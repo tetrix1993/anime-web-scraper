@@ -62,6 +62,8 @@ class HachinanDownload(Spring2020AnimeDownload):
 class Honzuki2Download(Spring2020AnimeDownload):
     
     PAGE_PREFIX = "http://booklove-anime.jp/story/"
+    IMAGE_PREFIX = "http://booklove-anime.jp/"
+    FIRST_EPISODE = 15
     
     def __init__(self):
         super().__init__()
@@ -70,7 +72,19 @@ class Honzuki2Download(Spring2020AnimeDownload):
             os.makedirs(self.base_folder)
     
     def run(self):
-        pass
+        ep_num = self.FIRST_EPISODE - 1
+        box_story_divs = self.get_soup(self.PAGE_PREFIX).find('section', id='second').find_all('div', class_='box_story')
+        for box_story_div in box_story_divs:
+            if 'intro02' in box_story_div['class']:
+                continue
+            ep_num += 1
+            episode = str(ep_num)
+            lis = box_story_div.find_all('li')
+            for j in range(len(lis)):
+                img = lis[j].find('img')
+                image_url = self.IMAGE_PREFIX + img['src'].replace('../', '')
+                file_path_without_extension = self.base_folder + '/' + episode + '_' + str(j + 1)
+                self.download_image(image_url, file_path_without_extension)
 
 
 # Houkago Teibou Nisshi

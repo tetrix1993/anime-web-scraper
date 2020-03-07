@@ -391,6 +391,8 @@ def download_spring_2020_anime():
     downloads.append(Tsugumomo2Download())
     downloads.append(YesterdayDownload())
     
+    downloads.append(MocaNewsDownload("20200306/2020030612000a_", "2020-2/honzuki2-moca", 15))
+    
     process_download(downloads)
 
 # endregion
@@ -432,7 +434,7 @@ if __name__ == '__main__':
     #download_fall_2019_anime()
     
     download_winter_2020_anime()
-    #download_spring_2020_anime()
+    download_spring_2020_anime()
     
     print("Download completed")
 

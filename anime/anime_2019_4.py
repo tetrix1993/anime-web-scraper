@@ -233,7 +233,7 @@ class HonzukiDownload(Fall2019AnimeDownload):
 
     PAGE_LINK = "http://booklove-anime.jp/story/"
     IMAGE_PREFIX = "http://booklove-anime.jp"
-    FINAL_EPISODE = 13
+    FINAL_EPISODE = 14
     NUM_OF_PICTURES_PER_PAGE = 6
     
     def __init__(self):
