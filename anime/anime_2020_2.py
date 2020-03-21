@@ -1,20 +1,20 @@
 import os
 from anime.main_download import MainDownload
 
+# Arte http://arte-anime.com/ #アルテ @arte_animation
 # Gleipnir http://gleipnir-anime.com/ #グレイプニル @gleipnir_anime
-# Hachi-nan tte http://hachinan-anime.com/ #八男 @Hachinan_PR
+# Hachi-nan tte http://hachinan-anime.com/story/ #八男 #hachinan @Hachinan_PR
 # Honzuki S2 http://booklove-anime.jp/story/ #本好きの下剋上 @anime_booklove
 # Houkago Teibou Nisshi https://teibotv.com/ #teibo @teibo_bu
 # Kaguya-sama S2 https://kaguya.love/ #かぐや様 @anime_kaguya
 # Kakushigoto https://kakushigoto-anime.com/ #かくしごと @kakushigoto_pr
 # Kingdom S3 https://kingdom-anime.com/story/ #キングダム @kingdom_animePR
-# Maou Gakuin no Futekigousha https://maohgakuin.com/ #魔王学院 @maohgakuin
-# Otome Game https://hamehura-anime.com/ #はめふら #hamehura @hamehura
+# Otome Game https://hamehura-anime.com/story/ #はめふら #hamehura @hamehura
 # Princess Connect https://anime.priconne-redive.jp/ #アニメプリコネ #プリコネR #プリコネ @priconne_anime
-# Re:Zero S2 http://re-zero-anime.jp/tv/story/ #rezero #リゼロ @Rezero_official
-# Tamayomi https://tamayomi.com/ #tamayomi @tamayomi_PR
+# Shachibato https://shachibato-anime.com/story.html #シャチバト #shachibato @schbt_anime
+# Tamayomi https://tamayomi.com/story/ #tamayomi @tamayomi_PR
 # Tsugumomo S2 http://tsugumomo.com/story/ #つぐもも @tsugumomo_anime
-# Yahari Ore no Seishun http://www.tbs.co.jp/anime/oregairu/ #俺ガイル #oregairu @anime_oregairu
+# Yahari Ore no Seishun http://www.tbs.co.jp/anime/oregairu/story/ #俺ガイル #oregairu @anime_oregairu
 # Yesterday wo Utatte https://singyesterday.com/ #イエスタデイをうたって @anime_yesterday
 
 
@@ -26,6 +26,21 @@ class Spring2020AnimeDownload(MainDownload):
         self.base_folder = self.base_folder + "/2020-2"
         if not os.path.exists(self.base_folder):
             os.makedirs(self.base_folder)
+
+
+# Arte
+class ArteDownload(Spring2020AnimeDownload):
+
+    PAGE_PREFIX = "http://arte-anime.com/"
+
+    def __init__(self):
+        super().__init__()
+        self.base_folder = self.base_folder + "/arte"
+        if not os.path.exists(self.base_folder):
+            os.makedirs(self.base_folder)
+
+    def run(self):
+        pass
 
 
 # Gleipnir
@@ -46,7 +61,8 @@ class GleipnirDownload(Spring2020AnimeDownload):
 # Hachi-nan tte, Sore wa Nai deshou!
 class HachinanDownload(Spring2020AnimeDownload):
     
-    PAGE_PREFIX = "http://hachinan-anime.com/"
+    PAGE_PREFIX = "http://hachinan-anime.com"
+    STORY_PAGE = "http://hachinan-anime.com/story/"
     
     def __init__(self):
         super().__init__()
@@ -55,7 +71,22 @@ class HachinanDownload(Spring2020AnimeDownload):
             os.makedirs(self.base_folder)
     
     def run(self):
-        pass
+        story_area_sect = str(self.get_soup(self.STORY_PAGE).find('section', class_='storyArea'))
+        split1 = story_area_sect.split('<p class="number-stories">')
+        for i in range(1, len(split1), 1):
+            episode = ''
+            try:
+                ep_num = int(split1[i].split('</p>')[0].split('</span>')[0].split('<span>')[1])
+                episode = str(ep_num).zfill(2)
+            except:
+                continue
+            if self.is_file_exists(self.base_folder + "/" + episode + "_1.jpg") or self.is_file_exists(self.base_folder + "/" + episode + "_1.png"):
+                continue
+            split2 = split1[i].split('<li><img src="')
+            for j in range(1, len(split2), 1):
+                image_url = self.PAGE_PREFIX + split2[j].split('"/></li>')[0]
+                file_path_without_extension = self.base_folder + '/' + episode + '_' + str(j)
+                self.download_image(image_url, file_path_without_extension)
 
 
 # Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan wo Erandeiraremasen 2nd Season
@@ -79,6 +110,8 @@ class Honzuki2Download(Spring2020AnimeDownload):
                 continue
             ep_num += 1
             episode = str(ep_num)
+            if self.is_file_exists(self.base_folder + "/" + episode + "_1.jpg") or self.is_file_exists(self.base_folder + "/" + episode + "_1.png"):
+                continue
             lis = box_story_div.find_all('li')
             for j in range(len(lis)):
                 img = lis[j].find('img')
@@ -147,21 +180,6 @@ class Kingdom3Download(Spring2020AnimeDownload):
         pass
 
 
-# Maou Gakuin no Futekigousha: Shijou Saikyou no Maou no Shiso, Tensei shite Shison-tachi no Gakkou e
-class MaohgakuinDownload(Spring2020AnimeDownload):
-
-    PAGE_PREFIX = "https://maohgakuin.com/"
-    
-    def __init__(self):
-        super().__init__()
-        self.base_folder = self.base_folder + "/maohgakuin"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
-    
-    def run(self):
-        pass
-
-
 # Otome Game no Hametsu Flag shika Nai Akuyaku Reijou ni Tensei shiteshimatta...
 class HamehuraDownload(Spring2020AnimeDownload):
 
@@ -192,17 +210,17 @@ class PriconneDownload(Spring2020AnimeDownload):
         pass
 
 
-# Re:Zero kara Hajimeru Isekai Seikatsu 2nd Season
-class ReZero2Download(Spring2020AnimeDownload):
+# Shachou, Battle no Jikan Desu!
+class ShachibatoDownload(Spring2020AnimeDownload):
 
-    PAGE_PREFIX = "http://re-zero-anime.jp/tv/story/"
-    
+    PAGE_PREFIX = "https://shachibato-anime.com/story.html"
+
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/rezero2"
+        self.base_folder = self.base_folder + "/shachibato"
         if not os.path.exists(self.base_folder):
             os.makedirs(self.base_folder)
-    
+
     def run(self):
         pass
 
@@ -241,6 +259,7 @@ class Tsugumomo2Download(Spring2020AnimeDownload):
 class Oregairu3Download(Spring2020AnimeDownload):
 
     PAGE_PREFIX = "http://www.tbs.co.jp/anime/oregairu/"
+    STORY_PAGE = "http://www.tbs.co.jp/anime/oregairu/story/"
     
     def __init__(self):
         super().__init__()
@@ -249,7 +268,28 @@ class Oregairu3Download(Spring2020AnimeDownload):
             os.makedirs(self.base_folder)
     
     def run(self):
-        pass
+        soup = self.get_soup(self.STORY_PAGE, decode=True)
+        story_nav = soup.find('ul', class_='story-nav')
+        chapters = story_nav.find_all('li')
+        for chapter in chapters:
+            try:
+                link_tag = chapter.find('a')
+                link_text = link_tag.text
+                if '第' in link_text and '話' in link_text:
+                    episode = link_text.split('話')[0].split('第')[1].zfill(2)
+                    if self.is_file_exists(self.base_folder + "/" + episode + "_1.jpg") or self.is_file_exists(self.base_folder + "/" + episode + "_1.png"):
+                        continue
+                    episode_link = self.STORY_PAGE + link_tag['href']
+                    episode_soup = self.get_soup(episode_link)
+                    image_tags = episode_soup.find('ul', class_='slides').find_all('img')
+                    j = 0
+                    for image_tag in image_tags:
+                        j += 1
+                        image_url = self.STORY_PAGE + image_tag['src']
+                        file_path_without_extension = self.base_folder + '/' + episode + '_' + str(j)
+                        self.download_image(image_url, file_path_without_extension)
+            except:
+                continue
 
 
 # Yesterday wo Utatte

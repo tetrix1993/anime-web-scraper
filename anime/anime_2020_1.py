@@ -276,7 +276,7 @@ class InfiniteDendrogramDownload(Winter2020AnimeDownload):
             for i in range(1, len(split2), 1):
                 split3 = split2[i].split('"')[0].split('/')[0]
                 try:
-                    episode_temp = int(split3[1])
+                    episode_temp = int(split3)
                     episode = str(episode_temp).zfill(2)
                 except Exception as e:
                     continue

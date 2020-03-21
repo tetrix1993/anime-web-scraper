@@ -30,13 +30,16 @@ class MainDownload:
         return response
         
     @staticmethod
-    def get_soup(url, headers=None):
+    def get_soup(url, headers=None, decode=False):
         if headers == None:
             headers = {}
             headers['User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'
         try:
             result = requests.get(url, headers=headers)
-            return bs(result.text, 'html.parser')
+            if decode:
+                return bs(result.content.decode(), 'html.parser')
+            else:
+                return bs(result.text, 'html.parser')
         except Exception as e:
             print(e)
         return ""

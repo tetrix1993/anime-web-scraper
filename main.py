@@ -374,7 +374,8 @@ def download_winter_2020_anime():
 
 def download_spring_2020_anime():
     downloads = []
-    
+
+    downloads.append(ArteDownload())
     downloads.append(GleipnirDownload())
     downloads.append(HachinanDownload())
     downloads.append(HamehuraDownload())
@@ -382,19 +383,26 @@ def download_spring_2020_anime():
     downloads.append(Kaguyasama2Download())
     downloads.append(KakushigotoDownload())
     downloads.append(Kingdom3Download())
-    downloads.append(MaohgakuinDownload())
     downloads.append(Oregairu3Download())
     downloads.append(PriconneDownload())
-    downloads.append(ReZero2Download())
+    downloads.append(ShachibatoDownload())
     downloads.append(TamayomiDownload())
     downloads.append(TeiboDownload())
     downloads.append(Tsugumomo2Download())
     downloads.append(YesterdayDownload())
     
-    downloads.append(MocaNewsDownload("20200306/2020030612000a_", "2020-2/honzuki2-moca", 15))
+    #downloads.append(MocaNewsDownload("20200306/2020030612000a_", "2020-2/honzuki2-moca", 15))
     
     process_download(downloads)
 
+
+def download_summer_2020_anime():
+    downloads = []
+
+    downloads.append(MaohgakuinDownload())
+    downloads.append(ReZero2Download())
+
+    process_download(downloads)
 # endregion
 
 def download_all():
@@ -412,6 +420,7 @@ def download_all():
     fns.append(download_fall_2019_anime)
     fns.append(download_winter_2020_anime)
     fns.append(download_spring_2020_anime)
+    fns.append(download_summer_2020_anime)
     
     process_download_function(fns)
 
@@ -435,6 +444,7 @@ if __name__ == '__main__':
     
     download_winter_2020_anime()
     download_spring_2020_anime()
+    #download_summer_2020_anime()
     
     print("Download completed")
 
