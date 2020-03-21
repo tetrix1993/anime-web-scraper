@@ -73,18 +73,6 @@ class MainDownload:
     @staticmethod    
     def download_image(url, filepath_without_extension, headers=None):
 
-        # Create download log:
-        timenow = str(datetime.datetime.now())
-        split1 = filepath_without_extension.split('/')
-        if len(split1) > 2:
-            filepath = ''
-            for i in range(len(split1) - 1):
-                filepath += split1[i] + '/'
-            filename = split1[len(split1) - 1]
-            logpath = filepath + 'log.txt'
-            with open(logpath, 'a+') as f:
-                f.write(timenow + '\t' + filename + '\t' + url + '\n')
-
         if ".png" in url:
             filepath = filepath_without_extension + ".png"
         elif ".jpeg" in url:
@@ -112,6 +100,18 @@ class MainDownload:
                         if chunk:
                             f.write(chunk)
             print("Downloaded " + url)
+
+            # Create download log:
+            timenow = str(datetime.datetime.now())
+            split1 = filepath_without_extension.split('/')
+            if len(split1) > 2:
+                filepath = ''
+                for i in range(len(split1) - 1):
+                    filepath += split1[i] + '/'
+                filename = split1[len(split1) - 1]
+                logpath = filepath + 'log.txt'
+                with open(logpath, 'a+') as f:
+                    f.write(timenow + '\t' + filename + '\t' + url + '\n')
             return True
         except Exception as e:
             print("Failed to download " + url + ' - ' + str(e))
