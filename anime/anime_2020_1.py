@@ -547,6 +547,7 @@ class MurenaseSetonGakuenDownload(Winter2020AnimeDownload):
 
     PAGE_PREFIX = "https://anime-seton.jp/"
     STORY_PAGE = "https://anime-seton.jp/story/"
+    BD_PAGE = "https://anime-seton.jp/bddvd/"
     FINAL_EPISODE = 13
     
     def __init__(self):
@@ -562,7 +563,7 @@ class MurenaseSetonGakuenDownload(Winter2020AnimeDownload):
             total_episodes = len(split1) - 1
             for i in range(total_episodes):
                 episode = str(i+1).zfill(2)
-                if (self.is_file_exists(self.base_folder + "/" + episode + "_01.jpg")):
+                if self.is_file_exists(self.base_folder + "/" + episode + "_01.jpg"):
                     continue
                 page_url = self.STORY_PAGE + "?ep=" + str(i+1)
                 page_response = self.get_response(page_url)
@@ -574,6 +575,15 @@ class MurenaseSetonGakuenDownload(Winter2020AnimeDownload):
                     imageUrl = split3[j].split('"')[0]
                     filepathWithoutExtension = self.base_folder + "/" + episode + "_" + str(j).zfill(2)
                     self.download_image(imageUrl, filepathWithoutExtension)
+            bd_soup = self.get_soup(self.BD_PAGE)
+            bd_tags = bd_soup.find_all('ul', class_='bddvd__list')
+            k = 0
+            for bd_tag in bd_tags:
+                k += 1
+                bd_link = bd_tag.find('img')['src']
+                if '8cffe16fefc1bd3bf15f31330d324626' not in bd_link: # not Now Printing image
+                    filepath_without_extension = self.base_folder + "/bluray_vol" + str(k)
+                    self.download_image(bd_link, filepath_without_extension)
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)

@@ -1,4 +1,5 @@
 import requests
+import datetime
 import urllib.request
 import os
 from bs4 import BeautifulSoup as bs
@@ -70,15 +71,28 @@ class MainDownload:
         return response
     
     @staticmethod    
-    def download_image(url, filepathWithoutExtension, headers=None):
+    def download_image(url, filepath_without_extension, headers=None):
+
+        # Create download log:
+        timenow = str(datetime.datetime.now())
+        split1 = filepath_without_extension.split('/')
+        if len(split1) > 2:
+            filepath = ''
+            for i in range(len(split1) - 1):
+                filepath += split1[i] + '/'
+            filename = split1[len(split1) - 1]
+            logpath = filepath + 'log.txt'
+            with open(logpath, 'a+') as f:
+                f.write(timenow + '\t' + filename + '\t' + url + '\n')
+
         if ".png" in url:
-            filepath = filepathWithoutExtension + ".png"
+            filepath = filepath_without_extension + ".png"
         elif ".jpeg" in url:
-            filepath = filepathWithoutExtension + ".jpeg"
+            filepath = filepath_without_extension + ".jpeg"
         elif ".gif" in url:
-            filepath = filepathWithoutExtension + ".gif"
+            filepath = filepath_without_extension + ".gif"
         else:
-            filepath = filepathWithoutExtension + ".jpg"
+            filepath = filepath_without_extension + ".jpg"
         
         # Check local directory if the file exists
         if (MainDownload.is_file_exists(filepath)):
