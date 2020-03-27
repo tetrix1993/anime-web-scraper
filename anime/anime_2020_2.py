@@ -1,4 +1,5 @@
 import os
+import re
 from anime.main_download import MainDownload
 
 # Arte http://arte-anime.com/ #アルテ @arte_animation
@@ -198,7 +199,8 @@ class HamehuraDownload(Spring2020AnimeDownload):
 # Princess Connect! Re:Dive
 class PriconneDownload(Spring2020AnimeDownload):
     
-    PAGE_PREFIX = "https://anime.priconne-redive.jp/"
+    PAGE_PREFIX = "https://anime.priconne-redive.jp"
+    STORY_PREFIX = "https://anime.priconne-redive.jp/story/";
     
     def __init__(self):
         super().__init__()
@@ -207,13 +209,24 @@ class PriconneDownload(Spring2020AnimeDownload):
             os.makedirs(self.base_folder)
     
     def run(self):
-        pass
+        soup = self.get_soup(self.STORY_PREFIX)
+        img_list = soup.find_all('ul', class_='img-list')
+        for i in range(len(img_list)):
+            episode = str(i + 1).zfill(2)
+            if self.is_file_exists(self.base_folder + "/" + episode + "_01.jpg") or self.is_file_exists(self.base_folder + "/" + episode + "_01.png"):
+                continue
+            images = img_list[i].find_all('img')
+            for j in range(len(images)):
+                image_url = self.PAGE_PREFIX + images[j]['src'].replace('-840x472', '')
+                file_path_without_extension = self.base_folder + '/' + episode + '_' + str(j + 1).zfill(2)
+                self.download_image(image_url, file_path_without_extension)
 
 
 # Shachou, Battle no Jikan Desu!
 class ShachibatoDownload(Spring2020AnimeDownload):
 
-    PAGE_PREFIX = "https://shachibato-anime.com/story.html"
+    PAGE_PREFIX = "https://shachibato-anime.com/"
+    STORY_PAGE = "https://shachibato-anime.com/story.html"
 
     def __init__(self):
         super().__init__()
@@ -222,13 +235,32 @@ class ShachibatoDownload(Spring2020AnimeDownload):
             os.makedirs(self.base_folder)
 
     def run(self):
-        pass
+        soup = self.get_soup(self.STORY_PAGE)
+        prog = re.compile('第[0-9]+話')
+        story_list = soup.find('ul', class_='story_navi').find_all('a')
+        for story in story_list:
+            result = prog.match(story.text)
+            if result is None:
+                continue
+            episode = result.group(0).split('話')[0].split('第')[1].zfill(2)
+            if self.is_file_exists(self.base_folder + "/" + episode + "_1.jpg") or self.is_file_exists(
+                    self.base_folder + "/" + episode + "_1.png"):
+                continue
+            story_url = self.PAGE_PREFIX + story['href']
+            story_soup = self.get_soup(story_url)
+            images = story_soup.find('div', class_='slider-for').find_all('img')
+            for j in range(len(images)):
+                image_url = self.PAGE_PREFIX + images[j]['src'].replace('../', '')
+                file_path_without_extension = self.base_folder + '/' + episode + '_' + str(j + 1)
+                self.download_image(image_url, file_path_without_extension)
+
 
 
 # Tamayomi
 class TamayomiDownload(Spring2020AnimeDownload):
 
     PAGE_PREFIX = "https://tamayomi.com/"
+    STORY_PREFIX = "https://tamayomi.com/story/"
     
     def __init__(self):
         super().__init__()
@@ -237,7 +269,19 @@ class TamayomiDownload(Spring2020AnimeDownload):
             os.makedirs(self.base_folder)
     
     def run(self):
-        pass
+        soup = self.get_soup(self.STORY_PREFIX)
+        stories = soup.find('ul', class_='story-storybox_thumbs').find_all('li', class_='story-storybox_thumbs_item')
+        for i in range(len(stories)):
+            episode = str(i + 1).zfill(2)
+            if self.is_file_exists(self.base_folder + "/" + episode + "_0.jpg") or self.is_file_exists(self.base_folder + "/" + episode + "_0.png"):
+                continue
+            story_url = self.STORY_PREFIX + stories[i].find('a')['href']
+            story_soup = self.get_soup(story_url)
+            images = story_soup.find('div', class_='story-detbox_main').find_all('img')
+            for j in range(len(images)):
+                image_url = images[j]['src']
+                file_path_without_extension = self.base_folder + '/' + episode + '_' + str(j + 1).zfill(2)
+                self.download_image(image_url, file_path_without_extension)
 
 
 # Tsugu Tsugumomo

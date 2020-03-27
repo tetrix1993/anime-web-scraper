@@ -35,6 +35,8 @@ class Winter2020AnimeDownload(MainDownload):
 class DarwinsGameDownload(Winter2020AnimeDownload):
     STORY_PAGE = "https://darwins-game.com/story/"
     PAGE_PREFIX = "https://darwins-game.com/story/?id=ep"
+    BD_PAGE = "https://darwins-game.com/bddvd/"
+    BD_PAGE_PREFIX = "https://darwins-game.com/"
     
     def __init__(self):
         super().__init__()
@@ -69,6 +71,16 @@ class DarwinsGameDownload(Winter2020AnimeDownload):
                     imageUrl = self.STORY_PAGE + split4[j].split('"')[0]
                     filepathWithoutExtension = self.base_folder + "/" + episode + "_" + str(j)
                     self.download_image(imageUrl, filepathWithoutExtension)
+
+            bd_soup = self.get_soup(self.BD_PAGE)
+            bd_tags = bd_soup.find('ul', class_='nav_package').find_all('img')
+            k = 0
+            for bd_tag in bd_tags:
+                k += 1
+                bd_link = self.BD_PAGE_PREFIX + bd_tag['src'].replace('../', '')
+                if "img_jk_1.jpg" not in bd_link: # Skip Coming Soon picture
+                    filepath_without_extension = self.base_folder + "/bluray_vol" + str(k)
+                    self.download_image(bd_link, filepath_without_extension)
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
@@ -594,6 +606,7 @@ class NekoparaDownload(Winter2020AnimeDownload):
     
     API_45_JSON = 'https://nekopara-anime.com/ja/php/avex/api.php?mode=45'
     API_46_JSON_PREFIX = 'https://nekopara-anime.com/ja/php/avex/api.php?mode=46&id='
+    BD_PAGE = 'https://nekopara-anime.com/ja/product/detail.php?id=1017384'
     
     PAGE_PREFIX = "https://nekopara-anime.com/ja/story/"
     
@@ -620,6 +633,17 @@ class NekoparaDownload(Winter2020AnimeDownload):
                     imageUrl = split1[j].split('\"')[0]
                     filepathWithoutExtension = self.base_folder + "/" + episode + "_" + str(j)
                     self.download_image(imageUrl, filepathWithoutExtension)
+
+            bd_soup = self.get_soup(self.BD_PAGE)
+            bd_tags = bd_soup.find_all('div', class_='c-article-visual__item')
+            k = 0
+            for bd_tag in bd_tags:
+                k += 1
+                bd_link = bd_tag.find('img')['src']
+                if 'nowprinting.jpg' not in bd_link:
+                    filepath_without_extension = self.base_folder + "/bluray_vol" + str(k)
+                    self.download_image(bd_link, filepath_without_extension)
+
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
