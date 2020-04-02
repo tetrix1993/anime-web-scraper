@@ -2,18 +2,19 @@ import os
 import re
 from anime.main_download import MainDownload
 
-# Arte http://arte-anime.com/ #アルテ @arte_animation
+# Arte http://arte-anime.com/ #アルテ @arte_animation [SUN]
+# BNA https://bna-anime.com/story/ #ビーエヌエー @bna_anime [THU]
 # Gleipnir http://gleipnir-anime.com/ #グレイプニル @gleipnir_anime
 # Hachi-nan tte http://hachinan-anime.com/story/ #八男 #hachinan @Hachinan_PR
 # Honzuki S2 http://booklove-anime.jp/story/ #本好きの下剋上 @anime_booklove
 # Houkago Teibou Nisshi https://teibotv.com/ #teibo @teibo_bu
 # Kaguya-sama S2 https://kaguya.love/ #かぐや様 @anime_kaguya
-# Kakushigoto https://kakushigoto-anime.com/ #かくしごと @kakushigoto_pr
-# Kingdom S3 https://kingdom-anime.com/story/ #キングダム @kingdom_animePR
-# Otome Game https://hamehura-anime.com/story/ #はめふら #hamehura @hamehura
-# Princess Connect https://anime.priconne-redive.jp/ #アニメプリコネ #プリコネR #プリコネ @priconne_anime
-# Shachibato https://shachibato-anime.com/story.html #シャチバト #shachibato @schbt_anime
-# Tamayomi https://tamayomi.com/story/ #tamayomi @tamayomi_PR
+# Kakushigoto https://kakushigoto-anime.com/ #かくしごと @kakushigoto_pr [TUE]
+# Kingdom S3 https://kingdom-anime.com/story/ #キングダム @kingdom_animePR [THU]
+# Otome Game https://hamehura-anime.com/story/ #はめふら #hamehura @hamehura [WED]
+# Princess Connect https://anime.priconne-redive.jp/story/ #アニメプリコネ #プリコネR #プリコネ @priconne_anime [THU]
+# Shachibato https://shachibato-anime.com/story.html #シャチバト #shachibato @schbt_anime [FRI]
+# Tamayomi https://tamayomi.com/story/ #tamayomi @tamayomi_PR [THU]
 # Tsugumomo S2 http://tsugumomo.com/story/ #つぐもも @tsugumomo_anime
 # Yahari Ore no Seishun http://www.tbs.co.jp/anime/oregairu/story/ #俺ガイル #oregairu @anime_oregairu
 # Yesterday wo Utatte https://singyesterday.com/ #イエスタデイをうたって @anime_yesterday
@@ -42,6 +43,39 @@ class ArteDownload(Spring2020AnimeDownload):
 
     def run(self):
         pass
+
+
+# Brand New Animal
+class BrandNewAnimalDownload(Spring2020AnimeDownload):
+
+    STORY_PAGE = "https://bna-anime.com/story/"
+
+    def __init__(self):
+        super().__init__()
+        self.base_folder = self.base_folder + "/bna"
+        if not os.path.exists(self.base_folder):
+            os.makedirs(self.base_folder)
+
+    def run(self):
+        soup = self.get_soup(self.STORY_PAGE)
+        ep_list = soup.find('ul', id='storyList').find_all('li')
+        for ep in ep_list:
+            try:
+                episode = self.get_episode_number(ep.find('span', class_='cn').text)
+                if episode is None:
+                    continue
+                if self.is_file_exists(self.base_folder + "/" + episode + "_1.jpg") or self.is_file_exists(
+                        self.base_folder + "/" + episode + "_1.png"):
+                    continue
+                ep_url = self.STORY_PAGE + ep.find('a')['href']
+                ep_soup = self.get_soup(ep_url)
+                images = ep_soup.find('ul', {'class': ['imgClick', 'cf']}).find_all('img')
+                for j in range(len(images)):
+                    image_url = self.STORY_PAGE + images[j]['src']
+                    file_path_without_extension = self.base_folder + '/' + episode + '_' + str(j + 1)
+                    self.download_image(image_url, file_path_without_extension)
+            except:
+                continue
 
 
 # Gleipnir
@@ -154,7 +188,7 @@ class Kaguyasama2Download(Spring2020AnimeDownload):
 # Kakushigoto
 class KakushigotoDownload(Spring2020AnimeDownload):
 
-    PAGE_PREFIX = "https://kakushigoto-anime.com/"
+    STORY_PAGE = "https://kakushigoto-anime.com/story/"
     
     def __init__(self):
         super().__init__()
@@ -163,13 +197,28 @@ class KakushigotoDownload(Spring2020AnimeDownload):
             os.makedirs(self.base_folder)
     
     def run(self):
-        pass
+        soup = self.get_soup(self.STORY_PAGE)
+        contents = soup.find_all('div', class_='story_tab_content')
+        for content in contents:
+            episode = ''
+            try:
+                episode = str(int(content['id'])).zfill(2)
+                if self.is_file_exists(self.base_folder + "/" + episode + "_1.jpg") or self.is_file_exists(
+                        self.base_folder + "/" + episode + "_1.png"):
+                    continue
+                image_divs = content.find_all('div', class_='swiper-slide')
+                for j in range(len(image_divs)):
+                    image_url = image_divs[j].find('img')['src']
+                    file_path_without_extension = self.base_folder + '/' + episode + '_' + str(j + 1)
+                    self.download_image(image_url, file_path_without_extension)
+            except:
+                continue
 
 
 # Kingdom 3rd Season
 class Kingdom3Download(Spring2020AnimeDownload):
 
-    PAGE_PREFIX = "https://kingdom-anime.com/story/"
+    STORY_PAGE = "https://kingdom-anime.com/story/"
     
     def __init__(self):
         super().__init__()
@@ -178,7 +227,25 @@ class Kingdom3Download(Spring2020AnimeDownload):
             os.makedirs(self.base_folder)
     
     def run(self):
-        pass
+        soup = self.get_soup(self.STORY_PAGE)
+        ep_list = soup.find('ul', id='ep_list').find_all('li')
+        for ep in ep_list:
+            try:
+                episode = self.get_episode_number(ep.find('span', class_='hd').text)
+                if episode is None:
+                    continue
+                if self.is_file_exists(self.base_folder + "/" + episode + "_1.jpg") or self.is_file_exists(
+                        self.base_folder + "/" + episode + "_1.png"):
+                    continue
+                ep_url = self.STORY_PAGE + ep.find('a')['href']
+                ep_soup = self.get_soup(ep_url)
+                images = ep_soup.find('div', id='episodeCont').find_all('img')
+                for j in range(len(images)):
+                    image_url = images[j]['src']
+                    file_path_without_extension = self.base_folder + '/' + episode + '_' + str(j + 1)
+                    self.download_image(image_url, file_path_without_extension)
+            except:
+                continue
 
 
 # Otome Game no Hametsu Flag shika Nai Akuyaku Reijou ni Tensei shiteshimatta...
@@ -236,13 +303,11 @@ class ShachibatoDownload(Spring2020AnimeDownload):
 
     def run(self):
         soup = self.get_soup(self.STORY_PAGE)
-        prog = re.compile('第[0-9]+話')
         story_list = soup.find('ul', class_='story_navi').find_all('a')
         for story in story_list:
-            result = prog.match(story.text)
-            if result is None:
+            episode = self.get_episode_number(story.text)
+            if episode is None:
                 continue
-            episode = result.group(0).split('話')[0].split('第')[1].zfill(2)
             if self.is_file_exists(self.base_folder + "/" + episode + "_1.jpg") or self.is_file_exists(
                     self.base_folder + "/" + episode + "_1.png"):
                 continue

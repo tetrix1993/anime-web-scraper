@@ -2,10 +2,11 @@ import requests
 import datetime
 import urllib.request
 import os
+import re
 from bs4 import BeautifulSoup as bs
 
 class MainDownload:
-    
+
     def __init__(self):
         self.base_folder = "download"
         if not os.path.exists(self.base_folder):
@@ -13,7 +14,7 @@ class MainDownload:
         
     def run(self):
         pass
-    
+
     @staticmethod
     def get_response(url, headers=None, decode=False):
         response = ""
@@ -126,3 +127,13 @@ class MainDownload:
     @staticmethod
     def is_file_exists(filepath):
         return os.path.isfile(filepath)
+
+    @staticmethod
+    def get_episode_number(text):
+        regex = '第[０|１|２|３|４|５|６|７|８|９|0-9]+話'
+        prog = re.compile(regex)
+        result = prog.match(text)
+        if result is not None:
+            return str(int(result.group(0).split('話')[0].split('第')[1])).zfill(2)
+        else:
+            return None
