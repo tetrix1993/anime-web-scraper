@@ -44,6 +44,7 @@ def run():
     # 2020-2 Spring 2020 Anime
 
     #downloads.append(ArteDownload()) #Arte
+    #downloads.append(BrandNewAnimalDownload()) #Brand New Animal
     #downloads.append(GleipnirDownload()) #Gleipnir
     #downloads.append(HachinanDownload()) #Hachi-nan tte, Sore wa Nai deshou!
     #downloads.append(HamehuraDownload()) #Otome Game no Hametsu Flag shika Nai Akuyaku Reijou ni Tensei shiteshimatta...

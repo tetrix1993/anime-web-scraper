@@ -368,6 +368,7 @@ def download_winter_2020_anime():
     
     #downloads.append(WebNewtypeDownload("219613", "2020-1/nekopara-wnt", 2))
     #downloads.append(WebNewtypeDownload("220518", "2020-1/nekopara-wnt", 3))
+    #downloads.append(WebNewtypeDownload("228317", "2020-1/nekopara-wnt", 12))
     
     process_download(downloads)
 
@@ -376,6 +377,7 @@ def download_spring_2020_anime():
     downloads = []
 
     downloads.append(ArteDownload())
+    downloads.append(BrandNewAnimalDownload())
     downloads.append(GleipnirDownload())
     downloads.append(HachinanDownload())
     downloads.append(HamehuraDownload())
@@ -391,7 +393,13 @@ def download_spring_2020_anime():
     downloads.append(Tsugumomo2Download())
     downloads.append(YesterdayDownload())
     
+    #downloads.append(MocaNewsDownload("20200329/2020032917000a_", "2020-2/arte-moca", 1))
+    
     #downloads.append(MocaNewsDownload("20200306/2020030612000a_", "2020-2/honzuki2-moca", 15))
+
+    #downloads.append(WebNewtypeDownload("228052", "2020-2/priconne-wnt", 1))
+
+    #downloads.append(MocaNewsDownload("20200325/2020032518220a_", "2020-2/tamayomi-moca", 1))
     
     process_download(downloads)
 
