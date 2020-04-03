@@ -352,7 +352,7 @@ class TamayomiDownload(Spring2020AnimeDownload):
 # Tsugu Tsugumomo
 class Tsugumomo2Download(Spring2020AnimeDownload):
 
-    PAGE_PREFIX = "http://tsugumomo.com/story/"
+    STORY_PAGE = "http://tsugumomo.com/story/"
     
     def __init__(self):
         super().__init__()
@@ -361,7 +361,22 @@ class Tsugumomo2Download(Spring2020AnimeDownload):
             os.makedirs(self.base_folder)
     
     def run(self):
-        pass
+        soup = self.get_soup(self.STORY_PAGE)
+        ep_li = soup.find('ul', class_='l-sub-title-list').find_all('li')
+        for ep in ep_li:
+            episode = ''
+            try:
+                episode = str(int(ep.find('p', class_='sub-title-num').text)).zfill(2)
+            except:
+                continue
+            if self.is_file_exists(self.base_folder + "/" + episode + "_1.jpg") or self.is_file_exists(
+                    self.base_folder + "/" + episode + "_1.png"):
+                continue
+            images = ep.find('div', class_='inner').find_all('img')
+            for j in range(len(images)):
+                image_url = images[j]['src']
+                file_path_without_extension = self.base_folder + '/' + episode + '_' + str(j + 1).zfill(2)
+                self.download_image(image_url, file_path_without_extension)
 
 
 # Yahari Ore no Seishun Love Comedy wa Machigatteiru. Kan
