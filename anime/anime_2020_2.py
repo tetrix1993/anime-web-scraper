@@ -42,7 +42,24 @@ class ArteDownload(Spring2020AnimeDownload):
             os.makedirs(self.base_folder)
 
     def run(self):
-        pass
+        soup = self.get_soup(self.PAGE_PREFIX)
+        story_mob = soup.find_all('div', class_='story_mob')
+        regex = '#[０|１|２|３|４|５|６|７|８|９|0-9]+'
+        prog = re.compile(regex)
+        for story in story_mob:
+            h4_tag_text = story.find('h4', class_='st_ntit').text.strip()
+            result = prog.match(h4_tag_text)
+            if result is None:
+                continue
+            episode = str(int(result.group(0).split('#')[1])).zfill(2)
+            if self.is_file_exists(self.base_folder + "/" + episode + "_1.jpg") or self.is_file_exists(
+                    self.base_folder + "/" + episode + "_1.png"):
+                continue
+            st_smlist = story.find_all('div', class_='st_smlist')
+            for j in range(len(st_smlist)):
+                image_url = st_smlist[j].find('img')['src']
+                file_path_without_extension = self.base_folder + '/' + episode + '_' + str(j + 1)
+                self.download_image(image_url, file_path_without_extension)
 
 
 # Brand New Animal
@@ -153,6 +170,20 @@ class Honzuki2Download(Spring2020AnimeDownload):
                 image_url = self.IMAGE_PREFIX + img['src'].replace('../', '')
                 file_path_without_extension = self.base_folder + '/' + episode + '_' + str(j + 1)
                 self.download_image(image_url, file_path_without_extension)
+
+        template = 'http://booklove-anime.jp/img/story/ep%s/img%s.jpg'
+        episode = 14
+        result = 0
+        while True:
+            episode += 1
+            for j in range(6):
+                image_url = template % (str(episode), str(j + 1).zfill(2))
+                file_path_without_extension = self.base_folder + '/' + str(episode) + '_' + str(j + 1)
+                result = self.download_image(image_url, file_path_without_extension)
+                if result == -1 or result is None:
+                    break
+            if result == -1 or result is None:
+                break
 
 
 # Houkago Teibou Nisshi

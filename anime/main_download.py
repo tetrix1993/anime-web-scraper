@@ -71,8 +71,15 @@ class MainDownload:
             print(e)
         return response
     
-    @staticmethod    
+    @staticmethod
     def download_image(url, filepath_without_extension, headers=None):
+        """
+        Download image to the filepath
+        :param url:
+        :param filepath_without_extension:
+        :param headers:
+        :return: 0 - Success, 1 - File Exists, -1 - Error
+        """
 
         if ".png" in url:
             filepath = filepath_without_extension + ".png"
@@ -86,7 +93,7 @@ class MainDownload:
         # Check local directory if the file exists
         if (MainDownload.is_file_exists(filepath)):
             #print("File exists: " + filepath)
-            return False
+            return 1
         
         if headers == None:
             headers = {}
@@ -95,6 +102,9 @@ class MainDownload:
         # Download image:
         try:
             with requests.get(url, stream=True, headers=headers) as r:
+                # File not found
+                if r.status_code == 404:
+                    return -1
                 r.raise_for_status()
                 with open(filepath, 'wb') as f:
                     for chunk in r.iter_content(chunk_size=8192):
@@ -113,10 +123,10 @@ class MainDownload:
                 logpath = filepath + 'log.txt'
                 with open(logpath, 'a+') as f:
                     f.write(timenow + '\t' + filename + '\t' + url + '\n')
-            return True
+            return 0
         except Exception as e:
             print("Failed to download " + url + ' - ' + str(e))
-            return False
+            return -1
     
     @staticmethod    
     def create_directory(filepath):
