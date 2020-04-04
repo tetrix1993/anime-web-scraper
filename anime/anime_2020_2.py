@@ -204,7 +204,7 @@ class TeiboDownload(Spring2020AnimeDownload):
 # Kaguya-sama wa Kokurasetai? Tensai-tachi no Renai Zunousen
 class Kaguyasama2Download(Spring2020AnimeDownload):
 
-    PAGE_PREFIX = "https://teibotv.com/"
+    STORY_PAGE = "https://kaguya.love/story/"
     
     def __init__(self):
         super().__init__()
@@ -213,7 +213,21 @@ class Kaguyasama2Download(Spring2020AnimeDownload):
             os.makedirs(self.base_folder)
     
     def run(self):
-        pass
+        soup = self.get_soup(self.STORY_PAGE)
+        story_divs = soup.find_all('div', class_='p-story__main')
+        for story_div in story_divs:
+            try:
+                episode = str(int(story_div.find('p', class_='story_no').text)).zfill(2)
+            except:
+                continue
+            if self.is_file_exists(self.base_folder + "/" + episode + "_1.jpg") or self.is_file_exists(
+                    self.base_folder + "/" + episode + "_1.png"):
+                continue
+            li_tags = story_div.find_all('li', class_='scene_item')
+            for j in range(len(li_tags)):
+                image_url = self.STORY_PAGE + li_tags[j].find('img')['src']
+                file_path_without_extension = self.base_folder + '/' + episode + '_' + str(j + 1)
+                self.download_image(image_url, file_path_without_extension)
 
 
 # Kakushigoto

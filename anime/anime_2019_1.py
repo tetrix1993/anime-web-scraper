@@ -329,7 +329,7 @@ class GrimmsNotesDownload(Winter2019AnimeDownload):
 # Kaguya-sama wa Kokurasetai
 class KaguyasamaDownload(Winter2019AnimeDownload):
 
-    PAGE_PREFIX = "https://kaguya.love/story/"
+    PAGE_PREFIX = "https://kaguya.love/1st/story/"
     PAGE_SUFFIX = ".html"
     IMAGE_PREFIX = "https://kaguya.love"
     FINAL_EPISODE = 12
