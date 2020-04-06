@@ -8,7 +8,7 @@ from anime.main_download import MainDownload
 # Hachi-nan tte http://hachinan-anime.com/story/ #八男 #hachinan @Hachinan_PR
 # Honzuki S2 http://booklove-anime.jp/story/ #本好きの下剋上 @anime_booklove
 # Houkago Teibou Nisshi https://teibotv.com/ #teibo @teibo_bu
-# Kaguya-sama S2 https://kaguya.love/ #かぐや様 @anime_kaguya
+# Kaguya-sama S2 https://kaguya.love/ #かぐや様 @anime_kaguya [SAT]
 # Kakushigoto https://kakushigoto-anime.com/ #かくしごと @kakushigoto_pr [TUE]
 # Kingdom S3 https://kingdom-anime.com/story/ #キングダム @kingdom_animePR [THU]
 # Otome Game https://hamehura-anime.com/story/ #はめふら #hamehura @hamehura [WED]
@@ -62,10 +62,15 @@ class ArteDownload(Spring2020AnimeDownload):
                 self.download_image(image_url, file_path_without_extension)
 
 
+
+
 # Brand New Animal
 class BrandNewAnimalDownload(Spring2020AnimeDownload):
 
     STORY_PAGE = "https://bna-anime.com/story/"
+    IMAGE_TEMPLATE = 'https://bna-anime.com/story/images/%s_%s.jpg'
+    TOTAL_EPISODES = 24
+    TOTAL_IMAGES_PER_EPISODE = 8
 
     def __init__(self):
         super().__init__()
@@ -94,12 +99,25 @@ class BrandNewAnimalDownload(Spring2020AnimeDownload):
             except:
                 continue
 
+        for i in range(self.TOTAL_EPISODES):
+            episode = str(i + 1).zfill(2)
+            if self.is_file_exists(self.base_folder + "/" + episode + "_1.jpg") or self.is_file_exists(
+                    self.base_folder + "/" + episode + "_1.png"):
+                continue
+            for j in range(self.TOTAL_IMAGES_PER_EPISODE):
+                image_url = self.IMAGE_TEMPLATE % (str(i + 1), str(j + 1))
+                file_path_without_extension = self.base_folder + '/' + episode + '_' + str(j + 1)
+                result = self.download_image(image_url, file_path_without_extension)
+                if result == -1:
+                    return
+
 
 # Gleipnir
 class GleipnirDownload(Spring2020AnimeDownload):
     
-    PAGE_PREFIX = "http://gleipnir-anime.com/"
-    
+    PAGE_PREFIX = "http://gleipnir-anime.com"
+    STORY_PAGE = 'http://gleipnir-anime.com/story/'
+
     def __init__(self):
         super().__init__()
         self.base_folder = self.base_folder + "/gleipnir"
@@ -107,7 +125,23 @@ class GleipnirDownload(Spring2020AnimeDownload):
             os.makedirs(self.base_folder)
     
     def run(self):
-        pass
+        soup = self.get_soup(self.STORY_PAGE)
+        stories = soup.find('section', class_='storyNavi').find_all('li')
+        for story in stories:
+            story_url_tag = story.find('a')
+            episode = self.get_episode_number(story_url_tag.text)
+            if episode is None:
+                continue
+            if self.is_file_exists(self.base_folder + "/" + episode + "_1.jpg") or self.is_file_exists(
+                    self.base_folder + "/" + episode + "_1.png"):
+                continue
+            story_url = self.PAGE_PREFIX + story_url_tag['href']
+            story_soup = self.get_soup(story_url)
+            images = story_soup.find('section', class_='story_slider').find_all('img')
+            for j in range(len(images)):
+                image_url = self.PAGE_PREFIX + images[j]['src']
+                file_path_without_extension = self.base_folder + '/' + episode + '_' + str(j + 1)
+                self.download_image(image_url, file_path_without_extension)
 
 
 # Hachi-nan tte, Sore wa Nai deshou!
@@ -190,6 +224,12 @@ class Honzuki2Download(Spring2020AnimeDownload):
 class TeiboDownload(Spring2020AnimeDownload):
 
     PAGE_PREFIX = "https://teibotv.com/"
+    STORY_PAGE = 'https://teibotv.com/story.html'
+    IMAGE_TEMPLATE = 'https://teibotv.com/images/story/%s/p_%s.jpg'
+
+    TOTAL_EPISODES = 13
+    TOTAL_IMAGES_PER_EPISODE = 6
+
     
     def __init__(self):
         super().__init__()
@@ -198,7 +238,34 @@ class TeiboDownload(Spring2020AnimeDownload):
             os.makedirs(self.base_folder)
     
     def run(self):
-        pass
+        soup = self.get_soup(self.STORY_PAGE)
+        story_thumb_boxes = soup.find_all('div', class_='story_thumb_box')
+        for story_thumb_box in story_thumb_boxes:
+            try:
+                content = str(story_thumb_box.find('div', class_='title'))
+                split1 = content.split('<span')[0].split('"title">')[1].split('れぽーと')[1]
+                episode = str(int(split1)).zfill(2)
+            except:
+                continue
+            if self.is_file_exists(self.base_folder + "/" + episode + "_1.jpg") or self.is_file_exists(self.base_folder + "/" + episode + "_1.png"):
+                continue
+            story_url = story_thumb_box.find('a')['href']
+            story_soup = self.get_soup(self.PAGE_PREFIX + story_url)
+            images = story_soup.find('ol', class_='main').find_all('img')
+            for j in range(len(images)):
+                image_url = self.PAGE_PREFIX + images[j]['src']
+                file_path_without_extension = self.base_folder + '/' + str(episode) + '_' + str(j + 1)
+                self.download_image(image_url, file_path_without_extension)
+
+        for i in range(self.TOTAL_EPISODES):
+            episode = str(i + 1).zfill(2)
+            for j in range(self.TOTAL_IMAGES_PER_EPISODE):
+                image_url = self.IMAGE_TEMPLATE % (str(i + 1).zfill(3), str(j).zfill(3))
+                file_path_without_extension = self.base_folder + '/' + str(episode) + '_' + str(j + 1)
+                result = self.download_image(image_url, file_path_without_extension)
+                if result == -1 or result is None:
+                    return
+
 
 
 # Kaguya-sama wa Kokurasetai? Tensai-tachi no Renai Zunousen
@@ -339,6 +406,9 @@ class ShachibatoDownload(Spring2020AnimeDownload):
 
     PAGE_PREFIX = "https://shachibato-anime.com/"
     STORY_PAGE = "https://shachibato-anime.com/story.html"
+    IMAGE_TEMPLATE = 'https://shachibato-anime.com/img/story/story-episode%s-img-%s.jpg'
+    TOTAL_EPISODES = 25
+    TOTAL_IMAGES_PER_EPISODE = 6
 
     def __init__(self):
         super().__init__()
@@ -363,6 +433,18 @@ class ShachibatoDownload(Spring2020AnimeDownload):
                 image_url = self.PAGE_PREFIX + images[j]['src'].replace('../', '')
                 file_path_without_extension = self.base_folder + '/' + episode + '_' + str(j + 1)
                 self.download_image(image_url, file_path_without_extension)
+
+        for i in range(self.TOTAL_EPISODES):
+            episode = str(i + 1).zfill(2)
+            if self.is_file_exists(self.base_folder + "/" + episode + "_1.jpg") or self.is_file_exists(
+                    self.base_folder + "/" + episode + "_1.png"):
+                continue
+            for j in range(self.TOTAL_IMAGES_PER_EPISODE):
+                image_url = self.IMAGE_TEMPLATE % (episode, str(j + 1).zfill(2))
+                file_path_without_extension = self.base_folder + '/' + episode + '_' + str(j + 1)
+                result = self.download_image(image_url, file_path_without_extension)
+                if result == -1:
+                    return
 
 
 
@@ -429,6 +511,9 @@ class Oregairu3Download(Spring2020AnimeDownload):
 
     PAGE_PREFIX = "http://www.tbs.co.jp/anime/oregairu/"
     STORY_PAGE = "http://www.tbs.co.jp/anime/oregairu/story/"
+    IMAGE_TEMPLATE = 'http://www.tbs.co.jp/anime/oregairu/story/img/story%s/%s.jpg'
+    TOTAL_EPISODES = 25
+    TOTAL_IMAGES_PER_EPISODE = 6
     
     def __init__(self):
         super().__init__()
@@ -460,11 +545,27 @@ class Oregairu3Download(Spring2020AnimeDownload):
             except:
                 continue
 
+        for i in range(self.TOTAL_EPISODES):
+            episode = str(i + 1).zfill(2)
+            if self.is_file_exists(self.base_folder + "/" + episode + "_1.jpg") or self.is_file_exists(
+                    self.base_folder + "/" + episode + "_1.png"):
+                continue
+            for j in range(self.TOTAL_IMAGES_PER_EPISODE):
+                image_url = self.IMAGE_TEMPLATE % (episode, str(j + 1).zfill(2))
+                file_path_without_extension = self.base_folder + '/' + episode + '_' + str(j + 1)
+                result = self.download_image(image_url, file_path_without_extension)
+                if result == -1:
+                    return
+
 
 # Yesterday wo Utatte
 class YesterdayDownload(Spring2020AnimeDownload):
 
-    PAGE_PREFIX = "https://singyesterday.com/"
+    STORY_PAGE = "https://singyesterday.com/story/"
+    PAGE_PREFIX = 'https://singyesterday.com/'
+    IMAGE_TEMPLATE = 'https://singyesterday.com/cmn/images/story/%s/yd_%s_%s.jpg'
+    TOTAL_EPISODES = 12
+    TOTAL_IMAGES_PER_EPISODE = 4
     
     def __init__(self):
         super().__init__()
@@ -473,4 +574,13 @@ class YesterdayDownload(Spring2020AnimeDownload):
             os.makedirs(self.base_folder)
     
     def run(self):
-        pass
+        for i in range(self.TOTAL_EPISODES):
+            episode = str(i + 1).zfill(2)
+            if self.is_file_exists(self.base_folder + "/" + episode + "_1.jpg"):
+                continue
+            for j in range(self.TOTAL_IMAGES_PER_EPISODE):
+                image_url = self.IMAGE_TEMPLATE % (episode, episode, str(j + 1).zfill(2))
+                file_path_without_extension = self.base_folder + '/' + episode + '_' + str(j + 1)
+                result = self.download_image(image_url, file_path_without_extension)
+                if result == -1:
+                    return
