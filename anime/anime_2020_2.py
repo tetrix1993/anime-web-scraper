@@ -4,19 +4,20 @@ from anime.main_download import MainDownload
 
 # Arte http://arte-anime.com/ #アルテ @arte_animation [SUN]
 # BNA https://bna-anime.com/story/ #ビーエヌエー @bna_anime [THU]
-# Gleipnir http://gleipnir-anime.com/ #グレイプニル @gleipnir_anime
-# Hachi-nan tte http://hachinan-anime.com/story/ #八男 #hachinan @Hachinan_PR
-# Honzuki S2 http://booklove-anime.jp/story/ #本好きの下剋上 @anime_booklove
-# Houkago Teibou Nisshi https://teibotv.com/ #teibo @teibo_bu
+# Gleipnir http://gleipnir-anime.com/ #グレイプニル @gleipnir_anime [MON]
+# Hachi-nan tte http://hachinan-anime.com/story/ #八男 #hachinan @Hachinan_PR [WED]
+# Honzuki S2 http://booklove-anime.jp/story/ #本好きの下剋上 @anime_booklove [MON]
+# Houkago Teibou Nisshi https://teibotv.com/ #teibo @teibo_bu [MON]
 # Kaguya-sama S2 https://kaguya.love/ #かぐや様 @anime_kaguya [SAT]
 # Kakushigoto https://kakushigoto-anime.com/ #かくしごと @kakushigoto_pr [TUE]
 # Kingdom S3 https://kingdom-anime.com/story/ #キングダム @kingdom_animePR [THU]
 # Otome Game https://hamehura-anime.com/story/ #はめふら #hamehura @hamehura [WED]
+# Namiyo https://namiyo-anime.com/story/ #波よ聞いてくれ #namiyo [WED]
 # Princess Connect https://anime.priconne-redive.jp/story/ #アニメプリコネ #プリコネR #プリコネ @priconne_anime [THU]
-# Shachibato https://shachibato-anime.com/story.html #シャチバト #shachibato @schbt_anime [FRI]
-# Tamayomi https://tamayomi.com/story/ #tamayomi @tamayomi_PR [THU]
+# Shachibato https://shachibato-anime.com/story.html #シャチバト #shachibato @schbt_anime [TUE]
+# Tamayomi https://tamayomi.com/story/ #tamayomi @tamayomi_PR [WED]
 # Tsugumomo S2 http://tsugumomo.com/story/ #つぐもも @tsugumomo_anime
-# Yahari Ore no Seishun http://www.tbs.co.jp/anime/oregairu/story/ #俺ガイル #oregairu @anime_oregairu
+# Yahari Ore no Seishun http://www.tbs.co.jp/anime/oregairu/story/ #俺ガイル #oregairu @anime_oregairu [DELAYED]
 # Yesterday wo Utatte https://singyesterday.com/ #イエスタデイをうたって @anime_yesterday
 
 
@@ -149,6 +150,9 @@ class HachinanDownload(Spring2020AnimeDownload):
     
     PAGE_PREFIX = "http://hachinan-anime.com"
     STORY_PAGE = "http://hachinan-anime.com/story/"
+    TOTAL_EPISODES = 13
+    IMAGES_PER_EPISODE = 6
+    IMAGE_TEMPLATE = 'http://hachinan-anime.com/wp-content/themes/hachinan-anime/images/story/%s-%s.jpg'
     
     def __init__(self):
         super().__init__()
@@ -157,21 +161,19 @@ class HachinanDownload(Spring2020AnimeDownload):
             os.makedirs(self.base_folder)
     
     def run(self):
-        story_area_sect = str(self.get_soup(self.STORY_PAGE).find('section', class_='storyArea'))
-        split1 = story_area_sect.split('<p class="number-stories">')
-        for i in range(1, len(split1), 1):
-            episode = ''
-            try:
-                ep_num = int(split1[i].split('</p>')[0].split('</span>')[0].split('<span>')[1])
-                episode = str(ep_num).zfill(2)
-            except:
+        soup = self.get_soup(self.STORY_PAGE)
+        a_tags = soup.find('nav', class_='l-nav').find_all('a')
+        for a_tag in a_tags:
+            episode = self.get_episode_number(a_tag.text)
+            if episode is None:
                 continue
             if self.is_file_exists(self.base_folder + "/" + episode + "_1.jpg") or self.is_file_exists(self.base_folder + "/" + episode + "_1.png"):
                 continue
-            split2 = split1[i].split('<li><img src="')
-            for j in range(1, len(split2), 1):
-                image_url = self.PAGE_PREFIX + split2[j].split('"/></li>')[0]
-                file_path_without_extension = self.base_folder + '/' + episode + '_' + str(j)
+            story_soup = self.get_soup(self.PAGE_PREFIX + a_tag['href'])
+            images = story_soup.find('ul', class_='capture').find_all('img')
+            for j in range(len(images)):
+                image_url = self.PAGE_PREFIX + images[j]['src']
+                file_path_without_extension = self.base_folder + '/' + episode + '_' + str(j + 1)
                 self.download_image(image_url, file_path_without_extension)
 
 
@@ -210,6 +212,9 @@ class Honzuki2Download(Spring2020AnimeDownload):
         result = 0
         while True:
             episode += 1
+            if self.is_file_exists(self.base_folder + "/" + str(episode) + "_1.jpg") or self.is_file_exists(
+                    self.base_folder + "/" + str(episode) + "_1.png"):
+                continue
             for j in range(6):
                 image_url = template % (str(episode), str(j + 1).zfill(2))
                 file_path_without_extension = self.base_folder + '/' + str(episode) + '_' + str(j + 1)
@@ -218,6 +223,34 @@ class Honzuki2Download(Spring2020AnimeDownload):
                     break
             if result == -1 or result is None:
                 break
+
+
+# Nami yo Kiitekure
+class NamiyoDownload(Spring2020AnimeDownload):
+
+    STORY_PAGE = 'https://namiyo-anime.com/story/'
+
+    def __init__(self):
+        super().__init__()
+        self.base_folder = self.base_folder + "/namiyo"
+        if not os.path.exists(self.base_folder):
+            os.makedirs(self.base_folder)
+
+    def run(self):
+        soup = self.get_soup(self.STORY_PAGE)
+        stories = soup.find('ul', class_='l-episode-list').find_all('li', class_='l-episode-item')
+        ep_num = 0
+        for story in stories:
+            ep_num += 1
+            episode = str(ep_num).zfill(2)
+            if self.is_file_exists(self.base_folder + "/" + str(episode) + "_1.jpg") or self.is_file_exists(
+                    self.base_folder + "/" + str(episode) + "_1.png"):
+                continue
+            images = story.find_all('div', class_='swiper-slide')
+            for j in range(len(images)):
+                image_url = images[j].find('img')['src']
+                file_path_without_extension = self.base_folder + '/' + str(episode) + '_' + str(j + 1)
+                self.download_image(image_url, file_path_without_extension)
 
 
 # Houkago Teibou Nisshi
@@ -259,6 +292,9 @@ class TeiboDownload(Spring2020AnimeDownload):
 
         for i in range(self.TOTAL_EPISODES):
             episode = str(i + 1).zfill(2)
+            if self.is_file_exists(self.base_folder + "/" + episode + "_1.jpg") or self.is_file_exists(
+                    self.base_folder + "/" + episode + "_1.png"):
+                continue
             for j in range(self.TOTAL_IMAGES_PER_EPISODE):
                 image_url = self.IMAGE_TEMPLATE % (str(i + 1).zfill(3), str(j).zfill(3))
                 file_path_without_extension = self.base_folder + '/' + str(episode) + '_' + str(j + 1)
@@ -363,7 +399,7 @@ class Kingdom3Download(Spring2020AnimeDownload):
 # Otome Game no Hametsu Flag shika Nai Akuyaku Reijou ni Tensei shiteshimatta...
 class HamehuraDownload(Spring2020AnimeDownload):
 
-    PAGE_PREFIX = "https://hamehura-anime.com/story"
+    STORY_PAGE = "https://hamehura-anime.com/story"
     
     def __init__(self):
         super().__init__()
@@ -372,14 +408,28 @@ class HamehuraDownload(Spring2020AnimeDownload):
             os.makedirs(self.base_folder)
     
     def run(self):
-        pass
+        soup = self.get_soup(self.STORY_PAGE)
+        story_content = soup.find_all('div', class_='story_content')
+        for story in story_content:
+            title = story.find('p', class_='orn_ttl').text
+            episode = self.get_episode_number(title)
+            if episode is None:
+                continue
+            if self.is_file_exists(self.base_folder + "/" + episode + "_1.jpg") or self.is_file_exists(
+                    self.base_folder + "/" + episode + "_1.png"):
+                continue
+            swiper_slide = story.find_all('div', class_='swiper-slide')
+            for j in range(len(swiper_slide)):
+                image_url = swiper_slide[j].find('img')['src']
+                file_path_without_extension = self.base_folder + '/' + episode + '_' + str(j + 1)
+                self.download_image(image_url, file_path_without_extension)
 
 
 # Princess Connect! Re:Dive
 class PriconneDownload(Spring2020AnimeDownload):
     
     PAGE_PREFIX = "https://anime.priconne-redive.jp"
-    STORY_PREFIX = "https://anime.priconne-redive.jp/story/";
+    STORY_PREFIX = "https://anime.priconne-redive.jp/story/"
     
     def __init__(self):
         super().__init__()
@@ -463,11 +513,14 @@ class TamayomiDownload(Spring2020AnimeDownload):
     def run(self):
         soup = self.get_soup(self.STORY_PREFIX)
         stories = soup.find('ul', class_='story-storybox_thumbs').find_all('li', class_='story-storybox_thumbs_item')
-        for i in range(len(stories)):
-            episode = str(i + 1).zfill(2)
+        for story in stories:
+            story_title = story.find('p', class_='story-storybox_thumbs_title').text
+            episode = self.get_episode_number(story_title, prefix='第', suffix='球')
+            if episode is None:
+                continue
             if self.is_file_exists(self.base_folder + "/" + episode + "_0.jpg") or self.is_file_exists(self.base_folder + "/" + episode + "_0.png"):
                 continue
-            story_url = self.STORY_PREFIX + stories[i].find('a')['href']
+            story_url = self.STORY_PREFIX + story.find('a')['href']
             story_soup = self.get_soup(story_url)
             images = story_soup.find('div', class_='story-detbox_main').find_all('img')
             for j in range(len(images)):

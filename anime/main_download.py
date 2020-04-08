@@ -102,7 +102,7 @@ class MainDownload:
         # Download image:
         try:
             with requests.get(url, stream=True, headers=headers) as r:
-                # File not found
+                # File not found or redirected to main page
                 if r.status_code == 404:
                     return -1
                 r.raise_for_status()
@@ -139,11 +139,15 @@ class MainDownload:
         return os.path.isfile(filepath)
 
     @staticmethod
-    def get_episode_number(text):
-        regex = '第[０|１|２|３|４|５|６|７|８|９|0-9]+話'
+    def get_episode_number(text, prefix=None, suffix=None):
+        if prefix is None:
+            prefix = '第'
+        if suffix is None:
+            suffix = '話'
+        regex = prefix + '[０|１|２|３|４|５|６|７|８|９|0-9]+' + suffix
         prog = re.compile(regex)
         result = prog.match(text)
         if result is not None:
-            return str(int(result.group(0).split('話')[0].split('第')[1])).zfill(2)
+            return str(int(result.group(0).split(suffix)[0].split(prefix)[1])).zfill(2)
         else:
             return None
