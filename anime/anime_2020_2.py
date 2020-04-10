@@ -1,6 +1,7 @@
 import os
 import re
 from anime.main_download import MainDownload
+from scan import WebNewtypeScanner
 
 # Arte http://arte-anime.com/ #アルテ @arte_animation [SUN]
 # BNA https://bna-anime.com/story/ #ビーエヌエー @bna_anime [THU]
@@ -636,4 +637,8 @@ class YesterdayDownload(Spring2020AnimeDownload):
                 file_path_without_extension = self.base_folder + '/' + episode + '_' + str(j + 1)
                 result = self.download_image(image_url, file_path_without_extension)
                 if result == -1:
-                    return
+                    break
+            if result == -1:
+                break
+        WebNewtypeScanner('イエスタデイをうたって', self.base_folder).run()
+

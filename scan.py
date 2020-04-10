@@ -1,4 +1,5 @@
 import os
+import re
 import requests
 from anime.external_download import WebNewtypeDownload
 
@@ -109,8 +110,8 @@ class WebNewtypeScanner(MainScanner):
     def has_next_page(self, text):
         return '<img src="/img/pager_right.png"' in text and '<span class="pageNumber"><img src="/img/pager_right.png"' not in text
     
-    def get_episode_num(self, news_title):
-        split1 = news_title.split('話')[0].split('第')
+    def get_episode_num(self, result):
+        split1 = result[0].split('話')[0].split('第')
         if len(split1) < 2:
             return -1
         try:
@@ -134,12 +135,18 @@ class WebNewtypeScanner(MainScanner):
             if len(split3) < 2:
                 continue
             news_title = split3[1].split('</p>')[0]
-            if self.keyword not in news_title or '先行' not in news_title or '第' not in news_title or '話' not in news_title:
+            regex = '第' + '[０|１|２|３|４|５|６|７|８|９|0-9]+' + '話'
+            prog = re.compile(regex)
+            result = prog.findall(news_title)
+            if '最終話' in news_title and '先行' in news_title:
+                episode = 'last'
+            elif self.keyword in news_title and '先行' in news_title and len(result) > 0:
+                episode_num = self.get_episode_num(result)
+                if episode_num < 1:
+                    continue
+                episode = str(episode_num).zfill(2)
+            else:
                 continue
-            episode_num = self.get_episode_num(news_title)
-            if (episode_num < 1):
-                continue
-            episode = str(episode_num).zfill(2)
             if os.path.isfile(self.base_folder + "/" + episode + "_01.jpg"):
                 return 1
             split4 = split2[i].split('<a href="')
@@ -147,9 +154,9 @@ class WebNewtypeScanner(MainScanner):
                 continue
             url = split4[1].split('"')[0]
             article_id = self.get_article_id(url)
-            if (len(article_id) == 0):
+            if len(article_id) == 0:
                 continue
-            WebNewtypeDownload(article_id, self.base_folder, episode_num).run()
+            WebNewtypeDownload(article_id, self.base_folder, episode).run()
         return 0
 
     def run(self):
