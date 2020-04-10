@@ -138,7 +138,7 @@ class WebNewtypeScanner(MainScanner):
             regex = '第' + '[０|１|２|３|４|５|６|７|８|９|0-9]+' + '話'
             prog = re.compile(regex)
             result = prog.findall(news_title)
-            if '最終話' in news_title and '先行' in news_title:
+            if self.keyword in news_title and '最終話' in news_title and '先行' in news_title:
                 episode = 'last'
             elif self.keyword in news_title and '先行' in news_title and len(result) > 0:
                 episode_num = self.get_episode_num(result)
