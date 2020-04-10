@@ -431,6 +431,7 @@ class PriconneDownload(Spring2020AnimeDownload):
     
     PAGE_PREFIX = "https://anime.priconne-redive.jp"
     STORY_PREFIX = "https://anime.priconne-redive.jp/story/"
+    STORY_TEMPLATE = "https://anime.priconne-redive.jp/story/?id=%s"
     
     def __init__(self):
         super().__init__()
@@ -440,12 +441,17 @@ class PriconneDownload(Spring2020AnimeDownload):
     
     def run(self):
         soup = self.get_soup(self.STORY_PREFIX)
-        img_list = soup.find_all('ul', class_='img-list')
-        for i in range(len(img_list)):
+        latest_episode_text = soup.find('ul', class_='story-num').find('li', class_='active').text
+        prog = re.compile('[0-9]+')
+        result = prog.findall(latest_episode_text)
+        max_episode = int(result[0])
+        for i in range(max_episode):
             episode = str(i + 1).zfill(2)
             if self.is_file_exists(self.base_folder + "/" + episode + "_01.jpg") or self.is_file_exists(self.base_folder + "/" + episode + "_01.png"):
                 continue
-            images = img_list[i].find_all('img')
+            story_soup = self.get_soup(self.STORY_TEMPLATE % episode)
+            img_list = story_soup.find('ul', class_='img-list')
+            images = img_list.find_all('img')
             for j in range(len(images)):
                 image_url = self.PAGE_PREFIX + images[j]['src'].replace('-840x472', '')
                 file_path_without_extension = self.base_folder + '/' + episode + '_' + str(j + 1).zfill(2)
@@ -543,13 +549,11 @@ class Tsugumomo2Download(Spring2020AnimeDownload):
     
     def run(self):
         soup = self.get_soup(self.STORY_PAGE)
-        ep_li = soup.find('ul', class_='l-sub-title-list').find_all('li')
-        for ep in ep_li:
-            episode = ''
-            try:
-                episode = str(int(ep.find('p', class_='sub-title-num').text)).zfill(2)
-            except:
-                continue
+        ep_li = soup.find_all('div', class_='l-sub-title')
+        ep_num = 0
+        for ep in reversed(ep_li):
+            ep_num += 1
+            episode = str(ep_num).zfill(2)
             if self.is_file_exists(self.base_folder + "/" + episode + "_1.jpg") or self.is_file_exists(
                     self.base_folder + "/" + episode + "_1.png"):
                 continue
