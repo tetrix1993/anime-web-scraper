@@ -52,6 +52,7 @@ def run():
     #downloads.append(Kaguyasama2Download()) #Kaguya-sama wa Kokurasetai? Tensai-tachi no Renai Zunousen
     #downloads.append(KakushigotoDownload()) #Kakushigoto
     #downloads.append(Kingdom3Download()) #Kingdom S3
+    #downloads.append(NamiyoDownload()) #Nami yo, Kiitekure
     #downloads.append(Oregairu3Download()) #Yahari Ore no Seishun Love Comedy wa Machigatteiru. Kan
     #downloads.append(PriconneDownload()) #Princess Connect! Re:Dive
     #downloads.append(ShachibatoDownload()) #Shachou, Battle no Jikan Desu!
