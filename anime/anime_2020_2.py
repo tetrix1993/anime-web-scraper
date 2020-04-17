@@ -14,12 +14,12 @@ from scan import WebNewtypeScanner
 # Kingdom S3 https://kingdom-anime.com/story/ #キングダム @kingdom_animePR [THU]
 # Otome Game https://hamehura-anime.com/story/ #はめふら #hamehura @hamehura [WED]
 # Namiyo https://namiyo-anime.com/story/ #波よ聞いてくれ #namiyo [WED]
-# Princess Connect https://anime.priconne-redive.jp/story/ #アニメプリコネ #プリコネR #プリコネ @priconne_anime [THU]
+# Princess Connect https://anime.priconne-redive.jp/story/ #アニメプリコネ #プリコネR #プリコネ @priconne_anime [FRI]
 # Shachibato https://shachibato-anime.com/story.html #シャチバト #shachibato @schbt_anime [TUE]
 # Tamayomi https://tamayomi.com/story/ #tamayomi @tamayomi_PR [WED]
-# Tsugumomo S2 http://tsugumomo.com/story/ #つぐもも @tsugumomo_anime
+# Tsugumomo S2 http://tsugumomo.com/story/ #つぐもも @tsugumomo_anime [FRI]
 # Yahari Ore no Seishun http://www.tbs.co.jp/anime/oregairu/story/ #俺ガイル #oregairu @anime_oregairu [DELAYED]
-# Yesterday wo Utatte https://singyesterday.com/ #イエスタデイをうたって @anime_yesterday
+# Yesterday wo Utatte https://singyesterday.com/ #イエスタデイをうたって @anime_yesterday [FRI]
 
 
 # Spring 2020 Anime
@@ -144,6 +144,7 @@ class GleipnirDownload(Spring2020AnimeDownload):
                 image_url = self.PAGE_PREFIX + images[j]['src']
                 file_path_without_extension = self.base_folder + '/' + episode + '_' + str(j + 1)
                 self.download_image(image_url, file_path_without_extension)
+        WebNewtypeScanner('グレイプニル', self.base_folder).run()
 
 
 # Hachi-nan tte, Sore wa Nai deshou!
@@ -551,7 +552,7 @@ class Tsugumomo2Download(Spring2020AnimeDownload):
         soup = self.get_soup(self.STORY_PAGE)
         ep_li = soup.find_all('div', class_='l-sub-title')
         ep_num = 0
-        for ep in reversed(ep_li):
+        for ep in ep_li:
             ep_num += 1
             episode = str(ep_num).zfill(2)
             if self.is_file_exists(self.base_folder + "/" + episode + "_1.jpg") or self.is_file_exists(
