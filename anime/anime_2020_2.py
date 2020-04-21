@@ -178,6 +178,46 @@ class HachinanDownload(Spring2020AnimeDownload):
                 file_path_without_extension = self.base_folder + '/' + episode + '_' + str(j + 1)
                 self.download_image(image_url, file_path_without_extension)
 
+        # Download Blu-ray pictures
+        image_urls = []
+        other_filepath = self.base_folder + '/' + 'other'
+        if not os.path.exists(other_filepath):
+            os.makedirs(other_filepath)
+        url_list = ["http://hachinan-anime.com/bd/",
+                    "http://hachinan-anime.com/bd/bd-special/",
+                    "http://hachinan-anime.com/bd/campaign/"]
+        for url in url_list:
+            bd_soup = self.get_soup(url)
+            try:
+                images = bd_soup.find('section', class_='bdvdArea').find_all('img')
+                for image in images:
+                    image_urls.append(self.PAGE_PREFIX + image['src'])
+            except:
+                pass
+
+        music_soup = self.get_soup("http://hachinan-anime.com/music/")
+        try:
+            music_sections = music_soup.find_all('section', class_='musicArea')
+            for music_section in music_sections:
+                images = music_section.find_all('img')
+                for image in images:
+                    image_url = image['src']
+                    if 'http://' not in image_url and 'https://' not in image_url:
+                        image_url = self.PAGE_PREFIX + image_url
+                    image_urls.append(image_url)
+        except:
+            pass
+
+        for image_url in image_urls:
+            try:
+                image_filename = image_url.split('/')[-1]
+                if os.path.exists(other_filepath + '/' + image_filename):
+                    continue
+                file_path_without_extension = other_filepath + '/' + image_filename.split('.jpg')[0].split('.jpeg')[0].split('.png')[0]
+                self.download_image(image_url, file_path_without_extension)
+            except:
+                pass
+
 
 # Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan wo Erandeiraremasen 2nd Season
 class Honzuki2Download(Spring2020AnimeDownload):
@@ -310,6 +350,7 @@ class TeiboDownload(Spring2020AnimeDownload):
 class Kaguyasama2Download(Spring2020AnimeDownload):
 
     STORY_PAGE = "https://kaguya.love/story/"
+    PAGE_PREFIX = 'https://kaguya.love'
     
     def __init__(self):
         super().__init__()
@@ -333,6 +374,55 @@ class Kaguyasama2Download(Spring2020AnimeDownload):
                 image_url = self.STORY_PAGE + li_tags[j].find('img')['src']
                 file_path_without_extension = self.base_folder + '/' + episode + '_' + str(j + 1)
                 self.download_image(image_url, file_path_without_extension)
+
+        # Download Blu-ray/Music
+        image_urls = []
+        other_filepath = self.base_folder + '/' + 'other'
+        if not os.path.exists(other_filepath):
+            os.makedirs(other_filepath)
+        url_list = ["https://kaguya.love/bddvd/",
+                    "https://kaguya.love/bddvd/02.html",
+                    "https://kaguya.love/bddvd/03.html",
+                    "https://kaguya.love/bddvd/04.html",
+                    "https://kaguya.love/bddvd/05.html",
+                    "https://kaguya.love/bddvd/06.html"]
+        for url in url_list:
+            bd_soup = self.get_soup(url)
+            try:
+                images = bd_soup.find('div', class_='p-bddvd').find_all('img')
+                for image in images:
+                    image_url = image['src'].replace('../..', '')
+                    if 'http://' not in image_url and 'https://' not in image_url:
+                        image_url = self.PAGE_PREFIX + image_url
+                    image_urls.append(image_url)
+            except:
+                pass
+
+        url_list = ["https://kaguya.love/music/opening/",
+                    "https://kaguya.love/music/ending/",
+                    "https://kaguya.love/music/charasong/"]
+        for url in url_list:
+            music_soup = self.get_soup(url)
+            try:
+                images = music_soup.find('div', class_='p-music').find_all('img')
+                for image in images:
+                    image_url = image['src'].replace('../..', '')
+                    if 'http://' not in image_url and 'https://' not in image_url:
+                        image_url = self.PAGE_PREFIX + image_url
+                    image_urls.append(image_url)
+            except:
+                pass
+
+        for image_url in image_urls:
+            try:
+                image_filename = image_url.split('/')[-1]
+                if os.path.exists(other_filepath + '/' + image_filename):
+                    continue
+                file_path_without_extension = other_filepath + '/' + \
+                    image_filename.split('.jpg')[0].split('.jpeg')[0].split('.png')[0]
+                self.download_image(image_url, file_path_without_extension)
+            except:
+                pass
 
 
 # Kakushigoto
@@ -495,6 +585,7 @@ class ShachibatoDownload(Spring2020AnimeDownload):
                 file_path_without_extension = self.base_folder + '/' + episode + '_' + str(j + 1)
                 self.download_image(image_url, file_path_without_extension)
 
+        result = 0
         for i in range(self.TOTAL_EPISODES):
             episode = str(i + 1).zfill(2)
             if self.is_file_exists(self.base_folder + "/" + episode + "_1.jpg") or self.is_file_exists(
@@ -505,14 +596,46 @@ class ShachibatoDownload(Spring2020AnimeDownload):
                 file_path_without_extension = self.base_folder + '/' + episode + '_' + str(j + 1)
                 result = self.download_image(image_url, file_path_without_extension)
                 if result == -1:
-                    return
+                    break
+            if result == -1:
+                break
+
+        image_urls = []
+        other_filepath = self.base_folder + '/' + 'other'
+        if not os.path.exists(other_filepath):
+            os.makedirs(other_filepath)
+        url_list = ["https://shachibato-anime.com/bluray.html",
+                    "https://shachibato-anime.com/music.html"]
+        for url in url_list:
+            bd_soup = self.get_soup(url)
+            try:
+                images = bd_soup.find('div', class_='container1').find_all('img')
+                for image in images:
+                    image_url = image['src']
+                    if 'http://' not in image_url and 'https://' not in image_url:
+                        image_url = self.PAGE_PREFIX + image_url
+                    image_urls.append(image_url)
+            except:
+                pass
+
+        for image_url in image_urls:
+            try:
+                image_filename = image_url.split('/')[-1]
+                if os.path.exists(other_filepath + '/' + image_filename):
+                    continue
+                file_path_without_extension = other_filepath + '/' + \
+                    image_filename.split('.jpg')[0].split('.jpeg')[0].split('.png')[0]
+                self.download_image(image_url, file_path_without_extension)
+            except:
+                pass
+
 
 
 
 # Tamayomi
 class TamayomiDownload(Spring2020AnimeDownload):
 
-    PAGE_PREFIX = "https://tamayomi.com/"
+    PAGE_PREFIX = "https://tamayomi.com"
     STORY_PREFIX = "https://tamayomi.com/story/"
     
     def __init__(self):
@@ -538,6 +661,39 @@ class TamayomiDownload(Spring2020AnimeDownload):
                 image_url = images[j]['src']
                 file_path_without_extension = self.base_folder + '/' + episode + '_' + str(j + 1).zfill(2)
                 self.download_image(image_url, file_path_without_extension)
+
+        image_urls = []
+        other_filepath = self.base_folder + '/' + 'other'
+        if not os.path.exists(other_filepath):
+            os.makedirs(other_filepath)
+        url_list = ["https://tamayomi.com/discography/detail.php?id=1017453",
+                    "https://tamayomi.com/discography/detail.php?id=1017468",
+                    "https://tamayomi.com/discography/detail.php?id=1017553",
+                    "https://tamayomi.com/discography/detail.php?id=1017554",
+                    "https://tamayomi.com/discography/detail.php?id=1017555",
+                    "https://tamayomi.com/discography/detail.php?id=1017556"]
+        for url in url_list:
+            bd_soup = self.get_soup(url)
+            try:
+                images = bd_soup.find('div', class_='disc-single').find_all('img')
+                for image in images:
+                    image_url = image['src']
+                    if 'http://' not in image_url and 'https://' not in image_url:
+                        image_url = self.PAGE_PREFIX + image_url
+                    image_urls.append(image_url)
+            except:
+                pass
+
+        for image_url in image_urls:
+            try:
+                image_filename = image_url.split('/')[-1]
+                if os.path.exists(other_filepath + '/' + image_filename):
+                    continue
+                file_path_without_extension = other_filepath + '/' + \
+                    image_filename.split('.jpg')[0].split('.jpeg')[0].split('.png')[0]
+                self.download_image(image_url, file_path_without_extension)
+            except:
+                pass
 
 
 # Tsugu Tsugumomo
