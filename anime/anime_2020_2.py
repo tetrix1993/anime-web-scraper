@@ -450,13 +450,16 @@ class PriconneDownload(Spring2020AnimeDownload):
             episode = str(i + 1).zfill(2)
             if self.is_file_exists(self.base_folder + "/" + episode + "_01.jpg") or self.is_file_exists(self.base_folder + "/" + episode + "_01.png"):
                 continue
-            story_soup = self.get_soup(self.STORY_TEMPLATE % episode)
-            img_list = story_soup.find('ul', class_='img-list')
-            images = img_list.find_all('img')
-            for j in range(len(images)):
-                image_url = self.PAGE_PREFIX + images[j]['src'].replace('-840x472', '')
-                file_path_without_extension = self.base_folder + '/' + episode + '_' + str(j + 1).zfill(2)
-                self.download_image(image_url, file_path_without_extension)
+            try:
+                story_soup = self.get_soup(self.STORY_TEMPLATE % episode)
+                img_list = story_soup.find('ul', class_='img-list')
+                images = img_list.find_all('img')
+                for j in range(len(images)):
+                    image_url = self.PAGE_PREFIX + images[j]['src'].replace('-840x472', '')
+                    file_path_without_extension = self.base_folder + '/' + episode + '_' + str(j + 1).zfill(2)
+                    self.download_image(image_url, file_path_without_extension)
+            except:
+                continue
 
 
 # Shachou, Battle no Jikan Desu!
