@@ -44,7 +44,10 @@ class MocaNewsDownload(MainDownload):
         if not os.path.exists(self.base_folder):
             os.makedirs(self.base_folder)
         self.article_id = str(article_id)
-        self.episode = str(episode).zfill(2)
+        if isinstance(episode, int):
+            self.episode = str(episode).zfill(2)
+        else:
+            self.episode = str(episode)
         
     def check_str(self, art_id, img_id):
         check_chr = "abcdefghijklmnopqrstuvwxyz0123456789"

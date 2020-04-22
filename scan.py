@@ -2,6 +2,10 @@ import os
 import re
 import requests
 from anime.external_download import WebNewtypeDownload
+from anime.external_download import MocaNewsDownload
+from bs4 import BeautifulSoup as bs
+from datetime import datetime
+from datetime import timedelta
 
 class MainScanner():
 
@@ -29,6 +33,24 @@ class MainScanner():
             print(e)
         return response
 
+    @staticmethod
+    def get_soup(url, headers=None, decode=False, charset=None):
+        if headers == None:
+            headers = {}
+            headers['User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'
+        try:
+            result = requests.get(url, headers=headers)
+            if decode:
+                if charset is None:
+                    return bs(result.content.decode(), 'html.parser')
+                else:
+                    return bs(result.content.decode(charset), 'html.parser')
+            else:
+                return bs(result.text, 'html.parser')
+        except Exception as e:
+            print(e)
+        return ""
+
 class AniverseMagazineScanner(MainScanner):
     
     # Example prefix: https://aniverse-mag.com/page/2?s=プランダラ
@@ -38,13 +60,13 @@ class AniverseMagazineScanner(MainScanner):
         super().__init__()
         self.keyword = keyword
         self.base_folder = base_folder.replace("download/","") + "-aniverse"
-    
+
     def has_results(self, text):
         return "<h2>Sorry, nothing found.</h2>" not in text
     
     def has_next_page(self, text):
         return '<i class="fa fa-long-arrow-right">' in text
-        
+
     def get_episode_num(self, news_title):
         split1 = news_title.split('話')[0].split('第')
         if len(split1) < 2:
@@ -177,6 +199,89 @@ class WebNewtypeScanner(MainScanner):
                 if result == 1:
                     return
                 page += 1
+
+
+class MocaNewsScanner(MainScanner):
+
+    PAGE_URL_TEMPLATE = 'https://moca-news.net/article/%s/'
+
+    def __init__(self, keyword, base_folder, start_date, end_date, ignore_cache=False):
+        super().__init__()
+        self.keyword = keyword
+        self.base_folder = base_folder + "-moca"
+        self.start_date = datetime.strptime(start_date, '%Y%m%d')
+        self.end_date = datetime.strptime(end_date, '%Y%m%d')
+        self.ignore_cache = ignore_cache
+        if not os.path.exists(self.base_folder):
+            os.makedirs(self.base_folder)
+
+    def write_cache(self, date):
+        cache_filepath = self.base_folder + '/cache'
+        with open(cache_filepath, 'w+') as f:
+            f.write(date.strftime('%Y%m%d'))
+
+    def read_last_read_date(self):
+        date = None
+        if self.ignore_cache:
+            return date
+        cache_filepath = self.base_folder + '/cache'
+        if os.path.exists(cache_filepath):
+            with open(cache_filepath, 'r') as f:
+                date_str = f.read().strip()
+            try:
+                date = datetime.strptime(date_str, '%Y%m%d')
+            except:
+                pass
+        return date
+
+    def get_episode_num(self, result):
+        split1 = result[0].split('話')[0].split('第')
+        if len(split1) < 2:
+            return -1
+        try:
+            return int(split1[1])
+        except:
+            return -1
+
+    def get_article_id(self, text):
+        split1 = text.split('/')
+        if len(split1) == 6:
+            return split1[2] + '/' + split1[3]
+        else:
+            return None
+
+    def run(self):
+        last_read_date = self.read_last_read_date()
+        regex = '第' + '[０|１|２|３|４|５|６|７|８|９|0-9]+' + '話'
+        curr_date = self.end_date
+        while self.start_date <= curr_date and (last_read_date is None or last_read_date <= curr_date):
+            date_str = curr_date.strftime('%Y%m%d')
+            page_url = self.PAGE_URL_TEMPLATE % date_str
+            soup = self.get_soup(page_url, decode=True, charset='shift_jisx0213')
+            try:
+                article_divs = soup.find('div', id='main-area').find_all('div', class_='linkblock')
+                for article_div in article_divs:
+                    article_title = article_div.find('div', class_='fontbold').text
+                    prog = re.compile(regex)
+                    result = prog.findall(article_title)
+                    if self.keyword in article_title and '最終話' in article_title and '先行' in article_title:
+                        episode = 'last'
+                    elif self.keyword in article_title and '先行' in article_title and len(result) > 0:
+                        episode_num = self.get_episode_num(result)
+                        if episode_num < 1:
+                            continue
+                        episode = str(episode_num).zfill(2)
+                    else:
+                        continue
+                    image_url = article_div.find('img')['src']
+                    article_id = self.get_article_id(image_url)
+                    MocaNewsDownload(article_id, self.base_folder.replace('download/', ''), episode).run()
+            except:
+                pass
+            curr_date -= timedelta(days=1)
+
+        self.write_cache(self.end_date)
+
 
 if __name__ == '__main__':
     print('Bofuri: ')

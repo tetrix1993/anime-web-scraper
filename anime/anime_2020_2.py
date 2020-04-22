@@ -1,7 +1,9 @@
 import os
 import re
 from anime.main_download import MainDownload
+from datetime import datetime
 from scan import WebNewtypeScanner
+from scan import MocaNewsScanner
 
 # Arte http://arte-anime.com/ #アルテ @arte_animation [SUN]
 # BNA https://bna-anime.com/story/ #ビーエヌエー @bna_anime [THU]
@@ -265,6 +267,14 @@ class Honzuki2Download(Spring2020AnimeDownload):
                     break
             if result == -1 or result is None:
                 break
+
+        last_date = datetime.strptime('20200630', '%Y%m%d')
+        today = datetime.today()
+        if today < last_date:
+            end_date = today
+        else:
+            end_date = last_date
+        MocaNewsScanner('本好きの下剋上', self.base_folder, '20200401', end_date.strftime('%Y%m%d')).run()
 
 
 # Nami yo Kiitekure

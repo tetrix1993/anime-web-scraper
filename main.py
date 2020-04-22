@@ -399,6 +399,7 @@ def download_spring_2020_anime():
     #downloads.append(MocaNewsDownload("20200306/2020030612000a_", "2020-2/honzuki2-moca", 15))
     #downloads.append(MocaNewsDownload("20200406/2020040612000a_", "2020-2/honzuki2-moca", 16))
     #downloads.append(MocaNewsDownload("20200413/2020041312000a_", "2020-2/honzuki2-moca", 17))
+    #downloads.append(MocaNewsDownload("20200420/2020042012000a_", "2020-2/honzuki2-moca", 18))
 
     #downloads.append(WebNewtypeDownload("228052", "2020-2/priconne-wnt", 1))
 
