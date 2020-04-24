@@ -436,6 +436,22 @@ class Kaguyasama2Download(Spring2020AnimeDownload):
             except:
                 pass
 
+        # Download character image
+        chara_filepath = self.base_folder + '/chara'
+        if not os.path.exists(chara_filepath):
+            os.makedirs(chara_filepath)
+        chara_image_templates = [self.PAGE_PREFIX + '/assets/img/chara/img_chara%s.png',
+                                 self.PAGE_PREFIX + '/assets/img/chara/img_face%s-1.png',
+                                 self.PAGE_PREFIX + '/assets/img/chara/img_face%s-2.png']
+        num_of_characters = 10
+        for i in range(len(chara_image_templates)):
+            for j in range(num_of_characters):
+                image_url = chara_image_templates[i] % str(j + 1).zfill(2)
+                filename = image_url.split('/')[-1].replace('.jpg', '').replace('.png', '')
+                filepath = chara_filepath + '/' + filename
+                if not os.path.exists(filepath + '.jpg') or os.path.exists(filepath + '.png'):
+                    self.download_image(image_url, filepath)
+
 
 # Kakushigoto
 class KakushigotoDownload(Spring2020AnimeDownload):
@@ -563,6 +579,34 @@ class PriconneDownload(Spring2020AnimeDownload):
             except:
                 continue
 
+        # Download characters
+        chara_filepath = self.base_folder + '/chara'
+        if not os.path.exists(chara_filepath):
+            os.makedirs(chara_filepath)
+        chara_soup = self.get_soup('https://anime.priconne-redive.jp/character/')
+        full_image_urls = []
+        thumb_image_urls = []
+        chara_names = []
+        try:
+            main_lis = chara_soup.find('ul', class_='main-list').find_all('li')
+            for li in main_lis:
+                chara_names.append(li.find('p', class_='name').text)
+                full_image_urls.append(self.PAGE_PREFIX + li.find('a')['href'])
+                thumb_image_urls.append(self.PAGE_PREFIX + li.find('img')['src'])
+            sub_lis = chara_soup.find('ul', class_='sub-list').find_all('li')
+            for li in sub_lis:
+                chara_names.append(li.find('p', class_='name').text)
+                full_image_urls.append(self.PAGE_PREFIX + li.find('a')['href'])
+                thumb_image_urls.append(self.PAGE_PREFIX + li.find('img')['src'])
+        except:
+            pass
+        if len(full_image_urls) == len(thumb_image_urls) == len(chara_names):
+            for i in range(len(full_image_urls)):
+                full_image_filepath = chara_filepath + '/f_' + chara_names[i]
+                thumb_image_filepath = chara_filepath + '/t_' + chara_names[i]
+                self.download_image(full_image_urls[i], full_image_filepath)
+                self.download_image(thumb_image_urls[i], thumb_image_filepath)
+
 
 # Shachou, Battle no Jikan Desu!
 class ShachibatoDownload(Spring2020AnimeDownload):
@@ -641,7 +685,32 @@ class ShachibatoDownload(Spring2020AnimeDownload):
             except:
                 pass
 
-
+        # Download characters
+        chara_filepath = self.base_folder + '/chara'
+        if not os.path.exists(chara_filepath):
+            os.makedirs(chara_filepath)
+        chara_soup = self.get_soup('https://shachibato-anime.com/character.html')
+        image_urls = []
+        try:
+            lis = chara_soup.find('ul', class_='panel').find_all()
+            for li in lis:
+                visual_div = li.find('div', class_='visual')
+                if visual_div is not None:
+                    image_urls.append(self.PAGE_PREFIX + visual_div.find('img')['src'])
+                face_div = li.find('div', class_='face')
+                if face_div is not None:
+                    face_images = face_div.find_all('img')
+                    for face_img in face_images:
+                        image_urls.append(self.PAGE_PREFIX + face_img['src'])
+                visual2_div = li.find('div', class_='visual2')
+                if visual2_div is not None:
+                    image_urls.append(self.PAGE_PREFIX + visual2_div.find('img')['src'])
+        except:
+            pass
+        for image_url in image_urls:
+            filename = image_url.split('/')[-1].replace('.jpg', '').replace('.png', '')
+            file_path_without_extension = chara_filepath + '/' + filename
+            self.download_image(image_url, file_path_without_extension)
 
 
 # Tamayomi
@@ -706,6 +775,30 @@ class TamayomiDownload(Spring2020AnimeDownload):
                 self.download_image(image_url, file_path_without_extension)
             except:
                 pass
+
+        # Download characters
+        chara_filepath = self.base_folder + '/chara'
+        if not os.path.exists(chara_filepath):
+            os.makedirs(chara_filepath)
+
+        image_urls = []
+        chara_soup = self.get_soup("https://tamayomi.com/character/")
+        class_names = ['character-thumbs_imageArea', 'character-modal_item_headerFace', 'character-modal_item_imagebox']
+        for class_name in class_names:
+            try:
+                div_tags = chara_soup.find_all('div', class_=class_name)
+                for div_tag in div_tags:
+                    image_url = div_tag.find('img')['src']
+                    if image_url[0:3] == "../":
+                        image_url = self.PAGE_PREFIX + image_url[2:]
+                    image_urls.append(image_url)
+            except:
+                pass
+
+        for image_url in image_urls:
+            filename = image_url.split('/')[-1].replace('.jpg', '').replace('.png', '')
+            file_path_without_extension = chara_filepath + '/' + filename
+            self.download_image(image_url, file_path_without_extension)
 
 
 # Tsugu Tsugumomo

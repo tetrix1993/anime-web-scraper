@@ -122,7 +122,7 @@ class MainDownload:
                     filepath += split1[i] + '/'
                 filename = split1[len(split1) - 1]
                 logpath = filepath + 'log.txt'
-                with open(logpath, 'a+') as f:
+                with open(logpath, 'a+', encoding='utf-8') as f:
                     f.write(timenow + '\t' + filename + '\t' + url + '\n')
             return 0
         except Exception as e:
@@ -189,7 +189,7 @@ class MainDownload:
                         filepath += split1[j] + '/'
                     filename = split1[len(split1) - 1]
                     logpath = filepath + 'log.txt'
-                    with open(logpath, 'a+') as f:
+                    with open(logpath, 'a+', encoding='utf-8') as f:
                         f.write(timenow + '\t' + filename + '\t' + url + '\n')
                 print("Downloaded " + url)
             return 0
