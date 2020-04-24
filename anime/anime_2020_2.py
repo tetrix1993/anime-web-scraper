@@ -213,11 +213,13 @@ class HachinanDownload(Spring2020AnimeDownload):
         for image_url in image_urls:
             try:
                 image_filename = image_url.split('/')[-1]
-                if os.path.exists(other_filepath + '/' + image_filename):
-                    continue
                 file_path_without_extension = other_filepath + '/' + image_filename.split('.jpg')[0].split('.jpeg')[0].split('.png')[0]
+                if os.path.exists(other_filepath + '/' + image_filename):
+                    self.download_image_if_exists(image_url, file_path_without_extension, other_filepath + '/' + image_filename)
+                    continue
                 self.download_image(image_url, file_path_without_extension)
-            except:
+            except Exception as e:
+                print(e)
                 pass
 
 
