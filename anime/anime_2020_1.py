@@ -24,7 +24,9 @@ from scan import WebNewtypeScanner
 
 # Winter 2020 Anime
 class Winter2020AnimeDownload(MainDownload):
-    
+    season = "2020-1"
+    season_name = "Winter 2020"
+
     def __init__(self):
         super().__init__()
         self.base_folder = self.base_folder + "/2020-1"
@@ -33,6 +35,9 @@ class Winter2020AnimeDownload(MainDownload):
 
 # Darwin's Game
 class DarwinsGameDownload(Winter2020AnimeDownload):
+    title = "Darwin's Game"
+    keywords = ["Darwin's Game"]
+
     STORY_PAGE = "https://darwins-game.com/story/"
     PAGE_PREFIX = "https://darwins-game.com/story/?id=ep"
     BD_PAGE = "https://darwins-game.com/bddvd/"
@@ -87,6 +92,9 @@ class DarwinsGameDownload(Winter2020AnimeDownload):
 
 # Eizouken ni wa Te wo Dasu na!
 class EizoukenDownload(Winter2020AnimeDownload):
+    title = "Eizouken ni wa Te wo Dasu na!"
+    keywords = ["Eizouken ni wa Te wo Dasu na!", "Keep Your Hands Off Eizouken!"]
+
     PAGE_PREFIX = "http://eizouken-anime.com"
     STORY_DATA_JSON = "http://eizouken-anime.com/story/story_data.json"
     
@@ -122,6 +130,8 @@ class EizoukenDownload(Winter2020AnimeDownload):
 
 # Hatena Illusion
 class HatenaIllusionDownload(Winter2020AnimeDownload):
+    title = "Hatena Illusion"
+    keywords = ["Hatena Illusion"]
 
     PAGE_PREFIX = "http://hatenaillusion-anime.com/"
     STORY_PAGE = "http://hatenaillusion-anime.com/story.html"
@@ -155,6 +165,8 @@ class HatenaIllusionDownload(Winter2020AnimeDownload):
 
 # Heya Camp
 class HeyaCampDownload(Winter2020AnimeDownload):
+    title = "Heya Camp"
+    keywords = ["Heya Camp", "Room Camp"]
 
     PAGE_PREFIX = "https://yurucamp.jp/heyacamp/"
     EPISODE_PREFIX = "https://yurucamp.jp/heyacamp/episode/"
@@ -266,6 +278,8 @@ class HeyaCampDownload(Winter2020AnimeDownload):
 
 # Infinite Dendrogram
 class InfiniteDendrogramDownload(Winter2020AnimeDownload):
+    title = "Infinite Dendrogram"
+    keywords = ["Infinite Dendrogram"]
 
     PAGE_PREFIX = "http://dendro-anime.jp/story/"
     EPISODE_PAGE_PREFIX = "http://dendro-anime.jp/story/ep"
@@ -310,6 +324,9 @@ class InfiniteDendrogramDownload(Winter2020AnimeDownload):
 
 # Isekai Quartet 2
 class IsekaiQuartet2Download(Winter2020AnimeDownload):
+    title = "Isekai Quartet 2"
+    keywords = ["Isekai Quartet 2"]
+
     PAGE_PREFIX = "http://isekai-quartet.com/"
     STORY_PAGE = "http://isekai-quartet.com/story/index.html"
     
@@ -349,6 +366,9 @@ class IsekaiQuartet2Download(Winter2020AnimeDownload):
 
 # Ishuzoku Reviewers
 class IshuzokuReviewersDownload(Winter2020AnimeDownload):
+    title = "Ishuzoku Reviewers"
+    keywords = ["Isyuzoku", "Ishuzoku Reviewers", "Interspecies Reviewers"]
+
     PAGE_PREFIX = "https://isyuzoku.com/"
     STORY_PAGE = "https://isyuzoku.com/story/"
     CHAR_DAI = "\\xe7\\xac\\xac" #第
@@ -400,6 +420,9 @@ class IshuzokuReviewersDownload(Winter2020AnimeDownload):
 
 # Itai no wa Iya nano de Bougyoryoku ni Kyokufuri Shitai to Omoimasu.
 class BofuriDownload(Winter2020AnimeDownload):
+    title = "Itai no wa Iya nano de Bougyoryoku ni Kyokufuri Shitai to Omoimasu."
+    keywords = ["Itai no wa Iya nano de Bougyoryoku ni Kyokufuri Shitai to Omoimasu.",
+                "BOFURI: I Don't Want to Get Hurt, so I'll Max Out My Defense."]
 
     PAGE_PREFIX = "https://bofuri.jp/"
     STORY_PAGE = "https://bofuri.jp/story/"
@@ -433,6 +456,9 @@ class BofuriDownload(Winter2020AnimeDownload):
 
 # Jibaku Shounen Hanako-kun
 class HanakoKunDownload(Winter2020AnimeDownload):
+    title = "Jibaku Shounen Hanako-kun"
+    keywords = ["Jibaku Shounen Hanako-kun", "Toilet Bound Hanako-kun", "Hanakokun"]
+
     PAGE_PREFIX = "https://www.tbs.co.jp/anime/hanakokun/"
     STORY_PAGE = "https://www.tbs.co.jp/anime/hanakokun/story/"
     
@@ -473,6 +499,9 @@ class HanakoKunDownload(Winter2020AnimeDownload):
 
 # Koisuru Asteroid
 class KoisuruAsteroidDownload(Winter2020AnimeDownload):
+    title = "Koisuru Asteroid"
+    keywords = ["Koisuru Asteroid", "Asteroid in Love"]
+
     STORY_PAGE = "http://koiastv.com/story.html"
     PAGE_PREFIX = "http://koiastv.com/story"
     IMAGE_PREFIX = "http://koiastv.com/"
@@ -514,6 +543,9 @@ class KoisuruAsteroidDownload(Winter2020AnimeDownload):
 
 # Kyokou Suiri
 class KyokouSuiriDownload(Winter2020AnimeDownload):
+    title = "Kyokou Suiri"
+    keywords = ["Kyokou Suiri", "In/Spectre"]
+
     PAGE_PREFIX = "https://kyokousuiri.jp/"
     STORY_PAGE = "https://kyokousuiri.jp/story/"
     
@@ -556,6 +588,8 @@ class KyokouSuiriDownload(Winter2020AnimeDownload):
 
 # Murenase! Seton Gakuen
 class MurenaseSetonGakuenDownload(Winter2020AnimeDownload):
+    title = "Murenase! Seton Gakuen"
+    keywords = ["Murenase! Seton Gakuen", "Seton Academy: Join the Pack!"]
 
     PAGE_PREFIX = "https://anime-seton.jp/"
     STORY_PAGE = "https://anime-seton.jp/story/"
@@ -603,6 +637,8 @@ class MurenaseSetonGakuenDownload(Winter2020AnimeDownload):
 
 # Nekopara
 class NekoparaDownload(Winter2020AnimeDownload):
+    title = "Nekopara"
+    keywords = ["Nekopara"]
     
     API_45_JSON = 'https://nekopara-anime.com/ja/php/avex/api.php?mode=45'
     API_46_JSON_PREFIX = 'https://nekopara-anime.com/ja/php/avex/api.php?mode=46&id='
@@ -651,6 +687,9 @@ class NekoparaDownload(Winter2020AnimeDownload):
 
 # Oshi ga Budoukan Ittekuretara Shinu
 class OshibudoDownload(Winter2020AnimeDownload):
+    title = "Oshi ga Budoukan Ittekuretara Shinu"
+    keywords = ["Oshibudo", "Oshi ga Budoukan Ittekuretara Shinu",
+                "If My Favorite Pop Idol Made It to the Budokan, I Would Die"]
     
     EPISODE_DATA_JSON = "https://oshibudo.com/story/episode_data.php"
     PAGE_PREFIX = "https://oshibudo.com/story/"
@@ -683,6 +722,8 @@ class OshibudoDownload(Winter2020AnimeDownload):
 
 # Plunderer
 class PlundererDownload(Winter2020AnimeDownload):
+    title = "Plunderer"
+    keywords = ["Plunderer"]
 
     PAGE_PREFIX = "http://plunderer-info.com/"
     CHAR_DAI = "\\xe7\\xac\\xac" #第
@@ -728,6 +769,9 @@ class PlundererDownload(Winter2020AnimeDownload):
 
 # Rikei ga Koi ni Ochita no de Shoumei shitemita.
 class RikekoiDownload(Winter2020AnimeDownload):
+    title = "Rikei ga Koi ni Ochita no de Shoumei shitemita."
+    keywords = ["Rikekoi", "Rikei ga Koi ni Ochita no de Shoumei shitemita.",
+                "Science Fell in Love, So I Tried to Prove It"]
 
     PAGE_PREFIX = "https://rikekoi.com"
     STORY_PAGE = "https://rikekoi.com/story/1"
@@ -793,7 +837,9 @@ class RikekoiDownload(Winter2020AnimeDownload):
 
 # Runway de Waratte
 class RunwayDeWaratteDownload(Winter2020AnimeDownload):
-    
+    title = "Runway de Waratte"
+    keywords = ["Runway de Waratte", "Smile Down the Runway"]
+
     STORY_PAGE = "https://runway-anime.com/introduction/"
     
     def __init__(self):
@@ -825,6 +871,9 @@ class RunwayDeWaratteDownload(Winter2020AnimeDownload):
 
 # Somali to Mori no Kamisama
 class SomaliDownload(Winter2020AnimeDownload):
+    title = "Somali to Mori no Kamisama"
+    keywords = ["Somali to Mori no Kamisama", "Somali and the Forest Spirit"]
+
     PAGE_PREFIX = "https://somali-anime.com/"
     STORY_PAGE = "https://somali-anime.com/story.html"
     
@@ -865,6 +914,8 @@ class SomaliDownload(Winter2020AnimeDownload):
 
 # Toaru Kagaku no Railgun T
 class RailgunTDownload(Winter2020AnimeDownload):
+    title = "Toaru Kagaku no Railgun T"
+    keywords = ["Toaru Kagaku no Railgun T", "A Certain Scientific Railgun T"]
     
     PAGE_PREFIX = "https://toaru-project.com/railgun_t/"
     STORY_PAGE = "https://toaru-project.com/railgun_t/story/"
@@ -909,6 +960,7 @@ class RailgunTDownload(Winter2020AnimeDownload):
             print(e)
 
 # Toaru Kagaku no Railgun T
+'''
 class RailgunTDownload2(Winter2020AnimeDownload):
 
     #https://toaru-project.com/railgun_t/core_sys/images/contents/00000014/block/00000021/00000030.jpg
@@ -935,3 +987,4 @@ class RailgunTDownload2(Winter2020AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
+'''

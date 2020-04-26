@@ -26,7 +26,9 @@ from scan import MocaNewsScanner
 
 # Spring 2020 Anime
 class Spring2020AnimeDownload(MainDownload):
-    
+    season = "2020-2"
+    season_name = "Spring 2020"
+
     def __init__(self):
         super().__init__()
         self.base_folder = self.base_folder + "/2020-2"
@@ -36,6 +38,8 @@ class Spring2020AnimeDownload(MainDownload):
 
 # Arte
 class ArteDownload(Spring2020AnimeDownload):
+    title = "Arte"
+    keywords = ["Arte"]
 
     PAGE_PREFIX = "http://arte-anime.com/"
 
@@ -66,10 +70,10 @@ class ArteDownload(Spring2020AnimeDownload):
                 self.download_image(image_url, file_path_without_extension)
 
 
-
-
 # Brand New Animal
 class BrandNewAnimalDownload(Spring2020AnimeDownload):
+    title = "Brand New Animal"
+    keywords = ["BNA", "Brand New Animal"]
 
     STORY_PAGE = "https://bna-anime.com/story/"
     IMAGE_TEMPLATE = 'https://bna-anime.com/story/images/%s_%s.jpg'
@@ -118,6 +122,8 @@ class BrandNewAnimalDownload(Spring2020AnimeDownload):
 
 # Gleipnir
 class GleipnirDownload(Spring2020AnimeDownload):
+    title = "Gleipnir"
+    keywords = ["Gleipnir"]
     
     PAGE_PREFIX = "http://gleipnir-anime.com"
     STORY_PAGE = 'http://gleipnir-anime.com/story/'
@@ -151,6 +157,8 @@ class GleipnirDownload(Spring2020AnimeDownload):
 
 # Hachi-nan tte, Sore wa Nai deshou!
 class HachinanDownload(Spring2020AnimeDownload):
+    title = "Hachi-nan tte, Sore wa Nai deshou!"
+    keywords = ["Hachi-nan tte, Sore wa Nai deshou!", "Hachinan", "The 8th Son? Are You Kidding Me?"]
     
     PAGE_PREFIX = "http://hachinan-anime.com"
     STORY_PAGE = "http://hachinan-anime.com/story/"
@@ -225,6 +233,9 @@ class HachinanDownload(Spring2020AnimeDownload):
 
 # Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan wo Erandeiraremasen 2nd Season
 class Honzuki2Download(Spring2020AnimeDownload):
+    title = "Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan wo Erandeiraremasen 2nd Season"
+    keywords = ["Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan wo Erandeiraremasen 2nd Season",
+                "Ascendance of a Bookworm"]
     
     PAGE_PREFIX = "http://booklove-anime.jp/story/"
     IMAGE_PREFIX = "http://booklove-anime.jp/"
@@ -281,6 +292,8 @@ class Honzuki2Download(Spring2020AnimeDownload):
 
 # Nami yo Kiitekure
 class NamiyoDownload(Spring2020AnimeDownload):
+    title = "Nami yo Kiitekure"
+    keywords = ["Namiyo", "Nami yo Kiitekure", "Wave, Listen to Me!"]
 
     STORY_PAGE = 'https://namiyo-anime.com/story/'
 
@@ -309,6 +322,8 @@ class NamiyoDownload(Spring2020AnimeDownload):
 
 # Houkago Teibou Nisshi
 class TeiboDownload(Spring2020AnimeDownload):
+    title = "Houkago Teibou Nisshi"
+    keywords = ["Teibo", "Houkago Teibou Nisshi", "Diary of Our Days at the Breakwater"]
 
     PAGE_PREFIX = "https://teibotv.com/"
     STORY_PAGE = 'https://teibotv.com/story.html'
@@ -360,6 +375,9 @@ class TeiboDownload(Spring2020AnimeDownload):
 
 # Kaguya-sama wa Kokurasetai? Tensai-tachi no Renai Zunousen
 class Kaguyasama2Download(Spring2020AnimeDownload):
+    title = "Kaguya-sama wa Kokurasetai?: Tensai-tachi no Renai Zunousen"
+    keywords = ["Kaguya", "Kaguyasama", "Kaguya-sama wa Kokurasetai?: Tensai-tachi no Renai Zunousen",
+                "Kaguya-sama: Love is War 2nd Season"]
 
     STORY_PAGE = "https://kaguya.love/story/"
     PAGE_PREFIX = 'https://kaguya.love'
@@ -455,6 +473,8 @@ class Kaguyasama2Download(Spring2020AnimeDownload):
 
 # Kakushigoto
 class KakushigotoDownload(Spring2020AnimeDownload):
+    title = "Kakushigoto"
+    keywords = ["Kakushigoto"]
 
     STORY_PAGE = "https://kakushigoto-anime.com/story/"
     
@@ -485,6 +505,8 @@ class KakushigotoDownload(Spring2020AnimeDownload):
 
 # Kingdom 3rd Season
 class Kingdom3Download(Spring2020AnimeDownload):
+    title = "Kingdom"
+    keywords = ["Kingdom 3rd Season"]
 
     STORY_PAGE = "https://kingdom-anime.com/story/"
     
@@ -518,6 +540,9 @@ class Kingdom3Download(Spring2020AnimeDownload):
 
 # Otome Game no Hametsu Flag shika Nai Akuyaku Reijou ni Tensei shiteshimatta...
 class HamehuraDownload(Spring2020AnimeDownload):
+    title = "Otome Game no Hametsu Flag shika Nai Akuyaku Reijou ni Tensei shiteshimatta..."
+    keywords = ["Hamehura", "Otome Game no Hametsu Flag shika Nai Akuyaku Reijou ni Tensei shiteshimatta...",
+                "My Next Life as a Villainess: All Routes Lead to Doom!"]
 
     STORY_PAGE = "https://hamehura-anime.com/story"
     
@@ -547,6 +572,8 @@ class HamehuraDownload(Spring2020AnimeDownload):
 
 # Princess Connect! Re:Dive
 class PriconneDownload(Spring2020AnimeDownload):
+    title = "Princess Connect! Re:Dive"
+    keywords = ["Princess Connect! Re:Dive", "Priconne"]
     
     PAGE_PREFIX = "https://anime.priconne-redive.jp"
     STORY_PREFIX = "https://anime.priconne-redive.jp/story/"
@@ -610,6 +637,8 @@ class PriconneDownload(Spring2020AnimeDownload):
 
 # Shachou, Battle no Jikan Desu!
 class ShachibatoDownload(Spring2020AnimeDownload):
+    title = "Shachou, Battle no Jikan Desu!"
+    keywords = ["Shachou, Battle no Jikan Desu!", "Shachibato! President, It's Time for Battle!"]
 
     PAGE_PREFIX = "https://shachibato-anime.com/"
     STORY_PAGE = "https://shachibato-anime.com/story.html"
@@ -715,6 +744,8 @@ class ShachibatoDownload(Spring2020AnimeDownload):
 
 # Tamayomi
 class TamayomiDownload(Spring2020AnimeDownload):
+    title = "Tamayomi"
+    keywords = ["Tamayomi"]
 
     PAGE_PREFIX = "https://tamayomi.com"
     STORY_PREFIX = "https://tamayomi.com/story/"
@@ -803,6 +834,8 @@ class TamayomiDownload(Spring2020AnimeDownload):
 
 # Tsugu Tsugumomo
 class Tsugumomo2Download(Spring2020AnimeDownload):
+    title = "Tsugu Tsugumomo"
+    keywords = ["Tsugumomo"]
 
     STORY_PAGE = "http://tsugumomo.com/story/"
     
@@ -831,6 +864,9 @@ class Tsugumomo2Download(Spring2020AnimeDownload):
 
 # Yahari Ore no Seishun Love Comedy wa Machigatteiru. Kan
 class Oregairu3Download(Spring2020AnimeDownload):
+    title = "Yahari Ore no Seishun Love Comedy wa Machigatteiru. Kan"
+    keywords = ["Oregairu", "Yahari Ore no Seishun Love Comedy wa Machigatteiru. Kan",
+                "My Teen Romantic Comedy SNAFU 3", "My youth romantic comedy is wrong as I expected 3"]
 
     PAGE_PREFIX = "http://www.tbs.co.jp/anime/oregairu/"
     STORY_PAGE = "http://www.tbs.co.jp/anime/oregairu/story/"
@@ -883,6 +919,8 @@ class Oregairu3Download(Spring2020AnimeDownload):
 
 # Yesterday wo Utatte
 class YesterdayDownload(Spring2020AnimeDownload):
+    title = "Yesterday wo Utatte"
+    keywords = ["Yesterday wo Utatte", "Sing Yesterday For Me"]
 
     STORY_PAGE = "https://singyesterday.com/story/"
     PAGE_PREFIX = 'https://singyesterday.com/'

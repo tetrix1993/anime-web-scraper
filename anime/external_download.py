@@ -2,7 +2,13 @@ import os
 import math
 from anime.main_download import MainDownload
 
-class AniverseMagazineDownload(MainDownload):
+
+class ExternalDownload(MainDownload):
+    def __init__(self):
+        super().__init__()
+
+
+class AniverseMagazineDownload(ExternalDownload):
 
     PAGE_PREFIX = "https://aniverse-mag.com/archives/"
     
@@ -33,7 +39,8 @@ class AniverseMagazineDownload(MainDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
-class MocaNewsDownload(MainDownload):
+
+class MocaNewsDownload(ExternalDownload):
 
     PAGE_PREFIX = "https://moca-news.net/article/"
     COOKIE_URL = "https://moca-news.net/pd.php"
@@ -96,7 +103,7 @@ class MocaNewsDownload(MainDownload):
             print(e)
 
 
-class WebNewtypeDownload(MainDownload):
+class WebNewtypeDownload(ExternalDownload):
     
     PAGE_PREFIX = "https://webnewtype.com/news/article/"
     

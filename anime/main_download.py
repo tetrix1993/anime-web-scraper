@@ -5,8 +5,15 @@ import urllib.request
 import os
 import re
 from bs4 import BeautifulSoup as bs
+from search import *
+
 
 class MainDownload:
+
+    title = ""
+    keywords = []
+    season = None
+    season_name = ""
 
     def __init__(self):
         self.base_folder = "download"
@@ -223,3 +230,20 @@ class MainDownload:
             return str(int(result.group(0).split(suffix)[0].split(prefix)[1])).zfill(2)
         else:
             return None
+
+    # Match filter
+    def match(self, s_filter):
+        if not isinstance(s_filter, SearchFilter):
+            return False
+        if s_filter.season is not None:
+            if self.season is not None and self.season.lower() not in s_filter.season:
+                return False
+            elif self.season is None:
+                return False
+        matched_keywords = 0
+        for filter_keyword in s_filter.keywords:
+            for keyword in self.keywords:
+                if filter_keyword.lower() in keyword.lower():
+                    matched_keywords += 1
+                    break
+        return matched_keywords == len(s_filter.keywords)
