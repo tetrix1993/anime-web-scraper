@@ -1,17 +1,23 @@
 import os
 from anime.main_download import MainDownload
 
+
 # Summer 2019 Anime
 class Summer2019AnimeDownload(MainDownload):
-    
+    season = "2019-3"
+    season_name = "Summer 2019"
+
     def __init__(self):
         super().__init__()
         self.base_folder = self.base_folder + "/2019-3"
         if not os.path.exists(self.base_folder):
             os.makedirs(self.base_folder)
 
+
 # Arifureta
 class ArifuretaDownload(Summer2019AnimeDownload):
+    title = "Arifureta Shokugyou de Sekai Saikyou"
+    keywords = ["Arifureta Shokugyou de Sekai Saikyou", "Arifureta: From Commonplace to World's Strongest"]
 
     MAIN_PAGE = "https://arifureta.com/storys/"
 
@@ -53,8 +59,11 @@ class ArifuretaDownload(Summer2019AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Dumbbell
 class DumbbellDownload(Summer2019AnimeDownload):
+    title = "Dumbbell Nan Kilo Moteru?"
+    keywords = ["Dumbbell Nan Kilo Moteru?", "How heavy are the dumbbells you lift?"]
 
     PAGE_LINK = "https://dumbbell-anime.jp/story/"
     IMAGE_PREFIX = "https://dumbbell-anime.jp/"
@@ -91,8 +100,11 @@ class DumbbellDownload(Summer2019AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Granbelm
 class GranbelmDownload(Summer2019AnimeDownload):
+    title = "Granbelm"
+    keywords = ["Granbelm"]
     
     PAGE_LINK = "http://granbelm.com/story/"
     FINAL_EPISODE = 13
@@ -126,8 +138,12 @@ class GranbelmDownload(Summer2019AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Hensuki
 class HensukiDownload(Summer2019AnimeDownload):
+    title = "Kawaikereba Hentai demo Suki ni Natte Kuremasu ka?"
+    keywords = ["Kawaikereba Hentai demo Suki ni Natte Kuremasu ka?",
+                "Hensuki: Are you willing to fall in love with a pervert, as long as she's a cutie?"]
 
     PAGE_PREFIX = "https://hensuki.com/story/?mode=story"
     IMAGE_PREFIX = "https://hensuki.com/story/"
@@ -163,8 +179,11 @@ class HensukiDownload(Summer2019AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Isekai Cheat Magician
 class IsekaiCheatDownload(Summer2019AnimeDownload):
+    title = "Isekai Cheat Magician"
+    keywords = ["Isekai Cheat Magician"]
 
     PAGE_LINK = "http://isekai-cheat-magician.com/story/"
     FINAL_EPISODE = 13
@@ -197,9 +216,12 @@ class IsekaiCheatDownload(Summer2019AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
-            
+
+
 # Joshikousei no Mudazukai
 class JyoshimudaDownload(Summer2019AnimeDownload):
+    title = "Joshikousei no Mudazukai"
+    keywords = ["Joshikousei no Mudazukai", "Wasteful Days of High School Girl"]
 
     PAGE_PREFIX = "http://jyoshimuda.com/story"
     PAGE_SUFFIX = ".html"
@@ -238,8 +260,11 @@ class JyoshimudaDownload(Summer2019AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Kanata no Astra
 class KanataNoAstraDownload(Summer2019AnimeDownload):
+    title = "Kanata no Astra"
+    keywords = ["Astra Lost in Space"]
 
     IMAGE_PREFIX = "http://astra-anime.com/"
     PAGE_LINK = "http://astra-anime.com/story/"
@@ -274,8 +299,11 @@ class KanataNoAstraDownload(Summer2019AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Machikado Mazoku
 class MachikadoMazokuDownload(Summer2019AnimeDownload):
+    title = "Machikado Mazoku"
+    keywords = ["Machikado Mazoku", "The Demon Girl Next Door"]
 
     PAGE_PREFIX = "http://www.tbs.co.jp/anime/machikado/story/"
     # PAGE_SUFFIX = ".html"
@@ -329,6 +357,8 @@ class MachikadoMazokuDownload(Summer2019AnimeDownload):
 
 # Maou-sama, Retry!
 class MaousamaRetryDownload(Summer2019AnimeDownload):
+    title = "Maou-sama, Retry!"
+    keywords = ["Maou-sama, Retry!", "Maousama", "Demon Lord, Retry!"]
 
     PAGE_PREFIX = "http://maousama-anime.com/story/"
     FINAL_EPISODE = 13
@@ -364,8 +394,13 @@ class MaousamaRetryDownload(Summer2019AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Okaasan Online
 class OkaasanOnlineDownload(Summer2019AnimeDownload):
+    title = "Maou-sama, Retry!"
+    keywords = ["Tsuujou Kougeki ga Zentai Kougeki de Ni-kai Kougeki no Okaasan wa Suki Desu ka?",
+                "Do You Like Your Mom? Her Normal Attack is Two Attacks at Full Power",
+                "Okaasan online"]
 
     PAGE_PREFIX = "https://okaasan-online.com/story/"
     IMAGE_PREFIX = "https://okaasan-online.com"
@@ -400,8 +435,11 @@ class OkaasanOnlineDownload(Summer2019AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Sounan desu ka?
 class SounanDesukaDownload(Summer2019AnimeDownload):
+    title = "Sounan Desu ka?"
+    keywords = ["Sounan Desu ka?", "Are You Lost?"]
 
     PAGE_LINK = "http://sounandesuka.jp/"
     FINAL_EPISODE = 13
@@ -434,8 +472,11 @@ class SounanDesukaDownload(Summer2019AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Tejina-senpai
 class TejinaDownload(Summer2019AnimeDownload):
+    title = "Tejina-senpai"
+    keywords = ["Tejina-senpai", "Magical Sempai"]
 
     PAGE_LINK = "http://www.tejina-senpai.jp/story.html"
     IMAGE_PREFIX = "http://www.tejina-senpai.jp/"
@@ -471,8 +512,12 @@ class TejinaDownload(Summer2019AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Uchinoko
 class UchinokoDownload(Summer2019AnimeDownload):
+    title = "Uchi no Ko no Tame naraba, Ore wa Moshikashitara Maou mo Taoseru kamo Shirenai."
+    keywords = ["Uchi no Ko no Tame naraba, Ore wa Moshikashitara Maou mo Taoseru kamo Shirenai.",
+                "Uchinoko", "Uchimusume", "If It's for My Daughter, I'd Even Defeat a Demon Lord"]
 
     PAGE_PREFIX = "http://uchinoko-anime.com/story/"
     FINAL_EPISODE = 13

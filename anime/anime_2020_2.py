@@ -505,7 +505,7 @@ class KakushigotoDownload(Spring2020AnimeDownload):
 
 # Kingdom 3rd Season
 class Kingdom3Download(Spring2020AnimeDownload):
-    title = "Kingdom"
+    title = "Kingdom 3rd Season"
     keywords = ["Kingdom 3rd Season"]
 
     STORY_PAGE = "https://kingdom-anime.com/story/"

@@ -17,8 +17,11 @@ from anime.main_download import MainDownload
 # Val x Love https://val-love.com/episode/ #ヴァルラヴ #戦恋 @val_love_pr [MON]
 # Noukin https://noukin-anime.com/story/ #のうきん @noukin_anime [FRI]
 
+
 # Fall 2019 Anime
 class Fall2019AnimeDownload(MainDownload):
+    season = "2019-4"
+    season_name = "Fall 2019"
     
     def __init__(self):
         super().__init__()
@@ -26,8 +29,11 @@ class Fall2019AnimeDownload(MainDownload):
         if not os.path.exists(self.base_folder):
             os.makedirs(self.base_folder)
 
+
 # Assassins Pride
 class AssassinsPrideDownload(Fall2019AnimeDownload):
+    title = "Assassins Pride"
+    keywords = ["Assassins Pride"]
 
     PAGE_LINK = "https://assassinspride-anime.com/"
     FINAL_EPISODE = 13
@@ -64,6 +70,8 @@ class AssassinsPrideDownload(Fall2019AnimeDownload):
 
 # Bokuben 2 (Sunday)
 class Bokuben2Download(Fall2019AnimeDownload):
+    title = "Bokutachi wa Benkyou ga Dekinai!"
+    keywords = ["Bokuben", "Bokutachi wa Benkyou ga Dekinai!", "We Never Learn" "2", "2nd"]
 
     PAGE_PREFIX = "https://boku-ben.com/story/2nd/"
     PAGE_SUFFIX = ".html"
@@ -107,6 +115,9 @@ class Bokuben2Download(Fall2019AnimeDownload):
 
 # Choujin Koukousei-tachi wa Isekai demo Yoyuu de Ikinuku you desu!
 class ChoyoyuDownload(Fall2019AnimeDownload):
+    title = "Choujin Koukousei-tachi wa Isekai demo Yoyuu de Ikinuku you desu!"
+    keywords = ["Choujin Koukousei-tachi wa Isekai demo Yoyuu de Ikinuku you desu!",
+                "CHOYOYU!: High School Prodigies Have It Easy Even in Another World!"]
     
     PAGE_LINK = "http://choyoyu.com/story/"
     PAGE_PREFIX = "http://choyoyu.com"
@@ -147,6 +158,8 @@ class ChoyoyuDownload(Fall2019AnimeDownload):
 
 # Hataage! Kemonomichi (Monday)
 class KemonomichiDownload(Fall2019AnimeDownload):
+    title = "Hataage! Kemonomichi"
+    keywords = ["Hataage! Kemonomichi", "Kemono Michi: Rise Up"]
 
     PAGE_LINK = "http://hataage-kemonomichi.com/story/"
     PAGE_PREFIX = "http://hataage-kemonomichi.com"
@@ -184,6 +197,8 @@ class KemonomichiDownload(Fall2019AnimeDownload):
 
 # High Score Girl II
 class HiScoreGirl2Download(Fall2019AnimeDownload):
+    title = "High Score Girl II"
+    keywords = ["High Score Girl II", "Hi Score Girl", "2", "2nd"]
 
     PAGE_LINK = "http://hi-score-girl.com/story/"
     PAGE_PREFIX = "http://hi-score-girl.com"
@@ -230,6 +245,9 @@ class HiScoreGirl2Download(Fall2019AnimeDownload):
     
 # Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan wo Erandeiraremasen
 class HonzukiDownload(Fall2019AnimeDownload):
+    title = "Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan wo Erandeiraremasen"
+    keywords = ["Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan wo Erandeiraremasen",
+                "Ascendance of a Bookworm"]
 
     PAGE_LINK = "http://booklove-anime.jp/story/"
     IMAGE_PREFIX = "http://booklove-anime.jp"
@@ -267,9 +285,12 @@ class HonzukiDownload(Fall2019AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
-        
+
+
 # Kandagawa Jet Girls
 class KandagawaJetGirlsDownload(Fall2019AnimeDownload):
+    title = "Kandagawa Jet Girls"
+    keywords = ["Kandagawa Jet Girls"]
     
     PAGE_PREFIX = "http://kjganime.com/story.html"
     IMAGE_PREFIX = "http://kjganime.com/"
@@ -300,9 +321,12 @@ class KandagawaJetGirlsDownload(Fall2019AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)           
 
+
 # Houkago Saikoro Club
 # Wednesday? Friday?
 class SaikoroDownload(Fall2019AnimeDownload):
+    title = "Houkago Saikoro Club"
+    keywords = ["Houkago Saikoro Club", "Afterschool Dice Club"]
 
     PAGE_LINK = "http://saikoro-club.com/story/index.html"
     PAGE_PREFIX = "http://saikoro-club.com/story/"
@@ -349,6 +373,8 @@ class SaikoroDownload(Fall2019AnimeDownload):
 
 # Mairimashita! Iruma-kun
 class IrumaKunDownload(Fall2019AnimeDownload):
+    title = "Mairimashita! Iruma-kun"
+    keywords = ["Mairimashita! Iruma-kun", "Welcome to Demon School! Iruma-kun", "Irumakun"]
 
     PAGE_PREFIX = "https://boku-ben.com/story/"
     PAGE_SUFFIX = ".html"
@@ -368,6 +394,8 @@ class IrumaKunDownload(Fall2019AnimeDownload):
 
 # Null Peta
 class NullPetaDownload(Fall2019AnimeDownload):
+    title = "Null Peta"
+    keywords = ["Null Peta", "Nullpeta"]
 
     PAGE_LINK = "https://nullpeta.com/story/"
     FINAL_EPISODE = 12
@@ -415,6 +443,8 @@ class NullPetaDownload(Fall2019AnimeDownload):
 
 # Ore wo Suki nano wa Omae dake ka yo (Tuesday)
 class OresukiDownload(Fall2019AnimeDownload):
+    title = "Ore wo Suki nano wa Omae dake ka yo"
+    keywords = ["Ore wo Suki nano wa Omae dake ka yo", "ORESUKI Are you the only one who loves me?"]
 
     PAGE_PREFIX = "https://ore.ski/story/?id=ep"
     IMAGE_PREFIX = "https://ore.ski/story/"
@@ -455,6 +485,8 @@ class OresukiDownload(Fall2019AnimeDownload):
 
 # Rifle is Beautiful
 class RifleIsBeautifulDownload(Fall2019AnimeDownload):
+    title = "Rifle is Beautiful"
+    keywords = ["Rifle is Beautiful", "Chidori RSC"]
 
     PAGE_PREFIX = "https://chidori-high-school.com/story/"
     IMAGE_PREFIX = PAGE_PREFIX
@@ -497,6 +529,9 @@ class RifleIsBeautifulDownload(Fall2019AnimeDownload):
 
 # Shinchou Yuusha: Kono Yuusha ga Ore Tueee Kuse ni Shinchou Sugiru (Tuesday)
 class ShinchouYuushaDownload(Fall2019AnimeDownload):
+    title = "Shinchou Yuusha: Kono Yuusha ga Ore Tueee Kuse ni Shinchou Sugiru"
+    keywords = ["Shinchou Yuusha: Kono Yuusha ga Ore Tueee Kuse ni Shinchou Sugiru",
+                "Cautious Hero: The Hero Is Overpowered but Overly Cautious"]
 
     PAGE_LINK = "http://shincho-yusha.jp"
     
@@ -534,6 +569,8 @@ class ShinchouYuushaDownload(Fall2019AnimeDownload):
 
 # Val x Love (Fri)
 class ValLoveDownload(Fall2019AnimeDownload):
+    title = "Val x Love"
+    keywords = ["Val x Love", "Vallove", "Ikusa x Koi"]
 
     PAGE_LINK = "https://val-love.com/episode/"
     
@@ -576,6 +613,9 @@ class ValLoveDownload(Fall2019AnimeDownload):
 
 # Watashi, Nouryoku wa Heikinchi de tte Itta yo ne!
 class NoukinDownload(Fall2019AnimeDownload):
+    title = "Watashi, Nouryoku wa Heikinchi de tte Itta yo ne!"
+    keywords = ["Noukin", "Watashi, Nouryoku wa Heikinchi de tte Itta yo ne!",
+                "Didn't I Say to Make My Abilities Average in the Next Life?!"]
 
     PAGE_LINK = "https://noukin-anime.com/story/"
     

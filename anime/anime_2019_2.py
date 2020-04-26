@@ -3,6 +3,8 @@ from anime.main_download import MainDownload
 
 # Spring 2019 Anime
 class Spring2019AnimeDownload(MainDownload):
+    season = "2019-2"
+    season_name = "Spring 2019"
     
     def __init__(self):
         super().__init__()
@@ -10,8 +12,11 @@ class Spring2019AnimeDownload(MainDownload):
         if not os.path.exists(self.base_folder):
             os.makedirs(self.base_folder)
 
+
 # Bokutachi wa Benkyou ga Dekinai
 class BokubenDownload(Spring2019AnimeDownload):
+    title = "Bokutachi wa Benkyou ga Dekinai"
+    keywords = ["Bokuben", "Bokutachi wa Benkyou ga Dekinai", "We Never Learn"]
 
     PAGE_PREFIX = "https://boku-ben.com/story/"
     PAGE_SUFFIX = ".html"
@@ -50,8 +55,11 @@ class BokubenDownload(Spring2019AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Choukadou Girl 1/6
 class ChoukadouGirlDownload(Spring2019AnimeDownload):
+    title = "Choukadou Girl 1/6"
+    keywords = ["Choukadou Girl 1/6", "Amazing Stranger"]
     
     PAGE_LINK = "http://choukadou-anime.com/story/"
     FINAL_EPISODE = 12
@@ -83,8 +91,11 @@ class ChoukadouGirlDownload(Spring2019AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Hachigatsu no Cinderella Nine
 class HachinaiDownload(Spring2019AnimeDownload):
+    title = "Hachigatsu no Cinderella Nine"
+    keywords = ["Hachigatsu no Cinderella Nine", "Amazing Stranger"]
     
     PAGE_LINK = "https://anime-hachinai.com"
     FINAL_EPISODE = 12
@@ -119,8 +130,11 @@ class HachinaiDownload(Spring2019AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Hangyakusei Million Arthur 2nd Season
 class HangyakuseiMillionArthur2Download(Spring2019AnimeDownload):
+    title = "Hangyakusei Million Arthur 2nd Season"
+    keywords = ["Hangyakusei Million Arthur 2nd Season", "Operation Han-Gyaku-Sei Million Arthur 2nd Season"]
     
     PAGE_PREFIX = "http://hangyakusei-anime.com/"
     STORY_PAGE = "http://hangyakusei-anime.com/story/"
@@ -158,8 +172,11 @@ class HangyakuseiMillionArthur2Download(Spring2019AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Hitoribocchi no Marumaru Seikatsu
 class HitoribocchiDownload(Spring2019AnimeDownload):
+    title = "Hitoribocchi no Marumaru Seikatsu"
+    keywords = ["Hitoribocchi no Marumaru Seikatsu"]
     
     IMAGE_PREFIX = "http://hitoribocchi.jp/"
     PAGE_LINK = "http://hitoribocchi.jp/story/"
@@ -194,8 +211,11 @@ class HitoribocchiDownload(Spring2019AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Isekai Quartet
 class IsekaiQuartetDownload(Spring2019AnimeDownload):
+    title = "Isekai Quartet"
+    keywords = ["Isekai Quartet"]
     
     IMAGE_PREFIX = "http://isekai-quartet.com/"
     PAGE_LINK = "http://isekai-quartet.com/story/index_s1.html"
@@ -233,8 +253,11 @@ class IsekaiQuartetDownload(Spring2019AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Kenja no Mago
 class KenjaNoMagoDownload(Spring2019AnimeDownload):
+    title = "Kenja no Mago"
+    keywords = ["Kenja no Mago", "Wise Man's Grandchild"]
 
     IMAGE_PREFIX = "http://kenja-no-mago.jp/story/img/story/"
     IMAGE_SUFFIX = ".gif"
@@ -258,8 +281,11 @@ class KenjaNoMagoDownload(Spring2019AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Midara na Ao-chan wa Benkyou ga Dekinai
 class MidaraNaAochanDownload(Spring2019AnimeDownload):
+    title = "Midara na Ao-chan wa Benkyou ga Dekinai"
+    keywords = ["Midara na Ao-chan wa Benkyou ga Dekinai", "Ao-chan Can't Study!", "Aochan"]
     
     PAGE_LINK = "http://aochan-anime.com/story"
     FINAL_EPISODE = 12
@@ -293,8 +319,11 @@ class MidaraNaAochanDownload(Spring2019AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Nande Koko ni Sensei ga!?
 class NankokoDownload(Spring2019AnimeDownload):
+    title = "Nande Koko ni Sensei ga!?"
+    keywords = ["Nande Koko ni Sensei ga!?", "Nankoko", "Why the hell are you here, Teacher!?"]
     
     PAGE_LINK = "http://nankoko-anime.com/"
     # FINAL_EPISODE = 12
@@ -333,8 +362,11 @@ class NankokoDownload(Spring2019AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Nobunaga-sensei no Osanazuma
 class NobutsumaDownload(Spring2019AnimeDownload):
+    title = "Nobunaga-sensei no Osanazuma"
+    keywords = ["Nobunaga-sensei no Osanazuma", "Nobutsuma"]
     
     PAGE_LINK = "http://nobutsuma-anime.com/story/"
     FINAL_EPISODE = 12
@@ -366,8 +398,11 @@ class NobutsumaDownload(Spring2019AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Senryuu Shoujo
 class SenryuuShoujoDownload(Spring2019AnimeDownload):
+    title = "Senryuu Shoujo"
+    keywords = ["Senryuu Shoujo", "Senryuu Girl"]
     
     PAGE_LINK = "http://senryu-girl-official.com/story"
     FINAL_EPISODE = 12
@@ -401,8 +436,11 @@ class SenryuuShoujoDownload(Spring2019AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Sewayaki Kitsune no Senko-san
 class SenkosanDownload(Spring2019AnimeDownload):
+    title = "Sewayaki Kitsune no Senko-san"
+    keywords = ["Sewayaki Kitsune no Senko-san", "Senkosan", "The Helpful Fox Senko-san"]
     
     IMAGE_PREFIX = "http://senkosan.com/"
     PAGE_LINK = "http://senkosan.com/story/"
@@ -440,8 +478,11 @@ class SenkosanDownload(Spring2019AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Yatogame-chan Kansatsu Nikki
 class YatogameDownload(Spring2019AnimeDownload):
+    title = "Yatogame-chan Kansatsu Nikki"
+    keywords = ["Yatogame-chan Kansatsu Nikki", "Yatogamechan"]
     
     PAGE_LINK = "https://yatogame.nagoya/story/"
     FINAL_EPISODE = 12
@@ -478,8 +519,12 @@ class YatogameDownload(Spring2019AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Kono Yo no Hate de Koi wo Utau Shoujo YU-NO
 class YunoDownload(Spring2019AnimeDownload):
+    title = "Kono Yo no Hate de Koi wo Utau Shoujo YU-NO"
+    keywords = ["Kono Yo no Hate de Koi wo Utau Shoujo YU-NO", "Yuno",
+                "YU-NO: A girl who chants love at the bound of this world."]
 
     PAGE_PREFIX = "http://yuno-anime.com/episode/"
     FINAL_EPISODE = 26

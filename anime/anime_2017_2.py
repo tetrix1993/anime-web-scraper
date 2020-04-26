@@ -4,6 +4,8 @@ from anime.main_download import MainDownload
 
 # Spring 2017 Anime
 class Spring2017AnimeDownload(MainDownload):
+    season = "2017-2"
+    season_name = "Spring 2017"
     
     def __init__(self):
         super().__init__()
@@ -14,6 +16,8 @@ class Spring2017AnimeDownload(MainDownload):
 
 # Alice to Zouroku
 class AliceToZourokuDownload(Spring2017AnimeDownload):
+    title = "Alice to Zouroku"
+    keywords = ["Alice to Zouroku", "Alice & Zoroku", "and"]
 
     PAGE_URL = 'https://www.alicetozouroku.com/story/story_%s.html'
     IMAGE_PREFIX = 'https://www.alicetozouroku.com'
@@ -43,6 +47,8 @@ class AliceToZourokuDownload(Spring2017AnimeDownload):
 
 # Busou Shoujo Machiavellianism
 class BusouShoujoMachiavellismDownload(Spring2017AnimeDownload):
+    title = "Busou Shoujo Machiavellianism"
+    keywords = ["Busou Shoujo Machiavellianism", "Armed Girl's Machiavellism"]
 
     IMAGE_URL = 'http://machiavellism-anime.jp/story/img/%s/%s.jpg'
 
@@ -68,6 +74,8 @@ class BusouShoujoMachiavellismDownload(Spring2017AnimeDownload):
 
 # Clockwork Planet
 class ClockworkPlanetDownload(Spring2017AnimeDownload):
+    title = "Clockwork Planet"
+    keywords = ["Clockwork Planet"]
 
     IMAGE_URL = 'http://www.tbs.co.jp/anime/cp/story/img/story%s/%s.png'
     FINAL_EPISODE = 12
@@ -92,6 +100,9 @@ class ClockworkPlanetDownload(Spring2017AnimeDownload):
 
 # Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka Gaiden: Sword Oratoria
 class SwordOratoriaDownload(Spring2017AnimeDownload):
+    title = "Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka Gaiden: Sword Oratoria"
+    keywords = ["Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka Gaiden: Sword Oratoria", "Danmachi",
+                "Sword Oratoria: Is it Wrong to Try to Pick Up Girls in a Dungeon? On the Side"]
 
     STORY_PAGE = 'http://danmachi.com/sword_oratoria/story/'
 
@@ -116,6 +127,8 @@ class SwordOratoriaDownload(Spring2017AnimeDownload):
 
 # Eromanga Sensei
 class EromangaSenseiDownload(Spring2017AnimeDownload):
+    title = "Eromanga Sensei"
+    keywords = ["Eromanga Sensei", "Eromanga-Sensei"]
 
     IMAGE_URL = 'https://eromanga-sensei.com/assets/img/story/%s/%s.jpg'
     FINAL_EPISODE = 12
@@ -140,6 +153,8 @@ class EromangaSenseiDownload(Spring2017AnimeDownload):
 
 # Hinako Note
 class HinakoNoteDownload(Spring2017AnimeDownload):
+    title = "Hinako Note"
+    keywords = ["Hinako Note"]
 
     IMAGE_URL = 'http://hinakonote.jp/assets/story/%s_%s.jpg'
 
@@ -165,6 +180,8 @@ class HinakoNoteDownload(Spring2017AnimeDownload):
 
 # Re:Creators
 class ReCreatorsDownload(Spring2017AnimeDownload):
+    title = "Re:Creators"
+    keywords = ["Re:Creators"]
 
     IMAGE_URL = 'https://recreators.tv/img/story/story_%s_%s.jpg'
     FINAL_EPISODE = 22
@@ -189,6 +206,8 @@ class ReCreatorsDownload(Spring2017AnimeDownload):
 
 # Renai Boukun
 class RenaiBoukunDownload(Spring2017AnimeDownload):
+    title = "Renai Boukun"
+    keywords = ["Renai Boukun", "Love Tyrant"]
 
     STORY_PAGE = 'https://renaiboukun.com/story/'
     NUM_OF_PICTURES_PER_PAGE = 6
@@ -224,6 +243,9 @@ class RenaiBoukunDownload(Spring2017AnimeDownload):
 
 # Rokudenashi Majutsu Koushi to Akashic Records
 class RokuakaDownload(Spring2017AnimeDownload):
+    title = "Rokudenashi Majutsu Koushi to Akashic Records"
+    keywords = ["Rokudenashi Majutsu Koushi to Akashic Records", "Rokuaka",
+                "Akashic Records of Bastard Magic Instructor"]
 
     STORY_PAGE = 'http://rokuaka.jp/story/'
     IMAGE_PREFIX = 'http://rokuaka.jp'
@@ -256,6 +278,8 @@ class RokuakaDownload(Spring2017AnimeDownload):
 
 # Saenai Heroine no Sodatekata Flat
 class Saekano2Download(Spring2017AnimeDownload):
+    title = "Saenai Heroine no Sodatekata Flat"
+    keywords = ["Saenai Heroine no Sodatekata Flat", "Saekano: How to Raise a Boring Girlfriend"]
 
     IMAGE_URL = 'https://www.saenai.tv/images/story/%s/%s.jpg'
     FINAL_EPISODE = 12 # including Episode 0
@@ -280,6 +304,8 @@ class Saekano2Download(Spring2017AnimeDownload):
 
 # Sakura Quest
 class SakuraQuestDownload(Spring2017AnimeDownload):
+    title = "Sakura Quest"
+    keywords = ["Sakura Quest"]
 
     IMAGE_URL = 'http://sakura-quest.com/story/images/%s_%s.jpg'
     FINAL_EPISODE = 25
@@ -304,6 +330,8 @@ class SakuraQuestDownload(Spring2017AnimeDownload):
 
 # Sakurada Reset
 class SakuradaResetDownload(Spring2017AnimeDownload):
+    title = "Sakurada Reset"
+    keywords = ["Sakurada Reset", "Sagrada Reset"]
 
     IMAGE_URL = 'http://wwwsp.sagrada-anime.com/img/story/ep%s/img%s.jpg'
     FINAL_EPISODE = 24
@@ -328,6 +356,9 @@ class SakuradaResetDownload(Spring2017AnimeDownload):
 
 # Shuumatsu Nani Shitemasu ka? Isogashii Desu ka? Sukutte Moratte Ii Desu ka?
 class SukasukaDownload(Spring2017AnimeDownload):
+    title = "Shuumatsu Nani Shitemasu ka? Isogashii Desu ka? Sukutte Moratte Ii Desu ka?"
+    keywords = ["Shuumatsu Nani Shitemasu ka? Isogashii Desu ka? Sukutte Moratte Ii Desu ka?", "Sukasuka",
+                "WorldEnd: What do you do at the end of the world? Are you busy? Will you save us?"]
 
     STORY_PAGE = 'http://sukasuka-anime.com/story/%s.html'
     PAGE_PREFIX = 'http://sukasuka-anime.com/'
@@ -353,6 +384,9 @@ class SukasukaDownload(Spring2017AnimeDownload):
 
 # Zero kara Hajimeru Mahou no Sho
 class ZeronosyoDownload(Spring2017AnimeDownload):
+    title = "Zero kara Hajimeru Mahou no Sho"
+    keywords = ["Zero kara Hajimeru Mahou no Sho", "Zeronosyo", "Grimoire of Zero"]
+
     IMAGE_URL = 'http://zeronosyo.com/img/story/ep%s/img%s.jpg'
     FINAL_EPISODE = 12
     NUM_OF_PICTURES_PER_PAGE = 6

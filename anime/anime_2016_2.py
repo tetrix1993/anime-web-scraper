@@ -4,6 +4,8 @@ from anime.main_download import MainDownload
 
 # Spring 2016 Anime
 class Spring2016AnimeDownload(MainDownload):
+    season = "2016-2"
+    season_name = "Spring 2016"
     
     def __init__(self):
         super().__init__()
@@ -14,6 +16,8 @@ class Spring2016AnimeDownload(MainDownload):
 
 # Gakusen Toshi Asterisk 2nd Season
 class GakusenToshiAsterisk2Download(Spring2016AnimeDownload):
+    title = "Gakusen Toshi Asterisk 2nd Season"
+    keywords = ["Gakusen Toshi Asterisk 2nd Season", "The Asterisk War 2nd Season"]
 
     IMAGE_URL = 'https://asterisk-war.com/assets/img/story/%s/ep_slide%s.jpg'
     FIRST_EPISODE = 13

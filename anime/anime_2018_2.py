@@ -1,8 +1,11 @@
 import os
 from anime.main_download import MainDownload
 
+
 # Spring 2018 Anime
 class Spring2018AnimeDownload(MainDownload):
+    season = "2018-2"
+    season_name = "Spring 2018"
     
     def __init__(self):
         super().__init__()
@@ -10,8 +13,11 @@ class Spring2018AnimeDownload(MainDownload):
         if not os.path.exists(self.base_folder):
             os.makedirs(self.base_folder)
 
+
 # Alice or Alice: Siscon Niisan to Futago no Imouto
 class AliceOrAliceDownload(Spring2018AnimeDownload):
+    title = "Alice or Alice"
+    keywords = ["Alice or Alice: Siscon Niisan to Futago no Imouto"]
 
     IMAGE_URL = "http://alice-or-alice.com/images/story/story%s/%s.jpg"
     FINAL_EPISODE = 12
@@ -38,8 +44,11 @@ class AliceOrAliceDownload(Spring2018AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Amanchu! Advance
 class Amanchu2Download(Spring2018AnimeDownload):
+    title = "Amanchu! Advance"
+    keywords = ["Amanchu! Advance"]
 
     IMAGE_URL = "http://amanchu-anime.com/img/story2%s_1%s.jpg"
     FINAL_EPISODE = 12
@@ -66,8 +75,11 @@ class Amanchu2Download(Spring2018AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Comic Girls
 class ComicGirlsDownload(Spring2018AnimeDownload):
+    title = "Comic Girls"
+    keywords = ["Comic Girls"]
 
     IMAGE_URL = "http://comic-girls.com/story/img/story%s.png"
     FINAL_EPISODE = 12
@@ -91,8 +103,11 @@ class ComicGirlsDownload(Spring2018AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Golden Kamuy
 class GoldenKamuyDownload(Spring2018AnimeDownload):
+    title = "Golden Kamuy"
+    keywords = ["Golden Kamuy", "Kamui"]
 
     PAGE_URL = "https://kamuy-anime.com/story/%s.html"
     PAGE_PREFIX = "https://kamuy-anime.com/"
@@ -119,9 +134,12 @@ class GoldenKamuyDownload(Spring2018AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
-    
+
+
 # Hinamatsuri
 class HinamatsuriDownload(Spring2018AnimeDownload):
+    title = "Hinamatsuri"
+    keywords = ["Hinamatsuri"]
 
     IMAGE_URL = "http://hina-matsuri.net/assets/story/%s_%s.jpg"
     FINAL_EPISODE = 12
@@ -148,8 +166,11 @@ class HinamatsuriDownload(Spring2018AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Hisone to Maso-tan
 class HisomasoDownload(Spring2018AnimeDownload):
+    title = "Hisone to Maso-tan"
+    keywords = ["Hisone to Maso-tan", "Dragon Pilot: Hisone and Masotan"]
 
     IMAGE_URL = "http://hisomaso.com/core_sys/images/main/cont/story/ep%s_story_img%s.jpg"
     MAX_PAGES = [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1, 6]
@@ -175,8 +196,11 @@ class HisomasoDownload(Spring2018AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Last Period: Owarinaki Rasen no Monogatari
 class LastPeriodDownload(Spring2018AnimeDownload):
+    title = "Last Period: Owarinaki Rasen no Monogatari"
+    keywords = ["Last Period: Owarinaki Rasen no Monogatari", "Last Period: The Journey to the End of the Despair"]
 
     PAGE_PREFIX = "https://www.lastperiod.jp/"
     STORY_PAGE_URL = "https://www.lastperiod.jp/story/%s.html"
@@ -205,8 +229,11 @@ class LastPeriodDownload(Spring2018AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Lostorage Conflated WIXOSS
 class LostorageConflatedWixossDownload(Spring2018AnimeDownload):
+    title = "Lostorage Conflated WIXOSS"
+    keywords = ["Lostorage Conflated WIXOSS"]
 
     IMAGE_URL = "http://lostorage-wixoss.com/story/images/story%s_%s.jpg"
     FINAL_EPISODE = 12
@@ -233,8 +260,11 @@ class LostorageConflatedWixossDownload(Spring2018AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Sword Art Online Alternative: Gun Gale Online
 class GunGaleOnlineDownload(Spring2018AnimeDownload):
+    title = "Sword Art Online Alternative: Gun Gale Online"
+    keywords = ["Sword Art Online Alternative: Gun Gale Online"]
 
     IMAGE_URL = "https://gungale-online.net/assets/images/story/img_ep%s_%s.jpg"
     FINAL_EPISODE = 12
@@ -261,8 +291,11 @@ class GunGaleOnlineDownload(Spring2018AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Tada-kun wa Koi wo Shinai
 class TadakoiDownload(Spring2018AnimeDownload):
+    title = "Tada-kun wa Koi wo Shinai"
+    keywords = ["Tada-kun wa Koi wo Shinai", "Tada Never Falls in Love", "Tadakun"]
 
     IMAGE_URL = "http://tadakoi.tv/images/story/%s/p_%s.jpg"
     FINAL_EPISODE = 13
@@ -289,8 +322,11 @@ class TadakoiDownload(Spring2018AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Wotaku ni Koi wa Muzukashii
 class WotakoiDownload(Spring2018AnimeDownload):
+    title = "Wotaku ni Koi wa Muzukashii"
+    keywords = ["Wotaku ni Koi wa Muzukashii", "Wotakoi: Love is Hard for Otaku"]
 
     IMAGE_URL = "https://wotakoi-anime.com/assets/img/story/%s/ph_slide%s.jpg"
     FINAL_EPISODE = 11

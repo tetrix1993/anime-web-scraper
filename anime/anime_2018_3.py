@@ -1,8 +1,11 @@
 import os
 from anime.main_download import MainDownload
 
+
 # Summer 2018 Anime
 class Summer2018AnimeDownload(MainDownload):
+    season = "2018-3"
+    season_name = "Summer 2018"
     
     def __init__(self):
         super().__init__()
@@ -10,8 +13,11 @@ class Summer2018AnimeDownload(MainDownload):
         if not os.path.exists(self.base_folder):
             os.makedirs(self.base_folder)
 
+
 # Angolmois: Genkou Kassenki
 class AngolmoisDownload(Summer2018AnimeDownload):
+    title = "Angolmois: Genkou Kassenki"
+    keywords = ["Angolmois: Genkou Kassenki", "Angolmois: Record of Mongol Invasion"]
 
     PAGE_PREFIX = "https://angolmois-anime.jp/"
     STORY_PAGE_PREFIX = "https://angolmois-anime.jp/story/"
@@ -42,8 +48,11 @@ class AngolmoisDownload(Summer2018AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Asobi Asobase
 class AsobiAsobaseDownload(Summer2018AnimeDownload):
+    title = "Asobi Asobase"
+    keywords = ["Asobi Asobase", "Workshop Of Fun"]
     
     IMAGE_PREFIX = "http://asobiasobase.com/assets/story/"
     STORY_PAGE = "http://asobiasobase.com/story/"
@@ -73,8 +82,11 @@ class AsobiAsobaseDownload(Summer2018AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Chio-chan no Tsuugakurou
 class ChioChanDownload(Summer2018AnimeDownload):
+    title = "Chio-chan no Tsuugakuro"
+    keywords = ["Chio-chan no Tsuugakuro", "Chiochan", "Chio's School Road"]
     
     STORY_PAGE = "http://chiochan.jp/story/"
     
@@ -106,8 +118,11 @@ class ChioChanDownload(Summer2018AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Grand Blue
 class GrandBlueDownload(Summer2018AnimeDownload):
+    title = "Grand Blue"
+    keywords = ["Grand Blue"]
 
     PAGE_PREFIX = "https://www.grandblue-anime.com/"
     STORY_PAGE = "https://www.grandblue-anime.com/story/introduction.html"
@@ -143,8 +158,11 @@ class GrandBlueDownload(Summer2018AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Hanebado!
 class HanebadoDownload(Summer2018AnimeDownload):
+    title = "Hanebado!"
+    keywords = ["Hanebado!"]
 
     PAGE_PREFIX = "http://hanebad.com/img/story/ep"
     FINAL_EPISODE = 13
@@ -168,8 +186,11 @@ class HanebadoDownload(Summer2018AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Happy Sugar Life
 class HappySugarLifeDownload(Summer2018AnimeDownload):
+    title = "Happy Sugar Life"
+    keywords = ["Happy Sugar Life"]
     
     PAGE_PREFIX = "http://happysugarlife.tv/"
     STORY_PAGE = "http://happysugarlife.tv/story/"
@@ -216,8 +237,11 @@ class HappySugarLifeDownload(Summer2018AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Harukana Receive
 class HarukanaReceiveDownload(Summer2018AnimeDownload):
+    title = "Harukana Receive"
+    keywords = ["Harukana Receive"]
     
     IMAGE_PREFIX = "http://www.harukana-receive.jp/assets/story/"
     STORY_PAGE = "http://www.harukana-receive.jp/story/"
@@ -247,8 +271,11 @@ class HarukanaReceiveDownload(Summer2018AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Hataraku Saibou
 class HatarakuSaibouDownload(Summer2018AnimeDownload):
+    title = "Hataraku Saibou"
+    keywords = ["Hataraku Saibou", "Cells at Work!"]
     
     PAGE_PREFIX = "https://hataraku-saibou.com/"
     STORY_PAGE = "https://hataraku-saibou.com/story/"
@@ -294,8 +321,11 @@ class HatarakuSaibouDownload(Summer2018AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # High Score Girl
 class HiScoreGirlDownload(Summer2018AnimeDownload):
+    title = "High Score Girl"
+    keywords = ["High Score Girl", "Hi Score Girl"]
 
     PAGE_LINK = "http://hi-score-girl.com/story/"
     PAGE_PREFIX = "http://hi-score-girl.com"
@@ -339,8 +369,11 @@ class HiScoreGirlDownload(Summer2018AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e) 
 
+
 # Hyakuren no Haou to Seiyaku no Valkyria
 class HyakurenDownload(Summer2018AnimeDownload):
+    title = "Hyakuren no Haou to Seiyaku no Valkyria"
+    keywords = ["Hyakuren no Haou to Seiyaku no Valkyria", "The Master of Ragnarok & Blesser of Einherjar"]
 
     STORY_PAGE = "http://hyakuren-anime.com/story/"
 
@@ -371,8 +404,11 @@ class HyakurenDownload(Summer2018AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e) 
 
+
 # Isekai Maou to Shoukan Shoujo no Dorei Majutsu
 class IsekaiMaouDownload(Summer2018AnimeDownload):
+    title = "Isekai Maou to Shoukan Shoujo no Dorei Majutsu"
+    keywords = ["Isekai Maou to Shoukan Shoujo no Dorei Majutsu", "How Not to Summon a Demon Lord", "Isekaimaou"]
     
     STORY_PAGE = "https://isekaimaou-anime.com/story/"
     
@@ -407,8 +443,11 @@ class IsekaiMaouDownload(Summer2018AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Island
 class IslandDownload(Summer2018AnimeDownload):
+    title = "Island"
+    keywords = ["Island"]
 
     STORY_PAGE = "http://never-island.com/story/"
     FINAL_EPISODE = 12
@@ -438,8 +477,11 @@ class IslandDownload(Summer2018AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Overlord III
 class Overlord3Download(Summer2018AnimeDownload):
+    title = "Overlord III"
+    keywords = ["Overlord III", "3", "3rd"]
     
     IMAGE_PREFIX = "http://overlord-anime.com/assets/story/"
     FINAL_EPISODE = 13
@@ -465,8 +507,11 @@ class Overlord3Download(Summer2018AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Satsuriku no Tenshi
 class SatsurikuDownload(Summer2018AnimeDownload):
+    title = "Satsuriku no Tenshi"
+    keywords = ["Satsuriku no Tenshi", "Angels of Death"]
     
     IMAGE_URL = "http://satsuriku.com/images/story/%s/p_%s.jpg"
     FINAL_EPISODE = 16
@@ -493,8 +538,11 @@ class SatsurikuDownload(Summer2018AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Shichisei no Subaru
 class ShichiseiNoSubaruDownload(Summer2018AnimeDownload):
+    title = "Shichisei no Subaru"
+    keywords = ["Shichisei no Subaru", "Seven Senses of the Re'Union", "Reunion"]
     
     IMAGE_PREFIX = "http://7subaru.jp/wp-content/themes/subaru/img/story/"
     FINAL_EPISODE = 12
@@ -520,8 +568,11 @@ class ShichiseiNoSubaruDownload(Summer2018AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Tsukumogami Kashimasu
 class TsukumogamiDownload(Summer2018AnimeDownload):
+    title = "Tsukumogami Kashimasu"
+    keywords = ["Tsukumogami Kashimasu", "We Rent Tsukumogami"]
 
     IMAGE_URL = "http://tsukumogami.jp/assets/img/common/story/img%s_%s.jpg"
     FINAL_EPISODE = 12
@@ -548,8 +599,11 @@ class TsukumogamiDownload(Summer2018AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Yuragi-sou no Yuuna-san
 class YuragisouDownload(Summer2018AnimeDownload):
+    title = "Yuragi-sou no Yuuna-san"
+    keywords = ["Yuragi-sou no Yuuna-san", "Yuuna and the Haunted Hot Springs"]
 
     IMAGE_URL = "https://yuragisou.com/assets/img/common/story/%s/%s.jpg"
     FINAL_EPISODE = 12

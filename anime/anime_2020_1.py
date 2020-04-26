@@ -22,6 +22,7 @@ from scan import WebNewtypeScanner
 # Somali https://somali-anime.com/story.html #ソマリと森の神様 @somali_anime [THU]
 # Toaru Kagaku no Railgun T https://toaru-project.com/railgun_t/story/ #超電磁砲T @toaru_project [SUN]
 
+
 # Winter 2020 Anime
 class Winter2020AnimeDownload(MainDownload):
     season = "2020-1"
@@ -32,6 +33,7 @@ class Winter2020AnimeDownload(MainDownload):
         self.base_folder = self.base_folder + "/2020-1"
         if not os.path.exists(self.base_folder):
             os.makedirs(self.base_folder)
+
 
 # Darwin's Game
 class DarwinsGameDownload(Winter2020AnimeDownload):
@@ -90,6 +92,7 @@ class DarwinsGameDownload(Winter2020AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Eizouken ni wa Te wo Dasu na!
 class EizoukenDownload(Winter2020AnimeDownload):
     title = "Eizouken ni wa Te wo Dasu na!"
@@ -128,6 +131,7 @@ class EizoukenDownload(Winter2020AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Hatena Illusion
 class HatenaIllusionDownload(Winter2020AnimeDownload):
     title = "Hatena Illusion"
@@ -163,10 +167,11 @@ class HatenaIllusionDownload(Winter2020AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Heya Camp
 class HeyaCampDownload(Winter2020AnimeDownload):
     title = "Heya Camp"
-    keywords = ["Heya Camp", "Room Camp"]
+    keywords = ["Heya Camp", "Room Camp", "Yuru Camp", "Yurucamp", "Laid-Back Camp"]
 
     PAGE_PREFIX = "https://yurucamp.jp/heyacamp/"
     EPISODE_PREFIX = "https://yurucamp.jp/heyacamp/episode/"
@@ -276,6 +281,7 @@ class HeyaCampDownload(Winter2020AnimeDownload):
             print(e)
 '''
 
+
 # Infinite Dendrogram
 class InfiniteDendrogramDownload(Winter2020AnimeDownload):
     title = "Infinite Dendrogram"
@@ -322,6 +328,7 @@ class InfiniteDendrogramDownload(Winter2020AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Isekai Quartet 2
 class IsekaiQuartet2Download(Winter2020AnimeDownload):
     title = "Isekai Quartet 2"
@@ -363,6 +370,7 @@ class IsekaiQuartet2Download(Winter2020AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
+
 
 # Ishuzoku Reviewers
 class IshuzokuReviewersDownload(Winter2020AnimeDownload):
@@ -418,6 +426,7 @@ class IshuzokuReviewersDownload(Winter2020AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Itai no wa Iya nano de Bougyoryoku ni Kyokufuri Shitai to Omoimasu.
 class BofuriDownload(Winter2020AnimeDownload):
     title = "Itai no wa Iya nano de Bougyoryoku ni Kyokufuri Shitai to Omoimasu."
@@ -453,6 +462,7 @@ class BofuriDownload(Winter2020AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
+
 
 # Jibaku Shounen Hanako-kun
 class HanakoKunDownload(Winter2020AnimeDownload):
@@ -496,6 +506,7 @@ class HanakoKunDownload(Winter2020AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
+
 
 # Koisuru Asteroid
 class KoisuruAsteroidDownload(Winter2020AnimeDownload):
@@ -585,6 +596,7 @@ class KyokouSuiriDownload(Winter2020AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
+
 
 # Murenase! Seton Gakuen
 class MurenaseSetonGakuenDownload(Winter2020AnimeDownload):
@@ -685,6 +697,7 @@ class NekoparaDownload(Winter2020AnimeDownload):
             print(e)
         WebNewtypeScanner('ネコぱら',self.base_folder).run()
 
+
 # Oshi ga Budoukan Ittekuretara Shinu
 class OshibudoDownload(Winter2020AnimeDownload):
     title = "Oshi ga Budoukan Ittekuretara Shinu"
@@ -719,6 +732,7 @@ class OshibudoDownload(Winter2020AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
+
 
 # Plunderer
 class PlundererDownload(Winter2020AnimeDownload):
@@ -766,6 +780,7 @@ class PlundererDownload(Winter2020AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
+
 
 # Rikei ga Koi ni Ochita no de Shoumei shitemita.
 class RikekoiDownload(Winter2020AnimeDownload):
@@ -835,6 +850,7 @@ class RikekoiDownload(Winter2020AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Runway de Waratte
 class RunwayDeWaratteDownload(Winter2020AnimeDownload):
     title = "Runway de Waratte"
@@ -868,6 +884,7 @@ class RunwayDeWaratteDownload(Winter2020AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
+
 
 # Somali to Mori no Kamisama
 class SomaliDownload(Winter2020AnimeDownload):
@@ -911,6 +928,7 @@ class SomaliDownload(Winter2020AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
         WebNewtypeScanner('ソマリと森の神様',self.base_folder).run()
+
 
 # Toaru Kagaku no Railgun T
 class RailgunTDownload(Winter2020AnimeDownload):
@@ -958,6 +976,7 @@ class RailgunTDownload(Winter2020AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
+
 
 # Toaru Kagaku no Railgun T
 '''

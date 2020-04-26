@@ -19,6 +19,8 @@ def process_download(downloads):
     for process in processes:
         process.join()
 
+    print("Download completed")
+
 
 def run():
     while True:
@@ -43,7 +45,7 @@ def run():
 
 
 def print_intro_message():
-    print("Search for anime:")
+    print("Search for anime to download:")
     print("1 - Filter by keyword only")
     print("2 - Filter by season only")
     print("3 - Filter by keyword and season")
@@ -99,7 +101,7 @@ def process_query(has_keyword, has_season):
         choices = []
         while True:
             try:
-                expr = input("Enter choice of season: ").strip()
+                expr = input("Enter choice(s) of season: ").strip()
                 choices = get_numbers_from_expression(expr)
                 break
             except ValueError:
@@ -122,7 +124,7 @@ def process_query(has_keyword, has_season):
         choices = []
         while True:
             try:
-                expr = input("Enter choice of anime: ").strip()
+                expr = input("Enter choice(s) of anime to download: ").strip()
                 choices = get_numbers_from_expression(expr)
                 break
             except ValueError:
@@ -130,7 +132,7 @@ def process_query(has_keyword, has_season):
                 continue
         filtered_anime_classes = filter_anime_classes(anime_classes, choices)
         if len(filtered_anime_classes) == 0:
-            print("No anime is selected.")
+            print("No anime selected.")
             return
         else:
             process_download(filtered_anime_classes)

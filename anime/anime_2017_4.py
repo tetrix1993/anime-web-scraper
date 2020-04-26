@@ -4,6 +4,8 @@ from anime.main_download import MainDownload
 
 # Fall 2017 Anime
 class Fall2017AnimeDownload(MainDownload):
+    season = "2017-4"
+    season_name = "Fall 2017"
     
     def __init__(self):
         super().__init__()
@@ -14,6 +16,8 @@ class Fall2017AnimeDownload(MainDownload):
 
 # Animegataris
 class AnimegatarisDownload(Fall2017AnimeDownload):
+    title = "Animegataris"
+    keywords = ["Animegataris"]
 
     STORY_URL = 'http://animegataris.com/story'
     
@@ -58,6 +62,8 @@ class AnimegatarisDownload(Fall2017AnimeDownload):
 
 # Blend S
 class BlendSDownload(Fall2017AnimeDownload):
+    title = "Blend S"
+    keywords = ["Blend S"]
 
     IMAGE_URL = "https://blend-s.jp/assets/img/story/%s/img%s.jpg"
     FINAL_EPISODE = 12
@@ -84,6 +90,8 @@ class BlendSDownload(Fall2017AnimeDownload):
 
 # Imouto sae Ireba Ii.
 class ImotosaeDownload(Fall2017AnimeDownload):
+    title = "Imouto sae Ireba Ii."
+    keywords = ["Imouto sae Ireba Ii.", "Imotosae", "A Sister's All You Need"]
 
     IMAGE_URL = "http://imotosae.com/story/img/%s/%s_%s.jpg"
     FINAL_EPISODE = 12
@@ -110,6 +118,8 @@ class ImotosaeDownload(Fall2017AnimeDownload):
 
 # Konohana Kitan
 class KonohanaKitanDownload(Fall2017AnimeDownload):
+    title = "Konohana Kitan"
+    keywords = ["Konohana Kitan"]
 
     IMAGE_URL = "http://konohanatei.jp/story/img/vol_%s/pic_%s.jpg"
     FINAL_EPISODE = 12
@@ -136,6 +146,8 @@ class KonohanaKitanDownload(Fall2017AnimeDownload):
 
 # Shoujo Shuumatsu Ryokou
 class ShoujoShuumatsuRyokouDownload(Fall2017AnimeDownload):
+    title = "Shoujo Shuumatsu Ryokou"
+    keywords = ["Shoujo Shuumatsu Ryokou", "Girls' Last Tour"]
 
     IMAGE_URL = "http://girls-last-tour.com/assets/story/%s_%s.jpg"
     FINAL_EPISODE = 12

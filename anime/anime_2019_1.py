@@ -1,8 +1,11 @@
 import os
 from anime.main_download import MainDownload
 
+
 # Winter 2019 Anime
 class Winter2019AnimeDownload(MainDownload):
+    season = "2019-1"
+    season_name = "Winter 2019"
     
     def __init__(self):
         super().__init__()
@@ -10,8 +13,11 @@ class Winter2019AnimeDownload(MainDownload):
         if not os.path.exists(self.base_folder):
             os.makedirs(self.base_folder)
 
+
 # Circlet Princess
 class CircletPrincessDownload(Winter2019AnimeDownload):
+    title = "Circlet Princess"
+    keywords = ["Circlet Princess"]
     
     STORY_PAGE = "https://cirpri-anime.jp/story/"
     
@@ -55,8 +61,11 @@ class CircletPrincessDownload(Winter2019AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Date A Live III
 class DateALive3Download(Winter2019AnimeDownload):
+    title = "Date A Live III"
+    keywords = ["Date A Live III", "3", "3rd"]
     
     FINAL_EPISODE = 12
     IMAGE_PREFIX = "http://date-a-live-anime.com/story/"
@@ -89,8 +98,11 @@ class DateALive3Download(Winter2019AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Domestic na Kanojo
 class DomeKanoDownload(Winter2019AnimeDownload):
+    title = "Domestic na Kanojo"
+    keywords = ["Domestic na Kanojo", "Domestic Girlfriend", "Domekano"]
 
     PAGE_LINK = "http://domekano-anime.com/story/"
     
@@ -122,8 +134,11 @@ class DomeKanoDownload(Winter2019AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Egao no Daika
 class EgaoNoDaikaDownload(Winter2019AnimeDownload):
+    title = "Egao no Daika"
+    keywords = ["Egao no Daika", "The Price of Smiles"]
     
     IMAGE_PREFIX = "http://egaonodaika.com/"
     PAGE_LINK = "http://egaonodaika.com/story/"
@@ -162,8 +177,11 @@ class EgaoNoDaikaDownload(Winter2019AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Endro
 class EndroDownload(Winter2019AnimeDownload):
+    title = "Endro~!"
+    keywords = ["Endro~!", "Endoro~!"]
     
     PAGE_LINK = "http://www.endro.jp/"
     FINAL_EPISODE = 12
@@ -201,8 +219,11 @@ class EndroDownload(Winter2019AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Girly Air Force
 class GirlyAirForceDownload(Winter2019AnimeDownload):
+    title = "Girly Air Force"
+    keywords = ["Girly Air Force"]
     
     PAGE_LINK = "http://www.gaf-anime.jp/story.html"
     IMAGE_PREFIX = "http://www.gaf-anime.jp"
@@ -241,8 +262,11 @@ class GirlyAirForceDownload(Winter2019AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Gotoubun no Hanayome
 class GotoubunDownload(Winter2019AnimeDownload):
+    title = "Gotoubun no Hanayome"
+    keywords = ["Gotoubun no Hanayome", "The Quintessential Quintuplets", "Go-toubun", "5-toubun"]
 
     PAGE_PREFIX = "http://www.tbs.co.jp/anime/5hanayome/story/"
     # FINAL_EPISODE = 12
@@ -289,8 +313,11 @@ class GotoubunDownload(Winter2019AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Grimms Notes The Animation
 class GrimmsNotesDownload(Winter2019AnimeDownload):
+    title = "Grimms Notes The Animation"
+    keywords = ["Grimms Notes The Animation"]
     
     PAGE_PREFIX = "http://www.tbs.co.jp/anime/grimmsnotes/story/"
     
@@ -328,6 +355,9 @@ class GrimmsNotesDownload(Winter2019AnimeDownload):
 
 # Kaguya-sama wa Kokurasetai
 class KaguyasamaDownload(Winter2019AnimeDownload):
+    title = "Kaguya-sama wa Kokurasetai: Tensai-tachi no Renai Zunousen"
+    keywords = ["Kaguya", "Kaguyasama", "Kaguya-sama wa Kokurasetai: Tensai-tachi no Renai Zunousen",
+                "Kaguya-sama: Love is War"]
 
     PAGE_PREFIX = "https://kaguya.love/1st/story/"
     PAGE_SUFFIX = ".html"
@@ -366,8 +396,11 @@ class KaguyasamaDownload(Winter2019AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Mahou Shoujo Tokushusen Asuka
 class MahouShoujoTokushusenAsukaDownload(Winter2019AnimeDownload):
+    title = "Mahou Shoujo Tokushusen Asuka"
+    keywords = ["Mahou Shoujo Tokushusen Asuka", "Magical Girl Spec-Ops Asuka"]
     
     PAGE_PREFIX = "http://magical-five.jp/"
     
@@ -397,8 +430,11 @@ class MahouShoujoTokushusenAsukaDownload(Winter2019AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)    
 
+
 # Mini Toji
 class MiniTojiDownload(Winter2019AnimeDownload):
+    title = "Mini Toji"
+    keywords = ["Mini Toji", "Mini Toji", "Tojinomiko", "Miko", "Katana Maidens"]
     
     PAGE_PREFIX = "http://minitoji.jp/"
     STORY_PAGE = "http://minitoji.jp/story/"
@@ -434,8 +470,11 @@ class MiniTojiDownload(Winter2019AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)  
 
+
 # Pastel Memories
 class PastelMemoriesDownload(Winter2019AnimeDownload):
+    title = "Pastel Memories"
+    keywords = ["Pastel Memories"]
     
     STORY_PAGE = "https://pasumemotv.com/story"
     
@@ -490,8 +529,11 @@ class PastelMemoriesDownload(Winter2019AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e) 
 
+
 # Tate no Yuusha no Nariagari
 class TateNoYuushaDownload(Winter2019AnimeDownload):
+    title = "Tate no Yuusha no Nariagari"
+    keywords = ["Tate no Yuusha no Nariagari", "The Rising of the Shield Hero"]
     
     PAGE_PREFIX = "http://shieldhero-anime.jp"
     
@@ -521,8 +563,11 @@ class TateNoYuushaDownload(Winter2019AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e) 
 
+
 # Watashi ni Tenshi ga Maiorita!
 class WatatenDownload(Winter2019AnimeDownload):
+    title = "Watashi ni Tenshi ga Maiorita!"
+    keywords = ["Watashi ni Tenshi ga Maiorita!", "Wataten! An Angel Flew Down to Me"]
     
     PAGE_PREFIX = "http://watatentv.com/"
     STORY_PAGE = "http://watatentv.com/story.html"

@@ -1,8 +1,11 @@
 import os
 from anime.main_download import MainDownload
 
+
 # Fall 2018 Anime
 class Fall2018AnimeDownload(MainDownload):
+    season = "2018-4"
+    season_name = "Fall 2018"
     
     def __init__(self):
         super().__init__()
@@ -10,8 +13,11 @@ class Fall2018AnimeDownload(MainDownload):
         if not os.path.exists(self.base_folder):
             os.makedirs(self.base_folder)
 
+
 # Akanesasu Shoujo
 class AkanesasuShoujoDownload(Fall2018AnimeDownload):
+    title = "Akanesasu Shoujo"
+    keywords = ["Akanesasu Shoujo", "The Girl in Twilight"]
     
     PAGE_PREFIX = "http://akanesasushojo.com/"
     STORY_PAGE = "http://akanesasushojo.com/story/"
@@ -47,8 +53,11 @@ class AkanesasuShoujoDownload(Fall2018AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Anima Yell!
 class AnimaYellDownload(Fall2018AnimeDownload):
+    title = "Anima Yell!"
+    keywords = ["Anima Yell!"]
     
     PAGE_PREFIX = "http://www.animayell.com/"
     STORY_PAGE = "http://www.animayell.com/story/"
@@ -84,8 +93,11 @@ class AnimaYellDownload(Fall2018AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Beelzebub-jou no Okinimesu mama.
 class BeelmamaDownload(Fall2018AnimeDownload):
+    title = "Beelzebub-jou no Okinimesu mama."
+    keywords = ["Beelzebub-jou no Okinimesu mama.", "Beelmama", "As Miss Beelzebub Likes."]
     
     PAGE_PREFIX = "https://beelmama.com/"
     STORY_PAGE = "https://beelmama.com/story/"
@@ -121,8 +133,11 @@ class BeelmamaDownload(Fall2018AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Conception
 class ConceptionDownload(Fall2018AnimeDownload):
+    title = "Conception"
+    keywords = ["Conception"]
 
     PAGE_LINK = "http://conception-anime.com/story/"
     
@@ -154,8 +169,11 @@ class ConceptionDownload(Fall2018AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Goblin Slayer
 class GoblinSlayerDownload(Fall2018AnimeDownload):
+    title = "Goblin Slayer"
+    keywords = ["Goblin Slayer"]
 
     PAGE_PREFIX = "http://goblinslayer.jp/"
     STORY_PAGE = "http://goblinslayer.jp/story/"
@@ -206,8 +224,11 @@ class GoblinSlayerDownload(Fall2018AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Golden Kamuy 2nd Season
 class GoldenKamuy2Download(Fall2018AnimeDownload):
+    title = "Golden Kamuy 2nd Season"
+    keywords = ["Golden Kamuy 2nd Season", "Kamui"]
 
     PAGE_URL = "https://kamuy-anime.com/story/%s.html"
     PAGE_PREFIX = "https://kamuy-anime.com/"
@@ -236,8 +257,11 @@ class GoldenKamuy2Download(Fall2018AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Hangyakusei Million Arthur
 class HangyakuseiMillionArthurDownload(Fall2018AnimeDownload):
+    title = "Hangyakusei Million Arthur"
+    keywords = ["Hangyakusei Million Arthur", "Operation Han-Gyaku-Sei Million Arthur"]
     
     PAGE_PREFIX = "http://hangyakusei-anime.com/"
     STORY_PAGE = "http://hangyakusei-anime.com/story/"
@@ -275,8 +299,11 @@ class HangyakuseiMillionArthurDownload(Fall2018AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Irozuku Sekai no Ashita kara
 class IrodukuDownload(Fall2018AnimeDownload):
+    title = "Irozuku Sekai no Ashita kara"
+    keywords = ["Irozuku Sekai no Ashita kara", "Iroduku: The World in Colors"]
 
     PAGE_PREFIX = "http://www.iroduku.jp/"
     STORY_PAGE = "http://iroduku.jp/story/"
@@ -304,8 +331,11 @@ class IrodukuDownload(Fall2018AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Kishuku Gakkou no Juliet
 class KishukuJulietDownload(Fall2018AnimeDownload):
+    title = "Kishuku Gakkou no Juliet"
+    keywords = ["Kishuku Gakkou no Juliet", "Boarding School Juliet"]
     
     PAGE_PREFIX = "https://www.juliet-anime.com/"
     STORY_PAGE = "https://www.juliet-anime.com/story/index.html"
@@ -344,8 +374,11 @@ class KishukuJulietDownload(Fall2018AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Merc Storia: Mukiryoku no Shounen to Bin no Naka no Shoujo
 class MercStoriaDownload(Fall2018AnimeDownload):
+    title = "Merc Storia: Mukiryoku no Shounen to Bin no Naka no Shoujo"
+    keywords = ["Merc Storia: Mukiryoku no Shounen to Bin no Naka no Shoujo"]
     
     PAGE_PREFIX = "http://www.mercstoria.jp/"
     STORY_PAGE = "http://www.mercstoria.jp/story/"
@@ -391,8 +424,11 @@ class MercStoriaDownload(Fall2018AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Ore ga Suki nano wa Imouto dakedo Imouto ja Nai
 class ImoimoDownload(Fall2018AnimeDownload):
+    title = "Ore ga Suki nano wa Imouto dakedo Imouto ja Nai"
+    keywords = ["Ore ga Suki nano wa Imouto dakedo Imouto ja Nai", "Imoimo", "My Sister, My Writer"]
 
     STORY_PAGE = "http://imo-imo.jp/story/"
     IMAGE_PREFIX = "http://imo-imo.jp/assets/story/"
@@ -419,8 +455,11 @@ class ImoimoDownload(Fall2018AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Release the Spyce
 class ReleaseTheSpyceDownload(Fall2018AnimeDownload):
+    title = "Release the Spyce"
+    keywords = ["Release the Spyce"]
 
     IMAGE_PREFIX = "https://releasethespyce.jp/story/img/"
     FINAL_EPISODE = 12
@@ -447,8 +486,11 @@ class ReleaseTheSpyceDownload(Fall2018AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Sora to Umi no Aida
 class SoraumiDownload(Fall2018AnimeDownload):
+    title = "Sora to Umi no Aida"
+    keywords = ["Sora to Umi no Aida", "Between the Sky and Sea", "Soraumi"]
     
     PAGE_PREFIX = "http://soraumi-anime.com/story/"
     PAGE_SUFFIX = "/"
@@ -480,8 +522,11 @@ class SoraumiDownload(Fall2018AnimeDownload):
                 print("Error in running " + self.__class__.__name__)
                 print(e)
 
+
 # SSSS.Gridman
 class SsssGridmanDownload(Fall2018AnimeDownload):
+    title = "SSSS.Gridman"
+    keywords = ["SSSS.Gridman"]
 
     IMAGE_PREFIX = "https://gridman.net/story/img/"
     FINAL_EPISODE = 12
@@ -508,8 +553,12 @@ class SsssGridmanDownload(Fall2018AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Seishun Buta Yarou wa Bunny Girl Senpai no Yume wo Minai
 class AobutaDownload(Fall2018AnimeDownload):
+    title = "Seishun Buta Yarou wa Bunny Girl Senpai no Yume wo Minai"
+    keywords = ["Seishun Buta Yarou wa Bunny Girl Senpai no Yume wo Minai", "Aobuta",
+                "Rascal Does Not Dream of Bunny Girl Senpai"]
     
     PAGE_PREFIX = "https://ao-buta.com/"
     STORY_PAGE = "https://ao-buta.com/story/"
@@ -545,9 +594,12 @@ class AobutaDownload(Fall2018AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Tensei shitara Slime Datta Ken
 # Tonari no Kyuuketsuki-san
 class TensuraDownload(Fall2018AnimeDownload):
+    title = "Tensei shitara Slime Datta Ken"
+    keywords = ["Tensei shitara Slime Datta Ken", "Tensura", "That Time I Got Reincarnated as a Slime"]
     
     STORY_PAGE = "http://www.ten-sura.com/story/"
     
@@ -579,8 +631,11 @@ class TensuraDownload(Fall2018AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Tonari no Kyuuketsuki-san
 class TonariNoKyuuketsukiSanDownload(Fall2018AnimeDownload):
+    title = "Tonari no Kyuuketsuki-san"
+    keywords = ["Tonari no Kyuuketsuki-san", "Kyuketsukisan", "Ms. vampire who lives in my neighborhood."]
     
     STORY_PAGE = "http://kyuketsukisan-anime.com/story/"
     
@@ -611,9 +666,12 @@ class TonariNoKyuuketsukiSanDownload(Fall2018AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
-    
+
+
 # Uchi no Maid ga Uzasugiru!
 class UzamaidDownload(Fall2018AnimeDownload):
+    title = "Uchi no Maid ga Uzasugiru!"
+    keywords = ["Uchi no Maid ga Uzasugiru!", "Uzamaid!"]
 
     PAGE_PREFIX = "http://uzamaid.com/"
     STORY_PAGE = "http://uzamaid.com/story.html"
@@ -649,8 +707,11 @@ class UzamaidDownload(Fall2018AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+
 # Ulysses: Jehanne Darc to Renkin no Kishi
 class UlyssesDownload(Fall2018AnimeDownload):
+    title = "Ulysses: Jehanne Darc to Renkin no Kishi"
+    keywords = ["Ulysses: Jeanne d'Arc and the Alchemist Knight"]
 
     PAGE_PREFIX = "https://ulysses-anime.jp/story/"
     
@@ -684,5 +745,3 @@ class UlyssesDownload(Fall2018AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
- 
-    

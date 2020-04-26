@@ -4,6 +4,8 @@ from anime.main_download import MainDownload
 
 # Summer 2017 Anime
 class Summer2017AnimeDownload(MainDownload):
+    season = "2017-3"
+    season_name = "Summer 2017"
     
     def __init__(self):
         super().__init__()
@@ -14,6 +16,8 @@ class Summer2017AnimeDownload(MainDownload):
 
 # Gamers!
 class GamersDownload(Summer2017AnimeDownload):
+    title = "Gamers!"
+    keywords = ["Gamers!"]
 
     PAGE_URL = 'https://www.gamers-anime.com/story/%s.html'
     IMAGE_PREFIX = 'https://www.gamers-anime.com/'
@@ -45,6 +49,8 @@ class GamersDownload(Summer2017AnimeDownload):
 
 # Isekai wa Smartphone to Tomo ni
 class IsesumaDownload(Summer2017AnimeDownload):
+    title = "Isekai wa Smartphone to Tomo ni"
+    keywords = ["Isekai wa Smartphone to Tomo ni", "Isesuma", "In Another World With My Smartphone"]
 
     IMAGE_URL = "http://isesuma-anime.jp/img/story/ep%s/scene%s.png"
     FINAL_EPISODE = 12
@@ -70,6 +76,8 @@ class IsesumaDownload(Summer2017AnimeDownload):
 
 # New Game!!
 class NewGame2Download(Summer2017AnimeDownload):
+    title = "New Game!!"
+    keywords = ["New Game!!"]
 
     IMAGE_URL = 'http://newgame-anime.com/assets/outline/s2/%s_%s.jpg'
     FINAL_EPISODE = 12
@@ -95,6 +103,8 @@ class NewGame2Download(Summer2017AnimeDownload):
 
 # Tenshi no 3P
 class TenshiNo3PDownload(Summer2017AnimeDownload):
+    title = "Tenshi no 3P!"
+    keywords = ["Tenshi no 3P!", "Angel's 3Piece!"]
 
     IMAGE_URL = 'http://www.tenshi-no-3p.com/img/story/ep%s/story%s_%s.jpg'
     FINAL_EPISODE = 12
@@ -124,6 +134,8 @@ class TenshiNo3PDownload(Summer2017AnimeDownload):
 
 # Tsurezure Children
 class TsurezureChildrenDownload(Summer2017AnimeDownload):
+    title = "Tsurezure Children"
+    keywords = ["Tsurezure Children", "Tsuredure"]
 
     PAGE_URL = 'http://tsuredure-project.jp/story'
 
@@ -153,8 +165,11 @@ class TsurezureChildrenDownload(Summer2017AnimeDownload):
             print(e)
 
 
-# Youkoso Jitsuryoku Shijou Shugi Kyoushitsu e
+# Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e
 class YouzitsuDownload(Summer2017AnimeDownload):
+    title = "Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e"
+    keywords = ["Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e", "Youzitsu", "Youjitsu",
+                "Classroom of the Elite"]
 
     IMAGE_URL = 'http://you-zitsu.com/assets/story/%s_%s.jpg'
     FINAL_EPISODE = 12
