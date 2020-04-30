@@ -925,8 +925,8 @@ class YesterdayDownload(Spring2020AnimeDownload):
     STORY_PAGE = "https://singyesterday.com/story/"
     PAGE_PREFIX = 'https://singyesterday.com/'
     IMAGE_TEMPLATE = 'https://singyesterday.com/cmn/images/story/%s/yd_%s_%s.jpg'
-    TOTAL_EPISODES = 12
-    TOTAL_IMAGES_PER_EPISODE = 4
+    TOTAL_EPISODES = 18
+    TOTAL_IMAGES_PER_EPISODE = 10
     
     def __init__(self):
         super().__init__()
@@ -939,13 +939,16 @@ class YesterdayDownload(Spring2020AnimeDownload):
             episode = str(i + 1).zfill(2)
             if self.is_file_exists(self.base_folder + "/" + episode + "_1.jpg"):
                 continue
+            is_first_image = True
             for j in range(self.TOTAL_IMAGES_PER_EPISODE):
+                if j == 1:
+                    is_first_image = False
                 image_url = self.IMAGE_TEMPLATE % (episode, episode, str(j + 1).zfill(2))
                 file_path_without_extension = self.base_folder + '/' + episode + '_' + str(j + 1)
                 result = self.download_image(image_url, file_path_without_extension)
                 if result == -1:
                     break
-            if result == -1:
+            if result == -1 and is_first_image:
                 break
         WebNewtypeScanner('イエスタデイをうたって', self.base_folder).run()
 
