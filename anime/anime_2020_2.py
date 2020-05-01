@@ -390,20 +390,23 @@ class Kaguyasama2Download(Spring2020AnimeDownload):
     
     def run(self):
         soup = self.get_soup(self.STORY_PAGE)
-        story_divs = soup.find_all('div', class_='p-story__main')
-        for story_div in story_divs:
+        story_nav = soup.find('div', class_='p-story_nav').find_all('a')
+        for story_tag in story_nav:
             try:
-                episode = str(int(story_div.find('p', class_='story_no').text)).zfill(2)
+                page_url = self.PAGE_PREFIX + story_tag['href']
+                episode = str(int(story_tag.text)).zfill(2)
+                if self.is_file_exists(self.base_folder + "/" + episode + "_1.jpg") or self.is_file_exists(
+                        self.base_folder + "/" + episode + "_1.png"):
+                    continue
+                page_soup = self.get_soup(page_url)
+                story_div = page_soup.find('div', class_='p-story__main')
+                li_tags = story_div.find_all('li', class_='scene_item')
+                for j in range(len(li_tags)):
+                    image_url = self.STORY_PAGE + li_tags[j].find('img')['src']
+                    file_path_without_extension = self.base_folder + '/' + episode + '_' + str(j + 1)
+                    self.download_image(image_url, file_path_without_extension)
             except:
                 continue
-            if self.is_file_exists(self.base_folder + "/" + episode + "_1.jpg") or self.is_file_exists(
-                    self.base_folder + "/" + episode + "_1.png"):
-                continue
-            li_tags = story_div.find_all('li', class_='scene_item')
-            for j in range(len(li_tags)):
-                image_url = self.STORY_PAGE + li_tags[j].find('img')['src']
-                file_path_without_extension = self.base_folder + '/' + episode + '_' + str(j + 1)
-                self.download_image(image_url, file_path_without_extension)
 
         # Download Blu-ray/Music
         image_urls = []
@@ -568,6 +571,24 @@ class HamehuraDownload(Spring2020AnimeDownload):
                 image_url = swiper_slide[j].find('img')['src']
                 file_path_without_extension = self.base_folder + '/' + episode + '_' + str(j + 1)
                 self.download_image(image_url, file_path_without_extension)
+
+        '''
+        self.base_folder += "_hidden"
+        if not os.path.exists(self.base_folder):
+            os.makedirs(self.base_folder)
+        image_template = "https://hamehura-anime.com/wp/wp-content/uploads/2020/%s/%s.jpg"
+        for i in range(3, 7):
+            month = str(i).zfill(2)
+            for j in range(6):
+                image_num = str(j + 1).zfill(2)
+                for k in range(12):
+                    if k == 0:
+                        image_url = image_template % (month, image_num)
+                    else:
+                        image_url = image_template % (month, image_num + '-' + str(k))
+                    file_path_without_extension = self.base_folder + '/' + month + '_' + image_num + '_' + str(k)
+                    self.download_image(image_url, file_path_without_extension)
+        '''
 
 
 # Princess Connect! Re:Dive
