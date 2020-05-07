@@ -2,7 +2,9 @@ import os
 import anime.constants as constants
 from anime.main_download import MainDownload
 
+# Iwa Kakeru!: Sport Climbing Girls http://iwakakeru-anime.com/ #いわかける #iwakakeru @iwakakeru_anime
 # Kanojo, Okarishimasu https://kanokari-official.com/ #かのかり #kanokari @kanokari_anime
+# Kuma Kuma Kuma Bear https://kumakumakumabear.com/ #くまクマ熊ベアー #kumabear @kumabear_anime
 # Majo no Tabitabi https://majotabi.jp/ #魔女の旅々 #魔女の旅々はいいぞ #majotabi @majotabi_PR
 # Maou Gakuin no Futekigousha https://maohgakuin.com/ #魔王学院 @maohgakuin
 # Re:Zero S2 http://re-zero-anime.jp/tv/story/ #rezero #リゼロ @Rezero_official
@@ -20,6 +22,35 @@ class UnconfirmedDownload(MainDownload):
         self.base_folder = self.base_folder + "/unconfirmed"
         if not os.path.exists(self.base_folder):
             os.makedirs(self.base_folder)
+
+
+# Iwa Kakeru!: Sport Climbing Girls
+class IwakakeruDownload(UnconfirmedDownload):
+    title = "Iwa Kakeru!: Sport Climbing Girls"
+    keywords = ["Iwa Kakeru!: Sport Climbing Girls", "Iwakakeru"]
+
+    def __init__(self):
+        super().__init__()
+        self.base_folder = self.base_folder + "/iwakakeru"
+        if not os.path.exists(self.base_folder):
+            os.makedirs(self.base_folder)
+
+    def run(self):
+        self.download_key_visual()
+
+    def download_key_visual(self):
+        keyvisual_folder = self.base_folder + '/' + constants.FOLDER_KEY_VISUAL
+        if not os.path.exists(keyvisual_folder):
+            os.makedirs(keyvisual_folder)
+
+        image_urls = ["http://iwakakeru-anime.com/img/index/mainvisual.png"]
+        for image_url in image_urls:
+            image_with_extension = self.extract_image_name_from_url(image_url, with_extension=True)
+            if os.path.exists(keyvisual_folder + '/' + image_with_extension):
+                continue
+            image_without_extension = self.extract_image_name_from_url(image_url, with_extension=False)
+            filepath_without_extension = keyvisual_folder + '/' + image_without_extension
+            self.download_image(image_url, filepath_without_extension)
 
 
 class KanokariDownload(UnconfirmedDownload):
@@ -73,6 +104,36 @@ class KanokariDownload(UnconfirmedDownload):
                     self.download_image(image_url, filepath_without_extension)
         except Exception as e:
             pass
+
+
+# Kuma Kuma Kuma Bear
+class KumaBearDownload(UnconfirmedDownload):
+    title = "Kuma Kuma Kuma Bear"
+    keywords = ["Kuma Kuma Kuma Bear"]
+
+    def __init__(self):
+        super().__init__()
+        self.base_folder = self.base_folder + "/kumabear"
+        if not os.path.exists(self.base_folder):
+            os.makedirs(self.base_folder)
+
+    def run(self):
+        self.download_key_visual()
+
+    def download_key_visual(self):
+        keyvisual_folder = self.base_folder + '/' + constants.FOLDER_KEY_VISUAL
+        if not os.path.exists(keyvisual_folder):
+            os.makedirs(keyvisual_folder)
+
+        image_urls = ["https://kumakumakumabear.com/core_sys/images/main/tz/main_img.jpg",
+                      "https://kumakumakumabear.com/core_sys/images/main/tz/main_img_2.jpg"]
+        for image_url in image_urls:
+            image_with_extension = self.extract_image_name_from_url(image_url, with_extension=True)
+            if os.path.exists(keyvisual_folder + '/' + image_with_extension):
+                continue
+            image_without_extension = self.extract_image_name_from_url(image_url, with_extension=False)
+            filepath_without_extension = keyvisual_folder + '/' + image_without_extension
+            self.download_image(image_url, filepath_without_extension)
 
 
 # Maou Gakuin no Futekigousha: Shijou Saikyou no Maou no Shiso, Tensei shite Shison-tachi no Gakkou e
