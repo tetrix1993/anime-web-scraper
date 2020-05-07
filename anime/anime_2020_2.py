@@ -41,6 +41,9 @@ class ArteDownload(Spring2020AnimeDownload):
     keywords = ["Arte"]
 
     PAGE_PREFIX = "http://arte-anime.com/"
+    IMAGE_TEMPLATE = 'http://arte-anime.com/U1y9gMfZ/wp-content/themes/arte/images/story/img%s_%s.jpg'
+    FINAL_EPISODE = 13
+    IMAGES_PER_EPISODE = 5
 
     def __init__(self):
         super().__init__()
@@ -49,6 +52,21 @@ class ArteDownload(Spring2020AnimeDownload):
             os.makedirs(self.base_folder)
 
     def run(self):
+        for i in range(self.FINAL_EPISODE):
+            episode = str(i + 1).zfill(2)
+            if self.is_file_exists(self.base_folder + "/" + episode + "_1.jpg") or self.is_file_exists(
+                    self.base_folder + "/" + episode + "_1.png"):
+                continue
+            for j in range(self.IMAGES_PER_EPISODE):
+                image_url = self.IMAGE_TEMPLATE % (episode, str(j + 1).zfill(2))
+                file_path_without_extension = self.base_folder + '/' + episode + '_' + str(j + 1)
+                result = self.download_image(image_url, file_path_without_extension)
+                if result == -1:
+                    break
+            if result == -1:
+                break
+
+        '''
         soup = self.get_soup(self.PAGE_PREFIX)
         story_mob = soup.find_all('div', class_='story_mob')
         regex = '#[０|１|２|３|４|５|６|７|８|９|0-9]+'
@@ -67,6 +85,7 @@ class ArteDownload(Spring2020AnimeDownload):
                 image_url = st_smlist[j].find('img')['src']
                 file_path_without_extension = self.base_folder + '/' + episode + '_' + str(j + 1)
                 self.download_image(image_url, file_path_without_extension)
+        '''
 
 
 # Brand New Animal

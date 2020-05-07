@@ -88,20 +88,6 @@ class MainDownload:
         :param headers:
         :return: 0 - Success, 1 - File Exists, -1 - Error
         """
-
-        if ".png" in url:
-            filepath = filepath_without_extension + ".png"
-        elif ".jpeg" in url:
-            filepath = filepath_without_extension + ".jpeg"
-        elif ".gif" in url:
-            filepath = filepath_without_extension + ".gif"
-        else:
-            filepath = filepath_without_extension + ".jpg"
-        
-        # Check local directory if the file exists
-        if (MainDownload.is_file_exists(filepath)):
-            #print("File exists: " + filepath)
-            return 1
         
         if headers == None:
             headers = {}
@@ -113,6 +99,19 @@ class MainDownload:
                 # File not found or redirected to main page
                 if r.status_code == 404:
                     return -1
+                content_type = r.headers['Content-Type']
+                if content_type == 'image/png':
+                    filepath = filepath_without_extension + ".png"
+                elif content_type == 'image/jpeg':
+                    filepath = filepath_without_extension + ".jpg"
+                elif content_type == 'image/gif':
+                    filepath = filepath_without_extension + ".gif"
+                else:
+                    return -1
+
+                if MainDownload.is_file_exists(filepath):
+                    return 1
+
                 r.raise_for_status()
                 with open(filepath, 'wb') as f:
                     for chunk in r.iter_content(chunk_size=8192):
