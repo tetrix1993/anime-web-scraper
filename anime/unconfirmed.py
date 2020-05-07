@@ -1,6 +1,9 @@
 import os
+import anime.constants as constants
 from anime.main_download import MainDownload
 
+# Kanojo, Okarishimasu https://kanokari-official.com/ #かのかり #kanokari @kanokari_anime
+# Majo no Tabitabi https://majotabi.jp/ #魔女の旅々 #魔女の旅々はいいぞ #majotabi @majotabi_PR
 # Maou Gakuin no Futekigousha https://maohgakuin.com/ #魔王学院 @maohgakuin
 # Re:Zero S2 http://re-zero-anime.jp/tv/story/ #rezero #リゼロ @Rezero_official
 # Yahari Ore no Seishun http://www.tbs.co.jp/anime/oregairu/story/ #俺ガイル #oregairu @anime_oregairu
@@ -17,6 +20,59 @@ class UnconfirmedDownload(MainDownload):
         self.base_folder = self.base_folder + "/unconfirmed"
         if not os.path.exists(self.base_folder):
             os.makedirs(self.base_folder)
+
+
+class KanokariDownload(UnconfirmedDownload):
+    title = "Kanojo, Okarishimasu"
+    keywords = ["Kanojo, Okarishimasu", "Kanokari", "Rent-a-Girlfriend"]
+
+    def __init__(self):
+        super().__init__()
+        self.base_folder = self.base_folder + "/kanokari"
+        if not os.path.exists(self.base_folder):
+            os.makedirs(self.base_folder)
+
+    def run(self):
+        self.download_key_visual()
+        self.download_character()
+
+    def download_key_visual(self):
+        keyvisual_folder = self.base_folder + '/' + constants.FOLDER_KEY_VISUAL
+        if not os.path.exists(keyvisual_folder):
+            os.makedirs(keyvisual_folder)
+
+        image_urls = ["https://kanokari-official.com/wp/wp-content/uploads/2020/03/mv01.jpg",
+                      "https://kanokari-official.com/wp/wp-content/uploads/2020/03/mv02.jpg",
+                      "https://kanokari-official.com/wp/wp-content/uploads/2020/03/ruka_KV.jpg",
+                      "https://kanokari-official.com/wp/wp-content/uploads/2020/03/sumi_KV0322.jpg"]
+        for image_url in image_urls:
+            image_with_extension = self.extract_image_name_from_url(image_url, with_extension=True)
+            if os.path.exists(keyvisual_folder + '/' + image_with_extension):
+                continue
+            image_without_extension = self.extract_image_name_from_url(image_url, with_extension=False)
+            filepath_without_extension = keyvisual_folder + '/' + image_without_extension
+            self.download_image(image_url, filepath_without_extension)
+
+    def download_character(self):
+        character_folder = self.base_folder + '/' + constants.FOLDER_CHARACTER
+        if not os.path.exists(character_folder):
+            os.makedirs(character_folder)
+
+        try:
+            soup = self.get_soup("https://kanokari-official.com/")
+            chara_details = soup.find('section', class_='chara_area').find_all('div', class_='chara_detail')
+            for chara_detail in chara_details:
+                images = chara_detail.find_all('img')
+                for image in images:
+                    image_url = image['src']
+                    image_with_extension = self.extract_image_name_from_url(image_url, with_extension=True)
+                    if os.path.exists(character_folder + '/' + image_with_extension):
+                        continue
+                    image_without_extension = self.extract_image_name_from_url(image_url, with_extension=False)
+                    filepath_without_extension = character_folder + '/' + image_without_extension
+                    self.download_image(image_url, filepath_without_extension)
+        except Exception as e:
+            pass
 
 
 # Maou Gakuin no Futekigousha: Shijou Saikyou no Maou no Shiso, Tensei shite Shison-tachi no Gakkou e

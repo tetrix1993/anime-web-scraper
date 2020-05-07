@@ -231,6 +231,28 @@ class MainDownload:
         else:
             return None
 
+    @staticmethod
+    def extract_image_name_from_url(text, with_extension=True):
+        split1 = text.split('/')[-1]
+
+        # Expected input with extension e.g. image.jpg or http://website.com/image.jpg
+        if not with_extension:
+            split2 = split1.split('.')
+            if len(split2) == 1:
+                raise ValueError("Unexpected url: " + split2[0])
+            if len(split2) == 2:
+                return split2[0]
+
+            str = ''
+            for i in range(len(split2) - 1):
+                if i == len(split2) - 2:
+                    str += split2[i]
+                else:
+                    str += split2[i] + '.'
+            return str
+        else:
+            return split1
+
     # Match filter
     def match(self, s_filter):
         if not isinstance(s_filter, SearchFilter):
