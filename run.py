@@ -36,11 +36,6 @@ def process_download(downloads):
 def run():
     downloads = []
 
-    # 2020-3 Summer 2020 Anime
-
-    #downloads.append(MaohgakuinDownload()) #Maou Gakuin no Futekigousha: Shijou Saikyou no Maou no Shiso, Tensei shite Shison-tachi no Gakkou e
-    #downloads.append(ReZero2Download()) #Re:Zero kara Hajimeru Isekai Seikatsu 2nd Season
-
     # 2020-2 Spring 2020 Anime
 
     #downloads.append(ArteDownload()) #Arte
@@ -53,7 +48,6 @@ def run():
     #downloads.append(KakushigotoDownload()) #Kakushigoto
     #downloads.append(Kingdom3Download()) #Kingdom S3
     #downloads.append(NamiyoDownload()) #Nami yo, Kiitekure
-    #downloads.append(Oregairu3Download()) #Yahari Ore no Seishun Love Comedy wa Machigatteiru. Kan
     #downloads.append(PriconneDownload()) #Princess Connect! Re:Dive
     #downloads.append(ShachibatoDownload()) #Shachou, Battle no Jikan Desu!
     #downloads.append(TamayomiDownload()) #Tamayomi

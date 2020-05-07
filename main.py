@@ -348,7 +348,7 @@ def download_winter_2020_anime():
     #downloads.append(EizoukenDownload())
     downloads.append(HatenaIllusionDownload())
     #downloads.append(HeyaCampDownload())
-    downloads.append(InfiniteDendrogramDownload())
+    #downloads.append(InfiniteDendrogramDownload())
     #downloads.append(IsekaiQuartet2Download())
     #downloads.append(IshuzokuReviewersDownload())
     #downloads.append(HanakoKunDownload())
@@ -386,7 +386,6 @@ def download_spring_2020_anime():
     downloads.append(KakushigotoDownload())
     downloads.append(Kingdom3Download())
     downloads.append(NamiyoDownload())
-    #downloads.append(Oregairu3Download())
     downloads.append(PriconneDownload())
     downloads.append(ShachibatoDownload())
     downloads.append(TamayomiDownload())
@@ -412,6 +411,7 @@ def download_summer_2020_anime():
     downloads = []
 
     downloads.append(MaohgakuinDownload())
+    downloads.append(Oregairu3Download())
     downloads.append(ReZero2Download())
 
     process_download(downloads)

@@ -20,7 +20,6 @@ from scan import MocaNewsScanner
 # Shachibato https://shachibato-anime.com/story.html #シャチバト #shachibato @schbt_anime [TUE]
 # Tamayomi https://tamayomi.com/story/ #tamayomi @tamayomi_PR [WED]
 # Tsugumomo S2 http://tsugumomo.com/story/ #つぐもも @tsugumomo_anime [FRI]
-# Yahari Ore no Seishun http://www.tbs.co.jp/anime/oregairu/story/ #俺ガイル #oregairu @anime_oregairu [DELAYED]
 # Yesterday wo Utatte https://singyesterday.com/ #イエスタデイをうたって @anime_yesterday [FRI]
 
 
@@ -881,61 +880,6 @@ class Tsugumomo2Download(Spring2020AnimeDownload):
                 image_url = images[j]['src']
                 file_path_without_extension = self.base_folder + '/' + episode + '_' + str(j + 1).zfill(2)
                 self.download_image(image_url, file_path_without_extension)
-
-
-# Yahari Ore no Seishun Love Comedy wa Machigatteiru. Kan
-class Oregairu3Download(Spring2020AnimeDownload):
-    title = "Yahari Ore no Seishun Love Comedy wa Machigatteiru. Kan"
-    keywords = ["Oregairu", "Yahari Ore no Seishun Love Comedy wa Machigatteiru. Kan",
-                "My Teen Romantic Comedy SNAFU 3", "My youth romantic comedy is wrong as I expected 3"]
-
-    PAGE_PREFIX = "http://www.tbs.co.jp/anime/oregairu/"
-    STORY_PAGE = "http://www.tbs.co.jp/anime/oregairu/story/"
-    IMAGE_TEMPLATE = 'http://www.tbs.co.jp/anime/oregairu/story/img/story%s/%s.jpg'
-    TOTAL_EPISODES = 25
-    TOTAL_IMAGES_PER_EPISODE = 6
-    
-    def __init__(self):
-        super().__init__()
-        self.base_folder = self.base_folder + "/oregairu3"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
-    
-    def run(self):
-        soup = self.get_soup(self.STORY_PAGE, decode=True)
-        story_nav = soup.find('ul', class_='story-nav')
-        chapters = story_nav.find_all('li')
-        for chapter in chapters:
-            try:
-                link_tag = chapter.find('a')
-                link_text = link_tag.text
-                if '第' in link_text and '話' in link_text:
-                    episode = link_text.split('話')[0].split('第')[1].zfill(2)
-                    if self.is_file_exists(self.base_folder + "/" + episode + "_1.jpg") or self.is_file_exists(self.base_folder + "/" + episode + "_1.png"):
-                        continue
-                    episode_link = self.STORY_PAGE + link_tag['href']
-                    episode_soup = self.get_soup(episode_link)
-                    image_tags = episode_soup.find('ul', class_='slides').find_all('img')
-                    j = 0
-                    for image_tag in image_tags:
-                        j += 1
-                        image_url = self.STORY_PAGE + image_tag['src']
-                        file_path_without_extension = self.base_folder + '/' + episode + '_' + str(j)
-                        self.download_image(image_url, file_path_without_extension)
-            except:
-                continue
-
-        for i in range(self.TOTAL_EPISODES):
-            episode = str(i + 1).zfill(2)
-            if self.is_file_exists(self.base_folder + "/" + episode + "_1.jpg") or self.is_file_exists(
-                    self.base_folder + "/" + episode + "_1.png"):
-                continue
-            for j in range(self.TOTAL_IMAGES_PER_EPISODE):
-                image_url = self.IMAGE_TEMPLATE % (episode, str(j + 1).zfill(2))
-                file_path_without_extension = self.base_folder + '/' + episode + '_' + str(j + 1)
-                result = self.download_image(image_url, file_path_without_extension)
-                if result == -1:
-                    return
 
 
 # Yesterday wo Utatte
