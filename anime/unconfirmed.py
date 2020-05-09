@@ -2,12 +2,15 @@ import os
 import anime.constants as constants
 from anime.main_download import MainDownload
 
+# Bokutachi no Remake http://bokurema.com/ #ぼくリメ #bokurema @bokurema
+# Dokyuu Hentai HxEros https://hxeros.com/ #エグゼロス @hxeros_anime
 # Iwa Kakeru!: Sport Climbing Girls http://iwakakeru-anime.com/ #いわかける #iwakakeru @iwakakeru_anime
 # Kanojo, Okarishimasu https://kanokari-official.com/ #かのかり #kanokari @kanokari_anime
 # Kuma Kuma Kuma Bear https://kumakumakumabear.com/ #くまクマ熊ベアー #kumabear @kumabear_anime
 # Majo no Tabitabi https://majotabi.jp/ #魔女の旅々 #魔女の旅々はいいぞ #majotabi @majotabi_PR
 # Maou Gakuin no Futekigousha https://maohgakuin.com/ #魔王学院 @maohgakuin
 # Re:Zero S2 http://re-zero-anime.jp/tv/story/ #rezero #リゼロ @Rezero_official
+# Uzaki-chan wa Asobitai! https://uzakichan.com/ #宇崎ちゃん @uzakichan_asobi
 # Yahari Ore no Seishun http://www.tbs.co.jp/anime/oregairu/story/ #俺ガイル #oregairu @anime_oregairu
 
 
@@ -22,6 +25,75 @@ class UnconfirmedDownload(MainDownload):
         self.base_folder = self.base_folder + "/unconfirmed"
         if not os.path.exists(self.base_folder):
             os.makedirs(self.base_folder)
+
+
+class HxErosDownload(UnconfirmedDownload):
+    title = "Dokyuu Hentai HxEros"
+    keywords = ["Dokyuu Hentai HxEros"]
+
+    PAGE_PREFIX = 'https://hxeros.com'
+
+    def __init__(self):
+        super().__init__()
+        self.base_folder = self.base_folder + "/hxeros"
+        if not os.path.exists(self.base_folder):
+            os.makedirs(self.base_folder)
+
+    def run(self):
+        self.download_key_visual()
+        self.download_character()
+
+    def download_key_visual(self):
+        keyvisual_folder = self.base_folder + '/' + constants.FOLDER_KEY_VISUAL
+        if not os.path.exists(keyvisual_folder):
+            os.makedirs(keyvisual_folder)
+
+        # From Twitter
+        image_urls = ["https://pbs.twimg.com/media/ESLTIUOVAAAWQ5L?format=jpg&name=4096x4096"]
+        for image_url in image_urls:
+            image_with_extension = self.extract_image_name_from_twitter(image_url, with_extension=True)
+            if os.path.exists(keyvisual_folder + '/' + image_with_extension):
+                continue
+            image_without_extension = self.extract_image_name_from_twitter(image_url, with_extension=False)
+            filepath_without_extension = keyvisual_folder + '/' + image_without_extension
+            self.download_image(image_url, filepath_without_extension)
+
+    def download_character(self):
+        character_folder = self.base_folder + '/' + constants.FOLDER_CHARACTER
+        if not os.path.exists(character_folder):
+            os.makedirs(character_folder)
+
+        # Main Characters
+        image_objs = [
+            {'name': 'retto', 'url': 'https://hxeros.com/assets/img/character/single/retto/ph_character.png'},
+            {'name': 'kirara', 'url': 'https://hxeros.com/assets/img/character/single/kirara/ph_character.png'},
+            {'name': 'momoka', 'url': 'https://hxeros.com/assets/img/character/single/momoka/ph_character.png'},
+            {'name': 'sora', 'url': 'https://hxeros.com/assets/img/character/single/sora/ph_character.png'},
+            {'name': 'maihime', 'url': 'https://hxeros.com/assets/img/character/single/maihime/ph_character.png'}]
+        for image_obj in image_objs:
+            if os.path.exists(character_folder + '/' + image_obj['name'] + '.png'):
+                continue
+            filepath_without_extension = character_folder + '/' + image_obj['name']
+            self.download_image(image_obj['url'], filepath_without_extension)
+
+        # Other Characters
+        image_urls = []
+        try:
+            soup = self.get_soup('https://hxeros.com/character/other/')
+            image_divs = soup.find_all('div', class_='other_sec__ph')
+            for image_div in image_divs:
+                image_url = self.PAGE_PREFIX + image_div.find('img')['src']
+                image_urls.append(image_url)
+        except:
+            pass
+
+        for image_url in image_urls:
+            image_with_extension = self.extract_image_name_from_url(image_url, with_extension=True)
+            if os.path.exists(character_folder + '/' + image_with_extension):
+                continue
+            image_without_extension = self.extract_image_name_from_url(image_url, with_extension=False)
+            filepath_without_extension = character_folder + '/' + image_without_extension
+            self.download_image(image_url, filepath_without_extension)
 
 
 # Iwa Kakeru!: Sport Climbing Girls

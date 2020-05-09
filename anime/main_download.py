@@ -252,6 +252,20 @@ class MainDownload:
         else:
             return split1
 
+    @staticmethod
+    def extract_image_name_from_twitter(text, with_extension=True):
+        # Example url: https://pbs.twimg.com/media/ESLTIUOVAAAWQ5L?format=jpg&name=4096x4096
+        name = text.split('/')[-1].split('?')[0]
+        if with_extension:
+            if "format=jpg" in text:
+                return name + '.jpg'
+            elif "format=png" in text:
+                return name + '.png'
+            else:
+                return name + '.jpg'
+        else:
+            return name
+
     # Match filter
     def match(self, s_filter):
         if not isinstance(s_filter, SearchFilter):
