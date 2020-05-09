@@ -48,7 +48,15 @@ class HxErosDownload(UnconfirmedDownload):
         if not os.path.exists(keyvisual_folder):
             os.makedirs(keyvisual_folder)
 
-        # From Twitter
+        image_objs = [
+            {'name': 'kv', 'url': 'https://pbs.twimg.com/media/ESLTIUOVAAAWQ5L?format=jpg&name=4096x4096'}]
+        for image_obj in image_objs:
+            if os.path.exists(keyvisual_folder + '/' + image_obj['name'] + '.png'):
+                continue
+            filepath_without_extension = keyvisual_folder + '/' + image_obj['name']
+            self.download_image(image_obj['url'], filepath_without_extension)
+
+
         image_urls = ["https://pbs.twimg.com/media/ESLTIUOVAAAWQ5L?format=jpg&name=4096x4096"]
         for image_url in image_urls:
             image_with_extension = self.extract_image_name_from_twitter(image_url, with_extension=True)
@@ -222,7 +230,20 @@ class MaohgakuinDownload(UnconfirmedDownload):
             os.makedirs(self.base_folder)
     
     def run(self):
-        pass
+        self.download_key_visual()
+
+    def download_key_visual(self):
+        keyvisual_folder = self.base_folder + '/' + constants.FOLDER_KEY_VISUAL
+        if not os.path.exists(keyvisual_folder):
+            os.makedirs(keyvisual_folder)
+
+        image_objs = [
+            {'name': 'kv', 'url': 'https://maohgakuin.com/assets/img/top/kv.jpg'}]
+        for image_obj in image_objs:
+            if os.path.exists(keyvisual_folder + '/' + image_obj['name'] + '.png'):
+                continue
+            filepath_without_extension = keyvisual_folder + '/' + image_obj['name']
+            self.download_image(image_obj['url'], filepath_without_extension)
 
 
 # Re:Zero kara Hajimeru Isekai Seikatsu 2nd Season
@@ -241,6 +262,35 @@ class ReZero2Download(UnconfirmedDownload):
     
     def run(self):
         pass
+
+
+# Uzaki-chan wa Asobitai!
+class UzakiChanDownload(UnconfirmedDownload):
+    title = "Uzaki-chan wa Asobitai!"
+    keywords = ["Uzaki-chan wa Asobitai!", "Uzakichan"]
+
+    def __init__(self):
+        super().__init__()
+        self.base_folder = self.base_folder + "/uzakichan"
+        if not os.path.exists(self.base_folder):
+            os.makedirs(self.base_folder)
+
+    def run(self):
+        self.download_key_visual()
+
+    def download_key_visual(self):
+        keyvisual_folder = self.base_folder + '/' + constants.FOLDER_KEY_VISUAL
+        if not os.path.exists(keyvisual_folder):
+            os.makedirs(keyvisual_folder)
+
+        image_objs = [
+            {'name': 'kv', 'url': 'https://pbs.twimg.com/media/EP1u35XUEAAvg4f?format=jpg&name=large'},
+            {'name': 'kv2', 'url': 'https://pbs.twimg.com/media/EXi1RaHUYAAVJPM?format=jpg&name=medium'}]
+        for image_obj in image_objs:
+            if os.path.exists(keyvisual_folder + '/' + image_obj['name'] + '.png'):
+                continue
+            filepath_without_extension = keyvisual_folder + '/' + image_obj['name']
+            self.download_image(image_obj['url'], filepath_without_extension)
 
 
 # Yahari Ore no Seishun Love Comedy wa Machigatteiru. Kan
