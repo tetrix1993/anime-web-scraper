@@ -10,6 +10,7 @@ from anime.main_download import MainDownload
 # Kimi to Boku no Saigo no Senjou, Aruiwa Sekai ga Hajimaru Seisen #キミ戦 #kimisen @kimisen_project
 # Majo no Tabitabi https://majotabi.jp/ #魔女の旅々 #魔女の旅々はいいぞ #majotabi @majotabi_PR
 # Maou Gakuin no Futekigousha https://maohgakuin.com/ #魔王学院 @maohgakuin
+# Monster Musume no Oishasan https://mon-isha-anime.com/character/ #モン医者 #m_doctor @mon_isha_anime
 # Ochikobore Fruit Tart http://ochifuru-anime.com/ #ochifuru @ochifuru_anime
 # Peter Grill to Kenja no Jikan http://petergrill-anime.jp/ #賢者タイムアニメ #petergrill @petergrillanime
 # Re:Zero S2 http://re-zero-anime.jp/tv/story/ #rezero #リゼロ @Rezero_official
@@ -202,7 +203,7 @@ class KimisenDownload(UnconfirmedDownload):
             os.makedirs(keyvisual_folder)
 
         image_objs = [
-            {'name': 'kv', 'url': 'https://kimisentv.com/teaser/images/top-main-vis.jpg'}]
+            {'name': 'teaser', 'url': 'https://kimisentv.com/teaser/images/top-main-vis.jpg'}]
         for image_obj in image_objs:
             if os.path.exists(keyvisual_folder + '/' + image_obj['name'] + '.png') or \
                     os.path.exists(keyvisual_folder + '/' + image_obj['name'] + '.jpg'):
@@ -266,6 +267,36 @@ class MaohgakuinDownload(UnconfirmedDownload):
             {'name': 'kv', 'url': 'https://maohgakuin.com/assets/img/top/kv.jpg'}]
         for image_obj in image_objs:
             if os.path.exists(keyvisual_folder + '/' + image_obj['name'] + '.png'):
+                continue
+            filepath_without_extension = keyvisual_folder + '/' + image_obj['name']
+            self.download_image(image_obj['url'], filepath_without_extension)
+
+
+# Monster Musume no Oishasan
+class MonIshaDownload(UnconfirmedDownload):
+    title = "Monster Musume no Oishasan"
+    keywords = ["Monster Musume no Oishasan", "Monisha", "Mon-Isha"]
+
+    def __init__(self):
+        super().__init__()
+        self.base_folder = self.base_folder + "/mon-isha"
+        if not os.path.exists(self.base_folder):
+            os.makedirs(self.base_folder)
+
+    def run(self):
+        self.download_key_visual()
+
+    def download_key_visual(self):
+        keyvisual_folder = self.base_folder + '/' + constants.FOLDER_KEY_VISUAL
+        if not os.path.exists(keyvisual_folder):
+            os.makedirs(keyvisual_folder)
+
+        image_objs = [
+            {'name': 'teaser', 'url': 'https://pbs.twimg.com/media/EJTToJMU0AEgpMK?format=jpg&name=medium'},
+            {'name': 'kv', 'url': 'https://pbs.twimg.com/media/ETrymlxU0AA0Oep?format=jpg&name=medium'}]
+        for image_obj in image_objs:
+            if os.path.exists(keyvisual_folder + '/' + image_obj['name'] + '.png') or \
+                    os.path.exists(keyvisual_folder + '/' + image_obj['name'] + '.jpg'):
                 continue
             filepath_without_extension = keyvisual_folder + '/' + image_obj['name']
             self.download_image(image_obj['url'], filepath_without_extension)
