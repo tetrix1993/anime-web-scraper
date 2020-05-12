@@ -9,7 +9,10 @@ from anime.main_download import MainDownload
 # Kuma Kuma Kuma Bear https://kumakumakumabear.com/ #くまクマ熊ベアー #kumabear @kumabear_anime
 # Majo no Tabitabi https://majotabi.jp/ #魔女の旅々 #魔女の旅々はいいぞ #majotabi @majotabi_PR
 # Maou Gakuin no Futekigousha https://maohgakuin.com/ #魔王学院 @maohgakuin
+# Ochikobore Fruit Tart http://ochifuru-anime.com/ #ochifuru @ochifuru_anime
+# Peter Grill to Kenja no Jikan http://petergrill-anime.jp/ #賢者タイムアニメ #petergrill @petergrillanime
 # Re:Zero S2 http://re-zero-anime.jp/tv/story/ #rezero #リゼロ @Rezero_official
+# Tonikaku Kawaii http://tonikawa.com/ #トニカクカワイイ #tonikawa @tonikawa_anime
 # Uzaki-chan wa Asobitai! https://uzakichan.com/ #宇崎ちゃん @uzakichan_asobi
 # Yahari Ore no Seishun http://www.tbs.co.jp/anime/oregairu/story/ #俺ガイル #oregairu @anime_oregairu
 
@@ -246,6 +249,113 @@ class MaohgakuinDownload(UnconfirmedDownload):
             self.download_image(image_obj['url'], filepath_without_extension)
 
 
+# Ochikobore Fruit Tart
+class OchifuruDownload(UnconfirmedDownload):
+    title = "Ochikobore Fruit Tart"
+    keywords = ["Ochikobore Fruit Tart", "Dropout Idol", "Ochifuru"]
+
+    CHARA_IMAGE_TEMPLATE = 'http://ochifuru-anime.com/images/chara/%s/p_002.png'
+
+    def __init__(self):
+        super().__init__()
+        self.base_folder = self.base_folder + "/ochifuru"
+        if not os.path.exists(self.base_folder):
+            os.makedirs(self.base_folder)
+
+    def run(self):
+        self.download_key_visual()
+        self.download_character()
+
+    def download_key_visual(self):
+        keyvisual_folder = self.base_folder + '/' + constants.FOLDER_KEY_VISUAL
+        if not os.path.exists(keyvisual_folder):
+            os.makedirs(keyvisual_folder)
+
+        image_objs = [
+            {'name': 'kv', 'url': 'https://pbs.twimg.com/media/EKb4OniUwAELo-b?format=jpg&name=medium'}]
+        for image_obj in image_objs:
+            if os.path.exists(keyvisual_folder + '/' + image_obj['name'] + '.png') or \
+                    os.path.exists(keyvisual_folder + '/' + image_obj['name'] + '.jpg'):
+                continue
+            filepath_without_extension = keyvisual_folder + '/' + image_obj['name']
+            self.download_image(image_obj['url'], filepath_without_extension)
+
+    def download_character(self):
+        character_folder = self.base_folder + '/' + constants.FOLDER_CHARACTER
+        if not os.path.exists(character_folder):
+            os.makedirs(character_folder)
+
+        try:
+            i = 1
+            while True:
+                filepath_without_extension = character_folder + '/chara_' + str(i).zfill(2)
+                if os.path.exists(filepath_without_extension + '.png') or \
+                        os.path.exists(filepath_without_extension + '.jpg'):
+                    continue
+                image_url = self.CHARA_IMAGE_TEMPLATE % str(i).zfill(3)
+                result = self.download_image(image_url, filepath_without_extension)
+                if result == -1:
+                    break
+                i += 1
+        except Exception as e:
+            pass
+
+
+# Peter Grill to Kenja no Jikan
+class PeterGrillDownload(UnconfirmedDownload):
+    title = "Peter Grill to Kenja no Jikan"
+    keywords = ["Peter Grill to Kenja no Jikan", "Peter Grill and the Philosopher's Time"]
+
+    PAGE_PREFIX = 'http://petergrill-anime.jp/'
+
+    def __init__(self):
+        super().__init__()
+        self.base_folder = self.base_folder + "/petergrill"
+        if not os.path.exists(self.base_folder):
+            os.makedirs(self.base_folder)
+
+    def run(self):
+        self.download_key_visual()
+        self.download_character()
+
+    def download_key_visual(self):
+        keyvisual_folder = self.base_folder + '/' + constants.FOLDER_KEY_VISUAL
+        if not os.path.exists(keyvisual_folder):
+            os.makedirs(keyvisual_folder)
+
+        image_objs = [
+            {'name': 'kv', 'url': 'http://petergrill-anime.jp/images/key_v_202003.png'}]
+        for image_obj in image_objs:
+            if os.path.exists(keyvisual_folder + '/' + image_obj['name'] + '.png') or \
+                    os.path.exists(keyvisual_folder + '/' + image_obj['name'] + '.jpg'):
+                continue
+            filepath_without_extension = keyvisual_folder + '/' + image_obj['name']
+            self.download_image(image_obj['url'], filepath_without_extension)
+
+    def download_character(self):
+        character_folder = self.base_folder + '/' + constants.FOLDER_CHARACTER
+        if not os.path.exists(character_folder):
+            os.makedirs(character_folder)
+
+        try:
+            soup = self.get_soup("http://petergrill-anime.jp/character.php")
+            chara_details = soup.find_all('li', class_='character_item')
+            for chara_detail in chara_details:
+                images = chara_detail.find_all('img')
+                for image in images:
+                    if 'upload' not in image['src']:
+                        continue
+                    image_url = self.PAGE_PREFIX + image['src']
+                    image_with_extension = self.extract_image_name_from_url(image_url, with_extension=True)
+                    if os.path.exists(character_folder + '/' + image_with_extension):
+                        continue
+                    image_without_extension = self.extract_image_name_from_url(image_url, with_extension=False)
+                    filepath_without_extension = character_folder + '/' + image_without_extension
+                    self.download_image(image_url, filepath_without_extension)
+        except Exception as e:
+            pass
+
+
 # Re:Zero kara Hajimeru Isekai Seikatsu 2nd Season
 class ReZero2Download(UnconfirmedDownload):
     title = "Re:Zero kara Hajimeru Isekai Seikatsu 2nd Season"
@@ -262,6 +372,37 @@ class ReZero2Download(UnconfirmedDownload):
     
     def run(self):
         pass
+
+
+# Tonikaku Kawaii
+class TonikawaDownload(UnconfirmedDownload):
+    title = "Tonikaku Kawaii"
+    keywords = ["Tonikaku Kawaii", "Cawaii", "Fly Me to the Moon"]
+
+    def __init__(self):
+        super().__init__()
+        self.base_folder = self.base_folder + "/tonikawa"
+        if not os.path.exists(self.base_folder):
+            os.makedirs(self.base_folder)
+
+    def run(self):
+        self.download_key_visual()
+
+    def download_key_visual(self):
+        keyvisual_folder = self.base_folder + '/' + constants.FOLDER_KEY_VISUAL
+        if not os.path.exists(keyvisual_folder):
+            os.makedirs(keyvisual_folder)
+
+        image_objs = [
+            {'name': 'w_teaser_1', 'url': 'https://pbs.twimg.com/media/EXzj-iYVcAElclE?format=jpg&name=large'},
+            {'name': 'w_teaser_2', 'url': 'https://pbs.twimg.com/media/EXzj-iaU0AATNM7?format=jpg&name=large'},
+            {'name': 'w_teaser_3', 'url': 'http://tonikawa.com/assets/images/common/news/news-1/img.jpg'}]
+        for image_obj in image_objs:
+            if os.path.exists(keyvisual_folder + '/' + image_obj['name'] + '.png') or \
+                    os.path.exists(keyvisual_folder + '/' + image_obj['name'] + '.jpg'):
+                continue
+            filepath_without_extension = keyvisual_folder + '/' + image_obj['name']
+            self.download_image(image_obj['url'], filepath_without_extension)
 
 
 # Uzaki-chan wa Asobitai!
