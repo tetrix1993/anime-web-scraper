@@ -7,6 +7,7 @@ from anime.main_download import MainDownload
 # Iwa Kakeru!: Sport Climbing Girls http://iwakakeru-anime.com/ #いわかける #iwakakeru @iwakakeru_anime
 # Kanojo, Okarishimasu https://kanokari-official.com/ #かのかり #kanokari @kanokari_anime
 # Kuma Kuma Kuma Bear https://kumakumakumabear.com/ #くまクマ熊ベアー #kumabear @kumabear_anime
+# Kimi to Boku no Saigo no Senjou, Aruiwa Sekai ga Hajimaru Seisen #キミ戦 #kimisen @kimisen_project
 # Majo no Tabitabi https://majotabi.jp/ #魔女の旅々 #魔女の旅々はいいぞ #majotabi @majotabi_PR
 # Maou Gakuin no Futekigousha https://maohgakuin.com/ #魔王学院 @maohgakuin
 # Ochikobore Fruit Tart http://ochifuru-anime.com/ #ochifuru @ochifuru_anime
@@ -30,6 +31,7 @@ class UnconfirmedDownload(MainDownload):
             os.makedirs(self.base_folder)
 
 
+# Dokyuu Hentai HxEros
 class HxErosDownload(UnconfirmedDownload):
     title = "Dokyuu Hentai HxEros"
     keywords = ["Dokyuu Hentai HxEros"]
@@ -58,16 +60,6 @@ class HxErosDownload(UnconfirmedDownload):
                 continue
             filepath_without_extension = keyvisual_folder + '/' + image_obj['name']
             self.download_image(image_obj['url'], filepath_without_extension)
-
-
-        image_urls = ["https://pbs.twimg.com/media/ESLTIUOVAAAWQ5L?format=jpg&name=4096x4096"]
-        for image_url in image_urls:
-            image_with_extension = self.extract_image_name_from_twitter(image_url, with_extension=True)
-            if os.path.exists(keyvisual_folder + '/' + image_with_extension):
-                continue
-            image_without_extension = self.extract_image_name_from_twitter(image_url, with_extension=False)
-            filepath_without_extension = keyvisual_folder + '/' + image_without_extension
-            self.download_image(image_url, filepath_without_extension)
 
     def download_character(self):
         character_folder = self.base_folder + '/' + constants.FOLDER_CHARACTER
@@ -136,6 +128,7 @@ class IwakakeruDownload(UnconfirmedDownload):
             self.download_image(image_url, filepath_without_extension)
 
 
+# Kanojo, Okarishimasu
 class KanokariDownload(UnconfirmedDownload):
     title = "Kanojo, Okarishimasu"
     keywords = ["Kanojo, Okarishimasu", "Kanokari", "Rent-a-Girlfriend"]
@@ -187,6 +180,35 @@ class KanokariDownload(UnconfirmedDownload):
                     self.download_image(image_url, filepath_without_extension)
         except Exception as e:
             pass
+
+
+# Kimi to Boku no Saigo no Senjou, Aruiwa Sekai ga Hajimaru Seisen
+class KimisenDownload(UnconfirmedDownload):
+    title = "Kimi to Boku no Saigo no Senjou, Aruiwa Sekai ga Hajimaru Seisen"
+    keywords = ["Kimi to Boku no Saigo no Senjou, Aruiwa Sekai ga Hajimaru Seisen", "Kimisen"]
+
+    def __init__(self):
+        super().__init__()
+        self.base_folder = self.base_folder + "/kimisen"
+        if not os.path.exists(self.base_folder):
+            os.makedirs(self.base_folder)
+
+    def run(self):
+        self.download_key_visual()
+
+    def download_key_visual(self):
+        keyvisual_folder = self.base_folder + '/' + constants.FOLDER_KEY_VISUAL
+        if not os.path.exists(keyvisual_folder):
+            os.makedirs(keyvisual_folder)
+
+        image_objs = [
+            {'name': 'kv', 'url': 'https://kimisentv.com/teaser/images/top-main-vis.jpg'}]
+        for image_obj in image_objs:
+            if os.path.exists(keyvisual_folder + '/' + image_obj['name'] + '.png') or \
+                    os.path.exists(keyvisual_folder + '/' + image_obj['name'] + '.jpg'):
+                continue
+            filepath_without_extension = keyvisual_folder + '/' + image_obj['name']
+            self.download_image(image_obj['url'], filepath_without_extension)
 
 
 # Kuma Kuma Kuma Bear
