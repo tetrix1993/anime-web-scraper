@@ -277,6 +277,8 @@ class MonIshaDownload(UnconfirmedDownload):
     title = "Monster Musume no Oishasan"
     keywords = ["Monster Musume no Oishasan", "Monisha", "Mon-Isha"]
 
+    PAGE_PREFIX = 'https://mon-isha-anime.com/'
+
     def __init__(self):
         super().__init__()
         self.base_folder = self.base_folder + "/mon-isha"
@@ -285,6 +287,7 @@ class MonIshaDownload(UnconfirmedDownload):
 
     def run(self):
         self.download_key_visual()
+        self.download_character()
 
     def download_key_visual(self):
         keyvisual_folder = self.base_folder + '/' + constants.FOLDER_KEY_VISUAL
@@ -300,6 +303,27 @@ class MonIshaDownload(UnconfirmedDownload):
                 continue
             filepath_without_extension = keyvisual_folder + '/' + image_obj['name']
             self.download_image(image_obj['url'], filepath_without_extension)
+
+    def download_character(self):
+        character_folder = self.base_folder + '/' + constants.FOLDER_CHARACTER
+        if not os.path.exists(character_folder):
+            os.makedirs(character_folder)
+
+        try:
+            soup = self.get_soup("https://mon-isha-anime.com/character/")
+            chara_details = soup.find_all('div', class_='swinmob')
+            for chara_detail in chara_details:
+                images = chara_detail.find_all('img')
+                for image in images:
+                    image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                    image_with_extension = self.extract_image_name_from_url(image_url, with_extension=True)
+                    if os.path.exists(character_folder + '/' + image_with_extension):
+                        continue
+                    image_without_extension = self.extract_image_name_from_url(image_url, with_extension=False)
+                    filepath_without_extension = character_folder + '/' + image_without_extension
+                    self.download_image(image_url, filepath_without_extension)
+        except Exception as e:
+            pass
 
 
 # Ochikobore Fruit Tart
