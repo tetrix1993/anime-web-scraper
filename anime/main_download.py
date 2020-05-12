@@ -100,11 +100,11 @@ class MainDownload:
                 if r.status_code == 404:
                     return -1
                 content_type = r.headers['Content-Type']
-                if content_type == 'image/png':
+                if 'image/png' in content_type:
                     filepath = filepath_without_extension + ".png"
-                elif content_type == 'image/jpeg':
+                elif 'image/jpeg' in content_type:
                     filepath = filepath_without_extension + ".jpg"
-                elif content_type == 'image/gif':
+                elif 'image/gif' in content_type:
                     filepath = filepath_without_extension + ".gif"
                 else:
                     return -1
