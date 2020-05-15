@@ -1,5 +1,6 @@
 import os
 import re
+import anime.constants as constants
 from anime.main_download import MainDownload
 from datetime import datetime
 from scan import WebNewtypeScanner
@@ -208,7 +209,7 @@ class HachinanDownload(Spring2020AnimeDownload):
 
         # Download Blu-ray pictures
         image_urls = []
-        other_filepath = self.base_folder + '/' + 'other'
+        other_filepath = self.base_folder + '/' + constants.FOLDER_BLURAY
         if not os.path.exists(other_filepath):
             os.makedirs(other_filepath)
         url_list = ["http://hachinan-anime.com/bd/",
@@ -241,7 +242,7 @@ class HachinanDownload(Spring2020AnimeDownload):
                 image_filename = image_url.split('/')[-1]
                 file_path_without_extension = other_filepath + '/' + image_filename.split('.jpg')[0].split('.jpeg')[0].split('.png')[0]
                 if os.path.exists(other_filepath + '/' + image_filename):
-                    self.download_image_if_exists(image_url, file_path_without_extension, other_filepath + '/' + image_filename)
+                    #self.download_image_if_exists(image_url, file_path_without_extension, other_filepath + '/' + image_filename)
                     continue
                 self.download_image(image_url, file_path_without_extension)
             except Exception as e:
@@ -428,7 +429,7 @@ class Kaguyasama2Download(Spring2020AnimeDownload):
 
         # Download Blu-ray/Music
         image_urls = []
-        other_filepath = self.base_folder + '/' + 'other'
+        other_filepath = self.base_folder + '/' + constants.FOLDER_BLURAY
         if not os.path.exists(other_filepath):
             os.makedirs(other_filepath)
         url_list = ["https://kaguya.love/bddvd/",
@@ -476,7 +477,7 @@ class Kaguyasama2Download(Spring2020AnimeDownload):
                 pass
 
         # Download character image
-        chara_filepath = self.base_folder + '/chara'
+        chara_filepath = self.base_folder + '/' + constants.FOLDER_CHARACTER
         if not os.path.exists(chara_filepath):
             os.makedirs(chara_filepath)
         chara_image_templates = [self.PAGE_PREFIX + '/assets/img/chara/img_chara%s.png',
@@ -646,7 +647,7 @@ class PriconneDownload(Spring2020AnimeDownload):
                 continue
 
         # Download characters
-        chara_filepath = self.base_folder + '/chara'
+        chara_filepath = self.base_folder + '/' + constants.FOLDER_CHARACTER
         if not os.path.exists(chara_filepath):
             os.makedirs(chara_filepath)
         chara_soup = self.get_soup('https://anime.priconne-redive.jp/character/')
@@ -725,7 +726,7 @@ class ShachibatoDownload(Spring2020AnimeDownload):
                 break
 
         image_urls = []
-        other_filepath = self.base_folder + '/' + 'other'
+        other_filepath = self.base_folder + '/' + constants.FOLDER_BLURAY
         if not os.path.exists(other_filepath):
             os.makedirs(other_filepath)
         url_list = ["https://shachibato-anime.com/bluray.html",
@@ -754,7 +755,7 @@ class ShachibatoDownload(Spring2020AnimeDownload):
                 pass
 
         # Download characters
-        chara_filepath = self.base_folder + '/chara'
+        chara_filepath = self.base_folder + '/' + constants.FOLDER_CHARACTER
         if not os.path.exists(chara_filepath):
             os.makedirs(chara_filepath)
         chara_soup = self.get_soup('https://shachibato-anime.com/character.html')
@@ -814,9 +815,24 @@ class TamayomiDownload(Spring2020AnimeDownload):
                 self.download_image(image_url, file_path_without_extension)
 
         image_urls = []
-        other_filepath = self.base_folder + '/' + 'other'
+        other_filepath = self.base_folder + '/' + constants.FOLDER_BLURAY
         if not os.path.exists(other_filepath):
             os.makedirs(other_filepath)
+        
+        # Blu-Ray Volume Illustrations
+        image_objs = [
+            {'name': 'bd_1_1', 'url': 'https://pbs.twimg.com/media/EYBcL7KUMAAzETM?format=jpg&name=small'},
+            {'name': 'bd_1_2', 'url': 'https://pbs.twimg.com/media/EYBcOPCU0AASO2c?format=jpg&name=small'},
+            {'name': 'bd_2_1', 'url': 'https://pbs.twimg.com/media/EYBcSZDU8AAV3oc?format=jpg&name=small'},
+            {'name': 'bd_2_2', 'url': 'https://pbs.twimg.com/media/EYBcVieXkAATCH5?format=jpg&name=small'}]
+        for image_obj in image_objs:
+            if os.path.exists(other_filepath + '/' + image_obj['name'] + '.png') or \
+                    os.path.exists(other_filepath + '/' + image_obj['name'] + '.jpg'):
+                continue
+            filepath_without_extension = other_filepath + '/' + image_obj['name']
+            self.download_image(image_obj['url'], filepath_without_extension)
+
+        # Other Discography
         url_list = ["https://tamayomi.com/discography/detail.php?id=1017453",
                     "https://tamayomi.com/discography/detail.php?id=1017468",
                     "https://tamayomi.com/discography/detail.php?id=1017553",
@@ -847,7 +863,7 @@ class TamayomiDownload(Spring2020AnimeDownload):
                 pass
 
         # Download characters
-        chara_filepath = self.base_folder + '/chara'
+        chara_filepath = self.base_folder + '/' + constants.FOLDER_CHARACTER
         if not os.path.exists(chara_filepath):
             os.makedirs(chara_filepath)
 
@@ -899,6 +915,21 @@ class Tsugumomo2Download(Spring2020AnimeDownload):
                 image_url = images[j]['src']
                 file_path_without_extension = self.base_folder + '/' + episode + '_' + str(j + 1).zfill(2)
                 self.download_image(image_url, file_path_without_extension)
+
+        bluray_filepath = self.base_folder + '/' + constants.FOLDER_BLURAY
+        if not os.path.exists(bluray_filepath):
+            os.makedirs(bluray_filepath)
+
+        # Blu-Ray Volume Illustrations
+        image_objs = [
+            {'name': 'bd_1_1', 'url': 'http://tsugumomo.com/wp/wp-content/uploads/2020/04/ss_DSZD08246-01.jpg'},
+            {'name': 'bd_1_2', 'url': 'https://pbs.twimg.com/media/EWlDBBTUYAIelWQ?format=jpg&name=4096x4096'}]
+        for image_obj in image_objs:
+            if os.path.exists(bluray_filepath + '/' + image_obj['name'] + '.png') or \
+                    os.path.exists(bluray_filepath + '/' + image_obj['name'] + '.jpg'):
+                continue
+            filepath_without_extension = bluray_filepath + '/' + image_obj['name']
+            self.download_image(image_obj['url'], filepath_without_extension)
 
 
 # Yesterday wo Utatte

@@ -2,7 +2,7 @@ import os
 import shutil
 import traceback
 
-VERSION_NUMBER = 1
+VERSION_NUMBER = 2
 DOWNLOAD_DIR = 'download'
 UNCONFIRMED_DIR = DOWNLOAD_DIR + '/unconfirmed'
 MIGRATION_ERROR_LOG = 'migration_error.log'
@@ -19,14 +19,22 @@ def migrate_folders():
     migrate_folder('2020-3/rezero2', UNCONFIRMED_DIR + '/rezero2')
 
 
+def rename_folders():
+    rename_folder('download/2020-2/tamayomi/other', 'download/2020-2/tamayomi/bd')
+    rename_folder('download/2020-2/hachinan/other', 'download/2020-2/hachinan/bd')
+    rename_folder('download/2020-2/kaguya-sama2/other', 'download/2020-2/kaguya-sama2/bd')
+    rename_folder('download/2020-2/shachibato/other', 'download/2020-2/shachibato/bd')
+
+
 def run():
-    print('Running migration script version ' + str(VERSION_NUMBER))
     try:
         if is_latest_version():
             return
-        if not os.path.exists('download/unconfirmed'):
+        print('Running migration script version ' + str(VERSION_NUMBER))
+        if not os.path.exists(UNCONFIRMED_DIR):
             os.makedirs(UNCONFIRMED_DIR)
         migrate_folders()
+        rename_folders()
         delete_empty_folders()
         update_version()
         print('Migration completed.')
@@ -68,6 +76,20 @@ def migrate_folder(old_dir, new_dir):
         shutil.move(old_dir, new_dir)
         message = MOVING_IMAGE_TEMPLATE % (old_dir, new_dir)
         print(message)
+
+
+def rename_folder(old_dir, new_dir):
+    global is_successful
+    if os.path.exists(old_dir):
+        if os.path.exists(new_dir):
+            print('Failed in renaming ' + old_dir + ' to ' + new_dir + ' - ' + new_dir + ' already exists.')
+            is_successful = False
+        else:
+            try:
+                os.rename(old_dir, new_dir)
+                print('Renamed ' + old_dir + ' to ' + new_dir)
+            except:
+                is_successful = False
 
 
 def delete_empty_folders():
