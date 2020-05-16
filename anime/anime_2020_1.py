@@ -1,4 +1,5 @@
 import os
+import anime.constants as constants
 from anime.main_download import MainDownload
 from scan import WebNewtypeScanner
 
@@ -976,6 +977,34 @@ class RailgunTDownload(Winter2020AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
+
+        # Download Blu-ray
+        bluray_filepath = self.base_folder + '/' + constants.FOLDER_BLURAY
+        if not os.path.exists(bluray_filepath):
+            os.makedirs(bluray_filepath)
+
+        for i in range(8):
+            volume = i + 1
+            if volume == 1:
+                url = 'https://toaru-project.com/railgun_t/bd/'
+            else:
+                url = 'https://toaru-project.com/railgun_t/bd/%s.html' % str(volume).zfill(2)
+            try:
+                filename_without_extension = bluray_filepath + '/bd_' + str(volume)
+                if os.path.exists(filename_without_extension + '.jpg') or os.path.exists(filename_without_extension + '.png'):
+                    continue
+                bd_soup = self.get_soup(url)
+                image_url = self.PAGE_PREFIX + bd_soup.find('div', class_='ph').find('img')['src'].replace('../', '')
+                is_preview_image = False
+                for j in (55, 60, 1):
+                    if str(j).zfill(8) in image_url:
+                        is_preview_image = True
+                        break
+                if is_preview_image:
+                    break
+                self.download_image(image_url, filename_without_extension)
+            except:
+                pass
 
 
 # Toaru Kagaku no Railgun T
