@@ -646,6 +646,23 @@ class PriconneDownload(Spring2020AnimeDownload):
             except:
                 continue
 
+        # Download Blu-ray
+        bluray_filepath = self.base_folder + '/' + constants.FOLDER_BLURAY
+        if not os.path.exists(bluray_filepath):
+            os.makedirs(bluray_filepath)
+
+        image_objs = [
+            {'name': 'bd_1_1', 'url': 'https://anime.priconne-redive.jp/assets/data/82a6345d72fd68036496915319c326f0.png'},
+            {'name': 'bd_1_1s', 'url': 'https://pbs.twimg.com/media/EYTkbHcXQAQsR0A?format=jpg&name=900x900'},
+            {'name': 'bd_1_2', 'url': 'https://anime.priconne-redive.jp/assets/data/11323f9ee9ffc83c3151a0e18cb9b07b.png'},
+            {'name': 'bd_1_2s', 'url': 'https://pbs.twimg.com/media/EYTkbHeXQAMc7YR?format=jpg&name=900x900'}]
+        for image_obj in image_objs:
+            if os.path.exists(bluray_filepath + '/' + image_obj['name'] + '.png') or \
+                    os.path.exists(bluray_filepath + '/' + image_obj['name'] + '.jpg'):
+                continue
+            filepath_without_extension = bluray_filepath + '/' + image_obj['name']
+            self.download_image(image_obj['url'], filepath_without_extension)
+
         # Download characters
         chara_filepath = self.base_folder + '/' + constants.FOLDER_CHARACTER
         if not os.path.exists(chara_filepath):
