@@ -3,6 +3,7 @@ import anime.constants as constants
 from anime.main_download import MainDownload
 
 # Bokutachi no Remake http://bokurema.com/ #ぼくリメ #bokurema @bokurema
+# Cheat Kusushi no Slow Life: Isekai ni Tsukurou Drugstore https://www.cheat-kusushi.jp/ #チート薬師 #スローライフ @cheat_kusushi
 # Dokyuu Hentai HxEros https://hxeros.com/ #エグゼロス @hxeros_anime
 # Iwa Kakeru!: Sport Climbing Girls http://iwakakeru-anime.com/ #いわかける #iwakakeru @iwakakeru_anime
 # Kanojo, Okarishimasu https://kanokari-official.com/ #かのかり #kanokari @kanokari_anime
@@ -30,6 +31,33 @@ class UnconfirmedDownload(MainDownload):
         self.base_folder = self.base_folder + "/unconfirmed"
         if not os.path.exists(self.base_folder):
             os.makedirs(self.base_folder)
+
+
+class CheatKusushiDownload(UnconfirmedDownload):
+    title = 'Cheat Kusushi no Slow Life: Isekai ni Tsukurou Drugstore'
+    keywords = [title, 'Cheat Pharmacist\'s Slow Life: Making a Drugstore in Another World']
+
+    def __init__(self):
+        super().__init__()
+        self.base_folder = self.base_folder + "/cheat-kusushi"
+        if not os.path.exists(self.base_folder):
+            os.makedirs(self.base_folder)
+
+    def run(self):
+        self.download_key_visual()
+
+    def download_key_visual(self):
+        keyvisual_folder = self.base_folder + '/' + constants.FOLDER_KEY_VISUAL
+        if not os.path.exists(keyvisual_folder):
+            os.makedirs(keyvisual_folder)
+
+        image_objs = [
+            {'name': 'teaser', 'url': 'https://www.cheat-kusushi.jp/img/top-main.png'}]
+        for image_obj in image_objs:
+            if os.path.exists(keyvisual_folder + '/' + image_obj['name'] + '.png'):
+                continue
+            filepath_without_extension = keyvisual_folder + '/' + image_obj['name']
+            self.download_image(image_obj['url'], filepath_without_extension)
 
 
 # Dokyuu Hentai HxEros

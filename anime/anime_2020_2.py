@@ -443,7 +443,7 @@ class Kaguyasama2Download(Spring2020AnimeDownload):
             try:
                 images = bd_soup.find('div', class_='p-bddvd').find_all('img')
                 for image in images:
-                    image_url = image['src'].replace('../..', '')
+                    image_url = image['src'].replace('../..', '').replace('..', '')
                     if 'http://' not in image_url and 'https://' not in image_url:
                         image_url = self.PAGE_PREFIX + image_url
                     image_urls.append(image_url)
