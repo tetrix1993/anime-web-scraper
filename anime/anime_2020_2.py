@@ -208,6 +208,42 @@ class HachinanDownload(Spring2020AnimeDownload):
                 self.download_image(image_url, file_path_without_extension)
 
         # Download Blu-ray pictures
+        bluray_filepath = self.base_folder + '/' + constants.FOLDER_BLURAY
+        if not os.path.exists(bluray_filepath):
+            os.makedirs(bluray_filepath)
+
+        image_objs = [
+            {'name': 'bd_packege_sample', 'url': 'http://hachinan-anime.com/wp-content/themes/hachinan-anime/images/bddvd/packege_sample.jpg'},
+            {'name': 'bd_package', 'url': 'http://hachinan-anime.com/wp-content/uploads/2020/05/bd_package.jpg'},
+            {'name': 'bd_onsen_sample', 'url': 'http://hachinan-anime.com/wp-content/themes/hachinan-anime/images/bddvd/onsen_sample.jpg'},
+            {'name': 'bd_onsen_sample_2', 'url': 'http://hachinan-anime.com/wp-content/uploads/2020/04/onsen_sample.jpg'},
+            {'name': 'bd_onsen', 'url': 'http://hachinan-anime.com/wp-content/uploads/2020/05/hachiman_A3_poster.jpg'},
+            #{'name': 'music_op', 'url': 'http://hachinan-anime.com/wp-content/themes/hachinan-anime/images/music/op-jacket.jpg'},
+            {'name': 'music_ed', 'url': 'http://hachinan-anime.com/wp-content/themes/hachinan-anime/images/music/ed-jacket.jpg'},
+            {'name': 'bd_tokuten_sample_1_1', 'url': 'http://hachinan-anime.com/wp-content/uploads/2020/04/animate_sample.jpg'},
+            {'name': 'bd_tokuten_sample_1_2', 'url': 'http://hachinan-anime.com/wp-content/uploads/2020/04/amazon_sample.jpg'},
+            {'name': 'bd_tokuten_sample_1_3', 'url': 'http://hachinan-anime.com/wp-content/uploads/2020/04/gamers_sample.jpg'},
+            {'name': 'bd_tokuten_sample_1_4', 'url': 'http://hachinan-anime.com/wp-content/uploads/2020/04/toranoana_sample.jpg'},
+            {'name': 'bd_tokuten_sample_1_5', 'url': 'http://hachinan-anime.com/wp-content/uploads/2020/04/sofmap_sample.jpg'},
+            {'name': 'bd_tokuten_sample_2_1', 'url': 'http://hachinan-anime.com/wp-content/uploads/2020/05/animate_sample.png'},
+            {'name': 'bd_tokuten_sample_2_2', 'url': 'http://hachinan-anime.com/wp-content/uploads/2020/05/amazon_sample.png'},
+            {'name': 'bd_tokuten_sample_2_3', 'url': 'http://hachinan-anime.com/wp-content/uploads/2020/05/gamers_sample.jpg'},
+            {'name': 'bd_tokuten_sample_2_4', 'url': 'http://hachinan-anime.com/wp-content/uploads/2020/05/toranoana_sample.jpg'},
+            {'name': 'bd_tokuten_sample_2_5', 'url': 'http://hachinan-anime.com/wp-content/uploads/2020/05/sofmap_sample.jpg'},
+            {'name': 'bd_tokuten_1', 'url': 'http://hachinan-anime.com/wp-content/uploads/2020/05/animate.jpg'},
+            {'name': 'bd_tokuten_2', 'url': 'http://hachinan-anime.com/wp-content/uploads/2020/05/amazon.jpg'},
+            {'name': 'bd_tokuten_3', 'url': 'http://hachinan-anime.com/wp-content/uploads/2020/05/gamers.jpg'},
+            {'name': 'bd_tokuten_4', 'url': 'http://hachinan-anime.com/wp-content/uploads/2020/05/toranoana.jpg'},
+            {'name': 'bd_tokuten_5', 'url': 'http://hachinan-anime.com/wp-content/uploads/2020/05/sofmap.jpg'}
+        ]
+        for image_obj in image_objs:
+            if os.path.exists(bluray_filepath + '/' + image_obj['name'] + '.png') or \
+                    os.path.exists(bluray_filepath + '/' + image_obj['name'] + '.jpg'):
+                continue
+            filepath_without_extension = bluray_filepath + '/' + image_obj['name']
+            self.download_image(image_obj['url'], filepath_without_extension)
+
+        '''
         image_urls = []
         other_filepath = self.base_folder + '/' + constants.FOLDER_BLURAY
         if not os.path.exists(other_filepath):
@@ -248,6 +284,7 @@ class HachinanDownload(Spring2020AnimeDownload):
             except Exception as e:
                 print(e)
                 pass
+        '''
 
 
 # Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan wo Erandeiraremasen 2nd Season

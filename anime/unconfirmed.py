@@ -260,7 +260,8 @@ class KumaBearDownload(UnconfirmedDownload):
             os.makedirs(keyvisual_folder)
 
         image_urls = ["https://kumakumakumabear.com/core_sys/images/main/tz/main_img.jpg",
-                      "https://kumakumakumabear.com/core_sys/images/main/tz/main_img_2.jpg"]
+                      "https://kumakumakumabear.com/core_sys/images/main/tz/main_img_2.jpg",
+                      "https://kumakumakumabear.com/core_sys/images/main/tz/main_img_3.jpg"]
         for image_url in image_urls:
             image_with_extension = self.extract_image_name_from_url(image_url, with_extension=True)
             if os.path.exists(keyvisual_folder + '/' + image_with_extension):
