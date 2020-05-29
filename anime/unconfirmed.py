@@ -271,6 +271,37 @@ class KumaBearDownload(UnconfirmedDownload):
             self.download_image(image_url, filepath_without_extension)
 
 
+class MajotabiDownload(UnconfirmedDownload):
+    title = "Majo no Tabitabi"
+    keywords = [title, "Wandering Witch: The Journey of Elaina", "Majotabi"]
+
+    def __init__(self):
+        super().__init__()
+        self.base_folder = self.base_folder + "/majotabi"
+        if not os.path.exists(self.base_folder):
+            os.makedirs(self.base_folder)
+
+    def run(self):
+        self.download_key_visual()
+
+    def download_key_visual(self):
+        keyvisual_folder = self.base_folder + '/' + constants.FOLDER_KEY_VISUAL
+        if not os.path.exists(keyvisual_folder):
+            os.makedirs(keyvisual_folder)
+
+        image_objs = [
+            {'name': 'kv1', 'url': 'https://pbs.twimg.com/media/EHPjPtFU8AAHo9S?format=jpg&name=large'},
+            {'name': 'kv2', 'url': 'https://pbs.twimg.com/media/ESahsP9UEAAhzgn?format=jpg&name=large'},
+            {'name': 'kv3', 'url': 'https://pbs.twimg.com/media/EUqV9B7UcAAOCeE?format=jpg&name=medium'},
+            {'name': 'kv4', 'url': 'https://pbs.twimg.com/media/EW64PYgUMAAGDIk?format=jpg&name=4096x4096'}]
+        for image_obj in image_objs:
+            if os.path.exists(keyvisual_folder + '/' + image_obj['name'] + '.png'):
+                continue
+            filepath_without_extension = keyvisual_folder + '/' + image_obj['name']
+            self.download_image(image_obj['url'], filepath_without_extension)
+
+
+
 # Maou Gakuin no Futekigousha: Shijou Saikyou no Maou no Shiso, Tensei shite Shison-tachi no Gakkou e
 class MaohgakuinDownload(UnconfirmedDownload):
     title = "Maou Gakuin no Futekigousha: Shijou Saikyou no Maou no Shiso, Tensei shite Shison-tachi no Gakkou e"
