@@ -858,7 +858,7 @@ class TamayomiDownload(Spring2020AnimeDownload):
             episode = self.get_episode_number(story_title, prefix='第', suffix='球')
             if episode is None:
                 continue
-            if self.is_file_exists(self.base_folder + "/" + episode + "_0.jpg") or self.is_file_exists(self.base_folder + "/" + episode + "_0.png"):
+            if self.is_file_exists(self.base_folder + "/" + episode + "_01.jpg") or self.is_file_exists(self.base_folder + "/" + episode + "_01.png"):
                 continue
             story_url = self.STORY_PREFIX + story.find('a')['href']
             story_soup = self.get_soup(story_url)
@@ -878,7 +878,11 @@ class TamayomiDownload(Spring2020AnimeDownload):
             {'name': 'bd_1_1', 'url': 'https://pbs.twimg.com/media/EYBcL7KUMAAzETM?format=jpg&name=small'},
             {'name': 'bd_1_2', 'url': 'https://pbs.twimg.com/media/EYBcOPCU0AASO2c?format=jpg&name=small'},
             {'name': 'bd_2_1', 'url': 'https://pbs.twimg.com/media/EYBcSZDU8AAV3oc?format=jpg&name=small'},
-            {'name': 'bd_2_2', 'url': 'https://pbs.twimg.com/media/EYBcVieXkAATCH5?format=jpg&name=small'}]
+            {'name': 'bd_2_2', 'url': 'https://pbs.twimg.com/media/EYBcVieXkAATCH5?format=jpg&name=small'},
+            {'name': 'bd_3_1', 'url': 'https://pbs.twimg.com/media/EZK2fXMU0AIVWun?format=jpg&name=small'},
+            {'name': 'bd_3_2', 'url': 'https://pbs.twimg.com/media/EZK2g17VcAUpMfE?format=jpg&name=small'},
+            {'name': 'bd_4_1', 'url': 'https://pbs.twimg.com/media/EZK2iQQUwAADyPY?format=jpg&name=small'},
+            {'name': 'bd_4_2', 'url': 'https://pbs.twimg.com/media/EZK2jzcU0AIm_Uy?format=jpg&name=small'}]
         for image_obj in image_objs:
             if os.path.exists(other_filepath + '/' + image_obj['name'] + '.png') or \
                     os.path.exists(other_filepath + '/' + image_obj['name'] + '.jpg'):
