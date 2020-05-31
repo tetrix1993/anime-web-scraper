@@ -2,6 +2,7 @@ import os
 import anime.constants as constants
 from anime.main_download import MainDownload
 
+
 # Bokutachi no Remake http://bokurema.com/ #ぼくリメ #bokurema @bokurema
 # Cheat Kusushi no Slow Life: Isekai ni Tsukurou Drugstore https://www.cheat-kusushi.jp/ #チート薬師 #スローライフ @cheat_kusushi
 # Dokyuu Hentai HxEros https://hxeros.com/ #エグゼロス @hxeros_anime
@@ -22,7 +23,6 @@ from anime.main_download import MainDownload
 
 # Unconfirmed Season Anime
 class UnconfirmedDownload(MainDownload):
-
     season = "9999-9"
     season_name = "Unconfirmed"
 
@@ -83,9 +83,11 @@ class HxErosDownload(UnconfirmedDownload):
             os.makedirs(keyvisual_folder)
 
         image_objs = [
+            {'name': 'teaser', 'url': 'https://pbs.twimg.com/media/EIRucj0XkAUJTsE?format=jpg&name=medium'},
             {'name': 'kv', 'url': 'https://pbs.twimg.com/media/ESLTIUOVAAAWQ5L?format=jpg&name=4096x4096'}]
         for image_obj in image_objs:
-            if os.path.exists(keyvisual_folder + '/' + image_obj['name'] + '.png'):
+            if os.path.exists(keyvisual_folder + '/' + image_obj['name'] + '.jpg') or \
+                    os.path.exists(keyvisual_folder + '/' + image_obj['name'] + '.png'):
                 continue
             filepath_without_extension = keyvisual_folder + '/' + image_obj['name']
             self.download_image(image_obj['url'], filepath_without_extension)
@@ -301,20 +303,19 @@ class MajotabiDownload(UnconfirmedDownload):
             self.download_image(image_obj['url'], filepath_without_extension)
 
 
-
 # Maou Gakuin no Futekigousha: Shijou Saikyou no Maou no Shiso, Tensei shite Shison-tachi no Gakkou e
 class MaohgakuinDownload(UnconfirmedDownload):
     title = "Maou Gakuin no Futekigousha: Shijou Saikyou no Maou no Shiso, Tensei shite Shison-tachi no Gakkou e"
     keywords = ["Maou Gakuin no Futekigousha: Shijou Saikyou no Maou no Shiso, Tensei shite Shison-tachi no Gakkou e"]
 
     PAGE_PREFIX = "https://maohgakuin.com/"
-    
+
     def __init__(self):
         super().__init__()
         self.base_folder = self.base_folder + "/maohgakuin"
         if not os.path.exists(self.base_folder):
             os.makedirs(self.base_folder)
-    
+
     def run(self):
         self.download_key_visual()
 
@@ -500,13 +501,13 @@ class ReZero2Download(UnconfirmedDownload):
                 "Re:Zero - Starting Life in Another World"]
 
     PAGE_PREFIX = "http://re-zero-anime.jp/tv/story/"
-    
+
     def __init__(self):
         super().__init__()
         self.base_folder = self.base_folder + "/rezero2"
         if not os.path.exists(self.base_folder):
             os.makedirs(self.base_folder)
-    
+
     def run(self):
         pass
 
