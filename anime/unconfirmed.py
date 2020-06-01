@@ -306,9 +306,10 @@ class MajotabiDownload(UnconfirmedDownload):
 # Maou Gakuin no Futekigousha: Shijou Saikyou no Maou no Shiso, Tensei shite Shison-tachi no Gakkou e
 class MaohgakuinDownload(UnconfirmedDownload):
     title = "Maou Gakuin no Futekigousha: Shijou Saikyou no Maou no Shiso, Tensei shite Shison-tachi no Gakkou e"
-    keywords = ["Maou Gakuin no Futekigousha: Shijou Saikyou no Maou no Shiso, Tensei shite Shison-tachi no Gakkou e"]
+    keywords = [title, 'Maohgakuin']
 
     PAGE_PREFIX = "https://maohgakuin.com/"
+    CHARACTER_PREFIX = 'https://maohgakuin.com/character/'
 
     def __init__(self):
         super().__init__()
@@ -318,6 +319,7 @@ class MaohgakuinDownload(UnconfirmedDownload):
 
     def run(self):
         self.download_key_visual()
+        self.download_character()
 
     def download_key_visual(self):
         keyvisual_folder = self.base_folder + '/' + constants.FOLDER_KEY_VISUAL
@@ -325,12 +327,46 @@ class MaohgakuinDownload(UnconfirmedDownload):
             os.makedirs(keyvisual_folder)
 
         image_objs = [
-            {'name': 'kv', 'url': 'https://maohgakuin.com/assets/img/top/kv.jpg'}]
+            #{'name': 'kv', 'url': 'https://maohgakuin.com/assets/img/top/kv.jpg'}
+            {'name': 'kv', 'url': 'https://pbs.twimg.com/media/EZbC3ljUMAEAkei?format=jpg&name=4096x4096'},
+            {'name': 'kv2', 'url': 'https://pbs.twimg.com/media/EZaMb5WUEAAxxIg?format=jpg&name=4096x4096'}]
         for image_obj in image_objs:
             if os.path.exists(keyvisual_folder + '/' + image_obj['name'] + '.png'):
                 continue
             filepath_without_extension = keyvisual_folder + '/' + image_obj['name']
             self.download_image(image_obj['url'], filepath_without_extension)
+
+    def download_character(self):
+        character_folder = self.base_folder + '/' + constants.FOLDER_CHARACTER
+        if not os.path.exists(character_folder):
+            os.makedirs(character_folder)
+
+        try:
+            soup = self.get_soup("https://maohgakuin.com/character/")
+            chara_details = soup.find('div', class_='chara_list').find_all('li')
+            for chara_detail in chara_details:
+                thumb_image_url = self.PAGE_PREFIX + chara_detail.find('img')['src'].replace('../', '')
+                image_with_extension = self.extract_image_name_from_url(thumb_image_url, with_extension=True)
+                if os.path.exists(character_folder + '/' + image_with_extension):
+                    continue
+                image_urls = [thumb_image_url]
+                chara_url = self.CHARACTER_PREFIX + chara_detail.find('a')['href'].replace('./', '')
+                chara_soup = self.get_soup(chara_url)
+                chara_detail = chara_soup.find('div', class_='chara_detail')
+                image_urls.append(self.PAGE_PREFIX + chara_detail.find('p', class_='stand_image')
+                                  .find('img')['src'].replace('../', ''))
+                image_urls.append(self.PAGE_PREFIX + chara_detail.find('div', class_='face_image')
+                                  .find('img')['src'].replace('../', ''))
+
+                for image_url in image_urls:
+                    image_with_extension = self.extract_image_name_from_url(image_url, with_extension=True)
+                    if os.path.exists(character_folder + '/' + image_with_extension):
+                        continue
+                    image_without_extension = self.extract_image_name_from_url(image_url, with_extension=False)
+                    filepath_without_extension = character_folder + '/' + image_without_extension
+                    self.download_image(image_url, filepath_without_extension)
+        except Exception as e:
+            pass
 
 
 # Monster Musume no Oishasan
