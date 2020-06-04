@@ -182,17 +182,23 @@ class KanokariDownload(UnconfirmedDownload):
         if not os.path.exists(keyvisual_folder):
             os.makedirs(keyvisual_folder)
 
-        image_urls = ["https://kanokari-official.com/wp/wp-content/uploads/2020/03/mv01.jpg",
-                      "https://kanokari-official.com/wp/wp-content/uploads/2020/03/mv02.jpg",
-                      "https://kanokari-official.com/wp/wp-content/uploads/2020/03/ruka_KV.jpg",
-                      "https://kanokari-official.com/wp/wp-content/uploads/2020/03/sumi_KV0322.jpg"]
-        for image_url in image_urls:
-            image_with_extension = self.extract_image_name_from_url(image_url, with_extension=True)
-            if os.path.exists(keyvisual_folder + '/' + image_with_extension):
+        image_objs = [
+            {'name': 'chara_new_kv1', 'url': 'https://kanokari-official.com/wp/wp-content/themes/kanokari_main/_assets/images/slider/kv_chizuru.jpg'},
+            {'name': 'chara_new_kv2', 'url': 'https://kanokari-official.com/wp/wp-content/themes/kanokari_main/_assets/images/slider/kv_mami.jpg'},
+            {'name': 'chara_new_kv3', 'url': 'https://kanokari-official.com/wp/wp-content/themes/kanokari_main/_assets/images/slider/kv_ruka.jpg'},
+            {'name': 'chara_new_kv4', 'url': 'https://kanokari-official.com/wp/wp-content/themes/kanokari_main/_assets/images/slider/kv_sumi.jpg'},
+            {'name': 'chara_kv1', 'url': 'https://kanokari-official.com/wp/wp-content/uploads/2020/03/mv01.jpg'},
+            {'name': 'chara_kv2', 'url': 'https://kanokari-official.com/wp/wp-content/uploads/2020/03/mv02.jpg'},
+            {'name': 'chara_kv3', 'url': 'https://kanokari-official.com/wp/wp-content/uploads/2020/03/ruka_KV.jpg'},
+            {'name': 'chara_kv4', 'url': 'https://kanokari-official.com/wp/wp-content/uploads/2020/03/sumi_KV0322.jpg'},
+            {'name': 'kv_web', 'url': 'https://kanokari-official.com/wp/wp-content/themes/kanokari_main/_assets/images/slider/kv_main.jpg'},
+            {'name': 'kv', 'url': 'https://pbs.twimg.com/media/EYwr-OVU8AANFm4?format=jpg&name=large'}]
+        for image_obj in image_objs:
+            if os.path.exists(keyvisual_folder + '/' + image_obj['name'] + '.jpg') or \
+                    os.path.exists(keyvisual_folder + '/' + image_obj['name'] + '.png'):
                 continue
-            image_without_extension = self.extract_image_name_from_url(image_url, with_extension=False)
-            filepath_without_extension = keyvisual_folder + '/' + image_without_extension
-            self.download_image(image_url, filepath_without_extension)
+            filepath_without_extension = keyvisual_folder + '/' + image_obj['name']
+            self.download_image(image_obj['url'], filepath_without_extension)
 
     def download_character(self):
         character_folder = self.base_folder + '/' + constants.FOLDER_CHARACTER
