@@ -84,7 +84,10 @@ class HxErosDownload(UnconfirmedDownload):
 
         image_objs = [
             {'name': 'teaser', 'url': 'https://pbs.twimg.com/media/EIRucj0XkAUJTsE?format=jpg&name=medium'},
-            {'name': 'kv', 'url': 'https://pbs.twimg.com/media/ESLTIUOVAAAWQ5L?format=jpg&name=4096x4096'}]
+            {'name': 'kv', 'url': 'https://pbs.twimg.com/media/ESLTIUOVAAAWQ5L?format=jpg&name=4096x4096'},
+            {'name': 'kv_web', 'url': 'https://hxeros.com/assets/img/top/ph_main.jpg'},
+            {'name': 'kv2', 'url': 'https://pbs.twimg.com/media/EZo3lpqUEAEH3Xp?format=jpg&name=4096x4096'},
+            {'name': 'kv2_web', 'url': 'https://hxeros.com/assets/img/top/ph_main_2.jpg'}]
         for image_obj in image_objs:
             if os.path.exists(keyvisual_folder + '/' + image_obj['name'] + '.jpg') or \
                     os.path.exists(keyvisual_folder + '/' + image_obj['name'] + '.png'):
