@@ -389,7 +389,7 @@ class PeterGrillDownload(Summer2020AnimeDownload):
 # Re:Zero kara Hajimeru Isekai Seikatsu 2nd Season
 class ReZero2Download(Summer2020AnimeDownload):
     title = "Re:Zero kara Hajimeru Isekai Seikatsu 2nd Season"
-    keywords = [title, "Re:Zero - Starting Life in Another World"]
+    keywords = [title, "rezero", "Re:Zero - Starting Life in Another World"]
 
     PAGE_PREFIX = "http://re-zero-anime.jp/tv/story/"
 
@@ -400,7 +400,21 @@ class ReZero2Download(Summer2020AnimeDownload):
             os.makedirs(self.base_folder)
 
     def run(self):
-        pass
+        self.download_key_visual()
+
+    def download_key_visual(self):
+        keyvisual_folder = self.base_folder + '/' + constants.FOLDER_KEY_VISUAL
+        if not os.path.exists(keyvisual_folder):
+            os.makedirs(keyvisual_folder)
+
+        image_objs = [
+            #{'name': 'kv_old', 'url': 'http://re-zero-anime.jp/tv/assets/top/main-tv1r.jpg'},
+            {'name': 'kv', 'url': 'http://re-zero-anime.jp/tv/assets/top/main-tv2.jpg'}]
+        for image_obj in image_objs:
+            filename = keyvisual_folder + '/' + image_obj['name']
+            if os.path.exists(filename + '.jpg') or os.path.exists(filename + '.png'):
+                continue
+            self.download_image(image_obj['url'], filename)
 
 
 # Uzaki-chan wa Asobitai!
@@ -451,6 +465,7 @@ class Oregairu3Download(Summer2020AnimeDownload):
             os.makedirs(self.base_folder)
 
     def run(self):
+        self.download_key_visual()
         soup = self.get_soup(self.STORY_PAGE, decode=True)
         story_nav = soup.find('ul', class_='story-nav')
         chapters = story_nav.find_all('li')
@@ -486,3 +501,16 @@ class Oregairu3Download(Summer2020AnimeDownload):
                 result = self.download_image(image_url, file_path_without_extension)
                 if result == -1:
                     return
+
+    def download_key_visual(self):
+        keyvisual_folder = self.base_folder + '/' + constants.FOLDER_KEY_VISUAL
+        if not os.path.exists(keyvisual_folder):
+            os.makedirs(keyvisual_folder)
+
+        image_objs = [{'name': 'kv', 'url': 'http://www.tbs.co.jp/anime/oregairu/img/keyvisual_pc_2.jpg'},
+            {'name': 'kv2', 'url': 'http://www.tbs.co.jp/anime/oregairu/special/img/special02_01.png'}]
+        for image_obj in image_objs:
+            filename = keyvisual_folder + '/' + image_obj['name']
+            if os.path.exists(filename + '.jpg') or os.path.exists(filename + '.png'):
+                continue
+            self.download_image(image_obj['url'], filename)
