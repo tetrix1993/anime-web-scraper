@@ -2,7 +2,7 @@ import os
 import shutil
 import traceback
 
-VERSION_NUMBER = 2
+VERSION_NUMBER = 3
 DOWNLOAD_DIR = 'download'
 UNCONFIRMED_DIR = DOWNLOAD_DIR + '/unconfirmed'
 MIGRATION_ERROR_LOG = 'migration_error.log'
@@ -14,9 +14,16 @@ is_successful = True
 
 
 def migrate_folders():
-    migrate_folder('2020-2/oregairu3', UNCONFIRMED_DIR + '/oregairu3')
-    migrate_folder('2020-3/maohgakuin', UNCONFIRMED_DIR + '/maohgakuin')
-    migrate_folder('2020-3/rezero2', UNCONFIRMED_DIR + '/rezero2')
+    migrate_folder_by_name('2020-2', '2020-3', 'oregairu3')
+    migrate_folder_by_name(UNCONFIRMED_DIR, '2020-3', 'oregairu3')
+    migrate_folder_by_name(UNCONFIRMED_DIR, '2020-3', 'maohgakuin')
+    migrate_folder_by_name(UNCONFIRMED_DIR, '2020-3', 'rezero2')
+    migrate_folder_by_name(UNCONFIRMED_DIR, '2020-3', 'hxeros')
+    migrate_folder_by_name(UNCONFIRMED_DIR, '2020-3', 'kanokari')
+    migrate_folder_by_name(UNCONFIRMED_DIR, '2020-3', 'mon-isha')
+    migrate_folder_by_name(UNCONFIRMED_DIR, '2020-3', 'ochifuru')
+    migrate_folder_by_name(UNCONFIRMED_DIR, '2020-3', 'petergrill')
+    migrate_folder_by_name(UNCONFIRMED_DIR, '2020-3', 'uzakichan')
 
 
 def rename_folders():
@@ -76,6 +83,10 @@ def migrate_folder(old_dir, new_dir):
         shutil.move(old_dir, new_dir)
         message = MOVING_IMAGE_TEMPLATE % (old_dir, new_dir)
         print(message)
+
+
+def migrate_folder_by_name(old_dir, new_dir, name):
+    migrate_folder(old_dir + '/' + name, new_dir + '/' + name)
 
 
 def rename_folder(old_dir, new_dir):
