@@ -1,4 +1,5 @@
 import os
+import anime.constants as constants
 from anime.main_download import MainDownload
 
 # Assassins Pride https://assassinspride-anime.com/ #アサプラ @assassins_anime [TUE/THU]
@@ -458,6 +459,39 @@ class OresukiDownload(Fall2019AnimeDownload):
             os.makedirs(self.base_folder)
     
     def run(self):
+        self.download_bluray()
+        self.download_episode_preview()
+
+    def download_bluray(self):
+        bluray_filepath = self.base_folder + '/' + constants.FOLDER_BLURAY
+        if not os.path.exists(bluray_filepath):
+            os.makedirs(bluray_filepath)
+
+        bluray_template = 'https://ore.ski/_assets/img/blu-ray_dvd/%s/jacket_%s.%s'
+        for i in range(1, 7, 1):
+            for j in range(1, 5, 1):
+                pic_type = 'png'
+                if i == 6:
+                    pic_type = 'jpg'
+                bluray_url = bluray_template % (str(i).zfill(2), str(j).zfill(2), pic_type)
+                filepath_without_extension = bluray_filepath + '/bd_' + str(i) + '_' + str(j)
+                self.download_image(bluray_url, filepath_without_extension)
+
+        image_objs = [
+            {'name': 'bd_bonus_1', 'url': 'https://ore.ski/_assets/img/blu-ray_dvd/ph_all.jpg'},
+            {'name': 'bd_bonus_2', 'url': 'https://ore.ski/_assets/img/blu-ray_dvd/ph_animate.jpg'},
+            {'name': 'bd_bonus_3', 'url': 'https://ore.ski/_assets/img/blu-ray_dvd/ph_amazon.jpg'},
+            {'name': 'bd_bonus_4', 'url': 'https://ore.ski/_assets/img/blu-ray_dvd/ph_gamers.jpg'},
+            {'name': 'bd_bonus_5', 'url': 'https://ore.ski/_assets/img/blu-ray_dvd/ph_sofmap.jpg'},
+            {'name': 'bd_bonus_6', 'url': 'https://ore.ski/_assets/img/blu-ray_dvd/ph_toranoana.jpg'}]
+        for image_obj in image_objs:
+            if os.path.exists(bluray_filepath + '/' + image_obj['name'] + '.png') or \
+                    os.path.exists(bluray_filepath + '/' + image_obj['name'] + '.jpg'):
+                continue
+            filepath_without_extension = bluray_filepath + '/' + image_obj['name']
+            self.download_image(image_obj['url'], filepath_without_extension)
+
+    def download_episode_preview(self):
         try:
             for i in range(1, self.FINAL_EPISODE + 1, 1):
                 episode = str(i).zfill(2)
@@ -477,7 +511,7 @@ class OresukiDownload(Fall2019AnimeDownload):
                     imageFileName = episode + '_' + str(j)
                     filepathWithoutExtension = self.base_folder + "/" + imageFileName
                     self.download_image(imageUrl, filepathWithoutExtension)
-        
+
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)

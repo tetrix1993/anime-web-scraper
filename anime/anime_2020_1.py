@@ -446,6 +446,10 @@ class BofuriDownload(Winter2020AnimeDownload):
             os.makedirs(self.base_folder)
     
     def run(self):
+        self.download_bluray()
+        self.download_episode_preview()
+
+    def download_episode_preview(self):
         try:
             response = self.get_response(self.EPISODE_PAGE)
             for i in range(1, self.FINAL_EPISODE + 1, 1):
@@ -463,6 +467,32 @@ class BofuriDownload(Winter2020AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
+
+    def download_bluray(self):
+        bluray_filepath = self.base_folder + '/' + constants.FOLDER_BLURAY
+        if not os.path.exists(bluray_filepath):
+            os.makedirs(bluray_filepath)
+
+        image_objs = [
+            {'name': 'bd_bonus_1', 'url': 'https://bofuri.jp/assets/bluray/cp/1.png'},
+            {'name': 'bd_bonus_2', 'url': 'https://bofuri.jp/assets/bluray/bnf/th/1.jpg'},
+            {'name': 'bd_bonus_3', 'url': 'https://bofuri.jp/assets/bluray/bnf/th/2.jpg'},
+            {'name': 'bd_bonus_4', 'url': 'https://bofuri.jp/assets/bluray/bnf/th/3.jpg'},
+            {'name': 'bd_bonus_5', 'url': 'https://bofuri.jp/assets/bluray/bnf/th/4.jpg'},
+            {'name': 'bd_bonus_6', 'url': 'https://bofuri.jp/assets/bluray/bnf/th/5.jpg'},
+            {'name': 'bd_bonus_7', 'url': 'https://bofuri.jp/assets/bluray/bnf/th/6.jpg'},
+            {'name': 'bd_1_1', 'url': 'https://pbs.twimg.com/media/ES0VfovUMAAY11q?format=jpg&name=4096x4096'},
+            {'name': 'bd_1_2', 'url': 'https://tc-animate.techorus-cdn.com/resize_image/resize_image.php?image=03111454_5e687d099c28c.jpg'},
+            {'name': 'bd_2_1', 'url': 'https://pbs.twimg.com/media/EUlhuICUMAAvPf6?format=jpg&name=4096x4096'},
+            {'name': 'bd_2_2', 'url': 'https://tc-animate.techorus-cdn.com/resize_image/resize_image.php?image=05111439_5eb8e52a46095.jpg'},
+            {'name': 'bd_3_1', 'url': 'https://bofuri.jp/assets/bluray/3/main.jpg'},
+            {'name': 'bd_3_2', 'url': 'https://tc-animate.techorus-cdn.com/resize_image/resize_image.php?image=04171104_5e990ebc07a88.jpg'}]
+        for image_obj in image_objs:
+            if os.path.exists(bluray_filepath + '/' + image_obj['name'] + '.png') or \
+                    os.path.exists(bluray_filepath + '/' + image_obj['name'] + '.jpg'):
+                continue
+            filepath_without_extension = bluray_filepath + '/' + image_obj['name']
+            self.download_image(image_obj['url'], filepath_without_extension)
 
 
 # Jibaku Shounen Hanako-kun
