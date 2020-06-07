@@ -40,8 +40,12 @@ class HxErosDownload(Summer2020AnimeDownload):
             os.makedirs(self.base_folder)
 
     def run(self):
-        self.download_key_visual()
-        self.download_character()
+        try:
+            self.download_key_visual()
+            self.download_character()
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
     def download_key_visual(self):
         keyvisual_folder = self.base_folder + '/' + constants.FOLDER_KEY_VISUAL
@@ -111,8 +115,12 @@ class KanokariDownload(Summer2020AnimeDownload):
             os.makedirs(self.base_folder)
 
     def run(self):
-        self.download_key_visual()
-        self.download_character()
+        try:
+            self.download_key_visual()
+            self.download_character()
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
     def download_key_visual(self):
         keyvisual_folder = self.base_folder + '/' + constants.FOLDER_KEY_VISUAL
@@ -174,8 +182,12 @@ class MaohgakuinDownload(Summer2020AnimeDownload):
             os.makedirs(self.base_folder)
 
     def run(self):
-        self.download_key_visual()
-        self.download_character()
+        try:
+            self.download_key_visual()
+            self.download_character()
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
     def download_key_visual(self):
         keyvisual_folder = self.base_folder + '/' + constants.FOLDER_KEY_VISUAL
@@ -239,8 +251,12 @@ class MonIshaDownload(Summer2020AnimeDownload):
             os.makedirs(self.base_folder)
 
     def run(self):
-        self.download_key_visual()
-        self.download_character()
+        try:
+            self.download_key_visual()
+            self.download_character()
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
     def download_key_visual(self):
         keyvisual_folder = self.base_folder + '/' + constants.FOLDER_KEY_VISUAL
@@ -293,8 +309,12 @@ class OchifuruDownload(Summer2020AnimeDownload):
             os.makedirs(self.base_folder)
 
     def run(self):
-        self.download_key_visual()
-        self.download_character()
+        try:
+            self.download_key_visual()
+            self.download_character()
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
     def download_key_visual(self):
         keyvisual_folder = self.base_folder + '/' + constants.FOLDER_KEY_VISUAL
@@ -316,17 +336,18 @@ class OchifuruDownload(Summer2020AnimeDownload):
             os.makedirs(character_folder)
 
         try:
-            i = 1
+            i = 0
             while True:
+                i += 1
                 filepath_without_extension = character_folder + '/chara_' + str(i).zfill(2)
                 if os.path.exists(filepath_without_extension + '.png') or \
                         os.path.exists(filepath_without_extension + '.jpg'):
+
                     continue
                 image_url = self.CHARA_IMAGE_TEMPLATE % str(i).zfill(3)
                 result = self.download_image(image_url, filepath_without_extension)
                 if result == -1:
                     break
-                i += 1
         except Exception as e:
             pass
 
@@ -345,8 +366,12 @@ class PeterGrillDownload(Summer2020AnimeDownload):
             os.makedirs(self.base_folder)
 
     def run(self):
-        self.download_key_visual()
-        self.download_character()
+        try:
+            self.download_key_visual()
+            self.download_character()
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
     def download_key_visual(self):
         keyvisual_folder = self.base_folder + '/' + constants.FOLDER_KEY_VISUAL
@@ -400,7 +425,11 @@ class ReZero2Download(Summer2020AnimeDownload):
             os.makedirs(self.base_folder)
 
     def run(self):
-        self.download_key_visual()
+        try:
+            self.download_key_visual()
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
     def download_key_visual(self):
         keyvisual_folder = self.base_folder + '/' + constants.FOLDER_KEY_VISUAL
@@ -429,7 +458,11 @@ class UzakiChanDownload(Summer2020AnimeDownload):
             os.makedirs(self.base_folder)
 
     def run(self):
-        self.download_key_visual()
+        try:
+            self.download_key_visual()
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
     def download_key_visual(self):
         keyvisual_folder = self.base_folder + '/' + constants.FOLDER_KEY_VISUAL
@@ -465,7 +498,14 @@ class Oregairu3Download(Summer2020AnimeDownload):
             os.makedirs(self.base_folder)
 
     def run(self):
-        self.download_key_visual()
+        try:
+            self.download_key_visual()
+            self.download_episode_preview()
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
+
+    def download_episode_preview(self):
         soup = self.get_soup(self.STORY_PAGE, decode=True)
         story_nav = soup.find('ul', class_='story-nav')
         chapters = story_nav.find_all('li')

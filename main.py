@@ -5,6 +5,7 @@ from anime import *
 def run_process(download):
     print("Running " + download.__class__.__name__ + " (" + str(os.getpid()) + ")")
     download.run()
+    print("Ending " + download.__class__.__name__ + " (" + str(os.getpid()) + ")")
 
 
 def run_process_function(fn):
@@ -346,7 +347,7 @@ def download_winter_2020_anime():
     #downloads.append(BofuriDownload())
     #downloads.append(DarwinsGameDownload())
     #downloads.append(EizoukenDownload())
-    downloads.append(HatenaIllusionDownload())
+    #downloads.append(HatenaIllusionDownload())
     #downloads.append(HeyaCampDownload())
     #downloads.append(InfiniteDendrogramDownload())
     #downloads.append(IsekaiQuartet2Download())
@@ -410,9 +411,19 @@ def download_spring_2020_anime():
 def download_summer_2020_anime():
     downloads = []
 
-    downloads.append(MaohgakuinDownload())
-    downloads.append(Oregairu3Download())
-    downloads.append(ReZero2Download())
+    subclasses = Summer2020AnimeDownload.__subclasses__()
+    for subclass in subclasses:
+        downloads.append(subclass())
+
+    #downloads.append(HxErosDownload())
+    #downloads.append(KanokariDownload())
+    #downloads.append(MaohgakuinDownload())
+    #downloads.append(MonIshaDownload())
+    #downloads.append(OchifuruDownload())
+    #downloads.append(Oregairu3Download())
+    #downloads.append(PeterGrillDownload())
+    #downloads.append(ReZero2Download())
+    #downloads.append(UzakiChanDownload())
 
     process_download(downloads)
 # endregion
