@@ -285,6 +285,12 @@ class MainDownload:
             os.makedirs(filepath)
         return filepath
 
+    def create_custom_directory(self, dir_name):
+        filepath = self.base_folder + '/' + dir_name
+        if not os.path.exists(filepath):
+            os.makedirs(filepath)
+        return filepath
+
     def download_image_objects(self, image_objs, filepath):
         for image_obj in image_objs:
             filename = filepath + '/' + image_obj['name']

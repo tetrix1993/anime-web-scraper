@@ -53,6 +53,33 @@ class DarwinsGameDownload(Winter2020AnimeDownload):
             os.makedirs(self.base_folder)
     
     def run(self):
+        self.download_bluray()
+        self.download_episode_preview()
+
+    def download_bluray(self):
+        bluray_filepath = self.create_bluray_directory()
+        try:
+            bd_soup = self.get_soup(self.BD_PAGE)
+            bd_tags = bd_soup.find('ul', class_='nav_package').find_all('img')
+            k = 0
+            for bd_tag in bd_tags:
+                k += 1
+                bd_link = self.BD_PAGE_PREFIX + bd_tag['src'].replace('../', '')
+                if "img_jk_1.jpg" not in bd_link:  # Skip Coming Soon picture
+                    filepath_without_extension = bluray_filepath + "/bd_" + str(k)
+                    self.download_image(bd_link, filepath_without_extension)
+        except:
+            pass
+
+        image_objs = [
+            {'name': 'bd_bonus_1', 'url': 'https://darwins-game.com/assets/img/bddvd/img_animate.jpg'},
+            {'name': 'bd_bonus_2', 'url': 'https://darwins-game.com/assets/img/bddvd/img_aniplex03.jpg'},
+            {'name': 'bd_bonus_3', 'url': 'https://darwins-game.com/assets/img/bddvd/img_amazon.jpg'},
+            {'name': 'bd_bonus_4', 'url': 'https://darwins-game.com/assets/img/bddvd/img_sofmap.jpg'}]
+        self.download_image_objects(image_objs, bluray_filepath)
+
+
+    def download_episode_preview(self):
         try:
             response = self.get_response(self.STORY_PAGE)
             split1 = response.split('<ul class="story_list">')
@@ -79,16 +106,6 @@ class DarwinsGameDownload(Winter2020AnimeDownload):
                     imageUrl = self.STORY_PAGE + split4[j].split('"')[0]
                     filepathWithoutExtension = self.base_folder + "/" + episode + "_" + str(j)
                     self.download_image(imageUrl, filepathWithoutExtension)
-
-            bd_soup = self.get_soup(self.BD_PAGE)
-            bd_tags = bd_soup.find('ul', class_='nav_package').find_all('img')
-            k = 0
-            for bd_tag in bd_tags:
-                k += 1
-                bd_link = self.BD_PAGE_PREFIX + bd_tag['src'].replace('../', '')
-                if "img_jk_1.jpg" not in bd_link: # Skip Coming Soon picture
-                    filepath_without_extension = self.base_folder + "/bluray_vol" + str(k)
-                    self.download_image(bd_link, filepath_without_extension)
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
@@ -556,6 +573,13 @@ class KoisuruAsteroidDownload(Winter2020AnimeDownload):
             os.makedirs(self.base_folder)
     
     def run(self):
+        self.download_keyvisual()
+        self.download_bluray()
+        self.download_endcard()
+        self.download_event()
+        self.download_episode_preview()
+
+    def download_episode_preview(self):
         try:
             response = self.get_response(self.STORY_PAGE)
             split1 = response.split('<a href="story')
@@ -581,7 +605,57 @@ class KoisuruAsteroidDownload(Winter2020AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
-        
+
+    def download_endcard(self):
+        filepath = self.create_custom_directory(constants.FOLDER_ENDCARD)
+        image_objs = [
+            {'name': 'ec01', 'url': 'https://pbs.twimg.com/media/ENGSq1FUUAAWIAk?format=png&name=900x900'},
+            {'name': 'ec02', 'url': 'https://pbs.twimg.com/media/EN1wCCGUcAAGxZO?format=jpg&name=medium'},
+            {'name': 'ec03', 'url': 'https://pbs.twimg.com/media/EOao-mwU8AAIFfF?format=jpg&name=medium'},
+            {'name': 'ec04', 'url': 'https://pbs.twimg.com/media/EO9r0v_UYAEgYPu?format=jpg&name=medium'},
+            {'name': 'ec05', 'url': 'https://pbs.twimg.com/media/EPmPDAoU0AUX3jo?format=jpg&name=medium'},
+            {'name': 'ec06', 'url': 'https://pbs.twimg.com/media/EQKCfFIUEAMvJG2?format=jpg&name=900x900'},
+            {'name': 'ec07', 'url': 'https://pbs.twimg.com/media/ERNrIGsVAAI3zj2?format=jpg&name=medium'},
+            {'name': 'ec08', 'url': 'https://pbs.twimg.com/media/ER3HzkDUUAIbiBW?format=jpg&name=medium'},
+            {'name': 'ec09', 'url': 'https://pbs.twimg.com/media/ESbMX2_U0AAIA7v?format=png&name=900x900'},
+            {'name': 'ec10', 'url': 'https://pbs.twimg.com/media/ES-LTOmU4AYlBor?format=png&name=900x900'},
+            {'name': 'ec11', 'url': 'https://pbs.twimg.com/media/ETePfWDU0AE9qzl?format=png&name=900x900'},
+            {'name': 'ec12', 'url': 'https://pbs.twimg.com/media/EUGBTQ-U4AELyLs?format=jpg&name=medium'}]
+        self.download_image_objects(image_objs, filepath)
+
+    def download_bluray(self):
+        filepath = self.create_bluray_directory()
+        image_objs = [
+            {'name': 'music_ost', 'url': 'https://pbs.twimg.com/media/ER3JRDCVUAMnQjM?format=jpg&name=small'},
+            {'name': 'music_op', 'url': 'https://pbs.twimg.com/media/EQKEKLVVAAEtmJ0?format=jpg&name=900x900'},
+            {'name': 'bd_1_1', 'url': 'https://pbs.twimg.com/media/ER3Nv8IVUAIgJqQ?format=png&name=medium'},
+            {'name': 'bd_1_2', 'url': 'http://koiastv.com/images/package/001/j_002.jpg'},
+            {'name': 'bd_2_1', 'url': 'https://pbs.twimg.com/media/EUFWg1bVAAAmMsD?format=jpg&name=medium'},
+            {'name': 'bd_2_2', 'url': 'http://koiastv.com/images/package/002/j_002.jpg'},
+            {'name': 'bd_3_1', 'url': 'https://pbs.twimg.com/media/EWGL6AxUMAApbvB?format=jpg&name=900x900'},
+            {'name': 'bd_2_2', 'url': 'http://koiastv.com/images/package/003/j_002.jpg'},
+            {'name': 'bd_bonus_1', 'url': 'http://koiastv.com/images/package/tokuten/p_amazon2.jpg'},
+            {'name': 'bd_bonus_2', 'url': 'http://koiastv.com/images/package/tokuten/p_animate2.jpg'},
+            {'name': 'bd_bonus_3', 'url': 'http://koiastv.com/images/package/tokuten/p_gamers3.jpg'},
+            {'name': 'bd_bonus_4', 'url': 'http://koiastv.com/images/package/tokuten/p_sofmap2.jpg'},
+            {'name': 'bd_bonus_5', 'url': 'http://koiastv.com/images/package/tokuten/p_tora2.jpg'},
+            {'name': 'bd_bonus_6', 'url': 'http://koiastv.com/images/package/tokuten/p_gstore2.jpg'}]
+        self.download_image_objects(image_objs, filepath)
+
+    def download_event(self):
+        filepath = self.create_custom_directory(constants.FOLDER_EVENT)
+        image_objs = [
+            {'name': 'valentine', 'url': 'http://koiastv.com/images/news/p_038.jpg'},
+            {'name': 'valentine_big', 'url': 'http://koiastv.com/images/top/v_002.jpg'},
+            {'name': 'special_event_visual', 'url': 'http://koiastv.com/images/news/p_043.jpg'}]
+        self.download_image_objects(image_objs, filepath)
+
+    def download_keyvisual(self):
+        filepath = self.create_key_visual_directory()
+        image_objs = [
+            {'name': 'kv', 'url': 'http://koiastv.com/images/top/v_001.jpg'}]
+        self.download_image_objects(image_objs, filepath)
+
 
 # Kyokou Suiri
 class KyokouSuiriDownload(Winter2020AnimeDownload):
@@ -714,6 +788,13 @@ class NekoparaDownload(Winter2020AnimeDownload):
             os.makedirs(self.base_folder)
     
     def run(self):
+        self.download_keyvisual()
+        self.download_bluray()
+        self.download_event()
+        self.download_endcard()
+        self.download_episode_preview()
+
+    def download_episode_preview(self):
         try:
             api45_json = self.get_json(self.API_45_JSON)
             ids = api45_json['item']
@@ -722,7 +803,7 @@ class NekoparaDownload(Winter2020AnimeDownload):
                 url = self.API_46_JSON_PREFIX + id
                 api46_json = self.get_json(url)
                 #episode = api46_json['item']['title_mobile'].split('話')[0].replace('第','').zfill(2)
-                episode = str(len(ids) - i).zfill(2) 
+                episode = str(len(ids) - i).zfill(2)
                 if self.is_file_exists(self.base_folder + "/" + episode + "_1.jpg") or self.is_file_exists(self.base_folder + "/" + episode + "_1.png"):
                     break
                 split1 = api46_json['item']['contents'].split('<br')[0].split('<img src=\"')
@@ -745,6 +826,59 @@ class NekoparaDownload(Winter2020AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
         WebNewtypeScanner('ネコぱら',self.base_folder).run()
+
+    def download_keyvisual(self):
+        filepath = self.create_key_visual_directory()
+        image_objs = [
+            {'name': 'kv_1', 'url': 'https://nekopara-anime.com/ja/img/home/visual_01.jpg'},
+            {'name': 'kv_2', 'url': 'https://nekopara-anime.com/ja/img/home/visual_02.jpg'},
+            {'name': 'kv_2b', 'url': 'https://nekopara-anime.com/ja/img/home/visual_02.jpg'},
+            {'name': 'kv_3', 'url': 'https://nekopara-anime.com/ja/img/home/visual_03.jpg'},
+            {'name': 'kv_3_pc', 'url': 'https://nekopara-anime.com/ja/img/home/visual_03_pc.png'},
+            {'name': 'kv_4', 'url': 'https://nekopara-anime.com/ja/img/home/visual_04_pc.png'},
+            {'name': 'kv_5', 'url': 'https://nekopara-anime.com/ja/img/home/visual_05_pc.png'}]
+        self.download_image_objects(image_objs, filepath)
+
+    def download_bluray(self):
+        filepath = self.create_bluray_directory()
+        image_objs = [
+            {'name': 'music_op', 'url': 'https://img.imageimg.net/artist/nekopara-anime/img/product_1031077.jpg'},
+            {'name': 'music_ed', 'url': 'https://img.imageimg.net/artist/nekopara-anime/img/product_1031101.jpg'},
+            {'name': 'music_ost', 'url': 'https://img.imageimg.net/artist/nekopara-anime/img/product_1031239.jpg'},
+            {'name': 'bd_1', 'url': 'https://img.imageimg.net/artist/nekopara-anime/img/product_1031240.jpg'},
+            {'name': 'bd_2', 'url': 'https://img.imageimg.net/artist/nekopara-anime/img/product_1031241.jpg'},
+            {'name': 'bd_bonus_1_1', 'url': 'https://m.imageimg.net/upload/artist_img/NKPRA/0116a14b28b259b049b9c1d235cc100979a3c5e4_5e3ba84feaad8.jpg'},
+            {'name': 'bd_bonus_1_2', 'url': 'https://m.imageimg.net/upload/artist_img/NKPRA/9d3b89466d93d37f9d72b557ca87bcd0ee5e5df9_5e7b0d79705b2.jpg'},
+            {'name': 'bd_bonus_1_3', 'url': 'https://m.imageimg.net/upload/artist_img/NKPRA/d2f96e4c177cd49d17aa356c38e1820da1030008_5e7b0d9364282.jpg'},
+            {'name': 'bd_bonus_1_4', 'url': 'https://m.imageimg.net/upload/artist_img/NKPRA/e49f6ab0cfb91fa3cefe49f81384ee849b6c68c6_5e7b0da5dddab.jpg'},
+            {'name': 'bd_bonus_2', 'url': 'https://m.imageimg.net/upload/artist_img/NKPRA/4ee0a49df45d2dc987a6b707ebaed013b57023bb_5e7b0e19ce06d.jpg'},
+            {'name': 'bd_bonus_3', 'url': 'https://m.imageimg.net/upload/artist_img/NKPRA/a071447604066d768245b9ffeff7204d065e398e_5e3ba84f78244.jpg'},
+            {'name': 'bd_bonus_4', 'url': 'https://m.imageimg.net/upload/artist_img/NKPRA/0135f75e251f30014adb7ee63f925125b98b2585_5eddd001a7e4a.jpg'},
+            {'name': 'bd_bonus_5', 'url': 'https://m.imageimg.net/upload/artist_img/NKPRA/d05814a8be31ddb04c2662a66c9da235aac3ced7_5eddd000f1102.jpg'}]
+        self.download_image_objects(image_objs, filepath)
+
+    def download_event(self):
+        filepath = self.create_custom_directory(constants.FOLDER_EVENT)
+        image_objs = [
+            {'name': 'c97', 'url': 'https://pbs.twimg.com/media/EMyYJvUVAAAGYpK?format=jpg&name=900x900'}]
+        self.download_image_objects(image_objs, filepath)
+
+    def download_endcard(self):
+        filepath = self.create_custom_directory(constants.FOLDER_ENDCARD)
+        image_objs = [
+            {'name': 'ec01', 'url': 'https://pbs.twimg.com/media/ENxmTedUwAEgfx1?format=jpg&name=900x900'},
+            {'name': 'ec02', 'url': 'https://pbs.twimg.com/media/EN-o56OUEAASMdD?format=jpg&name=900x900'},
+            {'name': 'ec03', 'url': 'https://pbs.twimg.com/media/EN-pP27U8AADHNC?format=jpg&name=900x900'},
+            {'name': 'ec04', 'url': 'https://pbs.twimg.com/media/EN-pzv4VAAE78yp?format=jpg&name=900x900'},
+            {'name': 'ec05', 'url': 'https://pbs.twimg.com/media/EN-qLLSVAAEwKy8?format=jpg&name=900x900'},
+            {'name': 'ec06', 'url': 'https://pbs.twimg.com/media/EN-q7jJUcAAfDjG?format=jpg&name=900x900'},
+            {'name': 'ec07', 'url': 'https://pbs.twimg.com/media/ERIxa0bVAAEdXoQ?format=jpg&name=900x900'},
+            {'name': 'ec08', 'url': 'https://pbs.twimg.com/media/ERIx4CXUcAI_8PO?format=jpg&name=900x900'},
+            {'name': 'ec09', 'url': 'https://pbs.twimg.com/media/ESFRo6TU8AAFvvt?format=jpg&name=900x900'},
+            {'name': 'ec10', 'url': 'https://pbs.twimg.com/media/ERIyogOVAAED-eX?format=jpg&name=900x900'},
+            {'name': 'ec11', 'url': 'https://pbs.twimg.com/media/ETJ8K-0UUAADTyx?format=jpg&name=medium'},
+            {'name': 'ec12', 'url': 'https://pbs.twimg.com/media/ETxU3O8UcAU269_?format=jpg&name=900x900'}]
+        self.download_image_objects(image_objs, filepath)
 
 
 # Oshi ga Budoukan Ittekuretara Shinu

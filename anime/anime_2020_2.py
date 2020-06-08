@@ -554,7 +554,7 @@ class Kaguyasama2Download(Spring2020AnimeDownload):
                     image_url = chara_image_templates[i] % str(j + 1).zfill(2)
                     filename = image_url.split('/')[-1].replace('.jpg', '').replace('.png', '')
                     filepath = chara_filepath + '/' + filename
-                    if not os.path.exists(filepath + '.jpg') or os.path.exists(filepath + '.png'):
+                    if not os.path.exists(filepath + '.jpg') and not os.path.exists(filepath + '.png'):
                         self.download_image(image_url, filepath)
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
