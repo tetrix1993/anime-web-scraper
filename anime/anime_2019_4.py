@@ -109,7 +109,6 @@ class AssassinsPrideDownload(Fall2019AnimeDownload):
         self.download_image_objects(image_objs, filepath)
 
 
-
 # Bokuben 2 (Sunday)
 class Bokuben2Download(Fall2019AnimeDownload):
     title = "Bokutachi wa Benkyou ga Dekinai!"
@@ -173,6 +172,10 @@ class ChoyoyuDownload(Fall2019AnimeDownload):
             os.makedirs(self.base_folder)
     
     def run(self):
+        self.download_episode_preview()
+        self.download_bluray()
+
+    def download_episode_preview(self):
         try:
             response = self.get_response(self.PAGE_LINK)
             if len(response) == 0:
@@ -192,10 +195,20 @@ class ChoyoyuDownload(Fall2019AnimeDownload):
                     imageFileName = episode + '_' + str(j)
                     filepathWithoutExtension = self.base_folder + "/" + imageFileName
                     self.download_image(imageUrl, filepathWithoutExtension)
-        
+
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
+
+    def download_bluray(self):
+        filepath = self.create_bluray_directory()
+        image_objs = [
+            {'name': 'music_ost', 'url': 'https://img.imageimg.net/artist/assassinspride-anime/img/product_1030791.jpg'}]
+        image_url_template = 'http://choyoyu.com/assets/img/products/bluray/bluray0%s_image01.jpg'
+        for i in range(1, 5, 1):
+            image_url = image_url_template % str(i)
+            image_objs.append({'name': 'bd_' + str(i), 'url': image_url})
+        self.download_image_objects(image_objs, filepath)
 
 
 # Hataage! Kemonomichi (Monday)
