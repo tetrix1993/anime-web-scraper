@@ -37,7 +37,7 @@ class AssassinsPrideDownload(Fall2019AnimeDownload):
     keywords = ["Assassins Pride"]
 
     PAGE_LINK = "https://assassinspride-anime.com/"
-    FINAL_EPISODE = 13
+    FINAL_EPISODE = 12
     NUM_OF_PICTURES_PER_PAGE = 3
     
     def __init__(self):
@@ -47,26 +47,67 @@ class AssassinsPrideDownload(Fall2019AnimeDownload):
             os.makedirs(self.base_folder)
     
     def run(self):
+        self.download_episode_preview()
+        self.download_keyvisual()
+        self.download_bluray()
+
+    def download_episode_preview(self):
         try:
             response = self.get_response(self.PAGE_LINK)
             split1 = response.split('<h3 class="top-story-box-ttl">')
-            if (len(split1) < 2):
+            if len(split1) < 2:
                 return
-            for i in range(1, len(split1), 1):
+            for i in range(1, self.FINAL_EPISODE + 1, 1):
                 episode = str(i).zfill(2)
                 split2 = split1[i].split('<ul>')
-                if (len(split2) < 2):
+                if len(split2) < 2:
                     continue
                 split3 = split2[1].split('</ul>')[0].split('<li><img src="')
                 for j in range(1, len(split3), 1):
                     imageUrl = split3[j].split('"')[0]
+                    if len(imageUrl) == 0:
+                        continue
                     if "sample" in imageUrl:
                         break
                     filepathWithoutExtension = self.base_folder + "/" + episode + "_" + str(j)
-                    self.download_image(imageUrl, filepathWithoutExtension)
+                    if not os.path.exists(filepathWithoutExtension + '.jpg'):
+                        self.download_image(imageUrl, filepathWithoutExtension)
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
+
+    def download_keyvisual(self):
+        filepath = self.create_key_visual_directory()
+        image_url_template = 'https://assassinspride-anime.com/assets/img/top/main/visual/%s.jpg'
+        image_objs = []
+        for i in range(0, 6, 1):
+            image_url = image_url_template % str(i)
+            image_objs.append({'name': 'kv_' + str(i), 'url': image_url})
+        self.download_image_objects(image_objs, filepath)
+
+    def download_bluray(self):
+        filepath = self.create_bluray_directory()
+        image_objs = [
+            {'name': 'music_ost', 'url': 'https://img.imageimg.net/artist/assassinspride-anime/img/product_1030791.jpg'},
+            {'name': 'music_op', 'url': 'https://img.imageimg.net/artist/assassinspride-anime/img/product_1030685.jpg'},
+            {'name': 'music_op', 'url': 'https://img.imageimg.net/artist/assassinspride-anime/img/product_1030686.jpg'},
+            {'name': 'bd_1_1', 'url': 'https://m.imageimg.net/upload/artist_img/ASSSP/0be0ba5eeff1ecb7ff05a3aac0ca2772b54eb0f5_5dc3b42657914.jpg'},
+            {'name': 'bd_1_2', 'url': 'https://m.imageimg.net/upload/artist_img/ASSSP/bf34841f5725f2ed7098caf53c305d630711247a_5dc3b426c5b49.jpg'},
+            {'name': 'bd_1_3', 'url': 'https://m.imageimg.net/upload/artist_img/ASSSP/c41e2864f2e0f4c4012b8f273d49b5eb7a5aa6f0_5dd68534e94eb.jpg'},
+            {'name': 'bd_2_1', 'url': 'https://m.imageimg.net/upload/artist_img/ASSSP/54607137c3e8b5224e4c6a5d7a2eb83f96270d2c_5e0554b0c92a4.jpg'},
+            {'name': 'bd_2_2', 'url': 'https://m.imageimg.net/upload/artist_img/ASSSP/5f779c6126936ab5cafab1c535425dcbf0546bc2_5e0554b16a0d7.jpg'},
+            {'name': 'bd_2_3', 'url': 'https://m.imageimg.net/upload/artist_img/ASSSP/8a3331ed49c5c86b0d18f189318fcae0ebeb29fd_5e0554b2044c6.jpg'},
+            {'name': 'bd_3_1', 'url': 'https://m.imageimg.net/upload/artist_img/ASSSP/254d9210a0a37afa7100f11e7e7b64ad9d1df583_5e60eb7e219a8.jpg'},
+            {'name': 'bd_3_2', 'url': 'https://m.imageimg.net/upload/artist_img/ASSSP/114e87dec4c9808edac7e278dc7848bb69fadd28_5e60eb861207c.jpg'},
+            {'name': 'bd_3_3', 'url': 'https://m.imageimg.net/upload/artist_img/ASSSP/e6fbabc8bd63767e6e11487c9b2ab9f703e8b8d3_5e60eb8c9e08a.jpg'},
+            {'name': 'bd_bonus_1', 'url': 'https://pbs.twimg.com/media/EaAA-9SUcAEFoM9?format=jpg&name=medium'},
+            {'name': 'bd_bonus_2', 'url': 'https://pbs.twimg.com/media/EaAA-9gU8AAI3Bb?format=jpg&name=medium'},
+            {'name': 'bd_bonus_3', 'url': 'https://pbs.twimg.com/media/EaAA-9eU8AASuRF?format=jpg&name=medium'},
+            {'name': 'bd_bonus_4', 'url': 'https://pbs.twimg.com/media/EaAA-9fUMAAJYBL?format=jpg&name=medium'},
+            {'name': 'bd_bonus_5', 'url': 'https://pbs.twimg.com/media/EaABDs4VAAEw14r?format=jpg&name=medium'},
+            {'name': 'bd_bonus_6', 'url': 'https://pbs.twimg.com/media/EaABDtWUEAAiL2G?format=jpg&name=medium'}]
+        self.download_image_objects(image_objs, filepath)
+
 
 
 # Bokuben 2 (Sunday)
@@ -533,6 +574,10 @@ class RifleIsBeautifulDownload(Fall2019AnimeDownload):
             os.makedirs(self.base_folder)
     
     def run(self):
+        self.download_episode_preview()
+        self.download_goods()
+
+    def download_episode_preview(self):
         try:
             response = self.get_response(self.INITIAL_PAGE_LINK)
             split1 = response.split('<div class="nav_num flex">')
@@ -559,6 +604,15 @@ class RifleIsBeautifulDownload(Fall2019AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
+
+    def download_goods(self):
+        filepath = self.create_custom_directory(constants.FOLDER_GOODS)
+        image_objs = [
+            {'name': 'dakimakura_hikari', 'url': 'https://chidori-high-school.com/news/wp-content/uploads/2019/12/hikari_dakimakura_cmyk.jpg'},
+            {'name': 'dakimakura_erika', 'url': 'https://chidori-high-school.com/news/wp-content/uploads/2019/12/erika_dakimakura_cmyk.jpg'},
+            {'name': 'dakimakura_izumi', 'url': 'https://chidori-high-school.com/news/wp-content/uploads/2019/12/izumi_dakimakura_cmyk.jpg'},
+            {'name': 'dakimakura_yukio', 'url': 'https://chidori-high-school.com/news/wp-content/uploads/2019/12/yukio_dakimakura_cmyk.jpg'}]
+        self.download_image_objects(image_objs, filepath)
         
 
 # Shinchou Yuusha: Kono Yuusha ga Ore Tueee Kuse ni Shinchou Sugiru (Tuesday)

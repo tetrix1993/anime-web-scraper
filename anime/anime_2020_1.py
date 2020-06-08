@@ -53,8 +53,8 @@ class DarwinsGameDownload(Winter2020AnimeDownload):
             os.makedirs(self.base_folder)
     
     def run(self):
-        self.download_bluray()
         self.download_episode_preview()
+        self.download_bluray()
 
     def download_bluray(self):
         bluray_filepath = self.create_bluray_directory()
@@ -77,7 +77,6 @@ class DarwinsGameDownload(Winter2020AnimeDownload):
             {'name': 'bd_bonus_3', 'url': 'https://darwins-game.com/assets/img/bddvd/img_amazon.jpg'},
             {'name': 'bd_bonus_4', 'url': 'https://darwins-game.com/assets/img/bddvd/img_sofmap.jpg'}]
         self.download_image_objects(image_objs, bluray_filepath)
-
 
     def download_episode_preview(self):
         try:
@@ -573,11 +572,11 @@ class KoisuruAsteroidDownload(Winter2020AnimeDownload):
             os.makedirs(self.base_folder)
     
     def run(self):
+        self.download_episode_preview()
         self.download_keyvisual()
         self.download_bluray()
         self.download_endcard()
         self.download_event()
-        self.download_episode_preview()
 
     def download_episode_preview(self):
         try:
@@ -633,7 +632,7 @@ class KoisuruAsteroidDownload(Winter2020AnimeDownload):
             {'name': 'bd_2_1', 'url': 'https://pbs.twimg.com/media/EUFWg1bVAAAmMsD?format=jpg&name=medium'},
             {'name': 'bd_2_2', 'url': 'http://koiastv.com/images/package/002/j_002.jpg'},
             {'name': 'bd_3_1', 'url': 'https://pbs.twimg.com/media/EWGL6AxUMAApbvB?format=jpg&name=900x900'},
-            {'name': 'bd_2_2', 'url': 'http://koiastv.com/images/package/003/j_002.jpg'},
+            {'name': 'bd_3_2', 'url': 'http://koiastv.com/images/package/003/j_002.jpg'},
             {'name': 'bd_bonus_1', 'url': 'http://koiastv.com/images/package/tokuten/p_amazon2.jpg'},
             {'name': 'bd_bonus_2', 'url': 'http://koiastv.com/images/package/tokuten/p_animate2.jpg'},
             {'name': 'bd_bonus_3', 'url': 'http://koiastv.com/images/package/tokuten/p_gamers3.jpg'},
@@ -720,8 +719,8 @@ class MurenaseSetonGakuenDownload(Winter2020AnimeDownload):
             os.makedirs(self.base_folder)
     
     def run(self):
-        self.download_bluray()
         self.download_episode_preview()
+        self.download_bluray()
 
     def download_bluray(self):
         filepath = self.create_bluray_directory()
@@ -788,11 +787,11 @@ class NekoparaDownload(Winter2020AnimeDownload):
             os.makedirs(self.base_folder)
     
     def run(self):
+        self.download_episode_preview()
         self.download_keyvisual()
         self.download_bluray()
         self.download_event()
         self.download_endcard()
-        self.download_episode_preview()
 
     def download_episode_preview(self):
         try:
