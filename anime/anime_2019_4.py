@@ -185,7 +185,7 @@ class ChoyoyuDownload(Fall2019AnimeDownload):
                 if i == 0:
                     continue
                 episode = str(i).zfill(2)
-                if (self.is_file_exists(self.base_folder + "/" + episode + "_1.jpg")):
+                if self.is_file_exists(self.base_folder + "/" + episode + "_1.jpg"):
                     continue
                 second_split = first_split[i].split('<div class="story-storybox__thumbs__image"><img src="..')
                 for j in range(len(second_split)):
@@ -203,7 +203,7 @@ class ChoyoyuDownload(Fall2019AnimeDownload):
     def download_bluray(self):
         filepath = self.create_bluray_directory()
         image_objs = [
-            {'name': 'music_ost', 'url': 'https://img.imageimg.net/artist/assassinspride-anime/img/product_1030791.jpg'}]
+            {'name': 'music_ost', 'url': 'http://choyoyu.com/assets/img/products/cd/cd03_image01.jpg'}]
         image_url_template = 'http://choyoyu.com/assets/img/products/bluray/bluray0%s_image01.jpg'
         for i in range(1, 5, 1):
             image_url = image_url_template % str(i)
