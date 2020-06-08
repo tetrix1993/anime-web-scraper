@@ -646,6 +646,24 @@ class MurenaseSetonGakuenDownload(Winter2020AnimeDownload):
             os.makedirs(self.base_folder)
     
     def run(self):
+        self.download_bluray()
+        self.download_episode_preview()
+
+    def download_bluray(self):
+        filepath = self.create_bluray_directory()
+        image_objs = [
+            {'name': 'bd_1_1', 'url': 'https://anime-seton.jp/app/wp-content/uploads/2020/01/36ba84898e9b91bc5b376373e600e8d5.jpg'},
+            {'name': 'bd_1_1_2', 'url': 'https://anime-seton.jp/app/wp-content/uploads/2020/01/a6f93f0b7d4ac58b00ddf264fb353e9a.jpg'},
+            {'name': 'bd_2_1', 'url': 'https://anime-seton.jp/app/wp-content/uploads/2020/01/a46f6ed8cdd7ee40c9818ebe95c931e2.jpg'},
+            {'name': 'bd_2_2', 'url': 'https://pbs.twimg.com/media/ETtwvtwUYAAbP6V?format=png&name=900x900'},
+            {'name': 'bd_3_1', 'url': 'https://anime-seton.jp/app/wp-content/uploads/2020/01/4f28f65f18cbe1aa57d5faf1a196bd04.jpg'},
+            {'name': 'bd_3_2', 'url': 'https://pbs.twimg.com/media/EZqAhRjU8AI23qE?format=jpg&name=900x900'},
+            {'name': 'bd_bonus_1', 'url': 'https://anime-seton.jp/app/wp-content/uploads/2020/02/9ec9b9d4b1255a0606353a5144f9c335.jpg'},
+            {'name': 'bd_bonus_2', 'url': 'https://anime-seton.jp/app/wp-content/uploads/2020/01/0025f8f13f5e4f4eb913da12576b70ea.jpg'},
+            {'name': 'bd_bonus_3', 'url': 'https://anime-seton.jp/app/wp-content/uploads/2020/01/e3eb7162e11acf8e2caaabd195f7302d.jpg'}]
+        self.download_image_objects(image_objs, filepath)
+
+    def download_episode_preview(self):
         try:
             response = self.get_response(self.STORY_PAGE)
             split1 = response.split('<section class="story__list">')[1].split('</section>')[0].split('<li')

@@ -1,6 +1,7 @@
 import requests
 import random
 import datetime
+import anime.constants as constants
 import urllib.request
 import os
 import re
@@ -265,6 +266,32 @@ class MainDownload:
                 return name + '.jpg'
         else:
             return name
+
+    def create_bluray_directory(self):
+        filepath = self.base_folder + '/' + constants.FOLDER_BLURAY
+        if not os.path.exists(filepath):
+            os.makedirs(filepath)
+        return filepath
+
+    def create_character_directory(self):
+        filepath = self.base_folder + '/' + constants.FOLDER_CHARACTER
+        if not os.path.exists(filepath):
+            os.makedirs(filepath)
+        return filepath
+
+    def create_key_visual_directory(self):
+        filepath = self.base_folder + '/' + constants.FOLDER_KEY_VISUAL
+        if not os.path.exists(filepath):
+            os.makedirs(filepath)
+        return filepath
+
+    def download_image_objects(self, image_objs, filepath):
+        for image_obj in image_objs:
+            filename = filepath + '/' + image_obj['name']
+            if os.path.exists(filename + '.jpg') or os.path.exists(filename + '.png') or \
+                    os.path.exists(filename + '.gif'):
+                continue
+            self.download_image(image_obj['url'], filename)
 
     # Match filter
     def match(self, s_filter):
