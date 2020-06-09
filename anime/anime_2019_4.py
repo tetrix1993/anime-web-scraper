@@ -90,7 +90,7 @@ class AssassinsPrideDownload(Fall2019AnimeDownload):
         image_objs = [
             {'name': 'music_ost', 'url': 'https://img.imageimg.net/artist/assassinspride-anime/img/product_1030791.jpg'},
             {'name': 'music_op', 'url': 'https://img.imageimg.net/artist/assassinspride-anime/img/product_1030685.jpg'},
-            {'name': 'music_op', 'url': 'https://img.imageimg.net/artist/assassinspride-anime/img/product_1030686.jpg'},
+            {'name': 'music_ed', 'url': 'https://img.imageimg.net/artist/assassinspride-anime/img/product_1030686.jpg'},
             {'name': 'bd_1_1', 'url': 'https://m.imageimg.net/upload/artist_img/ASSSP/0be0ba5eeff1ecb7ff05a3aac0ca2772b54eb0f5_5dc3b42657914.jpg'},
             {'name': 'bd_1_2', 'url': 'https://m.imageimg.net/upload/artist_img/ASSSP/bf34841f5725f2ed7098caf53c305d630711247a_5dc3b426c5b49.jpg'},
             {'name': 'bd_1_3', 'url': 'https://m.imageimg.net/upload/artist_img/ASSSP/c41e2864f2e0f4c4012b8f273d49b5eb7a5aa6f0_5dd68534e94eb.jpg'},
@@ -226,6 +226,10 @@ class KemonomichiDownload(Fall2019AnimeDownload):
             os.makedirs(self.base_folder)
     
     def run(self):
+        self.download_episode_preview()
+        self.download_bluray()
+
+    def download_episode_preview(self):
         try:
             response = self.get_response(self.PAGE_LINK)
             if len(response) == 0:
@@ -233,9 +237,9 @@ class KemonomichiDownload(Fall2019AnimeDownload):
             first_split = response.split('<div class="ep-slider-sceneImage">')
             for i in range(len(first_split), 2, -1):
                 episode = str(len(first_split) - i + 1).zfill(2)
-                if (self.is_file_exists(self.base_folder + "/" + episode + "_01.jpg")):
+                if self.is_file_exists(self.base_folder + "/" + episode + "_01.jpg"):
                     continue
-                second_split = first_split[i-1].split('<div class="ep-slider-thumb">')[0]
+                second_split = first_split[i - 1].split('<div class="ep-slider-thumb">')[0]
                 third_split = second_split.split('<img src="..')
                 for j in range(len(third_split)):
                     if j == 0:
@@ -244,10 +248,26 @@ class KemonomichiDownload(Fall2019AnimeDownload):
                     imageFileName = episode + '_' + str(j).zfill(2)
                     filepathWithoutExtension = self.base_folder + "/" + imageFileName
                     self.download_image(imageUrl, filepathWithoutExtension)
-        
+
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
+
+    def download_bluray(self):
+        filepath = self.create_bluray_directory()
+        image_objs = [
+            {'name': 'music_ost', 'url': 'http://hataage-kemonomichi.com/assets/music/cs.png'},
+            {'name': 'music_op_1', 'url': 'http://hataage-kemonomichi.com/assets/music/op-a.png'},
+            {'name': 'music_op_2', 'url': 'http://hataage-kemonomichi.com/assets/music/op-b.png'},
+            {'name': 'bd_1', 'url': 'http://hataage-kemonomichi.com/assets/bddvd/1-boxil.png'},
+            {'name': 'bd_2', 'url': 'http://hataage-kemonomichi.com/assets/bddvd/2-boxil.png'},
+            {'name': 'bd_3', 'url': 'http://hataage-kemonomichi.com/assets/bddvd/3-boxil.png'},
+            {'name': 'bd_bonus_1', 'url': 'http://hataage-kemonomichi.com/assets/bddvd/cmp1.png'}]
+        image_url_template = 'http://hataage-kemonomichi.com/assets/bddvd/bnf/%s.jpg'
+        for i in range(1, 7, 1):
+            image_url = image_url_template % str(i)
+            image_objs.append({'name': 'bd_bonus_' + str(i + 1), 'url': image_url})
+        self.download_image_objects(image_objs, filepath)
 
 
 # High Score Girl II
@@ -276,10 +296,10 @@ class HiScoreGirl2Download(Fall2019AnimeDownload):
             split2 = split1[1].split('<div class="sm">')
             for i in range(1, len(split2), 1):
                 episode = str(self.FIRST_EPISODE + i - 1).zfill(2)
-                if (self.is_file_exists(self.base_folder + "/" + episode + "_1.jpg")):
+                if self.is_file_exists(self.base_folder + "/" + episode + "_1.jpg"):
                     continue
                 split3 = split2[i].split('<a href="..')
-                if (len(split3) < 2):
+                if len(split3) < 2:
                     continue
                 pageLink = self.PAGE_PREFIX + split3[1].split('"')[0]
                 pageResponse = self.get_response(pageLink)
@@ -601,7 +621,7 @@ class RifleIsBeautifulDownload(Fall2019AnimeDownload):
                 relative_page_link = split2[i].split('"')[0]
                 page_link = self.PAGE_PREFIX + relative_page_link
                 episode = relative_page_link[-2:]
-                if (self.is_file_exists(self.base_folder + "/" + episode + "_1.jpg")):
+                if self.is_file_exists(self.base_folder + "/" + episode + "_1.jpg"):
                     continue
                 page_response = self.get_response(page_link)
                 split3 = page_response.split('<div class="swiper-slide">')
@@ -652,7 +672,7 @@ class ShinchouYuushaDownload(Fall2019AnimeDownload):
                 if i == 0:
                     continue
                 episode = str(i).zfill(2)
-                if (self.is_file_exists(self.base_folder + "/" + episode + "_01.jpg")):
+                if self.is_file_exists(self.base_folder + "/" + episode + "_01.jpg"):
                     continue
                 second_split = first_split[i].split('</ul>')[0].split('<li><img src="')
                 for j in range(len(second_split)):
@@ -691,7 +711,7 @@ class ValLoveDownload(Fall2019AnimeDownload):
             split3 = split2.split('<a href="')
             for i in range(len(split3)-1, 0, -1):
                 episode = str(len(split3) - i).zfill(2)
-                if (self.is_file_exists(self.base_folder + "/" + episode + "_1.jpg")):
+                if self.is_file_exists(self.base_folder + "/" + episode + "_1.jpg"):
                     continue
                 pageLink = self.PAGE_LINK + split3[i].split('"')[0]
                 pageResponse = self.get_response(pageLink)
@@ -736,7 +756,7 @@ class NoukinDownload(Fall2019AnimeDownload):
             split3 = split2.split('<a href="')
             for i in range(len(split3)-2, 0, -1):
                 episode = str(len(split3) - i - 1).zfill(2)
-                if (self.is_file_exists(self.base_folder + "/" + episode + "_1.jpg")):
+                if self.is_file_exists(self.base_folder + "/" + episode + "_1.jpg"):
                     continue
                 pageLink = self.PAGE_LINK + split3[i].split('"')[0]
                 pageResponse = self.get_response(pageLink)
