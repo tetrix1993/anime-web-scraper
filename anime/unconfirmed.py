@@ -172,7 +172,7 @@ class KumaBearDownload(UnconfirmedDownload):
 
                 chara_main_images = chara_frame.find_all('div', class_='charaMainImg')
                 for i in range(len(chara_main_images)):
-                    chara_main_name = 'sub_' + chara_num
+                    chara_main_name = 'main_' + chara_num
                     if len(chara_sub_images) > 1:
                         chara_main_name += '_' + str(i + 1)
                     chara_main_image_url = self.PAGE_PREFIX + chara_main_images[i].find('img')['src'].replace('../', '')
