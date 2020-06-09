@@ -114,6 +114,8 @@ class KumaBearDownload(UnconfirmedDownload):
     title = "Kuma Kuma Kuma Bear"
     keywords = ["Kuma Kuma Kuma Bear"]
 
+    PAGE_PREFIX = 'https://kumakumakumabear.com/'
+
     def __init__(self):
         super().__init__()
         self.base_folder = self.base_folder + "/kumabear"
@@ -122,6 +124,7 @@ class KumaBearDownload(UnconfirmedDownload):
 
     def run(self):
         self.download_key_visual()
+        self.download_character()
 
     def download_key_visual(self):
         keyvisual_folder = self.base_folder + '/' + constants.FOLDER_KEY_VISUAL
@@ -138,6 +141,51 @@ class KumaBearDownload(UnconfirmedDownload):
             image_without_extension = self.extract_image_name_from_url(image_url, with_extension=False)
             filepath_without_extension = keyvisual_folder + '/' + image_without_extension
             self.download_image(image_url, filepath_without_extension)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            img_objs = [{'name': 'list_img',
+                'url': 'https://kumakumakumabear.com/core_sys/images/main/character/list_img.png'}]
+            self.download_image_objects(img_objs, folder)
+
+            soup = self.get_soup('https://kumakumakumabear.com/chara/')
+            chara_tags = soup.find_all('div', class_='nwu_box')
+            for chara_tag in chara_tags:
+                chara_url_tag = chara_tag.find('a')
+                chara_url = self.PAGE_PREFIX + chara_url_tag['href'].replace('../', '')
+                chara_num = chara_url.split('/')[-1].split('.html')[0].zfill(2)
+                if os.path.exists(folder + '/' + 'thumb_' + chara_num + '.png'):
+                    continue
+                image_objs_list = [{'name': 'thumb_' + chara_num, 'url': self.PAGE_PREFIX
+                                        + chara_url_tag.find('img')['src'].replace('../', '')}]
+                chara_soup = self.get_soup(chara_url)
+                chara_frame = chara_soup.find('div', class_='chraFrame')
+
+                chara_sub_images = chara_frame.find_all('div', class_='charaSubImg')
+                for i in range(len(chara_sub_images)):
+                    chara_sub_name = 'sub_' + chara_num
+                    if len(chara_sub_images) > 1:
+                        chara_sub_name += '_' + str(i + 1)
+                    chara_sub_image_url = self.PAGE_PREFIX + chara_sub_images[i].find('img')['src'].replace('../', '')
+                    image_objs_list.append({'name': chara_sub_name, 'url': chara_sub_image_url})
+
+                chara_main_images = chara_frame.find_all('div', class_='charaMainImg')
+                for i in range(len(chara_main_images)):
+                    chara_main_name = 'sub_' + chara_num
+                    if len(chara_sub_images) > 1:
+                        chara_main_name += '_' + str(i + 1)
+                    chara_main_image_url = self.PAGE_PREFIX + chara_main_images[i].find('img')['src'].replace('../', '')
+                    image_objs_list.append({'name': chara_main_name, 'url': chara_main_image_url})
+
+                scene_images = chara_frame.find('ul', class_='sceneImg').find_all('img')
+                for i in range(len(scene_images)):
+                    image_objs_list.append({'name': 'scene_' + chara_num + '_' + str(i + 1), 'url': self.PAGE_PREFIX
+                        + scene_images[i]['src'].replace('../', '')})
+                self.download_image_objects(image_objs_list, folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Character")
+            print(e)
 
 
 class MajotabiDownload(UnconfirmedDownload):
