@@ -1,4 +1,5 @@
 import os
+import anime.constants as constants
 from anime.main_download import MainDownload
 
 
@@ -28,6 +29,11 @@ class ArifuretaDownload(Summer2019AnimeDownload):
             os.makedirs(self.base_folder)
         
     def run(self):
+        self.download_episode_preview()
+        self.download_bluray()
+        self.download_goods()
+
+    def download_episode_preview(self):
         try:
             response = self.get_response(self.MAIN_PAGE)
             if len(response) == 0:
@@ -35,20 +41,22 @@ class ArifuretaDownload(Summer2019AnimeDownload):
             textBlocks = response.split("<h2 class=\"rdwh\">")[1] \
                 .split("</ul>")[0] \
                 .split("<li><a href=\"")
-            
+
             for i in range(len(textBlocks)):
                 if i == 0:
                     continue
                 pageUrl = textBlocks[i].split("\"")[0]
                 if "introduction" in pageUrl:
                     continue
-                episode = str(i-1).zfill(2)
+                episode = str(i - 1).zfill(2)
+                if os.path.exists(self.base_folder + "/" + episode + "_1.jpg"):
+                    continue
                 response2 = self.get_response(pageUrl)
                 if len(response2) == 0:
                     break
                 textBlocks2 = response2.split("<ul class=\"slider-for\">")[1] \
-                            .split("</ul>")[0] \
-                            .split("src=\"")
+                    .split("</ul>")[0] \
+                    .split("src=\"")
                 for j in range(len(textBlocks2)):
                     if j == 0:
                         continue
@@ -58,6 +66,40 @@ class ArifuretaDownload(Summer2019AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
+
+    def download_bluray(self):
+        filepath = self.create_bluray_directory()
+        image_objs = [
+            {'name': 'music_ed', 'url': 'https://arifureta.com/wp-content/uploads/2019/06/DracoVirgo_%E3%83%8F%E3%82%B8%E3%83%A1%E3%83%8E%E3%82%A6%E3%82%BF_%E5%88%9D%E5%9B%9E%E9%99%90%E5%AE%9A%E3%80%8C%E3%81%82%E3%82%8A%E3%81%B5%E3%82%8C%E3%81%9F%E8%81%B7%E6%A5%AD%E3%81%A7%E4%B8%96%E7%95%8C%E6%9C%80%E5%BC%B7%E3%80%8D%E7%9B%A4.jpg'},
+            {'name': 'charasong_mini_album', 'url': 'https://arifureta.com/wp-content/uploads/2019/11/LACA15802_H1.jpg'},
+            {'name': 'bd_1_1', 'url': 'https://arifureta.com/wp-content/uploads/2019/08/ARFR_BD01_BOX_SAMPLE.jpg'},
+            {'name': 'bd_1_2', 'url': 'https://arifureta.com/wp-content/uploads/2019/07/ARFR_BD01_DIGI_SAMPLE.jpg'},
+            {'name': 'bd_2_1', 'url': 'https://arifureta.com/wp-content/uploads/2019/11/ARFR_BD02_BOX_FIX_sample.jpg'},
+            {'name': 'bd_2_2', 'url': 'https://arifureta.com/wp-content/uploads/2019/11/ARFR_BD02_DIGI_FIX_sample.jpg'},
+            {'name': 'bd_3_1', 'url': 'https://arifureta.com/wp-content/uploads/2019/12/ARFR_BD03_BD_BOX-sample.jpg'},
+            {'name': 'bd_3_2', 'url': 'https://arifureta.com/wp-content/uploads/2019/12/ARFR_BD03_DIGI_191226-sample.jpg'},
+            {'name': 'bd_bonus_1', 'url': 'https://arifureta.com/wp-content/uploads/2019/06/OVL_sample.jpg'},
+            {'name': 'bd_bonus_2', 'url': 'https://arifureta.com/wp-content/uploads/2019/06/animate_sample.jpg'},
+            {'name': 'bd_bonus_3', 'url': 'https://arifureta.com/wp-content/uploads/2019/06/%E3%81%A8%E3%82%89%E3%83%AD%E3%83%B3%E3%82%B0%E3%82%BF%E3%83%9A.jpg'},
+            {'name': 'bd_bonus_4', 'url': 'https://arifureta.com/wp-content/uploads/2019/06/gamers_sample.jpg'},
+            {'name': 'bd_bonus_5', 'url': 'https://arifureta.com/wp-content/uploads/2019/06/Amazon_191202OK_sample.jpg'},
+            {'name': 'bd_bonus_6', 'url': 'https://arifureta.com/wp-content/uploads/2019/06/sofmap_sample.jpg'},
+            {'name': 'bd_bonus_7', 'url': 'https://arifureta.com/wp-content/uploads/2019/06/HMV%E5%8F%8E%E7%B4%8DBOX.jpg'},
+            {'name': 'unaired_ep_1', 'url': 'https://arifureta.com/wp-content/uploads/2020/01/asex02_003_H1.jpg'},
+            {'name': 'unaired_ep_2', 'url': 'https://arifureta.com/wp-content/uploads/2020/01/asex02_008_H1.mov.jpg'},
+            {'name': 'unaired_ep_3', 'url': 'https://arifureta.com/wp-content/uploads/2020/01/asex02_010_H1.mov-2.jpg'},
+            {'name': 'unaired_ep_4', 'url': 'https://arifureta.com/wp-content/uploads/2020/01/asex02_011_H1.mov.jpg'},
+            {'name': 'unaired_ep_5', 'url': 'https://arifureta.com/wp-content/uploads/2020/01/asex02_023_H1.jpg'},
+            {'name': 'unaired_ep_6', 'url': 'https://arifureta.com/wp-content/uploads/2020/01/asex02_043_H2.mov.jpg'}]
+        self.download_image_objects(image_objs, filepath)
+
+    def download_goods(self):
+        filepath = self.create_custom_directory(constants.FOLDER_GOODS)
+        image_objs = [
+            {'name': 'online_kuji', 'url': 'https://arifureta.com/wp-content/uploads/2019/09/main700-500-2.jpg'},
+            {'name': 'online_kuji_1', 'url': 'https://arifureta.com/wp-content/uploads/2019/09/tape_sample.png'},
+            {'name': 'online_kuji_2', 'url': 'https://arifureta.com/wp-content/uploads/2019/09/cu_sample.png'}]
+        self.download_image_objects(image_objs, filepath)
 
 
 # Dumbbell
