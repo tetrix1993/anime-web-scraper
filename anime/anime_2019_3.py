@@ -199,13 +199,19 @@ class HensukiDownload(Summer2019AnimeDownload):
             os.makedirs(self.base_folder)
     
     def run(self):
+        self.download_episode_preview()
+        self.download_bluray()
+
+    def download_episode_preview(self):
         try:
             for i in range(self.FINAL_EPISODE):
-                link = self.PAGE_PREFIX + str(i+1)
+                link = self.PAGE_PREFIX + str(i + 1)
                 response = self.get_response(link)
                 if len(response) == 0:
                     break
-                episode = str(i+1).zfill(2)
+                episode = str(i + 1).zfill(2)
+                if os.path.exists(self.base_folder + '/' + episode + '_1.jpg'):
+                    continue
                 first_split = response.split("<div class=\"story_img_wrap\">")
                 if len(first_split) < 2:
                     break
@@ -216,10 +222,31 @@ class HensukiDownload(Summer2019AnimeDownload):
                     imageUrl = self.IMAGE_PREFIX + textBlocks[j].split("\"")[0]
                     filepathWithoutExtension = self.base_folder + "/" + episode + "_" + str(j)
                     self.download_image(imageUrl, filepathWithoutExtension)
-                
+
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
+
+    def download_bluray(self):
+        filepath = self.create_bluray_directory()
+        image_objs = [
+            {'name': 'bd_1_1', 'url': 'https://pbs.twimg.com/media/EFTAiqGU8AIEWcV?format=jpg&name=large'},
+            {'name': 'bd_1_2', 'url': 'https://hensuki.com/bd/img/bd-1-open.jpg'},
+            {'name': 'bd_2_1', 'url': 'https://pbs.twimg.com/media/EGBVudvVAAAgyPx?format=jpg&name=medium'},
+            {'name': 'bd_2_2', 'url': 'https://pbs.twimg.com/media/EGBVvSnU8AAukM9?format=jpg&name=medium'},
+            {'name': 'bd_2_3', 'url': 'https://pbs.twimg.com/media/EGBVv7OVUAEfUQl?format=jpg&name=medium'},
+            {'name': 'bd_3_1', 'url': 'https://pbs.twimg.com/media/EIvt5c-U4AATYbV?format=jpg&name=4096x4096'},
+            {'name': 'bd_3_2', 'url': 'https://hensuki.com/bd/img/bd-3-dp.jpg'},
+            {'name': 'bd_3_2_1', 'url': 'https://pbs.twimg.com/media/EIvt-tdU0AEjJUn?format=jpg&name=4096x4096'},
+            {'name': 'bd_3_3', 'url': 'https://pbs.twimg.com/media/EIvt_12U8AAYeXj?format=jpg&name=4096x4096'},
+            {'name': 'bd_bonus_1', 'url': 'https://hensuki.com/bd/img/img_souki_tokuten.jpg'},
+            {'name': 'bd_bonus_2', 'url': 'https://hensuki.com/bd/img/amazon.jpg'},
+            {'name': 'bd_bonus_3', 'url': 'https://hensuki.com/bd/img/animeite.jpg'},
+            {'name': 'bd_bonus_4', 'url': 'https://hensuki.com/bd/img/gamers2.jpg'},
+            {'name': 'bd_bonus_5', 'url': 'https://hensuki.com/bd/img/sofmap.jpg'},
+            {'name': 'bd_bonus_6', 'url': 'https://hensuki.com/bd/img/toranoana2.jpg'},
+            {'name': 'bd_bonus_7', 'url': 'https://hensuki.com/bd/img/charaani.jpg'}]
+        self.download_image_objects(image_objs, filepath)
 
 
 # Isekai Cheat Magician
@@ -238,13 +265,19 @@ class IsekaiCheatDownload(Summer2019AnimeDownload):
             os.makedirs(self.base_folder)
     
     def run(self):
+        self.download_episode_preview()
+        self.download_bluray()
+
+    def download_episode_preview(self):
         try:
             response = self.get_response(self.PAGE_LINK)
             if len(response) == 0:
                 return
             for i in range(self.FINAL_EPISODE):
-                episode = str(i+1).zfill(2)
-                first_split = response.split("id=\"s" + str(i+1) + "\"")
+                episode = str(i + 1).zfill(2)
+                if os.path.exists(self.base_folder + '/' + episode + '_1.jpg'):
+                    continue
+                first_split = response.split("id=\"s" + str(i + 1) + "\"")
                 if len(first_split) < 2:
                     continue
                 textBlocks = first_split[1].split("<li><img src=\"")
@@ -254,10 +287,28 @@ class IsekaiCheatDownload(Summer2019AnimeDownload):
                     imageUrl = self.PAGE_LINK + textBlocks[j].split("\"")[0]
                     filepathWithoutExtension = self.base_folder + "/" + episode + "_" + str(j)
                     self.download_image(imageUrl, filepathWithoutExtension)
-                
+
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
+
+    def download_bluray(self):
+        filepath = self.create_bluray_directory()
+        image_objs = [
+            {'name': 'music_ed', 'url': 'https://pbs.twimg.com/media/D_FWx9DUcAA7E8r?format=jpg&name=4096x4096'},
+            {'name': 'bd_1_1', 'url': 'https://pbs.twimg.com/media/EF8S_KBU0AAJ6f1?format=jpg&name=900x900'},
+            {'name': 'bd_1_2', 'url': 'https://pbs.twimg.com/media/EFzKDxlU8AIurM8?format=jpg&name=large'},
+            {'name': 'bd_2_1', 'url': 'https://pbs.twimg.com/media/EImTHsxU0AEF9Um?format=jpg&name=large'},
+            {'name': 'bd_2_2', 'url': 'https://pbs.twimg.com/media/EImTHsvU8AAxrX9?format=jpg&name=large'},
+            {'name': 'bd_3_1', 'url': 'https://pbs.twimg.com/media/EKXpYVIUYAEmZmY?format=jpg&name=large'},
+            {'name': 'bd_3_2', 'url': 'https://pbs.twimg.com/media/EKXpYVHVUAAwPvO?format=jpg&name=large'},
+            {'name': 'bd_bonus_1', 'url': 'http://isekai-cheat-magician.com/bd/img/toku_souki.jpg'},
+            {'name': 'bd_bonus_2', 'url': 'https://pbs.twimg.com/media/ECfB7QgVUAEZsV6?format=jpg&name=large'},
+            {'name': 'bd_bonus_3', 'url': 'https://pbs.twimg.com/media/ECfB7QhUcAEohZ0?format=jpg&name=large'},
+            {'name': 'bd_bonus_4', 'url': 'https://pbs.twimg.com/media/ECj5F2fUwAAoWb-?format=jpg&name=large'},
+            {'name': 'bd_bonus_5', 'url': 'https://pbs.twimg.com/media/ECfB7QiUcAMNF-W?format=jpg&name=large'},
+            {'name': 'bd_bonus_6', 'url': 'https://pbs.twimg.com/media/ECfB7RDU4Ag77Ri?format=jpg&name=large'}]
+        self.download_image_objects(image_objs, filepath)
 
 
 # Joshikousei no Mudazukai
