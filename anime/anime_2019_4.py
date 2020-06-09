@@ -174,6 +174,7 @@ class ChoyoyuDownload(Fall2019AnimeDownload):
     def run(self):
         self.download_episode_preview()
         self.download_bluray()
+        self.download_character()
 
     def download_episode_preview(self):
         try:
@@ -209,6 +210,28 @@ class ChoyoyuDownload(Fall2019AnimeDownload):
             image_url = image_url_template % str(i)
             image_objs.append({'name': 'bd_' + str(i), 'url': image_url})
         self.download_image_objects(image_objs, filepath)
+
+    def download_character(self):
+        filepath = self.create_character_directory()
+        try:
+            soup = self.get_soup('http://choyoyu.com/character/')
+            image_objs = []
+            sections = soup.find_all('section')
+            for section in sections:
+                image_div = section.find('div', class_='chara-slide__image')
+                if image_div is not None:
+                    image_url = self.PAGE_PREFIX + image_div.find('img')['src'].replace('..', '')
+                    image_name = image_url.split('/')[-1].split('.png')[0]
+                    image_objs.append({'name': image_name, 'url': image_url})
+                face_div = section.find('div', class_='chara-slide__face')
+                if face_div is not None:
+                    image_url = self.PAGE_PREFIX + face_div.find('img')['src'].replace('..', '')
+                    image_name = image_url.split('/')[-1].split('.png')[0]
+                    image_objs.append({'name': image_name, 'url': image_url})
+            self.download_image_objects(image_objs, filepath)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Character')
+            print(e)
 
 
 # Hataage! Kemonomichi (Monday)
@@ -747,6 +770,11 @@ class NoukinDownload(Fall2019AnimeDownload):
             os.makedirs(self.base_folder)
     
     def run(self):
+        self.download_episode_preview()
+        self.download_bluray()
+        self.download_character()
+
+    def download_episode_preview(self):
         try:
             response = self.get_response(self.PAGE_LINK)
             split1 = response.split('<ul class="c-news_list">')
@@ -775,3 +803,37 @@ class NoukinDownload(Fall2019AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
+
+    def download_bluray(self):
+        filepath = self.create_bluray_directory()
+        image_objs = [
+            {'name': 'music_op', 'url': 'https://pbs.twimg.com/media/EF9AeyIVUAAvU8i?format=jpg&name=small'},
+            {'name': 'music_ed', 'url': 'https://pbs.twimg.com/media/EH8jYnwU8AAPq0D?format=jpg&name=small'},
+            {'name': 'bd_1_1', 'url': 'https://pbs.twimg.com/media/EJoJ9YuU8AIH-TY?format=jpg&name=900x900'},
+            {'name': 'bd_1_2', 'url': 'https://pbs.twimg.com/media/EJoKAQaUEAAGkFb?format=jpg&name=900x900'},
+            {'name': 'bd_2_1', 'url': 'https://pbs.twimg.com/media/EMcEweWUYAE8wJh?format=jpg&name=900x900'},
+            {'name': 'bd_2_2', 'url': 'https://pbs.twimg.com/media/EMcE1NKUYAAmuJ6?format=jpg&name=900x900'},
+            {'name': 'bd_3_1', 'url': 'https://pbs.twimg.com/media/EP3O4mQUUAIFFRh?format=jpg&name=900x900'},
+            {'name': 'bd_3_2', 'url': 'https://pbs.twimg.com/media/EP3O4mZU0AE4pnI?format=jpg&name=900x900'},
+            {'name': 'bd_bonus_1', 'url': 'https://m.imageimg.net/upload/artist_img/NOUKN/c5f143690ecb1cf10797e46e43b061397ab61672_5ded9ad3c9543.jpg'},
+            {'name': 'bd_bonus_2', 'url': 'https://m.imageimg.net/upload/artist_img/NOUKN/a0e237a7b078ec0d289ae95d1f74ae72d100328d_5ded9afea75c1.jpg'},
+            {'name': 'bd_bonus_2_1', 'url': 'https://www.gamers.co.jp/resize_image.php?image=12171428_5df867862e4de.jpg'},
+            {'name': 'bd_bonus_3', 'url': 'https://m.imageimg.net/upload/artist_img/NOUKN/67ab91a841c5684e734298af68009cafa645698f_5df82a3043663.jpg'},
+            {'name': 'bd_bonus_4', 'url': 'https://m.imageimg.net/upload/artist_img/NOUKN/55a784882229b7c45887f1db577156506a252a8d_5ded9b253412e.jpg'},
+            {'name': 'bd_bonus_4_1', 'url': 'https://pbs.twimg.com/media/ES--_fzU0AAemUS.jpg'},
+            #{'name': 'bd_bonus_4_1', 'url': 'https://a.sofmap.com/ec/topics/3000/19916699_toku_01.jpg'},
+            {'name': 'bd_bonus_5', 'url': 'https://m.imageimg.net/upload/artist_img/NOUKN/43ce4af9ac52d6a7353b4731472b4df9bdaf306f_5ded9b4c54d9d.jpg'},
+            {'name': 'bd_bonus_5_1', 'url': 'https://img.amiami.jp/images/product/review/194/MED-DVD2-44857_01.jpg'}]
+        self.download_image_objects(image_objs, filepath)
+
+    def download_character(self):
+        filepath = self.create_character_directory()
+        image_objs = []
+        image_url_template = 'https://noukin-anime.com/assets/img_201910/chara/img_main%s-%s.png'
+        for i in range(1, 10, 1):
+            image_url = image_url_template % (str(i).zfill(2), '1')
+            image_objs.append({'name': 'chara_' + str(i).zfill(2), 'url': image_url})
+            if i == 1:
+                image_url = image_url_template % (str(i).zfill(2), '2')
+                image_objs.append({'name': 'chara_' + str(i).zfill(2) + '_2', 'url': image_url})
+        self.download_image_objects(image_objs, filepath)
