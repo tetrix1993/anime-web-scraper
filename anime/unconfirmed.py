@@ -5,6 +5,7 @@ from anime.main_download import MainDownload
 
 # Bokutachi no Remake http://bokurema.com/ #ぼくリメ #bokurema @bokurema
 # Cheat Kusushi no Slow Life: Isekai ni Tsukurou Drugstore https://www.cheat-kusushi.jp/ #チート薬師 #スローライフ @cheat_kusushi
+# Higurashi no Naku Koro ni (2020) https://higurashianime.com/ #ひぐらし @higu_anime
 # Iwa Kakeru!: Sport Climbing Girls http://iwakakeru-anime.com/ #いわかける #iwakakeru @iwakakeru_anime
 # Kuma Kuma Kuma Bear https://kumakumakumabear.com/ #くまクマ熊ベアー #kumabear @kumabear_anime
 # Kimi to Boku no Saigo no Senjou, Aruiwa Sekai ga Hajimaru Seisen https://kimisentv.com/ #キミ戦 #kimisen @kimisen_project
@@ -52,10 +53,53 @@ class CheatKusushiDownload(UnconfirmedDownload):
             self.download_image(image_obj['url'], filepath_without_extension)
 
 
+# Higurashi no Naku Koro ni (2020)
+class Higurashi2020Download(UnconfirmedDownload):
+    title = "Higurashi no Naku Koro ni"
+    keywords = [title, "When They Cry"]
+
+    PAGE_PREFIX = 'https://higurashianime.com/'
+
+    def __init__(self):
+        super().__init__()
+        self.base_folder = self.base_folder + "/higurashi2020"
+        if not os.path.exists(self.base_folder):
+            os.makedirs(self.base_folder)
+
+    def run(self):
+        self.download_key_visual()
+        self.download_character()
+
+    def download_key_visual(self):
+        filepath = self.create_key_visual_directory()
+        image_objs = [
+            {'name': 'kv', 'url': 'https://higurashianime.com/images/images/v_001.jpg'}]
+        self.download_image_objects(image_objs, filepath)
+
+    def download_character(self):
+        filepath = self.create_character_directory()
+        image_objs = []
+        image_url_template = 'https://higurashianime.com/images/chara/p_%s_%s.png'
+        try:
+            soup = self.get_soup('https://higurashianime.com/chara.html')
+            chara_url_tags = soup.find('div', class_='chara_list_wrap').find_all('a')
+            for chara_url_tag in chara_url_tags:
+                chara_short_url = chara_url_tag['href']
+                chara_num = str(int(chara_short_url.split('chara')[1].split('.html')[0]))
+                for j in range(1, 3, 1):
+                    image_name = 'chara' + chara_num.zfill(2) + '_' + str(j)
+                    image_url = image_url_template % (str(j).zfill(2), chara_num.zfill(2))
+                    image_objs.append({'name': image_name, 'url': image_url})
+            self.download_image_objects(image_objs, filepath)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Character')
+            print(e)
+
+
 # Iwa Kakeru!: Sport Climbing Girls
 class IwakakeruDownload(UnconfirmedDownload):
     title = "Iwa Kakeru!: Sport Climbing Girls"
-    keywords = ["Iwa Kakeru!: Sport Climbing Girls", "Iwakakeru"]
+    keywords = [title, "Iwakakeru"]
 
     def __init__(self):
         super().__init__()
@@ -84,7 +128,7 @@ class IwakakeruDownload(UnconfirmedDownload):
 # Kimi to Boku no Saigo no Senjou, Aruiwa Sekai ga Hajimaru Seisen
 class KimisenDownload(UnconfirmedDownload):
     title = "Kimi to Boku no Saigo no Senjou, Aruiwa Sekai ga Hajimaru Seisen"
-    keywords = ["Kimi to Boku no Saigo no Senjou, Aruiwa Sekai ga Hajimaru Seisen", "Kimisen"]
+    keywords = [title, "Kimisen"]
 
     def __init__(self):
         super().__init__()
@@ -113,7 +157,7 @@ class KimisenDownload(UnconfirmedDownload):
 # Kuma Kuma Kuma Bear
 class KumaBearDownload(UnconfirmedDownload):
     title = "Kuma Kuma Kuma Bear"
-    keywords = ["Kuma Kuma Kuma Bear"]
+    keywords = [title]
 
     PAGE_PREFIX = 'https://kumakumakumabear.com/'
 
@@ -279,7 +323,7 @@ class OchifuruDownload(UnconfirmedDownload):
 # Tonikaku Kawaii
 class TonikawaDownload(UnconfirmedDownload):
     title = "Tonikaku Kawaii"
-    keywords = ["Tonikaku Kawaii", "Cawaii", "Fly Me to the Moon"]
+    keywords = [title, "Cawaii", "Fly Me to the Moon"]
 
     def __init__(self):
         super().__init__()
