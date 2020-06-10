@@ -2,6 +2,7 @@ from search import SearchFilter
 from anime import MainDownload
 from multiprocessing import Process
 from anime import *
+import migrate
 
 
 def run_process(download):
@@ -23,6 +24,7 @@ def process_download(downloads):
 
 
 def run():
+    migrate.run()
     while True:
         print_intro_message()
         try:

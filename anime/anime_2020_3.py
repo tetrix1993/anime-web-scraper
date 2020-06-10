@@ -7,7 +7,6 @@ from anime.main_download import MainDownload
 # Maou Gakuin no Futekigousha https://maohgakuin.com/ #魔王学院 @maohgakuin
 # Monster Musume no Oishasan https://mon-isha-anime.com/character/ #モン医者 #m_doctor @mon_isha_anime
 # Re:Zero S2 http://re-zero-anime.jp/tv/story/ #rezero #リゼロ @Rezero_official
-# Ochikobore Fruit Tart http://ochifuru-anime.com/ #ochifuru @ochifuru_anime
 # Peter Grill to Kenja no Jikan http://petergrill-anime.jp/ #賢者タイムアニメ #petergrill @petergrillanime
 # Re:Zero S2 http://re-zero-anime.jp/tv/story/ #rezero #リゼロ @Rezero_official
 # Uzaki-chan wa Asobitai! https://uzakichan.com/ #宇崎ちゃん @uzakichan_asobi
@@ -291,63 +290,6 @@ class MonIshaDownload(Summer2020AnimeDownload):
                     image_without_extension = self.extract_image_name_from_url(image_url, with_extension=False)
                     filepath_without_extension = character_folder + '/' + image_without_extension
                     self.download_image(image_url, filepath_without_extension)
-        except Exception as e:
-            pass
-
-
-# Ochikobore Fruit Tart
-class OchifuruDownload(Summer2020AnimeDownload):
-    title = "Ochikobore Fruit Tart"
-    keywords = [title, "Dropout Idol", "Ochifuru"]
-
-    CHARA_IMAGE_TEMPLATE = 'http://ochifuru-anime.com/images/chara/%s/p_002.png'
-
-    def __init__(self):
-        super().__init__()
-        self.base_folder = self.base_folder + "/ochifuru"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
-
-    def run(self):
-        try:
-            self.download_key_visual()
-            self.download_character()
-        except Exception as e:
-            print("Error in running " + self.__class__.__name__)
-            print(e)
-
-    def download_key_visual(self):
-        keyvisual_folder = self.base_folder + '/' + constants.FOLDER_KEY_VISUAL
-        if not os.path.exists(keyvisual_folder):
-            os.makedirs(keyvisual_folder)
-
-        image_objs = [
-            {'name': 'kv', 'url': 'https://pbs.twimg.com/media/EKb4OniUwAELo-b?format=jpg&name=medium'}]
-        for image_obj in image_objs:
-            if os.path.exists(keyvisual_folder + '/' + image_obj['name'] + '.png') or \
-                    os.path.exists(keyvisual_folder + '/' + image_obj['name'] + '.jpg'):
-                continue
-            filepath_without_extension = keyvisual_folder + '/' + image_obj['name']
-            self.download_image(image_obj['url'], filepath_without_extension)
-
-    def download_character(self):
-        character_folder = self.base_folder + '/' + constants.FOLDER_CHARACTER
-        if not os.path.exists(character_folder):
-            os.makedirs(character_folder)
-
-        try:
-            i = 0
-            while True:
-                i += 1
-                filepath_without_extension = character_folder + '/chara_' + str(i).zfill(2)
-                if os.path.exists(filepath_without_extension + '.png') or \
-                        os.path.exists(filepath_without_extension + '.jpg'):
-
-                    continue
-                image_url = self.CHARA_IMAGE_TEMPLATE % str(i).zfill(3)
-                result = self.download_image(image_url, filepath_without_extension)
-                if result == -1:
-                    break
         except Exception as e:
             pass
 

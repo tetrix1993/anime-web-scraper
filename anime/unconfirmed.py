@@ -7,8 +7,9 @@ from anime.main_download import MainDownload
 # Cheat Kusushi no Slow Life: Isekai ni Tsukurou Drugstore https://www.cheat-kusushi.jp/ #チート薬師 #スローライフ @cheat_kusushi
 # Iwa Kakeru!: Sport Climbing Girls http://iwakakeru-anime.com/ #いわかける #iwakakeru @iwakakeru_anime
 # Kuma Kuma Kuma Bear https://kumakumakumabear.com/ #くまクマ熊ベアー #kumabear @kumabear_anime
-# Kimi to Boku no Saigo no Senjou, Aruiwa Sekai ga Hajimaru Seisen #キミ戦 #kimisen @kimisen_project
+# Kimi to Boku no Saigo no Senjou, Aruiwa Sekai ga Hajimaru Seisen https://kimisentv.com/ #キミ戦 #kimisen @kimisen_project
 # Majo no Tabitabi https://majotabi.jp/ #魔女の旅々 #魔女の旅々はいいぞ #majotabi @majotabi_PR
+# Ochikobore Fruit Tart http://ochifuru-anime.com/ #ochifuru @ochifuru_anime
 # Tonikaku Kawaii http://tonikawa.com/ #トニカクカワイイ #tonikawa @tonikawa_anime
 
 
@@ -216,6 +217,63 @@ class MajotabiDownload(UnconfirmedDownload):
                 continue
             filepath_without_extension = keyvisual_folder + '/' + image_obj['name']
             self.download_image(image_obj['url'], filepath_without_extension)
+
+
+# Ochikobore Fruit Tart
+class OchifuruDownload(UnconfirmedDownload):
+    title = "Ochikobore Fruit Tart"
+    keywords = [title, "Dropout Idol", "Ochifuru"]
+
+    CHARA_IMAGE_TEMPLATE = 'http://ochifuru-anime.com/images/chara/%s/p_002.png'
+
+    def __init__(self):
+        super().__init__()
+        self.base_folder = self.base_folder + "/ochifuru"
+        if not os.path.exists(self.base_folder):
+            os.makedirs(self.base_folder)
+
+    def run(self):
+        try:
+            self.download_key_visual()
+            self.download_character()
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
+
+    def download_key_visual(self):
+        keyvisual_folder = self.base_folder + '/' + constants.FOLDER_KEY_VISUAL
+        if not os.path.exists(keyvisual_folder):
+            os.makedirs(keyvisual_folder)
+
+        image_objs = [
+            {'name': 'kv', 'url': 'https://pbs.twimg.com/media/EKb4OniUwAELo-b?format=jpg&name=medium'}]
+        for image_obj in image_objs:
+            if os.path.exists(keyvisual_folder + '/' + image_obj['name'] + '.png') or \
+                    os.path.exists(keyvisual_folder + '/' + image_obj['name'] + '.jpg'):
+                continue
+            filepath_without_extension = keyvisual_folder + '/' + image_obj['name']
+            self.download_image(image_obj['url'], filepath_without_extension)
+
+    def download_character(self):
+        character_folder = self.base_folder + '/' + constants.FOLDER_CHARACTER
+        if not os.path.exists(character_folder):
+            os.makedirs(character_folder)
+
+        try:
+            i = 0
+            while True:
+                i += 1
+                filepath_without_extension = character_folder + '/chara_' + str(i).zfill(2)
+                if os.path.exists(filepath_without_extension + '.png') or \
+                        os.path.exists(filepath_without_extension + '.jpg'):
+
+                    continue
+                image_url = self.CHARA_IMAGE_TEMPLATE % str(i).zfill(3)
+                result = self.download_image(image_url, filepath_without_extension)
+                if result == -1:
+                    break
+        except Exception as e:
+            pass
 
 
 # Tonikaku Kawaii
