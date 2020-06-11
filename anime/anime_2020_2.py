@@ -1118,6 +1118,7 @@ class YesterdayDownload(Spring2020AnimeDownload):
                 if self.is_file_exists(self.base_folder + "/" + episode + "_1.jpg"):
                     continue
                 is_first_image = True
+                result = 0
                 for j in range(self.TOTAL_IMAGES_PER_EPISODE):
                     if j == 1:
                         is_first_image = False

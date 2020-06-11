@@ -27,19 +27,49 @@ class MainDownload:
     @staticmethod
     def get_response(url, headers=None, decode=False):
         response = ""
-        if headers == None:
-            headers = {}
-            headers['User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'
+        if headers is None:
+            headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
         try:
             result = requests.get(url, headers=headers)
-            if (decode):
+            if decode:
                 response = str(result.content.decode())
             else:
                 response = str(result.content)
         except Exception as e:
             print(e)
         return response
-        
+
+    def website_has_updated(self, url, cache_name='story', headers=None):
+        if headers is None:
+            headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
+        try:
+            response = requests.get(url, headers=headers)
+            content_length = 0
+            try:
+                content_length = response.headers['Content-Length']
+            except:
+                try:
+                    content_length = str(len(str(response.content)))
+                except:
+                    print('Error in reading content length for ' + url)
+                    return False
+            cache_file = self.base_folder + '/' + cache_name
+            old_content_length = '0'
+            if os.path.exists(cache_file):
+                try:
+                    with open(cache_file, 'r') as f:
+                        old_content_length = f.read()
+                except:
+                    pass
+            if content_length != old_content_length:
+                print('The website ' + url + ' has been updated.')
+                with open(cache_file, 'w+') as f:
+                    f.write(content_length)
+                return True
+        except Exception as e:
+            print(e)
+        return False
+
     @staticmethod
     def get_soup(url, headers=None, decode=False):
         if headers == None:

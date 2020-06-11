@@ -31,6 +31,7 @@ class HxErosDownload(Summer2020AnimeDownload):
     keywords = [title]
 
     PAGE_PREFIX = 'https://hxeros.com'
+    STORY_PAGE = 'https://hxeros.com/story/'
 
     def __init__(self):
         super().__init__()
@@ -39,73 +40,71 @@ class HxErosDownload(Summer2020AnimeDownload):
             os.makedirs(self.base_folder)
 
     def run(self):
-        try:
-            self.download_key_visual()
-            self.download_character()
-        except Exception as e:
-            print("Error in running " + self.__class__.__name__)
-            print(e)
+        self.download_episode_preview()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.website_has_updated(self.STORY_PAGE)
 
     def download_key_visual(self):
-        keyvisual_folder = self.base_folder + '/' + constants.FOLDER_KEY_VISUAL
-        if not os.path.exists(keyvisual_folder):
-            os.makedirs(keyvisual_folder)
-
+        filepath = self.create_key_visual_directory()
         image_objs = [
             {'name': 'teaser', 'url': 'https://pbs.twimg.com/media/EIRucj0XkAUJTsE?format=jpg&name=medium'},
             {'name': 'kv', 'url': 'https://pbs.twimg.com/media/ESLTIUOVAAAWQ5L?format=jpg&name=4096x4096'},
             {'name': 'kv_web', 'url': 'https://hxeros.com/assets/img/top/ph_main.jpg'},
             {'name': 'kv2', 'url': 'https://pbs.twimg.com/media/EZo3lpqUEAEH3Xp?format=jpg&name=4096x4096'},
             {'name': 'kv2_web', 'url': 'https://hxeros.com/assets/img/top/ph_main_2.jpg'}]
-        for image_obj in image_objs:
-            if os.path.exists(keyvisual_folder + '/' + image_obj['name'] + '.jpg') or \
-                    os.path.exists(keyvisual_folder + '/' + image_obj['name'] + '.png'):
-                continue
-            filepath_without_extension = keyvisual_folder + '/' + image_obj['name']
-            self.download_image(image_obj['url'], filepath_without_extension)
+        self.download_image_objects(image_objs, filepath)
 
     def download_character(self):
-        character_folder = self.base_folder + '/' + constants.FOLDER_CHARACTER
-        if not os.path.exists(character_folder):
-            os.makedirs(character_folder)
-
-        # Main Characters
-        image_objs = [
-            {'name': 'retto', 'url': 'https://hxeros.com/assets/img/character/single/retto/ph_character.png'},
-            {'name': 'kirara', 'url': 'https://hxeros.com/assets/img/character/single/kirara/ph_character.png'},
-            {'name': 'momoka', 'url': 'https://hxeros.com/assets/img/character/single/momoka/ph_character.png'},
-            {'name': 'sora', 'url': 'https://hxeros.com/assets/img/character/single/sora/ph_character.png'},
-            {'name': 'maihime', 'url': 'https://hxeros.com/assets/img/character/single/maihime/ph_character.png'}]
-        for image_obj in image_objs:
-            if os.path.exists(character_folder + '/' + image_obj['name'] + '.png'):
-                continue
-            filepath_without_extension = character_folder + '/' + image_obj['name']
-            self.download_image(image_obj['url'], filepath_without_extension)
-
-        # Other Characters
-        image_urls = []
         try:
-            soup = self.get_soup('https://hxeros.com/character/other/')
-            image_divs = soup.find_all('div', class_='other_sec__ph')
-            for image_div in image_divs:
-                image_url = self.PAGE_PREFIX + image_div.find('img')['src']
-                image_urls.append(image_url)
-        except:
-            pass
+            character_folder = self.base_folder + '/' + constants.FOLDER_CHARACTER
+            if not os.path.exists(character_folder):
+                os.makedirs(character_folder)
 
-        for image_url in image_urls:
-            image_with_extension = self.extract_image_name_from_url(image_url, with_extension=True)
-            if os.path.exists(character_folder + '/' + image_with_extension):
-                continue
-            image_without_extension = self.extract_image_name_from_url(image_url, with_extension=False)
-            filepath_without_extension = character_folder + '/' + image_without_extension
-            self.download_image(image_url, filepath_without_extension)
+            # Main Characters
+            image_objs = [
+                {'name': 'retto', 'url': 'https://hxeros.com/assets/img/character/single/retto/ph_character.png'},
+                {'name': 'kirara', 'url': 'https://hxeros.com/assets/img/character/single/kirara/ph_character.png'},
+                {'name': 'momoka', 'url': 'https://hxeros.com/assets/img/character/single/momoka/ph_character.png'},
+                {'name': 'sora', 'url': 'https://hxeros.com/assets/img/character/single/sora/ph_character.png'},
+                {'name': 'maihime', 'url': 'https://hxeros.com/assets/img/character/single/maihime/ph_character.png'}]
+            for image_obj in image_objs:
+                if os.path.exists(character_folder + '/' + image_obj['name'] + '.png'):
+                    continue
+                filepath_without_extension = character_folder + '/' + image_obj['name']
+                self.download_image(image_obj['url'], filepath_without_extension)
+
+            # Other Characters
+            image_urls = []
+            try:
+                soup = self.get_soup('https://hxeros.com/character/other/')
+                image_divs = soup.find_all('div', class_='other_sec__ph')
+                for image_div in image_divs:
+                    image_url = self.PAGE_PREFIX + image_div.find('img')['src']
+                    image_urls.append(image_url)
+            except:
+                pass
+
+            for image_url in image_urls:
+                image_with_extension = self.extract_image_name_from_url(image_url, with_extension=True)
+                if os.path.exists(character_folder + '/' + image_with_extension):
+                    continue
+                image_without_extension = self.extract_image_name_from_url(image_url, with_extension=False)
+                filepath_without_extension = character_folder + '/' + image_without_extension
+                self.download_image(image_url, filepath_without_extension)
+        except Exception as e:
+                print("Error in running " + self.__class__.__name__ + ' - Character')
+                print(e)
 
 
 # Kanojo, Okarishimasu
 class KanokariDownload(Summer2020AnimeDownload):
     title = "Kanojo, Okarishimasu"
     keywords = [title, "Kanokari", "Rent-a-Girlfriend"]
+
+    STORY_PAGE = 'https://kanokari-official.com/story/'
 
     def __init__(self):
         super().__init__()
@@ -114,18 +113,15 @@ class KanokariDownload(Summer2020AnimeDownload):
             os.makedirs(self.base_folder)
 
     def run(self):
-        try:
-            self.download_key_visual()
-            self.download_character()
-        except Exception as e:
-            print("Error in running " + self.__class__.__name__)
-            print(e)
+        self.download_episode_preview()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.website_has_updated(self.STORY_PAGE)
 
     def download_key_visual(self):
-        keyvisual_folder = self.base_folder + '/' + constants.FOLDER_KEY_VISUAL
-        if not os.path.exists(keyvisual_folder):
-            os.makedirs(keyvisual_folder)
-
+        keyvisual_folder = self.create_key_visual_directory()
         image_objs = [
             {'name': 'chara_new_kv1', 'url': 'https://kanokari-official.com/wp/wp-content/themes/kanokari_main/_assets/images/slider/kv_chizuru.jpg'},
             {'name': 'chara_new_kv2', 'url': 'https://kanokari-official.com/wp/wp-content/themes/kanokari_main/_assets/images/slider/kv_mami.jpg'},
@@ -137,33 +133,35 @@ class KanokariDownload(Summer2020AnimeDownload):
             {'name': 'chara_kv4', 'url': 'https://kanokari-official.com/wp/wp-content/uploads/2020/03/sumi_KV0322.jpg'},
             {'name': 'kv_web', 'url': 'https://kanokari-official.com/wp/wp-content/themes/kanokari_main/_assets/images/slider/kv_main.jpg'},
             {'name': 'kv', 'url': 'https://pbs.twimg.com/media/EYwr-OVU8AANFm4?format=jpg&name=large'}]
-        for image_obj in image_objs:
-            if os.path.exists(keyvisual_folder + '/' + image_obj['name'] + '.jpg') or \
-                    os.path.exists(keyvisual_folder + '/' + image_obj['name'] + '.png'):
-                continue
-            filepath_without_extension = keyvisual_folder + '/' + image_obj['name']
-            self.download_image(image_obj['url'], filepath_without_extension)
+        self.download_image_objects(image_objs, keyvisual_folder)
 
     def download_character(self):
-        character_folder = self.base_folder + '/' + constants.FOLDER_CHARACTER
-        if not os.path.exists(character_folder):
-            os.makedirs(character_folder)
-
+        character_folder = self.create_character_directory()
+        image_objs = [
+            {'name': 'chara_body01', 'url': 'https://kanokari-official.com/wp/wp-content/themes/kanokari_teaser/assets/img/top/chara/chara_body01.png'},
+            {'name': 'chara_body02', 'url': 'https://kanokari-official.com/wp/wp-content/themes/kanokari_teaser/assets/img/top/chara/chara_body02.png'},
+            {'name': 'chara_body03', 'url': 'https://kanokari-official.com/wp/wp-content/themes/kanokari_teaser/assets/img/top/chara/chara_body03.png'},
+            {'name': 'chara_body04', 'url': 'https://kanokari-official.com/wp/wp-content/themes/kanokari_teaser/assets/img/top/chara/chara_body04.png'},
+            {'name': 'chara_body05', 'url': 'https://kanokari-official.com/wp/wp-content/themes/kanokari_teaser/assets/img/top/chara/chara_body05.png'},
+            {'name': 'chara_yt01', 'url': 'https://kanokari-official.com/wp/wp-content/uploads/2020/03/かのかり_千鶴PV-06.jpg'},
+            {'name': 'chara_yt02', 'url': 'https://kanokari-official.com/wp/wp-content/uploads/2020/03/かのかり_麻美PV-01.jpg'},
+            {'name': 'chara_yt03', 'url': 'https://kanokari-official.com/wp/wp-content/uploads/2020/03/かのかり_瑠夏PV-06.jpg'},
+            {'name': 'chara_yt04', 'url': 'https://kanokari-official.com/wp/wp-content/uploads/2020/03/かのかり_墨PV-06.jpg'}]
         try:
-            soup = self.get_soup("https://kanokari-official.com/")
-            chara_details = soup.find('section', class_='chara_area').find_all('div', class_='chara_detail')
+            soup = self.get_soup("https://kanokari-official.com/character/")
+            chara_details = soup.find_all('div', class_='visual-chara')
             for chara_detail in chara_details:
-                images = chara_detail.find_all('img')
-                for image in images:
-                    image_url = image['src']
-                    image_with_extension = self.extract_image_name_from_url(image_url, with_extension=True)
-                    if os.path.exists(character_folder + '/' + image_with_extension):
-                        continue
-                    image_without_extension = self.extract_image_name_from_url(image_url, with_extension=False)
-                    filepath_without_extension = character_folder + '/' + image_without_extension
-                    self.download_image(image_url, filepath_without_extension)
+                image = chara_detail.find('img')
+                image_url = image['src']
+                image_with_extension = self.extract_image_name_from_url(image_url, with_extension=True)
+                if os.path.exists(character_folder + '/' + image_with_extension):
+                    continue
+                image_without_extension = self.extract_image_name_from_url(image_url, with_extension=False)
+                image_objs.append({'name': image_without_extension, 'url': image_url})
         except Exception as e:
-            pass
+            print("Error in running " + self.__class__.__name__ + ' - Character')
+            print(e)
+        self.download_image_objects(image_objs, character_folder)
 
 
 # Maou Gakuin no Futekigousha: Shijou Saikyou no Maou no Shiso, Tensei shite Shison-tachi no Gakkou e
@@ -173,6 +171,7 @@ class MaohgakuinDownload(Summer2020AnimeDownload):
 
     PAGE_PREFIX = "https://maohgakuin.com/"
     CHARACTER_PREFIX = 'https://maohgakuin.com/character/'
+    STORY_PAGE = 'https://maohgakuin.com/intro/'
 
     def __init__(self):
         super().__init__()
@@ -181,33 +180,23 @@ class MaohgakuinDownload(Summer2020AnimeDownload):
             os.makedirs(self.base_folder)
 
     def run(self):
-        try:
-            self.download_key_visual()
-            self.download_character()
-        except Exception as e:
-            print("Error in running " + self.__class__.__name__)
-            print(e)
+        self.download_episode_preview()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.website_has_updated(self.STORY_PAGE)
 
     def download_key_visual(self):
-        keyvisual_folder = self.base_folder + '/' + constants.FOLDER_KEY_VISUAL
-        if not os.path.exists(keyvisual_folder):
-            os.makedirs(keyvisual_folder)
-
+        keyvisual_folder = self.create_key_visual_directory()
         image_objs = [
             #{'name': 'kv', 'url': 'https://maohgakuin.com/assets/img/top/kv.jpg'}
             {'name': 'kv', 'url': 'https://pbs.twimg.com/media/EZbC3ljUMAEAkei?format=jpg&name=4096x4096'},
             {'name': 'kv2', 'url': 'https://pbs.twimg.com/media/EZaMb5WUEAAxxIg?format=jpg&name=4096x4096'}]
-        for image_obj in image_objs:
-            if os.path.exists(keyvisual_folder + '/' + image_obj['name'] + '.png'):
-                continue
-            filepath_without_extension = keyvisual_folder + '/' + image_obj['name']
-            self.download_image(image_obj['url'], filepath_without_extension)
+        self.download_image_objects(image_objs, keyvisual_folder)
 
     def download_character(self):
-        character_folder = self.base_folder + '/' + constants.FOLDER_CHARACTER
-        if not os.path.exists(character_folder):
-            os.makedirs(character_folder)
-
+        character_folder = self.create_character_directory()
         try:
             soup = self.get_soup("https://maohgakuin.com/character/")
             chara_details = soup.find('div', class_='chara_list').find_all('li')
@@ -233,7 +222,8 @@ class MaohgakuinDownload(Summer2020AnimeDownload):
                     filepath_without_extension = character_folder + '/' + image_without_extension
                     self.download_image(image_url, filepath_without_extension)
         except Exception as e:
-            pass
+            print("Error in running " + self.__class__.__name__ + ' - Character')
+            print(e)
 
 
 # Monster Musume no Oishasan
@@ -242,6 +232,7 @@ class MonIshaDownload(Summer2020AnimeDownload):
     keywords = [title, "Monisha", "Mon-Isha"]
 
     PAGE_PREFIX = 'https://mon-isha-anime.com/'
+    STORY_PAGE = 'https://mon-isha-anime.com/story/'
 
     def __init__(self):
         super().__init__()
@@ -250,12 +241,12 @@ class MonIshaDownload(Summer2020AnimeDownload):
             os.makedirs(self.base_folder)
 
     def run(self):
-        try:
-            self.download_key_visual()
-            self.download_character()
-        except Exception as e:
-            print("Error in running " + self.__class__.__name__)
-            print(e)
+        self.download_episode_preview()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.website_has_updated(self.STORY_PAGE)
 
     def download_key_visual(self):
         keyvisual_folder = self.base_folder + '/' + constants.FOLDER_KEY_VISUAL
@@ -273,10 +264,7 @@ class MonIshaDownload(Summer2020AnimeDownload):
             self.download_image(image_obj['url'], filepath_without_extension)
 
     def download_character(self):
-        character_folder = self.base_folder + '/' + constants.FOLDER_CHARACTER
-        if not os.path.exists(character_folder):
-            os.makedirs(character_folder)
-
+        character_folder = self.create_character_directory()
         try:
             soup = self.get_soup("https://mon-isha-anime.com/character/")
             chara_details = soup.find_all('div', class_='swinmob')
@@ -291,7 +279,8 @@ class MonIshaDownload(Summer2020AnimeDownload):
                     filepath_without_extension = character_folder + '/' + image_without_extension
                     self.download_image(image_url, filepath_without_extension)
         except Exception as e:
-            pass
+            print("Error in running " + self.__class__.__name__ + ' - Character')
+            print(e)
 
 
 # Peter Grill to Kenja no Jikan
@@ -308,32 +297,21 @@ class PeterGrillDownload(Summer2020AnimeDownload):
             os.makedirs(self.base_folder)
 
     def run(self):
-        try:
-            self.download_key_visual()
-            self.download_character()
-        except Exception as e:
-            print("Error in running " + self.__class__.__name__)
-            print(e)
+        self.download_episode_preview()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.website_has_updated(self.PAGE_PREFIX)
 
     def download_key_visual(self):
-        keyvisual_folder = self.base_folder + '/' + constants.FOLDER_KEY_VISUAL
-        if not os.path.exists(keyvisual_folder):
-            os.makedirs(keyvisual_folder)
-
+        keyvisual_folder = self.create_key_visual_directory()
         image_objs = [
             {'name': 'kv', 'url': 'http://petergrill-anime.jp/images/key_v_202003.png'}]
-        for image_obj in image_objs:
-            if os.path.exists(keyvisual_folder + '/' + image_obj['name'] + '.png') or \
-                    os.path.exists(keyvisual_folder + '/' + image_obj['name'] + '.jpg'):
-                continue
-            filepath_without_extension = keyvisual_folder + '/' + image_obj['name']
-            self.download_image(image_obj['url'], filepath_without_extension)
+        self.download_image_objects(image_objs, keyvisual_folder)
 
     def download_character(self):
-        character_folder = self.base_folder + '/' + constants.FOLDER_CHARACTER
-        if not os.path.exists(character_folder):
-            os.makedirs(character_folder)
-
+        character_folder = self.create_character_directory()
         try:
             soup = self.get_soup("http://petergrill-anime.jp/character.php")
             chara_details = soup.find_all('li', class_='character_item')
@@ -350,7 +328,8 @@ class PeterGrillDownload(Summer2020AnimeDownload):
                     filepath_without_extension = character_folder + '/' + image_without_extension
                     self.download_image(image_url, filepath_without_extension)
         except Exception as e:
-            pass
+            print("Error in running " + self.__class__.__name__ + ' - Character')
+            print(e)
 
 
 # Re:Zero kara Hajimeru Isekai Seikatsu 2nd Season
@@ -358,7 +337,7 @@ class ReZero2Download(Summer2020AnimeDownload):
     title = "Re:Zero kara Hajimeru Isekai Seikatsu 2nd Season"
     keywords = [title, "rezero", "Re:Zero - Starting Life in Another World"]
 
-    PAGE_PREFIX = "http://re-zero-anime.jp/tv/story/"
+    STORY_PAGE = "http://re-zero-anime.jp/tv/story/"
 
     def __init__(self):
         super().__init__()
@@ -367,32 +346,27 @@ class ReZero2Download(Summer2020AnimeDownload):
             os.makedirs(self.base_folder)
 
     def run(self):
-        try:
-            self.download_key_visual()
-        except Exception as e:
-            print("Error in running " + self.__class__.__name__)
-            print(e)
+        self.download_episode_preview()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.website_has_updated(self.STORY_PAGE)
 
     def download_key_visual(self):
-        keyvisual_folder = self.base_folder + '/' + constants.FOLDER_KEY_VISUAL
-        if not os.path.exists(keyvisual_folder):
-            os.makedirs(keyvisual_folder)
-
+        keyvisual_folder = self.create_key_visual_directory()
         image_objs = [
             #{'name': 'kv_old', 'url': 'http://re-zero-anime.jp/tv/assets/top/main-tv1r.jpg'},
             {'name': 'kv', 'url': 'http://re-zero-anime.jp/tv/assets/top/main-tv2.jpg'},
             {'name': 'kv2', 'url': 'http://re-zero-anime.jp/tv/assets/top/main-tv2b.jpg'}]
-        for image_obj in image_objs:
-            filename = keyvisual_folder + '/' + image_obj['name']
-            if os.path.exists(filename + '.jpg') or os.path.exists(filename + '.png'):
-                continue
-            self.download_image(image_obj['url'], filename)
+        self.download_image_objects(image_objs, keyvisual_folder)
 
 
 # Uzaki-chan wa Asobitai!
 class UzakiChanDownload(Summer2020AnimeDownload):
     title = "Uzaki-chan wa Asobitai!"
     keywords = [title, "Uzakichan"]
+
+    PAGE_PREFIX = 'https://uzakichan.com/'
 
     def __init__(self):
         super().__init__()
@@ -401,25 +375,18 @@ class UzakiChanDownload(Summer2020AnimeDownload):
             os.makedirs(self.base_folder)
 
     def run(self):
-        try:
-            self.download_key_visual()
-        except Exception as e:
-            print("Error in running " + self.__class__.__name__)
-            print(e)
+        self.download_episode_preview()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.website_has_updated(self.PAGE_PREFIX)
 
     def download_key_visual(self):
-        keyvisual_folder = self.base_folder + '/' + constants.FOLDER_KEY_VISUAL
-        if not os.path.exists(keyvisual_folder):
-            os.makedirs(keyvisual_folder)
-
+        keyvisual_folder = self.create_key_visual_directory()
         image_objs = [
             {'name': 'kv', 'url': 'https://pbs.twimg.com/media/EP1u35XUEAAvg4f?format=jpg&name=large'},
             {'name': 'kv2', 'url': 'https://pbs.twimg.com/media/EXi1RaHUYAAVJPM?format=jpg&name=medium'}]
-        for image_obj in image_objs:
-            if os.path.exists(keyvisual_folder + '/' + image_obj['name'] + '.png'):
-                continue
-            filepath_without_extension = keyvisual_folder + '/' + image_obj['name']
-            self.download_image(image_obj['url'], filepath_without_extension)
+        self.download_image_objects(image_objs, keyvisual_folder)
 
 
 # Yahari Ore no Seishun Love Comedy wa Machigatteiru. Kan
@@ -441,59 +408,56 @@ class Oregairu3Download(Summer2020AnimeDownload):
             os.makedirs(self.base_folder)
 
     def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
         try:
-            self.download_key_visual()
-            self.download_episode_preview()
+            self.website_has_updated(self.STORY_PAGE)
+            try:
+                soup = self.get_soup(self.STORY_PAGE, decode=True)
+                story_nav = soup.find('ul', class_='story-nav')
+                chapters = story_nav.find_all('li')
+                for chapter in chapters:
+                    try:
+                        link_tag = chapter.find('a')
+                        link_text = link_tag.text
+                        if '第' in link_text and '話' in link_text:
+                            episode = link_text.split('話')[0].split('第')[1].zfill(2)
+                            if self.is_file_exists(self.base_folder + "/" + episode + "_1.jpg") or self.is_file_exists(
+                                    self.base_folder + "/" + episode + "_1.png"):
+                                continue
+                            episode_link = self.STORY_PAGE + link_tag['href']
+                            episode_soup = self.get_soup(episode_link)
+                            image_tags = episode_soup.find('ul', class_='slides').find_all('img')
+                            j = 0
+                            for image_tag in image_tags:
+                                j += 1
+                                image_url = self.STORY_PAGE + image_tag['src']
+                                file_path_without_extension = self.base_folder + '/' + episode + '_' + str(j)
+                                self.download_image(image_url, file_path_without_extension)
+                    except:
+                        continue
+            except:
+                pass
+
+            for i in range(self.TOTAL_EPISODES):
+                episode = str(i + 1).zfill(2)
+                if self.is_file_exists(self.base_folder + "/" + episode + "_1.jpg") or self.is_file_exists(
+                        self.base_folder + "/" + episode + "_1.png"):
+                    continue
+                for j in range(self.TOTAL_IMAGES_PER_EPISODE):
+                    image_url = self.IMAGE_TEMPLATE % (episode, str(j + 1).zfill(2))
+                    file_path_without_extension = self.base_folder + '/' + episode + '_' + str(j + 1)
+                    result = self.download_image(image_url, file_path_without_extension)
+                    if result == -1:
+                        return
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
 
-    def download_episode_preview(self):
-        soup = self.get_soup(self.STORY_PAGE, decode=True)
-        story_nav = soup.find('ul', class_='story-nav')
-        chapters = story_nav.find_all('li')
-        for chapter in chapters:
-            try:
-                link_tag = chapter.find('a')
-                link_text = link_tag.text
-                if '第' in link_text and '話' in link_text:
-                    episode = link_text.split('話')[0].split('第')[1].zfill(2)
-                    if self.is_file_exists(self.base_folder + "/" + episode + "_1.jpg") or self.is_file_exists(
-                            self.base_folder + "/" + episode + "_1.png"):
-                        continue
-                    episode_link = self.STORY_PAGE + link_tag['href']
-                    episode_soup = self.get_soup(episode_link)
-                    image_tags = episode_soup.find('ul', class_='slides').find_all('img')
-                    j = 0
-                    for image_tag in image_tags:
-                        j += 1
-                        image_url = self.STORY_PAGE + image_tag['src']
-                        file_path_without_extension = self.base_folder + '/' + episode + '_' + str(j)
-                        self.download_image(image_url, file_path_without_extension)
-            except:
-                continue
-
-        for i in range(self.TOTAL_EPISODES):
-            episode = str(i + 1).zfill(2)
-            if self.is_file_exists(self.base_folder + "/" + episode + "_1.jpg") or self.is_file_exists(
-                    self.base_folder + "/" + episode + "_1.png"):
-                continue
-            for j in range(self.TOTAL_IMAGES_PER_EPISODE):
-                image_url = self.IMAGE_TEMPLATE % (episode, str(j + 1).zfill(2))
-                file_path_without_extension = self.base_folder + '/' + episode + '_' + str(j + 1)
-                result = self.download_image(image_url, file_path_without_extension)
-                if result == -1:
-                    return
-
     def download_key_visual(self):
-        keyvisual_folder = self.base_folder + '/' + constants.FOLDER_KEY_VISUAL
-        if not os.path.exists(keyvisual_folder):
-            os.makedirs(keyvisual_folder)
-
+        keyvisual_folder = self.create_key_visual_directory()
         image_objs = [{'name': 'kv', 'url': 'http://www.tbs.co.jp/anime/oregairu/img/keyvisual_pc_2.jpg'},
             {'name': 'kv2', 'url': 'http://www.tbs.co.jp/anime/oregairu/special/img/special02_01.png'}]
-        for image_obj in image_objs:
-            filename = keyvisual_folder + '/' + image_obj['name']
-            if os.path.exists(filename + '.jpg') or os.path.exists(filename + '.png'):
-                continue
-            self.download_image(image_obj['url'], filename)
+        self.download_image_objects(image_objs, keyvisual_folder)
