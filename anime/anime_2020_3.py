@@ -380,7 +380,8 @@ class ReZero2Download(Summer2020AnimeDownload):
 
         image_objs = [
             #{'name': 'kv_old', 'url': 'http://re-zero-anime.jp/tv/assets/top/main-tv1r.jpg'},
-            {'name': 'kv', 'url': 'http://re-zero-anime.jp/tv/assets/top/main-tv2.jpg'}]
+            {'name': 'kv', 'url': 'http://re-zero-anime.jp/tv/assets/top/main-tv2.jpg'},
+            {'name': 'kv2', 'url': 'http://re-zero-anime.jp/tv/assets/top/main-tv2b.jpg'}]
         for image_obj in image_objs:
             filename = keyvisual_folder + '/' + image_obj['name']
             if os.path.exists(filename + '.jpg') or os.path.exists(filename + '.png'):
