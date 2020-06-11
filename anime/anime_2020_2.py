@@ -39,7 +39,7 @@ class Spring2020AnimeDownload(MainDownload):
 # Arte
 class ArteDownload(Spring2020AnimeDownload):
     title = "Arte"
-    keywords = ["Arte"]
+    keywords = [title]
 
     PAGE_PREFIX = "http://arte-anime.com/"
     IMAGE_TEMPLATE = 'http://arte-anime.com/U1y9gMfZ/wp-content/themes/arte/images/story/img%s_%s.jpg'
@@ -96,7 +96,7 @@ class ArteDownload(Spring2020AnimeDownload):
 # Brand New Animal
 class BrandNewAnimalDownload(Spring2020AnimeDownload):
     title = "Brand New Animal"
-    keywords = ["BNA", "Brand New Animal"]
+    keywords = [title, "BNA"]
 
     STORY_PAGE = "https://bna-anime.com/story/"
     IMAGE_TEMPLATE = 'https://bna-anime.com/story/images/%s_%s.jpg'
@@ -150,7 +150,7 @@ class BrandNewAnimalDownload(Spring2020AnimeDownload):
 # Gleipnir
 class GleipnirDownload(Spring2020AnimeDownload):
     title = "Gleipnir"
-    keywords = ["Gleipnir"]
+    keywords = [title]
     
     PAGE_PREFIX = "http://gleipnir-anime.com"
     STORY_PAGE = 'http://gleipnir-anime.com/story/'
@@ -189,7 +189,7 @@ class GleipnirDownload(Spring2020AnimeDownload):
 # Hachi-nan tte, Sore wa Nai deshou!
 class HachinanDownload(Spring2020AnimeDownload):
     title = "Hachi-nan tte, Sore wa Nai deshou!"
-    keywords = ["Hachi-nan tte, Sore wa Nai deshou!", "Hachinan", "The 8th Son? Are You Kidding Me?"]
+    keywords = [title, "Hachinan", "The 8th Son? Are You Kidding Me?"]
     
     PAGE_PREFIX = "http://hachinan-anime.com"
     STORY_PAGE = "http://hachinan-anime.com/story/"
@@ -202,8 +202,12 @@ class HachinanDownload(Spring2020AnimeDownload):
         self.base_folder = self.base_folder + "/hachinan"
         if not os.path.exists(self.base_folder):
             os.makedirs(self.base_folder)
-    
+
     def run(self):
+        self.download_episode_preview()
+        self.download_bluray()
+
+    def download_episode_preview(self):
         try:
             soup = self.get_soup(self.STORY_PAGE)
             a_tags = soup.find('nav', class_='l-nav').find_all('a')
@@ -211,7 +215,8 @@ class HachinanDownload(Spring2020AnimeDownload):
                 episode = self.get_episode_number(a_tag.text)
                 if episode is None:
                     continue
-                if self.is_file_exists(self.base_folder + "/" + episode + "_1.jpg") or self.is_file_exists(self.base_folder + "/" + episode + "_1.png"):
+                if self.is_file_exists(self.base_folder + "/" + episode + "_1.jpg") or self.is_file_exists(
+                        self.base_folder + "/" + episode + "_1.png"):
                     continue
                 story_soup = self.get_soup(self.PAGE_PREFIX + a_tag['href'])
                 images = story_soup.find('ul', class_='capture').find_all('img')
@@ -219,45 +224,36 @@ class HachinanDownload(Spring2020AnimeDownload):
                     image_url = self.PAGE_PREFIX + images[j]['src']
                     file_path_without_extension = self.base_folder + '/' + episode + '_' + str(j + 1)
                     self.download_image(image_url, file_path_without_extension)
-
-            # Download Blu-ray pictures
-            bluray_filepath = self.base_folder + '/' + constants.FOLDER_BLURAY
-            if not os.path.exists(bluray_filepath):
-                os.makedirs(bluray_filepath)
-
-            image_objs = [
-                {'name': 'bd_packege_sample', 'url': 'http://hachinan-anime.com/wp-content/themes/hachinan-anime/images/bddvd/packege_sample.jpg'},
-                {'name': 'bd_package', 'url': 'http://hachinan-anime.com/wp-content/uploads/2020/05/bd_package.jpg'},
-                {'name': 'bd_onsen_sample', 'url': 'http://hachinan-anime.com/wp-content/themes/hachinan-anime/images/bddvd/onsen_sample.jpg'},
-                {'name': 'bd_onsen_sample_2', 'url': 'http://hachinan-anime.com/wp-content/uploads/2020/04/onsen_sample.jpg'},
-                {'name': 'bd_onsen', 'url': 'http://hachinan-anime.com/wp-content/uploads/2020/05/hachiman_A3_poster.jpg'},
-                #{'name': 'music_op', 'url': 'http://hachinan-anime.com/wp-content/themes/hachinan-anime/images/music/op-jacket.jpg'},
-                {'name': 'music_ed', 'url': 'http://hachinan-anime.com/wp-content/themes/hachinan-anime/images/music/ed-jacket.jpg'},
-                {'name': 'bd_tokuten_sample_1_1', 'url': 'http://hachinan-anime.com/wp-content/uploads/2020/04/animate_sample.jpg'},
-                {'name': 'bd_tokuten_sample_1_2', 'url': 'http://hachinan-anime.com/wp-content/uploads/2020/04/amazon_sample.jpg'},
-                {'name': 'bd_tokuten_sample_1_3', 'url': 'http://hachinan-anime.com/wp-content/uploads/2020/04/gamers_sample.jpg'},
-                {'name': 'bd_tokuten_sample_1_4', 'url': 'http://hachinan-anime.com/wp-content/uploads/2020/04/toranoana_sample.jpg'},
-                {'name': 'bd_tokuten_sample_1_5', 'url': 'http://hachinan-anime.com/wp-content/uploads/2020/04/sofmap_sample.jpg'},
-                {'name': 'bd_tokuten_sample_2_1', 'url': 'http://hachinan-anime.com/wp-content/uploads/2020/05/animate_sample.png'},
-                {'name': 'bd_tokuten_sample_2_2', 'url': 'http://hachinan-anime.com/wp-content/uploads/2020/05/amazon_sample.png'},
-                {'name': 'bd_tokuten_sample_2_3', 'url': 'http://hachinan-anime.com/wp-content/uploads/2020/05/gamers_sample.png'},
-                {'name': 'bd_tokuten_sample_2_4', 'url': 'http://hachinan-anime.com/wp-content/uploads/2020/05/toranoana_sample.png'},
-                {'name': 'bd_tokuten_sample_2_5', 'url': 'http://hachinan-anime.com/wp-content/uploads/2020/05/sofmap_sample.png'},
-                {'name': 'bd_tokuten_1', 'url': 'http://hachinan-anime.com/wp-content/uploads/2020/05/animate.jpg'},
-                {'name': 'bd_tokuten_2', 'url': 'http://hachinan-anime.com/wp-content/uploads/2020/05/amazon.jpg'},
-                {'name': 'bd_tokuten_3', 'url': 'http://hachinan-anime.com/wp-content/uploads/2020/05/gamers.jpg'},
-                {'name': 'bd_tokuten_4', 'url': 'http://hachinan-anime.com/wp-content/uploads/2020/05/toranoana.jpg'},
-                {'name': 'bd_tokuten_5', 'url': 'http://hachinan-anime.com/wp-content/uploads/2020/05/sofmap.jpg'}
-            ]
-            for image_obj in image_objs:
-                if os.path.exists(bluray_filepath + '/' + image_obj['name'] + '.png') or \
-                        os.path.exists(bluray_filepath + '/' + image_obj['name'] + '.jpg'):
-                    continue
-                filepath_without_extension = bluray_filepath + '/' + image_obj['name']
-                self.download_image(image_obj['url'], filepath_without_extension)
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
+
+    def download_bluray(self):
+        filepath = self.create_bluray_directory()
+        image_objs = [
+            {'name': 'bd_packege_sample', 'url': 'http://hachinan-anime.com/wp-content/themes/hachinan-anime/images/bddvd/packege_sample.jpg'},
+            {'name': 'bd_package', 'url': 'http://hachinan-anime.com/wp-content/uploads/2020/05/bd_package.jpg'},
+            {'name': 'bd_onsen_sample', 'url': 'http://hachinan-anime.com/wp-content/themes/hachinan-anime/images/bddvd/onsen_sample.jpg'},
+            {'name': 'bd_onsen_sample_2', 'url': 'http://hachinan-anime.com/wp-content/uploads/2020/04/onsen_sample.jpg'},
+            {'name': 'bd_onsen', 'url': 'http://hachinan-anime.com/wp-content/uploads/2020/05/hachiman_A3_poster.jpg'},
+            #{'name': 'music_op', 'url': 'http://hachinan-anime.com/wp-content/themes/hachinan-anime/images/music/op-jacket.jpg'},
+            {'name': 'music_ed', 'url': 'http://hachinan-anime.com/wp-content/themes/hachinan-anime/images/music/ed-jacket.jpg'},
+            {'name': 'bd_tokuten_sample_1_1', 'url': 'http://hachinan-anime.com/wp-content/uploads/2020/04/animate_sample.jpg'},
+            {'name': 'bd_tokuten_sample_1_2', 'url': 'http://hachinan-anime.com/wp-content/uploads/2020/04/amazon_sample.jpg'},
+            {'name': 'bd_tokuten_sample_1_3', 'url': 'http://hachinan-anime.com/wp-content/uploads/2020/04/gamers_sample.jpg'},
+            {'name': 'bd_tokuten_sample_1_4', 'url': 'http://hachinan-anime.com/wp-content/uploads/2020/04/toranoana_sample.jpg'},
+            {'name': 'bd_tokuten_sample_1_5', 'url': 'http://hachinan-anime.com/wp-content/uploads/2020/04/sofmap_sample.jpg'},
+            {'name': 'bd_tokuten_sample_2_1', 'url': 'http://hachinan-anime.com/wp-content/uploads/2020/05/animate_sample.png'},
+            {'name': 'bd_tokuten_sample_2_2', 'url': 'http://hachinan-anime.com/wp-content/uploads/2020/05/amazon_sample.png'},
+            {'name': 'bd_tokuten_sample_2_3', 'url': 'http://hachinan-anime.com/wp-content/uploads/2020/05/gamers_sample.png'},
+            {'name': 'bd_tokuten_sample_2_4', 'url': 'http://hachinan-anime.com/wp-content/uploads/2020/05/toranoana_sample.png'},
+            {'name': 'bd_tokuten_sample_2_5', 'url': 'http://hachinan-anime.com/wp-content/uploads/2020/05/sofmap_sample.png'},
+            {'name': 'bd_tokuten_1', 'url': 'http://hachinan-anime.com/wp-content/uploads/2020/05/animate.jpg'},
+            {'name': 'bd_tokuten_2', 'url': 'http://hachinan-anime.com/wp-content/uploads/2020/05/amazon.jpg'},
+            {'name': 'bd_tokuten_3', 'url': 'http://hachinan-anime.com/wp-content/uploads/2020/05/gamers.jpg'},
+            {'name': 'bd_tokuten_4', 'url': 'http://hachinan-anime.com/wp-content/uploads/2020/05/toranoana.jpg'},
+            {'name': 'bd_tokuten_5', 'url': 'http://hachinan-anime.com/wp-content/uploads/2020/05/sofmap.jpg'}]
+        self.download_image_objects(image_objs, filepath)
 
         '''
         image_urls = []
@@ -306,8 +302,7 @@ class HachinanDownload(Spring2020AnimeDownload):
 # Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan wo Erandeiraremasen 2nd Season
 class Honzuki2Download(Spring2020AnimeDownload):
     title = "Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan wo Erandeiraremasen 2nd Season"
-    keywords = ["Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan wo Erandeiraremasen 2nd Season",
-                "Ascendance of a Bookworm"]
+    keywords = [title, "Ascendance of a Bookworm"]
     
     PAGE_PREFIX = "http://booklove-anime.jp/story/"
     IMAGE_PREFIX = "http://booklove-anime.jp/"
@@ -320,15 +315,21 @@ class Honzuki2Download(Spring2020AnimeDownload):
             os.makedirs(self.base_folder)
     
     def run(self):
+        self.download_episode_preview()
+        self.download_episode_preview_external()
+
+    def download_episode_preview(self):
         try:
             ep_num = self.FIRST_EPISODE - 1
-            box_story_divs = self.get_soup(self.PAGE_PREFIX).find('section', id='second').find_all('div', class_='box_story')
+            box_story_divs = self.get_soup(self.PAGE_PREFIX).find('section', id='second').find_all('div',
+                                                                                                   class_='box_story')
             for box_story_div in box_story_divs:
                 if 'intro02' in box_story_div['class']:
                     continue
                 ep_num += 1
                 episode = str(ep_num)
-                if self.is_file_exists(self.base_folder + "/" + episode + "_1.jpg") or self.is_file_exists(self.base_folder + "/" + episode + "_1.png"):
+                if self.is_file_exists(self.base_folder + "/" + episode + "_1.jpg") or self.is_file_exists(
+                        self.base_folder + "/" + episode + "_1.png"):
                     continue
                 lis = box_story_div.find_all('li')
                 for j in range(len(lis)):
@@ -353,7 +354,12 @@ class Honzuki2Download(Spring2020AnimeDownload):
                         break
                 if result == -1 or result is None:
                     break
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
+    def download_episode_preview_external(self):
+        try:
             last_date = datetime.strptime('20200630', '%Y%m%d')
             today = datetime.today()
             if today < last_date:
@@ -362,14 +368,14 @@ class Honzuki2Download(Spring2020AnimeDownload):
                 end_date = last_date
             MocaNewsScanner('本好きの下剋上', self.base_folder, '20200401', end_date.strftime('%Y%m%d')).run()
         except Exception as e:
-            print("Error in running " + self.__class__.__name__)
+            print("Error in running " + self.__class__.__name__ + ' - MocaNews')
             print(e)
 
 
 # Nami yo Kiitekure
 class NamiyoDownload(Spring2020AnimeDownload):
     title = "Nami yo Kiitekure"
-    keywords = ["Namiyo", "Nami yo Kiitekure", "Wave, Listen to Me!"]
+    keywords = [title, "Namiyo", "Wave, Listen to Me!"]
 
     STORY_PAGE = 'https://namiyo-anime.com/story/'
 
@@ -403,7 +409,7 @@ class NamiyoDownload(Spring2020AnimeDownload):
 # Houkago Teibou Nisshi
 class TeiboDownload(Spring2020AnimeDownload):
     title = "Houkago Teibou Nisshi"
-    keywords = ["Teibo", "Houkago Teibou Nisshi", "Diary of Our Days at the Breakwater"]
+    keywords = [title, "Teibo", "Diary of Our Days at the Breakwater"]
 
     PAGE_PREFIX = "https://teibotv.com/"
     STORY_PAGE = 'https://teibotv.com/story.html'
@@ -412,7 +418,6 @@ class TeiboDownload(Spring2020AnimeDownload):
     TOTAL_EPISODES = 13
     TOTAL_IMAGES_PER_EPISODE = 6
 
-    
     def __init__(self):
         super().__init__()
         self.base_folder = self.base_folder + "/teibo"
@@ -420,6 +425,9 @@ class TeiboDownload(Spring2020AnimeDownload):
             os.makedirs(self.base_folder)
     
     def run(self):
+        self.download_episode_preview()
+
+    def download_episode_preview(self):
         try:
             soup = self.get_soup(self.STORY_PAGE)
             story_thumb_boxes = soup.find_all('div', class_='story_thumb_box')
@@ -459,8 +467,7 @@ class TeiboDownload(Spring2020AnimeDownload):
 # Kaguya-sama wa Kokurasetai? Tensai-tachi no Renai Zunousen
 class Kaguyasama2Download(Spring2020AnimeDownload):
     title = "Kaguya-sama wa Kokurasetai?: Tensai-tachi no Renai Zunousen"
-    keywords = ["Kaguya", "Kaguyasama", "Kaguya-sama wa Kokurasetai?: Tensai-tachi no Renai Zunousen",
-                "Kaguya-sama: Love is War 2nd Season"]
+    keywords = [title, "Kaguya", "Kaguyasama", "Kaguya-sama: Love is War 2nd Season"]
 
     STORY_PAGE = "https://kaguya.love/story/"
     PAGE_PREFIX = 'https://kaguya.love'
@@ -472,6 +479,11 @@ class Kaguyasama2Download(Spring2020AnimeDownload):
             os.makedirs(self.base_folder)
     
     def run(self):
+        self.download_episode_preview()
+        self.download_bluray()
+        self.download_character()
+
+    def download_episode_preview(self):
         try:
             soup = self.get_soup(self.STORY_PAGE)
             story_nav = soup.find('div', class_='p-story_nav').find_all('a')
@@ -491,8 +503,12 @@ class Kaguyasama2Download(Spring2020AnimeDownload):
                         self.download_image(image_url, file_path_without_extension)
                 except:
                     continue
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
-            # Download Blu-ray/Music
+    def download_bluray(self):
+        try:
             image_urls = []
             other_filepath = self.base_folder + '/' + constants.FOLDER_BLURAY
             if not os.path.exists(other_filepath):
@@ -536,12 +552,16 @@ class Kaguyasama2Download(Spring2020AnimeDownload):
                     if os.path.exists(other_filepath + '/' + image_filename):
                         continue
                     file_path_without_extension = other_filepath + '/' + \
-                        image_filename.split('.jpg')[0].split('.jpeg')[0].split('.png')[0]
+                                                  image_filename.split('.jpg')[0].split('.jpeg')[0].split('.png')[0]
                     self.download_image(image_url, file_path_without_extension)
                 except:
                     pass
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Blu-Ray')
+            print(e)
 
-            # Download character image
+    def download_character(self):
+        try:
             chara_filepath = self.base_folder + '/' + constants.FOLDER_CHARACTER
             if not os.path.exists(chara_filepath):
                 os.makedirs(chara_filepath)
@@ -557,14 +577,14 @@ class Kaguyasama2Download(Spring2020AnimeDownload):
                     if not os.path.exists(filepath + '.jpg') and not os.path.exists(filepath + '.png'):
                         self.download_image(image_url, filepath)
         except Exception as e:
-            print("Error in running " + self.__class__.__name__)
+            print("Error in running " + self.__class__.__name__ + ' - Character')
             print(e)
 
 
 # Kakushigoto
 class KakushigotoDownload(Spring2020AnimeDownload):
     title = "Kakushigoto"
-    keywords = ["Kakushigoto"]
+    keywords = [title]
 
     STORY_PAGE = "https://kakushigoto-anime.com/story/"
     
@@ -600,7 +620,7 @@ class KakushigotoDownload(Spring2020AnimeDownload):
 # Kingdom 3rd Season
 class Kingdom3Download(Spring2020AnimeDownload):
     title = "Kingdom 3rd Season"
-    keywords = ["Kingdom 3rd Season"]
+    keywords = [title]
 
     STORY_PAGE = "https://kingdom-anime.com/story/"
     
@@ -639,8 +659,7 @@ class Kingdom3Download(Spring2020AnimeDownload):
 # Otome Game no Hametsu Flag shika Nai Akuyaku Reijou ni Tensei shiteshimatta...
 class HamehuraDownload(Spring2020AnimeDownload):
     title = "Otome Game no Hametsu Flag shika Nai Akuyaku Reijou ni Tensei shiteshimatta..."
-    keywords = ["Hamehura", "Otome Game no Hametsu Flag shika Nai Akuyaku Reijou ni Tensei shiteshimatta...",
-                "My Next Life as a Villainess: All Routes Lead to Doom!"]
+    keywords = [title, "Hamehura", "My Next Life as a Villainess: All Routes Lead to Doom!"]
 
     STORY_PAGE = "https://hamehura-anime.com/story"
     
@@ -693,7 +712,7 @@ class HamehuraDownload(Spring2020AnimeDownload):
 # Princess Connect! Re:Dive
 class PriconneDownload(Spring2020AnimeDownload):
     title = "Princess Connect! Re:Dive"
-    keywords = ["Princess Connect! Re:Dive", "Priconne"]
+    keywords = [title, "Priconne"]
     
     PAGE_PREFIX = "https://anime.priconne-redive.jp"
     STORY_PREFIX = "https://anime.priconne-redive.jp/story/"
@@ -706,6 +725,11 @@ class PriconneDownload(Spring2020AnimeDownload):
             os.makedirs(self.base_folder)
     
     def run(self):
+        self.download_episode_preview()
+        self.download_bluray()
+        self.download_character()
+
+    def download_episode_preview(self):
         try:
             soup = self.get_soup(self.STORY_PREFIX)
             latest_episode_text = soup.find('ul', class_='story-num').find('li', class_='active').text
@@ -714,7 +738,8 @@ class PriconneDownload(Spring2020AnimeDownload):
             max_episode = int(result[0])
             for i in range(max_episode):
                 episode = str(i + 1).zfill(2)
-                if self.is_file_exists(self.base_folder + "/" + episode + "_01.jpg") or self.is_file_exists(self.base_folder + "/" + episode + "_01.png"):
+                if self.is_file_exists(self.base_folder + "/" + episode + "_01.jpg") or self.is_file_exists(
+                        self.base_folder + "/" + episode + "_01.png"):
                     continue
                 try:
                     story_soup = self.get_soup(self.STORY_TEMPLATE % episode)
@@ -726,24 +751,21 @@ class PriconneDownload(Spring2020AnimeDownload):
                         self.download_image(image_url, file_path_without_extension)
                 except:
                     continue
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
-            # Download Blu-ray
-            bluray_filepath = self.base_folder + '/' + constants.FOLDER_BLURAY
-            if not os.path.exists(bluray_filepath):
-                os.makedirs(bluray_filepath)
+    def download_bluray(self):
+        bluray_filepath = self.create_bluray_directory()
+        image_objs = [
+            {'name': 'bd_1_1', 'url': 'https://anime.priconne-redive.jp/assets/data/82a6345d72fd68036496915319c326f0.png'},
+            {'name': 'bd_1_1s', 'url': 'https://pbs.twimg.com/media/EYTkbHcXQAQsR0A?format=jpg&name=900x900'},
+            {'name': 'bd_1_2', 'url': 'https://anime.priconne-redive.jp/assets/data/11323f9ee9ffc83c3151a0e18cb9b07b.png'},
+            {'name': 'bd_1_2s', 'url': 'https://pbs.twimg.com/media/EYTkbHeXQAMc7YR?format=jpg&name=900x900'}]
+        self.download_image_objects(image_objs, bluray_filepath)
 
-            image_objs = [
-                {'name': 'bd_1_1', 'url': 'https://anime.priconne-redive.jp/assets/data/82a6345d72fd68036496915319c326f0.png'},
-                {'name': 'bd_1_1s', 'url': 'https://pbs.twimg.com/media/EYTkbHcXQAQsR0A?format=jpg&name=900x900'},
-                {'name': 'bd_1_2', 'url': 'https://anime.priconne-redive.jp/assets/data/11323f9ee9ffc83c3151a0e18cb9b07b.png'},
-                {'name': 'bd_1_2s', 'url': 'https://pbs.twimg.com/media/EYTkbHeXQAMc7YR?format=jpg&name=900x900'}]
-            for image_obj in image_objs:
-                if os.path.exists(bluray_filepath + '/' + image_obj['name'] + '.png') or \
-                        os.path.exists(bluray_filepath + '/' + image_obj['name'] + '.jpg'):
-                    continue
-                filepath_without_extension = bluray_filepath + '/' + image_obj['name']
-                self.download_image(image_obj['url'], filepath_without_extension)
-
+    def download_character(self):
+        try:
             # Download characters
             chara_filepath = self.base_folder + '/' + constants.FOLDER_CHARACTER
             if not os.path.exists(chara_filepath):
@@ -772,14 +794,14 @@ class PriconneDownload(Spring2020AnimeDownload):
                     self.download_image(full_image_urls[i], full_image_filepath)
                     self.download_image(thumb_image_urls[i], thumb_image_filepath)
         except Exception as e:
-            print("Error in running " + self.__class__.__name__)
+            print("Error in running " + self.__class__.__name__ + ' - Character')
             print(e)
 
 
 # Shachou, Battle no Jikan Desu!
 class ShachibatoDownload(Spring2020AnimeDownload):
     title = "Shachou, Battle no Jikan Desu!"
-    keywords = ["Shachou, Battle no Jikan Desu!", "Shachibato! President, It's Time for Battle!"]
+    keywords = [title, "Shachibato! President, It's Time for Battle!"]
 
     PAGE_PREFIX = "https://shachibato-anime.com/"
     STORY_PAGE = "https://shachibato-anime.com/story.html"
@@ -794,6 +816,11 @@ class ShachibatoDownload(Spring2020AnimeDownload):
             os.makedirs(self.base_folder)
 
     def run(self):
+        self.download_episode_preview()
+        self.download_bluray()
+        self.download_character()
+
+    def download_episode_preview(self):
         try:
             soup = self.get_soup(self.STORY_PAGE)
             story_list = soup.find('ul', class_='story_navi').find_all('a')
@@ -826,37 +853,40 @@ class ShachibatoDownload(Spring2020AnimeDownload):
                         break
                 if result == -1:
                     break
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
-            image_urls = []
-            other_filepath = self.base_folder + '/' + constants.FOLDER_BLURAY
-            if not os.path.exists(other_filepath):
-                os.makedirs(other_filepath)
-            url_list = ["https://shachibato-anime.com/bluray.html",
-                        "https://shachibato-anime.com/music.html"]
-            for url in url_list:
-                bd_soup = self.get_soup(url)
-                try:
-                    images = bd_soup.find('div', class_='container1').find_all('img')
-                    for image in images:
-                        image_url = image['src']
-                        if 'http://' not in image_url and 'https://' not in image_url:
-                            image_url = self.PAGE_PREFIX + image_url
-                        image_urls.append(image_url)
-                except:
-                    pass
+    def download_bluray(self):
+        filepath = self.create_bluray_directory()
+        image_urls = []
+        url_list = ["https://shachibato-anime.com/bluray.html",
+                    "https://shachibato-anime.com/music.html"]
+        for url in url_list:
+            bd_soup = self.get_soup(url)
+            try:
+                images = bd_soup.find('div', class_='container1').find_all('img')
+                for image in images:
+                    image_url = image['src']
+                    if 'http://' not in image_url and 'https://' not in image_url:
+                        image_url = self.PAGE_PREFIX + image_url
+                    image_urls.append(image_url)
+            except:
+                pass
 
-            for image_url in image_urls:
-                try:
-                    image_filename = image_url.split('/')[-1]
-                    if os.path.exists(other_filepath + '/' + image_filename):
-                        continue
-                    file_path_without_extension = other_filepath + '/' + \
-                        image_filename.split('.jpg')[0].split('.jpeg')[0].split('.png')[0]
-                    self.download_image(image_url, file_path_without_extension)
-                except:
-                    pass
+        for image_url in image_urls:
+            try:
+                image_filename = image_url.split('/')[-1]
+                if os.path.exists(filepath + '/' + image_filename):
+                    continue
+                file_path_without_extension = filepath + '/' + \
+                    image_filename.split('.jpg')[0].split('.jpeg')[0].split('.png')[0]
+                self.download_image(image_url, file_path_without_extension)
+            except:
+                pass
 
-            # Download characters
+    def download_character(self):
+        try:
             chara_filepath = self.base_folder + '/' + constants.FOLDER_CHARACTER
             if not os.path.exists(chara_filepath):
                 os.makedirs(chara_filepath)
@@ -883,14 +913,14 @@ class ShachibatoDownload(Spring2020AnimeDownload):
                 file_path_without_extension = chara_filepath + '/' + filename
                 self.download_image(image_url, file_path_without_extension)
         except Exception as e:
-            print("Error in running " + self.__class__.__name__)
+            print("Error in running " + self.__class__.__name__ + ' - Character')
             print(e)
 
 
 # Tamayomi
 class TamayomiDownload(Spring2020AnimeDownload):
     title = "Tamayomi"
-    keywords = ["Tamayomi"]
+    keywords = [title]
 
     PAGE_PREFIX = "https://tamayomi.com"
     STORY_PREFIX = "https://tamayomi.com/story/"
@@ -902,6 +932,11 @@ class TamayomiDownload(Spring2020AnimeDownload):
             os.makedirs(self.base_folder)
     
     def run(self):
+        self.download_episode_preview()
+        self.download_bluray()
+        self.download_character()
+
+    def download_episode_preview(self):
         try:
             soup = self.get_soup(self.STORY_PREFIX)
             stories = soup.find('ul', class_='story-storybox_thumbs').find_all('li', class_='story-storybox_thumbs_item')
@@ -919,67 +954,79 @@ class TamayomiDownload(Spring2020AnimeDownload):
                     image_url = images[j]['src']
                     file_path_without_extension = self.base_folder + '/' + episode + '_' + str(j + 1).zfill(2)
                     self.download_image(image_url, file_path_without_extension)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
-            image_urls = []
-            other_filepath = self.base_folder + '/' + constants.FOLDER_BLURAY
-            if not os.path.exists(other_filepath):
-                os.makedirs(other_filepath)
+    def download_bluray(self):
+        filepath = self.create_bluray_directory()
+        image_objs = [
+            {'name': 'music', 'url': 'https://img.imageimg.net/artist/tamayomi/img/product_1031383.jpg'},
+            {'name': 'music_bonus', 'url': 'https://m.imageimg.net/upload/artist_img/TMYMX/9d8e75e1e572dc299319aad7bc8c46e97dc75816_5ea64d7728b35.jpg'},
+            {'name': 'bd_1_1', 'url': 'https://pbs.twimg.com/media/EYBcL7KUMAAzETM?format=jpg&name=small'},
+            {'name': 'bd_1_2', 'url': 'https://pbs.twimg.com/media/EYBcOPCU0AASO2c?format=jpg&name=small'},
+            {'name': 'bd_2_1', 'url': 'https://pbs.twimg.com/media/EYBcSZDU8AAV3oc?format=jpg&name=small'},
+            {'name': 'bd_2_2', 'url': 'https://pbs.twimg.com/media/EYBcVieXkAATCH5?format=jpg&name=small'},
+            {'name': 'bd_3_1', 'url': 'https://pbs.twimg.com/media/EZK2fXMU0AIVWun?format=jpg&name=small'},
+            {'name': 'bd_3_2', 'url': 'https://pbs.twimg.com/media/EZK2g17VcAUpMfE?format=jpg&name=small'},
+            {'name': 'bd_4_1', 'url': 'https://pbs.twimg.com/media/EZK2iQQUwAADyPY?format=jpg&name=small'},
+            {'name': 'bd_4_2', 'url': 'https://pbs.twimg.com/media/EZK2jzcU0AIm_Uy?format=jpg&name=small'},
+            {'name': 'bd_bonus_1', 'url': 'https://m.imageimg.net/upload/artist_img/TMYMX/79336eca283b54c872bff032c87f6ad8763b12ee_5eaa4755dd468.png'},
+            {'name': 'bd_bonus_2', 'url': 'https://m.imageimg.net/upload/artist_img/TMYMX/ab0571bc7edc6a7d8f4ba0475bdfa907f0783c2b_5eaa476e8b18f.png'},
+            {'name': 'bd_bonus_3', 'url': 'https://m.imageimg.net/upload/artist_img/TMYMX/ee3cd344bd8a6f65beccf534a1a99b959bbbb12c_5eaa4795eb601.png'},
+            {'name': 'bd_bonus_4', 'url': 'https://m.imageimg.net/upload/artist_img/TMYMX/551c0094a71c5d237d6479081f23bb95a1c9a6bc_5ec79a608587b.png'},
+            {'name': 'bd_bonus_sample_4', 'url': 'https://m.imageimg.net/upload/artist_img/TMYMX/c86e2fe0f6263b75c4c4200a0783fd6226701eae_5eb8f11b125ae.png'},
+            {'name': 'bd_bonus_new_1', 'url': 'https://m.imageimg.net/upload/artist_img/TMYMX/3644ddf00baa3127b122cd99b1e230915c9fcd5a_5edda6a703138.png'},
+            {'name': 'bd_bonus_new_2', 'url': 'https://m.imageimg.net/upload/artist_img/TMYMX/1abfa15a0442f36d1d065f11b76e20f35994ecb2_5edda77c63dd7.png'},
+            {'name': 'bd_bonus_new_3', 'url': 'https://m.imageimg.net/upload/artist_img/TMYMX/a8fcbc5dc390b3cb92f1496e22b4d34b2baaf3a1_5edda79c322bc.png'},
+            {'name': 'bd_bonus_new_4', 'url': 'https://m.imageimg.net/upload/artist_img/TMYMX/6d86c0e4eaeb448714f12880178b84b9d50aa9b9_5edda969b26f1.png'}]
+        self.download_image_objects(image_objs, filepath)
 
-            # Blu-Ray Volume Illustrations
-            image_objs = [
-                {'name': 'bd_1_1', 'url': 'https://pbs.twimg.com/media/EYBcL7KUMAAzETM?format=jpg&name=small'},
-                {'name': 'bd_1_2', 'url': 'https://pbs.twimg.com/media/EYBcOPCU0AASO2c?format=jpg&name=small'},
-                {'name': 'bd_2_1', 'url': 'https://pbs.twimg.com/media/EYBcSZDU8AAV3oc?format=jpg&name=small'},
-                {'name': 'bd_2_2', 'url': 'https://pbs.twimg.com/media/EYBcVieXkAATCH5?format=jpg&name=small'},
-                {'name': 'bd_3_1', 'url': 'https://pbs.twimg.com/media/EZK2fXMU0AIVWun?format=jpg&name=small'},
-                {'name': 'bd_3_2', 'url': 'https://pbs.twimg.com/media/EZK2g17VcAUpMfE?format=jpg&name=small'},
-                {'name': 'bd_4_1', 'url': 'https://pbs.twimg.com/media/EZK2iQQUwAADyPY?format=jpg&name=small'},
-                {'name': 'bd_4_2', 'url': 'https://pbs.twimg.com/media/EZK2jzcU0AIm_Uy?format=jpg&name=small'}]
-            for image_obj in image_objs:
-                if os.path.exists(other_filepath + '/' + image_obj['name'] + '.png') or \
-                        os.path.exists(other_filepath + '/' + image_obj['name'] + '.jpg'):
+    def download_bluray_old(self):
+        image_urls = []
+        other_filepath = self.base_folder + '/' + constants.FOLDER_BLURAY
+        if not os.path.exists(other_filepath):
+            os.makedirs(other_filepath)
+
+        url_list = ["https://tamayomi.com/discography/detail.php?id=1017453",
+                    "https://tamayomi.com/discography/detail.php?id=1017468",
+                    "https://tamayomi.com/discography/detail.php?id=1017553",
+                    "https://tamayomi.com/discography/detail.php?id=1017554",
+                    "https://tamayomi.com/discography/detail.php?id=1017555",
+                    "https://tamayomi.com/discography/detail.php?id=1017556"]
+        for url in url_list:
+            bd_soup = self.get_soup(url)
+            try:
+                images = bd_soup.find('div', class_='disc-single').find_all('img')
+                for image in images:
+                    image_url = image['src']
+                    if 'http://' not in image_url and 'https://' not in image_url:
+                        image_url = self.PAGE_PREFIX + image_url
+                    image_urls.append(image_url)
+            except:
+                pass
+
+        for image_url in image_urls:
+            try:
+                image_filename = image_url.split('/')[-1]
+                if os.path.exists(other_filepath + '/' + image_filename):
                     continue
-                filepath_without_extension = other_filepath + '/' + image_obj['name']
-                self.download_image(image_obj['url'], filepath_without_extension)
+                file_path_without_extension = other_filepath + '/' + \
+                    image_filename.split('.jpg')[0].split('.jpeg')[0].split('.png')[0]
+                self.download_image(image_url, file_path_without_extension)
+            except:
+                pass
 
-            # Other Discography
-            url_list = ["https://tamayomi.com/discography/detail.php?id=1017453",
-                        "https://tamayomi.com/discography/detail.php?id=1017468",
-                        "https://tamayomi.com/discography/detail.php?id=1017553",
-                        "https://tamayomi.com/discography/detail.php?id=1017554",
-                        "https://tamayomi.com/discography/detail.php?id=1017555",
-                        "https://tamayomi.com/discography/detail.php?id=1017556"]
-            for url in url_list:
-                bd_soup = self.get_soup(url)
-                try:
-                    images = bd_soup.find('div', class_='disc-single').find_all('img')
-                    for image in images:
-                        image_url = image['src']
-                        if 'http://' not in image_url and 'https://' not in image_url:
-                            image_url = self.PAGE_PREFIX + image_url
-                        image_urls.append(image_url)
-                except:
-                    pass
-
-            for image_url in image_urls:
-                try:
-                    image_filename = image_url.split('/')[-1]
-                    if os.path.exists(other_filepath + '/' + image_filename):
-                        continue
-                    file_path_without_extension = other_filepath + '/' + \
-                        image_filename.split('.jpg')[0].split('.jpeg')[0].split('.png')[0]
-                    self.download_image(image_url, file_path_without_extension)
-                except:
-                    pass
-
-            # Download characters
+    def download_character(self):
+        try:
             chara_filepath = self.base_folder + '/' + constants.FOLDER_CHARACTER
             if not os.path.exists(chara_filepath):
                 os.makedirs(chara_filepath)
 
             image_urls = []
             chara_soup = self.get_soup("https://tamayomi.com/character/")
-            class_names = ['character-thumbs_imageArea', 'character-modal_item_headerFace', 'character-modal_item_imagebox']
+            class_names = ['character-thumbs_imageArea', 'character-modal_item_headerFace',
+                           'character-modal_item_imagebox']
             for class_name in class_names:
                 try:
                     div_tags = chara_soup.find_all('div', class_=class_name)
@@ -996,14 +1043,14 @@ class TamayomiDownload(Spring2020AnimeDownload):
                 file_path_without_extension = chara_filepath + '/' + filename
                 self.download_image(image_url, file_path_without_extension)
         except Exception as e:
-            print("Error in running " + self.__class__.__name__)
+            print("Error in running " + self.__class__.__name__ + ' - Character')
             print(e)
 
 
 # Tsugu Tsugumomo
 class Tsugumomo2Download(Spring2020AnimeDownload):
     title = "Tsugu Tsugumomo"
-    keywords = ["Tsugumomo"]
+    keywords = [title]
 
     STORY_PAGE = "http://tsugumomo.com/story/"
     
@@ -1014,6 +1061,10 @@ class Tsugumomo2Download(Spring2020AnimeDownload):
             os.makedirs(self.base_folder)
     
     def run(self):
+        self.download_episode_preview()
+        self.download_bluray()
+
+    def download_episode_preview(self):
         try:
             soup = self.get_soup(self.STORY_PAGE)
             ep_li = soup.find_all('div', class_='l-sub-title')
@@ -1029,30 +1080,23 @@ class Tsugumomo2Download(Spring2020AnimeDownload):
                     image_url = images[j]['src']
                     file_path_without_extension = self.base_folder + '/' + episode + '_' + str(j + 1).zfill(2)
                     self.download_image(image_url, file_path_without_extension)
-
-            bluray_filepath = self.base_folder + '/' + constants.FOLDER_BLURAY
-            if not os.path.exists(bluray_filepath):
-                os.makedirs(bluray_filepath)
-
-            # Blu-Ray Volume Illustrations
-            image_objs = [
-                {'name': 'bd_1_1', 'url': 'http://tsugumomo.com/wp/wp-content/uploads/2020/04/ss_DSZD08246-01.jpg'},
-                {'name': 'bd_1_2', 'url': 'https://pbs.twimg.com/media/EWlDBBTUYAIelWQ?format=jpg&name=4096x4096'}]
-            for image_obj in image_objs:
-                if os.path.exists(bluray_filepath + '/' + image_obj['name'] + '.png') or \
-                        os.path.exists(bluray_filepath + '/' + image_obj['name'] + '.jpg'):
-                    continue
-                filepath_without_extension = bluray_filepath + '/' + image_obj['name']
-                self.download_image(image_obj['url'], filepath_without_extension)
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
+
+    def download_bluray(self):
+        filepath = self.create_bluray_directory()
+        image_objs = [
+            {'name': 'bd_1_1', 'url': 'http://tsugumomo.com/wp/wp-content/uploads/2020/04/ss_DSZD08246-01.jpg'},
+            {'name': 'bd_1_2', 'url': 'https://pbs.twimg.com/media/EWlDBBTUYAIelWQ?format=jpg&name=4096x4096'},
+            {'name': 'bd_2_2', 'url': 'https://pbs.twimg.com/media/EZ-gw2NUEAAi3G6?format=jpg&name=4096x4096'}]
+        self.download_image_objects(image_objs, filepath)
 
 
 # Yesterday wo Utatte
 class YesterdayDownload(Spring2020AnimeDownload):
     title = "Yesterday wo Utatte"
-    keywords = ["Yesterday wo Utatte", "Sing Yesterday For Me"]
+    keywords = [title, "Sing Yesterday For Me"]
 
     STORY_PAGE = "https://singyesterday.com/story/"
     PAGE_PREFIX = 'https://singyesterday.com/'
