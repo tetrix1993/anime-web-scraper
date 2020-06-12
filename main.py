@@ -1,5 +1,17 @@
 from multiprocessing import Process
 from anime import *
+import migrate
+
+
+def run():
+    migrate.run()
+    downloads = [PlundererDownload(), RailgunTDownload(), ArteDownload(), BrandNewAnimalDownload(), GleipnirDownload(),
+                 HachinanDownload(), HamehuraDownload(), Honzuki2Download(), Kaguyasama2Download(),
+                 KakushigotoDownload(), Kingdom3Download(), NamiyoDownload(), PriconneDownload(), ShachibatoDownload(),
+                 TamayomiDownload(), TeiboDownload(), Tsugumomo2Download(), YesterdayDownload(), HxErosDownload(),
+                 KanokariDownload(), MaohgakuinDownload(), MonIshaDownload(), Oregairu3Download(), PeterGrillDownload(),
+                 ReZero2Download(), UzakiChanDownload()]
+    process_download(downloads)
 
 
 def run_process(download):
@@ -449,6 +461,7 @@ def download_all():
 
 
 if __name__ == '__main__':
+    run()
     #download_all()
 
     #download_spring_2017_anime()
@@ -465,8 +478,8 @@ if __name__ == '__main__':
     #download_summer_2019_anime()
     #download_fall_2019_anime()
     
-    download_winter_2020_anime()
-    download_spring_2020_anime()
+    #download_winter_2020_anime()
+    #download_spring_2020_anime()
     #download_summer_2020_anime()
     
     print("Download completed")
