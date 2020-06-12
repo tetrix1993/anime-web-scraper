@@ -206,6 +206,7 @@ class HachinanDownload(Spring2020AnimeDownload):
     def run(self):
         self.download_episode_preview()
         self.download_bluray()
+        self.download_key_visual()
 
     def download_episode_preview(self):
         try:
@@ -298,6 +299,15 @@ class HachinanDownload(Spring2020AnimeDownload):
                 pass
         '''
 
+    def download_key_visual(self):
+        filepath = self.create_key_visual_directory()
+        image_objs = [
+            {'name': 'kv1', 'url': 'http://hachinan-anime.com/wp-content/uploads/2019/07/（確認用）Hachinan-keyvisual-completeのコピー.jpg'},
+            {'name': 'kv2', 'url': 'http://hachinan-anime.com/wp-content/uploads/2019/12/アニメ「八男って、それはないでしょう！」キービジュアル第2弾.png'},
+            {'name': 'kv3', 'url': 'http://hachinan-anime.com/wp-content/uploads/2020/02/【八男】キービジュアル第3弾.jpg'},
+            {'name': 'kv4', 'url': 'http://hachinan-anime.com/wp-content/themes/hachinan-anime/images/home/img_main.jpg'}]
+        self.download_image_objects(image_objs, filepath)
+
 
 # Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan wo Erandeiraremasen 2nd Season
 class Honzuki2Download(Spring2020AnimeDownload):
@@ -317,6 +327,7 @@ class Honzuki2Download(Spring2020AnimeDownload):
     def run(self):
         self.download_episode_preview()
         self.download_episode_preview_external()
+        self.download_key_visual()
 
     def download_episode_preview(self):
         try:
@@ -370,6 +381,12 @@ class Honzuki2Download(Spring2020AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + ' - MocaNews')
             print(e)
+
+    def download_key_visual(self):
+        filepath = self.create_key_visual_directory()
+        image_objs = [
+            {'name': 'kv', 'url': 'http://booklove-anime.jp/img/index/mainvisual02.jpg'}]
+        self.download_image_objects(image_objs, filepath)
 
 
 # Nami yo Kiitekure
@@ -426,6 +443,7 @@ class TeiboDownload(Spring2020AnimeDownload):
     
     def run(self):
         self.download_episode_preview()
+        self.download_key_visual()
 
     def download_episode_preview(self):
         try:
@@ -463,6 +481,12 @@ class TeiboDownload(Spring2020AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+    def download_key_visual(self):
+        filepath = self.create_key_visual_directory()
+        image_objs = [
+            {'name': 'kv', 'url': 'https://teibotv.com/images/top/v_003.jpg'}]
+        self.download_image_objects(image_objs, filepath)
+
 
 # Kaguya-sama wa Kokurasetai? Tensai-tachi no Renai Zunousen
 class Kaguyasama2Download(Spring2020AnimeDownload):
@@ -480,6 +504,7 @@ class Kaguyasama2Download(Spring2020AnimeDownload):
     
     def run(self):
         self.download_episode_preview()
+        self.download_key_visual()
         self.download_bluray()
         self.download_character()
 
@@ -506,6 +531,15 @@ class Kaguyasama2Download(Spring2020AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
+
+    def download_key_visual(self):
+        filepath = self.create_key_visual_directory()
+        template = 'https://kaguya.love/assets/img/top/img_main%s.jpg'
+        image_objs = []
+        for i in range(1, 4, 1):
+            image_url = template % str(i).zfill(2)
+            image_objs.append({'name': 'kv' + str(i), 'url': image_url})
+        self.download_image_objects(image_objs, filepath)
 
     def download_bluray(self):
         try:
@@ -595,6 +629,11 @@ class KakushigotoDownload(Spring2020AnimeDownload):
             os.makedirs(self.base_folder)
     
     def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+        self.download_bluray()
+            
+    def download_episode_preview(self):
         try:
             soup = self.get_soup(self.STORY_PAGE)
             contents = soup.find_all('div', class_='story_tab_content')
@@ -615,6 +654,23 @@ class KakushigotoDownload(Spring2020AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
+
+    def download_key_visual(self):
+        filepath = self.create_key_visual_directory()
+        template = 'https://kakushigoto-anime.com/wp/wp-content/themes/kakushigoto_common/assets/img/top/kv0%s_pc.jpg'
+        image_objs = []
+        for i in range(1, 5, 1):
+            image_objs.append({'name': 'kv' + str(i), 'url': template % str(i)})
+        self.download_image_objects(image_objs, filepath)
+
+    def download_bluray(self):
+        filepath = self.create_bluray_directory()
+        image_objs = [
+            {'name': 'collab_cd', 'url': 'https://pbs.twimg.com/media/EUbrX69UcAA0qMr?format=jpg&name=medium'},
+            {'name': 'bd_1', 'url': 'https://pbs.twimg.com/media/EUmnFbkU8AUE-1Y?format=jpg&name=large'},
+            {'name': 'bd_2', 'url': 'https://pbs.twimg.com/media/EaTmvQ3UYAE2JIf?format=jpg&name=4096x4096'},
+            {'name': 'bd_bonus_1', 'url': 'https://pbs.twimg.com/media/EXZ763qU8AEVa7j?format=jpg&name=900x900'}]
+        self.download_image_objects(image_objs, filepath)
 
 
 # Kingdom 3rd Season
@@ -668,8 +724,12 @@ class HamehuraDownload(Spring2020AnimeDownload):
         self.base_folder = self.base_folder + "/hamehura"
         if not os.path.exists(self.base_folder):
             os.makedirs(self.base_folder)
-    
+
     def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
         try:
             soup = self.get_soup(self.STORY_PAGE)
             story_content = soup.find_all('div', class_='story_content')
@@ -708,6 +768,13 @@ class HamehuraDownload(Spring2020AnimeDownload):
                     self.download_image(image_url, file_path_without_extension)
         '''
 
+    def download_key_visual(self):
+        filepath = self.create_key_visual_directory()
+        image_objs = [
+            {'name': 'kv4', 'url': 'https://hamehura-anime.com/wp/wp-content/uploads/2020/02/4thKV_FIX.jpg'},
+            {'name': 'kv5', 'url': 'https://hamehura-anime.com/wp/wp-content/uploads/2020/03/第5弾キービジュアル.jpg'}]
+        self.download_image_objects(image_objs, filepath)
+
 
 # Princess Connect! Re:Dive
 class PriconneDownload(Spring2020AnimeDownload):
@@ -726,6 +793,7 @@ class PriconneDownload(Spring2020AnimeDownload):
     
     def run(self):
         self.download_episode_preview()
+        self.download_key_visual()
         self.download_bluray()
         self.download_character()
 
@@ -754,6 +822,11 @@ class PriconneDownload(Spring2020AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
+
+    def download_key_visual(self):
+        filepath = self.create_key_visual_directory()
+        image_objs = [{'name': 'kv', 'url': 'https://anime.priconne-redive.jp/assets/images/top_kv.png'}]
+        self.download_image_objects(image_objs, filepath)
 
     def download_bluray(self):
         bluray_filepath = self.create_bluray_directory()
@@ -817,6 +890,7 @@ class ShachibatoDownload(Spring2020AnimeDownload):
 
     def run(self):
         self.download_episode_preview()
+        self.download_key_visual()
         self.download_bluray()
         self.download_character()
 
@@ -916,6 +990,13 @@ class ShachibatoDownload(Spring2020AnimeDownload):
             print("Error in running " + self.__class__.__name__ + ' - Character')
             print(e)
 
+    def download_key_visual(self):
+        filepath = self.create_key_visual_directory()
+        image_objs = [
+            {'name': 'kv1', 'url': 'https://pbs.twimg.com/media/EPBl4JZUUAQc52k?format=jpg&name=medium'},
+            {'name': 'kv2', 'url': 'https://pbs.twimg.com/media/ERnjhKQUwAIKUEq?format=jpg&name=large'}]
+        self.download_image_objects(image_objs, filepath)
+
 
 # Tamayomi
 class TamayomiDownload(Spring2020AnimeDownload):
@@ -933,6 +1014,7 @@ class TamayomiDownload(Spring2020AnimeDownload):
     
     def run(self):
         self.download_episode_preview()
+        self.download_key_visual()
         self.download_bluray()
         self.download_character()
 
@@ -1046,6 +1128,13 @@ class TamayomiDownload(Spring2020AnimeDownload):
             print("Error in running " + self.__class__.__name__ + ' - Character')
             print(e)
 
+    def download_key_visual(self):
+        filepath = self.create_key_visual_directory()
+        image_objs = [
+            {'name': 'teaser', 'url': 'https://m.imageimg.net/upload/artist_img/TMYMX/176c07d906a0ff6f7fc0d2e9795dccaeb34cf6d0_5d47d5f463bee.jpg'},
+            {'name': 'kv', 'url': 'https://pbs.twimg.com/media/EPmR6ltUUAAGkSa?format=jpg&name=4096x4096'}]
+        self.download_image_objects(image_objs, filepath)
+
 
 # Tsugu Tsugumomo
 class Tsugumomo2Download(Spring2020AnimeDownload):
@@ -1063,6 +1152,7 @@ class Tsugumomo2Download(Spring2020AnimeDownload):
     def run(self):
         self.download_episode_preview()
         self.download_bluray()
+        self.download_key_visual()
 
     def download_episode_preview(self):
         try:
@@ -1091,6 +1181,12 @@ class Tsugumomo2Download(Spring2020AnimeDownload):
             {'name': 'bd_1_2', 'url': 'https://pbs.twimg.com/media/EWlDBBTUYAIelWQ?format=jpg&name=4096x4096'},
             {'name': 'bd_2_1', 'url': 'http://tsugumomo.com/wp/wp-content/uploads/2020/06/DSZD08247-01.jpg'},
             {'name': 'bd_2_2', 'url': 'https://pbs.twimg.com/media/EZ-gw2NUEAAi3G6?format=jpg&name=4096x4096'}]
+        self.download_image_objects(image_objs, filepath)
+
+    def download_key_visual(self):
+        filepath = self.create_key_visual_directory()
+        image_objs = [
+            {'name': 'kv', 'url': 'http://tsugumomo.com/wp/wp-content/themes/tsugumomo/assets/img/top/kv_pc.jpg'}]
         self.download_image_objects(image_objs, filepath)
 
 
