@@ -116,6 +116,7 @@ class KanokariDownload(Summer2020AnimeDownload):
         self.download_episode_preview()
         self.download_key_visual()
         self.download_character()
+        self.download_bluray()
 
     def download_episode_preview(self):
         self.has_website_updated(self.STORY_PAGE)
@@ -162,6 +163,25 @@ class KanokariDownload(Summer2020AnimeDownload):
             print("Error in running " + self.__class__.__name__ + ' - Character')
             print(e)
         self.download_image_objects(image_objs, character_folder)
+
+    def download_bluray(self):
+        bluray_folder = self.create_bluray_directory()
+        image_objs = []
+        url_template = 'https://kanokari-official.com/bluray/vol%s/'
+        try:
+            for i in range(1, 5, 1):
+                bluray_url = url_template % str(i)
+                soup = self.get_soup(bluray_url)
+                images = soup.find('div', class_='bluray-main').find_all('img')
+                for image in images:
+                    image_url = image['src']
+                    image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                    image_objs.append({'name': image_name, 'url': image_url})
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Blu-Ray')
+            print(e)
+        self.download_image_objects(image_objs, bluray_folder)
+        self.has_website_updated(url='https://kanokari-official.com/bluray/store/', cache_name='bd_bonus')
 
 
 # Maou Gakuin no Futekigousha: Shijou Saikyou no Maou no Shiso, Tensei shite Shison-tachi no Gakkou e
