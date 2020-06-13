@@ -7,6 +7,7 @@ import os
 import re
 from bs4 import BeautifulSoup as bs
 from search import *
+import shutil
 
 
 class MainDownload:
@@ -39,9 +40,11 @@ class MainDownload:
             print(e)
         return response
 
-    def has_website_updated(self, url, cache_name='story', headers=None):
+    def has_website_updated(self, url, cache_name='story', headers=None, charset=None):
         if headers is None:
             headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
+        if charset is None:
+            charset = 'utf-8'
         try:
             response = requests.get(url, headers=headers)
             content_length = 0
@@ -53,7 +56,17 @@ class MainDownload:
                 except:
                     print('Error in reading content length for ' + url)
                     return False
-            cache_file = self.base_folder + '/' + cache_name + '.log'
+            log_folder = self.base_folder + '/log'
+            if not os.path.exists(log_folder):
+                os.makedirs(log_folder)
+
+            # Compatibility
+            old_cache_file = self.base_folder + '/' + cache_name + '.log'
+            cache_file = log_folder + '/' + cache_name + '.log'
+            if os.path.exists(old_cache_file):
+                if not os.path.exists(cache_file):
+                    shutil.move(old_cache_file, cache_file)
+
             old_content_length = '0'
             if os.path.exists(cache_file):
                 try:
@@ -61,10 +74,15 @@ class MainDownload:
                         old_content_length = f.read()
                 except:
                     pass
+
             if content_length != old_content_length:
                 print('The website ' + url + ' has been updated.')
                 with open(cache_file, 'w+') as f:
                     f.write(content_length)
+                webpage = log_folder + '/' + cache_name + '_' + datetime.datetime.today().strftime('%Y%m%d%H%M%S')\
+                          + '.html'
+                with open(webpage, 'w', encoding='utf-8') as f:
+                    f.write(str(response.content.decode(charset)))
                 return True
         except Exception as e:
             print(e)
@@ -109,9 +127,8 @@ class MainDownload:
         except Exception as e:
             print(e)
         return response
-    
-    @staticmethod
-    def download_image(url, filepath_without_extension, headers=None):
+
+    def download_image(self, url, filepath_without_extension, headers=None):
         """
         Download image to the filepath
         :param url:
@@ -151,16 +168,14 @@ class MainDownload:
             print("Downloaded " + url)
 
             # Create download log:
-            timenow = str(datetime.datetime.now())
-            split1 = filepath_without_extension.split('/')
-            if len(split1) > 2:
-                filepath = ''
-                for i in range(len(split1) - 1):
-                    filepath += split1[i] + '/'
-                filename = split1[len(split1) - 1]
-                logpath = filepath + 'log.txt'
-                with open(logpath, 'a+', encoding='utf-8') as f:
-                    f.write(timenow + '\t' + filename + '\t' + url + '\n')
+            timenow = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            filename = filepath.replace(self.base_folder, '')
+            log_folder = self.base_folder + '/log'
+            if not os.path.exists(log_folder):
+                os.makedirs(log_folder)
+            logpath = log_folder + '/download.log'
+            with open(logpath, 'a+', encoding='utf-8') as f:
+                f.write(timenow + '\t' + filename + '\t' + url + '\n')
             return 0
         except Exception as e:
             print("Failed to download " + url + ' - ' + str(e))

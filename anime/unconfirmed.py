@@ -11,6 +11,7 @@ from anime.main_download import MainDownload
 # Kimi to Boku no Saigo no Senjou, Aruiwa Sekai ga Hajimaru Seisen https://kimisentv.com/ #キミ戦 #kimisen @kimisen_project
 # Majo no Tabitabi https://majotabi.jp/ #魔女の旅々 #魔女の旅々はいいぞ #majotabi @majotabi_PR
 # Ochikobore Fruit Tart http://ochifuru-anime.com/ #ochifuru @ochifuru_anime
+# Tatoeba Last Dungeon https://lasdan.com/ #ラスダン @lasdan_PR
 # Tonikaku Kawaii http://tonikawa.com/ #トニカクカワイイ #tonikawa @tonikawa_anime
 
 
@@ -396,7 +397,7 @@ class LasdanDownload(UnconfirmedDownload):
 # Tonikaku Kawaii
 class TonikawaDownload(UnconfirmedDownload):
     title = "Tonikaku Kawaii"
-    keywords = [title, "Cawaii", "Fly Me to the Moon"]
+    keywords = [title, "Tonikawa", "Cawaii", "Fly Me to the Moon"]
 
     PAGE_PREFIX = 'http://tonikawa.com/'
 

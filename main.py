@@ -8,9 +8,16 @@ def run():
     downloads = [PlundererDownload(), RailgunTDownload(), ArteDownload(), BrandNewAnimalDownload(), GleipnirDownload(),
                  HachinanDownload(), HamehuraDownload(), Honzuki2Download(), Kaguyasama2Download(),
                  KakushigotoDownload(), Kingdom3Download(), NamiyoDownload(), PriconneDownload(), ShachibatoDownload(),
-                 TamayomiDownload(), TeiboDownload(), Tsugumomo2Download(), YesterdayDownload(), HxErosDownload(),
-                 KanokariDownload(), MaohgakuinDownload(), MonIshaDownload(), Oregairu3Download(), PeterGrillDownload(),
-                 ReZero2Download(), UzakiChanDownload()]
+                 TamayomiDownload(), TeiboDownload(), Tsugumomo2Download(), YesterdayDownload()]
+    subclasses = Summer2020AnimeDownload.__subclasses__()
+    for subclass in subclasses:
+        downloads.append(subclass())
+    process_download(downloads)
+
+    downloads = []
+    subclasses = UnconfirmedDownload.__subclasses__()
+    for subclass in subclasses:
+        downloads.append(subclass())
     process_download(downloads)
 
 
