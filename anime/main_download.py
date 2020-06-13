@@ -47,15 +47,12 @@ class MainDownload:
             charset = 'utf-8'
         try:
             response = requests.get(url, headers=headers)
-            content_length = 0
+            content = str(response.content.decode(charset))
             try:
-                content_length = response.headers['Content-Length']
+                content_length = str(len(content))
             except:
-                try:
-                    content_length = str(len(str(response.content)))
-                except:
-                    print('Error in reading content length for ' + url)
-                    return False
+                print('Error in reading content length for ' + url)
+                return False
             log_folder = self.base_folder + '/log'
             if not os.path.exists(log_folder):
                 os.makedirs(log_folder)
@@ -82,7 +79,7 @@ class MainDownload:
                 webpage = log_folder + '/' + cache_name + '_' + datetime.datetime.today().strftime('%Y%m%d%H%M%S')\
                           + '.html'
                 with open(webpage, 'w', encoding='utf-8') as f:
-                    f.write(str(response.content.decode(charset)))
+                    f.write(content)
                 return True
         except Exception as e:
             print(e)
