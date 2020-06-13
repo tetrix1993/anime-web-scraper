@@ -19,6 +19,8 @@ class UnconfirmedDownload(MainDownload):
     season = "9999-9"
     season_name = "Unconfirmed"
 
+    PAGE_PREFIX = 'https://www.cheat-kusushi.jp/'
+
     def __init__(self):
         super().__init__()
         self.base_folder = self.base_folder + "/unconfirmed"
@@ -37,20 +39,17 @@ class CheatKusushiDownload(UnconfirmedDownload):
             os.makedirs(self.base_folder)
 
     def run(self):
+        self.download_episode_preview()
         self.download_key_visual()
 
-    def download_key_visual(self):
-        keyvisual_folder = self.base_folder + '/' + constants.FOLDER_KEY_VISUAL
-        if not os.path.exists(keyvisual_folder):
-            os.makedirs(keyvisual_folder)
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
 
+    def download_key_visual(self):
+        keyvisual_folder = self.create_key_visual_directory()
         image_objs = [
             {'name': 'teaser', 'url': 'https://www.cheat-kusushi.jp/img/top-main.png'}]
-        for image_obj in image_objs:
-            if os.path.exists(keyvisual_folder + '/' + image_obj['name'] + '.png'):
-                continue
-            filepath_without_extension = keyvisual_folder + '/' + image_obj['name']
-            self.download_image(image_obj['url'], filepath_without_extension)
+        self.download_image_objects(image_objs, keyvisual_folder)
 
 
 # Higurashi no Naku Koro ni (2020)
@@ -67,8 +66,12 @@ class Higurashi2020Download(UnconfirmedDownload):
             os.makedirs(self.base_folder)
 
     def run(self):
+        self.download_episode_preview()
         self.download_key_visual()
         self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
 
     def download_key_visual(self):
         filepath = self.create_key_visual_directory()
@@ -101,6 +104,8 @@ class IwakakeruDownload(UnconfirmedDownload):
     title = "Iwa Kakeru!: Sport Climbing Girls"
     keywords = [title, "Iwakakeru"]
 
+    PAGE_PREFIX = 'http://iwakakeru-anime.com/'
+
     def __init__(self):
         super().__init__()
         self.base_folder = self.base_folder + "/iwakakeru"
@@ -108,7 +113,11 @@ class IwakakeruDownload(UnconfirmedDownload):
             os.makedirs(self.base_folder)
 
     def run(self):
+        self.download_episode_preview()
         self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
 
     def download_key_visual(self):
         keyvisual_folder = self.base_folder + '/' + constants.FOLDER_KEY_VISUAL
@@ -130,6 +139,8 @@ class KimisenDownload(UnconfirmedDownload):
     title = "Kimi to Boku no Saigo no Senjou, Aruiwa Sekai ga Hajimaru Seisen"
     keywords = [title, "Kimisen"]
 
+    PAGE_PREFIX = 'https://kimisentv.com/'
+
     def __init__(self):
         super().__init__()
         self.base_folder = self.base_folder + "/kimisen"
@@ -137,21 +148,17 @@ class KimisenDownload(UnconfirmedDownload):
             os.makedirs(self.base_folder)
 
     def run(self):
+        self.download_episode_preview()
         self.download_key_visual()
 
-    def download_key_visual(self):
-        keyvisual_folder = self.base_folder + '/' + constants.FOLDER_KEY_VISUAL
-        if not os.path.exists(keyvisual_folder):
-            os.makedirs(keyvisual_folder)
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
 
+    def download_key_visual(self):
+        keyvisual_folder = self.create_key_visual_directory()
         image_objs = [
             {'name': 'teaser', 'url': 'https://kimisentv.com/teaser/images/top-main-vis.jpg'}]
-        for image_obj in image_objs:
-            if os.path.exists(keyvisual_folder + '/' + image_obj['name'] + '.png') or \
-                    os.path.exists(keyvisual_folder + '/' + image_obj['name'] + '.jpg'):
-                continue
-            filepath_without_extension = keyvisual_folder + '/' + image_obj['name']
-            self.download_image(image_obj['url'], filepath_without_extension)
+        self.download_image_objects(image_objs, keyvisual_folder)
 
 
 # Kuma Kuma Kuma Bear
@@ -168,8 +175,12 @@ class KumaBearDownload(UnconfirmedDownload):
             os.makedirs(self.base_folder)
 
     def run(self):
+        self.download_episode_preview()
         self.download_key_visual()
         self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
 
     def download_key_visual(self):
         keyvisual_folder = self.base_folder + '/' + constants.FOLDER_KEY_VISUAL
@@ -237,6 +248,8 @@ class MajotabiDownload(UnconfirmedDownload):
     title = "Majo no Tabitabi"
     keywords = [title, "Wandering Witch: The Journey of Elaina", "Majotabi"]
 
+    PAGE_PREFIX = 'https://majotabi.jp/'
+
     def __init__(self):
         super().__init__()
         self.base_folder = self.base_folder + "/majotabi"
@@ -244,23 +257,20 @@ class MajotabiDownload(UnconfirmedDownload):
             os.makedirs(self.base_folder)
 
     def run(self):
+        self.download_episode_preview()
         self.download_key_visual()
 
-    def download_key_visual(self):
-        keyvisual_folder = self.base_folder + '/' + constants.FOLDER_KEY_VISUAL
-        if not os.path.exists(keyvisual_folder):
-            os.makedirs(keyvisual_folder)
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
 
+    def download_key_visual(self):
+        keyvisual_folder = self.create_key_visual_directory()
         image_objs = [
             {'name': 'kv1', 'url': 'https://pbs.twimg.com/media/EHPjPtFU8AAHo9S?format=jpg&name=large'},
             {'name': 'kv2', 'url': 'https://pbs.twimg.com/media/ESahsP9UEAAhzgn?format=jpg&name=large'},
             {'name': 'kv3', 'url': 'https://pbs.twimg.com/media/EUqV9B7UcAAOCeE?format=jpg&name=medium'},
             {'name': 'kv4', 'url': 'https://pbs.twimg.com/media/EW64PYgUMAAGDIk?format=jpg&name=4096x4096'}]
-        for image_obj in image_objs:
-            if os.path.exists(keyvisual_folder + '/' + image_obj['name'] + '.png'):
-                continue
-            filepath_without_extension = keyvisual_folder + '/' + image_obj['name']
-            self.download_image(image_obj['url'], filepath_without_extension)
+        self.download_image_objects(image_objs, keyvisual_folder)
 
 
 # Ochikobore Fruit Tart
@@ -268,6 +278,7 @@ class OchifuruDownload(UnconfirmedDownload):
     title = "Ochikobore Fruit Tart"
     keywords = [title, "Dropout Idol", "Ochifuru"]
 
+    PAGE_PREFIX = 'http://ochifuru-anime.com/'
     CHARA_IMAGE_TEMPLATE = 'http://ochifuru-anime.com/images/chara/%s/p_002.png'
 
     def __init__(self):
@@ -277,26 +288,18 @@ class OchifuruDownload(UnconfirmedDownload):
             os.makedirs(self.base_folder)
 
     def run(self):
-        try:
-            self.download_key_visual()
-            self.download_character()
-        except Exception as e:
-            print("Error in running " + self.__class__.__name__)
-            print(e)
+        self.download_episode_preview()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
 
     def download_key_visual(self):
-        keyvisual_folder = self.base_folder + '/' + constants.FOLDER_KEY_VISUAL
-        if not os.path.exists(keyvisual_folder):
-            os.makedirs(keyvisual_folder)
-
+        keyvisual_folder = self.create_key_visual_directory()
         image_objs = [
             {'name': 'kv', 'url': 'https://pbs.twimg.com/media/EKb4OniUwAELo-b?format=jpg&name=medium'}]
-        for image_obj in image_objs:
-            if os.path.exists(keyvisual_folder + '/' + image_obj['name'] + '.png') or \
-                    os.path.exists(keyvisual_folder + '/' + image_obj['name'] + '.jpg'):
-                continue
-            filepath_without_extension = keyvisual_folder + '/' + image_obj['name']
-            self.download_image(image_obj['url'], filepath_without_extension)
+        self.download_image_objects(image_objs, keyvisual_folder)
 
     def download_character(self):
         character_folder = self.base_folder + '/' + constants.FOLDER_CHARACTER
@@ -317,13 +320,85 @@ class OchifuruDownload(UnconfirmedDownload):
                 if result == -1:
                     break
         except Exception as e:
-            pass
+            print("Error in running " + self.__class__.__name__ + ' - Character')
+            print(e)
+
+
+# Tatoeba Last Dungeon Mae no Mura no Shounen ga Joban no Machi de Kurasu Youna Monogatari
+class LasdanDownload(UnconfirmedDownload):
+    title = "Tatoeba Last Dungeon Mae no Mura no Shounen ga Joban no Machi de Kurasu Youna Monogatari"
+    keywords = [title, "Lasdan"]
+
+    PAGE_PREFIX = 'https://lasdan.com/'
+
+    def __init__(self):
+        super().__init__()
+        self.base_folder = self.base_folder + "/lasdan"
+        if not os.path.exists(self.base_folder):
+            os.makedirs(self.base_folder)
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        filepath = self.create_key_visual_directory()
+        image_objs = [
+            {'name': 'kv1', 'url': 'https://pbs.twimg.com/media/ETrMsHWUMAIIE59?format=jpg&name=large'},
+            {'name': 'kv2', 'url': 'https://pbs.twimg.com/media/ETsAx85UcAEJSAn?format=jpg&name=900x900'}]
+        self.download_image_objects(image_objs, filepath)
+
+    def download_character(self):
+        chara_folder = self.create_character_directory()
+        chara_main_url = 'https://lasdan.com/character/lloyd.html'
+        image_objs = []
+        try:
+            soup = self.get_soup(chara_main_url)
+            chara_list = soup.find('div', id='c_list_block_0001').find_all('a')
+            cache_filepath = chara_folder + '/chara.log'
+            chara_link_visited = []
+            if os.path.exists(cache_filepath):
+                with open(cache_filepath, 'r', encoding='utf-8') as f:
+                    try:
+                        line = f.readline()
+                        while line:
+                            chara_link_visited.append(line.strip())
+                            line = f.readline()
+                    except:
+                        pass
+            for chara_tag in chara_list:
+                chara_temp_url = chara_tag['href'].replace('../', '')
+                chara_url = self.PAGE_PREFIX + chara_temp_url
+                chara_page_name = chara_temp_url.split('/')[-1]
+                if chara_page_name in chara_link_visited:
+                    continue
+                chara_soup = self.get_soup(chara_url)
+                body_image_url = self.PAGE_PREFIX + \
+                    chara_soup.find('div', class_='charaBody').find('img')['src'].replace('../', '')
+                body_image_name = self.extract_image_name_from_url(body_image_url, with_extension=False)
+                image_objs.append({'name': body_image_name, 'url': body_image_url})
+                face_image_url = self.PAGE_PREFIX + \
+                    chara_soup.find('div', class_='charaFace').find('img')['src'].replace('../', '')
+                face_image_name = self.extract_image_name_from_url(face_image_url, with_extension=False)
+                image_objs.append({'name': face_image_name, 'url': face_image_url})
+                with open(cache_filepath, 'a+', encoding='utf-8') as f:
+                    f.write(chara_page_name + '\n')
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Character')
+            print(e)
+        self.download_image_objects(image_objs, chara_folder)
 
 
 # Tonikaku Kawaii
 class TonikawaDownload(UnconfirmedDownload):
     title = "Tonikaku Kawaii"
     keywords = [title, "Cawaii", "Fly Me to the Moon"]
+
+    PAGE_PREFIX = 'http://tonikawa.com/'
 
     def __init__(self):
         super().__init__()
@@ -332,7 +407,11 @@ class TonikawaDownload(UnconfirmedDownload):
             os.makedirs(self.base_folder)
 
     def run(self):
+        self.download_episode_preview()
         self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
 
     def download_key_visual(self):
         keyvisual_folder = self.base_folder + '/' + constants.FOLDER_KEY_VISUAL
