@@ -166,22 +166,48 @@ class KanokariDownload(Summer2020AnimeDownload):
 
     def download_bluray(self):
         bluray_folder = self.create_bluray_directory()
-        image_objs = []
         url_template = 'https://kanokari-official.com/bluray/vol%s/'
         try:
             for i in range(1, 5, 1):
+                image_objs = []
                 bluray_url = url_template % str(i)
                 soup = self.get_soup(bluray_url)
-                images = soup.find('div', class_='bluray-main').find_all('img')
+                bluray_div = soup.find('div', class_='bluray-main')
+                if bluray_div is None:
+                    continue
+                images = bluray_div.find_all('img')
+                if images is None or len(images) == 0:
+                    continue
                 for image in images:
                     image_url = image['src']
                     image_name = self.extract_image_name_from_url(image_url, with_extension=False)
                     image_objs.append({'name': image_name, 'url': image_url})
+                self.download_image_objects(image_objs, bluray_folder)
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + ' - Blu-Ray')
             print(e)
+
+        image_objs = []
+        bd_bonus_page_url = 'https://kanokari-official.com/bluray/store/'
+        self.has_website_updated(url=bd_bonus_page_url, cache_name='bd_bonus')
+        try:
+            soup = self.get_soup(bd_bonus_page_url)
+            bonus_blocks = soup.find_all('li')
+            if bonus_blocks is not None and len(bonus_blocks) > 0:
+                for bonus_block in bonus_blocks:
+                    images = bonus_block.find_all('div', class_='slider__img')
+                    if images is not None and len(images) > 0:
+                        for image in images:
+                            try:
+                                image_url = image['style'].split('url(')[1].split(');')[0]
+                                image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                                image_objs.append({'name': image_name, 'url': image_url})
+                            except:
+                                pass
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Blu-Ray Bonus')
+            print(e)
         self.download_image_objects(image_objs, bluray_folder)
-        self.has_website_updated(url='https://kanokari-official.com/bluray/store/', cache_name='bd_bonus')
 
 
 # Maou Gakuin no Futekigousha: Shijou Saikyou no Maou no Shiso, Tensei shite Shison-tachi no Gakkou e
