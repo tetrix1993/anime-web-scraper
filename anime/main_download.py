@@ -39,7 +39,7 @@ class MainDownload:
             print(e)
         return response
 
-    def website_has_updated(self, url, cache_name='story', headers=None):
+    def has_website_updated(self, url, cache_name='story', headers=None):
         if headers is None:
             headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
         try:
@@ -53,7 +53,7 @@ class MainDownload:
                 except:
                     print('Error in reading content length for ' + url)
                     return False
-            cache_file = self.base_folder + '/' + cache_name
+            cache_file = self.base_folder + '/' + cache_name + '.log'
             old_content_length = '0'
             if os.path.exists(cache_file):
                 try:

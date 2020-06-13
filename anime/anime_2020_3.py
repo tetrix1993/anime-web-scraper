@@ -45,7 +45,7 @@ class HxErosDownload(Summer2020AnimeDownload):
         self.download_character()
 
     def download_episode_preview(self):
-        self.website_has_updated(self.STORY_PAGE)
+        self.has_website_updated(self.STORY_PAGE)
 
     def download_key_visual(self):
         filepath = self.create_key_visual_directory()
@@ -118,7 +118,7 @@ class KanokariDownload(Summer2020AnimeDownload):
         self.download_character()
 
     def download_episode_preview(self):
-        self.website_has_updated(self.STORY_PAGE)
+        self.has_website_updated(self.STORY_PAGE)
 
     def download_key_visual(self):
         keyvisual_folder = self.create_key_visual_directory()
@@ -185,7 +185,7 @@ class MaohgakuinDownload(Summer2020AnimeDownload):
         self.download_character()
 
     def download_episode_preview(self):
-        self.website_has_updated(self.STORY_PAGE)
+        self.has_website_updated(self.STORY_PAGE)
 
     def download_key_visual(self):
         keyvisual_folder = self.create_key_visual_directory()
@@ -246,7 +246,7 @@ class MonIshaDownload(Summer2020AnimeDownload):
         self.download_character()
 
     def download_episode_preview(self):
-        self.website_has_updated(self.STORY_PAGE)
+        self.has_website_updated(self.STORY_PAGE)
 
     def download_key_visual(self):
         keyvisual_folder = self.base_folder + '/' + constants.FOLDER_KEY_VISUAL
@@ -302,7 +302,7 @@ class PeterGrillDownload(Summer2020AnimeDownload):
         self.download_character()
 
     def download_episode_preview(self):
-        self.website_has_updated(self.PAGE_PREFIX)
+        self.has_website_updated(self.PAGE_PREFIX)
 
     def download_key_visual(self):
         keyvisual_folder = self.create_key_visual_directory()
@@ -350,7 +350,7 @@ class ReZero2Download(Summer2020AnimeDownload):
         self.download_key_visual()
 
     def download_episode_preview(self):
-        self.website_has_updated(self.STORY_PAGE)
+        self.has_website_updated(self.STORY_PAGE)
 
     def download_key_visual(self):
         keyvisual_folder = self.create_key_visual_directory()
@@ -379,7 +379,7 @@ class UzakiChanDownload(Summer2020AnimeDownload):
         self.download_key_visual()
 
     def download_episode_preview(self):
-        self.website_has_updated(self.PAGE_PREFIX)
+        self.has_website_updated(self.PAGE_PREFIX)
 
     def download_key_visual(self):
         keyvisual_folder = self.create_key_visual_directory()
@@ -413,7 +413,7 @@ class Oregairu3Download(Summer2020AnimeDownload):
 
     def download_episode_preview(self):
         try:
-            self.website_has_updated(self.STORY_PAGE)
+            self.has_website_updated(self.STORY_PAGE)
             try:
                 soup = self.get_soup(self.STORY_PAGE, decode=True)
                 story_nav = soup.find('ul', class_='story-nav')
