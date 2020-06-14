@@ -325,6 +325,51 @@ class OchifuruDownload(UnconfirmedDownload):
             print(e)
 
 
+# Senyoku no Sigrdrifa
+class SigrdrifaDownload(UnconfirmedDownload):
+    title = "Senyoku no Sigrdrifa"
+    keywords = [title, "Warlords of Sigrdrifa", "Sigururi"]
+
+    PAGE_PREFIX = "https://sigururi.com/"
+
+    def __init__(self):
+        super().__init__()
+        self.base_folder = self.base_folder + "/sigrdrifa"
+        if not os.path.exists(self.base_folder):
+            os.makedirs(self.base_folder)
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        image_objs = [{'name': 'kv_01_pc', 'url': 'https://sigururi.com/assets/img/top/kv_01_pc.jpg'},
+                      {'name': 'kv_01_sp', 'url': 'https://sigururi.com/assets/img/top/kv_01_sp.jpg'},
+                      {'name': 'kv_02_pc', 'url': 'https://sigururi.com/assets/img/top/kv_02_pc.jpg'},
+                      {'name': 'kv_02_sp', 'url': 'https://sigururi.com/assets/img/top/kv_02_sp.jpg'}]
+        self.download_image_objects(image_objs, folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        image_url_template = 'https://sigururi.com/assets/img/chara/chara_%s.png'
+        i = 0
+        while True:
+            i += 1
+            image_url = image_url_template % str(i).zfill(2)
+            filepath_without_extension = folder + '/chara_' + str(i).zfill(2)
+            filepath = filepath_without_extension + '.png'
+            if os.path.exists(filepath):
+                continue
+            result = self.download_image(image_url, filepath_without_extension)
+            if result == -1:
+                break
+
+
 # Tatoeba Last Dungeon Mae no Mura no Shounen ga Joban no Machi de Kurasu Youna Monogatari
 class LasdanDownload(UnconfirmedDownload):
     title = "Tatoeba Last Dungeon Mae no Mura no Shounen ga Joban no Machi de Kurasu Youna Monogatari"
