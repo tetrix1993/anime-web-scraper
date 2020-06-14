@@ -542,26 +542,31 @@ class Kaguyasama2Download(Spring2020AnimeDownload):
         self.download_image_objects(image_objs, filepath)
 
     def download_bluray(self):
+        self.has_website_updated('https://kaguya.love/bddvd/', 'bd_bonus')
         try:
             image_urls = []
             other_filepath = self.base_folder + '/' + constants.FOLDER_BLURAY
             if not os.path.exists(other_filepath):
                 os.makedirs(other_filepath)
-            url_list = ["https://kaguya.love/bddvd/",
-                        "https://kaguya.love/bddvd/02.html",
-                        "https://kaguya.love/bddvd/03.html",
-                        "https://kaguya.love/bddvd/04.html",
-                        "https://kaguya.love/bddvd/05.html",
-                        "https://kaguya.love/bddvd/06.html"]
+            url_list = ["https://kaguya.love/bddvd/"]
+            for i in range(2, 7, 1):
+                url_list.append('https://kaguya.love/bddvd/%s.html' % str(i).zfill(2))
             for url in url_list:
                 bd_soup = self.get_soup(url)
                 try:
-                    images = bd_soup.find('div', class_='p-bddvd').find_all('img')
-                    for image in images:
-                        image_url = image['src'].replace('../..', '').replace('..', '')
-                        if 'http://' not in image_url and 'https://' not in image_url:
-                            image_url = self.PAGE_PREFIX + image_url
-                        image_urls.append(image_url)
+                    package_tag = bd_soup.find('figure', class_='jk')
+                    if package_tag is not None:
+                        package_image = package_tag.find('img')
+                        if package_image is not None:
+                            image_url = self.PAGE_PREFIX + package_image['src']
+                            image_urls.append(image_url)
+                    novelty_tags = bd_soup.find_all('figure', class_='novelty_img')
+                    if novelty_tags is not None and len(novelty_tags) > 0:
+                        for novelty_tag in novelty_tags:
+                            image_tag = novelty_tag.find('img')
+                            if image_tag is not None:
+                                image_url = self.PAGE_PREFIX + image_tag['src'].replace('..', '')
+                                image_urls.append(image_url)
                 except:
                     pass
 
