@@ -233,6 +233,7 @@ class MaohgakuinDownload(Summer2020AnimeDownload):
     def download_episode_preview(self):
         self.has_website_updated(self.STORY_PAGE)
 
+
     def download_key_visual(self):
         keyvisual_folder = self.create_key_visual_directory()
         image_objs = [
@@ -288,11 +289,22 @@ class MonIshaDownload(Summer2020AnimeDownload):
 
     def run(self):
         self.download_episode_preview()
+        self.download_intro()
         self.download_key_visual()
         self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.STORY_PAGE)
+
+    def download_intro(self):
+        intro_folder = self.create_custom_directory(constants.FOLDER_INTRO)
+        image_objs = []
+        intro_image_url_template = 'https://mon-isha-anime.com/images/story/st_ph_a%s.jpg'
+        for i in range(26):
+            image_url = intro_image_url_template % str(i + 1).zfill(2)
+            image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+            image_objs.append({'name': image_name, 'url': image_url})
+        self.download_image_objects(image_objs, intro_folder)
 
     def download_key_visual(self):
         keyvisual_folder = self.base_folder + '/' + constants.FOLDER_KEY_VISUAL
