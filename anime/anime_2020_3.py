@@ -233,7 +233,6 @@ class MaohgakuinDownload(Summer2020AnimeDownload):
     def download_episode_preview(self):
         self.has_website_updated(self.STORY_PAGE)
 
-
     def download_key_visual(self):
         keyvisual_folder = self.create_key_visual_directory()
         image_objs = [
@@ -435,6 +434,7 @@ class UzakiChanDownload(Summer2020AnimeDownload):
     def run(self):
         self.download_episode_preview()
         self.download_key_visual()
+        self.download_bluray()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX)
@@ -445,6 +445,25 @@ class UzakiChanDownload(Summer2020AnimeDownload):
             {'name': 'kv', 'url': 'https://pbs.twimg.com/media/EP1u35XUEAAvg4f?format=jpg&name=large'},
             {'name': 'kv2', 'url': 'https://pbs.twimg.com/media/EXi1RaHUYAAVJPM?format=jpg&name=medium'}]
         self.download_image_objects(image_objs, keyvisual_folder)
+
+    def download_bluray(self):
+        bd_url = 'https://uzakichan.com/package.html'
+        self.has_website_updated(bd_url, 'bd')
+        folder = self.create_bluray_directory()
+        image_objs = []
+        try:
+            soup = self.get_soup(bd_url)
+            specialboxes = soup.find_all('div', class_='specialbox')
+            for specialbox in specialboxes:
+                images = specialbox.find_all('img')
+                for image in images:
+                    image_url = self.PAGE_PREFIX + image['src']
+                    image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                    image_objs.append({'name': image_name, 'url': image_url})
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Blu-Ray')
+            print(e)
+        self.download_image_objects(image_objs, folder)
 
 
 # Yahari Ore no Seishun Love Comedy wa Machigatteiru. Kan
