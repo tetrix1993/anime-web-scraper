@@ -58,6 +58,7 @@ class DarwinsGameDownload(Winter2020AnimeDownload):
 
     def download_bluray(self):
         bluray_filepath = self.create_bluray_directory()
+        '''
         try:
             bd_soup = self.get_soup(self.BD_PAGE)
             bd_tags = bd_soup.find('ul', class_='nav_package').find_all('img')
@@ -70,8 +71,16 @@ class DarwinsGameDownload(Winter2020AnimeDownload):
                     self.download_image(bd_link, filepath_without_extension)
         except:
             pass
-
+        '''
         image_objs = [
+            {'name': 'bd_1_1', 'url': 'https://pbs.twimg.com/media/EPNlw-1UYAEFHTR?format=jpg&name=4096x4096'},
+            {'name': 'bd_1_2', 'url': 'https://pbs.twimg.com/media/EPNlw-1UEAA-pLI?format=jpg&name=4096x4096'},
+            {'name': 'bd_2_1', 'url': 'https://pbs.twimg.com/media/ETPHRi2UMAYlNoj?format=png&name=900x900'},
+            {'name': 'bd_2_2', 'url': 'https://pbs.twimg.com/media/ETPHSqoU8AASZkk?format=png&name=900x900'},
+            {'name': 'bd_3_1', 'url': 'https://darwins-game.com/assets/img/bddvd/img_jk_03.jpg'},
+            {'name': 'bd_3_2', 'url': 'https://pbs.twimg.com/media/EVO8qahUMAApK2A?format=jpg&name=4096x4096'},
+            {'name': 'bd_4_1', 'url': 'https://pbs.twimg.com/media/Eai1XvsVAAAcHGN?format=jpg&name=4096x4096'},
+            {'name': 'bd_4_2', 'url': 'https://pbs.twimg.com/media/Eai1a3PUMAAtii5?format=jpg&name=4096x4096'},
             {'name': 'bd_bonus_1', 'url': 'https://darwins-game.com/assets/img/bddvd/img_animate.jpg'},
             {'name': 'bd_bonus_2', 'url': 'https://darwins-game.com/assets/img/bddvd/img_aniplex03.jpg'},
             {'name': 'bd_bonus_3', 'url': 'https://darwins-game.com/assets/img/bddvd/img_amazon.jpg'},
