@@ -7,6 +7,7 @@ from anime.main_download import MainDownload
 # Cheat Kusushi no Slow Life: Isekai ni Tsukurou Drugstore https://www.cheat-kusushi.jp/ #チート薬師 #スローライフ @cheat_kusushi
 # Higurashi no Naku Koro ni (2020) https://higurashianime.com/ #ひぐらし @higu_anime
 # Iwa Kakeru!: Sport Climbing Girls http://iwakakeru-anime.com/ #いわかける #iwakakeru @iwakakeru_anime
+# Kaifuku Jutsushi no Yarinaoshi http://kaiyari.com/ #回復術士 @kaiyari_anime
 # Kuma Kuma Kuma Bear https://kumakumakumabear.com/ #くまクマ熊ベアー #kumabear @kumabear_anime
 # Kimi to Boku no Saigo no Senjou, Aruiwa Sekai ga Hajimaru Seisen https://kimisentv.com/ #キミ戦 #kimisen @kimisen_project
 # Majo no Tabitabi https://majotabi.jp/ #魔女の旅々 #魔女の旅々はいいぞ #majotabi @majotabi_PR
@@ -133,6 +134,35 @@ class IwakakeruDownload(UnconfirmedDownload):
             image_without_extension = self.extract_image_name_from_url(image_url, with_extension=False)
             filepath_without_extension = keyvisual_folder + '/' + image_without_extension
             self.download_image(image_url, filepath_without_extension)
+
+
+# Kaifuku Jutsushi no Yarinaoshi
+class KaiyariDownload(UnconfirmedDownload):
+    title = "Kaifuku Jutsushi no Yarinaoshi"
+    keywords = [title, "Kaiyari", "Redo of Healer"]
+
+    PAGE_PREFIX = "http://kaiyari.com/"
+
+    def __init__(self):
+        super().__init__()
+        self.base_folder = self.base_folder + "/kaiyari"
+        if not os.path.exists(self.base_folder):
+            os.makedirs(self.base_folder)
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        image_objs = [{'name': 'announce', 'url': 'http://kaiyari.com/teaser/images/top-main-vis.jpg'},
+            {'name': 'announce_2', 'url': 'https://pbs.twimg.com/media/EJ0V4iwVUAE-Ep7?format=jpg&name=medium'},
+            {'name': 'teaser', 'url': 'http://kaiyari.com/teaser/images/top-main-vis2.jpg'},
+            {'name': 'teaser_2', 'url': 'https://pbs.twimg.com/media/EaizJUOU8AATcDK?format=jpg&name=medium'}]
+        self.download_image_objects(image_objs, folder)
 
 
 # Kimi to Boku no Saigo no Senjou, Aruiwa Sekai ga Hajimaru Seisen
