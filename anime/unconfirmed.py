@@ -11,6 +11,7 @@ from anime.main_download import MainDownload
 # Kuma Kuma Kuma Bear https://kumakumakumabear.com/ #くまクマ熊ベアー #kumabear @kumabear_anime
 # Kimi to Boku no Saigo no Senjou, Aruiwa Sekai ga Hajimaru Seisen https://kimisentv.com/ #キミ戦 #kimisen @kimisen_project
 # Majo no Tabitabi https://majotabi.jp/ #魔女の旅々 #魔女の旅々はいいぞ #majotabi @majotabi_PR
+# Maou-jou de Oyasumi https://maoujo-anime.com/ #魔王城でおやすみ @maoujo_anime
 # Ochikobore Fruit Tart http://ochifuru-anime.com/ #ochifuru @ochifuru_anime
 # Tatoeba Last Dungeon https://lasdan.com/ #ラスダン @lasdan_PR
 # Tonikaku Kawaii http://tonikawa.com/ #トニカクカワイイ #tonikawa @tonikawa_anime
@@ -302,6 +303,50 @@ class MajotabiDownload(UnconfirmedDownload):
             {'name': 'kv3', 'url': 'https://pbs.twimg.com/media/EUqV9B7UcAAOCeE?format=jpg&name=medium'},
             {'name': 'kv4', 'url': 'https://pbs.twimg.com/media/EW64PYgUMAAGDIk?format=jpg&name=4096x4096'}]
         self.download_image_objects(image_objs, keyvisual_folder)
+
+
+# Maou-jou de Oyasumi
+class MaoujoDownload(UnconfirmedDownload):
+    title = "Maou-jou de Oyasumi"
+    keywords = [title, "Maoujo", "Sleepy Princess in the Demon Castle"]
+
+    PAGE_PREFIX = 'https://maoujo-anime.com/'
+
+    def __init__(self):
+        super().__init__()
+        self.base_folder = self.base_folder + "/maoujo"
+        if not os.path.exists(self.base_folder):
+            os.makedirs(self.base_folder)
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        image_objs = [{'name': 'teaser', 'url': 'https://pbs.twimg.com/media/EOUT0DDU0AEEKKN?format=jpg&name=900x900'},
+                      {'name': 'teaser_2', 'url': 'https://maoujo-anime.com/img/visual/visual_01.png'}]
+        self.download_image_objects(image_objs, folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        image_objs = []
+        try:
+            json_obj = self.get_json('https://maoujo-anime.com/character/chara_data.php')
+            charas = json_obj['charas']
+            for chara in charas:
+                image_url = self.PAGE_PREFIX + chara['images']['visual'].split('?')[0]
+                image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                image_objs.append({'name': image_name, 'url': image_url})
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Character")
+            print(e)
+        self.download_image_objects(image_objs, folder)
+
 
 
 # Ochikobore Fruit Tart
