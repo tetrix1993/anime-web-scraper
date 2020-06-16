@@ -444,6 +444,7 @@ class TeiboDownload(Spring2020AnimeDownload):
     def run(self):
         self.download_episode_preview()
         self.download_key_visual()
+        self.download_bluray()
 
     def download_episode_preview(self):
         try:
@@ -486,6 +487,34 @@ class TeiboDownload(Spring2020AnimeDownload):
         image_objs = [
             {'name': 'kv', 'url': 'https://teibotv.com/images/top/v_003.jpg'}]
         self.download_image_objects(image_objs, filepath)
+
+    def download_bluray(self):
+        folder = self.create_bluray_directory()
+        image_objs = []
+        try:
+            soup = self.get_soup('https://teibotv.com/package.html')
+            for i in range(3):
+                volume_class = 'vol' + str(i + 1).zfill(2)
+                elem = soup.find('div', class_=volume_class)
+                if elem is not None:
+                    images = elem.find_all('img')
+                    if images is not None and len(images) > 0:
+                        for image in images:
+                            image_url = self.PAGE_PREFIX + image['src']
+                            image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                            image_objs.append({'name': image_name, 'url': image_url})
+            bonus_elem = soup.find('div', class_='tokuten')
+            if bonus_elem is not None:
+                images = bonus_elem.find_all('img')
+                if images is not None and len(images) > 0:
+                    for image in images:
+                        image_url = self.PAGE_PREFIX + image['src']
+                        image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                        image_objs.append({'name': image_name, 'url': image_url})
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Blu-Ray')
+            print(e)
+        self.download_image_objects(image_objs, folder)
 
 
 # Kaguya-sama wa Kokurasetai? Tensai-tachi no Renai Zunousen
