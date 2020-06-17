@@ -222,7 +222,9 @@ class HachinanDownload(Spring2020AnimeDownload):
                 story_soup = self.get_soup(self.PAGE_PREFIX + a_tag['href'])
                 images = story_soup.find('ul', class_='capture').find_all('img')
                 for j in range(len(images)):
-                    image_url = self.PAGE_PREFIX + images[j]['src']
+                    image_url = images[j]['src']
+                    if self.PAGE_PREFIX not in image_url:
+                        image_url = self.PAGE_PREFIX + image_url
                     file_path_without_extension = self.base_folder + '/' + episode + '_' + str(j + 1)
                     self.download_image(image_url, file_path_without_extension)
         except Exception as e:
