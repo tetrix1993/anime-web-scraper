@@ -329,7 +329,9 @@ class MaoujoDownload(UnconfirmedDownload):
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         image_objs = [{'name': 'teaser', 'url': 'https://pbs.twimg.com/media/EOUT0DDU0AEEKKN?format=jpg&name=900x900'},
-                      {'name': 'teaser_2', 'url': 'https://maoujo-anime.com/img/visual/visual_01.png'}]
+                      {'name': 'teaser_2', 'url': 'https://maoujo-anime.com/img/visual/visual_01.png'},
+                      {'name': 'gensaku_20200527', 'url': 'https://maoujo-anime.com/special/illust/gensaku_20200527.jpg'},
+                      {'name': 'gensaku_twitter', 'url': 'https://pbs.twimg.com/media/EY_hB6lVcAAduDe?format=jpg&name=medium'}]
         self.download_image_objects(image_objs, folder)
 
     def download_character(self):
@@ -346,7 +348,6 @@ class MaoujoDownload(UnconfirmedDownload):
             print("Error in running " + self.__class__.__name__ + " - Character")
             print(e)
         self.download_image_objects(image_objs, folder)
-
 
 
 # Ochikobore Fruit Tart

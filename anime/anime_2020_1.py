@@ -1,4 +1,5 @@
 import os
+import requests
 import anime.constants as constants
 from anime.main_download import MainDownload
 from scan import WebNewtypeScanner
@@ -1136,6 +1137,11 @@ class RailgunTDownload(Winter2020AnimeDownload):
             os.makedirs(self.base_folder)
     
     def run(self):
+        self.download_episode_preview()
+        self.download_bluray()
+        self.download_character()
+
+    def download_episode_preview(self):
         try:
             response = self.get_response(self.STORY_PAGE)
             split1 = response.split('<table summary="List_Type01">')
@@ -1153,7 +1159,7 @@ class RailgunTDownload(Winter2020AnimeDownload):
                     episode = str(episode_num).zfill(2)
                 except:
                     continue
-                if (self.is_file_exists(self.base_folder + "/" + episode + "_1.jpg") or self.is_file_exists(self.base_folder + "/" + episode + "_1.png")):
+                if self.is_file_exists(self.base_folder + "/" + episode + "_1.jpg") or self.is_file_exists(self.base_folder + "/" + episode + "_1.png"):
                     continue
                 page_response = self.get_response(page_url)
                 split4 = page_response.split('<ul class="tp5">')
@@ -1168,7 +1174,7 @@ class RailgunTDownload(Winter2020AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
-        # Download Blu-ray
+    def download_bluray(self):
         bluray_filepath = self.base_folder + '/' + constants.FOLDER_BLURAY
         if not os.path.exists(bluray_filepath):
             os.makedirs(bluray_filepath)
@@ -1181,20 +1187,67 @@ class RailgunTDownload(Winter2020AnimeDownload):
                 url = 'https://toaru-project.com/railgun_t/bd/%s.html' % str(volume).zfill(2)
             try:
                 filename_without_extension = bluray_filepath + '/bd_' + str(volume)
-                if os.path.exists(filename_without_extension + '.jpg') or os.path.exists(filename_without_extension + '.png'):
+                if os.path.exists(filename_without_extension + '.jpg') or os.path.exists(
+                        filename_without_extension + '.png'):
                     continue
                 bd_soup = self.get_soup(url)
                 image_url = self.PAGE_PREFIX + bd_soup.find('div', class_='ph').find('img')['src'].replace('../', '')
-                is_preview_image = False
-                for j in (55, 60, 1):
-                    if str(j).zfill(8) in image_url:
-                        is_preview_image = True
-                        break
-                if is_preview_image:
-                    break
+                content_length = requests.head(image_url).headers['Content-Length']
+                if content_length == '163509': # preview image
+                    continue
                 self.download_image(image_url, filename_without_extension)
+            except Exception as e:
+                print("Error in running " + self.__class__.__name__ + ' - Blu-Ray')
+                print(e)
+
+        # Blu-ray Bonus / Music
+        url_list = ['https://toaru-project.com/railgun_t/bd/privilege.html',
+                    'https://toaru-project.com/railgun_t/music/']
+        for url in url_list:
+            soup = self.get_soup(url)
+            image_objs = []
+            try:
+                images = soup.find('div', id='cms_block').find_all('img')
+                for image in images:
+                    image_url = self.PAGE_PREFIX + image['src'].split('?')[0].replace('../', '')
+                    content_length = requests.head(image_url).headers['Content-Length']
+                    if content_length == '121984': # preview image
+                        continue
+                    image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                    image_objs.append({'name': image_name, 'url': image_url})
             except:
                 pass
+            self.download_image_objects(image_objs, bluray_filepath)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        image_objs = []
+        try:
+            soup = self.get_soup('https://toaru-project.com/railgun_t/chara/')
+            chara_list = soup.find('div', id='main_inner').find_all('div', class_='nwu_box')
+            for chara in chara_list:
+                chara_url = self.PAGE_PREFIX + chara.find('a')['href'].replace('../', '')
+                chara_name = chara_url.split('/')[-1].split('.html')[0]
+                picture_filepath = folder + '/' + chara_name + '_body'
+                if os.path.exists(picture_filepath + '.jpg') or os.path.exists(picture_filepath + '.png'):
+                    continue
+                chara_soup = self.get_soup(chara_url)
+
+                chara_body = chara_soup.find('div', class_='charaBody')
+                if chara_body is not None:
+                    chara_body_image_url = self.PAGE_PREFIX + chara_body.find('img')['src'].replace('../', '')
+                    chara_body_name = chara_name + '_body'
+                    image_objs.append({'name': chara_body_name, 'url': chara_body_image_url})
+
+                chara_face = chara_soup.find('div', class_='charaFace')
+                if chara_face is not None:
+                    chara_face_image_url = self.PAGE_PREFIX + chara_face.find('img')['src'].replace('../', '')
+                    chara_face_name = chara_name + '_face'
+                    image_objs.append({'name': chara_face_name, 'url': chara_face_image_url})
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Character')
+            print(e)
+        self.download_image_objects(image_objs, folder)
 
 
 # Toaru Kagaku no Railgun T
