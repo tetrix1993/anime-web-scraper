@@ -705,7 +705,8 @@ class KakushigotoDownload(Spring2020AnimeDownload):
             {'name': 'collab_cd', 'url': 'https://pbs.twimg.com/media/EUbrX69UcAA0qMr?format=jpg&name=medium'},
             {'name': 'bd_1', 'url': 'https://pbs.twimg.com/media/EUmnFbkU8AUE-1Y?format=jpg&name=large'},
             {'name': 'bd_2', 'url': 'https://pbs.twimg.com/media/EaTmvQ3UYAE2JIf?format=jpg&name=4096x4096'},
-            {'name': 'bd_bonus_1', 'url': 'https://pbs.twimg.com/media/EXZ763qU8AEVa7j?format=jpg&name=900x900'}]
+            {'name': 'bd_bonus_1', 'url': 'https://pbs.twimg.com/media/EXZ763qU8AEVa7j?format=jpg&name=900x900'},
+            {'name': 'bd_bonus_2', 'url': 'https://pbs.twimg.com/media/EaymgYTU0AE6VeG?format=jpg&name=900x900'}]
         self.download_image_objects(image_objs, filepath)
 
 
