@@ -11,7 +11,6 @@ import shutil
 
 
 class MainDownload:
-
     title = ""
     keywords = []
     season = None
@@ -21,7 +20,7 @@ class MainDownload:
         self.base_folder = "download"
         if not os.path.exists(self.base_folder):
             os.makedirs(self.base_folder)
-        
+
     def run(self):
         pass
 
@@ -29,7 +28,8 @@ class MainDownload:
     def get_response(url, headers=None, decode=False):
         response = ""
         if headers is None:
-            headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
+            headers = {
+                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
         try:
             result = requests.get(url, headers=headers)
             if decode:
@@ -42,7 +42,8 @@ class MainDownload:
 
     def has_website_updated(self, url, cache_name='story', headers=None, charset=None):
         if headers is None:
-            headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
+            headers = {
+                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
         if charset is None:
             charset = 'utf-8'
         try:
@@ -76,7 +77,7 @@ class MainDownload:
                 print('The website ' + url + ' has been updated.')
                 with open(cache_file, 'w+') as f:
                     f.write(content_length)
-                webpage = log_folder + '/' + cache_name + '_' + datetime.datetime.today().strftime('%Y%m%d%H%M%S')\
+                webpage = log_folder + '/' + cache_name + '_' + datetime.datetime.today().strftime('%Y%m%d%H%M%S') \
                           + '.html'
                 with open(webpage, 'w', encoding='utf-8') as f:
                     f.write(content)
@@ -89,7 +90,8 @@ class MainDownload:
     def get_soup(url, headers=None, decode=False):
         if headers == None:
             headers = {}
-            headers['User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'
+            headers[
+                'User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'
         try:
             result = requests.get(url, headers=headers)
             if decode:
@@ -99,25 +101,27 @@ class MainDownload:
         except Exception as e:
             print(e)
         return ""
-    
+
     @staticmethod
-    def get_json(url,  headers=None):
+    def get_json(url, headers=None):
         response = ""
         if headers == None:
             headers = {}
-            headers['User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'
+            headers[
+                'User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'
         try:
             response = requests.get(url, headers=headers).json()
         except Exception as e:
             print(e)
         return response
-    
+
     @staticmethod
     def post_response(url, headers=None, data=None):
         response = ""
         if headers == None:
             headers = {}
-            headers['User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'
+            headers[
+                'User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'
         try:
             result = requests.post('https://moca-news.net/pd.php', headers=headers, data=data)
             response = str(result.content.decode())
@@ -133,11 +137,12 @@ class MainDownload:
         :param headers:
         :return: 0 - Success, 1 - File Exists, -1 - Error
         """
-        
+
         if headers == None:
             headers = {}
-            headers['User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'
-        
+            headers[
+                'User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'
+
         # Download image:
         try:
             with requests.get(url, stream=True, headers=headers) as r:
@@ -177,12 +182,13 @@ class MainDownload:
         except Exception as e:
             print("Failed to download " + url + ' - ' + str(e))
             return -1
-    
+
     def download_image_if_exists(self, url, filepath_without_extension, old_filepath, headers=None):
         if headers == None:
             headers = {}
-            headers['User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'
-        
+            headers[
+                'User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'
+
         temp_filepath = self.base_folder + "/%032x" % random.getrandbits(128)
         # Download image:
         try:
@@ -228,7 +234,7 @@ class MainDownload:
                         os.replace(temp_filepath, filepath)
                         break
                     i += 1
-                
+
                 # Create download log:
                 timenow = str(datetime.datetime.now())
                 split1 = filepath_without_extension.split('/')
@@ -248,13 +254,13 @@ class MainDownload:
             print("Failed to download " + url)
             print(e)
             return -1
-    
-    @staticmethod    
+
+    @staticmethod
     def create_directory(filepath):
         # If directory exists
         if not os.path.exists(filepath):
             os.makedirs(filepath)
-    
+
     @staticmethod
     def is_file_exists(filepath):
         return os.path.isfile(filepath)
@@ -340,6 +346,14 @@ class MainDownload:
                     os.path.exists(filename + '.gif'):
                 continue
             self.download_image(image_obj['url'], filename)
+
+    def is_image_exists(self, name, filepath=None):
+        if filepath is None:
+            filepath = self.base_folder
+        filename = filepath + '/' + name
+        return os.path.exists(filename + '.jpg') \
+            or os.path.exists(filename + '.png') \
+            or os.path.exists(filename + '.gif')
 
     # Match filter
     def match(self, s_filter):

@@ -46,6 +46,30 @@ class HxErosDownload(Summer2020AnimeDownload):
 
     def download_episode_preview(self):
         self.has_website_updated(self.STORY_PAGE)
+        try:
+            soup = self.get_soup(self.STORY_PAGE)
+            episode_tags = soup.find('ul', class_='storynav').find_all('a')
+            for episode_tag in episode_tags:
+                try:
+                    episode = str(int(episode_tag.text)).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                episode_url = self.PAGE_PREFIX + episode_tag['href']
+                episode_soup = self.get_soup(episode_url)
+                story_slider = episode_soup.find('div', class_='story__slider')
+                if story_slider is not None:
+                    images = story_slider.find_all('img')
+                    image_objs = []
+                    for i in range(len(images)):
+                        image_name = episode + '_' + str(i + 1)
+                        image_url = self.STORY_PAGE + images[i]['src']
+                        image_objs.append({'name': image_name, 'url': image_url})
+                    self.download_image_objects(image_objs, self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
     def download_key_visual(self):
         filepath = self.create_key_visual_directory()
