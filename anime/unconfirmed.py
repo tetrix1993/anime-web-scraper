@@ -13,6 +13,7 @@ from anime.main_download import MainDownload
 # Majo no Tabitabi https://majotabi.jp/ #魔女の旅々 #魔女の旅々はいいぞ #majotabi @majotabi_PR
 # Maou-jou de Oyasumi https://maoujo-anime.com/ #魔王城でおやすみ @maoujo_anime
 # Ochikobore Fruit Tart http://ochifuru-anime.com/ #ochifuru @ochifuru_anime
+# Rail Romanesque https://railromanesque.jp/ @rail_romanesque #まいてつ #レヱルロマネスク
 # Tatoeba Last Dungeon https://lasdan.com/ #ラスダン @lasdan_PR
 # Tonikaku Kawaii http://tonikawa.com/ #トニカクカワイイ #tonikawa @tonikawa_anime
 
@@ -401,6 +402,47 @@ class OchifuruDownload(UnconfirmedDownload):
             print(e)
 
 
+# Rail Romanesque
+class RailRomanesqueDownload(UnconfirmedDownload):
+    title = "Rail Romanesque"
+    keywords = [title, "Maitetsu"]
+
+    PAGE_PREFIX = 'https://railromanesque.jp/'
+
+    def __init__(self):
+        super().__init__()
+        self.base_folder = self.base_folder + "/rail-romanesque"
+        if not os.path.exists(self.base_folder):
+            os.makedirs(self.base_folder)
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+        #self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        image_objs = [{'name': 'kv', 'url': 'https://ogre.natalie.mu/media/news/comic/2020/0624/railromanesque_main.jpg'}]
+        self.download_image_objects(image_objs, folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        i = 0
+        chara_url = 'https://railromanesque.jp/wp-content/themes/railromanesque/image/contents/top/chara-detail/%s-stand.png'
+        while True:
+            i += 1
+            image_url = chara_url % str(i).zfill(2)
+            image_name = self.extract_image_name_from_url(image_url, with_extension=True)
+            if os.path.exists(folder + '/' + image_name):
+                continue
+            result = self.download_image(image_url, folder + '/' + image_name)
+            if result == -1:
+                break
+
+
 # Senyoku no Sigrdrifa
 class SigrdrifaDownload(UnconfirmedDownload):
     title = "Senyoku no Sigrdrifa"
@@ -427,23 +469,29 @@ class SigrdrifaDownload(UnconfirmedDownload):
         image_objs = [{'name': 'kv_01_pc', 'url': 'https://sigururi.com/assets/img/top/kv_01_pc.jpg'},
                       {'name': 'kv_01_sp', 'url': 'https://sigururi.com/assets/img/top/kv_01_sp.jpg'},
                       {'name': 'kv_02_pc', 'url': 'https://sigururi.com/assets/img/top/kv_02_pc.jpg'},
-                      {'name': 'kv_02_sp', 'url': 'https://sigururi.com/assets/img/top/kv_02_sp.jpg'}]
+                      {'name': 'kv_02_sp', 'url': 'https://sigururi.com/assets/img/top/kv_02_sp.jpg'},
+                      {'name': 'kv_03_pc', 'url': 'https://sigururi.com/assets/img/top/kv_03_pc.jpg'},
+                      {'name': 'kv_03_sp', 'url': 'https://sigururi.com/assets/img/top/kv_03_sp.jpg'}]
         self.download_image_objects(image_objs, folder)
 
     def download_character(self):
         folder = self.create_character_directory()
-        image_url_template = 'https://sigururi.com/assets/img/chara/chara_%s.png'
-        i = 0
-        while True:
-            i += 1
-            image_url = image_url_template % str(i).zfill(2)
-            filepath_without_extension = folder + '/chara_' + str(i).zfill(2)
-            filepath = filepath_without_extension + '.png'
-            if os.path.exists(filepath):
-                continue
-            result = self.download_image(image_url, filepath_without_extension)
-            if result == -1:
-                break
+        image_url_templates = ['https://sigururi.com/assets/img/chara/chara_%s.png',
+                               'https://sigururi.com/assets/img/character/chara_%s_new.png']
+        for image_url_template in image_url_templates:
+            i = 0
+            while True:
+                i += 1
+                image_url = image_url_template % str(i).zfill(2)
+                image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                image_name_with_extension = self.extract_image_name_from_url(image_url, with_extension=True)
+                filepath_without_extension = folder + '/' + image_name
+                filepath = folder + '/' + image_name_with_extension
+                if os.path.exists(filepath):
+                    continue
+                result = self.download_image(image_url, filepath_without_extension)
+                if result == -1:
+                    break
 
 
 # Tatoeba Last Dungeon Mae no Mura no Shounen ga Joban no Machi de Kurasu Youna Monogatari

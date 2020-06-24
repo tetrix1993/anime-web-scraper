@@ -129,7 +129,7 @@ class MainDownload:
             print(e)
         return response
 
-    def download_image(self, url, filepath_without_extension, headers=None):
+    def download_image(self, url, filepath_without_extension, headers=None, file_type=None):
         """
         Download image to the filepath
         :param url:
@@ -156,7 +156,18 @@ class MainDownload:
                     filepath = filepath_without_extension + ".jpg"
                 elif 'image/gif' in content_type:
                     filepath = filepath_without_extension + ".gif"
+                elif 'image/webp' in content_type:
+                    filepath = filepath_without_extension + ".webp"
                 else:
+                    extension = url.split('.')[-1]
+                    if extension == 'jpg' or extension == 'jpeg':
+                        filepath = filepath_without_extension + ".png"
+                    elif extension == 'png':
+                        filepath = filepath_without_extension + ".jpg"
+                    elif extension == 'gif':
+                        filepath = filepath_without_extension + ".gif"
+                    elif extension == 'webp':
+                        filepath = filepath_without_extension + ".webp"
                     return -1
 
                 if MainDownload.is_file_exists(filepath):
@@ -343,7 +354,7 @@ class MainDownload:
         for image_obj in image_objs:
             filename = filepath + '/' + image_obj['name']
             if os.path.exists(filename + '.jpg') or os.path.exists(filename + '.png') or \
-                    os.path.exists(filename + '.gif'):
+                    os.path.exists(filename + '.gif') or os.path.exists(filename + '.webp'):
                 continue
             self.download_image(image_obj['url'], filename)
 

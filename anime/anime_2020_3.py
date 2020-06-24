@@ -2,7 +2,7 @@ import os
 import anime.constants as constants
 from anime.main_download import MainDownload
 
-# Dokyuu Hentai HxEros https://hxeros.com/ #エグゼロス @hxeros_anime
+# Dokyuu Hentai HxEros https://hxeros.com/ #エグゼロス #hxeros @hxeros_anime [SUN]
 # Kanojo, Okarishimasu https://kanokari-official.com/ #かのかり #kanokari @kanokari_anime
 # Maou Gakuin no Futekigousha https://maohgakuin.com/ #魔王学院 @maohgakuin
 # Monster Musume no Oishasan https://mon-isha-anime.com/character/ #モン医者 #m_doctor @mon_isha_anime
@@ -45,7 +45,7 @@ class HxErosDownload(Summer2020AnimeDownload):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.STORY_PAGE)
+        #self.has_website_updated(self.STORY_PAGE)
         try:
             soup = self.get_soup(self.STORY_PAGE)
             episode_tags = soup.find('ul', class_='storynav').find_all('a')
