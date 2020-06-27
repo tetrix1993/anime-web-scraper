@@ -942,6 +942,10 @@ class PlundererDownload(Winter2020AnimeDownload):
             os.makedirs(self.base_folder)
     
     def run(self):
+        self.download_episode_preview()
+        self.download_bluray()
+
+    def download_episode_preview(self):
         try:
             response = self.get_response(self.PAGE_PREFIX)
             split1 = response.split('<h1 class="news_ttl">')
@@ -972,6 +976,22 @@ class PlundererDownload(Winter2020AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
+
+    def download_bluray(self):
+        folder = self.create_bluray_directory()
+        image_objs = []
+        bluray_url = 'http://plunderer-info.com/bd/'
+        try:
+            soup = self.get_soup(bluray_url)
+            images = soup.find('div', class_='news-cts_inner').find_all('img')
+            for image in images:
+                image_url = bluray_url + image['src']
+                image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                image_objs.append({'name': image_name, 'url': image_url})
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Blu-Ray')
+            print(e)
+        self.download_image_objects(image_objs, folder)
 
 
 # Rikei ga Koi ni Ochita no de Shoumei shitemita.
