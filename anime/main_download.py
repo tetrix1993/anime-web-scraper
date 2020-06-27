@@ -364,7 +364,8 @@ class MainDownload:
         filename = filepath + '/' + name
         return os.path.exists(filename + '.jpg') \
             or os.path.exists(filename + '.png') \
-            or os.path.exists(filename + '.gif')
+            or os.path.exists(filename + '.gif') \
+            or os.path.exists(filename + '.webp')
 
     # Match filter
     def match(self, s_filter):

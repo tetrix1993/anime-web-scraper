@@ -241,7 +241,7 @@ class MaohgakuinDownload(Summer2020AnimeDownload):
 
     PAGE_PREFIX = "https://maohgakuin.com/"
     CHARACTER_PREFIX = 'https://maohgakuin.com/character/'
-    STORY_PAGE = 'https://maohgakuin.com/intro/'
+    STORY_PAGE = 'https://maohgakuin.com/story/'
 
     def __init__(self):
         super().__init__()
@@ -255,7 +255,34 @@ class MaohgakuinDownload(Summer2020AnimeDownload):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.STORY_PAGE)
+        #self.has_website_updated(self.STORY_PAGE)
+        try:
+            soup = self.get_soup(self.STORY_PAGE)
+            episodes = soup.find('nav', class_='page_nav').find_all('a')
+            for episode_tag in episodes:
+                episode_num = ''
+                try:
+                    episode_num = str(int(episode_tag.text)).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode_num + '_1'):
+                    continue
+                episode_url = self.STORY_PAGE + episode_tag['href'].replace('./', '')
+                episode_soup = self.get_soup(episode_url)
+                image_container = episode_soup.find('div', class_='main_image')
+                if image_container is not None:
+                    images = image_container.find_all('img')
+                    if images is not None and len(images) > 0:
+                        image_objs = []
+                        for i in range(len(images)):
+                            image_url = self.STORY_PAGE + images[i]['src']
+                            image_name = episode_num + '_' + str(i + 1)
+                            image_objs.append({'name': image_name, 'url': image_url})
+                        self.download_image_objects(image_objs, self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
+
 
     def download_key_visual(self):
         keyvisual_folder = self.create_key_visual_directory()
