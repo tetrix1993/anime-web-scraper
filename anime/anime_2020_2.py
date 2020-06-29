@@ -871,7 +871,12 @@ class PriconneDownload(Spring2020AnimeDownload):
             {'name': 'bd_1_1', 'url': 'https://anime.priconne-redive.jp/assets/data/82a6345d72fd68036496915319c326f0.png'},
             {'name': 'bd_1_1s', 'url': 'https://pbs.twimg.com/media/EYTkbHcXQAQsR0A?format=jpg&name=900x900'},
             {'name': 'bd_1_2', 'url': 'https://anime.priconne-redive.jp/assets/data/11323f9ee9ffc83c3151a0e18cb9b07b.png'},
-            {'name': 'bd_1_2s', 'url': 'https://pbs.twimg.com/media/EYTkbHeXQAMc7YR?format=jpg&name=900x900'}]
+            {'name': 'bd_1_2s', 'url': 'https://pbs.twimg.com/media/EYTkbHeXQAMc7YR?format=jpg&name=900x900'},
+            {'name': 'bd_2_1', 'url': 'https://anime.priconne-redive.jp/assets/data/e7ea4524bba61f75f2dcb6a256a8b83b.png'},
+            {'name': 'bd_2_1s', 'url': 'https://pbs.twimg.com/media/Ebrro9AUYAIUDHy?format=png&name=900x900'},
+            {'name': 'bd_2_2', 'url': 'https://anime.priconne-redive.jp/assets/data/aaa7409d1f2c64ff3025e61576115a9a.png'},
+            {'name': 'bd_2_2s', 'url': 'https://pbs.twimg.com/media/Ebr7kB6U0AEMNBK?format=png&name=900x900'}
+        ]
         self.download_image_objects(image_objs, bluray_filepath)
 
     def download_character(self):
