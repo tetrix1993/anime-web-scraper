@@ -253,6 +253,7 @@ class MaohgakuinDownload(Summer2020AnimeDownload):
         self.download_episode_preview()
         self.download_key_visual()
         self.download_character()
+        self.download_bluray()
 
     def download_episode_preview(self):
         #self.has_website_updated(self.STORY_PAGE)
@@ -321,6 +322,13 @@ class MaohgakuinDownload(Summer2020AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + ' - Character')
             print(e)
+
+    def download_bluray(self):
+        folder = self.create_bluray_directory()
+        image_objs = [
+            {'name': 'music_ed', 'url': 'https://pbs.twimg.com/media/Eb6ctYuU8AEVilj?format=jpg&name=large'}
+        ]
+        self.download_image_objects(image_objs, folder)
 
 
 # Monster Musume no Oishasan
