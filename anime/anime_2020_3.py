@@ -408,6 +408,7 @@ class PeterGrillDownload(Summer2020AnimeDownload):
         self.download_episode_preview()
         self.download_key_visual()
         self.download_character()
+        self.download_bluray()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX)
@@ -438,6 +439,14 @@ class PeterGrillDownload(Summer2020AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + ' - Character')
             print(e)
+
+    def download_bluray(self):
+        folder = self.create_bluray_directory()
+        image_objs = [
+            {'name': 'bd_1_1', 'url': 'https://aniverse-mag.com/wp-content/uploads/2020/07/200702_01.jpg'},
+            {'name': 'bd_1_2', 'url': 'https://aniverse-mag.com/wp-content/uploads/2020/07/200702_02.jpg'}
+        ]
+        self.download_image_objects(image_objs, folder)
 
 
 # Re:Zero kara Hajimeru Isekai Seikatsu 2nd Season

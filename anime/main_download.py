@@ -8,6 +8,7 @@ import re
 from bs4 import BeautifulSoup as bs
 from search import *
 import shutil
+from PIL import Image
 
 
 class MainDownload:
@@ -144,6 +145,7 @@ class MainDownload:
                 'User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'
 
         # Download image:
+        extension = ''
         try:
             with requests.get(url, stream=True, headers=headers) as r:
                 # File not found or redirected to main page
@@ -156,8 +158,6 @@ class MainDownload:
                     filepath = filepath_without_extension + ".jpg"
                 elif 'image/gif' in content_type:
                     filepath = filepath_without_extension + ".gif"
-                elif 'image/webp' in content_type:
-                    filepath = filepath_without_extension + ".webp"
                 else:
                     extension = url.split('.')[-1]
                     if extension == 'jpg' or extension == 'jpeg':
@@ -168,16 +168,39 @@ class MainDownload:
                         filepath = filepath_without_extension + ".gif"
                     elif extension == 'webp':
                         filepath = filepath_without_extension + ".webp"
-                    return -1
+                    else:
+                        return -1
 
                 if MainDownload.is_file_exists(filepath):
                     return 1
 
-                r.raise_for_status()
-                with open(filepath, 'wb') as f:
-                    for chunk in r.iter_content(chunk_size=8192):
-                        if chunk:
-                            f.write(chunk)
+                if 'image/webp' in content_type and len(extension) > 0:
+                    r.raise_for_status()
+                    with open(filepath + '_temp', 'wb') as f:
+                        for chunk in r.iter_content(chunk_size=8192):
+                            if chunk:
+                                f.write(chunk)
+                    if extension == 'jpg':
+                        im = Image.open(filepath + '_temp').convert('RGB')
+                        im.save(filepath, 'jpeg')
+                        os.remove(filepath + '_temp')
+                    elif extension == 'png':
+                        im = Image.open(filepath + '_temp').convert('RGB')
+                        im.save(filepath, 'png')
+                        os.remove(filepath + '_temp')
+                    elif extension == 'gif':
+                        im = Image.open(filepath + '_temp')
+                        im.info.pop('background', None)
+                        im.save(filepath, 'gif', save_all=True)
+                        os.remove(filepath + '_temp')
+                    else: #webp
+                        os.rename(filepath + '_temp', filepath)
+                else:
+                    r.raise_for_status()
+                    with open(filepath, 'wb') as f:
+                        for chunk in r.iter_content(chunk_size=8192):
+                            if chunk:
+                                f.write(chunk)
             print("Downloaded " + url)
 
             # Create download log:

@@ -13,6 +13,7 @@ The Anime Web Scraper downloads images of previews of episodes from official web
 ```
 pip install requests
 pip install bs4
+pip install pillow
 ```
 
 ## Running the Program
