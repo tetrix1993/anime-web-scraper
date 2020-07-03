@@ -1,6 +1,8 @@
 import os
 import anime.constants as constants
 from anime.main_download import MainDownload
+from datetime import datetime
+from scan import MocaNewsScanner
 
 # Dokyuu Hentai HxEros https://hxeros.com/ #エグゼロス #hxeros @hxeros_anime [SUN]
 # Kanojo, Okarishimasu https://kanokari-official.com/ #かのかり #kanokari @kanokari_anime
@@ -500,12 +502,26 @@ class UzakiChanDownload(Summer2020AnimeDownload):
             os.makedirs(self.base_folder)
 
     def run(self):
-        self.download_episode_preview()
+        #self.download_episode_preview()
+        self.download_episode_preview_external()
         self.download_key_visual()
         self.download_bluray()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_episode_preview_external(self):
+        try:
+            last_date = datetime.strptime('20200930', '%Y%m%d')
+            today = datetime.today()
+            if today < last_date:
+                end_date = today
+            else:
+                end_date = last_date
+            MocaNewsScanner('宇崎ちゃんは遊びたい', self.base_folder, '20200703', end_date.strftime('%Y%m%d')).run()
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - MocaNews')
+            print(e)
 
     def download_key_visual(self):
         keyvisual_folder = self.create_key_visual_directory()
