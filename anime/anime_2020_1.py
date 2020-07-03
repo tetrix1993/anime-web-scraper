@@ -821,15 +821,15 @@ class NekoparaDownload(Winter2020AnimeDownload):
                     filepathWithoutExtension = self.base_folder + "/" + episode + "_" + str(j)
                     self.download_image(imageUrl, filepathWithoutExtension)
 
-            bd_soup = self.get_soup(self.BD_PAGE)
-            bd_tags = bd_soup.find_all('div', class_='c-article-visual__item')
-            k = 0
-            for bd_tag in bd_tags:
-                k += 1
-                bd_link = bd_tag.find('img')['src']
-                if 'nowprinting.jpg' not in bd_link:
-                    filepath_without_extension = self.base_folder + "/bluray_vol" + str(k)
-                    self.download_image(bd_link, filepath_without_extension)
+            #bd_soup = self.get_soup(self.BD_PAGE)
+            #bd_tags = bd_soup.find_all('div', class_='c-article-visual__item')
+            #k = 0
+            #for bd_tag in bd_tags:
+            #    k += 1
+            #    bd_link = bd_tag.find('img')['src']
+            #    if 'nowprinting.jpg' not in bd_link:
+            #        filepath_without_extension = self.base_folder + "/bluray_vol" + str(k)
+            #        self.download_image(bd_link, filepath_without_extension)
 
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
@@ -856,6 +856,7 @@ class NekoparaDownload(Winter2020AnimeDownload):
             {'name': 'music_ost', 'url': 'https://img.imageimg.net/artist/nekopara-anime/img/product_1031239.jpg'},
             {'name': 'bd_1', 'url': 'https://img.imageimg.net/artist/nekopara-anime/img/product_1031240.jpg'},
             {'name': 'bd_2', 'url': 'https://img.imageimg.net/artist/nekopara-anime/img/product_1031241.jpg'},
+            {'name': 'bd_3', 'url': 'https://img.imageimg.net/artist/nekopara-anime/img/product_1031242.jpg'},
             {'name': 'bd_bonus_1_1', 'url': 'https://m.imageimg.net/upload/artist_img/NKPRA/0116a14b28b259b049b9c1d235cc100979a3c5e4_5e3ba84feaad8.jpg'},
             {'name': 'bd_bonus_1_2', 'url': 'https://m.imageimg.net/upload/artist_img/NKPRA/9d3b89466d93d37f9d72b557ca87bcd0ee5e5df9_5e7b0d79705b2.jpg'},
             {'name': 'bd_bonus_1_3', 'url': 'https://m.imageimg.net/upload/artist_img/NKPRA/d2f96e4c177cd49d17aa356c38e1820da1030008_5e7b0d9364282.jpg'},
