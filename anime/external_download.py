@@ -12,7 +12,7 @@ class AniverseMagazineDownload(ExternalDownload):
 
     PAGE_PREFIX = "https://aniverse-mag.com/archives/"
     
-    def __init__(self, article_id, save_folder, episode, num_of_pictures):
+    def __init__(self, article_id, save_folder, episode, num_of_pictures=0):
         super().__init__()
         self.base_folder = self.base_folder + "/" + save_folder
         if not os.path.exists(self.base_folder):
@@ -23,18 +23,29 @@ class AniverseMagazineDownload(ExternalDownload):
         
     def run(self):
         try:
-            response = self.get_response(self.PAGE_PREFIX + self.article_id)
-            if len(response) == 0:
-                return
-            textBlocks = response.split("data-lazy-src=\"")
-            if len(textBlocks) < 2:
-                return
-            for i in range(self.num_of_pictures + 1):
-                if i == 0:
-                    continue
-                imageUrl = textBlocks[i].split("\"")[0]
-                filepathWithoutExtension = self.base_folder + "/" + self.episode + "_" + str(i)
-                self.download_image(imageUrl, filepathWithoutExtension)
+            article_url = self.PAGE_PREFIX + self.article_id
+            if self.num_of_pictures > 0: # Old Logic
+                response = self.get_response(article_url)
+                if len(response) == 0:
+                    return
+                textBlocks = response.split("data-lazy-src=\"")
+                if len(textBlocks) < 2:
+                    return
+                for i in range(self.num_of_pictures + 1):
+                    if i == 0:
+                        continue
+                    imageUrl = textBlocks[i].split("\"")[0]
+                    filepathWithoutExtension = self.base_folder + "/" + self.episode + "_" + str(i)
+                    self.download_image(imageUrl, filepathWithoutExtension)
+            else:
+                soup = self.get_soup(article_url)
+                items = soup.find_all('dl', class_='gallery-item')
+                image_objs = []
+                for i in range(len(items)):
+                    image_url = items[i].find('img')['data-lazy-src']
+                    image_name = self.episode + '_' + str(i + 1).zfill(2)
+                    image_objs.append({'name': image_name, 'url': image_url})
+                self.download_image_objects(image_objs, self.base_folder)
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)

@@ -3,6 +3,7 @@ import anime.constants as constants
 from anime.main_download import MainDownload
 from datetime import datetime
 from scan import MocaNewsScanner
+from scan import AniverseMagazineScanner
 
 # Dokyuu Hentai HxEros https://hxeros.com/ #エグゼロス #hxeros @hxeros_anime [SUN]
 # Kanojo, Okarishimasu https://kanokari-official.com/ #かのかり #kanokari @kanokari_anime
@@ -512,13 +513,14 @@ class UzakiChanDownload(Summer2020AnimeDownload):
 
     def download_episode_preview_external(self):
         try:
-            last_date = datetime.strptime('20200930', '%Y%m%d')
-            today = datetime.today()
-            if today < last_date:
-                end_date = today
-            else:
-                end_date = last_date
-            MocaNewsScanner('宇崎ちゃんは遊びたい', self.base_folder, '20200703', end_date.strftime('%Y%m%d')).run()
+            AniverseMagazineScanner('宇崎ちゃんは遊びたい', self.base_folder).run()
+            #last_date = datetime.strptime('20200930', '%Y%m%d')
+            #today = datetime.today()
+            #if today < last_date:
+            #    end_date = today
+            #else:
+            #    end_date = last_date
+            #MocaNewsScanner('宇崎ちゃんは遊びたい', self.base_folder, '20200703', end_date.strftime('%Y%m%d')).run()
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + ' - MocaNews')
             print(e)

@@ -1,11 +1,13 @@
 import os
 import re
 import requests
+from anime.external_download import AniverseMagazineDownload
 from anime.external_download import WebNewtypeDownload
 from anime.external_download import MocaNewsDownload
 from bs4 import BeautifulSoup as bs
 from datetime import datetime
 from datetime import timedelta
+
 
 class MainScanner():
 
@@ -51,6 +53,7 @@ class MainScanner():
             print(e)
         return ""
 
+
 class AniverseMagazineScanner(MainScanner):
     
     # Example prefix: https://aniverse-mag.com/page/2?s=プランダラ
@@ -67,14 +70,20 @@ class AniverseMagazineScanner(MainScanner):
     def has_next_page(self, text):
         return '<i class="fa fa-long-arrow-right">' in text
 
-    def get_episode_num(self, news_title):
-        split1 = news_title.split('話')[0].split('第')
+    def get_episode_num(self, result):
+        split1 = result[0].split('話')[0].split('第')
         if len(split1) < 2:
             return -1
         try:
             return int(split1[1])
         except:
             return -1
+
+    def get_article_id(self, url):
+        split1 = url.split('/')
+        if len(split1) < 1:
+            return ""
+        return split1[len(split1)-1]
         
     def process_page(self, text):
         split1 = text.split('<h2 class="cb-post-title">')
@@ -83,19 +92,36 @@ class AniverseMagazineScanner(MainScanner):
             if len(split2) < 2:
                 continue
             news_title = split2[1].split('</a>')[0]
-            if self.keyword not in news_title or '先行' not in news_title or '第' not in news_title or '話' not in news_title:
+
+            regex = '第' + '[０|１|２|３|４|５|６|７|８|９|0-9]+' + '話'
+            prog = re.compile(regex)
+            result = prog.findall(news_title)
+            if self.keyword in news_title and '最終話' in news_title and len(result) == 0:
+                episode = 'last'
+            elif self.keyword in news_title and len(result) > 0:
+                episode_num = self.get_episode_num(result)
+                if episode_num < 1:
+                    continue
+                episode = str(episode_num).zfill(2)
+            else:
                 continue
-            episode_num = self.get_episode_num(news_title)
-            if (episode_num < 1):
-                continue
-            episode = str(episode_num).zfill(2)
+
+            #if self.keyword not in news_title or '先行' not in news_title or '第' not in news_title or '話' not in news_title:
+            #    continue
+            #episode_num = self.get_episode_num(news_title)
+            #if episode_num < 1:
+            #    continue
+            #episode = str(episode_num).zfill(2)
             if os.path.isfile(self.base_folder + "/" + episode + "_01.jpg"):
                 return 1
             split3 = split2[0].split('<a href="')
             if len(split3) < 2:
                 continue
             url = split3[1]
-            print(episode + " " + url)
+            article_id = self.get_article_id(url)
+            if len(article_id) == 0:
+                continue
+            AniverseMagazineDownload(article_id, self.base_folder, episode).run()
         
     def run(self):
         first_page_url = self.SEARCH_URL % ("1", self.keyword)
@@ -115,7 +141,8 @@ class AniverseMagazineScanner(MainScanner):
                 if result == 1:
                     return
                 page += 1
-        
+
+
 class WebNewtypeScanner(MainScanner):
     
     PAGE_PREFIX = "https://webnewtype.com/"
