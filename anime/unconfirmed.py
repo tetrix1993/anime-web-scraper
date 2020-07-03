@@ -8,6 +8,7 @@ from anime.main_download import MainDownload
 # Ijiranaide, Nagatoro-san https://www.nagatorosan.jp/ #長瀞さん @nagatoro_tv
 # Iwa Kakeru!: Sport Climbing Girls http://iwakakeru-anime.com/ #いわかける #iwakakeru @iwakakeru_anime
 # Kaifuku Jutsushi no Yarinaoshi http://kaiyari.com/ #回復術士 @kaiyari_anime
+# Kami-tachi ni Hirowareta Otoko https://kamihiro-anime.com/ #神達に拾われた男 @kamihiro_anime
 # Kuma Kuma Kuma Bear https://kumakumakumabear.com/ #くまクマ熊ベアー #kumabear @kumabear_anime
 # Kimi to Boku no Saigo no Senjou, Aruiwa Sekai ga Hajimaru Seisen https://kimisentv.com/ #キミ戦 #kimisen @kimisen_project
 # Majo no Tabitabi https://majotabi.jp/ #魔女の旅々 #魔女の旅々はいいぞ #majotabi @majotabi_PR
@@ -204,6 +205,55 @@ class KaiyariDownload(UnconfirmedDownload):
         self.download_image_objects(image_objs, folder)
 
 
+# Kami-tachi ni Hirowareta Otoko
+class KamihiroDownload(UnconfirmedDownload):
+    title = 'Kami-tachi ni Hirowareta Otoko'
+    keywords = [title, 'Kamihiro', 'Kamitachi']
+
+    PAGE_PREFIX = 'https://kamihiro-anime.com'
+
+    def __init__(self):
+        super().__init__()
+        self.base_folder = self.base_folder + "/kamihiro"
+        if not os.path.exists(self.base_folder):
+            os.makedirs(self.base_folder)
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        image_objs = [
+            {'name': 'teaser', 'url': 'https://pbs.twimg.com/media/EVy1wvNVcAAWcJH?format=jpg&name=large'},
+            {'name': 'kv1', 'url': 'https://pbs.twimg.com/media/Eb_jqRLUYAAZ01A?format=jpg&name=4096x4096'}
+        ]
+        self.download_image_objects(image_objs, folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.find_all('div', class_='char')
+            image_objs = []
+            for image in images:
+                image_tag = image.find('img')
+                if image_tag is None:
+                    continue
+                image_url = self.PAGE_PREFIX + image_tag['src']
+                image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                image_objs.append({'name': image_name, 'url': image_url})
+            self.download_image_objects(image_objs, folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Character")
+            print(e)
+
+
+
 # Kimi to Boku no Saigo no Senjou, Aruiwa Sekai ga Hajimaru Seisen
 class KimisenDownload(UnconfirmedDownload):
     title = "Kimi to Boku no Saigo no Senjou, Aruiwa Sekai ga Hajimaru Seisen"
@@ -329,6 +379,7 @@ class MajotabiDownload(UnconfirmedDownload):
     def run(self):
         self.download_episode_preview()
         self.download_key_visual()
+        self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX)
@@ -339,8 +390,29 @@ class MajotabiDownload(UnconfirmedDownload):
             {'name': 'kv1', 'url': 'https://pbs.twimg.com/media/EHPjPtFU8AAHo9S?format=jpg&name=large'},
             {'name': 'kv2', 'url': 'https://pbs.twimg.com/media/ESahsP9UEAAhzgn?format=jpg&name=large'},
             {'name': 'kv3', 'url': 'https://pbs.twimg.com/media/EUqV9B7UcAAOCeE?format=jpg&name=medium'},
-            {'name': 'kv4', 'url': 'https://pbs.twimg.com/media/EW64PYgUMAAGDIk?format=jpg&name=4096x4096'}]
+            {'name': 'kv4', 'url': 'https://pbs.twimg.com/media/EW64PYgUMAAGDIk?format=jpg&name=4096x4096'},
+            {'name': 'kv5', 'url': 'https://pbs.twimg.com/media/EZvKDzlUcAEVTt-?format=jpg&name=large'},
+            {'name': 'kv6', 'url': 'https://pbs.twimg.com/media/Eb_X0idVAAAjpNx?format=jpg&name=medium'}
+        ]
         self.download_image_objects(image_objs, keyvisual_folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            characters = soup.find_all('div', class_='chr-img')
+            image_objs = []
+            for character in characters:
+                image_tag = character.find('img')
+                if image_tag is None:
+                    continue
+                image_url = self.PAGE_PREFIX + image_tag['src'].replace('./', '')
+                image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                image_objs.append({'name': image_name, 'url': image_url})
+            self.download_image_objects(image_objs, folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Character")
+            print(e)
 
 
 # Maou-jou de Oyasumi
