@@ -192,6 +192,7 @@ class KanokariDownload(Summer2020AnimeDownload):
         self.download_key_visual()
         self.download_character()
         self.download_bluray()
+        self.download_other()
 
     def download_episode_preview(self):
         self.has_website_updated(self.STORY_PAGE)
@@ -289,6 +290,13 @@ class KanokariDownload(Summer2020AnimeDownload):
             print("Error in running " + self.__class__.__name__ + ' - Blu-Ray Bonus')
             print(e)
         self.download_image_objects(image_objs, bluray_folder)
+
+    def download_other(self):
+        folder = self.create_custom_directory(constants.FOLDER_OTHER)
+        image_objs = [
+            {'name': 'mygirl_vol30', 'url': 'https://images-na.ssl-images-amazon.com/images/I/716PmdvklHL.jpg'}
+        ]
+        self.download_image_objects(image_objs, folder)
 
 
 # Maou Gakuin no Futekigousha: Shijou Saikyou no Maou no Shiso, Tensei shite Shison-tachi no Gakkou e
@@ -433,7 +441,7 @@ class MaohgakuinDownload(Summer2020AnimeDownload):
             print(e)
 
     def download_other(self):
-        folder = self.create_custom_directory('other')
+        folder = self.create_custom_directory(constants.FOLDER_OTHER)
         image_objs = [
             {'name': 'radio', 'url': 'http://www.onsen.ag/program/maoh/image/781_pgi01_l.jpg'},
             {'name': 'bs11_guide', 'url': 'https://pbs.twimg.com/media/EbZlqboUwAYVvCu?format=jpg&name=4096x4096'},
