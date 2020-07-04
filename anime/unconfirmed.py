@@ -4,6 +4,7 @@ from anime.main_download import MainDownload
 
 # Bokutachi no Remake http://bokurema.com/ #ぼくリメ #bokurema @bokurema
 # Cheat Kusushi no Slow Life: Isekai ni Tsukurou Drugstore https://www.cheat-kusushi.jp/ #チート薬師 #スローライフ @cheat_kusushi
+# Danmachi III http://danmachi.com/danmachi3/ #danmachi @danmachi_anime
 # Higurashi no Naku Koro ni (2020) https://higurashianime.com/ #ひぐらし @higu_anime
 # Ijiranaide, Nagatoro-san https://www.nagatorosan.jp/ #長瀞さん @nagatoro_tv
 # Iwa Kakeru!: Sport Climbing Girls http://iwakakeru-anime.com/ #いわかける #iwakakeru @iwakakeru_anime
@@ -55,6 +56,35 @@ class CheatKusushiDownload(UnconfirmedDownload):
         image_objs = [
             {'name': 'teaser', 'url': 'https://www.cheat-kusushi.jp/img/top-main.png'}]
         self.download_image_objects(image_objs, keyvisual_folder)
+
+
+# Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka III
+class Danmachi3Download(UnconfirmedDownload):
+    title = 'Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka III'
+    keywords = [title, 'Danmachi', 'Is It Wrong to Try to Pick Up Girls in a Dungeon? III', '3rd']
+
+    PAGE_PREFIX = 'http://danmachi.com/danmachi3/'
+
+    def __init__(self):
+        super().__init__()
+        self.base_folder = self.base_folder + "/danmachi3"
+        if not os.path.exists(self.base_folder):
+            os.makedirs(self.base_folder)
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        image_objs = [
+            {'name': 'teaser', 'url': 'https://pbs.twimg.com/media/ETtwMdUUMAAdqd1?format=jpg&name=4096x4096'},
+            {'name': 'kv1', 'url': 'https://pbs.twimg.com/media/EcCRpVLUcAAdpGv?format=jpg&name=900x900'}
+        ]
+        self.download_image_objects(image_objs, folder)
 
 
 # Higurashi no Naku Koro ni (2020)
