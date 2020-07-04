@@ -243,20 +243,26 @@ class KanokariDownload(Summer2020AnimeDownload):
         bluray_folder = self.create_bluray_directory()
         url_template = 'https://kanokari-official.com/bluray/vol%s/'
         try:
+            stop = False
             for i in range(1, 5, 1):
                 image_objs = []
                 bluray_url = url_template % str(i)
                 soup = self.get_soup(bluray_url)
                 bluray_div = soup.find('div', class_='bluray-main')
                 if bluray_div is None:
-                    continue
+                    break
                 images = bluray_div.find_all('img')
                 if images is None or len(images) == 0:
-                    continue
+                    break
                 for image in images:
                     image_url = image['src']
+                    if 'nowprinting' in image_url:
+                        stop = True
+                        break
                     image_name = self.extract_image_name_from_url(image_url, with_extension=False)
                     image_objs.append({'name': image_name, 'url': image_url})
+                if stop:
+                    break
                 self.download_image_objects(image_objs, bluray_folder)
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + ' - Blu-Ray')
