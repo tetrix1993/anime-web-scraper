@@ -311,6 +311,7 @@ class MaohgakuinDownload(Summer2020AnimeDownload):
         self.download_key_visual()
         self.download_character()
         self.download_bluray()
+        self.download_other()
 
     def download_episode_preview(self):
         #self.has_website_updated(self.STORY_PAGE)
@@ -340,7 +341,6 @@ class MaohgakuinDownload(Summer2020AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
-
 
     def download_key_visual(self):
         keyvisual_folder = self.create_key_visual_directory()
@@ -384,6 +384,61 @@ class MaohgakuinDownload(Summer2020AnimeDownload):
         folder = self.create_bluray_directory()
         image_objs = [
             {'name': 'music_ed', 'url': 'https://pbs.twimg.com/media/Eb6ctYuU8AEVilj?format=jpg&name=large'}
+        ]
+        self.download_image_objects(image_objs, folder)
+
+        try:
+            bd_url = 'https://maohgakuin.com/products/'
+            stop = False
+            for i in range(1, 7, 1):
+                url = bd_url
+                if i > 1:
+                    url = bd_url + '?no=' + str(i)
+                soup = self.get_soup(url)
+                products_main = 'products_main'
+                products_novelty = 'products_novelty'
+                classes = [products_main, products_novelty]
+                for class_ in classes:
+                    image_objs = []
+                    divs = soup.find_all('div', class_=class_)
+                    if divs is not None and len(divs) > 0:
+                        for div in divs:
+                            images = div.find_all('img')
+                            if images is not None and len(images) > 0:
+                                bd_count = 0
+                                for image in images:
+                                    image_url = image['src']
+                                    if len(image_url) < 2 or 'nowprinting' in image_url:
+                                        if i == 1:
+                                            stop = True
+                                            break
+                                        else:
+                                            continue
+                                    if image_url[0] == '/':
+                                        image_url = image_url[1:len(image_url)]
+                                    image_url = self.PAGE_PREFIX + image_url
+                                    if class_ == products_main:
+                                        bd_count += 1
+                                        image_name = 'bd_' + str(i)
+                                        if bd_count > 1:
+                                            image_name + '_' + str(bd_count)
+                                    else:
+                                        image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                                    image_objs.append({'name': image_name, 'url': image_url})
+                    self.download_image_objects(image_objs, folder)
+                if stop:
+                    break
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Blu-Ray')
+            print(e)
+
+    def download_other(self):
+        folder = self.create_custom_directory('other')
+        image_objs = [
+            {'name': 'radio', 'url': 'http://www.onsen.ag/program/maoh/image/781_pgi01_l.jpg'},
+            {'name': 'bs11_guide', 'url': 'https://pbs.twimg.com/media/EbZlqboUwAYVvCu?format=jpg&name=4096x4096'},
+            {'name': 'ep_visual_1', 'url': 'https://pbs.twimg.com/media/EcFiPBSU0AADZI9?format=jpg&name=large'},
+            {'name': 'ep01_kinen', 'url': 'https://pbs.twimg.com/media/EcFzWEEUcAM0bOT?format=jpg&name=large'}
         ]
         self.download_image_objects(image_objs, folder)
 
