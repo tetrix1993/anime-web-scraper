@@ -21,6 +21,11 @@ class MainDownload:
         self.base_folder = "download"
         if not os.path.exists(self.base_folder):
             os.makedirs(self.base_folder)
+            
+    def init_base_folder(self, name):
+        self.base_folder = self.base_folder + "/" + name
+        if not os.path.exists(self.base_folder):
+            os.makedirs(self.base_folder)
 
     def run(self):
         pass
