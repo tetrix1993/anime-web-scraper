@@ -46,6 +46,7 @@ class HxErosDownload(Summer2020AnimeDownload):
         self.download_episode_preview()
         self.download_key_visual()
         self.download_character()
+        self.download_bluray()
 
     def download_episode_preview(self):
         #self.has_website_updated(self.STORY_PAGE)
@@ -124,6 +125,53 @@ class HxErosDownload(Summer2020AnimeDownload):
         except Exception as e:
                 print("Error in running " + self.__class__.__name__ + ' - Character')
                 print(e)
+
+    def download_bluray(self):
+        bd_url = 'https://hxeros.com/bddvd/%s.html'
+        self.has_website_updated(bd_url % str(1))
+        folder = self.create_bluray_directory()
+        image_objs = []
+        try:
+            first_page_image_count = 0
+            for i in range(1, 7, 1):
+                url = bd_url % str(i)
+                soup = self.get_soup(url)
+                image_count = 0
+                bddvd_item = 'bddvd__item'
+                bddvd_shop = 'bddvd__shop'
+                classes = [bddvd_item, bddvd_shop]
+                for class_ in classes:
+                    if i != 1 and class_ == bddvd_shop:
+                        continue
+                    article_tag = soup.find('article', class_=class_)
+                    if article_tag is not None:
+                        images = article_tag.find_all('img')
+                        if images is not None and len(images) > 0:
+                            if class_ == bddvd_item:
+                                if i == 1:
+                                    first_page_image_count = len(images)
+                                else:
+                                    image_count = len(images)
+                            bd_image_count = 0
+                            for image in images:
+                                image_url = self.PAGE_PREFIX + image['src']
+                                if 'ico_aniplexplus.svg' in image_url:
+                                    continue
+                                if class_ == bddvd_item:
+                                    bd_image_count += 1
+                                    if bd_image_count > 1:
+                                        image_name = 'bd_' + str(i) + '_' + bd_image_count
+                                    else:
+                                        image_name = 'bd_' + str(i)
+                                else:
+                                    image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                                image_objs.append({'name': image_name, 'url': image_url})
+                self.download_image_objects(image_objs, folder)
+                if (i > 1 and image_count != first_page_image_count) or first_page_image_count == 1:
+                    break
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Blu-Ray')
+            print(e)
 
 
 # Kanojo, Okarishimasu
