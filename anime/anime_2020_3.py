@@ -595,7 +595,20 @@ class ReZero2Download(Summer2020AnimeDownload):
         self.download_key_visual()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.STORY_PAGE)
+        #self.has_website_updated(self.STORY_PAGE)
+        image_url_template = 'http://re-zero-anime.jp/tv/assets/episode/%s/%s.jpg'
+        episode = 25
+        while True:
+            episode += 1
+            if self.is_image_exists(str(episode) + '_1'):
+                continue
+            for j in range(6):
+                image_url = image_url_template % (str(episode), str(j + 1))
+                image_name = str(episode) + '_' + str(j + 1)
+                result = self.download_image(image_url, self.base_folder + '/' + image_name)
+                if result == -1:
+                    return
+
 
     def download_key_visual(self):
         keyvisual_folder = self.create_key_visual_directory()
