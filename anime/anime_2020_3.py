@@ -295,7 +295,9 @@ class KanokariDownload(Summer2020AnimeDownload):
             print("Error in running " + self.__class__.__name__ + ' - Blu-Ray')
             print(e)
 
-        image_objs = []
+        image_objs = [
+            {'name': 'music_ed', 'url': 'https://kanokari-official.com/wp/wp-content/uploads/2020/05/halca_H1_kikan_c.jpg'}
+        ]
         bd_bonus_page_url = 'https://kanokari-official.com/bluray/store/'
         self.has_website_updated(url=bd_bonus_page_url, cache_name='bd_bonus')
         try:
