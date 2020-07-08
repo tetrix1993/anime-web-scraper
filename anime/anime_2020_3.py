@@ -196,6 +196,32 @@ class KanokariDownload(Summer2020AnimeDownload):
 
     def download_episode_preview(self):
         self.has_website_updated(self.STORY_PAGE)
+        image_objs = []
+        try:
+            soup = self.get_soup(self.STORY_PAGE)
+            chapters = soup.find_all('div', class_='story-main__detail__block')
+            for chapter in chapters:
+                episode_tag = chapter.find('span', class_='num')
+                if episode_tag is None:
+                    continue
+                try:
+                    episode = str(episode_tag.text).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                slides = chapter.find_all('div', class_='swiper-slide')
+                if slides is not None and len(slides) > 0:
+                    for i in range(len(slides)):
+                        image = slides[i].find('img')
+                        if image is not None:
+                            image_url = image['src']
+                            image_name = episode + '_' + str(i + 1)
+                            image_objs.append({'name': image_name, 'url': image_url})
+                    self.download_image_objects(image_objs, self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
     def download_key_visual(self):
         keyvisual_folder = self.create_key_visual_directory()
@@ -608,7 +634,6 @@ class ReZero2Download(Summer2020AnimeDownload):
                 result = self.download_image(image_url, self.base_folder + '/' + image_name)
                 if result == -1:
                     return
-
 
     def download_key_visual(self):
         keyvisual_folder = self.create_key_visual_directory()
