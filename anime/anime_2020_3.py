@@ -5,14 +5,13 @@ from datetime import datetime
 from scan import MocaNewsScanner
 from scan import AniverseMagazineScanner
 
-# Dokyuu Hentai HxEros https://hxeros.com/ #エグゼロス #hxeros @hxeros_anime [SUN]
-# Kanojo, Okarishimasu https://kanokari-official.com/ #かのかり #kanokari @kanokari_anime
-# Maou Gakuin no Futekigousha https://maohgakuin.com/ #魔王学院 @maohgakuin
+# Dokyuu Hentai HxEros https://hxeros.com/ #エグゼロス #hxeros @hxeros_anime [WED]
+# Kanojo, Okarishimasu https://kanokari-official.com/ #かのかり #kanokari @kanokari_anime [WED]
+# Maou Gakuin no Futekigousha https://maohgakuin.com/ #魔王学院 @maohgakuin [SAT]
 # Monster Musume no Oishasan https://mon-isha-anime.com/character/ #モン医者 #m_doctor @mon_isha_anime
-# Re:Zero S2 http://re-zero-anime.jp/tv/story/ #rezero #リゼロ @Rezero_official
 # Peter Grill to Kenja no Jikan http://petergrill-anime.jp/ #賢者タイムアニメ #petergrill @petergrillanime
-# Re:Zero S2 http://re-zero-anime.jp/tv/story/ #rezero #リゼロ @Rezero_official
-# Uzaki-chan wa Asobitai! https://uzakichan.com/ #宇崎ちゃん @uzakichan_asobi
+# Re:Zero S2 http://re-zero-anime.jp/tv/story/ #rezero #リゼロ @Rezero_official [MON]
+# Uzaki-chan wa Asobitai! https://uzakichan.com/ #宇崎ちゃん @uzakichan_asobi [FRI]
 # Yahari Ore no Seishun http://www.tbs.co.jp/anime/oregairu/story/ #俺ガイル #oregairu @anime_oregairu
 
 
@@ -611,6 +610,7 @@ class ReZero2Download(Summer2020AnimeDownload):
     keywords = [title, "rezero", "Re:Zero - Starting Life in Another World"]
 
     STORY_PAGE = "http://re-zero-anime.jp/tv/story/"
+    PAGE_PREFIX = 'http://re-zero-anime.jp/tv/'
 
     def __init__(self):
         super().__init__()
@@ -621,6 +621,7 @@ class ReZero2Download(Summer2020AnimeDownload):
     def run(self):
         self.download_episode_preview()
         self.download_key_visual()
+        self.download_bluray()
 
     def download_episode_preview(self):
         #self.has_website_updated(self.STORY_PAGE)
@@ -644,6 +645,44 @@ class ReZero2Download(Summer2020AnimeDownload):
             {'name': 'kv', 'url': 'http://re-zero-anime.jp/tv/assets/top/main-tv2.jpg'},
             {'name': 'kv2', 'url': 'http://re-zero-anime.jp/tv/assets/top/main-tv2b.jpg'}]
         self.download_image_objects(image_objs, keyvisual_folder)
+
+    def download_bluray(self):
+        bluray_url = 'http://re-zero-anime.jp/tv/bluray/'
+        self.has_website_updated(bluray_url, 'bluray')
+        folder = self.create_bluray_directory()
+        image_objs = []
+        try:
+            soup = self.get_soup(bluray_url)
+            sections = soup.find_all('section')
+            if sections is None or len(sections) == 0:
+                return
+            for section in sections:
+                if not section.has_attr('id'):
+                    continue
+                section_id = section['id']
+                bd_prefix = ''
+                if len(section_id) == 3 and section_id[0:2] == 'Bd' and section_id[2].isnumeric():
+                    bd_prefix = 'bd' + section_id[2]
+                images = section.find_all('img')
+                if images is None or len(images) == 0:
+                    continue
+                for i in range(len(images)):
+                    image = images[i]
+                    image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                    if 'assets/bluray/np.png' in image_url:
+                        continue
+                    if len(bd_prefix) > 0:
+                        if i == 0:
+                            image_name = bd_prefix
+                        else:
+                            image_name = bd_prefix + '_' + str(i + 1)
+                    else:
+                        image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                    image_objs.append({'name': image_name, 'url': image_url})
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Blu-ray')
+            print(e)
+        self.download_image_objects(image_objs, folder)
 
 
 # Uzaki-chan wa Asobitai!
