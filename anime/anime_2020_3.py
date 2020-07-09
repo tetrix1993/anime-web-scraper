@@ -785,6 +785,7 @@ class Oregairu3Download(Summer2020AnimeDownload):
     def run(self):
         self.download_episode_preview()
         self.download_key_visual()
+        self.download_bluray()
 
     def download_episode_preview(self):
         try:
@@ -836,3 +837,29 @@ class Oregairu3Download(Summer2020AnimeDownload):
         image_objs = [{'name': 'kv', 'url': 'http://www.tbs.co.jp/anime/oregairu/img/keyvisual_pc_2.jpg'},
             {'name': 'kv2', 'url': 'http://www.tbs.co.jp/anime/oregairu/special/img/special02_01.png'}]
         self.download_image_objects(image_objs, keyvisual_folder)
+
+    def download_bluray(self):
+        folder = self.create_bluray_directory()
+        image_objs = []
+        disc_prefix = 'http://www.tbs.co.jp/anime/oregairu/disc/'
+        try:
+            soup = self.get_soup('http://www.tbs.co.jp/anime/oregairu/disc/')
+            bd_vol_images = soup.find_all('div', class_='disc-img')
+            for bd_vol_image in bd_vol_images:
+                image = bd_vol_image.find('img')
+                if image is not None:
+                    image_url = disc_prefix + image['src']
+                    image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                    image_objs.append({'name': image_name, 'url': image_url})
+
+            bd_bonus_images = soup.find_all('td', class_='td_img_disc')
+            for bd_bonus_image in bd_bonus_images:
+                image = bd_bonus_image.find('a', class_='md-image')
+                if image is not None and image.has_attr('data-image'):
+                    image_url = disc_prefix + image['data-image']
+                    image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                    image_objs.append({'name': image_name, 'url': image_url})
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Blu-ray')
+            print(e)
+        self.download_image_objects(image_objs, folder)
