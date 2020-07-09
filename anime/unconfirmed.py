@@ -320,7 +320,7 @@ class KumaBearDownload(UnconfirmedDownload):
 
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/kumabear2"
+        self.base_folder = self.base_folder + "/kumabear"
         if not os.path.exists(self.base_folder):
             os.makedirs(self.base_folder)
 
