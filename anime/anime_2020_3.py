@@ -571,7 +571,15 @@ class PeterGrillDownload(Summer2020AnimeDownload):
 
     def download_episode_preview_external(self):
         try:
-            AniverseMagazineScanner('ピーター・グリルと賢者の時間', self.base_folder).run()
+            jp_title = 'ピーター・グリルと賢者の時間'
+            AniverseMagazineScanner(jp_title, self.base_folder).run()
+            last_date = datetime.strptime('20200930', '%Y%m%d')
+            today = datetime.today()
+            if today < last_date:
+                end_date = today
+            else:
+                end_date = last_date
+            MocaNewsScanner(jp_title, self.base_folder, '20200709', end_date.strftime('%Y%m%d')).run()
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + ' - Aniverse')
             print(e)
