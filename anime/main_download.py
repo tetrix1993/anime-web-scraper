@@ -166,9 +166,9 @@ class MainDownload:
                 else:
                     extension = url.split('.')[-1]
                     if extension == 'jpg' or extension == 'jpeg':
-                        filepath = filepath_without_extension + ".png"
-                    elif extension == 'png':
                         filepath = filepath_without_extension + ".jpg"
+                    elif extension == 'png':
+                        filepath = filepath_without_extension + ".png"
                     elif extension == 'gif':
                         filepath = filepath_without_extension + ".gif"
                     elif extension == 'webp':

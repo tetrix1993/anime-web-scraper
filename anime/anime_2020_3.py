@@ -493,13 +493,26 @@ class MonIshaDownload(Summer2020AnimeDownload):
             os.makedirs(self.base_folder)
 
     def run(self):
-        self.download_episode_preview()
+        #self.download_episode_preview()
+        self.download_episode_preview_external()
         self.download_intro()
         self.download_key_visual()
         self.download_character()
+        self.download_bluray()
 
     def download_episode_preview(self):
         self.has_website_updated(self.STORY_PAGE)
+
+    def download_episode_preview_external(self):
+        jp_title = 'モンスター娘のお医者さん'
+        AniverseMagazineScanner(jp_title, self.base_folder).run()
+        #last_date = datetime.strptime('20200930', '%Y%m%d')
+        #today = datetime.today()
+        #if today < last_date:
+        #    end_date = today
+        #else:
+        #    end_date = last_date
+        #MocaNewsScanner(jp_title, self.base_folder, '20200710', end_date.strftime('%Y%m%d')).run()
 
     def download_intro(self):
         intro_folder = self.create_custom_directory(constants.FOLDER_INTRO)
@@ -543,6 +556,27 @@ class MonIshaDownload(Summer2020AnimeDownload):
                     self.download_image(image_url, filepath_without_extension)
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + ' - Character')
+            print(e)
+
+    def download_bluray(self):
+        folder = self.create_bluray_directory()
+        image_objs = []
+        try:
+            bd_urls = ['index', 'tokuten']
+            for bd_url in bd_urls:
+                url = 'https://mon-isha-anime.com/products/bd/%s.html' % bd_url
+                soup = self.get_soup(url)
+                innertx = soup.find('div', class_='mu_innertx')
+                if innertx is None:
+                    continue
+                images = innertx.find_all('img')
+                for image in images:
+                    image_url = self.PAGE_PREFIX + image['src'].replace('../../', '')
+                    image_name = self.extract_image_name_from_url(image_url)
+                    image_objs.append({'name': image_name, 'url': image_url})
+                self.download_image_objects(image_objs, folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Bluray')
             print(e)
 
 
