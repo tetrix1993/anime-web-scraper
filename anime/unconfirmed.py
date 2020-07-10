@@ -14,6 +14,7 @@ from anime.main_download import MainDownload
 # Kimi to Boku no Saigo no Senjou, Aruiwa Sekai ga Hajimaru Seisen https://kimisentv.com/ #キミ戦 #kimisen @kimisen_project
 # Majo no Tabitabi https://majotabi.jp/ #魔女の旅々 #魔女の旅々はいいぞ #majotabi @majotabi_PR
 # Maou-jou de Oyasumi https://maoujo-anime.com/ #魔王城でおやすみ @maoujo_anime
+# Mushoku Tensei https://mushokutensei.jp/ #無職転生 @mushokutensei_A
 # Ochikobore Fruit Tart http://ochifuru-anime.com/ #ochifuru @ochifuru_anime
 # Rail Romanesque https://railromanesque.jp/ @rail_romanesque #まいてつ #レヱルロマネスク
 # Tatoeba Last Dungeon https://lasdan.com/ #ラスダン @lasdan_PR
@@ -501,6 +502,52 @@ class MaoujoDownload(UnconfirmedDownload):
             print(e)
         self.download_image_objects(image_objs, folder)
 
+
+# Mushoku Tensei: Isekai Ittara Honki Dasu
+class MushokuTenseiDownload(UnconfirmedDownload):
+    title = "Mushoku Tensei: Isekai Ittara Honki Dasu"
+    keywords = [title, 'Jobless Reincarnation']
+
+    PAGE_PREFIX = 'https://mushokutensei.jp/'
+
+    def __init__(self):
+        super().__init__()
+        self.init_base_folder('mushoku-tensei')
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        image_objs = [
+            {'name': 'teaser', 'url': 'https://pbs.twimg.com/media/EHKOHakU4AUq-A3?format=jpg&name=large'},
+            {'name': 'kv1', 'url': 'https://pbs.twimg.com/media/Ea3MiJFU0AETcOY?format=jpg&name=4096x4096'}
+        ]
+        self.download_image_objects(image_objs, folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        image_objs = []
+        try:
+            soup = self.get_soup('https://mushokutensei.jp/character/')
+            charaslides = soup.find_all('div', class_='charaslide')
+            for charaslide in charaslides:
+                slideclasses = ['charaslide_img', 'charaslide_data_img']
+                for slideclass in slideclasses:
+                    slide_img = charaslide.find('div', class_=slideclass)
+                    if slide_img is not None and slide_img.has_attr('data-imgload'):
+                        image_url = slide_img['data-imgload']
+                        image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                        image_objs.append({'name': image_name, 'url': image_url})
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Character")
+            print(e)
+        self.download_image_objects(image_objs, folder)
 
 # Ochikobore Fruit Tart
 class OchifuruDownload(UnconfirmedDownload):
