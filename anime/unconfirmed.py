@@ -9,6 +9,7 @@ from anime.main_download import MainDownload
 # Ijiranaide, Nagatoro-san https://www.nagatorosan.jp/ #長瀞さん @nagatoro_tv
 # Iwa Kakeru!: Sport Climbing Girls http://iwakakeru-anime.com/ #いわかける #iwakakeru @iwakakeru_anime
 # Kaifuku Jutsushi no Yarinaoshi http://kaiyari.com/ #回復術士 @kaiyari_anime
+# Kamisama ni Natta Hi https://kamisama-day.jp/ #神様になった日 @kamisama_Ch_AB
 # Kami-tachi ni Hirowareta Otoko https://kamihiro-anime.com/ #神達に拾われた男 @kamihiro_anime
 # Kuma Kuma Kuma Bear https://kumakumakumabear.com/ #くまクマ熊ベアー #kumabear @kumabear_anime
 # Kimi to Boku no Saigo no Senjou, Aruiwa Sekai ga Hajimaru Seisen https://kimisentv.com/ #キミ戦 #kimisen @kimisen_project
@@ -233,6 +234,35 @@ class KaiyariDownload(UnconfirmedDownload):
             {'name': 'announce_2', 'url': 'https://pbs.twimg.com/media/EJ0V4iwVUAE-Ep7?format=jpg&name=medium'},
             {'name': 'teaser', 'url': 'http://kaiyari.com/teaser/images/top-main-vis2.jpg'},
             {'name': 'teaser_2', 'url': 'https://pbs.twimg.com/media/EaizJUOU8AATcDK?format=jpg&name=medium'}]
+        self.download_image_objects(image_objs, folder)
+
+
+# Kamisama ni Natta Hi
+class KamisamaNiNattaHiDownload(UnconfirmedDownload):
+    title = "Kamisama ni Natta Hi"
+    keywords = [title, "The Day I Became a God"]
+
+    PAGE_PREFIX = 'https://kamisama-day.jp/'
+
+    def __init__(self):
+        super().__init__()
+        self.init_base_folder('kamisama-ni-natta-hi')
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        image_objs = [
+            {'name': 'opening_1', 'url': 'https://kamisama-day.jp/assets/img/opening_1.jpg'},
+            {'name': 'opening_2', 'url': 'https://kamisama-day.jp/assets/img/opening_2.jpg'},
+            {'name': 'opening_3', 'url': 'https://kamisama-day.jp/assets/img/opening_3.jpg'},
+            {'name': 'kv', 'url': 'https://kamisama-day.jp/assets/img/kv.jpg'}
+        ]
         self.download_image_objects(image_objs, folder)
 
 
