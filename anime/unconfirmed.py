@@ -331,6 +331,7 @@ class KimisenDownload(UnconfirmedDownload):
     def run(self):
         self.download_episode_preview()
         self.download_key_visual()
+        self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX)
@@ -340,6 +341,20 @@ class KimisenDownload(UnconfirmedDownload):
         image_objs = [
             {'name': 'teaser', 'url': 'https://kimisentv.com/teaser/images/top-main-vis.jpg'}]
         self.download_image_objects(image_objs, keyvisual_folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        character_url = 'https://kimisentv.com/assets/character/c%s.png'
+        i = 0
+        while True:
+            i += 1
+            image_name = 'c' + str(i)
+            if self.is_image_exists(image_name, folder):
+                continue
+            image_url = character_url % str(i)
+            result = self.download_image(image_url, folder + '/' + image_name)
+            if result == -1:
+                break
 
 
 # Kuma Kuma Kuma Bear
