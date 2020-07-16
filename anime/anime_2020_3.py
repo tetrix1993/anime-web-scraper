@@ -7,12 +7,12 @@ from scan import AniverseMagazineScanner
 
 # Dokyuu Hentai HxEros https://hxeros.com/ #エグゼロス #hxeros @hxeros_anime [WED]
 # Kanojo, Okarishimasu https://kanokari-official.com/ #かのかり #kanokari @kanokari_anime [WED]
-# Maou Gakuin no Futekigousha https://maohgakuin.com/ #魔王学院 @maohgakuin [SAT]
+# Maou Gakuin no Futekigousha https://maohgakuin.com/ #魔王学院 @maohgakuin [MON]
 # Monster Musume no Oishasan https://mon-isha-anime.com/character/ #モン医者 #m_doctor @mon_isha_anime
 # Peter Grill to Kenja no Jikan http://petergrill-anime.jp/ #賢者タイムアニメ #petergrill @petergrillanime
 # Re:Zero S2 http://re-zero-anime.jp/tv/story/ #rezero #リゼロ @Rezero_official [MON]
-# Uzaki-chan wa Asobitai! https://uzakichan.com/ #宇崎ちゃん @uzakichan_asobi [FRI]
-# Yahari Ore no Seishun http://www.tbs.co.jp/anime/oregairu/story/ #俺ガイル #oregairu @anime_oregairu
+# Uzaki-chan wa Asobitai! https://uzakichan.com/ #宇崎ちゃん @uzakichan_asobi [MON]
+# Yahari Ore no Seishun http://www.tbs.co.jp/anime/oregairu/story/ #俺ガイル #oregairu @anime_oregairu [THU]
 
 
 # Summer 2020 Anime
@@ -421,7 +421,7 @@ class MaohgakuinDownload(Summer2020AnimeDownload):
             {'name': 'music_ed', 'url': 'https://pbs.twimg.com/media/Eb6ctYuU8AEVilj?format=jpg&name=large'}
         ]
         self.download_image_objects(image_objs, folder)
-
+        
         try:
             bd_url = 'https://maohgakuin.com/products/'
             stop = False
@@ -875,7 +875,12 @@ class Oregairu3Download(Summer2020AnimeDownload):
 
     def download_bluray(self):
         folder = self.create_bluray_directory()
-        image_objs = []
+        image_objs = [
+            {'name': 'music_ed', 'url': 'https://pbs.twimg.com/media/Ec7bHveUwAEpB8X?format=jpg&name=large'},
+            {'name': 'album_1', 'url': 'https://tc-animate.techorus-cdn.com/resize_image/resize_image.php?image=07091514_5f06b5ad6bf56.jpg'},
+            {'name': 'album_2', 'url': 'https://tc-animate.techorus-cdn.com/resize_image/resize_image.php?image=07091512_5f06b558505c8.jpg'},
+            {'name': 'bd_1', 'url': 'https://tc-animate.techorus-cdn.com/resize_image/resize_image.php?image=07091503_5f06b33680c68.jpg'}
+        ]
         disc_prefix = 'http://www.tbs.co.jp/anime/oregairu/disc/'
         try:
             soup = self.get_soup('http://www.tbs.co.jp/anime/oregairu/disc/')
