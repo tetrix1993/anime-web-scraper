@@ -527,7 +527,9 @@ class MaoujoDownload(UnconfirmedDownload):
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         image_objs = [{'name': 'teaser', 'url': 'https://pbs.twimg.com/media/EOUT0DDU0AEEKKN?format=jpg&name=900x900'},
-                      {'name': 'teaser_2', 'url': 'https://maoujo-anime.com/img/visual/visual_01.png'},
+                      #{'name': 'teaser_2', 'url': 'https://maoujo-anime.com/img/visual/visual_01.png'},
+                      {'name': 'teaser_2', 'url': 'https://64.media.tumblr.com/48ca6877e25711c2f1122fe1ea52167e/e6093826ece4bf20-9a/s2048x3072/88f0c7494e7d2c8c95f5b9495b79cdb6b799f401.png'},
+                      {'name': 'kv', 'url': 'https://maoujo-anime.com/img/home/visual_02.jpg'},
                       {'name': 'gensaku_20200527', 'url': 'https://maoujo-anime.com/special/illust/gensaku_20200527.jpg'},
                       {'name': 'gensaku_twitter', 'url': 'https://pbs.twimg.com/media/EY_hB6lVcAAduDe?format=jpg&name=medium'}]
         self.download_image_objects(image_objs, folder)
