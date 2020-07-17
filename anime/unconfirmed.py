@@ -6,6 +6,7 @@ from anime.main_download import MainDownload
 # Bokutachi no Remake http://bokurema.com/ #ぼくリメ #bokurema @bokurema
 # Cheat Kusushi no Slow Life: Isekai ni Tsukurou Drugstore https://www.cheat-kusushi.jp/ #チート薬師 #スローライフ @cheat_kusushi
 # Danmachi III http://danmachi.com/danmachi3/ #danmachi @danmachi_anime
+# Gochuumon wa Usagi desu ka? Bloom https://gochiusa.com/bloom/ #gochiusa @usagi_anime
 # Higurashi no Naku Koro ni (2020) https://higurashianime.com/ #ひぐらし @higu_anime
 # Ijiranaide, Nagatoro-san https://www.nagatorosan.jp/ #長瀞さん @nagatoro_tv
 # Iwa Kakeru!: Sport Climbing Girls http://iwakakeru-anime.com/ #いわかける #iwakakeru @iwakakeru_anime
@@ -129,6 +130,33 @@ class Danmachi3Download(UnconfirmedDownload):
         image_objs = [
             {'name': 'teaser', 'url': 'https://pbs.twimg.com/media/ETtwMdUUMAAdqd1?format=jpg&name=4096x4096'},
             {'name': 'kv1', 'url': 'https://pbs.twimg.com/media/EcCRpVLUcAAdpGv?format=jpg&name=900x900'}
+        ]
+        self.download_image_objects(image_objs, folder)
+
+
+# Gochuumon wa Usagi Desu ka? Bloom
+class GochiUsa3Download(UnconfirmedDownload):
+    title = "Gochuumon wa Usagi Desu ka? Bloom"
+    keywords = [title, 'Gochiusa', '3rd']
+
+    PAGE_PREFIX = 'https://gochiusa.com/bloom/'
+
+    def __init__(self):
+        super().__init__()
+        self.init_base_folder('gochiusa3')
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        image_objs = [
+            {'name': 'original_kv', 'url': 'https://gochiusa.com/bloom/core_sys/images/main/home/main_img.jpg'},
+            {'name': 'kv', 'url': 'https://pbs.twimg.com/media/EdIiHEMVAAA5PrU?format=jpg&name=900x900'}
         ]
         self.download_image_objects(image_objs, folder)
 
