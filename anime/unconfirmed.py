@@ -17,6 +17,7 @@ from anime.main_download import MainDownload
 # Maou-jou de Oyasumi https://maoujo-anime.com/ #魔王城でおやすみ @maoujo_anime
 # Mushoku Tensei https://mushokutensei.jp/ #無職転生 @mushokutensei_A
 # Ochikobore Fruit Tart http://ochifuru-anime.com/ #ochifuru @ochifuru_anime
+# Ore dake Haireru Kakushi Dungeon https://kakushidungeon-anime.jp/ #隠しダンジョン @kakushidungeon
 # Rail Romanesque https://railromanesque.jp/ @rail_romanesque #まいてつ #レヱルロマネスク
 # Tatoeba Last Dungeon https://lasdan.com/ #ラスダン @lasdan_PR
 # Tonikaku Kawaii http://tonikawa.com/ #トニカクカワイイ #tonikawa @tonikawa_anime
@@ -645,6 +646,31 @@ class OchifuruDownload(UnconfirmedDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + ' - Character')
             print(e)
+
+
+# Ore dake Haireru Kakushi Dungeon
+class KakushiDungeonDownload(UnconfirmedDownload):
+    title = "Ore dake Haireru Kakushi Dungeon"
+    keywords = [title, "The Hidden Dungeon Only I Can Enter"]
+
+    PAGE_PREFIX = 'https://kakushidungeon-anime.jp/'
+
+    def __init__(self):
+        super().__init__()
+        self.init_base_folder('kakushi-dungeon')
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        image_objs = [{'name': 'teaser', 'url': 'https://kakushidungeon-anime.jp/teaser/images/top-main-vis.jpg'},
+                      {'name': 'teaser_2', 'url': 'https://pbs.twimg.com/media/EXZB_ZiU0AA4srN?format=jpg&name=large'}]
+        self.download_image_objects(image_objs, folder)
 
 
 # Rail Romanesque
