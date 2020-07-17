@@ -319,6 +319,7 @@ class Honzuki2Download(Spring2020AnimeDownload):
     PAGE_PREFIX = "http://booklove-anime.jp/story/"
     IMAGE_PREFIX = "http://booklove-anime.jp/"
     FIRST_EPISODE = 15
+    FINAL_EPISODE = 26
     
     def __init__(self):
         super().__init__()
@@ -354,7 +355,7 @@ class Honzuki2Download(Spring2020AnimeDownload):
             template = 'http://booklove-anime.jp/img/story/ep%s/img%s.jpg'
             episode = 14
             result = 0
-            while True:
+            while episode <= self.FINAL_EPISODE:
                 episode += 1
                 if self.is_file_exists(self.base_folder + "/" + str(episode) + "_1.jpg") or self.is_file_exists(
                         self.base_folder + "/" + str(episode) + "_1.png"):
