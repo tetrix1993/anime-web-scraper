@@ -2,8 +2,7 @@ import os
 import anime.constants as constants
 from anime.main_download import MainDownload
 from datetime import datetime
-from scan import MocaNewsScanner
-from scan import AniverseMagazineScanner
+from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 
 # Dokyuu Hentai HxEros https://hxeros.com/ #エグゼロス #hxeros @hxeros_anime [WED]
 # Kanojo, Okarishimasu https://kanokari-official.com/ #かのかり #kanokari @kanokari_anime [WED]
@@ -376,6 +375,7 @@ class MaohgakuinDownload(Summer2020AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
+        WebNewtypeScanner('魔王学院の不適合者', self.base_folder).run()
 
     def download_key_visual(self):
         keyvisual_folder = self.create_key_visual_directory()
