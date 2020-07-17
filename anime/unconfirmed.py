@@ -2,6 +2,7 @@ import os
 import anime.constants as constants
 from anime.main_download import MainDownload
 
+# 100-man no Inochi no Ue ni Ore wa Tatteiru http://1000000-lives.com/ #俺100 @1000000_lives
 # Bokutachi no Remake http://bokurema.com/ #ぼくリメ #bokurema @bokurema
 # Cheat Kusushi no Slow Life: Isekai ni Tsukurou Drugstore https://www.cheat-kusushi.jp/ #チート薬師 #スローライフ @cheat_kusushi
 # Danmachi III http://danmachi.com/danmachi3/ #danmachi @danmachi_anime
@@ -37,6 +38,48 @@ class UnconfirmedDownload(MainDownload):
             os.makedirs(self.base_folder)
 
 
+# 100-man no Inochi no Ue ni Ore wa Tatteiru
+class HyakumanNoInochiDownload(UnconfirmedDownload):
+    title = "100-man no Inochi no Ue ni Ore wa Tatteiru"
+    keywords = [title, "I'm standing on 1,000,000 lives.", "Hyakuman"]
+
+    PAGE_PREFIX = 'http://1000000-lives.com/'
+
+    def __init__(self):
+        super().__init__()
+        self.init_base_folder('100-man-no-inochi')
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        image_objs = [
+            {'name': 'kv', 'url': 'https://pbs.twimg.com/media/ESLrKCWUcAExG_i?format=jpg&name=4096x4096'}]
+        self.download_image_objects(image_objs, folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        chara_url_template = 'http://1000000-lives.com/img/index/img_character%s.png'
+        i = 0
+        while True:
+            i += 1
+            image_name = 'img_character' + str(i).zfill(2)
+            if self.is_image_exists(image_name, folder):
+                continue
+            image_url = chara_url_template % str(i).zfill(2)
+            image_filepath = folder + '/' + image_name
+            result = self.download_image(image_url, image_filepath)
+            if result == -1:
+                break
+
+
+# Cheat Kusushi no Slow Life: Isekai ni Tsukurou Drugstore
 class CheatKusushiDownload(UnconfirmedDownload):
     title = 'Cheat Kusushi no Slow Life: Isekai ni Tsukurou Drugstore'
     keywords = [title, 'Cheat Pharmacist\'s Slow Life: Making a Drugstore in Another World']
