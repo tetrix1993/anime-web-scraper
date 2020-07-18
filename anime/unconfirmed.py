@@ -156,7 +156,7 @@ class GochiUsa3Download(UnconfirmedDownload):
         folder = self.create_key_visual_directory()
         image_objs = [
             {'name': 'original_kv', 'url': 'https://gochiusa.com/bloom/core_sys/images/main/home/main_img.jpg'},
-            {'name': 'kv', 'url': 'https://pbs.twimg.com/media/EdIiHEMVAAA5PrU?format=jpg&name=900x900'}
+            {'name': 'kv', 'url': 'https://pbs.twimg.com/media/EdIvRRNUEAI7tTZ?format=jpg&name=medium'}
         ]
         self.download_image_objects(image_objs, folder)
 
