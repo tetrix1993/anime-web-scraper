@@ -471,6 +471,17 @@ class KumaBearDownload(UnconfirmedDownload):
         try:
             img_objs = [{'name': 'list_img',
                 'url': 'https://kumakumakumabear.com/core_sys/images/main/character/list_img.png'}]
+
+            special_chara_numbers = [str(num).zfill(2) for num in range(1, 6, 1)]
+            special_chara_images = [
+                'https://64.media.tumblr.com/9c9652165c3656fefc86789815a5585d/c8a5ee31f02427b4-47/s1280x1920/782016087a2ee0740a8f54341e58bffad80addcb.png',
+                'https://64.media.tumblr.com/a469c9d9b8c8016ef2b957be6f1f05cd/c8a5ee31f02427b4-dc/s1280x1920/4694b1072c94a3c7a3a90ffc71fb74d1c5170aae.png',
+                'https://64.media.tumblr.com/3025601ebb1822281a044f001d3bd3c3/c8a5ee31f02427b4-d0/s1280x1920/0f322395fd351ea30d7d9764cbaa7b715e2dd883.png',
+                'https://64.media.tumblr.com/a27fee0b02d89dbee41c459b1b42e7fa/c8a5ee31f02427b4-3d/s1280x1920/c11c77d6e7bbd2fa7030be197f19522ba46703ec.png',
+                'https://64.media.tumblr.com/5a26e287b34a1ccd1713d27a13c9293f/c8a5ee31f02427b4-62/s1280x1920/a67e3bf69f98bb7deb2c565ce0d07045d2baecf9.png'
+            ]
+            for i in range(len(special_chara_images)):
+                img_objs.append({'name': 'main_' + str(i + 1).zfill(2), 'url': special_chara_images[i]})
             self.download_image_objects(img_objs, folder)
 
             soup = self.get_soup('https://kumakumakumabear.com/chara/')
@@ -480,19 +491,12 @@ class KumaBearDownload(UnconfirmedDownload):
                 chara_url = self.PAGE_PREFIX + chara_url_tag['href'].replace('../', '')
                 chara_num = chara_url.split('/')[-1].split('.html')[0].zfill(2)
                 if os.path.exists(folder + '/' + 'thumb_' + chara_num + '.png')\
-                        and not (chara_num == '01' or chara_num == '02'):
+                        and not (chara_num in special_chara_numbers):
+                    continue
+                if chara_num in special_chara_numbers and os.path.exists(folder + '/' + 'main_' + chara_num + 'a.png'):
                     continue
                 image_objs_list = [{'name': 'thumb_' + chara_num, 'url': self.PAGE_PREFIX
                     + chara_url_tag.find('img')['src'].replace('../', '')}]
-                if chara_num == '01' or chara_num == '02':
-                    if os.path.exists(folder + '/' + 'main_' + chara_num + 'a' + '.png') \
-                            and os.path.exists(folder + '/' + 'main_' + chara_num + '.png'):
-                        continue
-                    if not os.path.exists(folder + '/' + 'main_' + chara_num + '.png'):
-                        if chara_num == '01':
-                            image_objs_list.append({'name': 'main_01', 'url': 'https://66.media.tumblr.com/9c9652165c3656fefc86789815a5585d/c8a5ee31f02427b4-47/s1280x1920/782016087a2ee0740a8f54341e58bffad80addcb.png'})
-                        elif chara_num == '02':
-                            image_objs_list.append({'name': 'main_02', 'url': 'https://66.media.tumblr.com/a469c9d9b8c8016ef2b957be6f1f05cd/c8a5ee31f02427b4-dc/s1280x1920/4694b1072c94a3c7a3a90ffc71fb74d1c5170aae.png'})
                 chara_soup = self.get_soup(chara_url)
                 chara_frame = chara_soup.find('div', class_='chraFrame')
 
@@ -507,7 +511,7 @@ class KumaBearDownload(UnconfirmedDownload):
                 chara_main_images = chara_frame.find_all('div', class_='charaMainImg')
                 for i in range(len(chara_main_images)):
                     chara_main_name = 'main_' + chara_num
-                    if chara_num == '01' or chara_num == '02':
+                    if chara_num in special_chara_numbers:
                         chara_main_name += 'a'
                     if len(chara_sub_images) > 1:
                         chara_main_name += '_' + str(i + 1)
