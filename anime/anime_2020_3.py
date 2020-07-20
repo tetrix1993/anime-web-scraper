@@ -751,13 +751,27 @@ class UzakiChanDownload(Summer2020AnimeDownload):
             os.makedirs(self.base_folder)
 
     def run(self):
-        #self.download_episode_preview()
+        self.download_episode_preview()
         self.download_episode_preview_external()
         self.download_key_visual()
         self.download_bluray()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        try:
+            template = 'https://uzakichan.com/story/story%s_%s.png'
+            for i in range(13):
+                episode = str(i + 1).zfill(2)
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                for j in range(6):
+                    image_url = template % (episode, str(j + 1).zfill(2))
+                    image_name = episode + '_' + str(j + 1)
+                    result = self.download_image(image_url, self.base_folder + '/' + image_name)
+                    if result == -1:
+                        return
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
     def download_episode_preview_external(self):
         try:
