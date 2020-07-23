@@ -15,12 +15,14 @@ from anime.main_download import MainDownload
 # Kami-tachi ni Hirowareta Otoko https://kamihiro-anime.com/ #神達に拾われた男 @kamihiro_anime
 # Kuma Kuma Kuma Bear https://kumakumakumabear.com/ #くまクマ熊ベアー #kumabear @kumabear_anime
 # Kimi to Boku no Saigo no Senjou, Aruiwa Sekai ga Hajimaru Seisen https://kimisentv.com/ #キミ戦 #kimisen @kimisen_project
+# Mahouka Koukou no Rettousei: Raihousha-hen https://mahouka.jp/ #mahouka @mahouka_anime
 # Majo no Tabitabi https://majotabi.jp/ #魔女の旅々 #魔女の旅々はいいぞ #majotabi @majotabi_PR
 # Maou-jou de Oyasumi https://maoujo-anime.com/ #魔王城でおやすみ @maoujo_anime
 # Mushoku Tensei https://mushokutensei.jp/ #無職転生 @mushokutensei_A
 # Ochikobore Fruit Tart http://ochifuru-anime.com/ #ochifuru @ochifuru_anime
 # Ore dake Haireru Kakushi Dungeon https://kakushidungeon-anime.jp/ #隠しダンジョン @kakushidungeon
 # Rail Romanesque https://railromanesque.jp/ @rail_romanesque #まいてつ #レヱルロマネスク
+# Senyoku no Sigrdrifa https://sigururi.com/ #シグルリ @sigururi
 # Tatoeba Last Dungeon https://lasdan.com/ #ラスダン @lasdan_PR
 # Tonikaku Kawaii http://tonikawa.com/ #トニカクカワイイ #tonikawa @tonikawa_anime
 
@@ -528,6 +530,32 @@ class KumaBearDownload(UnconfirmedDownload):
             print(e)
 
 
+class Mahouka2Download(UnconfirmedDownload):
+    title = "Mahouka Koukou no Rettousei: Raihousha-hen"
+    keywords = [title, "The Irregular at Magic High School", "2nd"]
+
+    PAGE_PREFIX = 'https://mahouka.jp/'
+
+    def __init__(self):
+        super().__init__()
+        self.init_base_folder('mahouka2')
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        image_objs = [
+            {'name': 'teaser', 'url': 'https://mahouka.jp/news/SYS/CONTENTS/2019100420534812757301'},
+            {'name': 'kv', 'url': 'https://mahouka.jp/assets/img/top/main/kv/kv.jpg'}
+        ]
+        self.download_image_objects(image_objs, folder)
+
+
 class MajotabiDownload(UnconfirmedDownload):
     title = "Majo no Tabitabi"
     keywords = [title, "Wandering Witch: The Journey of Elaina", "Majotabi"]
@@ -806,6 +834,7 @@ class SigrdrifaDownload(UnconfirmedDownload):
         self.download_episode_preview()
         self.download_key_visual()
         self.download_character()
+        self.download_other()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX)
@@ -838,6 +867,14 @@ class SigrdrifaDownload(UnconfirmedDownload):
                 result = self.download_image(image_url, filepath_without_extension)
                 if result == -1:
                     break
+
+    def download_other(self):
+        folder = self.create_custom_directory('other')
+        image_objs = [
+            {'name': 'news_vol_01', 'url': 'https://pbs.twimg.com/media/EdnNj1qVoAEY4MX?format=jpg&name=4096x4096'},
+            {'name': 'uminohi', 'url': 'https://sigururi.com/SYS/CONTENTS/2020072310293692693264/w708'}
+        ]
+        self.download_image_objects(image_objs, folder)
 
 
 # Tatoeba Last Dungeon Mae no Mura no Shounen ga Joban no Machi de Kurasu Youna Monogatari
