@@ -263,6 +263,7 @@ class IwakakeruDownload(UnconfirmedDownload):
     def run(self):
         self.download_episode_preview()
         self.download_key_visual()
+        self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX)
@@ -280,6 +281,47 @@ class IwakakeruDownload(UnconfirmedDownload):
             image_without_extension = self.extract_image_name_from_url(image_url, with_extension=False)
             filepath_without_extension = keyvisual_folder + '/' + image_without_extension
             self.download_image(image_url, filepath_without_extension)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        chara_url_template = 'http://iwakakeru-anime.com/img/character/chara%s.png'
+        thumb_url_template = 'http://iwakakeru-anime.com/img/character/chara%s_thum.png'
+        face_url_template = 'http://iwakakeru-anime.com/img/character/chara%s_face%s.png'
+        maximum = 0
+        try:
+            soup = self.get_soup('http://iwakakeru-anime.com/character/')
+            main_inner_div = soup.find('div', id='main_inner')
+            if main_inner_div is not None:
+                sections = main_inner_div.find_all('section')
+                for section in sections:
+                    links = section.find_all('a')
+                    for link in links:
+                        if link.has_attr('href') and 'chara' in link['href'] and '.php' in link['href']:
+                            try:
+                                number = int(link['href'].split('.php')[0].split('chara')[1])
+                                if number > maximum:
+                                    maximum = number
+                            except:
+                                pass
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Character")
+            print(e)
+            return
+
+        for i in range(1, maximum + 1, 1):
+            chara_name = 'chara' + str(i)
+            if self.is_image_exists(chara_name, folder):
+                continue
+            chara_url = chara_url_template % str(i)
+            result = self.download_image(chara_url, folder + '/' + chara_name)
+            if result == -1:
+                continue
+            image_objs = [
+                {'name': 'chara' + str(i) + '_thum', 'url': thumb_url_template % str(i)},
+                {'name': 'chara' + str(i) + '_face1', 'url': face_url_template % (str(i), '1')},
+                {'name': 'chara' + str(i) + '_face2', 'url': face_url_template % (str(i), '2')}
+            ]
+            self.download_image_objects(image_objs, folder)
 
 
 # Kaifuku Jutsushi no Yarinaoshi
