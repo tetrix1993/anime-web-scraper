@@ -3,15 +3,14 @@ import re
 import anime.constants as constants
 from anime.main_download import MainDownload
 from datetime import datetime
-from scan import WebNewtypeScanner
-from scan import MocaNewsScanner
+from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 
 # Arte http://arte-anime.com/ #アルテ @arte_animation [SUN]
 # BNA https://bna-anime.com/story/ #ビーエヌエー @bna_anime [THU]
 # Gleipnir http://gleipnir-anime.com/ #グレイプニル @gleipnir_anime [MON]
 # Hachi-nan tte http://hachinan-anime.com/story/ #八男 #hachinan @Hachinan_PR [WED]
 # Honzuki S2 http://booklove-anime.jp/story/ #本好きの下剋上 @anime_booklove [MON]
-# Houkago Teibou Nisshi https://teibotv.com/ #teibo @teibo_bu [MON]
+# Houkago Teibou Nisshi https://teibotv.com/ #teibo @teibo_bu [FRI]
 # Kaguya-sama S2 https://kaguya.love/ #かぐや様 @anime_kaguya [SAT]
 # Kakushigoto https://kakushigoto-anime.com/ #かくしごと @kakushigoto_pr [TUE]
 # Kingdom S3 https://kingdom-anime.com/story/ #キングダム @kingdom_animePR [THU]
@@ -446,6 +445,7 @@ class TeiboDownload(Spring2020AnimeDownload):
     
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_external()
         self.download_key_visual()
         self.download_bluray()
 
@@ -484,6 +484,9 @@ class TeiboDownload(Spring2020AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
+
+    def download_episode_preview_external(self):
+        AniverseMagazineScanner('放課後ていぼう日誌', self.base_folder).run()
 
     def download_key_visual(self):
         filepath = self.create_key_visual_directory()

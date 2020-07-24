@@ -596,14 +596,25 @@ class PeterGrillDownload(Summer2020AnimeDownload):
             os.makedirs(self.base_folder)
 
     def run(self):
-        #self.download_episode_preview()
+        self.download_episode_preview()
         self.download_episode_preview_external()
         self.download_key_visual()
         self.download_character()
         self.download_bluray()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        #self.has_website_updated(self.PAGE_PREFIX)
+        template_url = 'http://petergrill-anime.jp/images/upload/pg%s_still_%s.png'
+        for i in range(13):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_1'):
+                continue
+            for j in range(6):
+                image_name = episode + '_' + str(j + 1)
+                image_url = template_url % (episode, str(j + 1).zfill(2))
+                result = self.download_image(image_url, self.base_folder + '/' + image_name)
+                if result == -1:
+                    return
 
     def download_episode_preview_external(self):
         try:
