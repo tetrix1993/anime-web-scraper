@@ -367,6 +367,7 @@ class KamisamaNiNattaHiDownload(UnconfirmedDownload):
     def run(self):
         self.download_episode_preview()
         self.download_key_visual()
+        self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX)
@@ -377,8 +378,29 @@ class KamisamaNiNattaHiDownload(UnconfirmedDownload):
             {'name': 'opening_1', 'url': 'https://kamisama-day.jp/assets/img/opening_1.jpg'},
             {'name': 'opening_2', 'url': 'https://kamisama-day.jp/assets/img/opening_2.jpg'},
             {'name': 'opening_3', 'url': 'https://kamisama-day.jp/assets/img/opening_3.jpg'},
-            {'name': 'kv', 'url': 'https://kamisama-day.jp/assets/img/kv.jpg'}
+            {'name': 'kv', 'url': 'https://kamisama-day.jp/assets/img/kv.jpg'},
+            {'name': 'kv2', 'url': 'https://kamisama-day.jp/assets/img/top/kv.jpg'}
         ]
+        self.download_image_objects(image_objs, folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        image_objs = []
+        face_url = 'https://kamisama-day.jp/assets/img/chara/face_%s.png'
+        img_url = 'https://kamisama-day.jp/assets/img/chara/img_%s.png'
+        try:
+            soup = self.get_soup('https://kamisama-day.jp/character/')
+            nav = soup.find('nav', class_='chara_nav')
+            if nav is not None:
+                chara_links = nav.find_all('a')
+                for chara_link in chara_links:
+                    if chara_link.has_attr('href') and '?chara=' in chara_link['href']:
+                        chara_name = chara_link['href'].split('?chara=')[1]
+                        image_objs.append({'name': 'face_' + chara_name, 'url': face_url % chara_name})
+                        image_objs.append({'name': 'img_' + chara_name, 'url': img_url % chara_name})
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Character")
+            print(e)
         self.download_image_objects(image_objs, folder)
 
 
