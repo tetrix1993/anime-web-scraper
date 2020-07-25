@@ -2,7 +2,7 @@ import os
 import shutil
 import traceback
 
-VERSION_NUMBER = 4
+VERSION_NUMBER = 5
 DOWNLOAD_DIR = 'download'
 UNCONFIRMED_DIR = DOWNLOAD_DIR + '/unconfirmed'
 MIGRATION_ERROR_LOG = 'migration_error.log'
@@ -23,7 +23,24 @@ def migrate_folders():
     migrate_folder_by_name(UNCONFIRMED_DIR, '2020-3', 'mon-isha')
     migrate_folder_by_name(UNCONFIRMED_DIR, '2020-3', 'petergrill')
     migrate_folder_by_name(UNCONFIRMED_DIR, '2020-3', 'uzakichan')
-    migrate_folder_by_name('2020-3', UNCONFIRMED_DIR, 'ochifuru')
+    migrate_folder_by_name('2020-3', '2020-4', 'ochifuru')
+    migrate_folder_by_name(UNCONFIRMED_DIR, '2020-4', 'ochifuru')
+    migrate_folder_by_name(UNCONFIRMED_DIR, '2020-4', '100-man-no-inochi')
+    migrate_folder_by_name(UNCONFIRMED_DIR, '2020-4', 'danmachi3')
+    migrate_folder_by_name(UNCONFIRMED_DIR, '2020-4', 'gochiusa3')
+    migrate_folder_by_name(UNCONFIRMED_DIR, '2020-4', 'higurashi2020')
+    migrate_folder_by_name(UNCONFIRMED_DIR, '2020-4', 'iwakakeru')
+    migrate_folder_by_name(UNCONFIRMED_DIR, '2020-4', 'kamisama-ni-natta-hi')
+    migrate_folder_by_name(UNCONFIRMED_DIR, '2020-4', 'kamihiro')
+    migrate_folder_by_name(UNCONFIRMED_DIR, '2020-4', 'kimisen')
+    migrate_folder_by_name(UNCONFIRMED_DIR, '2020-4', 'kumabear')
+    migrate_folder_by_name(UNCONFIRMED_DIR, '2020-4', 'mahouka2')
+    migrate_folder_by_name(UNCONFIRMED_DIR, '2020-4', 'majotabi')
+    migrate_folder_by_name(UNCONFIRMED_DIR, '2020-4', 'maoujo')
+    migrate_folder_by_name(UNCONFIRMED_DIR, '2020-4', 'rail-romanesque')
+    migrate_folder_by_name(UNCONFIRMED_DIR, '2020-4', 'sigrdrifa')
+    migrate_folder_by_name(UNCONFIRMED_DIR, '2020-4', 'lasdan')
+    migrate_folder_by_name(UNCONFIRMED_DIR, '2020-4', 'tonikawa')
 
 
 def rename_folders():

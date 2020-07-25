@@ -13,7 +13,7 @@ def run():
     process_download(downloads)
 
     downloads = []
-    subclasses = UnconfirmedDownload.__subclasses__()
+    subclasses = Fall2020AnimeDownload.__subclasses__() + UnconfirmedDownload.__subclasses__()
     for subclass in subclasses:
         downloads.append(subclass())
     process_download(downloads)
