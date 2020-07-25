@@ -13,6 +13,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 # Kami-tachi ni Hirowareta Otoko https://kamihiro-anime.com/ #神達に拾われた男 @kamihiro_anime
 # Kimi to Boku no Saigo no Senjou, Aruiwa Sekai ga Hajimaru Seisen https://kimisentv.com/ #キミ戦 #kimisen @kimisen_project
 # Kuma Kuma Kuma Bear https://kumakumakumabear.com/ #くまクマ熊ベアー #kumabear @kumabear_anime
+# Maesetsu https://maesetsu.jp/ #まえせつ @maesetsu_anime
 # Mahouka Koukou no Rettousei: Raihousha-hen https://mahouka.jp/ #mahouka @mahouka_anime
 # Majo no Tabitabi https://majotabi.jp/ #魔女の旅々 #魔女の旅々はいいぞ #majotabi @majotabi_PR
 # Maou-jou de Oyasumi https://maoujo-anime.com/ #魔王城でおやすみ @maoujo_anime
@@ -494,6 +495,61 @@ class KumaBearDownload(Fall2020AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + " - Character")
             print(e)
+
+
+# Maesetsu!
+class MaesetsuDownload(Fall2020AnimeDownload):
+    title = "Maesetsu!"
+    keywords = [title]
+
+    PAGE_PREFIX = 'https://maesetsu.jp/'
+
+    def __init__(self):
+        super().__init__()
+        self.init_base_folder('maesetsu')
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+        self.download_character()
+        self.download_other()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        image_objs = [
+            {'name': 'kv', 'url': 'https://maesetsu.jp/core_sys/images/main/tz/kv.png'},
+            {'name': 'kv2', 'url': 'https://maesetsu.jp/core_sys/images/main/tz/kv2.jpg'},
+            {'name': 'kv3', 'url': 'https://maesetsu.jp/core_sys/images/main/tz/kv3.jpg'}
+        ]
+        self.download_image_objects(image_objs, folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        image_objs = []
+        face_url_template = 'https://maesetsu.jp/core_sys/images/main/tz/chara/msch%s_face.jpg'
+        body_url_template = 'https://maesetsu.jp/core_sys/images/main/tz/chara/msch%s_body.jpg'
+        for i in range(1, 12, 1):
+            body_name = 'msch' + str(i) + '_body'
+            if self.is_image_exists(body_name):
+                continue
+            face_name = 'msch' + str(i) + '_face'
+            image_objs.append({'name': body_name, 'url': body_url_template % str(i)})
+            image_objs.append({'name': face_name, 'url': face_url_template % str(i)})
+        self.download_image_objects(image_objs, folder)
+
+    def download_other(self):
+        folder = self.create_custom_directory('other')
+        image_objs = []
+        image_url_template = 'https://maesetsu.jp/core_sys/images/main/tz/slider/scene_%s.jpg'
+        for i in range(1, 23, 1):
+            image_name = 'gallery_' + str(i).zfill(3)
+            if self.is_image_exists(image_name):
+                continue
+            image_objs.append({'name': image_name, 'url': image_url_template % str(i).zfill(3)})
+        self.download_image_objects(image_objs, folder)
 
 
 # Mahouka Koukou no Rettousei: Raihousha-hen
