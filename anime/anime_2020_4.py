@@ -703,7 +703,13 @@ class OchifuruDownload(Fall2020AnimeDownload):
     def download_key_visual(self):
         keyvisual_folder = self.create_key_visual_directory()
         image_objs = [
-            {'name': 'kv', 'url': 'https://pbs.twimg.com/media/EKb4OniUwAELo-b?format=jpg&name=medium'}]
+            {'name': 'kv', 'url': 'https://pbs.twimg.com/media/EKb4OniUwAELo-b?format=jpg&name=medium'},
+            {'name': 'kv_1', 'url': 'http://ochifuru-anime.com/images/top/v_001.png'},
+            {'name': 'kv_2', 'url': 'http://ochifuru-anime.com/images/top/v_001m.png'},
+            {'name': 'kv2', 'url': 'https://pbs.twimg.com/media/EeAHzyzU8AI2juU?format=jpg&name=medium'},
+            {'name': 'kv2_1', 'url': 'http://ochifuru-anime.com/images/top/v_002.png'},
+            {'name': 'kv2_2', 'url': 'http://ochifuru-anime.com/images/top/v_002m.png'}
+        ]
         self.download_image_objects(image_objs, keyvisual_folder)
 
     def download_character(self):

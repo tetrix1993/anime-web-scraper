@@ -471,11 +471,13 @@ class MaohgakuinDownload(Summer2020AnimeDownload):
         folder = self.create_custom_directory(constants.FOLDER_OTHER)
         image_objs = [
             {'name': 'radio', 'url': 'http://www.onsen.ag/program/maoh/image/781_pgi01_l.jpg'},
+            {'name': 'radio_big', 'url': 'https://pbs.twimg.com/media/Edcd905UYAEphRb?format=jpg&name=large'},
             {'name': 'bs11_guide', 'url': 'https://pbs.twimg.com/media/EbZlqboUwAYVvCu?format=jpg&name=4096x4096'},
             {'name': 'ep_visual_1', 'url': 'https://pbs.twimg.com/media/EcFiPBSU0AADZI9?format=jpg&name=large'},
             {'name': 'ep01_kinen', 'url': 'https://pbs.twimg.com/media/EcFzWEEUcAM0bOT?format=jpg&name=large'},
             {'name': 'ep01_kinen_2', 'url': 'https://pbs.twimg.com/media/EcoPPXsVAAEPdSf?format=jpg&name=4096x4096'},
-            {'name': 'ep01_kinen_3', 'url': 'https://pbs.twimg.com/media/EdMlINcUcAASho3?format=jpg&name=large'}
+            {'name': 'ep01_kinen_3', 'url': 'https://pbs.twimg.com/media/EdMlINcUcAASho3?format=jpg&name=large'},
+            {'name': 'ep01_kinen_4', 'url': 'https://pbs.twimg.com/media/EdwjQJKU4AAJSBL?format=jpg&name=4096x4096'}
         ]
         self.download_image_objects(image_objs, folder)
 
