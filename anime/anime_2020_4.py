@@ -420,20 +420,15 @@ class KumaBearDownload(Fall2020AnimeDownload):
         self.has_website_updated(self.PAGE_PREFIX)
 
     def download_key_visual(self):
-        keyvisual_folder = self.base_folder + '/' + constants.FOLDER_KEY_VISUAL
-        if not os.path.exists(keyvisual_folder):
-            os.makedirs(keyvisual_folder)
-
-        image_urls = ["https://kumakumakumabear.com/core_sys/images/main/tz/main_img.jpg",
-                      "https://kumakumakumabear.com/core_sys/images/main/tz/main_img_2.jpg",
-                      "https://kumakumakumabear.com/core_sys/images/main/tz/main_img_3.jpg"]
-        for image_url in image_urls:
-            image_with_extension = self.extract_image_name_from_url(image_url, with_extension=True)
-            if os.path.exists(keyvisual_folder + '/' + image_with_extension):
-                continue
-            image_without_extension = self.extract_image_name_from_url(image_url, with_extension=False)
-            filepath_without_extension = keyvisual_folder + '/' + image_without_extension
-            self.download_image(image_url, filepath_without_extension)
+        folder = self.create_key_visual_directory()
+        image_objs = [
+            {'name': 'main_img', 'url': 'https://kumakumakumabear.com/core_sys/images/main/tz/main_img.jpg'},
+            {'name': 'main_img_2', 'url': 'https://kumakumakumabear.com/core_sys/images/main/tz/main_img_2.jpg'},
+            {'name': 'main_img_3', 'url': 'https://kumakumakumabear.com/core_sys/images/main/tz/main_img_3.jpg'},
+            {'name': 'pop_img', 'url': 'https://kumakumakumabear.com/core_sys/images/main/tz/pop_img.jpg'},
+            {'name': 'pop_img', 'url': 'https://pbs.twimg.com/media/EeFRDpaU8AAiFuh?format=jpg&name=large'}
+        ]
+        self.download_image_objects(image_objs, folder)
 
     def download_character(self):
         folder = self.create_character_directory()
