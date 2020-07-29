@@ -2,6 +2,7 @@ import os
 import re
 import anime.constants as constants
 from anime.main_download import MainDownload
+from anime.external_download import MocaNewsDownload
 from datetime import datetime
 from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 
@@ -496,6 +497,8 @@ class TeiboDownload(Spring2020AnimeDownload):
 
     def download_bluray(self):
         folder = self.create_bluray_directory()
+        if not os.path.exists(self.base_folder + '/bd_bonus_01.jpg'):
+            MocaNewsDownload("20200729/2020072912000a_", self.base_folder.replace('download/', ''), 'bd_bonus').run()
         image_objs = []
         try:
             soup = self.get_soup('https://teibotv.com/package.html')
