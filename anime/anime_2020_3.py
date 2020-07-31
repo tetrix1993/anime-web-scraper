@@ -128,7 +128,9 @@ class HxErosDownload(Summer2020AnimeDownload):
         bd_url = 'https://hxeros.com/bddvd/%s.html'
         self.has_website_updated(bd_url % str(1))
         folder = self.create_bluray_directory()
-        image_objs = []
+        image_objs = [
+            {'name': 'bd_1_big', 'url': 'https://pbs.twimg.com/media/EeQ8-JEU8AIPA8t?format=jpg&name=4096x4096'}
+        ]
         try:
             first_page_image_count = 0
             for i in range(1, 7, 1):
@@ -158,7 +160,7 @@ class HxErosDownload(Summer2020AnimeDownload):
                                 if class_ == bddvd_item:
                                     bd_image_count += 1
                                     if bd_image_count > 1:
-                                        image_name = 'bd_' + str(i) + '_' + bd_image_count
+                                        image_name = 'bd_' + str(i) + '_' + str(bd_image_count)
                                     else:
                                         image_name = 'bd_' + str(i)
                                 else:
