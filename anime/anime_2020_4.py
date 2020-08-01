@@ -928,7 +928,10 @@ class TonikawaDownload(Fall2020AnimeDownload):
         image_objs = [
             {'name': 'w_teaser_1', 'url': 'https://pbs.twimg.com/media/EXzj-iYVcAElclE?format=jpg&name=large'},
             {'name': 'w_teaser_2', 'url': 'https://pbs.twimg.com/media/EXzj-iaU0AATNM7?format=jpg&name=large'},
-            {'name': 'w_teaser_3', 'url': 'http://tonikawa.com/assets/images/common/news/news-1/img.jpg'}]
+            {'name': 'w_teaser_3', 'url': 'http://tonikawa.com/assets/images/common/news/news-1/img.jpg'},
+            {'name': 'kv', 'url': 'https://pbs.twimg.com/media/EeUsvfaVAAI-B7N?format=jpg&name=large'},
+            {'name': 'img_keyvisual_character', 'url': 'http://tonikawa.com/assets/images/pc/index/img_keyvisual_character.png'}
+        ]
         for image_obj in image_objs:
             if os.path.exists(keyvisual_folder + '/' + image_obj['name'] + '.png') or \
                     os.path.exists(keyvisual_folder + '/' + image_obj['name'] + '.jpg'):
