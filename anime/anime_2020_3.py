@@ -80,7 +80,10 @@ class HxErosDownload(Summer2020AnimeDownload):
             {'name': 'kv', 'url': 'https://pbs.twimg.com/media/ESLTIUOVAAAWQ5L?format=jpg&name=4096x4096'},
             {'name': 'kv_web', 'url': 'https://hxeros.com/assets/img/top/ph_main.jpg'},
             {'name': 'kv2', 'url': 'https://pbs.twimg.com/media/EZo3lpqUEAEH3Xp?format=jpg&name=4096x4096'},
-            {'name': 'kv2_web', 'url': 'https://hxeros.com/assets/img/top/ph_main_2.jpg'}]
+            {'name': 'kv2_web', 'url': 'https://hxeros.com/assets/img/top/ph_main_2.jpg'},
+            {'name': 'ph_main_kirara', 'url': 'https://hxeros.com/assets/img/top/ph_main_kirara.jpg'},
+            {'name': 'ph_main_kirara_twitter', 'url': 'https://pbs.twimg.com/media/EeVou8SU8AAQ3CO?format=jpg&name=900x900'}
+        ]
         self.download_image_objects(image_objs, filepath)
 
     def download_character(self):
