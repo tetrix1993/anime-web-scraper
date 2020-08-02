@@ -586,6 +586,12 @@ class Kaguyasama2Download(Spring2020AnimeDownload):
             other_filepath = self.base_folder + '/' + constants.FOLDER_BLURAY
             if not os.path.exists(other_filepath):
                 os.makedirs(other_filepath)
+            image_objs = [
+                {'name': 'bd_1', 'url': 'https://pbs.twimg.com/media/EYsi1b-UMAAyPDK?format=jpg&name=900x900'},
+                {'name': 'bd_2', 'url': 'https://pbs.twimg.com/media/EcUL42TUYAAfElR?format=jpg&name=900x900'},
+                {'name': 'bd_3', 'url': 'https://pbs.twimg.com/media/EeQoG9GVAAANa_C?format=jpg&name=900x900'}
+            ]
+            self.download_image_objects(image_objs, other_filepath)
             url_list = ["https://kaguya.love/bddvd/"]
             for i in range(2, 7, 1):
                 url_list.append('https://kaguya.love/bddvd/%s.html' % str(i).zfill(2))
