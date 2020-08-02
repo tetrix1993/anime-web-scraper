@@ -449,11 +449,12 @@ class MaohgakuinDownload(Summer2020AnimeDownload):
                                 for image in images:
                                     image_url = image['src']
                                     if len(image_url) < 2 or 'nowprinting' in image_url:
-                                        if i == 1:
+                                        if class_ == products_main:
                                             stop = True
-                                            break
-                                        else:
+                                        if i == 1:
                                             continue
+                                        else:
+                                            break
                                     if image_url[0] == '/':
                                         image_url = image_url[1:len(image_url)]
                                     image_url = self.PAGE_PREFIX + image_url
