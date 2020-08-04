@@ -43,3 +43,89 @@ pip install pillow
 ![example5.png](/images/example7.png)
 5. The images will be saved at the folder `download`.\
 ![example3.jpg](/images/example3.jpg)
+
+## Websites
+<details>
+<summary>Here are the some of the websites that are scraped:</summary>
+
+### News Website
+* [Aniverse Magazine](https://aniverse-mag.com/)
+* [Moca News](https://moca-news.net/)
+* [WebNewtype](https://webnewtype.com/)
+
+### New Anime
+* [Cheat Kusushi no Slow Life: Isekai ni Tsukurou Drugstore](https://www.cheat-kusushi.jp/)
+* [Ijiranaide, Nagatoro-san](https://www.nagatorosan.jp/)
+* [Kaifuku Jutsushi no Yarinaoshi](http://kaiyari.com/)
+* [Mushoku Tensei: Isekai Ittara Honki Dasu](https://mushokutensei.jp/)
+* [Ore dake Haireru Kakushi Dungeon](https://kakushidungeon-anime.jp/)
+
+### Fall 2020 Anime
+* [100-man no Inochi no Ue ni Ore wa Tatteiru](http://1000000-lives.com/)
+* [Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka III](http://danmachi.com/danmachi3/)
+* [Gochuumon wa Usagi Desu ka? Bloom](https://gochiusa.com/bloom/)
+* [Higurashi no Naku Koro ni (2020)](https://higurashianime.com/)
+* [Iwa Kakeru!: Sport Climbing Girls](http://iwakakeru-anime.com/)
+* [Kamisama ni Natta Hi](https://kamisama-day.jp/)
+* [Kami-tachi ni Hirowareta Otoko](https://kamihiro-anime.com/)
+* [Kimi to Boku no Saigo no Senjou, Aruiwa Sekai ga Hajimaru Seisen](https://kimisentv.com/)
+* [Kuma Kuma Kuma Bear](https://kumakumakumabear.com/)
+* [Maesetsu!](https://maesetsu.jp/)
+* [Mahouka Koukou no Rettousei: Raihousha-hen](https://mahouka.jp/)
+* [Majo no Tabitabi](https://majotabi.jp/)
+* [Maou-jou de Oyasumi](https://maoujo-anime.com/)
+* [Ochikobore Fruit Tart](http://ochifuru-anime.com/)
+* [Rail Romanesque](https://railromanesque.jp/)
+* [Senyoku no Sigrdrifa](https://sigururi.com/)
+* [Tatoeba Last Dungeon Mae no Mura no Shounen ga Joban no Machi de Kurasu Youna Monogatari](https://lasdan.com/)
+* [Tonikaku Kawaii](http://tonikawa.com/)
+
+### Summer 2020 Anime
+* [Dokyuu Hentai HxEros](https://hxeros.com/)
+* [Kanojo, Okarishimasu](https://kanokari-official.com/)
+* [Maou Gakuin no Futekigousha: Shijou Saikyou no Maou no Shiso, Tensei shite Shison-tachi no Gakkou e](https://maohgakuin.com/)
+* [Monster Musume no Oishasan](https://mon-isha-anime.com/)
+* [Peter Grill to Kenja no Jikan](http://petergrill-anime.jp/)
+* [Re:Zero kara Hajimeru Isekai Seikatsu 2nd Season](http://re-zero-anime.jp/tv/)
+* [Uzaki-chan wa Asobitai!](https://uzakichan.com/)
+* [Yahari Ore no Seishun Love Comedy wa Machigatteiru. Kan](http://www.tbs.co.jp/anime/oregairu/)
+
+### Spring 2020 Anime
+* [Arte](http://arte-anime.com/)
+* [Brand New Animal](https://bna-anime.com/)
+* [Gleipnir](http://gleipnir-anime.com)
+* [Hachi-nan tte, Sore wa Nai deshou!](http://hachinan-anime.com/)
+* [Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan wo Erandeiraremasen 2nd Season](http://booklove-anime.jp/)
+* [Houkago Teibou Nisshi](https://teibotv.com/)
+* [Kaguya-sama wa Kokurasetai? Tensai-tachi no Renai Zunousen](https://kaguya.love/)
+* [Kakushigoto](https://kakushigoto-anime.com/)
+* [Kingdom 3rd Season](https://kingdom-anime.com/)
+* [Otome Game no Hametsu Flag shika Nai Akuyaku Reijou ni Tensei shiteshimatta...](https://hamehura-anime.com/)
+* [Nami yo Kiitekure](https://namiyo-anime.com/)
+* [Princess Connect! Re:Dive](https://anime.priconne-redive.jp)
+* [Shachou, Battle no Jikan Desu!](https://shachibato-anime.com/)
+* [Tamayomi](https://tamayomi.com)
+* [Tsugu Tsugumomo](http://tsugumomo.com/)
+* [Yesterday wo Utatte](https://singyesterday.com/)
+
+### Winter 2020 Anime
+* [Darwin's Game](https://darwins-game.com/)
+* [Eizouken ni wa Te wo Dasu na!](http://eizouken-anime.com)
+* [Hatena Illusion](http://hatenaillusion-anime.com/)
+* [Heya Camp](https://yurucamp.jp/heyacamp/)
+* [Infinite Dendrogram](http://dendro-anime.jp/)
+* [Isekai Quartet 2](http://isekai-quartet.com/)
+* [Ishuzoku Reviewers](https://isyuzoku.com/)
+* [Itai no wa Iya nano de Bougyoryoku ni Kyokufuri Shitai to Omoimasu.](https://bofuri.jp/)
+* [Jibaku Shounen Hanako-kun](https://www.tbs.co.jp/anime/hanakokun/)
+* [Koisuru Asteroid](http://koiastv.com/)
+* [Kyokou Suiri](https://kyokousuiri.jp/)
+* [Murenase! Seton Gakuen](https://anime-seton.jp/)
+* [Nekopara](https://nekopara-anime.com/ja/)
+* [Oshi ga Budoukan Ittekuretara Shinu](https://oshibudo.com/)
+* [Plunderer](http://plunderer-info.com/)
+* [Rikei ga Koi ni Ochita no de Shoumei shitemita.](https://rikekoi.com)
+* [Runway de Waratte](https://runway-anime.com/)
+* [Somali to Mori no Kamisama](https://somali-anime.com/)
+* [Toaru Kagaku no Railgun T](https://toaru-project.com/railgun_t/)
+</details>
