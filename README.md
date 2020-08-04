@@ -46,7 +46,7 @@ pip install pillow
 
 ## Websites
 <details>
-<summary>Here are the some of the websites that are scraped:</summary>
+<summary>Here are the some of the websites that are scraped (click to expand):</summary>
 
 ### News Website
 * [Aniverse Magazine](https://aniverse-mag.com/)
