@@ -58,7 +58,8 @@ class HyakumanNoInochiDownload(Fall2020AnimeDownload):
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         image_objs = [
-            {'name': 'kv', 'url': 'https://pbs.twimg.com/media/ESLrKCWUcAExG_i?format=jpg&name=4096x4096'}]
+            {'name': 'kv', 'url': 'https://pbs.twimg.com/media/ESLrKCWUcAExG_i?format=jpg&name=4096x4096'},
+            {'name': 'kv2', 'url': 'https://pbs.twimg.com/media/Ee03f7CU8AUtfE5?format=png&name=large'}]
         self.download_image_objects(image_objs, folder)
 
     def download_character(self):
