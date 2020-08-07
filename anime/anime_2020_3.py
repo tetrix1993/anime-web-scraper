@@ -87,11 +87,8 @@ class HxErosDownload(Summer2020AnimeDownload):
         self.download_image_objects(image_objs, filepath)
 
     def download_character(self):
+        character_folder = self.create_character_directory()
         try:
-            character_folder = self.base_folder + '/' + constants.FOLDER_CHARACTER
-            if not os.path.exists(character_folder):
-                os.makedirs(character_folder)
-
             # Main Characters
             image_objs = [
                 {'name': 'retto', 'url': 'https://hxeros.com/assets/img/character/single/retto/ph_character.png'},
@@ -104,28 +101,32 @@ class HxErosDownload(Summer2020AnimeDownload):
                     continue
                 filepath_without_extension = character_folder + '/' + image_obj['name']
                 self.download_image(image_obj['url'], filepath_without_extension)
-
-            # Other Characters
-            image_urls = []
-            try:
-                soup = self.get_soup('https://hxeros.com/character/other/')
-                image_divs = soup.find_all('div', class_='other_sec__ph')
-                for image_div in image_divs:
-                    image_url = self.PAGE_PREFIX + image_div.find('img')['src']
-                    image_urls.append(image_url)
-            except:
-                pass
-
-            for image_url in image_urls:
-                image_with_extension = self.extract_image_name_from_url(image_url, with_extension=True)
-                if os.path.exists(character_folder + '/' + image_with_extension):
-                    continue
-                image_without_extension = self.extract_image_name_from_url(image_url, with_extension=False)
-                filepath_without_extension = character_folder + '/' + image_without_extension
-                self.download_image(image_url, filepath_without_extension)
         except Exception as e:
                 print("Error in running " + self.__class__.__name__ + ' - Character')
                 print(e)
+
+        # Other characters
+        try:
+            soup = self.get_soup('https://hxeros.com/character/')
+            other_urls = soup.find_all('ul', class_='character__thumblist')[1].find_all('a')
+            for other_url in other_urls:
+                url = self.PAGE_PREFIX + other_url['href']
+                try:
+                    other_soup = self.get_soup(url)
+                    pictures = other_soup.find_all('picture')
+                    image_objs = []
+                    for picture in pictures:
+                        if picture is not None:
+                            image = picture.find('img')
+                            if image is not None:
+                                image_url = self.PAGE_PREFIX + image['src']
+                                image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                                image_objs.append({'name': image_name, 'url': image_url})
+                    self.download_image_objects(image_objs, character_folder)
+                except:
+                    pass
+        except:
+            pass
 
     def download_bluray(self):
         bd_url = 'https://hxeros.com/bddvd/%s.html'
