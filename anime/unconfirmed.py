@@ -4,6 +4,7 @@ from anime.main_download import MainDownload
 
 # Bokutachi no Remake http://bokurema.com/ #ぼくリメ #bokurema @bokurema
 # Cheat Kusushi no Slow Life: Isekai ni Tsukurou Drugstore https://www.cheat-kusushi.jp/ #チート薬師 #スローライフ @cheat_kusushi
+# Gotoubun no Hanayome S2 https://www.tbs.co.jp/anime/5hanayome/ #五等分の花嫁 @5Hanayome_anime
 # Ijiranaide, Nagatoro-san https://www.nagatorosan.jp/ #長瀞さん @nagatoro_tv
 # Kaifuku Jutsushi no Yarinaoshi http://kaiyari.com/ #回復術士 @kaiyari_anime
 # Mushoku Tensei https://mushokutensei.jp/ #無職転生 @mushokutensei_A
@@ -47,6 +48,50 @@ class CheatKusushiDownload(UnconfirmedDownload):
         image_objs = [
             {'name': 'teaser', 'url': 'https://www.cheat-kusushi.jp/img/top-main.png'}]
         self.download_image_objects(image_objs, keyvisual_folder)
+
+
+# Gotoubun no Hanayome ∬
+class Gotoubun2Download(UnconfirmedDownload):
+    title = "Gotoubun no Hanayome 2nd Season"
+    keywords = [title, "The Quintessential Quintuplets", "Go-toubun", "5-toubun"]
+
+    PAGE_PREFIX = 'https://www.tbs.co.jp/anime/5hanayome/'
+
+    def __init__(self):
+        super().__init__()
+        self.init_base_folder('gotoubun2')
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated('https://www.tbs.co.jp/anime/5hanayome/story/')
+        image_objs = []
+        image_template = self.PAGE_PREFIX + 'story/img/intro_slide%s@2x.jpg'
+        for i in range(6):
+            image_url = image_template % str(i + 1).zfill(2)
+            image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+            image_objs.append({'name': image_name, 'url': image_url})
+        self.download_image_objects(image_objs, self.base_folder)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        image_objs = [
+            {'name': 'teaser_visual', 'url': self.PAGE_PREFIX + 'img/teaser_visual.jpg'}
+        ]
+        self.download_image_objects(image_objs, folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        image_objs = []
+        image_template = self.PAGE_PREFIX + 'character/img/character_%s@2x.png'
+        for i in range(6):
+            image_url = image_template % str(i).zfill(2)
+            image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+            image_objs.append({'name': image_name, 'url': image_url})
+        self.download_image_objects(image_objs, folder)
 
 
 # Ijiranaide, Nagatoro-san

@@ -268,7 +268,7 @@ class GotoubunDownload(Winter2019AnimeDownload):
     title = "Gotoubun no Hanayome"
     keywords = ["Gotoubun no Hanayome", "The Quintessential Quintuplets", "Go-toubun", "5-toubun"]
 
-    PAGE_PREFIX = "http://www.tbs.co.jp/anime/5hanayome/story/"
+    PAGE_PREFIX = "http://www.tbs.co.jp/anime/5hanayome/1st/story/"
     # FINAL_EPISODE = 12
     NUM_OF_PICTURES_PER_PAGE = 4
 
