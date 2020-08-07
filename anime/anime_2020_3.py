@@ -624,6 +624,39 @@ class PeterGrillDownload(Summer2020AnimeDownload):
 
     def download_episode_preview(self):
         #self.has_website_updated(self.PAGE_PREFIX)
+        try:
+            soup = self.get_soup('http://petergrill-anime.jp/works.php')
+            episode_list_items = soup.find_all('li', class_='episode_list_item')
+            for episode_list_item in episode_list_items:
+                para = episode_list_item.find('p', class_='episode_list_honbun')
+                if para is not None:
+                    para_text = para.text
+                    if '第' in para_text and '話' in para_text:
+                        try:
+                            episode = str(int(para_text.split('第')[1].split('話')[0])).zfill(2)
+                        except:
+                            continue
+                        if self.is_image_exists(episode + '_1'):
+                            continue
+                        episode_link_tag = episode_list_item.find('a')
+                        if episode_link_tag is not None and episode_link_tag.has_attr('href'):
+                            episode_url = self.PAGE_PREFIX + episode_link_tag['href']
+                            episode_soup = self.get_soup(episode_url)
+                            episode_images = episode_soup.find('div', class_='episode_images')
+                            if episode_images is not None:
+                                slider = episode_images.find('ul', class_='slider')
+                                if slider is not None:
+                                    images = slider.find_all('img')
+                                    image_objs = []
+                                    for i in range(len(images)):
+                                        image_url = images[i]['src'].replace('../', self.PAGE_PREFIX)
+                                        image_name = episode + '_' + str(i + 1)
+                                        image_objs.append({'name': image_name, 'url': image_url})
+                                    self.download_image_objects(image_objs, self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
+
         template_url = 'http://petergrill-anime.jp/images/upload/pg%s_still_%s.png'
         for i in range(13):
             episode = str(i + 1).zfill(2)
