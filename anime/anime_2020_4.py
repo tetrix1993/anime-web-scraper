@@ -603,7 +603,8 @@ class MajotabiDownload(Fall2020AnimeDownload):
             {'name': 'kv3', 'url': 'https://pbs.twimg.com/media/EUqV9B7UcAAOCeE?format=jpg&name=medium'},
             {'name': 'kv4', 'url': 'https://pbs.twimg.com/media/EW64PYgUMAAGDIk?format=jpg&name=4096x4096'},
             {'name': 'kv5', 'url': 'https://pbs.twimg.com/media/EZvKDzlUcAEVTt-?format=jpg&name=large'},
-            {'name': 'kv6', 'url': 'https://pbs.twimg.com/media/Eb_X0idVAAAjpNx?format=jpg&name=medium'}
+            {'name': 'kv6', 'url': 'https://pbs.twimg.com/media/Eb_X0idVAAAjpNx?format=jpg&name=medium'},
+            {'name': 'kv7', 'url': 'https://pbs.twimg.com/media/Eezxq0UUEAAj6vn?format=jpg&name=large'}
         ]
         self.download_image_objects(image_objs, keyvisual_folder)
 
