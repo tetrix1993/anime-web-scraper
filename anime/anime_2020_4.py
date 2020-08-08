@@ -334,21 +334,22 @@ class KamihiroDownload(Fall2020AnimeDownload):
         folder = self.create_key_visual_directory()
         image_objs = [
             {'name': 'teaser', 'url': 'https://pbs.twimg.com/media/EVy1wvNVcAAWcJH?format=jpg&name=large'},
-            {'name': 'kv1', 'url': 'https://pbs.twimg.com/media/Eb_jqRLUYAAZ01A?format=jpg&name=4096x4096'}
+            {'name': 'kv1', 'url': 'https://pbs.twimg.com/media/Eb_jqRLUYAAZ01A?format=jpg&name=4096x4096'},
+            {'name': 'kv2', 'url': 'https://pbs.twimg.com/media/Ee095ywUwAAOSpk?format=jpg&name=4096x4096'}
         ]
         self.download_image_objects(image_objs, folder)
 
     def download_character(self):
         folder = self.create_character_directory()
         try:
-            soup = self.get_soup(self.PAGE_PREFIX)
-            images = soup.find_all('div', class_='char')
+            soup = self.get_soup('https://kamihiro-anime.com/character/')
+            images = soup.find_all('div', class_='thumb')
             image_objs = []
             for image in images:
                 image_tag = image.find('img')
                 if image_tag is None:
                     continue
-                image_url = self.PAGE_PREFIX + image_tag['src']
+                image_url = image_tag['src']
                 image_name = self.extract_image_name_from_url(image_url, with_extension=False)
                 image_objs.append({'name': image_name, 'url': image_url})
             self.download_image_objects(image_objs, folder)
