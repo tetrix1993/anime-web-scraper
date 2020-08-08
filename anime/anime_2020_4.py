@@ -335,7 +335,8 @@ class KamihiroDownload(Fall2020AnimeDownload):
         image_objs = [
             {'name': 'teaser', 'url': 'https://pbs.twimg.com/media/EVy1wvNVcAAWcJH?format=jpg&name=large'},
             {'name': 'kv1', 'url': 'https://pbs.twimg.com/media/Eb_jqRLUYAAZ01A?format=jpg&name=4096x4096'},
-            {'name': 'kv2', 'url': 'https://pbs.twimg.com/media/Ee095ywUwAAOSpk?format=jpg&name=4096x4096'}
+            {'name': 'kv2', 'url': 'https://kamihiro-anime.com/wp/wp-content/uploads/2020/08/GF_KV2_logo.jpg'},
+            #{'name': 'kv2', 'url': 'https://pbs.twimg.com/media/Ee095ywUwAAOSpk?format=jpg&name=4096x4096'}
         ]
         self.download_image_objects(image_objs, folder)
 
