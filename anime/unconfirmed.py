@@ -7,6 +7,7 @@ from anime.main_download import MainDownload
 # Gotoubun no Hanayome S2 https://www.tbs.co.jp/anime/5hanayome/ #五等分の花嫁 @5Hanayome_anime
 # Ijiranaide, Nagatoro-san https://www.nagatorosan.jp/ #長瀞さん @nagatoro_tv
 # Kaifuku Jutsushi no Yarinaoshi http://kaiyari.com/ #回復術士 @kaiyari_anime
+# Kobayashi-san Chi no Maid Dragon S https://maidragon.jp/2nd/ #maidragon @maidragon_anime
 # Mushoku Tensei https://mushokutensei.jp/ #無職転生 @mushokutensei_A
 # Ore dake Haireru Kakushi Dungeon https://kakushidungeon-anime.jp/ #隠しダンジョン @kakushidungeon
 
@@ -157,6 +158,31 @@ class KaiyariDownload(UnconfirmedDownload):
             {'name': 'announce_2', 'url': 'https://pbs.twimg.com/media/EJ0V4iwVUAE-Ep7?format=jpg&name=medium'},
             {'name': 'teaser', 'url': 'http://kaiyari.com/teaser/images/top-main-vis2.jpg'},
             {'name': 'teaser_2', 'url': 'https://pbs.twimg.com/media/EaizJUOU8AATcDK?format=jpg&name=medium'}]
+        self.download_image_objects(image_objs, folder)
+
+
+# Kobayashi-san Chi no Maid Dragon S
+class KobayashiMaidDragon2Download(UnconfirmedDownload):
+    title = 'Kobayashi-san Chi no Maid Dragon S'
+    keywords = [title, "Miss Kobayashi's Maid Dragon"]
+
+    PAGE_PREFIX = 'https://maidragon.jp/2nd/'
+
+    def __init__(self):
+        super().__init__()
+        self.init_base_folder('maidragon2')
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        image_objs = [{'name': 'teaser', 'url': 'https://pbs.twimg.com/media/EfEVvJEUwAI6LmD?format=jpg&name=large'},
+                      {'name': 'teaser_covid', 'url': 'https://galleryamh2home.files.wordpress.com/2020/02/1597072728776.jpg'}]
         self.download_image_objects(image_objs, folder)
 
 
