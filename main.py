@@ -5,8 +5,7 @@ import migrate
 
 def run():
     migrate.run()
-    downloads = [PlundererDownload(), RailgunTDownload(), Kaguyasama2Download(), PriconneDownload(),
-                 ShachibatoDownload(), TeiboDownload(), Tsugumomo2Download()]
+    downloads = [RailgunTDownload(), Kaguyasama2Download(), PriconneDownload(), TeiboDownload()]
     subclasses = Summer2020AnimeDownload.__subclasses__()
     for subclass in subclasses:
         downloads.append(subclass())

@@ -1238,7 +1238,9 @@ class Tsugumomo2Download(Spring2020AnimeDownload):
             {'name': 'bd_2_1', 'url': 'http://tsugumomo.com/wp/wp-content/uploads/2020/06/DSZD08247-01.jpg'},
             {'name': 'bd_2_2', 'url': 'https://pbs.twimg.com/media/EZ-gw2NUEAAi3G6?format=jpg&name=4096x4096'},
             {'name': 'bd_3_1', 'url': 'http://tsugumomo.com/wp/wp-content/uploads/2020/06/DSZD08248-01.jpg'},
-            {'name': 'bd_3_2', 'url': 'https://pbs.twimg.com/media/EeoD3obUEAAvcvd?format=jpg&name=4096x4096'}
+            {'name': 'bd_3_2', 'url': 'https://pbs.twimg.com/media/EeoD3obUEAAvcvd?format=jpg&name=4096x4096'},
+            {'name': 'bd_4_1', 'url': 'http://tsugumomo.com/wp/wp-content/uploads/2020/08/継つぐももJK_vo4_11koap_DVD_s_h1.jpg'},
+            {'name': 'bd_4_2', 'url': 'https://pbs.twimg.com/media/EfNJR_9UMAEDgrf?format=jpg&name=4096x4096'}
         ]
         self.download_image_objects(image_objs, filepath)
 

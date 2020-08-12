@@ -326,7 +326,12 @@ class KanokariDownload(Summer2020AnimeDownload):
     def download_other(self):
         folder = self.create_custom_directory(constants.FOLDER_OTHER)
         image_objs = [
-            {'name': 'mygirl_vol30', 'url': 'https://images-na.ssl-images-amazon.com/images/I/716PmdvklHL.jpg'}
+            {'name': 'mygirl_vol30', 'url': 'https://images-na.ssl-images-amazon.com/images/I/716PmdvklHL.jpg'},
+            {'name': 'daki_dmm_main', 'url': 'https://pbs.twimg.com/media/EfNKzGQVAAA224h?format=jpg&name=medium'},
+            {'name': 'daki_dmm1', 'url': 'https://pics.dmm.com/mono/hobby/cha_202008ddmpza863/cha_202008ddmpza863pl.jpg'},
+            {'name': 'daki_dmm2', 'url': 'https://pics.dmm.com/mono/hobby/cha_202008ddmpza864/cha_202008ddmpza864pl.jpg'},
+            {'name': 'daki_dmm3', 'url': 'https://pics.dmm.com/mono/hobby/cha_202008ddmpza865/cha_202008ddmpza865pl.jpg'},
+            {'name': 'daki_dmm4', 'url': 'https://pics.dmm.com/mono/hobby/cha_202008ddmpza866/cha_202008ddmpza866pl.jpg'}
         ]
         self.download_image_objects(image_objs, folder)
 
