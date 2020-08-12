@@ -203,18 +203,13 @@ class IwakakeruDownload(Fall2020AnimeDownload):
         self.has_website_updated(self.PAGE_PREFIX)
 
     def download_key_visual(self):
-        keyvisual_folder = self.base_folder + '/' + constants.FOLDER_KEY_VISUAL
-        if not os.path.exists(keyvisual_folder):
-            os.makedirs(keyvisual_folder)
-
-        image_urls = ["http://iwakakeru-anime.com/img/index/mainvisual.png"]
-        for image_url in image_urls:
-            image_with_extension = self.extract_image_name_from_url(image_url, with_extension=True)
-            if os.path.exists(keyvisual_folder + '/' + image_with_extension):
-                continue
-            image_without_extension = self.extract_image_name_from_url(image_url, with_extension=False)
-            filepath_without_extension = keyvisual_folder + '/' + image_without_extension
-            self.download_image(image_url, filepath_without_extension)
+        folder = self.create_key_visual_directory()
+        image_objs = [
+            {'name': 'mainvisual', 'url': 'http://iwakakeru-anime.com/img/index/mainvisual.png'},
+            {'name': 'mainvisual_2', 'url': 'http://iwakakeru-anime.com/img/index/mainvisual_2.png'},
+            {'name': 'kv2', 'url': 'https://pbs.twimg.com/media/EfLNG6MVAAAYWZ2?format=jpg&name=large'},
+        ]
+        self.download_image_objects(image_objs, folder)
 
     def download_character(self):
         folder = self.create_character_directory()
