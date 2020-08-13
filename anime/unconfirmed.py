@@ -10,6 +10,7 @@ from anime.main_download import MainDownload
 # Kobayashi-san Chi no Maid Dragon S https://maidragon.jp/2nd/ #maidragon @maidragon_anime
 # Mushoku Tensei https://mushokutensei.jp/ #無職転生 @mushokutensei_A
 # Ore dake Haireru Kakushi Dungeon https://kakushidungeon-anime.jp/ #隠しダンジョン @kakushidungeon
+# Princess Connect! Re:Dive S2 https://anime.priconne-redive.jp/ #アニメプリコネ #プリコネR #プリコネ @priconne_anime
 
 
 # Unconfirmed Season Anime
@@ -255,4 +256,28 @@ class KakushiDungeonDownload(UnconfirmedDownload):
         folder = self.create_key_visual_directory()
         image_objs = [{'name': 'teaser', 'url': 'https://kakushidungeon-anime.jp/teaser/images/top-main-vis.jpg'},
                       {'name': 'teaser_2', 'url': 'https://pbs.twimg.com/media/EXZB_ZiU0AA4srN?format=jpg&name=large'}]
+        self.download_image_objects(image_objs, folder)
+
+
+# Princess Connect! Re:Dive 2nd Season
+class Priconne2Download(UnconfirmedDownload):
+    title = "Princess Connect! Re:Dive 2nd Season"
+    keywords = [title, "Priconne"]
+
+    PAGE_PREFIX = "https://anime.priconne-redive.jp"
+
+    def __init__(self):
+        super().__init__()
+        self.init_base_folder('priconne2')
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        image_objs = [{'name': 'teaser', 'url': 'https://anime.priconne-redive.jp/assets/images/top_kv.png'}]
         self.download_image_objects(image_objs, folder)
