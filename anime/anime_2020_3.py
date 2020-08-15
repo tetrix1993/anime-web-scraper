@@ -429,7 +429,8 @@ class MaohgakuinDownload(Summer2020AnimeDownload):
     def download_bluray(self):
         folder = self.create_bluray_directory()
         image_objs = [
-            {'name': 'music_ed', 'url': 'https://pbs.twimg.com/media/Eb6ctYuU8AEVilj?format=jpg&name=large'}
+            {'name': 'music_ed', 'url': 'https://pbs.twimg.com/media/Eb6ctYuU8AEVilj?format=jpg&name=large'},
+            {'name': 'bd_1_big', 'url': 'https://pbs.twimg.com/media/EfdVYazU0AcE6VM?format=jpg&name=4096x4096'}
         ]
         self.download_image_objects(image_objs, folder)
         
