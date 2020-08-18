@@ -965,7 +965,9 @@ class Oregairu3Download(Summer2020AnimeDownload):
             {'name': 'music_ed', 'url': 'https://pbs.twimg.com/media/Ec7bHveUwAEpB8X?format=jpg&name=large'},
             {'name': 'album_1', 'url': 'https://tc-animate.techorus-cdn.com/resize_image/resize_image.php?image=07091514_5f06b5ad6bf56.jpg'},
             {'name': 'album_2', 'url': 'https://tc-animate.techorus-cdn.com/resize_image/resize_image.php?image=07091512_5f06b558505c8.jpg'},
-            {'name': 'bd_1', 'url': 'https://tc-animate.techorus-cdn.com/resize_image/resize_image.php?image=07091503_5f06b33680c68.jpg'}
+            #{'name': 'bd_1', 'url': 'https://tc-animate.techorus-cdn.com/resize_image/resize_image.php?image=07091503_5f06b33680c68.jpg'},
+            {'name': 'bd_1_1', 'url': 'https://pbs.twimg.com/media/EflqqRCVoAAQRSa?format=jpg&name=4096x4096'},
+            {'name': 'bd_1_2', 'url': 'https://pbs.twimg.com/media/Efq6Z9bUwAMUGMB?format=jpg&name=4096x4096'}
         ]
         disc_prefix = 'http://www.tbs.co.jp/anime/oregairu/disc/'
         try:
