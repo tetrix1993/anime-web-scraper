@@ -11,6 +11,7 @@ from anime.main_download import MainDownload
 # Mushoku Tensei https://mushokutensei.jp/ #無職転生 @mushokutensei_A
 # Ore dake Haireru Kakushi Dungeon https://kakushidungeon-anime.jp/ #隠しダンジョン @kakushidungeon
 # Princess Connect! Re:Dive S2 https://anime.priconne-redive.jp/ #アニメプリコネ #プリコネR #プリコネ @priconne_anime
+# Tatoeba Last Dungeon https://lasdan.com/ #ラスダン @lasdan_PR
 
 
 # Unconfirmed Season Anime
@@ -281,3 +282,72 @@ class Priconne2Download(UnconfirmedDownload):
         folder = self.create_key_visual_directory()
         image_objs = [{'name': 'teaser', 'url': 'https://anime.priconne-redive.jp/assets/images/top_kv.png'}]
         self.download_image_objects(image_objs, folder)
+
+
+# Tatoeba Last Dungeon Mae no Mura no Shounen ga Joban no Machi de Kurasu Youna Monogatari
+class LasdanDownload(UnconfirmedDownload):
+    title = "Tatoeba Last Dungeon Mae no Mura no Shounen ga Joban no Machi de Kurasu Youna Monogatari"
+    keywords = [title, "Lasdan"]
+
+    PAGE_PREFIX = 'https://lasdan.com/'
+
+    def __init__(self):
+        super().__init__()
+        self.base_folder = self.base_folder + "/lasdan"
+        if not os.path.exists(self.base_folder):
+            os.makedirs(self.base_folder)
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        filepath = self.create_key_visual_directory()
+        image_objs = [
+            {'name': 'kv1', 'url': 'https://pbs.twimg.com/media/ETrMsHWUMAIIE59?format=jpg&name=large'},
+            {'name': 'kv2', 'url': 'https://pbs.twimg.com/media/ETsAx85UcAEJSAn?format=jpg&name=900x900'}]
+        self.download_image_objects(image_objs, filepath)
+
+    def download_character(self):
+        chara_folder = self.create_character_directory()
+        chara_main_url = 'https://lasdan.com/character/lloyd.html'
+        image_objs = []
+        try:
+            soup = self.get_soup(chara_main_url)
+            chara_list = soup.find('div', id='c_list_block_0001').find_all('a')
+            cache_filepath = chara_folder + '/chara.log'
+            chara_link_visited = []
+            if os.path.exists(cache_filepath):
+                with open(cache_filepath, 'r', encoding='utf-8') as f:
+                    try:
+                        line = f.readline()
+                        while line:
+                            chara_link_visited.append(line.strip())
+                            line = f.readline()
+                    except:
+                        pass
+            for chara_tag in chara_list:
+                chara_temp_url = chara_tag['href'].replace('../', '')
+                chara_url = self.PAGE_PREFIX + chara_temp_url
+                chara_page_name = chara_temp_url.split('/')[-1]
+                if chara_page_name in chara_link_visited:
+                    continue
+                chara_soup = self.get_soup(chara_url)
+                body_image_url = self.PAGE_PREFIX + \
+                    chara_soup.find('div', class_='charaBody').find('img')['src'].replace('../', '')
+                body_image_name = self.extract_image_name_from_url(body_image_url, with_extension=False)
+                image_objs.append({'name': body_image_name, 'url': body_image_url})
+                face_image_url = self.PAGE_PREFIX + \
+                    chara_soup.find('div', class_='charaFace').find('img')['src'].replace('../', '')
+                face_image_name = self.extract_image_name_from_url(face_image_url, with_extension=False)
+                image_objs.append({'name': face_image_name, 'url': face_image_url})
+                with open(cache_filepath, 'a+', encoding='utf-8') as f:
+                    f.write(chara_page_name + '\n')
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Character')
+            print(e)
+        self.download_image_objects(image_objs, chara_folder)
