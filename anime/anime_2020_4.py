@@ -481,10 +481,20 @@ class KumaBearDownload(Fall2020AnimeDownload):
                     chara_main_image_url = self.PAGE_PREFIX + chara_main_images[i].find('img')['src'].replace('../', '')
                     image_objs_list.append({'name': chara_main_name, 'url': chara_main_image_url})
 
-                scene_images = chara_frame.find('ul', class_='sceneImg').find_all('img')
-                for i in range(len(scene_images)):
-                    image_objs_list.append({'name': 'scene_' + chara_num + '_' + str(i + 1), 'url': self.PAGE_PREFIX
-                        + scene_images[i]['src'].replace('../', '')})
+                scene_image_tag = chara_frame.find('ul', class_='sceneImg')
+                if scene_image_tag:
+                    scene_images = scene_image_tag.find_all('img')
+                    for i in range(len(scene_images)):
+                        image_objs_list.append({'name': 'scene_' + chara_num + '_' + str(i + 1), 'url': self.PAGE_PREFIX
+                            + scene_images[i]['src'].replace('../', '')})
+                self.download_image_objects(image_objs_list, folder)
+
+                chara_dam_img_tag = chara_frame.find('div', class_='charaDamImg')
+                if chara_dam_img_tag:
+                    dam_images = chara_dam_img_tag.find_all('img')
+                    for i in range(len(dam_images)):
+                        image_objs_list.append({'name': 'scene_' + chara_num + '_' + str(i + 1), 'url': self.PAGE_PREFIX
+                            + dam_images[i]['src'].replace('../', '')})
                 self.download_image_objects(image_objs_list, folder)
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + " - Character")
