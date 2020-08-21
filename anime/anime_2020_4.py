@@ -157,7 +157,10 @@ class Higurashi2020Download(Fall2020AnimeDownload):
     def download_key_visual(self):
         filepath = self.create_key_visual_directory()
         image_objs = [
-            {'name': 'kv', 'url': 'https://higurashianime.com/images/images/v_001.jpg'}]
+            {'name': 'kv', 'url': 'https://higurashianime.com/images/images/v_001.jpg'},
+            {'name': 'kv1', 'url': 'https://higurashianime.com/images/index/v_002.jpg'},
+            {'name': 'kv2', 'url': 'https://higurashianime.com/images/index/v_001.jpg'}
+        ]
         self.download_image_objects(image_objs, filepath)
 
     def download_character(self):
