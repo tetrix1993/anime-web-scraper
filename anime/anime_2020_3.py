@@ -628,6 +628,7 @@ class PeterGrillDownload(Summer2020AnimeDownload):
         self.download_key_visual()
         self.download_character()
         self.download_bluray()
+        self.download_other()
 
     def download_episode_preview(self):
         #self.has_website_updated(self.PAGE_PREFIX)
@@ -724,6 +725,11 @@ class PeterGrillDownload(Summer2020AnimeDownload):
             {'name': 'bd_1_1', 'url': 'https://aniverse-mag.com/wp-content/uploads/2020/07/200702_01.jpg'},
             {'name': 'bd_1_2', 'url': 'https://aniverse-mag.com/wp-content/uploads/2020/07/200702_02.jpg'}
         ]
+        self.download_image_objects(image_objs, folder)
+
+    def download_other(self):
+        folder = self.create_custom_directory('other')
+        image_objs = [{'name': 'daki_dmm1', 'url': 'https://scratch.dmm.com/s3/prize/TPasD0NgnkpbYKeCf29Kq3vPX0Ylm4HPRLihP4G5.jpeg'}]
         self.download_image_objects(image_objs, folder)
 
 
