@@ -812,7 +812,9 @@ class SigrdrifaDownload(Fall2020AnimeDownload):
                       {'name': 'kv_02_pc', 'url': 'https://sigururi.com/assets/img/top/kv_02_pc.jpg'},
                       {'name': 'kv_02_sp', 'url': 'https://sigururi.com/assets/img/top/kv_02_sp.jpg'},
                       {'name': 'kv_03_pc', 'url': 'https://sigururi.com/assets/img/top/kv_03_pc.jpg'},
-                      {'name': 'kv_03_sp', 'url': 'https://sigururi.com/assets/img/top/kv_03_sp.jpg'}]
+                      {'name': 'kv_03_sp', 'url': 'https://sigururi.com/assets/img/top/kv_03_sp.jpg'},
+                      {'name': 'kv_04_pc', 'url': 'https://sigururi.com/assets/img/top/kv_04_pc.jpg'},
+                      {'name': 'kv_04_sp', 'url': 'https://sigururi.com/assets/img/top/kv_04_sp.jpg'}]
         self.download_image_objects(image_objs, folder)
 
     def download_character(self):
