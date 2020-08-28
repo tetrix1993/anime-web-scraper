@@ -273,6 +273,18 @@ class KanokariDownload(Summer2020AnimeDownload):
     def download_bluray(self):
         bluray_folder = self.create_bluray_directory()
         url_template = 'https://kanokari-official.com/bluray/vol%s/'
+
+        image_objs = [
+            {'name': 'ゲーマーズ1巻特典_c', 'url': 'https://kanokari-official.com/wp/wp-content/uploads/2020/08/ゲーマーズ1巻特典_c.jpg'},
+            {'name': 'ゲーマーズ_描き下ろし_c', 'url': 'https://kanokari-official.com/wp/wp-content/uploads/2020/08/ゲーマーズ_描き下ろし_c.jpg'},
+            {'name': 'アニメイト_描き下ろし_c', 'url': 'https://kanokari-official.com/wp/wp-content/uploads/2020/08/アニメイト_描き下ろし_c.jpg'},
+            {'name': 'とらのあな_描き下ろし_c', 'url': 'https://kanokari-official.com/wp/wp-content/uploads/2020/08/とらのあな_描き下ろし_c.jpg'},
+            {'name': 'ソフマップ_描き下ろし_c', 'url': 'https://kanokari-official.com/wp/wp-content/uploads/2020/08/ソフマップ_描き下ろし_c.jpg'},
+            {'name': 'Amazon_描き下ろし_c', 'url': 'https://kanokari-official.com/wp/wp-content/uploads/2020/08/Amazon_描き下ろし_c.jpg'},
+            {'name': 'kanokari_gamers_kokai_s', 'url': 'http://kanokari-official.com/wp/wp-content/uploads/2020/08/kanokari_gamers_kokai_s.jpg'}
+        ]
+        self.download_image_objects(image_objs, bluray_folder)
+
         try:
             stop = False
             for i in range(1, 5, 1):
