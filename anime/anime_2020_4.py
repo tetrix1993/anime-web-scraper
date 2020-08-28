@@ -17,6 +17,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 # Mahouka Koukou no Rettousei: Raihousha-hen https://mahouka.jp/ #mahouka @mahouka_anime
 # Majo no Tabitabi https://majotabi.jp/ #魔女の旅々 #魔女の旅々はいいぞ #majotabi @majotabi_PR
 # Maou-jou de Oyasumi https://maoujo-anime.com/ #魔王城でおやすみ @maoujo_anime
+# Munou na Nana https://munounanana.com/ #無能なナナ @munounanana
 # Ochikobore Fruit Tart http://ochifuru-anime.com/ #ochifuru @ochifuru_anime
 # Rail Romanesque https://railromanesque.jp/ @rail_romanesque #まいてつ #レヱルロマネスク
 # Senyoku no Sigrdrifa https://sigururi.com/ #シグルリ @sigururi
@@ -682,6 +683,47 @@ class MaoujoDownload(Fall2020AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + " - Character")
             print(e)
+        self.download_image_objects(image_objs, folder)
+
+
+# Munou na Nana
+class MunounaNanaDownload(Fall2020AnimeDownload):
+    title = 'Munou na Nana'
+    keywords = [title, 'Talentless Nana']
+
+    PAGE_PREFIX = 'https://munounanana.com/'
+
+    def __init__(self):
+        super().__init__()
+        self.init_base_folder('munou-na-nana')
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        image_objs = [{'name': 'kv1', 'url': 'https://munounanana.com/assets/top/main1/vis.jpg'}]
+        self.download_image_objects(image_objs, folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        image_objs = []
+        try:
+            soup = self.get_soup('https://munounanana.com/character/')
+            chara_data = soup.find_all('div', class_='character-data')
+            for chara in chara_data:
+                img = chara.find('img')
+                if img and img.has_attr('src'):
+                    image_url = self.PAGE_PREFIX + img['src'].replace('../', '').split('?')[0]
+                    image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                    image_objs.append({'name': image_name, 'url': image_url})
+        except:
+            pass
         self.download_image_objects(image_objs, folder)
 
 
