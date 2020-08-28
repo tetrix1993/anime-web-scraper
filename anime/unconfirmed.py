@@ -179,7 +179,8 @@ class KobayashiMaidDragon2Download(UnconfirmedDownload):
         self.download_key_visual()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        pass
+        #self.has_website_updated(self.PAGE_PREFIX)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
