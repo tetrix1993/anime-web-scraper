@@ -500,6 +500,8 @@ class MaohgakuinDownload(Summer2020AnimeDownload):
             {'name': 'bs11_guide', 'url': 'https://pbs.twimg.com/media/EbZlqboUwAYVvCu?format=jpg&name=4096x4096'},
             {'name': 'ep_visual_1', 'url': 'https://pbs.twimg.com/media/EcFiPBSU0AADZI9?format=jpg&name=large'},
             {'name': 'image_ep1', 'url': 'https://maohgakuin.com/assets/img/image_ep1.jpg'},
+            {'name': 'image_ep2', 'url': 'https://maohgakuin.com/assets/img/image_ep2.jpg'},
+            {'name': 'image_ep3', 'url': 'https://maohgakuin.com/assets/img/image_ep3.jpg'},
             {'name': 'ep01_kinen', 'url': 'https://pbs.twimg.com/media/EcFzWEEUcAM0bOT?format=jpg&name=large'},
             {'name': 'ep01_kinen_2', 'url': 'https://pbs.twimg.com/media/EcoPPXsVAAEPdSf?format=jpg&name=4096x4096'},
             {'name': 'ep01_kinen_3', 'url': 'https://pbs.twimg.com/media/EdMlINcUcAASho3?format=jpg&name=large'},
