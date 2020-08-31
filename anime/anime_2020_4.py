@@ -381,7 +381,8 @@ class KimisenDownload(Fall2020AnimeDownload):
     def download_key_visual(self):
         keyvisual_folder = self.create_key_visual_directory()
         image_objs = [
-            {'name': 'teaser', 'url': 'https://kimisentv.com/teaser/images/top-main-vis.jpg'}]
+            {'name': 'teaser', 'url': 'https://kimisentv.com/teaser/images/top-main-vis.jpg'},
+            {'name': 'kv1', 'url': 'https://pbs.twimg.com/media/EgvNvZXUYAEUPfC?format=jpg&name=large'}]
         self.download_image_objects(image_objs, keyvisual_folder)
 
     def download_character(self):
