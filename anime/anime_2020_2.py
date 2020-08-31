@@ -602,7 +602,7 @@ class Kaguyasama2Download(Spring2020AnimeDownload):
                     if package_tag is not None:
                         package_image = package_tag.find('img')
                         if package_image is not None:
-                            image_url = self.PAGE_PREFIX + package_image['src']
+                            image_url = self.PAGE_PREFIX + package_image['src'].replace('../', '/')
                             image_urls.append(image_url)
                     novelty_tags = bd_soup.find_all('figure', class_='novelty_img')
                     if novelty_tags is not None and len(novelty_tags) > 0:
