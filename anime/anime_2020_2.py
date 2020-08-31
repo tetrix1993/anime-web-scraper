@@ -589,7 +589,8 @@ class Kaguyasama2Download(Spring2020AnimeDownload):
             image_objs = [
                 {'name': 'bd_1', 'url': 'https://pbs.twimg.com/media/EYsi1b-UMAAyPDK?format=jpg&name=900x900'},
                 {'name': 'bd_2', 'url': 'https://pbs.twimg.com/media/EcUL42TUYAAfElR?format=jpg&name=900x900'},
-                {'name': 'bd_3', 'url': 'https://pbs.twimg.com/media/EeQoG9GVAAANa_C?format=jpg&name=900x900'}
+                {'name': 'bd_3', 'url': 'https://pbs.twimg.com/media/EeQoG9GVAAANa_C?format=jpg&name=900x900'},
+                {'name': 'bd_4', 'url': 'https://pbs.twimg.com/media/EguZjVqUcAEuusP?format=jpg&name=900x900'}
             ]
             self.download_image_objects(image_objs, other_filepath)
             url_list = ["https://kaguya.love/bddvd/"]
