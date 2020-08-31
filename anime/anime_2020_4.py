@@ -883,7 +883,8 @@ class SigrdrifaDownload(Fall2020AnimeDownload):
         image_objs = [
             {'name': 'news_vol_01', 'url': 'https://pbs.twimg.com/media/EdnNj1qVoAEY4MX?format=jpg&name=4096x4096'},
             {'name': 'news_vol_02', 'url': 'https://pbs.twimg.com/media/EeYvh7oUYAAdeWc?format=jpg&name=4096x4096'},
-            {'name': 'uminohi', 'url': 'https://sigururi.com/SYS/CONTENTS/2020072310293692693264/w708'}
+            {'name': 'uminohi', 'url': 'https://sigururi.com/SYS/CONTENTS/2020072310293692693264/w708'},
+            {'name': 'zanshomimai', 'url': 'https://sigururi.com/news/SYS/CONTENTS/2020083114133842932562/w712'}
         ]
         self.download_image_objects(image_objs, folder)
 
