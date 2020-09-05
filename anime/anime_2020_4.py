@@ -5,6 +5,7 @@ from datetime import datetime
 from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 
 # 100-man no Inochi no Ue ni Ore wa Tatteiru http://1000000-lives.com/ #俺100 @1000000_lives
+# Adachi to Shimamura https://www.tbs.co.jp/anime/adashima/ #安達としまむら @adashima_staff
 # Danmachi III http://danmachi.com/danmachi3/ #danmachi @danmachi_anime
 # Gochuumon wa Usagi desu ka? Bloom https://gochiusa.com/bloom/ #gochiusa @usagi_anime
 # Higurashi no Naku Koro ni (2020) https://higurashianime.com/ #ひぐらし @higu_anime
@@ -19,6 +20,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 # Maou-jou de Oyasumi https://maoujo-anime.com/ #魔王城でおやすみ @maoujo_anime
 # Munou na Nana https://munounanana.com/ #無能なナナ @munounanana
 # Ochikobore Fruit Tart http://ochifuru-anime.com/ #ochifuru @ochifuru_anime
+# One Room S3 https://oneroom-anime.com/ #OneRoom @anime_one_room
 # Rail Romanesque https://railromanesque.jp/ @rail_romanesque #まいてつ #レヱルロマネスク
 # Senyoku no Sigrdrifa https://sigururi.com/ #シグルリ @sigururi
 # Tonikaku Kawaii http://tonikawa.com/ #トニカクカワイイ #tonikawa @tonikawa_anime
@@ -74,6 +76,43 @@ class HyakumanNoInochiDownload(Fall2020AnimeDownload):
             image_url = chara_url_template % str(i).zfill(2)
             image_filepath = folder + '/' + image_name
             result = self.download_image(image_url, image_filepath)
+            if result == -1:
+                break
+
+
+# Adachi to Shimamura
+class AdashimaDownload(Fall2020AnimeDownload):
+    title = 'Adachi to Shimamura'
+    keywords = [title, 'Adashima']
+
+    PAGE_PREFIX = 'https://www.tbs.co.jp/anime/adashima/'
+
+    def __init__(self):
+        super().__init__()
+        self.init_base_folder('adashima')
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        image_objs = [
+            {'name': 'teaser', 'url': 'https://pbs.twimg.com/media/EMwxnAfVUAAkw_i?format=jpg&name=medium'},
+            {'name': 'kv1', 'url': 'https://pbs.twimg.com/media/Egzs0tCUMAA9ycs?format=jpg&name=medium'}]
+        self.download_image_objects(image_objs, folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        img_url_template = 'https://www.tbs.co.jp/anime/adashima/character/img/chara_stand_%s@2x.png'
+        for i in range(1, 11, 1):
+            img_url = img_url_template % str(i).zfill(2)
+            img_name = 'chara_stand_%s@2x' % str(i).zfill(2)
+            result = self.download_image(img_url, folder + '/' + img_name)
             if result == -1:
                 break
 
@@ -785,6 +824,40 @@ class OchifuruDownload(Fall2020AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + ' - Character')
             print(e)
+
+
+# One Room 3rd Season
+class OneRoom3Download(Fall2020AnimeDownload):
+    title = "One Room 3rd Season"
+    keywords = [title, "Third"]
+
+    PAGE_PREFIX = "https://oneroom-anime.com/"
+
+    def __init__(self):
+        super().__init__()
+        self.init_base_folder('one-room3')
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+        self.download_bluray()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        image_objs = [
+            {'name': 'kv', 'url': 'https://pbs.twimg.com/media/Eg9v7u7VgAAhwPr?format=jpg&name=4096x4096'}]
+        self.download_image_objects(image_objs, folder)
+
+    def download_bluray(self):
+        folder = self.create_bluray_directory()
+        image_objs = [
+            {'name': 'bd_s1s2_1', 'url': 'https://oneroom-anime.com/wordpress/wp-content/uploads/2020/07/237a13f0134854b4d0b8162879eafef1.jpg'},
+            {'name': 'bd_s1s2_2', 'url': 'https://oneroom-anime.com/wordpress/wp-content/uploads/2020/07/5cc4ed2d63953152405ca92e5549c420.jpg'}
+        ]
+        self.download_image_objects(image_objs, folder)
 
 
 # Rail Romanesque
