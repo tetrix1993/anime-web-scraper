@@ -545,7 +545,7 @@ class TateNoYuushaDownload(Winter2019AnimeDownload):
             
     def run(self):
         try:
-            response = self.get_response(self.PAGE_PREFIX)
+            response = self.get_response(self.PAGE_PREFIX + '/1st')
             split1 = response.split('<article class="p-intro">')
             if len(split1) < 2:
                 return

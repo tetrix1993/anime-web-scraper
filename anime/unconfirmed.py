@@ -11,6 +11,7 @@ from anime.main_download import MainDownload
 # Mushoku Tensei https://mushokutensei.jp/ #無職転生 @mushokutensei_A
 # Ore dake Haireru Kakushi Dungeon https://kakushidungeon-anime.jp/ #隠しダンジョン @kakushidungeon
 # Princess Connect! Re:Dive S2 https://anime.priconne-redive.jp/ #アニメプリコネ #プリコネR #プリコネ @priconne_anime
+# Tate no Yuusha S2 http://shieldhero-anime.jp/ #shieldhero #盾の勇者の成り上がり @shieldheroanime
 # Tatoeba Last Dungeon https://lasdan.com/ #ラスダン @lasdan_PR
 
 
@@ -282,6 +283,33 @@ class Priconne2Download(UnconfirmedDownload):
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         image_objs = [{'name': 'teaser', 'url': 'https://anime.priconne-redive.jp/assets/images/top_kv.png'}]
+        self.download_image_objects(image_objs, folder)
+
+
+# Tate no Yuusha no Nariagari S2
+class TateNoYuusha2Download(UnconfirmedDownload):
+    title = "Tate no Yuusha no Nariagari 2nd Season"
+    keywords = [title, "The Rising of the Shield Hero"]
+
+    PAGE_PREFIX = "http://shieldhero-anime.jp"
+
+    def __init__(self):
+        super().__init__()
+        self.init_base_folder('tate-no-yuusha2')
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        image_objs = [
+            {'name': 'announce', 'url': 'https://pbs.twimg.com/media/EDag4MkUwAAQnf0?format=jpg&name=medium'},
+            {'name': 'kv1', 'url': 'https://pbs.twimg.com/media/EhHFvyVU4AA7cUw?format=jpg&name=large'}
+        ]
         self.download_image_objects(image_objs, folder)
 
 
