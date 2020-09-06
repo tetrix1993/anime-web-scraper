@@ -16,4 +16,5 @@ from anime.anime_2020_1 import *
 from anime.anime_2020_2 import *
 from anime.anime_2020_3 import *
 from anime.anime_2020_4 import *
+from anime.anime_2021_1 import *
 from anime.unconfirmed import *
