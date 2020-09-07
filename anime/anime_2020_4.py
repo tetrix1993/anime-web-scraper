@@ -749,7 +749,11 @@ class MunounaNanaDownload(Fall2020AnimeDownload):
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
-        image_objs = [{'name': 'kv1', 'url': 'https://munounanana.com/assets/top/main1/vis.jpg'}]
+        image_objs = [
+            {'name': 'kv1', 'url': 'https://munounanana.com/assets/top/main1/vis.jpg'},
+            {'name': 'kv2', 'url': 'https://munounanana.com/assets/top/main2/vis.png'},
+            {'name': 'kv2_1', 'url': 'https://pbs.twimg.com/media/EhTHrVKVgAA0u-d?format=jpg&name=medium'}
+        ]
         self.download_image_objects(image_objs, folder)
 
     def download_character(self):
