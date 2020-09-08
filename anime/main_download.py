@@ -56,6 +56,7 @@ class MainDownload:
             response = requests.get(url, headers=headers)
             if response.status_code >= 400:
                 print("Error %s for %s" % (str(response.status_code), url))
+                return False
             content = str(response.content.decode(charset))
             try:
                 content_length = str(len(content))
