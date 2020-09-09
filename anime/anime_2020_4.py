@@ -445,6 +445,7 @@ class KumaBearDownload(Fall2020AnimeDownload):
     keywords = [title]
 
     PAGE_PREFIX = 'https://kumakumakumabear.com/'
+    STORY_PAGE = 'https://kumakumakumabear.com/story/'
 
     def __init__(self):
         super().__init__()
@@ -458,7 +459,35 @@ class KumaBearDownload(Fall2020AnimeDownload):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        try:
+            soup = self.get_soup(self.STORY_PAGE)
+            content_div = soup.find('div', id='ContentsListUnit02')
+            if content_div:
+                title_divs = content_div.find_all('div', class_='title')
+                for i in range(1, len(title_divs), 1):
+                    a_tag = title_divs[i].find('a')
+                    if a_tag and a_tag.has_attr('href'):
+                        try:
+                            episode = str(int(a_tag.text.replace('＃', '').replace('#', ''))).zfill(2)
+                        except:
+                            continue
+                        if self.is_image_exists(episode + '_1'):
+                            continue
+                        episode_url = self.PAGE_PREFIX + a_tag['href'].replace('../', '')
+                        episode_soup = self.get_soup(episode_url)
+                        wdxmax_div_tag = episode_soup.find('div', class_='wdxmax')
+                        if wdxmax_div_tag:
+                            images = wdxmax_div_tag.find_all('img')
+                            image_objs = []
+                            for j in range(len(images)):
+                                if images[j].has_attr('src'):
+                                    image_url = self.PAGE_PREFIX + images[j]['src'].replace('../', '').split('?')[0]
+                                    image_name = episode + '_' + str(j + 1)
+                                    image_objs.append({'name': image_name, 'url': image_url})
+                            self.download_image_objects(image_objs, self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
