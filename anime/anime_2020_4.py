@@ -455,6 +455,7 @@ class KumaBearDownload(Fall2020AnimeDownload):
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_external()
         self.download_key_visual()
         self.download_character()
 
@@ -488,6 +489,10 @@ class KumaBearDownload(Fall2020AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
+
+    def download_episode_preview_external(self):
+        jp_title = 'くまクマ熊ベアー'
+        AniverseMagazineScanner(jp_title, self.base_folder).run()
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
