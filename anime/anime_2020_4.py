@@ -95,6 +95,7 @@ class AdashimaDownload(Fall2020AnimeDownload):
         self.download_episode_preview()
         self.download_key_visual()
         self.download_character()
+        self.download_bluray()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX)
@@ -115,6 +116,13 @@ class AdashimaDownload(Fall2020AnimeDownload):
             result = self.download_image(img_url, folder + '/' + img_name)
             if result == -1:
                 break
+
+    def download_bluray(self):
+        folder = self.create_bluray_directory()
+        image_objs = [
+            {'name': 'music_op', 'url': 'https://pbs.twimg.com/media/Ehjk3IFUMAEm8g6?format=jpg&name=large'},
+        ]
+        self.download_image_objects(image_objs, folder)
 
 
 # Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka III
