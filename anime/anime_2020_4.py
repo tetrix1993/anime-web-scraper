@@ -8,6 +8,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 # Adachi to Shimamura https://www.tbs.co.jp/anime/adashima/ #安達としまむら @adashima_staff
 # Danmachi III http://danmachi.com/danmachi3/ #danmachi @danmachi_anime
 # Gochuumon wa Usagi desu ka? Bloom https://gochiusa.com/bloom/ #gochiusa @usagi_anime
+# Golden Kamuy 3rd Season https://www.kamuy-anime.com/ #ゴールデンカムイ @kamuy_official
 # Higurashi no Naku Koro ni (2020) https://higurashianime.com/ #ひぐらし @higu_anime
 # Iwa Kakeru!: Sport Climbing Girls http://iwakakeru-anime.com/ #いわかける #iwakakeru @iwakakeru_anime
 # Kamisama ni Natta Hi https://kamisama-day.jp/ #神様になった日 @kamisama_Ch_AB
@@ -177,6 +178,48 @@ class GochiUsa3Download(Fall2020AnimeDownload):
         image_objs = [
             {'name': 'original_kv', 'url': 'https://gochiusa.com/bloom/core_sys/images/main/home/main_img.jpg'},
             {'name': 'kv', 'url': 'https://pbs.twimg.com/media/EdIvRRNUEAI7tTZ?format=jpg&name=medium'}
+        ]
+        self.download_image_objects(image_objs, folder)
+
+
+# Golden Kamuy 3rd Season
+class GoldenKamuy3Download(Fall2020AnimeDownload):
+    title = "Golden Kamuy 3rd Season"
+    keywords = [title, "Kamui"]
+
+    PAGE_URL = "https://kamuy-anime.com/story/%s.html"
+    PAGE_PREFIX = "https://kamuy-anime.com/"
+    FIRST_EPISODE = 25
+    FINAL_EPISODE = 36
+
+    def __init__(self):
+        super().__init__()
+        self.init_base_folder('golden-kamuy3')
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        try:
+            for i in range(self.FIRST_EPISODE, self.FINAL_EPISODE + 1, 1):
+                episode = str(i).zfill(2)
+                if self.is_file_exists(self.base_folder + "/" + episode + "_1.jpg"):
+                    continue
+                response = self.get_response(self.PAGE_URL % episode)
+                split1 = response.split('<div class="ph"><a href="../')
+                for j in range(1, len(split1), 1):
+                    imageUrl = self.PAGE_PREFIX + split1[j].split('"')[0]
+                    filepathWithoutExtension = self.base_folder + "/" + episode + '_' + str(j)
+                    self.download_image(imageUrl, filepathWithoutExtension)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        image_objs = [
+            {'name': 'kv1', 'url': 'https://pbs.twimg.com/media/Ea1xVSTUEAA1G7y?format=jpg&name=large'}
         ]
         self.download_image_objects(image_objs, folder)
 

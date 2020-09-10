@@ -13,7 +13,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 # Winter 2021 Anime
 class Winter2021AnimeDownload(MainDownload):
     season = "2021-1"
-    season_name = "Winter 2020"
+    season_name = "Winter 2021"
 
     def __init__(self):
         super().__init__()
