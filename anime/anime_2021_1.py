@@ -8,6 +8,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 # Gotoubun no Hanayome S2 https://www.tbs.co.jp/anime/5hanayome/ #五等分の花嫁 @5Hanayome_anime
 # Ore dake Haireru Kakushi Dungeon https://kakushidungeon-anime.jp/ #隠しダンジョン @kakushidungeon
 # Tatoeba Last Dungeon https://lasdan.com/ #ラスダン @lasdan_PR
+# Urasekai Picnic https://www.othersidepicnic.com/ #裏ピク @OthersidePicnic
 
 
 # Winter 2021 Anime
@@ -178,3 +179,46 @@ class LasdanDownload(Winter2021AnimeDownload):
             print("Error in running " + self.__class__.__name__ + ' - Character')
             print(e)
         self.download_image_objects(image_objs, chara_folder)
+
+
+class UrasekaiPicnicDownload(Winter2021AnimeDownload):
+    title = 'Urasekai Picnic'
+    keywords = [title, 'Otherside Picnic']
+
+    PAGE_PREFIX = 'https://www.othersidepicnic.com'
+
+    def __init__(self):
+        super().__init__()
+        self.init_base_folder('urasekai-picnic')
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'main')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        image_objs = [
+            {'name': 'kv1', 'url': 'https://www.othersidepicnic.com/cms/wp-content/themes/othersidepicnic/images/home/kv.jpg'},
+        ]
+        self.download_image_objects(image_objs, folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        image_objs = []
+        try:
+            soup = self.get_soup('https://www.othersidepicnic.com/character/')
+            chr_imgs = soup.find_all('div', class_='stand-chara')
+            for chr_img in chr_imgs:
+                img_tag = chr_img.find('img')
+                if img_tag and img_tag.has_attr('src'):
+                    img_url = self.PAGE_PREFIX + img_tag['src']
+                    img_name = self.extract_image_name_from_url(img_url, with_extension=False)
+                    image_objs.append({'name': img_name, 'url': img_url})
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Character")
+            print(e)
+        self.download_image_objects(image_objs, folder)
