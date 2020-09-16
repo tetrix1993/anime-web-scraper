@@ -6,6 +6,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 
 
 # Gotoubun no Hanayome S2 https://www.tbs.co.jp/anime/5hanayome/ #五等分の花嫁 @5Hanayome_anime
+# Jaku-Chara Tomozaki-kun http://tomozaki-koushiki.com/ #友崎くん @tomozakikoshiki
 # Ore dake Haireru Kakushi Dungeon https://kakushidungeon-anime.jp/ #隠しダンジョン @kakushidungeon
 # Tatoeba Last Dungeon https://lasdan.com/ #ラスダン @lasdan_PR
 # Urasekai Picnic https://www.othersidepicnic.com/ #裏ピク @OthersidePicnic
@@ -62,6 +63,41 @@ class Gotoubun2Download(Winter2021AnimeDownload):
             image_url = image_template % str(i).zfill(2)
             image_name = self.extract_image_name_from_url(image_url, with_extension=False)
             image_objs.append({'name': image_name, 'url': image_url})
+        self.download_image_objects(image_objs, folder)
+
+
+# Jaku-Chara Tomozaki-kun
+class TomozakiKunDownload(Winter2021AnimeDownload):
+    title = "Jaku-Chara Tomozaki-kun"
+    keywords = [title, 'The Low Tier Character "Tomozaki-kun"', 'Tomozaki-kun']
+
+    PAGE_PREFIX = 'http://tomozaki-koushiki.com/'
+
+    def __init__(self):
+        super().__init__()
+        self.init_base_folder('tomozakikun')
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+        #self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+        #image_objs = []
+        #self.download_image_objects(image_objs, self.base_folder)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        image_objs = [
+            {'name': 'announce', 'url': 'https://pbs.twimg.com/media/EToARdRU0AACyGk?format=jpg&name=large'},
+            {'name': 'kv1', 'url': 'http://tomozaki-koushiki.com/news/wp-content/uploads/2020/09/キービジュアル.jpg'},
+        ]
+        self.download_image_objects(image_objs, folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        image_objs = []
         self.download_image_objects(image_objs, folder)
 
 
