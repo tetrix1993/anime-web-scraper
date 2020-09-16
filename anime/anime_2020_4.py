@@ -219,7 +219,9 @@ class GoldenKamuy3Download(Fall2020AnimeDownload):
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         image_objs = [
-            {'name': 'kv1', 'url': 'https://pbs.twimg.com/media/Ea1xVSTUEAA1G7y?format=jpg&name=large'}
+            {'name': 'kv1', 'url': 'https://pbs.twimg.com/media/Ea1xVSTUEAA1G7y?format=jpg&name=large'},
+            {'name': 'kv2', 'url': 'https://pbs.twimg.com/media/Eh2IA2VUMAAdhyT?format=jpg&name=large'},
+            {'name': 'kv3', 'url': 'https://pbs.twimg.com/media/Eh2IDQdVgAM9bfy?format=jpg&name=large'},
         ]
         self.download_image_objects(image_objs, folder)
 
