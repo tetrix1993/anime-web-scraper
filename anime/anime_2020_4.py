@@ -866,6 +866,7 @@ class OchifuruDownload(Fall2020AnimeDownload):
     keywords = [title, "Dropout Idol", "Ochifuru"]
 
     PAGE_PREFIX = 'http://ochifuru-anime.com/'
+    STORY_PAGE = 'http://ochifuru-anime.com/story.html'
     CHARA_IMAGE_TEMPLATE = 'http://ochifuru-anime.com/images/chara/%s/p_002.png'
 
     def __init__(self):
@@ -880,7 +881,37 @@ class OchifuruDownload(Fall2020AnimeDownload):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        soup = self.get_soup(self.STORY_PAGE)
+        try:
+            ol_list = soup.find('ol', class_='story_menu2')
+            if ol_list:
+                lis = ol_list.find_all('li')
+                for li in lis:
+                    a_tag = li.find('a')
+                    if a_tag and a_tag.has_attr('href'):
+                        split1 = a_tag['href'].split('?cat=story')
+                        if len(split1) == 2:
+                            try:
+                                episode = str(int(split1[1])).zfill(2)
+                                if not self.is_image_exists(episode + '_1'):
+                                    episode_url = self.PAGE_PREFIX + a_tag['href']
+                                    episode_soup = self.get_soup(episode_url)
+                                    image_ul = episode_soup.find('ul', class_='slider')
+                                    if image_ul:
+                                        image_lis = image_ul.find_all('li')
+                                        image_objs = []
+                                        for i in range(len(image_lis)):
+                                            img_tag = image_lis[i].find('img')
+                                            if img_tag and img_tag.has_attr('data-lazy'):
+                                                image_name = episode + '_' + str(i + 1)
+                                                image_url = self.PAGE_PREFIX + img_tag['data-lazy']
+                                                image_objs.append({'name': image_name, 'url': image_url})
+                                        self.download_image_objects(image_objs, self.base_folder)
+                            except:
+                                continue
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
     def download_key_visual(self):
         keyvisual_folder = self.create_key_visual_directory()
