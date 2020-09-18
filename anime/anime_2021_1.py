@@ -6,6 +6,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 
 
 # Gotoubun no Hanayome S2 https://www.tbs.co.jp/anime/5hanayome/ #五等分の花嫁 @5Hanayome_anime
+# Horimiya https://horimiya-anime.com/ #ホリミヤ @horimiya_anime
 # Jaku-Chara Tomozaki-kun http://tomozaki-koushiki.com/ #友崎くん @tomozakikoshiki
 # Ore dake Haireru Kakushi Dungeon https://kakushidungeon-anime.jp/ #隠しダンジョン @kakushidungeon
 # Tatoeba Last Dungeon https://lasdan.com/ #ラスダン @lasdan_PR
@@ -63,6 +64,44 @@ class Gotoubun2Download(Winter2021AnimeDownload):
             image_url = image_template % str(i).zfill(2)
             image_name = self.extract_image_name_from_url(image_url, with_extension=False)
             image_objs.append({'name': image_name, 'url': image_url})
+        self.download_image_objects(image_objs, folder)
+
+
+# Horimiya
+class HorimiyaDownload(Winter2021AnimeDownload):
+    title = "Horimiya"
+    keywords = [title]
+
+    PAGE_PREFIX = 'https://horimiya-anime.com/'
+
+    def __init__(self):
+        super().__init__()
+        self.init_base_folder('horimiya')
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+        #image_objs = []
+        #self.download_image_objects(image_objs, self.base_folder)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        image_objs = [
+            {'name': 'kv1_1', 'url': 'https://pbs.twimg.com/media/EiH_LNCU8AM5msx?format=png&name=900x900'},
+            {'name': 'kv1_2', 'url': 'https://horimiya-anime.com/teaser/img/top/main/img_main.jpg'},
+        ]
+        self.download_image_objects(image_objs, folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        image_objs = [
+            {'name': 'img_hori', 'url': 'https://horimiya-anime.com/teaser/img/top/chara/img_hori.png'},
+            {'name': 'img_miya', 'url': 'https://horimiya-anime.com/teaser/img/top/chara/img_miya.png'},
+        ]
         self.download_image_objects(image_objs, folder)
 
 
