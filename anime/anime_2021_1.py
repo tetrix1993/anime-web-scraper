@@ -11,6 +11,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 # Ore dake Haireru Kakushi Dungeon https://kakushidungeon-anime.jp/ #隠しダンジョン @kakushidungeon
 # Tatoeba Last Dungeon https://lasdan.com/ #ラスダン @lasdan_PR
 # Urasekai Picnic https://www.othersidepicnic.com/ #裏ピク @OthersidePicnic
+# Yuru Camp S2 https://yurucamp.jp/second/ #ゆるキャン @yurucamp_anime
 
 
 # Winter 2021 Anime
@@ -256,6 +257,7 @@ class LasdanDownload(Winter2021AnimeDownload):
         self.download_image_objects(image_objs, chara_folder)
 
 
+# Urasekai Picnic
 class UrasekaiPicnicDownload(Winter2021AnimeDownload):
     title = 'Urasekai Picnic'
     keywords = [title, 'Otherside Picnic']
@@ -296,4 +298,41 @@ class UrasekaiPicnicDownload(Winter2021AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + " - Character")
             print(e)
+        self.download_image_objects(image_objs, folder)
+
+
+# Yuru Camp S2
+class YuruCamp2Download(Winter2021AnimeDownload):
+    title = "Yuru Camp 2nd Season"
+    keywords = [title]
+
+    PAGE_PREFIX = 'https://yurucamp.jp/second/'
+
+    def __init__(self):
+        super().__init__()
+        self.init_base_folder('yurucamp2')
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+        #self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+        #image_objs = []
+        #self.download_image_objects(image_objs, self.base_folder)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        image_objs = [
+            {'name': 'teaser1', 'url': 'https://pbs.twimg.com/media/ETy4ZCFUYAEXlLl?format=jpg&name=4096x4096'},
+            {'name': 'teaser2', 'url': 'https://pbs.twimg.com/media/ETy4ZC0U4AAbSS_?format=jpg&name=4096x4096'},
+            {'name': 'mv_l', 'url': 'https://yurucamp.jp/second/images/mv_l.jpg'},
+            {'name': 'mv_r', 'url': 'https://yurucamp.jp/second/images/mv_r.jpg'},
+        ]
+        self.download_image_objects(image_objs, folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        image_objs = []
         self.download_image_objects(image_objs, folder)
