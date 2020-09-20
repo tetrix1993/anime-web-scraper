@@ -243,6 +243,7 @@ class Higurashi2020Download(Fall2020AnimeDownload):
         self.download_episode_preview()
         self.download_key_visual()
         self.download_character()
+        self.download_bluray()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX)
@@ -273,6 +274,24 @@ class Higurashi2020Download(Fall2020AnimeDownload):
             self.download_image_objects(image_objs, filepath)
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + ' - Character')
+            print(e)
+
+    def download_bluray(self):
+        folder = self.create_bluray_directory()
+        try:
+            soup = self.get_soup('https://higurashianime.com/package.html')
+            kiji_wraps = soup.find_all('div', class_='kiji_wrap')
+            for kiji_wrap in kiji_wraps:
+                image_tags = kiji_wrap.find_all('img')
+                image_objs = []
+                for image_tag in image_tags:
+                    if image_tag.has_attr('src'):
+                        image_url = self.PAGE_PREFIX + image_tag['src']
+                        image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                        image_objs.append({'name': image_name, 'url': image_url})
+                self.download_image_objects(image_objs, folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Blu-ray')
             print(e)
 
 
