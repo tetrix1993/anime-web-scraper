@@ -45,6 +45,7 @@ class HyakumanNoInochiDownload(Fall2020AnimeDownload):
     keywords = [title, "I'm standing on 1,000,000 lives.", "Hyakuman"]
 
     PAGE_PREFIX = 'http://1000000-lives.com/'
+    STORY_PAGE = 'http://1000000-lives.com/story/'
 
     def __init__(self):
         super().__init__()
@@ -56,7 +57,7 @@ class HyakumanNoInochiDownload(Fall2020AnimeDownload):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        self.has_website_updated(self.STORY_PAGE)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -87,6 +88,7 @@ class AdashimaDownload(Fall2020AnimeDownload):
     keywords = [title, 'Adashima']
 
     PAGE_PREFIX = 'https://www.tbs.co.jp/anime/adashima/'
+    STORY_PAGE = 'https://www.tbs.co.jp/anime/adashima/story/'
 
     def __init__(self):
         super().__init__()
@@ -99,7 +101,7 @@ class AdashimaDownload(Fall2020AnimeDownload):
         self.download_bluray()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        self.has_website_updated(self.STORY_PAGE)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -132,6 +134,7 @@ class Danmachi3Download(Fall2020AnimeDownload):
     keywords = [title, 'Danmachi', 'Is It Wrong to Try to Pick Up Girls in a Dungeon? III', '3rd']
 
     PAGE_PREFIX = 'http://danmachi.com/danmachi3/'
+    STORY_PAGE = 'http://danmachi.com/danmachi3/story/index.html'
 
     def __init__(self):
         super().__init__()
@@ -144,7 +147,7 @@ class Danmachi3Download(Fall2020AnimeDownload):
         self.download_key_visual()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        self.has_website_updated(self.STORY_PAGE)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -232,6 +235,7 @@ class Higurashi2020Download(Fall2020AnimeDownload):
     keywords = [title, "When They Cry"]
 
     PAGE_PREFIX = 'https://higurashianime.com/'
+    STORY_PAGE = 'https://higurashianime.com/intro.html'
 
     def __init__(self):
         super().__init__()
@@ -246,7 +250,7 @@ class Higurashi2020Download(Fall2020AnimeDownload):
         self.download_bluray()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        self.has_website_updated(self.STORY_PAGE)
 
     def download_key_visual(self):
         filepath = self.create_key_visual_directory()
@@ -301,6 +305,7 @@ class IwakakeruDownload(Fall2020AnimeDownload):
     keywords = [title, "Iwakakeru"]
 
     PAGE_PREFIX = 'http://iwakakeru-anime.com/'
+    STORY_PAGE = 'http://iwakakeru-anime.com/story/'
 
     def __init__(self):
         super().__init__()
@@ -314,7 +319,7 @@ class IwakakeruDownload(Fall2020AnimeDownload):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        self.has_website_updated(self.STORY_PAGE)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -373,6 +378,7 @@ class KamisamaNiNattaHiDownload(Fall2020AnimeDownload):
     keywords = [title, "The Day I Became a God"]
 
     PAGE_PREFIX = 'https://kamisama-day.jp/'
+    STORY_PAGE = 'https://kamisama-day.jp/story/'
 
     def __init__(self):
         super().__init__()
@@ -382,6 +388,7 @@ class KamisamaNiNattaHiDownload(Fall2020AnimeDownload):
         self.download_episode_preview()
         self.download_key_visual()
         self.download_character()
+        self.download_music()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX)
@@ -417,6 +424,24 @@ class KamisamaNiNattaHiDownload(Fall2020AnimeDownload):
             print(e)
         self.download_image_objects(image_objs, folder)
 
+    def download_music(self):
+        folder = self.create_custom_directory('music')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'music/')
+            contents_inner = soup.find('div', class_='main_contents_wrap')
+            if contents_inner:
+                img_tags = contents_inner.find_all('img')
+                image_objs = []
+                for img_tag in img_tags:
+                    if img_tag.has_attr('src'):
+                        image_url = self.PAGE_PREFIX + img_tag['src'].replace('../', '')
+                        image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                        image_objs.append({'name': image_name, 'url': image_url})
+                self.download_image_objects(image_objs, folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Music")
+            print(e)
+
 
 # Kami-tachi ni Hirowareta Otoko
 class KamihiroDownload(Fall2020AnimeDownload):
@@ -424,6 +449,7 @@ class KamihiroDownload(Fall2020AnimeDownload):
     keywords = [title, 'Kamihiro', 'Kamitachi']
 
     PAGE_PREFIX = 'https://kamihiro-anime.com'
+    STORY_PAGE = 'https://kamihiro-anime.com/story/'
 
     def __init__(self):
         super().__init__()
@@ -435,9 +461,10 @@ class KamihiroDownload(Fall2020AnimeDownload):
         self.download_episode_preview()
         self.download_key_visual()
         self.download_character()
+        self.download_music()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        self.has_website_updated(self.STORY_PAGE)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -467,6 +494,25 @@ class KamihiroDownload(Fall2020AnimeDownload):
             print("Error in running " + self.__class__.__name__ + " - Character")
             print(e)
 
+    def download_music(self):
+        folder = self.create_custom_directory('music')
+        try:
+            for music_page in ['opening-theme', 'ending-theme']:
+                soup = self.get_soup(self.PAGE_PREFIX + '/music/' + music_page + '/')
+                contents_inner = soup.find('div', class_='music-info__detail__data')
+                if contents_inner:
+                    img_tags = contents_inner.find_all('img')
+                    image_objs = []
+                    for img_tag in img_tags:
+                        if img_tag.has_attr('src'):
+                            image_url = img_tag['src']
+                            image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                            image_objs.append({'name': image_name, 'url': image_url})
+                    self.download_image_objects(image_objs, folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Music")
+            print(e)
+
 
 # Kimi to Boku no Saigo no Senjou, Aruiwa Sekai ga Hajimaru Seisen
 class KimisenDownload(Fall2020AnimeDownload):
@@ -474,6 +520,7 @@ class KimisenDownload(Fall2020AnimeDownload):
     keywords = [title, "Kimisen"]
 
     PAGE_PREFIX = 'https://kimisentv.com/'
+    STORY_PAGE = 'https://kimisentv.com/story/'
 
     def __init__(self):
         super().__init__()
@@ -485,9 +532,10 @@ class KimisenDownload(Fall2020AnimeDownload):
         self.download_episode_preview()
         self.download_key_visual()
         self.download_character()
+        self.download_music()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        self.has_website_updated(self.STORY_PAGE)
 
     def download_key_visual(self):
         keyvisual_folder = self.create_key_visual_directory()
@@ -509,6 +557,24 @@ class KimisenDownload(Fall2020AnimeDownload):
             result = self.download_image(image_url, folder + '/' + image_name)
             if result == -1:
                 break
+
+    def download_music(self):
+        folder = self.create_custom_directory('music')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'music/')
+            contents_inner = soup.find('div', class_='cont-body')
+            if contents_inner:
+                img_tags = contents_inner.find_all('img')
+                image_objs = []
+                for img_tag in img_tags:
+                    if img_tag.has_attr('src'):
+                        image_url = self.PAGE_PREFIX + img_tag['src'].replace('../', '').split('?')[0]
+                        image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                        image_objs.append({'name': image_name, 'url': image_url})
+                self.download_image_objects(image_objs, folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Music")
+            print(e)
 
 
 # Kuma Kuma Kuma Bear
@@ -696,6 +762,7 @@ class MaesetsuDownload(Fall2020AnimeDownload):
     keywords = [title]
 
     PAGE_PREFIX = 'https://maesetsu.jp/'
+    STORY_PAGE = 'https://maesetsu.jp/story/'
 
     def __init__(self):
         super().__init__()
@@ -705,10 +772,11 @@ class MaesetsuDownload(Fall2020AnimeDownload):
         self.download_episode_preview()
         self.download_key_visual()
         self.download_character()
+        self.download_music()
         self.download_other()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        self.has_website_updated(self.STORY_PAGE)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -744,6 +812,24 @@ class MaesetsuDownload(Fall2020AnimeDownload):
             image_objs.append({'name': image_name, 'url': image_url_template % str(i).zfill(3)})
         self.download_image_objects(image_objs, folder)
 
+    def download_music(self):
+        folder = self.create_custom_directory('music')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'music/')
+            contents_inner = soup.find('div', id='cms_block')
+            if contents_inner:
+                img_tags = contents_inner.find_all('img')
+                image_objs = []
+                for img_tag in img_tags:
+                    if img_tag.has_attr('src'):
+                        image_url = self.PAGE_PREFIX + img_tag['src'].replace('../', '').split('?')[0]
+                        image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                        image_objs.append({'name': image_name, 'url': image_url})
+                self.download_image_objects(image_objs, folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Music")
+            print(e)
+
 
 # Mahouka Koukou no Rettousei: Raihousha-hen
 class Mahouka2Download(Fall2020AnimeDownload):
@@ -751,6 +837,7 @@ class Mahouka2Download(Fall2020AnimeDownload):
     keywords = [title, "The Irregular at Magic High School", "2nd"]
 
     PAGE_PREFIX = 'https://mahouka.jp/'
+    STORY_PAGE = 'https://mahouka.jp/story/'
 
     def __init__(self):
         super().__init__()
@@ -761,7 +848,7 @@ class Mahouka2Download(Fall2020AnimeDownload):
         self.download_key_visual()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        self.has_website_updated(self.STORY_PAGE)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -833,6 +920,7 @@ class MaoujoDownload(Fall2020AnimeDownload):
     keywords = [title, "Maoujo", "Sleepy Princess in the Demon Castle"]
 
     PAGE_PREFIX = 'https://maoujo-anime.com/'
+    STORY_PAGE = 'https://maoujo-anime.com/story/'
 
     def __init__(self):
         super().__init__()
@@ -844,9 +932,10 @@ class MaoujoDownload(Fall2020AnimeDownload):
         self.download_episode_preview()
         self.download_key_visual()
         self.download_character()
+        self.download_music()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        self.has_website_updated(self.STORY_PAGE)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -873,6 +962,36 @@ class MaoujoDownload(Fall2020AnimeDownload):
             print(e)
         self.download_image_objects(image_objs, folder)
 
+    def download_music(self):
+        folder = self.create_custom_directory('music')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'music/')
+            contents_inner = soup.find('div', class_='l-content_l')
+            if contents_inner:
+                img_tags = contents_inner.find_all('img')
+                tokuten_tags = contents_inner.find_all('div', class_='c-tokuten-item__img')
+                image_objs = []
+                for img_tag in img_tags:
+                    if img_tag.has_attr('data-src'):
+                        image_url = self.PAGE_PREFIX + img_tag['data-src']
+                        image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                        image_objs.append({'name': image_name, 'url': image_url})
+                for tokuten_tag in tokuten_tags:
+                    if tokuten_tag.has_attr('style'):
+                        style = tokuten_tag['style']
+                        if len(style) > 25 and style[0:22] == "background-image:url('" and style[-3:] == "');":
+                            image_url_before = style[22:][0:len(style) - 25]
+                            if '../' in image_url_before:
+                                image_url = self.PAGE_PREFIX + image_url_before.replace('../', '')
+                            else:
+                                image_url = self.PAGE_PREFIX + 'music/' + image_url_before
+                            image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                            image_objs.append({'name': image_name, 'url': image_url})
+                self.download_image_objects(image_objs, folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Music")
+            print(e)
+
 
 # Munou na Nana
 class MunounaNanaDownload(Fall2020AnimeDownload):
@@ -880,6 +999,7 @@ class MunounaNanaDownload(Fall2020AnimeDownload):
     keywords = [title, 'Talentless Nana']
 
     PAGE_PREFIX = 'https://munounanana.com/'
+    STORY_PAGE = 'https://munounanana.com/story/'
 
     def __init__(self):
         super().__init__()
@@ -891,7 +1011,7 @@ class MunounaNanaDownload(Fall2020AnimeDownload):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        self.has_website_updated(self.STORY_PAGE)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -1122,6 +1242,7 @@ class SigrdrifaDownload(Fall2020AnimeDownload):
     keywords = [title, "Warlords of Sigrdrifa", "Sigururi"]
 
     PAGE_PREFIX = "https://sigururi.com/"
+    STORY_PAGE = 'https://sigururi.com/intro/'
 
     def __init__(self):
         super().__init__()
@@ -1136,7 +1257,7 @@ class SigrdrifaDownload(Fall2020AnimeDownload):
         self.download_other()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        self.has_website_updated(self.STORY_PAGE)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -1191,6 +1312,7 @@ class TonikawaDownload(Fall2020AnimeDownload):
     keywords = [title, "Tonikawa", "Cawaii", "Fly Me to the Moon"]
 
     PAGE_PREFIX = 'http://tonikawa.com/'
+    STORY_PAGE = 'http://tonikawa.com/story/'
 
     def __init__(self):
         super().__init__()
@@ -1203,7 +1325,7 @@ class TonikawaDownload(Fall2020AnimeDownload):
         self.download_key_visual()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        self.has_website_updated(self.STORY_PAGE)
 
     def download_key_visual(self):
         keyvisual_folder = self.base_folder + '/' + constants.FOLDER_KEY_VISUAL
