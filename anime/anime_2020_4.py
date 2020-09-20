@@ -980,7 +980,7 @@ class MaoujoDownload(Fall2020AnimeDownload):
                     if tokuten_tag.has_attr('style'):
                         style = tokuten_tag['style']
                         if len(style) > 25 and style[0:22] == "background-image:url('" and style[-3:] == "');":
-                            image_url_before = style[22:][0:len(style) - 25]
+                            image_url_before = style[22:len(style) - 3]
                             if '../' in image_url_before:
                                 image_url = self.PAGE_PREFIX + image_url_before.replace('../', '')
                             else:
