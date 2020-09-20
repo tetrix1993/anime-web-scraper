@@ -641,7 +641,7 @@ class KumaBearDownload(Fall2020AnimeDownload):
                 image_objs = []
                 for img_tag in img_tags:
                     if img_tag.has_attr('src'):
-                        image_url = self.PAGE_PREFIX + img_tag['src'].replace('../', '')
+                        image_url = self.PAGE_PREFIX + img_tag['src'].replace('../', '').split('?')[0]
                         image_name = self.extract_image_name_from_url(image_url, with_extension=False)
                         image_objs.append({'name': image_name, 'url': image_url})
                 self.download_image_objects(image_objs, folder)
