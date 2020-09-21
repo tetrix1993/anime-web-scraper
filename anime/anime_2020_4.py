@@ -1274,11 +1274,19 @@ class SigrdrifaDownload(Fall2020AnimeDownload):
     def download_character(self):
         folder = self.create_character_directory()
         image_url_templates = ['https://sigururi.com/assets/img/chara/chara_%s.png',
+                               'https://sigururi.com/assets/img/character/chara_%s.png',
                                'https://sigururi.com/assets/img/character/chara_%s_new.png']
+        soup = self.get_soup('https://sigururi.com/chara/')
+        num_of_chara = len(soup.find_all('div', class_='chara_wrap'))
+        chara_id_to_download = []
+        for i in range(num_of_chara):
+            if self.is_image_exists('chara_%s' % str(i + 1).zfill(2), folder)\
+                    or self.is_image_exists('chara_%s_new' % str(i + 1).zfill(2), folder):
+                continue
+            chara_id_to_download.append(i + 1)
+
         for image_url_template in image_url_templates:
-            i = 0
-            while True:
-                i += 1
+            for i in chara_id_to_download:
                 image_url = image_url_template % str(i).zfill(2)
                 image_name = self.extract_image_name_from_url(image_url, with_extension=False)
                 image_name_with_extension = self.extract_image_name_from_url(image_url, with_extension=True)
@@ -1286,9 +1294,7 @@ class SigrdrifaDownload(Fall2020AnimeDownload):
                 filepath = folder + '/' + image_name_with_extension
                 if os.path.exists(filepath):
                     continue
-                result = self.download_image(image_url, filepath_without_extension)
-                if result == -1:
-                    break
+                self.download_image(image_url, filepath_without_extension)
 
     def download_other(self):
         folder = self.create_custom_directory('other')
