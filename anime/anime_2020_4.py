@@ -389,6 +389,7 @@ class KamisamaNiNattaHiDownload(Fall2020AnimeDownload):
         self.download_key_visual()
         self.download_character()
         self.download_music()
+        self.download_other()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX)
@@ -441,6 +442,13 @@ class KamisamaNiNattaHiDownload(Fall2020AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + " - Music")
             print(e)
+
+    def download_other(self):
+        folder = self.create_custom_directory('other')
+        image_objs = [
+            {'name': 'bs11_guide', 'url': 'https://pbs.twimg.com/media/EilpMUKU4AAv0TX?format=jpg&name=large'}
+        ]
+        self.download_image_objects(image_objs, folder)
 
 
 # Kami-tachi ni Hirowareta Otoko
