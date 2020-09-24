@@ -1464,6 +1464,69 @@ class SigrdrifaDownload(Fall2020AnimeDownload):
         self.download_image_objects(image_objs, folder)
 
 
+# Strike Witches: Road to Berlin
+class StrikeWitches3Download(Fall2020AnimeDownload):
+    title = 'Strike Witches: Road to Berlin'
+    keywords = [title]
+
+    PAGE_PREFIX = 'http://w-witch.jp/strike_witches-rtb/'
+
+    def __init__(self):
+        super().__init__()
+        self.init_base_folder('strike-witches3')
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+        self.download_character()
+        self.download_music()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        image_objs = [
+            {'name': 'kv1', 'url': 'http://w-witch.jp/strike_witches-rtb/news/img/20200721_3/01.jpg'},
+            {'name': 'mv-sp', 'url': 'http://w-witch.jp/strike_witches-rtb/img/top/mv-sp.jpg'},
+            {'name': 'mv-pc', 'url': 'http://w-witch.jp/strike_witches-rtb/img/top/mv-pc.jpg'},
+        ]
+        self.download_image_objects(image_objs, folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        stop = False
+        for i in range(1, 31, 1):
+            for j in range(1, 3, 1):
+                image_url = self.PAGE_PREFIX + 'character/img/chara%s-%s.png' % (str(i), str(j))
+                image_name = 'chara%s-%s' % (str(i), str(j))
+                if self.is_image_exists(image_name, folder):
+                    continue
+                result = self.download_image(image_url, folder + '/' + image_name)
+                if result == -1:
+                    stop = True
+            if stop:
+                break
+
+    def download_music(self):
+        folder = self.create_custom_directory('music')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'music/')
+            cts_boxes = soup.find_all('div', class_='cts_box')
+            for cts_box in cts_boxes:
+                img_tags = cts_box.find_all('img')
+                image_objs = []
+                for img_tag in img_tags:
+                    if img_tag.has_attr('src'):
+                        image_url = self.PAGE_PREFIX + img_tag['src'].replace('../', '')
+                        image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                        image_objs.append({'name': image_name, 'url': image_url})
+                self.download_image_objects(image_objs, folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Music")
+            print(e)
+
+
 # Tonikaku Kawaii
 class TonikawaDownload(Fall2020AnimeDownload):
     title = "Tonikaku Kawaii"
