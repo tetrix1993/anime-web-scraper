@@ -488,6 +488,34 @@ class IwakakeruDownload(Fall2020AnimeDownload):
             self.download_image_objects(image_objs, folder)
 
 
+# Jujutsu Kaisen
+class JujutsuKaisenDownload(Fall2020AnimeDownload):
+    title = 'Jujutsu Kaisen'
+    keywords = [title]
+
+    PAGE_PREFIX = 'https://jujutsukaisen.jp/'
+    STORY_PAGE = 'https://jujutsukaisen.jp/story/'
+
+    def __init__(self):
+        super().__init__()
+        self.init_base_folder('jujutsu-kaisen')
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.STORY_PAGE)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        image_objs = [
+            {'name': 'kv1', 'url': 'https://jujutsukaisen.jp/news/images/20200914_01_01.jpg'},
+            {'name': 'kv2', 'url': 'https://jujutsukaisen.jp/news/images/20200525_01_01.jpg'},
+        ]
+        self.download_image_objects(image_objs, folder)
+
+
 # Kamisama ni Natta Hi
 class KamisamaNiNattaHiDownload(Fall2020AnimeDownload):
     title = "Kamisama ni Natta Hi"
