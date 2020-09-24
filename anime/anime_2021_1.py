@@ -329,6 +329,7 @@ class YuruCamp2Download(Winter2021AnimeDownload):
             {'name': 'teaser2', 'url': 'https://pbs.twimg.com/media/ETy4ZC0U4AAbSS_?format=jpg&name=4096x4096'},
             {'name': 'mv_l', 'url': 'https://yurucamp.jp/second/images/mv_l.jpg'},
             {'name': 'mv_r', 'url': 'https://yurucamp.jp/second/images/mv_r.jpg'},
+            {'name': 'g_visual_01', 'url': 'https://yurucamp.jp/second/images/g_visual_01.jpg'},
         ]
         self.download_image_objects(image_objs, folder)
 
