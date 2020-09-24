@@ -6,11 +6,14 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 
 # 100-man no Inochi no Ue ni Ore wa Tatteiru http://1000000-lives.com/ #俺100 @1000000_lives
 # Adachi to Shimamura https://www.tbs.co.jp/anime/adashima/ #安達としまむら @adashima_staff
+# Assault Lily: Bouquet https://anime.assaultlily-pj.com/ #アサルトリリィ @assaultlily_pj
 # Danmachi III http://danmachi.com/danmachi3/ #danmachi @danmachi_anime
+# Dogeza de Tanondemita https://dogeza-anime.com/ #土下座で @dgz_anime
 # Gochuumon wa Usagi desu ka? Bloom https://gochiusa.com/bloom/ #gochiusa @usagi_anime
 # Golden Kamuy 3rd Season https://www.kamuy-anime.com/ #ゴールデンカムイ @kamuy_official
 # Higurashi no Naku Koro ni (2020) https://higurashianime.com/ #ひぐらし @higu_anime
 # Iwa Kakeru!: Sport Climbing Girls http://iwakakeru-anime.com/ #いわかける #iwakakeru @iwakakeru_anime
+# Jujutsu Kaisen https://jujutsukaisen.jp/ #呪術廻戦 @animejujutsu
 # Kamisama ni Natta Hi https://kamisama-day.jp/ #神様になった日 @kamisama_Ch_AB
 # Kami-tachi ni Hirowareta Otoko https://kamihiro-anime.com/ #神達に拾われた男 @kamihiro_anime
 # Kimi to Boku no Saigo no Senjou, Aruiwa Sekai ga Hajimaru Seisen https://kimisentv.com/ #キミ戦 #kimisen @kimisen_project
@@ -24,6 +27,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 # One Room S3 https://oneroom-anime.com/ #OneRoom @anime_one_room
 # Rail Romanesque https://railromanesque.jp/ @rail_romanesque #まいてつ #レヱルロマネスク
 # Senyoku no Sigrdrifa https://sigururi.com/ #シグルリ @sigururi
+# Strike Witches: Road to Berlin http://w-witch.jp/strike_witches-rtb/ #w_witch #s_witch_rtb @RtbWitch
 # Tonikaku Kawaii http://tonikawa.com/ #トニカクカワイイ #tonikawa @tonikawa_anime
 
 
