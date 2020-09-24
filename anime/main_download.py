@@ -157,7 +157,7 @@ class MainDownload:
         try:
             with requests.get(url, stream=True, headers=headers) as r:
                 # File not found or redirected to main page
-                if r.status_code == 404:
+                if r.status_code >= 400:
                     return -1
                 content_type = r.headers['Content-Type']
                 if 'image/png' in content_type:

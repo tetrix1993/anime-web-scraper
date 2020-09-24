@@ -231,6 +231,49 @@ class Danmachi3Download(Fall2020AnimeDownload):
         self.download_image_objects(image_objs, folder)
 
 
+# Dogeza de Tanondemita
+class DogezaDeTanondemitaDownload(Fall2020AnimeDownload):
+    title = 'Dogeza de Tanondemita'
+    keywords = [title]
+
+    PAGE_PREFIX = 'https://dogeza-anime.com/'
+
+    def __init__(self):
+        super().__init__()
+        self.init_base_folder('dogeza')
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+        self.download_character()
+        self.download_bluray()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        image_objs = [
+            {'name': 'vist1', 'url': 'https://dogeza-anime.com/assets/news/vist1.jpg'},
+            {'name': 'visk1', 'url': 'https://dogeza-anime.com/assets/news/visk1.jpg'},
+            {'name': 'vis', 'url': 'https://dogeza-anime.com/assets/top/main-k1/vis.jpg'}
+        ]
+        self.download_image_objects(image_objs, folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        for i in range(1, 31, 1):
+            image_url = 'https://dogeza-anime.com/assets/character/c%s.png' % str(i)
+            image_name = 'c' + str(i)
+            if self.is_image_exists(image_name, folder):
+                continue
+            result = self.download_image(image_url, folder + '/' + image_name)
+            if result == -1:
+                break
+
+    def download_bluray(self):
+        pass
+
 # Gochuumon wa Usagi Desu ka? Bloom
 class GochiUsa3Download(Fall2020AnimeDownload):
     title = "Gochuumon wa Usagi Desu ka? Bloom"
