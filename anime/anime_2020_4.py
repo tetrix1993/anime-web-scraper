@@ -132,6 +132,75 @@ class AdashimaDownload(Fall2020AnimeDownload):
         self.download_image_objects(image_objs, folder)
 
 
+# Assault Lily: Bouquet
+class AssaultLilyDownload(Fall2020AnimeDownload):
+    title = 'Assault Lily: Bouquet'
+    keywords = [title]
+
+    PAGE_PREFIX = 'https://anime.assaultlily-pj.com/'
+    STORY_PAGE = 'https://anime.assaultlily-pj.com/story/'
+
+    def __init__(self):
+        super().__init__()
+        self.init_base_folder('assault-lily')
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+        self.download_character()
+        self.download_bluray()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.STORY_PAGE)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        image_objs = [
+            {'name': 'teaser', 'url': 'https://anime.assaultlily-pj.com/wordpress/wp-content/themes/anime_al_v1/assets/images/common/story/img_intro.jpg'},
+            {'name': 'kv1', 'url': 'https://anime.assaultlily-pj.com/wordpress/wp-content/themes/anime_al_v1/assets/images/pc/index/kv_1.jpg'}]
+        self.download_image_objects(image_objs, folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        image_objs = []
+        try:
+            soup = self.get_soup('https://anime.assaultlily-pj.com/character/')
+            cat_items = soup.find_all('li', class_='chara_Cat_Item')
+            if len(cat_items) > 1:
+                for i in range(len(cat_items)):
+                    list_items = cat_items[i].find_all('li', class_='chara_List_Item')
+                    for list_item in list_items:
+                        img_tag = list_item.find('img')
+                        if img_tag and img_tag.has_attr('src'):
+                            image_url = img_tag['src']
+                            if i == 0:
+                                image_url = image_url.replace('chara_', 'body_')
+                            image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                            image_objs.append({'name': image_name, 'url': image_url})
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Character')
+            print(e)
+        self.download_image_objects(image_objs, folder)
+
+    def download_bluray(self):
+        folder = self.create_bluray_directory()
+        image_objs = []
+        try:
+            soup = self.get_soup('https://anime.assaultlily-pj.com/cd_blu-ray/')
+            list_items = soup.find_all('li', class_='cdbd_List_Item')
+            for list_item in list_items:
+                img_tags = list_item.find_all('img')
+                for img_tag in img_tags:
+                    if img_tag.has_attr('src'):
+                        image_url = img_tag['src']
+                        image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                        image_objs.append({'name': image_name, 'url': image_url})
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Blu-Ray')
+            print(e)
+        self.download_image_objects(image_objs, folder)
+
+
 # Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka III
 class Danmachi3Download(Fall2020AnimeDownload):
     title = 'Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka III'
