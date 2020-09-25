@@ -239,7 +239,9 @@ class KanokariDownload(Summer2020AnimeDownload):
             {'name': 'chara_kv3', 'url': 'https://kanokari-official.com/wp/wp-content/uploads/2020/03/ruka_KV.jpg'},
             {'name': 'chara_kv4', 'url': 'https://kanokari-official.com/wp/wp-content/uploads/2020/03/sumi_KV0322.jpg'},
             {'name': 'kv_web', 'url': 'https://kanokari-official.com/wp/wp-content/themes/kanokari_main/_assets/images/slider/kv_main.jpg'},
-            {'name': 'kv', 'url': 'https://pbs.twimg.com/media/EYwr-OVU8AANFm4?format=jpg&name=large'}]
+            {'name': 'kv', 'url': 'https://pbs.twimg.com/media/EYwr-OVU8AANFm4?format=jpg&name=large'},
+            {'name': 's2_announce', 'url': 'https://kanokari-official.com/wp/wp-content/themes/kanokari_main/_assets/images/top/newsvisual_season2.jpg'},
+        ]
         self.download_image_objects(image_objs, keyvisual_folder)
 
     def download_character(self):
@@ -993,7 +995,7 @@ class Oregairu3Download(Summer2020AnimeDownload):
             {'name': 'bd_1_1', 'url': 'https://pbs.twimg.com/media/EflqqRCVoAAQRSa?format=jpg&name=4096x4096'},
             {'name': 'bd_1_2', 'url': 'https://pbs.twimg.com/media/Efq6Z9bUwAMUGMB?format=jpg&name=4096x4096'},
             {'name': 'bd_2_1', 'url': 'https://pbs.twimg.com/media/EgaTUXsUwAA5vJ-?format=jpg&name=large'},
-            {'name': 'bd_2_2', 'url': 'https://pbs.twimg.com/media/EgaTUXsUwAA5vJ-?format=jpg&name=large'},
+            {'name': 'bd_2_2', 'url': 'https://pbs.twimg.com/media/EivEo6NUcAYVOkx?format=jpg&name=large'},
             {'name': 'bd_3_1', 'url': 'https://pbs.twimg.com/media/Eg_h8JsVkAEmg2p?format=jpg&name=large'},
             {'name': 'bd_4_1', 'url': 'https://pbs.twimg.com/media/EhjLbFyVoAEbZtn?format=jpg&name=large'},
             {'name': 'bd_5_1', 'url': 'https://pbs.twimg.com/media/EiHMiubVgAAKyVV?format=jpg&name=large'},
