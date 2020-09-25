@@ -739,6 +739,7 @@ class PeterGrillDownload(Summer2020AnimeDownload):
             {'name': 'bd_1_1', 'url': 'https://aniverse-mag.com/wp-content/uploads/2020/07/200702_01.jpg'},
             {'name': 'bd_1_2', 'url': 'https://aniverse-mag.com/wp-content/uploads/2020/07/200702_02.jpg'},
             {'name': 'bd_2_1', 'url': 'http://petergrill-anime.jp/images/upload/pg_dvd2.png'},
+            {'name': 'bd_3_1', 'url': 'http://petergrill-anime.jp/images/upload/pg_dvd3.png'},
             {'name': 'bd_bonus_1', 'url': 'https://ecdnimg.toranoana.jp/ec/img/21/0006/61/50/210006615043-1p.jpg'},
             {'name': 'bd_bonus_2', 'url': 'https://www.gamers.co.jp/resize_image.php?image=08181030_5f3b2f360cd25.jpg'},
         ]
