@@ -48,7 +48,7 @@ class HyakumanNoInochiDownload(Fall2020AnimeDownload):
     title = "100-man no Inochi no Ue ni Ore wa Tatteiru"
     keywords = [title, "I'm standing on 1,000,000 lives.", "Hyakuman"]
 
-    PAGE_PREFIX = 'http://1000000-lives.com/'
+    PAGE_PREFIX = 'http://1000000-lives.com'
     STORY_PAGE = 'http://1000000-lives.com/story/'
 
     def __init__(self):
@@ -61,7 +61,36 @@ class HyakumanNoInochiDownload(Fall2020AnimeDownload):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.STORY_PAGE)
+        try:
+            soup = self.get_soup(self.STORY_PAGE)
+            story_list = soup.find('ul', class_='l_storylist')
+            if story_list:
+                stories = story_list.find_all('li')
+                for story in stories:
+                    a_tag = story.find('a')
+                    if a_tag and a_tag.has_attr('href'):
+                        try:
+                            episode = str(int(a_tag['href'].replace('story', '').replace('/', ''))).zfill(2)
+                        except:
+                            continue
+                        if self.is_image_exists(episode + '_1'):
+                            continue
+                        story_url = self.PAGE_PREFIX + a_tag['href']
+                        story_soup = self.get_soup(story_url)
+                        thumblist = story_soup.find('ul', class_='l_thumblist')
+                        if thumblist:
+                            lis = thumblist.find_all('li')
+                            image_objs = []
+                            for i in range(len(lis)):
+                                a_tag = lis[i].find('a')
+                                if a_tag and a_tag.has_attr('data-imgload'):
+                                    image_url = self.PAGE_PREFIX + a_tag['data-imgload']
+                                    image_name = episode + '_' + str(i + 1)
+                                    image_objs.append({'name': image_name, 'url': image_url})
+                            self.download_image_objects(image_objs, self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -72,18 +101,19 @@ class HyakumanNoInochiDownload(Fall2020AnimeDownload):
 
     def download_character(self):
         folder = self.create_character_directory()
-        chara_url_template = 'http://1000000-lives.com/img/index/img_character%s.png'
-        i = 0
-        while True:
-            i += 1
-            image_name = 'img_character' + str(i).zfill(2)
-            if self.is_image_exists(image_name, folder):
-                continue
-            image_url = chara_url_template % str(i).zfill(2)
-            image_filepath = folder + '/' + image_name
-            result = self.download_image(image_url, image_filepath)
-            if result == -1:
-                break
+        image_objs = []
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + '/character/')
+            images = soup.find_all('div', class_='charadata_body_img')
+            for image in images:
+                if image.has_attr('data-imgload'):
+                    image_url = self.PAGE_PREFIX + image['data-imgload']
+                    image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                    image_objs.append({'name': image_name, 'url': image_url})
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Character')
+            print(e)
+        self.download_image_objects(image_objs, folder)
 
 
 # Adachi to Shimamura
@@ -1499,12 +1529,37 @@ class StrikeWitches3Download(Fall2020AnimeDownload):
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_external()
         self.download_key_visual()
         self.download_character()
         self.download_media()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        image_url_template = 'http://w-witch.jp/strike_witches-rtb/story/img/%s/%s.jpg'
+        stop = False
+        for i in range(1, 13, 1):
+            for j in range(1, 7, 1):
+                image_url = image_url_template % (str(i).zfill(2), str(j).zfill(2))
+                image_name = str(i).zfill(2) + '_' + str(j)
+                result = self.download_image(image_url, self.base_folder + '/' + image_name)
+                if result == -1:
+                    stop = True
+            if stop:
+                break
+
+    def download_episode_preview_external(self):
+        try:
+            jp_title = '第501統合戦闘航空団 ストライクウィッチーズ ROAD to BERLIN'
+            last_date = datetime.strptime('20201231', '%Y%m%d')
+            today = datetime.today()
+            if today < last_date:
+                end_date = today
+            else:
+                end_date = last_date
+            MocaNewsScanner(jp_title, self.base_folder, '20200925', end_date.strftime('%Y%m%d')).run()
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - MocaNews')
+            print(e)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
