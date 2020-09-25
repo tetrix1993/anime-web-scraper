@@ -304,7 +304,7 @@ class UrasekaiPicnicDownload(Winter2021AnimeDownload):
 # Yuru Camp S2
 class YuruCamp2Download(Winter2021AnimeDownload):
     title = "Yuru Camp 2nd Season"
-    keywords = [title]
+    keywords = [title, 'Yurucamp']
 
     PAGE_PREFIX = 'https://yurucamp.jp/second/'
 

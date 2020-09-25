@@ -5,20 +5,33 @@ from anime import *
 import migrate
 
 
+MAX_PROCESSES = 30
+
+
 def run_process(download):
     print("Running " + download.__class__.__name__ + " (" + str(os.getpid()) + ")")
     download.run()
 
 
 def process_download(downloads):
-    processes = []
-    for download in downloads:
-        process = Process(target=run_process, args=(download(),))
-        processes.append(process)
-        process.start()
+    if MAX_PROCESSES <= 0:
+        return
 
-    for process in processes:
-        process.join()
+    if len(downloads) % MAX_PROCESSES == 0:
+        num_of_iterations = len(downloads) / MAX_PROCESSES
+    else:
+        num_of_iterations = int(len(downloads) / MAX_PROCESSES) + 1
+
+    for i in range(num_of_iterations):
+        processes = []
+        max_index = min((i + 1) * MAX_PROCESSES, len(downloads))
+        for download in downloads[(i * MAX_PROCESSES):max_index]:
+            process = Process(target=run_process, args=(download(),))
+            processes.append(process)
+            process.start()
+
+        for process in processes:
+            process.join()
 
     print("Download completed")
 
@@ -34,11 +47,13 @@ def run():
             continue
 
         if choice == 1:
-            process_query(True, False)
+            process_query(True, False, False)
         elif choice == 2:
-            process_query(False, True)
+            process_query(False, True, False)
         elif choice == 3:
-            process_query(True, True)
+            process_query(True, True, False)
+        elif choice == 4:
+            process_query(True, False, True)
         elif choice == 0:
             break
         else:
@@ -47,10 +62,11 @@ def run():
 
 
 def print_intro_message():
-    print("Search for anime to download:")
-    print("1 - Filter by keyword only")
-    print("2 - Filter by season only")
-    print("3 - Filter by keyword and season")
+    print("Enter choice:")
+    print("1 - Search anime by keyword")
+    print("2 - Search anime by season")
+    print("3 - Search anime by keyword and season")
+    print("4 - Identify the season the anime belongs to")
     print("0 - Exit")
 
 
@@ -84,7 +100,7 @@ def get_numbers_from_expression(expr):
     return results
 
 
-def process_query(has_keyword, has_season):
+def process_query(has_keyword, has_season, print_season):
     keyword = None
     season = None
 
@@ -96,7 +112,10 @@ def process_query(has_keyword, has_season):
             return
 
     if has_keyword:
-        keyword = input("Enter keyword: ").strip()
+        if print_season:
+            keyword = input("Enter anime name or keyword: ").strip()
+        else:
+            keyword = input("Enter keyword: ").strip()
 
     if has_season:
         print_season_choice(season_classes)
@@ -126,7 +145,10 @@ def process_query(has_keyword, has_season):
         choices = []
         while True:
             try:
-                expr = input("Enter choice(s) of anime to download: ").strip()
+                if print_season:
+                    expr = input("Enter choice(s) of anime to identify the season: ").strip()
+                else:
+                    expr = input("Enter choice(s) of anime to download: ").strip()
                 choices = get_numbers_from_expression(expr)
                 break
             except ValueError:
@@ -136,8 +158,15 @@ def process_query(has_keyword, has_season):
         if len(filtered_anime_classes) == 0:
             print("No anime selected.")
             return
+        elif print_season:
+            print_season_out(filtered_anime_classes)
         else:
             process_download(filtered_anime_classes)
+
+
+def print_season_out(anime_classes):
+    for anime_class in anime_classes:
+        print('%s | %s' % (anime_class.season, anime_class.title))
 
 
 def get_all_anime_classes(s_filter):
@@ -179,7 +208,9 @@ def filter_season_classes(season_classes, choices):
 def print_season_choice(season_classes):
     result_classes = []
     for i in range(len(season_classes)):
-        print("%i - %s" % (i + 1, season_classes[i].season_name))
+        choice = str(i + 1).rjust(len(str(len(season_classes))))
+        season_class = season_classes[i]
+        print("%s - %s (%s)" % (choice, season_class.season, season_class.season_name))
     return result_classes
 
 
@@ -193,7 +224,8 @@ def get_season_queries(season_classes):
 def print_anime_choice(anime_classes):
     result_classes = []
     for i in range(len(anime_classes)):
-        print("%i - %s" % (i + 1, anime_classes[i].title))
+        choice = str(i + 1).rjust(len(str(len(anime_classes))))
+        print("%s - %s" % (choice, anime_classes[i].title))
     return result_classes
 
 

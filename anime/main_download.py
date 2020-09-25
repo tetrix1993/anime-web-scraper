@@ -160,6 +160,8 @@ class MainDownload:
                 if r.status_code >= 400:
                     return -1
                 content_type = r.headers['Content-Type']
+                if 'text' in content_type:
+                    return -1
                 if 'image/png' in content_type:
                     filepath = filepath_without_extension + ".png"
                 elif 'image/jpeg' in content_type:

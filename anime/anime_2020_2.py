@@ -54,6 +54,7 @@ class ArteDownload(Spring2020AnimeDownload):
 
     def run(self):
         try:
+            stop = False
             for i in range(self.FINAL_EPISODE):
                 episode = str(i + 1).zfill(2)
                 if self.is_file_exists(self.base_folder + "/" + episode + "_1.jpg") or self.is_file_exists(
@@ -64,8 +65,9 @@ class ArteDownload(Spring2020AnimeDownload):
                     file_path_without_extension = self.base_folder + '/' + episode + '_' + str(j + 1)
                     result = self.download_image(image_url, file_path_without_extension)
                     if result == -1:
+                        stop = True
                         break
-                if result == -1:
+                if stop:
                     break
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
