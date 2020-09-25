@@ -764,6 +764,7 @@ class KumaBearDownload(Fall2020AnimeDownload):
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_guess()
         self.download_episode_preview_external()
         self.download_key_visual()
         self.download_character()
@@ -806,6 +807,7 @@ class KumaBearDownload(Fall2020AnimeDownload):
         content_num_first = 18
         block_num_first = 25
         image_num_first = 30
+        num_of_pic_per_episode = 4
         for i in range(13):
             episode = str(i + 1).zfill(2)
             if self.is_image_exists(episode + '_1'):
@@ -814,7 +816,7 @@ class KumaBearDownload(Fall2020AnimeDownload):
                 img_num = str(j + 1)
                 content_num = str(content_num_first + i).zfill(8)
                 block_num = str(block_num_first + i).zfill(8)
-                image_num = str(image_num_first + i * 4 + j).zfill(8)
+                image_num = str(image_num_first + i * num_of_pic_per_episode + j).zfill(8)
                 image_url = story_template % (content_num, block_num, image_num)
                 image_name = episode + '_' + img_num
                 result = self.download_image(image_url, self.base_folder + '/' + image_name)

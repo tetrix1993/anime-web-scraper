@@ -1163,6 +1163,7 @@ class RailgunTDownload(Winter2020AnimeDownload):
     
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_guess()
         self.download_bluray()
         self.download_character()
 
@@ -1198,6 +1199,32 @@ class RailgunTDownload(Winter2020AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
+
+    def download_episode_preview_guess(self):
+        story_template = 'https://toaru-project.com/railgun_t/core_sys/images/contents/%s/block/%s/%s.jpg'
+        content_num_first = 14
+        block_num_first = 21
+        image_num_first = 30
+        num_of_pic_per_episode = 6
+        for i in range(25):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_1'):
+                continue
+            for j in range(num_of_pic_per_episode):
+                img_num = str(j + 1)
+                if i >= 12: # Episode 13 and beyond
+                    content_num = str(content_num_first + i + 15).zfill(8)
+                    block_num = str(block_num_first + i + 43).zfill(8)
+                    image_num = str(image_num_first + i * num_of_pic_per_episode + j + 28).zfill(8)
+                else: # First 12 episodes
+                    content_num = str(content_num_first + i).zfill(8)
+                    block_num = str(block_num_first + i).zfill(8)
+                    image_num = str(image_num_first + i * num_of_pic_per_episode + j).zfill(8)
+                image_url = story_template % (content_num, block_num, image_num)
+                image_name = episode + '_' + img_num
+                result = self.download_image(image_url, self.base_folder + '/' + image_name)
+                if result == -1:
+                    return
 
     def download_bluray(self):
         bluray_filepath = self.base_folder + '/' + constants.FOLDER_BLURAY
@@ -1273,34 +1300,3 @@ class RailgunTDownload(Winter2020AnimeDownload):
             print("Error in running " + self.__class__.__name__ + ' - Character')
             print(e)
         self.download_image_objects(image_objs, folder)
-
-
-# Toaru Kagaku no Railgun T
-'''
-class RailgunTDownload2(Winter2020AnimeDownload):
-
-    #https://toaru-project.com/railgun_t/core_sys/images/contents/00000014/block/00000021/00000030.jpg
-    
-    def __init__(self):
-        super().__init__()
-        self.base_folder = self.base_folder + "/railgun-t-forced"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
-    
-    def run(self):
-        template = "https://toaru-project.com/railgun_t/core_sys/images/contents/%s/block/%s/%s.jpg"
-        try:
-            first = 14
-            second = 21
-            k = 30
-            for i in range(12):
-                episode = str(i+1).zfill(2)
-                for j in range(6):
-                    imageUrl = template % (str(first+i).zfill(8),str(second+i).zfill(8),str(k).zfill(8))
-                    filepathWithoutExtension = self.base_folder + "/" + episode + "_" + str(j+1)
-                    k += 1
-                    self.download_image(imageUrl, filepathWithoutExtension)
-        except Exception as e:
-            print("Error in running " + self.__class__.__name__)
-            print(e)
-'''
