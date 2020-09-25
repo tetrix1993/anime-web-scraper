@@ -8,6 +8,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 # Gotoubun no Hanayome S2 https://www.tbs.co.jp/anime/5hanayome/ #五等分の花嫁 @5Hanayome_anime
 # Horimiya https://horimiya-anime.com/ #ホリミヤ @horimiya_anime
 # Jaku-Chara Tomozaki-kun http://tomozaki-koushiki.com/ #友崎くん @tomozakikoshiki
+# Non Non Biyori Nonstop https://nonnontv.com/ #なのん #のんのんびより @nonnontv
 # Ore dake Haireru Kakushi Dungeon https://kakushidungeon-anime.jp/ #隠しダンジョン @kakushidungeon
 # Tatoeba Last Dungeon https://lasdan.com/ #ラスダン @lasdan_PR
 # Urasekai Picnic https://www.othersidepicnic.com/ #裏ピク @OthersidePicnic
@@ -139,6 +140,84 @@ class TomozakiKunDownload(Winter2021AnimeDownload):
         folder = self.create_character_directory()
         image_objs = []
         self.download_image_objects(image_objs, folder)
+
+
+# Non Non Biyori Nonstop
+class NonNonBiyori3Download(Winter2021AnimeDownload):
+    title = 'Non Non Biyori Nonstop'
+    keywords = [title]
+
+    STORY_PAGE = 'https://nonnontv.com/tvanime/story/season3/s00-3'
+
+    def __init__(self):
+        super().__init__()
+        self.init_base_folder('non-non-biyori3')
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.STORY_PAGE)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        image_objs = [
+            {'name': 'kv1', 'url': 'https://pbs.twimg.com/media/EYq7r4EUcAAQgCa?format=jpg&name=large'},
+            {'name': 'kv2', 'url': 'https://nonnontv2.wp-adm.kadokawa-isys.jp/tvanime/wp-content/uploads/2020/09/マルシー入り小キービジュアル2-RE_特効済.jpg'},
+        ]
+        self.download_image_objects(image_objs, folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        cache_filepath = folder + '/' + 'cache'
+        processed = []
+        num_processed = 0
+        if os.path.exists(cache_filepath):
+            with open(cache_filepath, 'r') as f:
+                inputs = f.read()
+            processed = inputs.split(';')
+            num_processed = len(processed)
+        try:
+            character_url = 'https://nonnontv.com/tvanime/character/'
+            soup = self.get_soup(character_url)
+            nav_tag = soup.find('nav', class_='character__nav__list')
+            if nav_tag:
+                a_tags = nav_tag.find_all('a', class_='character__nav__item')
+                if len(a_tags) > num_processed:
+                    for a_tag in a_tags:
+                        if a_tag.has_attr('href'):
+                            split1 = a_tag['href'].split('=')
+                            if len(split1) != 2:
+                                continue
+                            chara_name = split1[1]
+                            if chara_name in processed:
+                                continue
+                            chara_url = character_url + a_tag['href'].replace('./', '')
+                            chara_soup = self.get_soup(chara_url)
+                            chara_ph = chara_soup.find('div', class_='character__ph')
+                            if chara_ph:
+                                images = chara_ph.find_all('img')
+                                image_objs = []
+                                for image in images:
+                                    if image.has_attr('src'):
+                                        image_url = image['src']
+                                        image_name = chara_name + '_'\
+                                            + self.extract_image_name_from_url(image_url, with_extension=False)
+                                        image_objs.append({'name': image_name, 'url': image_url})
+                                self.download_image_objects(image_objs, folder)
+                                processed.append(chara_name)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Character")
+            print(e)
+
+        if len(processed) > num_processed:
+            with open(cache_filepath, 'w+') as f:
+                for i in range(len(processed)):
+                    if i > 0:
+                        f.write(';')
+                    f.write(processed[i])
 
 
 # Ore dake Haireru Kakushi Dungeon
