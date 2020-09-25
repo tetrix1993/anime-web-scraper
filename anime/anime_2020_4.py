@@ -1480,7 +1480,7 @@ class StrikeWitches3Download(Fall2020AnimeDownload):
         self.download_episode_preview()
         self.download_key_visual()
         self.download_character()
-        self.download_music()
+        self.download_media()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX)
@@ -1509,23 +1509,37 @@ class StrikeWitches3Download(Fall2020AnimeDownload):
             if stop:
                 break
 
-    def download_music(self):
-        folder = self.create_custom_directory('music')
-        try:
-            soup = self.get_soup(self.PAGE_PREFIX + 'music/')
-            cts_boxes = soup.find_all('div', class_='cts_box')
-            for cts_box in cts_boxes:
-                img_tags = cts_box.find_all('img')
-                image_objs = []
-                for img_tag in img_tags:
-                    if img_tag.has_attr('src'):
-                        image_url = self.PAGE_PREFIX + img_tag['src'].replace('../', '')
-                        image_name = self.extract_image_name_from_url(image_url, with_extension=False)
-                        image_objs.append({'name': image_name, 'url': image_url})
-                self.download_image_objects(image_objs, folder)
-        except Exception as e:
-            print("Error in running " + self.__class__.__name__ + " - Music")
-            print(e)
+    def download_media(self):
+        for i in range(2):
+            if i == 0:
+                folder = self.create_bluray_directory()
+                media_url = 'bd'
+            else:
+                folder = self.create_custom_directory('music')
+                media_url = 'music'
+            try:
+                media_full_url = self.PAGE_PREFIX + media_url + '/'
+                soup = self.get_soup(media_full_url)
+                cts_boxes = soup.find_all('div', class_='cts_box')
+                for cts_box in cts_boxes:
+                    img_tags = cts_box.find_all('img')
+                    image_objs = []
+                    for img_tag in img_tags:
+                        if img_tag.has_attr('src'):
+                            if '../' in img_tag['src']:
+                                image_url = self.PAGE_PREFIX + img_tag['src'].replace('../', '')
+                            else:
+                                image_url = media_full_url + img_tag['src']
+                            image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                            image_objs.append({'name': image_name, 'url': image_url})
+                    self.download_image_objects(image_objs, folder)
+            except Exception as e:
+                if i == 0:
+                    output = 'Blu-ray'
+                else:
+                    output = 'Music'
+                print("Error in running %s - %s" % (self.__class__.__name__, output))
+                print(e)
 
 
 # Tonikaku Kawaii
