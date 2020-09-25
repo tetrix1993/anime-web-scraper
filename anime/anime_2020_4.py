@@ -1460,6 +1460,7 @@ class SigrdrifaDownload(Fall2020AnimeDownload):
             {'name': 'img_miyako', 'url': 'https://sigururi.com/assets/img/special/interview/img_miyako.jpg'},
             {'name': 'img_azuzu', 'url': 'https://sigururi.com/assets/img/special/interview/img_azuzu.jpg'},
             {'name': 'img_sonoka', 'url': 'https://sigururi.com/assets/img/special/interview/img_sonoka.jpg'},
+            {'name': 'bs11_poster', 'url': 'https://pbs.twimg.com/media/EiuO9YwUYAAQ1U4?format=jpg&name=large'},
         ]
         self.download_image_objects(image_objs, folder)
 
