@@ -46,7 +46,7 @@ class Fall2020AnimeDownload(MainDownload):
 # 100-man no Inochi no Ue ni Ore wa Tatteiru
 class HyakumanNoInochiDownload(Fall2020AnimeDownload):
     title = "100-man no Inochi no Ue ni Ore wa Tatteiru"
-    keywords = [title, "I'm standing on 1,000,000 lives.", "Hyakuman"]
+    keywords = [title, "I'm standing on 1,000,000 lives.", "Hyakuman", "1000000"]
 
     PAGE_PREFIX = 'http://1000000-lives.com'
     STORY_PAGE = 'http://1000000-lives.com/story/'
@@ -574,8 +574,9 @@ class KamisamaNiNattaHiDownload(Fall2020AnimeDownload):
             {'name': 'opening_1', 'url': 'https://kamisama-day.jp/assets/img/opening_1.jpg'},
             {'name': 'opening_2', 'url': 'https://kamisama-day.jp/assets/img/opening_2.jpg'},
             {'name': 'opening_3', 'url': 'https://kamisama-day.jp/assets/img/opening_3.jpg'},
-            {'name': 'kv', 'url': 'https://kamisama-day.jp/assets/img/kv.jpg'},
-            {'name': 'kv2', 'url': 'https://kamisama-day.jp/assets/img/top/kv.jpg'}
+            {'name': 'kv', 'url': 'https://pbs.twimg.com/media/Ei13ho5UMAEhqwj?format=jpg&name=large'},
+            {'name': 'kv2', 'url': 'https://kamisama-day.jp/assets/img/kv.jpg'},
+            {'name': 'kv3', 'url': 'https://kamisama-day.jp/assets/img/top/kv.jpg'},
         ]
         self.download_image_objects(image_objs, folder)
 
