@@ -566,7 +566,7 @@ class KamisamaNiNattaHiDownload(Fall2020AnimeDownload):
         self.download_other()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        self.has_website_updated(self.STORY_PAGE)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
