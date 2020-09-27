@@ -873,7 +873,7 @@ class UzakiChanDownload(Summer2020AnimeDownload):
 
     def download_episode_preview_external(self):
         try:
-            AniverseMagazineScanner('宇崎ちゃんは遊びたい', self.base_folder).run()
+            AniverseMagazineScanner('宇崎ちゃんは遊びたい', self.base_folder, 12).run()
             #last_date = datetime.strptime('20200930', '%Y%m%d')
             #today = datetime.today()
             #if today < last_date:

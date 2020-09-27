@@ -53,16 +53,25 @@ class MainScanner():
             print(e)
         return ""
 
+    @staticmethod
+    def is_image_exists(name, filepath):
+        filename = 'download/' + filepath + '/' + name
+        return os.path.exists(filename + '.jpg') \
+            or os.path.exists(filename + '.png') \
+            or os.path.exists(filename + '.gif') \
+            or os.path.exists(filename + '.webp')
+
 
 class AniverseMagazineScanner(MainScanner):
     
     # Example prefix: https://aniverse-mag.com/page/2?s=プランダラ
     SEARCH_URL = "https://aniverse-mag.com/page/%s?s=%s"
     
-    def __init__(self, keyword, base_folder):
+    def __init__(self, keyword, base_folder, last_episode=None):
         super().__init__()
         self.keyword = keyword
         self.base_folder = base_folder.replace("download/","") + "-aniverse"
+        self.last_episode = last_episode
 
     def has_results(self, text):
         return "<h2>Sorry, nothing found.</h2>" not in text
@@ -124,6 +133,17 @@ class AniverseMagazineScanner(MainScanner):
             AniverseMagazineDownload(article_id, self.base_folder, episode).run()
         
     def run(self):
+        if self.last_episode:
+            # Stop processing if the last episode has already been downloaded
+            stop = False
+            for i in reversed(range(self.last_episode)):
+                if self.is_image_exists(str(i + 1).zfill(2) + '_01', self.base_folder) or\
+                        self.is_image_exists('last_01', self.base_folder):
+                    stop = True
+                    break
+            if stop:
+                return
+
         first_page_url = self.SEARCH_URL % ("1", self.keyword)
         first_page_response = self.get_response(url=first_page_url,decode=True)
         if self.has_results(first_page_response):
@@ -148,10 +168,11 @@ class WebNewtypeScanner(MainScanner):
     PAGE_PREFIX = "https://webnewtype.com/"
     SEARCH_PREFIX = "https://webnewtype.com/news/nrsearch/"
     
-    def __init__(self, keyword, base_folder):
+    def __init__(self, keyword, base_folder, last_episode=None):
         super().__init__()
         self.keyword = keyword
         self.base_folder = base_folder.replace("download/","") + "-wnt"
+        self.last_episode = last_episode
     
     def has_results(self, text):
         return "<li>記事はありません</li>" not in text
@@ -209,6 +230,17 @@ class WebNewtypeScanner(MainScanner):
         return 0
 
     def run(self):
+        if self.last_episode:
+            # Stop processing if the last episode has already been downloaded
+            stop = False
+            for i in reversed(range(self.last_episode)):
+                if self.is_image_exists(str(i + 1).zfill(2) + '_01', self.base_folder) or \
+                        self.is_image_exists('last_01', self.base_folder):
+                    stop = True
+                    break
+            if stop:
+                return
+
         first_page_url = self.SEARCH_PREFIX + self.keyword + '/'
         first_page_response = self.get_response(url=first_page_url,decode=True)
         if self.has_results(first_page_response):
