@@ -400,7 +400,7 @@ class MaohgakuinDownload(Summer2020AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
-        WebNewtypeScanner('魔王学院の不適合者', self.base_folder).run()
+        WebNewtypeScanner('魔王学院の不適合者', self.base_folder, 13).run()
 
     def download_key_visual(self):
         keyvisual_folder = self.create_key_visual_directory()
@@ -551,7 +551,7 @@ class MonIshaDownload(Summer2020AnimeDownload):
 
     def download_episode_preview_external(self):
         jp_title = 'モンスター娘のお医者さん'
-        AniverseMagazineScanner(jp_title, self.base_folder).run()
+        AniverseMagazineScanner(jp_title, self.base_folder, 12).run()
         #last_date = datetime.strptime('20200930', '%Y%m%d')
         #today = datetime.today()
         #if today < last_date:
@@ -697,7 +697,7 @@ class PeterGrillDownload(Summer2020AnimeDownload):
     def download_episode_preview_external(self):
         try:
             jp_title = 'ピーター・グリルと賢者の時間'
-            AniverseMagazineScanner(jp_title, self.base_folder).run()
+            AniverseMagazineScanner(jp_title, self.base_folder, 12).run()
             last_date = datetime.strptime('20200930', '%Y%m%d')
             today = datetime.today()
             if today < last_date:

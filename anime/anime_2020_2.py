@@ -182,7 +182,7 @@ class GleipnirDownload(Spring2020AnimeDownload):
                     image_url = images[j]['src'].replace('-1024x576', '')
                     file_path_without_extension = self.base_folder + '/' + episode + '_' + str(j + 1)
                     self.download_image(image_url, file_path_without_extension)
-            WebNewtypeScanner('グレイプニル', self.base_folder).run()
+            WebNewtypeScanner('グレイプニル', self.base_folder, 13).run()
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
@@ -489,7 +489,7 @@ class TeiboDownload(Spring2020AnimeDownload):
             print(e)
 
     def download_episode_preview_external(self):
-        AniverseMagazineScanner('放課後ていぼう日誌', self.base_folder).run()
+        AniverseMagazineScanner('放課後ていぼう日誌', self.base_folder, 12).run()
 
     def download_key_visual(self):
         filepath = self.create_key_visual_directory()
@@ -1296,7 +1296,7 @@ class YesterdayDownload(Spring2020AnimeDownload):
                         break
                 if result == -1 and is_first_image:
                     break
-            WebNewtypeScanner('イエスタデイをうたって', self.base_folder).run()
+            WebNewtypeScanner('イエスタデイをうたって', self.base_folder, 12).run()
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)

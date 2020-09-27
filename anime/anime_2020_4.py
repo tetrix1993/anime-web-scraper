@@ -856,7 +856,7 @@ class KumaBearDownload(Fall2020AnimeDownload):
 
     def download_episode_preview_external(self):
         jp_title = 'くまクマ熊ベアー'
-        AniverseMagazineScanner(jp_title, self.base_folder).run()
+        AniverseMagazineScanner(jp_title, self.base_folder, 12).run()
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
