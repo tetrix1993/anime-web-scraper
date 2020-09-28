@@ -147,6 +147,8 @@ class NonNonBiyori3Download(Winter2021AnimeDownload):
     title = 'Non Non Biyori Nonstop'
     keywords = [title]
 
+    PAGE_PREFIX = 'https://nonnontv.com'
+    # PAGE_PREFIX = 'https://nonnontv2.wp-adm.kadokawa-isys.jp'
     STORY_PAGE = 'https://nonnontv.com/tvanime/story/season3/s00-3'
 
     def __init__(self):
@@ -165,7 +167,7 @@ class NonNonBiyori3Download(Winter2021AnimeDownload):
         folder = self.create_key_visual_directory()
         image_objs = [
             {'name': 'kv1', 'url': 'https://pbs.twimg.com/media/EYq7r4EUcAAQgCa?format=jpg&name=large'},
-            {'name': 'kv2', 'url': 'https://nonnontv2.wp-adm.kadokawa-isys.jp/tvanime/wp-content/uploads/2020/09/マルシー入り小キービジュアル2-RE_特効済.jpg'},
+            {'name': 'kv2', 'url': self.PAGE_PREFIX + '/tvanime/wp-content/uploads/2020/09/マルシー入り小キービジュアル2-RE_特効済.jpg'},
         ]
         self.download_image_objects(image_objs, folder)
 
@@ -180,7 +182,7 @@ class NonNonBiyori3Download(Winter2021AnimeDownload):
             processed = inputs.split(';')
             num_processed = len(processed)
         try:
-            character_url = 'https://nonnontv.com/tvanime/character/'
+            character_url = self.PAGE_PREFIX + '/tvanime/character/'
             soup = self.get_soup(character_url)
             nav_tag = soup.find('nav', class_='character__nav__list')
             if nav_tag:
@@ -202,7 +204,7 @@ class NonNonBiyori3Download(Winter2021AnimeDownload):
                                 image_objs = []
                                 for image in images:
                                     if image.has_attr('src'):
-                                        image_url = image['src']
+                                        image_url = self.PAGE_PREFIX + image['src']
                                         image_name = chara_name + '_'\
                                             + self.extract_image_name_from_url(image_url, with_extension=False)
                                         image_objs.append({'name': image_name, 'url': image_url})
