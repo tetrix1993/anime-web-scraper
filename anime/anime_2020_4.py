@@ -6,14 +6,14 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 
 # 100-man no Inochi no Ue ni Ore wa Tatteiru http://1000000-lives.com/ #俺100 @1000000_lives
 # Adachi to Shimamura https://www.tbs.co.jp/anime/adashima/ #安達としまむら @adashima_staff
-# Assault Lily: Bouquet https://anime.assaultlily-pj.com/ #アサルトリリィ @assaultlily_pj
+# Assault Lily: Bouquet https://anime.assaultlily-pj.com/ #アサルトリリィ @assaultlily_pj [MON]
 # Danmachi III http://danmachi.com/danmachi3/ #danmachi @danmachi_anime
 # Dogeza de Tanondemita https://dogeza-anime.com/ #土下座で @dgz_anime
 # Gochuumon wa Usagi desu ka? Bloom https://gochiusa.com/bloom/ #gochiusa @usagi_anime
 # Golden Kamuy 3rd Season https://www.kamuy-anime.com/ #ゴールデンカムイ @kamuy_official
-# Higurashi no Naku Koro ni (2020) https://higurashianime.com/ #ひぐらし @higu_anime
+# Higurashi no Naku Koro ni (2020) https://higurashianime.com/ #ひぐらし @higu_anime [MON]
 # Iwa Kakeru!: Sport Climbing Girls http://iwakakeru-anime.com/ #いわかける #iwakakeru @iwakakeru_anime
-# Jujutsu Kaisen https://jujutsukaisen.jp/ #呪術廻戦 @animejujutsu
+# Jujutsu Kaisen https://jujutsukaisen.jp/ #呪術廻戦 @animejujutsu [MON]
 # Kamisama ni Natta Hi https://kamisama-day.jp/ #神様になった日 @kamisama_Ch_AB
 # Kami-tachi ni Hirowareta Otoko https://kamihiro-anime.com/ #神達に拾われた男 @kamihiro_anime
 # Kimi to Boku no Saigo no Senjou, Aruiwa Sekai ga Hajimaru Seisen https://kimisentv.com/ #キミ戦 #kimisen @kimisen_project
@@ -181,7 +181,33 @@ class AssaultLilyDownload(Fall2020AnimeDownload):
         self.download_bluray()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.STORY_PAGE)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'introduction/')
+            story_list = soup.find('ul', id='story-List')
+            if story_list:
+                a_tags = story_list.find_all('a')
+                for a_tag in a_tags:
+                    if a_tag.has_attr('href') and self.STORY_PAGE in a_tag['href']:
+                        try:
+                            episode = str(int(a_tag['href'].split(self.STORY_PAGE)[1])).zfill(2)
+                        except:
+                            continue
+                        if self.is_image_exists(episode + '_1'):
+                            continue
+                        story_soup = self.get_soup(a_tag['href'])
+                        uls = story_soup.find('ul', class_='story-Detail_List')
+                        if uls:
+                            images = uls.find_all('img')
+                            image_objs = []
+                            for i in range(len(images)):
+                                if images[i].has_attr('src'):
+                                    image_url = images[i]['src']
+                                    image_name = episode + '_' + str(i + 1)
+                                    image_objs.append({'name': image_name, 'url': image_url})
+                            self.download_image_objects(image_objs, self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -403,7 +429,7 @@ class Higurashi2020Download(Fall2020AnimeDownload):
         image_url_template = 'https://higurashianime.com/images/story/%s/p_%s.jpg'
         for i in range(1, self.LAST_EPISODE + 1, 1):
             for j in range(1, 7, 1):
-                image_name = str(i).zfill(3) + '_' + str(j)
+                image_name = str(i).zfill(2) + '_' + str(j)
                 if self.is_image_exists(image_name):
                     continue
                 image_url = image_url_template % (str(i).zfill(3), str(j).zfill(3))
