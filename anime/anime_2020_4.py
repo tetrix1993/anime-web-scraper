@@ -377,11 +377,12 @@ class GoldenKamuy3Download(Fall2020AnimeDownload):
 
 # Higurashi no Naku Koro ni (2020)
 class Higurashi2020Download(Fall2020AnimeDownload):
-    title = "Higurashi no Naku Koro ni"
+    title = "Higurashi no Naku Koro ni (2020)"
     keywords = [title, "When They Cry"]
 
     PAGE_PREFIX = 'https://higurashianime.com/'
     STORY_PAGE = 'https://higurashianime.com/intro.html'
+    LAST_EPISODE = 25
 
     def __init__(self):
         super().__init__()
@@ -396,7 +397,19 @@ class Higurashi2020Download(Fall2020AnimeDownload):
         self.download_bluray()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.STORY_PAGE)
+        if self.is_image_exists(str(self.LAST_EPISODE) + '_1'):
+            return
+
+        image_url_template = 'https://higurashianime.com/images/story/%s/p_%s.jpg'
+        for i in range(1, self.LAST_EPISODE + 1, 1):
+            for j in range(1, 7, 1):
+                image_name = str(i).zfill(3) + '_' + str(j)
+                if self.is_image_exists(image_name):
+                    continue
+                image_url = image_url_template % (str(i).zfill(3), str(j).zfill(3))
+                result = self.download_image(image_url, self.base_folder + '/' + image_name)
+                if result == -1:
+                    return
 
     def download_key_visual(self):
         filepath = self.create_key_visual_directory()
