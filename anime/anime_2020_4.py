@@ -524,7 +524,8 @@ class JujutsuKaisenDownload(Fall2020AnimeDownload):
     keywords = [title]
 
     PAGE_PREFIX = 'https://jujutsukaisen.jp/'
-    STORY_PAGE = 'https://jujutsukaisen.jp/story/'
+    STORY_PAGE = 'https://jujutsukaisen.jp/episodes/'
+    LAST_EPISODE = 12
 
     def __init__(self):
         super().__init__()
@@ -532,10 +533,55 @@ class JujutsuKaisenDownload(Fall2020AnimeDownload):
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_guess()
         self.download_key_visual()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.STORY_PAGE)
+        if self.is_image_exists(str(self.LAST_EPISODE) + '_01'):
+            return
+
+        try:
+            soup = self.get_soup(self.STORY_PAGE)
+            ul = soup.find('ul', class_='normalList')
+            if ul:
+                a_tags = ul.find_all('a')
+                for a_tag in a_tags:
+                    if a_tag.has_attr('href'):
+                        try:
+                            episode = str(int(a_tag['href'].split('.php')[0])).zfill(2)
+                        except:
+                            continue
+                        if self.is_image_exists(episode + '_01'):
+                            continue
+                        story_url = self.STORY_PAGE + a_tag['href']
+                        story_soup = self.get_soup(story_url)
+                        image_ul = story_soup.find('ul', class_='imgClick')
+                        images = image_ul.find_all('img')
+                        image_objs = []
+                        for i in range(len(images)):
+                            if images[i].has_attr('src'):
+                                image_url = self.PAGE_PREFIX + images[i]['src'].replace('../', '')
+                                image_name = episode + '_' + str(i + 1).zfill(2)
+                                image_objs.append({'name': image_name, 'url': image_url})
+                        self.download_image_objects(image_objs, self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
+
+    def download_episode_preview_guess(self):
+        if self.is_image_exists(str(self.LAST_EPISODE) + '_01'):
+            return
+
+        image_url_template = 'https://jujutsukaisen.jp/images/episodes/%s-%s.jpg'
+        for i in range(1, self.LAST_EPISODE + 1, 1):
+            for j in range(1, 11, 1):
+                image_name = str(i).zfill(2) + '_' + str(j).zfill(2)
+                if self.is_image_exists(image_name):
+                    continue
+                image_url = image_url_template % (str(i), str(j))
+                result = self.download_image(image_url, self.base_folder + '/' + image_name)
+                if result == -1:
+                    return
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
