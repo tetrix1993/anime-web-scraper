@@ -20,8 +20,8 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 # Kuma Kuma Kuma Bear https://kumakumakumabear.com/ #くまクマ熊ベアー #kumabear @kumabear_anime
 # Maesetsu https://maesetsu.jp/ #まえせつ @maesetsu_anime
 # Mahouka Koukou no Rettousei: Raihousha-hen https://mahouka.jp/ #mahouka @mahouka_anime
-# Majo no Tabitabi https://majotabi.jp/ #魔女の旅々 #魔女の旅々はいいぞ #majotabi @majotabi_PR
-# Maou-jou de Oyasumi https://maoujo-anime.com/ #魔王城でおやすみ @maoujo_anime
+# Majo no Tabitabi https://majotabi.jp/ #魔女の旅々 #魔女の旅々はいいぞ #majotabi @majotabi_PR [MON]
+# Maoujou de Oyasumi https://maoujo-anime.com/ #魔王城でおやすみ @maoujo_anime
 # Munou na Nana https://munounanana.com/ #無能なナナ @munounanana
 # Ochikobore Fruit Tart http://ochifuru-anime.com/ #ochifuru @ochifuru_anime
 # One Room S3 https://oneroom-anime.com/ #OneRoom @anime_one_room
@@ -1154,6 +1154,7 @@ class MajotabiDownload(Fall2020AnimeDownload):
     keywords = [title, "Wandering Witch: The Journey of Elaina", "Majotabi"]
 
     PAGE_PREFIX = 'https://majotabi.jp/'
+    LAST_EPISODE = 12
 
     def __init__(self):
         super().__init__()
@@ -1163,14 +1164,52 @@ class MajotabiDownload(Fall2020AnimeDownload):
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_guess()
         self.download_key_visual()
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        soup = self.get_soup(self.PAGE_PREFIX)
+        story_list = soup.find_all('div', class_='story-data')
+        for story in story_list:
+            slider_div = story.find('div', class_='ep-slider-sceneImage')
+            if slider_div:
+                episode_label = story.find('span', class_='ep-title-label')
+                if episode_label and '第' in episode_label.text and '話' in episode_label.text:
+                    try:
+                        episode = str(int(episode_label.text.split('第')[1].split('話')[0])).zfill(2)
+                    except:
+                        continue
+                else:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                images = slider_div.find_all('img')
+                image_objs = []
+                for i in range(len(images)):
+                    if images[i].has_attr('src'):
+                        image_url = self.PAGE_PREFIX + images[i]['src'].replace('./', '')
+                        image_name = episode + '_' + str(i + 1)
+                        image_objs.append({'name': image_name, 'url': image_url})
+                self.download_image_objects(image_objs, self.base_folder)
+
+    def download_episode_preview_guess(self):
+        if self.is_image_exists(str(self.LAST_EPISODE) + '_1'):
+            return
+
+        image_url_template = 'https://majotabi.jp/assets/story/%s_%s.jpg'
+        for i in range(1, self.LAST_EPISODE + 1, 1):
+            for j in range(1, 9, 1):
+                image_name = str(i).zfill(2) + '_' + str(j)
+                if self.is_image_exists(image_name):
+                    continue
+                image_url = image_url_template % (str(i), str(j))
+                result = self.download_image(image_url, self.base_folder + '/' + image_name)
+                if result == -1:
+                    return
 
     def download_key_visual(self):
-        keyvisual_folder = self.create_key_visual_directory()
+        folder = self.create_key_visual_directory()
         image_objs = [
             {'name': 'kv1', 'url': 'https://pbs.twimg.com/media/EHPjPtFU8AAHo9S?format=jpg&name=large'},
             {'name': 'kv2', 'url': 'https://pbs.twimg.com/media/ESahsP9UEAAhzgn?format=jpg&name=large'},
@@ -1182,7 +1221,7 @@ class MajotabiDownload(Fall2020AnimeDownload):
             {'name': 'kv8', 'url': 'https://pbs.twimg.com/media/EhDzQhiU4AQRDcg?format=jpg&name=medium'},
             {'name': 'kv8_1', 'url': 'https://majotabi.jp/assets/news/kv8.jpg'}
         ]
-        self.download_image_objects(image_objs, keyvisual_folder)
+        self.download_image_objects(image_objs, folder)
 
     def download_character(self):
         folder = self.create_character_directory()
@@ -1203,9 +1242,9 @@ class MajotabiDownload(Fall2020AnimeDownload):
             print(e)
 
 
-# Maou-jou de Oyasumi
+# Maoujou de Oyasumi
 class MaoujoDownload(Fall2020AnimeDownload):
-    title = "Maou-jou de Oyasumi"
+    title = "Maoujou de Oyasumi"
     keywords = [title, "Maoujo", "Sleepy Princess in the Demon Castle"]
 
     PAGE_PREFIX = 'https://maoujo-anime.com/'
