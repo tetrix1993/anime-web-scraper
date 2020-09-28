@@ -264,6 +264,7 @@ class Danmachi3Download(Fall2020AnimeDownload):
 
     PAGE_PREFIX = 'http://danmachi.com/danmachi3/'
     STORY_PAGE = 'http://danmachi.com/danmachi3/story/index.html'
+    LAST_EPISODE = 12
 
     def __init__(self):
         super().__init__()
@@ -276,7 +277,19 @@ class Danmachi3Download(Fall2020AnimeDownload):
         self.download_key_visual()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.STORY_PAGE)
+        if self.is_image_exists(str(self.LAST_EPISODE) + '_1'):
+            return
+
+        image_url_template = 'http://danmachi.com/danmachi3/story/images/story%s-%s.jpg'
+        for i in range(1, self.LAST_EPISODE + 1, 1):
+            for j in range(1, 7, 1):
+                image_name = str(i).zfill(2) + '_' + str(j)
+                if self.is_image_exists(image_name):
+                    continue
+                image_url = image_url_template % (str(i), str(j))
+                result = self.download_image(image_url, self.base_folder + '/' + image_name)
+                if result == -1:
+                    return
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
