@@ -501,7 +501,9 @@ class TeiboDownload(Spring2020AnimeDownload):
         folder = self.create_bluray_directory()
         if not os.path.exists(self.base_folder + '/bd_bonus_01.jpg'):
             MocaNewsDownload("20200729/2020072912000a_", self.base_folder.replace('download/', ''), 'bd_bonus').run()
-        image_objs = []
+        image_objs = [
+            {'name': 'bd_vol2', 'url': 'https://pbs.twimg.com/media/Ei-p86vUYAIC245?format=jpg&name=large'}
+        ]
         try:
             soup = self.get_soup('https://teibotv.com/package.html')
             for i in range(3):
