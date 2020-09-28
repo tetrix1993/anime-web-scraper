@@ -3,6 +3,7 @@ import anime.constants as constants
 from anime.main_download import MainDownload
 from datetime import datetime
 from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
+from PIL import Image
 
 # 100-man no Inochi no Ue ni Ore wa Tatteiru http://1000000-lives.com/ #俺100 @1000000_lives
 # Adachi to Shimamura https://www.tbs.co.jp/anime/adashima/ #安達としまむら @adashima_staff
@@ -265,6 +266,7 @@ class Danmachi3Download(Fall2020AnimeDownload):
     PAGE_PREFIX = 'http://danmachi.com/danmachi3/'
     STORY_PAGE = 'http://danmachi.com/danmachi3/story/index.html'
     LAST_EPISODE = 12
+    NUM_OF_IMAGE_PER_EPISODE = 6
 
     def __init__(self):
         super().__init__()
@@ -274,6 +276,7 @@ class Danmachi3Download(Fall2020AnimeDownload):
 
     def run(self):
         self.download_episode_preview()
+        self.generate_combined_episode_preview_image()
         self.download_key_visual()
 
     def download_episode_preview(self):
@@ -282,7 +285,7 @@ class Danmachi3Download(Fall2020AnimeDownload):
 
         image_url_template = 'http://danmachi.com/danmachi3/story/images/story%s-%s.jpg'
         for i in range(1, self.LAST_EPISODE + 1, 1):
-            for j in range(1, 7, 1):
+            for j in range(1, self.NUM_OF_IMAGE_PER_EPISODE + 1, 1):
                 image_name = str(i).zfill(2) + '_' + str(j)
                 if self.is_image_exists(image_name):
                     continue
@@ -290,6 +293,26 @@ class Danmachi3Download(Fall2020AnimeDownload):
                 result = self.download_image(image_url, self.base_folder + '/' + image_name)
                 if result == -1:
                     return
+
+    def generate_combined_episode_preview_image(self):
+        for i in range(1, self.LAST_EPISODE + 1, 1):
+            combined_image_name = str(i).zfill(2) + '_0'
+            if self.is_image_exists(combined_image_name):
+                continue
+            image_filepaths = []
+            for j in range(1, self.NUM_OF_IMAGE_PER_EPISODE + 1, 1):
+                image_name = str(i).zfill(2) + '_' + str(j)
+                if self.is_image_exists(image_name):
+                    image_filepaths.append(self.base_folder + '/' + image_name + '.jpg')
+            if len(image_filepaths) == 6:
+                images = [Image.open(x) for x in image_filepaths]
+                width, height = images[0].size
+                new_image = Image.new('RGB', (width * 3, height * 2))
+                for row in range(2):
+                    for col in range(3):
+                        index = row * 3 + col
+                        new_image.paste(images[index], (width * col, height * row))
+                new_image.save(self.base_folder + '/' + combined_image_name + '.jpg', subsampling=0, quality=100)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
