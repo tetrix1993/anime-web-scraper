@@ -8,14 +8,13 @@ def run():
     downloads = [RailgunTDownload(), Kaguyasama2Download(), PriconneDownload(), TeiboDownload()]
     downloads += [HxErosDownload(), KanokariDownload(), MaohgakuinDownload(), MonIshaDownload(),
                   ReZero2Download(), UzakiChanDownload(), Oregairu3Download()]
-    #subclasses = Fall2020AnimeDownload.__subclasses__()
-    #for subclass in subclasses:
-    #    downloads.append(subclass())
+    subclasses = Fall2020AnimeDownload.__subclasses__()
+    for subclass in subclasses:
+        downloads.append(subclass())
     process_download(downloads)
 
     downloads = []
-    subclasses = Fall2020AnimeDownload.__subclasses__() \
-                 + Winter2021AnimeDownload.__subclasses__() \
+    subclasses = Winter2021AnimeDownload.__subclasses__() \
                  + UnconfirmedDownload.__subclasses__()
     for subclass in subclasses:
         downloads.append(subclass())
