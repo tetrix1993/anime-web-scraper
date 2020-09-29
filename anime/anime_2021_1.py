@@ -54,7 +54,9 @@ class Gotoubun2Download(Winter2021AnimeDownload):
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         image_objs = [
-            {'name': 'teaser_visual', 'url': self.PAGE_PREFIX + 'img/teaser_visual.jpg'}
+            {'name': 'teaser_visual', 'url': self.PAGE_PREFIX + 'img/teaser_visual.jpg'},
+            {'name': 'key_visual', 'url': self.PAGE_PREFIX + 'img/key_visual.jpg'},
+            {'name': 'kv1', 'url': 'https://pbs.twimg.com/media/EjF1rDMWAAMXOVa?format=jpg&name=medium'},
         ]
         self.download_image_objects(image_objs, folder)
 
