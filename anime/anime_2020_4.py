@@ -1074,6 +1074,8 @@ class KumaBearDownload(Fall2020AnimeDownload):
                     if img_tag.has_attr('src'):
                         image_url = self.PAGE_PREFIX + img_tag['src'].replace('../', '').split('?')[0]
                         image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                        if image_name == '00000041':
+                            image_name = 'music_ed'
                         image_objs.append({'name': image_name, 'url': image_url})
                 self.download_image_objects(image_objs, folder)
         except Exception as e:
