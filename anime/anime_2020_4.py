@@ -334,6 +334,7 @@ class DogezaDeTanondemitaDownload(Fall2020AnimeDownload):
     keywords = [title]
 
     PAGE_PREFIX = 'https://dogeza-anime.com/'
+    LAST_EPISODE = 13
 
     def __init__(self):
         super().__init__()
@@ -346,7 +347,18 @@ class DogezaDeTanondemitaDownload(Fall2020AnimeDownload):
         self.download_bluray()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        story_template = 'https://dogeza-anime.com/assets/story/%s_%s.jpg'
+        for i in range(self.LAST_EPISODE):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_1'):
+                continue
+            for j in range(3):
+                img_num = str(j + 1)
+                image_url = story_template % (str(i + 1), str(j + 1))
+                image_name = episode + '_' + img_num
+                result = self.download_image(image_url, self.base_folder + '/' + image_name)
+                if result == -1:
+                    return
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -369,7 +381,23 @@ class DogezaDeTanondemitaDownload(Fall2020AnimeDownload):
                 break
 
     def download_bluray(self):
-        pass
+        folder = self.create_bluray_directory()
+        image_objs = []
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            content = soup.find('div', id='PackageCont')
+            if content:
+                images = content.find_all('img')
+                for image in images:
+                    if image.has_attr('src'):
+                        image_url = self.PAGE_PREFIX + image['src'].replace('./', '')
+                        image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                        image_objs.append({'name': image_name, 'url': image_url})
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
+        self.download_image_objects(image_objs, folder)
+        
 
 # Gochuumon wa Usagi Desu ka? Bloom
 class GochiUsa3Download(Fall2020AnimeDownload):
