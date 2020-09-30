@@ -177,6 +177,7 @@ class AssaultLilyDownload(Fall2020AnimeDownload):
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_external()
         self.download_key_visual()
         self.download_character()
         self.download_bluray()
@@ -209,6 +210,10 @@ class AssaultLilyDownload(Fall2020AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
+
+    def download_episode_preview_external(self):
+        jp_title = 'アサルトリリィ'
+        AniverseMagazineScanner(jp_title, self.base_folder, 12).run()
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()

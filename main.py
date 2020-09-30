@@ -3,6 +3,9 @@ from anime import *
 import migrate
 
 
+MAX_PROCESSES = 30
+
+
 def run():
     migrate.run()
     downloads = [RailgunTDownload(), Kaguyasama2Download(), PriconneDownload(), TeiboDownload()]
@@ -11,9 +14,9 @@ def run():
     subclasses = Fall2020AnimeDownload.__subclasses__()
     for subclass in subclasses:
         downloads.append(subclass())
-    process_download(downloads)
+    #process_download(downloads)
 
-    downloads = []
+    #downloads = []
     subclasses = Winter2021AnimeDownload.__subclasses__() \
                  + UnconfirmedDownload.__subclasses__()
     for subclass in subclasses:
@@ -33,14 +36,33 @@ def run_process_function(fn):
 
 
 def process_download(downloads):
-    processes = []
-    for download in downloads:
-        process = Process(target=run_process, args=(download,))
-        processes.append(process)
-        process.start()
+    if MAX_PROCESSES <= 0:
+        return
+
+    if len(downloads) % MAX_PROCESSES == 0:
+        num_of_iterations = len(downloads) / MAX_PROCESSES
+    else:
+        num_of_iterations = int(len(downloads) / MAX_PROCESSES) + 1
+
+    for i in range(num_of_iterations):
+        processes = []
+        max_index = min((i + 1) * MAX_PROCESSES, len(downloads))
+        for download in downloads[(i * MAX_PROCESSES):max_index]:
+            process = Process(target=run_process, args=(download,))
+            processes.append(process)
+            process.start()
+
+        for process in processes:
+            process.join()
+
+    #processes = []
+    #for download in downloads:
+    #    process = Process(target=run_process, args=(download,))
+    #    processes.append(process)
+    #    process.start()
     
-    for process in processes:
-        process.join()
+    #for process in processes:
+    #    process.join()
 
 
 def process_download_function(fns):
