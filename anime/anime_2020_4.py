@@ -8,8 +8,8 @@ from PIL import Image
 # 100-man no Inochi no Ue ni Ore wa Tatteiru http://1000000-lives.com/ #俺100 @1000000_lives
 # Adachi to Shimamura https://www.tbs.co.jp/anime/adashima/ #安達としまむら @adashima_staff
 # Assault Lily: Bouquet https://anime.assaultlily-pj.com/ #アサルトリリィ @assaultlily_pj [MON]
-# Danmachi III http://danmachi.com/danmachi3/ #danmachi @danmachi_anime
-# Dogeza de Tanondemita https://dogeza-anime.com/ #土下座で @dgz_anime
+# Danmachi III http://danmachi.com/danmachi3/ #danmachi @danmachi_anime [TUE]
+# Dogeza de Tanondemita https://dogeza-anime.com/ #土下座で @dgz_anime [WED]
 # Gochuumon wa Usagi desu ka? Bloom https://gochiusa.com/bloom/ #gochiusa @usagi_anime
 # Golden Kamuy 3rd Season https://www.kamuy-anime.com/ #ゴールデンカムイ @kamuy_official
 # Higurashi no Naku Koro ni (2020) https://higurashianime.com/ #ひぐらし @higu_anime [MON]
@@ -18,12 +18,12 @@ from PIL import Image
 # Kamisama ni Natta Hi https://kamisama-day.jp/ #神様になった日 @kamisama_Ch_AB
 # Kami-tachi ni Hirowareta Otoko https://kamihiro-anime.com/ #神達に拾われた男 @kamihiro_anime
 # Kimi to Boku no Saigo no Senjou, Aruiwa Sekai ga Hajimaru Seisen https://kimisentv.com/ #キミ戦 #kimisen @kimisen_project
-# Kuma Kuma Kuma Bear https://kumakumakumabear.com/ #くまクマ熊ベアー #kumabear @kumabear_anime
+# Kuma Kuma Kuma Bear https://kumakumakumabear.com/ #くまクマ熊ベアー #kumabear @kumabear_anime [TUE]
 # Maesetsu https://maesetsu.jp/ #まえせつ @maesetsu_anime
 # Mahouka Koukou no Rettousei: Raihousha-hen https://mahouka.jp/ #mahouka @mahouka_anime
 # Majo no Tabitabi https://majotabi.jp/ #魔女の旅々 #魔女の旅々はいいぞ #majotabi @majotabi_PR [MON]
 # Maoujou de Oyasumi https://maoujo-anime.com/ #魔王城でおやすみ @maoujo_anime
-# Munou na Nana https://munounanana.com/ #無能なナナ @munounanana
+# Munou na Nana https://munounanana.com/ #無能なナナ @munounanana [WED]
 # Ochikobore Fruit Tart http://ochifuru-anime.com/ #ochifuru @ochifuru_anime
 # One Room S3 https://oneroom-anime.com/ #OneRoom @anime_one_room
 # Rail Romanesque https://railromanesque.jp/ @rail_romanesque #まいてつ #レヱルロマネスク
@@ -397,7 +397,7 @@ class DogezaDeTanondemitaDownload(Fall2020AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
         self.download_image_objects(image_objs, folder)
-        
+
 
 # Gochuumon wa Usagi Desu ka? Bloom
 class GochiUsa3Download(Fall2020AnimeDownload):
@@ -1399,6 +1399,7 @@ class MunounaNanaDownload(Fall2020AnimeDownload):
 
     PAGE_PREFIX = 'https://munounanana.com/'
     STORY_PAGE = 'https://munounanana.com/story/'
+    LAST_EPISODE = 13
 
     def __init__(self):
         super().__init__()
@@ -1410,7 +1411,18 @@ class MunounaNanaDownload(Fall2020AnimeDownload):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.STORY_PAGE)
+        story_template = 'https://munounanana.com/assets/story/%s_%s.jpg'
+        for i in range(self.LAST_EPISODE):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_1'):
+                continue
+            for j in range(5):
+                img_num = str(j + 1)
+                image_url = story_template % (str(i + 1), str(j + 1))
+                image_name = episode + '_' + img_num
+                result = self.download_image(image_url, self.base_folder + '/' + image_name)
+                if result == -1:
+                    return
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
