@@ -1653,7 +1653,7 @@ class SigrdrifaDownload(Fall2020AnimeDownload):
     keywords = [title, "Warlords of Sigrdrifa", "Sigururi"]
 
     PAGE_PREFIX = "https://sigururi.com/"
-    STORY_PAGE = 'https://sigururi.com/intro/'
+    STORY_PAGE = 'https://sigururi.com/story/'
 
     def __init__(self):
         super().__init__()
@@ -1668,7 +1668,35 @@ class SigrdrifaDownload(Fall2020AnimeDownload):
         self.download_other()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.STORY_PAGE)
+        try:
+            soup = self.get_soup(self.STORY_PAGE)
+            nav = soup.find('nav', class_='page_tab')
+            if nav:
+                lis = nav.find_all('li')
+                for li in lis:
+                    a_tag = li.find('a')
+                    if a_tag and a_tag.has_attr('href'):
+                        try:
+                            episode = str(int(a_tag.text.strip())).zfill(2)
+                        except:
+                            continue
+                        if self.is_image_exists(episode + '_1'):
+                            continue
+                        story_url = self.STORY_PAGE + a_tag['href'].replace('./', '')
+                        story_soup = self.get_soup(story_url)
+                        img_div = story_soup.find('div', class_='s_image')
+                        if img_div:
+                            images = img_div.find_all('img')
+                            image_objs = []
+                            for i in range(len(images)):
+                                if images[i].has_attr('src'):
+                                    image_url = self.STORY_PAGE + images[i]['src']
+                                    image_name = episode + '_' + str(i + 1)
+                                    image_objs.append({'name': image_name, 'url': image_url})
+                            self.download_image_objects(image_objs, self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
