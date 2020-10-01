@@ -1,4 +1,4 @@
-from multiprocessing import Process
+from multiprocessing import Process, Pool
 from anime import *
 import migrate
 
@@ -11,17 +11,19 @@ def run():
     downloads = [RailgunTDownload(), Kaguyasama2Download(), PriconneDownload(), TeiboDownload()]
     downloads += [HxErosDownload(), KanokariDownload(), MaohgakuinDownload(), MonIshaDownload(),
                   ReZero2Download(), UzakiChanDownload(), Oregairu3Download()]
-    subclasses = Fall2020AnimeDownload.__subclasses__()
-    for subclass in subclasses:
-        downloads.append(subclass())
-    #process_download(downloads)
-
-    #downloads = []
-    subclasses = Winter2021AnimeDownload.__subclasses__() \
-                 + UnconfirmedDownload.__subclasses__()
+    subclasses = Fall2020AnimeDownload.__subclasses__() \
+        + Winter2021AnimeDownload.__subclasses__() \
+        + UnconfirmedDownload.__subclasses__()
     for subclass in subclasses:
         downloads.append(subclass())
     process_download(downloads)
+
+    #downloads = []
+    #subclasses = Winter2021AnimeDownload.__subclasses__() \
+    #             + UnconfirmedDownload.__subclasses__()
+    #for subclass in subclasses:
+    #    downloads.append(subclass())
+    #process_download(downloads)
 
 
 def run_process(download):
@@ -39,21 +41,29 @@ def process_download(downloads):
     if MAX_PROCESSES <= 0:
         return
 
-    if len(downloads) % MAX_PROCESSES == 0:
-        num_of_iterations = len(downloads) / MAX_PROCESSES
-    else:
-        num_of_iterations = int(len(downloads) / MAX_PROCESSES) + 1
+    with Pool(MAX_PROCESSES) as p:
+        results = []
+        for download in downloads:
+            result = p.apply_async(run_process, (download,))
+            results.append(result)
+        for result in results:
+            result.wait()
 
-    for i in range(num_of_iterations):
-        processes = []
-        max_index = min((i + 1) * MAX_PROCESSES, len(downloads))
-        for download in downloads[(i * MAX_PROCESSES):max_index]:
-            process = Process(target=run_process, args=(download,))
-            processes.append(process)
-            process.start()
+    #if len(downloads) % MAX_PROCESSES == 0:
+    #    num_of_iterations = len(downloads) / MAX_PROCESSES
+    #else:
+    #    num_of_iterations = int(len(downloads) / MAX_PROCESSES) + 1
 
-        for process in processes:
-            process.join()
+    #for i in range(num_of_iterations):
+    #    processes = []
+    #    max_index = min((i + 1) * MAX_PROCESSES, len(downloads))
+    #    for download in downloads[(i * MAX_PROCESSES):max_index]:
+    #        process = Process(target=run_process, args=(download,))
+    #        processes.append(process)
+    #        process.start()
+
+    #    for process in processes:
+    #        process.join()
 
     #processes = []
     #for download in downloads:

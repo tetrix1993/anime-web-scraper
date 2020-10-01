@@ -27,7 +27,7 @@ from PIL import Image
 # Ochikobore Fruit Tart http://ochifuru-anime.com/ #ochifuru @ochifuru_anime
 # One Room S3 https://oneroom-anime.com/ #OneRoom @anime_one_room
 # Rail Romanesque https://railromanesque.jp/ @rail_romanesque #まいてつ #レヱルロマネスク
-# Senyoku no Sigrdrifa https://sigururi.com/ #シグルリ @sigururi
+# Senyoku no Sigrdrifa https://sigururi.com/ #シグルリ @sigururi [WED]
 # Strike Witches: Road to Berlin http://w-witch.jp/strike_witches-rtb/ #w_witch #s_witch_rtb @RtbWitch
 # Tonikaku Kawaii http://tonikawa.com/ #トニカクカワイイ #tonikawa @tonikawa_anime
 

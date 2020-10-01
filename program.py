@@ -1,6 +1,6 @@
 from search import SearchFilter
 from anime import MainDownload
-from multiprocessing import Process
+from multiprocessing import Pool
 from anime import *
 import migrate
 
@@ -17,21 +17,13 @@ def process_download(downloads):
     if MAX_PROCESSES <= 0:
         return
 
-    if len(downloads) % MAX_PROCESSES == 0:
-        num_of_iterations = len(downloads) / MAX_PROCESSES
-    else:
-        num_of_iterations = int(len(downloads) / MAX_PROCESSES) + 1
-
-    for i in range(num_of_iterations):
-        processes = []
-        max_index = min((i + 1) * MAX_PROCESSES, len(downloads))
-        for download in downloads[(i * MAX_PROCESSES):max_index]:
-            process = Process(target=run_process, args=(download(),))
-            processes.append(process)
-            process.start()
-
-        for process in processes:
-            process.join()
+    with Pool(MAX_PROCESSES) as p:
+        results = []
+        for download in downloads:
+            result = p.apply_async(run_process, (download(),))
+            results.append(result)
+        for result in results:
+            result.wait()
 
     print("Download completed")
 
