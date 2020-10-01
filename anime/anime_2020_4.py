@@ -17,7 +17,7 @@ from PIL import Image
 # Jujutsu Kaisen https://jujutsukaisen.jp/ #呪術廻戦 @animejujutsu [MON]
 # Kamisama ni Natta Hi https://kamisama-day.jp/ #神様になった日 @kamisama_Ch_AB
 # Kami-tachi ni Hirowareta Otoko https://kamihiro-anime.com/ #神達に拾われた男 @kamihiro_anime
-# Kimi to Boku no Saigo no Senjou, Aruiwa Sekai ga Hajimaru Seisen https://kimisentv.com/ #キミ戦 #kimisen @kimisen_project
+# Kimi to Boku no Saigo no Senjou, Aruiwa Sekai ga Hajimaru Seisen https://kimisentv.com/ #キミ戦 #kimisen @kimisen_project [THU]
 # Kuma Kuma Kuma Bear https://kumakumakumabear.com/ #くまクマ熊ベアー #kumabear @kumabear_anime [TUE]
 # Maesetsu https://maesetsu.jp/ #まえせつ @maesetsu_anime
 # Mahouka Koukou no Rettousei: Raihousha-hen https://mahouka.jp/ #mahouka @mahouka_anime
@@ -870,6 +870,7 @@ class KimisenDownload(Fall2020AnimeDownload):
 
     PAGE_PREFIX = 'https://kimisentv.com/'
     STORY_PAGE = 'https://kimisentv.com/story/'
+    LAST_EPISODE = 12
 
     def __init__(self):
         super().__init__()
@@ -885,7 +886,18 @@ class KimisenDownload(Fall2020AnimeDownload):
         self.download_music()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.STORY_PAGE)
+        story_template = self.PAGE_PREFIX + 'assets/story/%s_%s.jpg'
+        for i in range(self.LAST_EPISODE):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_1'):
+                continue
+            for j in range(6):
+                img_num = str(j + 1)
+                image_url = story_template % (str(i + 1), str(j + 1))
+                image_name = episode + '_' + img_num
+                result = self.download_image(image_url, self.base_folder + '/' + image_name)
+                if result == -1:
+                    return
 
     def download_key_visual(self):
         keyvisual_folder = self.create_key_visual_directory()
