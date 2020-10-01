@@ -13,7 +13,7 @@ from PIL import Image
 # Gochuumon wa Usagi desu ka? Bloom https://gochiusa.com/bloom/ #gochiusa @usagi_anime
 # Golden Kamuy 3rd Season https://www.kamuy-anime.com/ #ゴールデンカムイ @kamuy_official
 # Higurashi no Naku Koro ni (2020) https://higurashianime.com/ #ひぐらし @higu_anime [MON]
-# Iwa Kakeru!: Sport Climbing Girls http://iwakakeru-anime.com/ #いわかける #iwakakeru @iwakakeru_anime
+# Iwa Kakeru!: Sport Climbing Girls http://iwakakeru-anime.com/ #いわかける #iwakakeru @iwakakeru_anime [THU]
 # Jujutsu Kaisen https://jujutsukaisen.jp/ #呪術廻戦 @animejujutsu [MON]
 # Kamisama ni Natta Hi https://kamisama-day.jp/ #神様になった日 @kamisama_Ch_AB
 # Kami-tachi ni Hirowareta Otoko https://kamihiro-anime.com/ #神達に拾われた男 @kamihiro_anime
@@ -560,6 +560,7 @@ class IwakakeruDownload(Fall2020AnimeDownload):
 
     PAGE_PREFIX = 'http://iwakakeru-anime.com/'
     STORY_PAGE = 'http://iwakakeru-anime.com/story/'
+    LAST_EPISODE = 12
 
     def __init__(self):
         super().__init__()
@@ -573,7 +574,18 @@ class IwakakeruDownload(Fall2020AnimeDownload):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.STORY_PAGE)
+        story_template = self.PAGE_PREFIX + 'img/story/ep%s/img%s.jpg'
+        for i in range(self.LAST_EPISODE):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_1'):
+                continue
+            for j in range(4):
+                img_num = str(j + 1)
+                image_url = story_template % (episode, str(j + 1).zfill(2))
+                image_name = episode + '_' + img_num
+                result = self.download_image(image_url, self.base_folder + '/' + image_name)
+                if result == -1:
+                    return
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
