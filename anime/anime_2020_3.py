@@ -445,6 +445,7 @@ class MaohgakuinDownload(Summer2020AnimeDownload):
         image_objs = [
             {'name': 'music_ed', 'url': 'https://pbs.twimg.com/media/Eb6ctYuU8AEVilj?format=jpg&name=large'},
             {'name': 'bd_1_big', 'url': 'https://pbs.twimg.com/media/EfdVYazU0AcE6VM?format=jpg&name=4096x4096'},
+            {'name': 'bd_2_big', 'url': 'https://pbs.twimg.com/media/EjTvsaZUcAAnOHS?format=jpg&name=medium'},
             {'name': 'bd_bonus_1', 'url': 'https://pbs.twimg.com/media/Ei1XmM2UcAA8Ha4?format=jpg&name=medium'},
         ]
         self.download_image_objects(image_objs, folder)
