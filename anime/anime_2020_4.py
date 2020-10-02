@@ -20,7 +20,7 @@ from PIL import Image
 # Kimi to Boku no Saigo no Senjou, Aruiwa Sekai ga Hajimaru Seisen https://kimisentv.com/ #キミ戦 #kimisen @kimisen_project [THU]
 # Kuma Kuma Kuma Bear https://kumakumakumabear.com/ #くまクマ熊ベアー #kumabear @kumabear_anime [TUE]
 # Maesetsu https://maesetsu.jp/ #まえせつ @maesetsu_anime
-# Mahouka Koukou no Rettousei: Raihousha-hen https://mahouka.jp/ #mahouka @mahouka_anime
+# Mahouka Koukou no Rettousei: Raihousha-hen https://mahouka.jp/ #mahouka @mahouka_anime [FRI-Twitter]
 # Majo no Tabitabi https://majotabi.jp/ #魔女の旅々 #魔女の旅々はいいぞ #majotabi @majotabi_PR [MON]
 # Maoujou de Oyasumi https://maoujo-anime.com/ #魔王城でおやすみ @maoujo_anime [FRI]
 # Munou na Nana https://munounanana.com/ #無能なナナ @munounanana [WED]
@@ -1259,6 +1259,37 @@ class Mahouka2Download(Fall2020AnimeDownload):
 
     def download_episode_preview(self):
         self.has_website_updated(self.STORY_PAGE)
+        try:
+            soup = self.get_soup(self.STORY_PAGE)
+            nav = soup.find('nav', class_='story_nav')
+            if nav:
+                a_tags = nav.find_all('a')
+                for a_tag in a_tags:
+                    if a_tag.has_attr('href') and 'story' in a_tag['href']:
+                        try:
+                            episode = str(int(a_tag.text)).zfill(2)
+                        except:
+                            continue
+                        if self.is_image_exists(episode + '_1'):
+                            continue
+                        episode_url = a_tag['href']
+                        if len(episode_url) > 1 and episode_url[0] == '/':
+                            episode_url = episode_url[1:]
+                        episode_soup = self.get_soup(self.PAGE_PREFIX + episode_url)
+                        div_image = episode_soup.find('div', class_='img_list')
+                        if div_image:
+                            images = div_image.find_all('img')
+                            image_objs = []
+                            for i in range(len(images)):
+                                if images[i].has_attr('src'):
+                                    image_url = self.STORY_PAGE + images[i]['src']
+                                    image_name = episode + '_' + str(i + 1)
+                                    image_objs.append({'name': image_name, 'url': image_url})
+                            self.download_image_objects(image_objs, self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
+
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
