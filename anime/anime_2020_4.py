@@ -1375,6 +1375,8 @@ class MaoujoDownload(Fall2020AnimeDownload):
                             continue
                     else:
                         continue
+                    if self.is_image_exists(episode + '_1'):
+                        continue
                     images = ep_obj['acf']['images']
                     image_objs = []
                     for i in range(len(images)):
@@ -1383,7 +1385,7 @@ class MaoujoDownload(Fall2020AnimeDownload):
                         image_objs.append({'name': image_name, 'url': image_url})
                     self.download_image_objects(image_objs, self.base_folder)
         except Exception as e:
-                print("Error in running " + self.__class__.__name__ + " - Character")
+                print("Error in running " + self.__class__.__name__)
                 print(e)
 
     def download_key_visual(self):
@@ -1911,6 +1913,7 @@ class TonikawaDownload(Fall2020AnimeDownload):
 
     PAGE_PREFIX = 'http://tonikawa.com/'
     STORY_PAGE = 'http://tonikawa.com/story/'
+    LAST_EPISODE = 12
 
     def __init__(self):
         super().__init__()
@@ -1920,10 +1923,49 @@ class TonikawaDownload(Fall2020AnimeDownload):
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_guess()
         self.download_key_visual()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.STORY_PAGE)
+        try:
+            soup = self.get_soup(self.STORY_PAGE)
+            div_list = soup.find('div', class_='list')
+            if div_list:
+                item_list = div_list.find_all('div', class_='item')
+                for item in item_list:
+                    span_ep_num = item.find('span', class_='number')
+                    if span_ep_num:
+                        try:
+                            episode = str(int(span_ep_num.text.replace('#', ''))).zfill(2)
+                        except:
+                            continue
+                        if self.is_image_exists(episode + '_01'):
+                            continue
+                        ul = item.find('ul', class_='swiper-wrapper')
+                        if ul:
+                            images = ul.find_all('img')
+                            image_objs = []
+                            for i in range(len(images)):
+                                if images[i].has_attr('src'):
+                                    image_url = self.PAGE_PREFIX + images[i]['src'].replace('../', '')
+                                    image_name = episode + '_' + str(i + 1).zfill(2)
+                                    image_objs.append({'name': image_name, 'url': image_url})
+                            self.download_image_objects(image_objs, self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
+
+    def download_episode_preview_guess(self):
+        image_url_template = 'http://tonikawa.com/assets/images/common/story/ep%s/img_%s.jpg'
+        for i in range(1, self.LAST_EPISODE + 1, 1):
+            for j in range(1, 11, 1):
+                image_name = str(i).zfill(2) + '_' + str(j).zfill(2)
+                if self.is_image_exists(image_name):
+                    continue
+                image_url = image_url_template % (str(i).zfill(2), str(j))
+                result = self.download_image(image_url, self.base_folder + '/' + image_name)
+                if result == -1:
+                    return
 
     def download_key_visual(self):
         keyvisual_folder = self.base_folder + '/' + constants.FOLDER_KEY_VISUAL
