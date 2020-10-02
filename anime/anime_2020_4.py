@@ -1359,6 +1359,32 @@ class MaoujoDownload(Fall2020AnimeDownload):
 
     def download_episode_preview(self):
         self.has_website_updated(self.STORY_PAGE)
+        #json_url = 'https://maoujo-anime.com/news/wp-json/wp/v2/pages?orderby=date&order=asc&per_page=100&parent=246'
+        try:
+            soup = self.get_soup(self.STORY_PAGE)
+            story_div = soup.find('div', id='app-story')
+            if story_div and story_div.has_attr('data-url'):
+                json_url = story_div['data-url']
+                episode_objs = self.get_json(json_url)
+                for ep_obj in episode_objs:
+                    title = ep_obj['title']['rendered'].strip()
+                    if len(title) > 2 and '第' == title[0] and '夜' in title[-1]:
+                        try:
+                            episode = str(int(title[1:len(title)-1])).zfill(2)
+                        except:
+                            continue
+                    else:
+                        continue
+                    images = ep_obj['acf']['images']
+                    image_objs = []
+                    for i in range(len(images)):
+                        image_url = images[i]['url']
+                        image_name = episode + '_' + str(i + 1)
+                        image_objs.append({'name': image_name, 'url': image_url})
+                    self.download_image_objects(image_objs, self.base_folder)
+        except Exception as e:
+                print("Error in running " + self.__class__.__name__ + " - Character")
+                print(e)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
