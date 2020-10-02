@@ -16,20 +16,20 @@ from PIL import Image
 # Iwa Kakeru!: Sport Climbing Girls http://iwakakeru-anime.com/ #いわかける #iwakakeru @iwakakeru_anime [THU]
 # Jujutsu Kaisen https://jujutsukaisen.jp/ #呪術廻戦 @animejujutsu [MON]
 # Kamisama ni Natta Hi https://kamisama-day.jp/ #神様になった日 @kamisama_Ch_AB
-# Kami-tachi ni Hirowareta Otoko https://kamihiro-anime.com/ #神達に拾われた男 @kamihiro_anime
+# Kami-tachi ni Hirowareta Otoko https://kamihiro-anime.com/ #神達に拾われた男 @kamihiro_anime [FRI]
 # Kimi to Boku no Saigo no Senjou, Aruiwa Sekai ga Hajimaru Seisen https://kimisentv.com/ #キミ戦 #kimisen @kimisen_project [THU]
 # Kuma Kuma Kuma Bear https://kumakumakumabear.com/ #くまクマ熊ベアー #kumabear @kumabear_anime [TUE]
 # Maesetsu https://maesetsu.jp/ #まえせつ @maesetsu_anime
 # Mahouka Koukou no Rettousei: Raihousha-hen https://mahouka.jp/ #mahouka @mahouka_anime
 # Majo no Tabitabi https://majotabi.jp/ #魔女の旅々 #魔女の旅々はいいぞ #majotabi @majotabi_PR [MON]
-# Maoujou de Oyasumi https://maoujo-anime.com/ #魔王城でおやすみ @maoujo_anime
+# Maoujou de Oyasumi https://maoujo-anime.com/ #魔王城でおやすみ @maoujo_anime [FRI]
 # Munou na Nana https://munounanana.com/ #無能なナナ @munounanana [WED]
 # Ochikobore Fruit Tart http://ochifuru-anime.com/ #ochifuru @ochifuru_anime
 # One Room S3 https://oneroom-anime.com/ #OneRoom @anime_one_room
 # Rail Romanesque https://railromanesque.jp/ @rail_romanesque #まいてつ #レヱルロマネスク
 # Senyoku no Sigrdrifa https://sigururi.com/ #シグルリ @sigururi [WED]
 # Strike Witches: Road to Berlin http://w-witch.jp/strike_witches-rtb/ #w_witch #s_witch_rtb @RtbWitch
-# Tonikaku Kawaii http://tonikawa.com/ #トニカクカワイイ #tonikawa @tonikawa_anime
+# Tonikaku Kawaii http://tonikawa.com/ #トニカクカワイイ #tonikawa @tonikawa_anime [FRI]
 
 
 # Fall 2020 Anime
@@ -814,6 +814,32 @@ class KamihiroDownload(Fall2020AnimeDownload):
 
     def download_episode_preview(self):
         self.has_website_updated(self.STORY_PAGE)
+        try:
+            soup = self.get_soup(self.STORY_PAGE)
+            articles = soup.find_all('article', class_='story-block')
+            for article in articles:
+                episode_div = article.find('div', class_='episode')
+                if not episode_div:
+                    continue
+                try:
+                    episode = str(int(episode_div.find('em').text.strip())).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                slider_div = article.find('div', class_='story-block__main--slider')
+                if slider_div:
+                    images = slider_div.find_all('img')
+                    image_objs = []
+                    for i in range(len(images)):
+                        if images[i].has_attr('src'):
+                            image_url = images[i]['src']
+                            image_name = episode + '_' + str(i + 1)
+                            image_objs.append({'name': image_name, 'url': image_url})
+                    self.download_image_objects(image_objs, self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
