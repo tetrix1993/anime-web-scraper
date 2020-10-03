@@ -743,6 +743,7 @@ class KamisamaNiNattaHiDownload(Fall2020AnimeDownload):
             {'name': 'kv', 'url': 'https://pbs.twimg.com/media/Ei13ho5UMAEhqwj?format=jpg&name=large'},
             {'name': 'kv2', 'url': 'https://kamisama-day.jp/assets/img/kv.jpg'},
             {'name': 'kv3', 'url': 'https://kamisama-day.jp/assets/img/top/kv.jpg'},
+            {'name': 'kv4', 'url': 'https://kamisama-day.jp/assets/img/top/kv2/kv.jpg'},
         ]
         self.download_image_objects(image_objs, folder)
 
