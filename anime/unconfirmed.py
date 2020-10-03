@@ -8,6 +8,7 @@ from anime.main_download import MainDownload
 # Kaifuku Jutsushi no Yarinaoshi http://kaiyari.com/ #回復術士 @kaiyari_anime
 # Kobayashi-san Chi no Maid Dragon S https://maidragon.jp/2nd/ #maidragon @maidragon_anime
 # Mushoku Tensei https://mushokutensei.jp/ #無職転生 @mushokutensei_A
+# Osananajimi ga Zettai ni Makenai Love Comedy https://osamake.com/ #おさまけ
 # Princess Connect! Re:Dive S2 https://anime.priconne-redive.jp/ #アニメプリコネ #プリコネR #プリコネ @priconne_anime
 # Tate no Yuusha S2 http://shieldhero-anime.jp/ #shieldhero #盾の勇者の成り上がり @shieldheroanime
 
@@ -187,6 +188,33 @@ class MushokuTenseiDownload(UnconfirmedDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + " - Character")
             print(e)
+        self.download_image_objects(image_objs, folder)
+
+
+# Osananajimi ga Zettai ni Makenai Love Comedy
+class OsamakeDownload(UnconfirmedDownload):
+    title = 'Osananajimi ga Zettai ni Makenai Love Comedy'
+    keywords = [title, 'Osamake']
+
+    PAGE_PREFIX = 'https://osamake.com/'
+
+    def __init__(self):
+        super().__init__()
+        self.init_base_folder('osamake')
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        image_objs = [
+            {'name': 'teaser', 'url': 'https://osamake.com/assets/top/main-t1b/vis.jpg'},
+            #{'name': 'teaser', 'url': 'https://pbs.twimg.com/media/EjZnt4CUcAIJeqR?format=jpg&name=4096x4096'},
+        ]
         self.download_image_objects(image_objs, folder)
 
 
