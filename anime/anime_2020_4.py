@@ -1317,6 +1317,8 @@ class Mahouka2Download(Fall2020AnimeDownload):
     def run(self):
         self.download_episode_preview()
         self.download_key_visual()
+        self.download_character()
+        self.download_bluray()
 
     def download_episode_preview(self):
         self.has_website_updated(self.STORY_PAGE)
@@ -1351,12 +1353,36 @@ class Mahouka2Download(Fall2020AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
-
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         image_objs = [
             {'name': 'teaser', 'url': 'https://mahouka.jp/news/SYS/CONTENTS/2019100420534812757301'},
             {'name': 'kv', 'url': 'https://mahouka.jp/assets/img/top/main/kv/kv.jpg'}
+        ]
+        self.download_image_objects(image_objs, folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        image_objs = []
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            img_divs = soup.find_all('div', class_='charaBox')
+            for img_div in img_divs:
+                images = img_div.find_all('img')
+                for image in images:
+                    if image and image.has_attr('src'):
+                        image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                        image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                        image_objs.append({'name': image_name, 'url': image_url})
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Character')
+            print(e)
+        self.download_image_objects(image_objs, folder)
+
+    def download_bluray(self):
+        folder = self.create_bluray_directory()
+        image_objs = [
+            {'name': 'music_ed', 'url': 'https://pbs.twimg.com/media/EjaDeI-U8AATDHD?format=jpg&name=900x900'},
         ]
         self.download_image_objects(image_objs, folder)
 
