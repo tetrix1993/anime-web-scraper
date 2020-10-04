@@ -1,4 +1,5 @@
 import os
+import requests
 import anime.constants as constants
 from anime.main_download import MainDownload
 from datetime import datetime
@@ -1775,6 +1776,7 @@ class SigrdrifaDownload(Fall2020AnimeDownload):
         self.download_episode_preview()
         self.download_key_visual()
         self.download_character()
+        self.download_bluray()
         self.download_other()
 
     def download_episode_preview(self):
@@ -1845,6 +1847,49 @@ class SigrdrifaDownload(Fall2020AnimeDownload):
                     continue
                 self.download_image(image_url, filepath_without_extension)
 
+    def download_bluray(self):
+        folder = self.create_bluray_directory()
+        try:
+            bd_url_template = self.PAGE_PREFIX + 'bddvd/vol%s/'
+            bd_urls = [self.PAGE_PREFIX + 'bddvd/special/'] + [bd_url_template % str(i + 1).zfill(2) for i in range(6)]
+            j = -1
+            for bd_url in bd_urls:
+                j += 1
+                is_volume = False
+                if '/vol' in bd_url:
+                    if self.is_image_exists('bd_vol%s' % str(j)):
+                        continue
+                    is_volume = True
+                soup = self.get_soup(bd_url)
+                if soup:
+                    div = soup.find('div', class_='bddvd')
+                    if div:
+                        images = div.find_all('img')
+                        image_objs = []
+                        for k in range(len(images)):
+                            if images[k].has_attr('src'):
+                                if len(images[k]['src']) > 0 and images[k]['src'][0] == '/':
+                                    image_url = self.PAGE_PREFIX + images[k]['src'][1:]
+                                else:
+                                    image_url = images[k]['src']
+                                content_length = requests.head(image_url).headers['Content-Length']
+                                if content_length == '29796' or content_length == '12133': # Skip Now Printing
+                                    if is_volume:
+                                        return
+                                    continue
+                                if is_volume:
+                                    if k == 0:
+                                        image_name = 'bd_vol%s' % str(j)
+                                    else:
+                                        image_name = 'bd_vol%s_%s' % (str(j), str(k))
+                                else:
+                                    image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                                image_objs.append({'name': image_name, 'url': image_url})
+                        self.download_image_objects(image_objs, folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Blu-Ray")
+            print(e)
+
     def download_other(self):
         folder = self.create_custom_directory('other')
         image_objs = [
@@ -1857,6 +1902,7 @@ class SigrdrifaDownload(Fall2020AnimeDownload):
             {'name': 'img_miyako', 'url': 'https://sigururi.com/assets/img/special/interview/img_miyako.jpg'},
             {'name': 'img_azuzu', 'url': 'https://sigururi.com/assets/img/special/interview/img_azuzu.jpg'},
             {'name': 'img_sonoka', 'url': 'https://sigururi.com/assets/img/special/interview/img_sonoka.jpg'},
+            {'name': 'img_clau', 'url': 'https://sigururi.com/assets/img/special/interview/img_clau.jpg'},
             {'name': 'bs11_poster', 'url': 'https://pbs.twimg.com/media/EiuO9YwUYAAQ1U4?format=jpg&name=large'},
         ]
         self.download_image_objects(image_objs, folder)
