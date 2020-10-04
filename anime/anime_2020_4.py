@@ -677,11 +677,13 @@ class IwakakeruDownload(Fall2020AnimeDownload):
                                     for image in images:
                                         if image.has_attr('src'):
                                             image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                                            image_name = self.extract_image_name_from_url(image_url,
+                                                                                          with_extension=False)
+                                            if self.is_image_exists(image_name, folder):
+                                                continue
                                             bd_content_length = requests.head(image_url).headers['Content-Length']
                                             if bd_content_length == '15283' or bd_content_length == '3379':
                                                 continue
-                                            image_name = self.extract_image_name_from_url(image_url,
-                                                                                          with_extension=False)
                                             image_objs.append({'name': image_name, 'url': image_url})
                                     success = self.download_image_objects(image_objs, folder)
                                     if success and len(images) == len(image_objs):
@@ -1383,8 +1385,66 @@ class Mahouka2Download(Fall2020AnimeDownload):
         folder = self.create_bluray_directory()
         image_objs = [
             {'name': 'music_ed', 'url': 'https://pbs.twimg.com/media/EjaDeI-U8AATDHD?format=jpg&name=900x900'},
+            {'name': 'bd_1_1', 'url': 'https://pbs.twimg.com/media/EjZfp3DU4AEmx9C?format=jpg&name=4096x4096'},
+            {'name': 'bd_1_2', 'url': 'https://pbs.twimg.com/media/EjZfrEUUwAAzXn2?format=jpg&name=large'},
+            {'name': 'bd_bonus_1', 'url': 'https://pbs.twimg.com/media/EjZfyqAUwAAOBrL?format=jpg&name=4096x4096'},
         ]
         self.download_image_objects(image_objs, folder)
+
+        cache_filepath = folder + '/' + 'cache'
+        processed = []
+        num_processed = 0
+        if os.path.exists(cache_filepath):
+            with open(cache_filepath, 'r') as f:
+                inputs = f.read()
+            processed = inputs.split(';')
+            num_processed = len(processed)
+
+        try:
+            package_template = 'https://mahouka.jp/package/%s.html'
+            package_id = ['index'] + [str(i).zfill(2) for i in range(2, 6)] + ['ost']
+            bd_urls = [package_template % id for id in package_id]
+            to_process = True
+            for i in range(len(bd_urls)):
+                if package_id[i] in processed:
+                    continue
+                if 0 < i < 5 and not to_process:
+                    continue
+                soup = self.get_soup(bd_urls[i])
+                if soup:
+                    package_div = soup.find('div', class_='p-package')
+                    if package_div:
+                        images = package_div.find_all('img')
+                        image_objs = []
+                        for image in images:
+                            if image.has_attr('src'):
+                                image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                                image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                                if self.is_image_exists(image_name, folder):
+                                    continue
+                                content_length = requests.head(image_url).headers['Content-Length']
+                                if content_length == '12538' or content_length == '22084':  # Skip Now Printing
+                                    if 0 < i < 5:
+                                        to_process = False
+                                        break
+                                    else:
+                                        continue
+                                image_objs.append({'name': image_name, 'url': image_url})
+                                if 0 < i < 5:  # Evaluate only the first image
+                                    break
+                        self.download_image_objects(image_objs, folder)
+                        if len(images) == len(image_objs):
+                            processed.append(package_id[i])
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Blu-ray')
+            print(e)
+
+        if len(processed) > num_processed:
+            with open(cache_filepath, 'w+') as f:
+                for i in range(len(processed)):
+                    if i > 0:
+                        f.write(';')
+                    f.write(processed[i])
 
 
 # Majo no Tabitabi
