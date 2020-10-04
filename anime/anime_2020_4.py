@@ -573,6 +573,7 @@ class IwakakeruDownload(Fall2020AnimeDownload):
         self.download_episode_preview()
         self.download_key_visual()
         self.download_character()
+        self.download_bluray()
 
     def download_episode_preview(self):
         story_template = self.PAGE_PREFIX + 'img/story/ep%s/img%s.jpg'
@@ -637,6 +638,64 @@ class IwakakeruDownload(Fall2020AnimeDownload):
                 {'name': 'chara' + str(i) + '_face2', 'url': face_url_template % (str(i), '2')}
             ]
             self.download_image_objects(image_objs, folder)
+
+    def download_bluray(self):
+        folder = self.create_bluray_directory()
+        cache_filepath = folder + '/' + 'cache'
+        processed = []
+        num_processed = 0
+        if os.path.exists(cache_filepath):
+            with open(cache_filepath, 'r') as f:
+                inputs = f.read()
+            processed = inputs.split(';')
+            num_processed = len(processed)
+        try:
+            product_url = 'http://iwakakeru-anime.com/products/'
+            soup = self.get_soup('http://iwakakeru-anime.com/products/')
+            box_div = soup.find('div', class_='box')
+            if box_div:
+                lis = box_div.find_all('li')
+                for li in lis:
+                    image = li.find('img')
+                    if image and image.has_attr('src'):
+                        f_image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                        content_length = requests.head(f_image_url).headers['Content-Length']
+                        if content_length == '15283' or content_length == '3379':  # Skip Now Printing
+                            continue
+                        a_tag = li.find('a')
+                        if a_tag and a_tag.has_attr('href') and 'id=' in a_tag['href']:
+                            a_tag_id = a_tag['href'].split('id=')[1]
+                            if a_tag_id in processed:
+                                continue
+                            bd_url = product_url + a_tag['href']
+                            bd_soup = self.get_soup(bd_url)
+                            if bd_soup:
+                                bd_box_div = bd_soup.find('div', class_='box')
+                                if bd_box_div:
+                                    images = bd_box_div.find_all('img')
+                                    image_objs = []
+                                    for image in images:
+                                        if image.has_attr('src'):
+                                            image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                                            bd_content_length = requests.head(image_url).headers['Content-Length']
+                                            if bd_content_length == '15283' or bd_content_length == '3379':
+                                                continue
+                                            image_name = self.extract_image_name_from_url(image_url,
+                                                                                          with_extension=False)
+                                            image_objs.append({'name': image_name, 'url': image_url})
+                                    success = self.download_image_objects(image_objs, folder)
+                                    if success and len(images) == len(image_objs):
+                                        processed.append(a_tag_id)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Blu-Ray")
+            print(e)
+
+        if len(processed) > num_processed:
+            with open(cache_filepath, 'w+') as f:
+                for i in range(len(processed)):
+                    if i > 0:
+                        f.write(';')
+                    f.write(processed[i])
 
 
 # Jujutsu Kaisen

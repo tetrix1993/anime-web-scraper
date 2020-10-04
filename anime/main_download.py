@@ -384,12 +384,16 @@ class MainDownload:
         return filepath
 
     def download_image_objects(self, image_objs, filepath):
+        is_successful = True
         for image_obj in image_objs:
             filename = filepath + '/' + image_obj['name']
             if os.path.exists(filename + '.jpg') or os.path.exists(filename + '.png') or \
                     os.path.exists(filename + '.gif') or os.path.exists(filename + '.webp'):
                 continue
-            self.download_image(image_obj['url'], filename)
+            result = self.download_image(image_obj['url'], filename)
+            if result == -1:
+                is_successful = False
+        return is_successful
 
     def is_image_exists(self, name, filepath=None):
         if filepath is None:
