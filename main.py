@@ -8,7 +8,7 @@ MAX_PROCESSES = 30
 
 def run():
     migrate.run()
-    downloads = [RailgunTDownload(), Kaguyasama2Download(), PriconneDownload(), TeiboDownload()]
+    downloads = [RailgunTDownload(), Kaguyasama2Download(), TeiboDownload()]
     downloads += [HxErosDownload(), KanokariDownload(), MaohgakuinDownload(), MonIshaDownload(),
                   ReZero2Download(), UzakiChanDownload(), Oregairu3Download()]
     subclasses = Fall2020AnimeDownload.__subclasses__() \
