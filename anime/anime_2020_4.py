@@ -7,7 +7,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 from PIL import Image
 
 # 100-man no Inochi no Ue ni Ore wa Tatteiru http://1000000-lives.com/ #俺100 @1000000_lives [TUE]
-# Adachi to Shimamura https://www.tbs.co.jp/anime/adashima/ #安達としまむら @adashima_staff
+# Adachi to Shimamura https://www.tbs.co.jp/anime/adashima/ #安達としまむら @adashima_staff [TUE]
 # Assault Lily: Bouquet https://anime.assaultlily-pj.com/ #アサルトリリィ @assaultlily_pj [MON]
 # Danmachi III http://danmachi.com/danmachi3/ #danmachi @danmachi_anime [SAT]
 # Dogeza de Tanondemita https://dogeza-anime.com/ #土下座で @dgz_anime [WED]
@@ -144,6 +144,7 @@ class AdashimaDownload(Fall2020AnimeDownload):
 
     PAGE_PREFIX = 'https://www.tbs.co.jp/anime/adashima/'
     STORY_PAGE = 'https://www.tbs.co.jp/anime/adashima/story/'
+    LAST_EPISODE = 12
 
     def __init__(self):
         super().__init__()
@@ -156,7 +157,19 @@ class AdashimaDownload(Fall2020AnimeDownload):
         self.download_bluray()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.STORY_PAGE)
+        if self.is_image_exists(str(self.LAST_EPISODE) + '_1'):
+            return
+
+        image_url_template = 'https://www.tbs.co.jp/anime/adashima/story/img/story%s/%s.jpg'
+        for i in range(1, self.LAST_EPISODE + 1, 1):
+            for j in range(1, 4, 1):
+                image_name = str(i).zfill(2) + '_' + str(j)
+                if self.is_image_exists(image_name):
+                    continue
+                image_url = image_url_template % (str(i).zfill(2), str(j).zfill(2))
+                result = self.download_image(image_url, self.base_folder + '/' + image_name)
+                if result == -1:
+                    return
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
