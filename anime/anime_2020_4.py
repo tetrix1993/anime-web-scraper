@@ -6,7 +6,7 @@ from datetime import datetime
 from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 from PIL import Image
 
-# 100-man no Inochi no Ue ni Ore wa Tatteiru http://1000000-lives.com/ #俺100 @1000000_lives
+# 100-man no Inochi no Ue ni Ore wa Tatteiru http://1000000-lives.com/ #俺100 @1000000_lives [TUE]
 # Adachi to Shimamura https://www.tbs.co.jp/anime/adashima/ #安達としまむら @adashima_staff
 # Assault Lily: Bouquet https://anime.assaultlily-pj.com/ #アサルトリリィ @assaultlily_pj [MON]
 # Danmachi III http://danmachi.com/danmachi3/ #danmachi @danmachi_anime [SAT]
