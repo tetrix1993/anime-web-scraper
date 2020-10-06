@@ -52,6 +52,7 @@ class HyakumanNoInochiDownload(Fall2020AnimeDownload):
 
     PAGE_PREFIX = 'http://1000000-lives.com'
     STORY_PAGE = 'http://1000000-lives.com/story/'
+    LAST_EPISODE = 12
 
     def __init__(self):
         super().__init__()
@@ -59,6 +60,7 @@ class HyakumanNoInochiDownload(Fall2020AnimeDownload):
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_guess()
         self.download_key_visual()
         self.download_character()
 
@@ -93,6 +95,23 @@ class HyakumanNoInochiDownload(Fall2020AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
+
+    def download_episode_preview_guess(self):
+        if self.is_image_exists(str(self.LAST_EPISODE) + '_1'):
+            return
+
+        image_url_template = 'http://1000000-lives.com/img/story/img_story%s.jpg'
+        for i in range(self.LAST_EPISODE):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_1'):
+                continue
+            for j in range(1, 7, 1):
+                num = i * 6 + j
+                image_name = episode + '_' + str(j)
+                image_url = image_url_template % str(num).zfill(2)
+                result = self.download_image(image_url, self.base_folder + '/' + image_name)
+                if result == -1:
+                    return
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
