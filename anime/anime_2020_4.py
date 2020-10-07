@@ -20,7 +20,7 @@ from PIL import Image
 # Kami-tachi ni Hirowareta Otoko https://kamihiro-anime.com/ #神達に拾われた男 @kamihiro_anime [FRI]
 # Kimi to Boku no Saigo no Senjou, Aruiwa Sekai ga Hajimaru Seisen https://kimisentv.com/ #キミ戦 #kimisen @kimisen_project [THU]
 # Kuma Kuma Kuma Bear https://kumakumakumabear.com/ #くまクマ熊ベアー #kumabear @kumabear_anime [TUE]
-# Maesetsu https://maesetsu.jp/ #まえせつ @maesetsu_anime
+# Maesetsu https://maesetsu.jp/ #まえせつ @maesetsu_anime [WED]
 # Mahouka Koukou no Rettousei: Raihousha-hen https://mahouka.jp/ #mahouka @mahouka_anime [FRI-Twitter]
 # Majo no Tabitabi https://majotabi.jp/ #魔女の旅々 #魔女の旅々はいいぞ #majotabi @majotabi_PR [MON]
 # Maoujou de Oyasumi https://maoujo-anime.com/ #魔王城でおやすみ @maoujo_anime [FRI]
