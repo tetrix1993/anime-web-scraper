@@ -67,11 +67,12 @@ class AniverseMagazineScanner(MainScanner):
     # Example prefix: https://aniverse-mag.com/page/2?s=プランダラ
     SEARCH_URL = "https://aniverse-mag.com/page/%s?s=%s"
     
-    def __init__(self, keyword, base_folder, last_episode=None):
+    def __init__(self, keyword, base_folder, last_episode=None, suffix=None):
         super().__init__()
         self.keyword = keyword
         self.base_folder = base_folder.replace("download/","") + "-aniverse"
         self.last_episode = last_episode
+        self.suffix = suffix
 
     def has_results(self, text):
         return "<h2>Sorry, nothing found.</h2>" not in text
@@ -79,8 +80,8 @@ class AniverseMagazineScanner(MainScanner):
     def has_next_page(self, text):
         return '<i class="fa fa-long-arrow-right">' in text
 
-    def get_episode_num(self, result):
-        split1 = result[0].split('話')[0].split('第')
+    def get_episode_num(self, result, suffix):
+        split1 = result[0].split(suffix)[0].split('第')
         if len(split1) < 2:
             return -1
         try:
@@ -102,13 +103,17 @@ class AniverseMagazineScanner(MainScanner):
                 continue
             news_title = split2[1].split('</a>')[0]
 
-            regex = '第' + '[０|１|２|３|４|５|６|７|８|９|0-9]+' + '話'
+            suffix = self.suffix
+            if suffix is None:
+                suffix = '話'
+
+            regex = '第' + '[０|１|２|３|４|５|６|７|８|９|0-9]+' + suffix
             prog = re.compile(regex)
             result = prog.findall(news_title)
-            if self.keyword in news_title and '最終話' in news_title and len(result) == 0:
+            if self.keyword in news_title and ('最終' + suffix) in news_title and len(result) == 0:
                 episode = 'last'
             elif self.keyword in news_title and len(result) > 0:
-                episode_num = self.get_episode_num(result)
+                episode_num = self.get_episode_num(result, suffix)
                 if episode_num < 1:
                     continue
                 episode = str(episode_num).zfill(2)
@@ -135,13 +140,8 @@ class AniverseMagazineScanner(MainScanner):
     def run(self):
         if self.last_episode:
             # Stop processing if the last episode has already been downloaded
-            stop = False
-            for i in reversed(range(self.last_episode)):
-                if self.is_image_exists(str(i + 1).zfill(2) + '_01', self.base_folder) or\
-                        self.is_image_exists('last_01', self.base_folder):
-                    stop = True
-                    break
-            if stop:
+            if self.is_image_exists(str(self.last_episode).zfill(2) + '_01', self.base_folder) or\
+                    self.is_image_exists('last_01', self.base_folder):
                 return
 
         first_page_url = self.SEARCH_URL % ("1", self.keyword)

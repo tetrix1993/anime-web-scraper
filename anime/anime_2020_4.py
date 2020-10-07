@@ -1300,6 +1300,7 @@ class MaesetsuDownload(Fall2020AnimeDownload):
 
     PAGE_PREFIX = 'https://maesetsu.jp/'
     STORY_PAGE = 'https://maesetsu.jp/story/'
+    LAST_EPISODE = 12
 
     def __init__(self):
         super().__init__()
@@ -1307,13 +1308,37 @@ class MaesetsuDownload(Fall2020AnimeDownload):
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_external()
         self.download_key_visual()
         self.download_character()
         self.download_music()
         self.download_other()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.STORY_PAGE)
+        try:
+            for i in range(self.LAST_EPISODE):
+                episode = str(i + 1).zfill(2)
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                soup = self.get_soup(self.STORY_PAGE + episode + '.html')
+                if len(soup) == 0:
+                    break
+                ph_divs = soup.find_all('div', class_='ph')
+                image_objs = []
+                for i in range(len(ph_divs)):
+                    image = ph_divs[i].find('img')
+                    if image and image.has_attr('src'):
+                        image_url = self.PAGE_PREFIX + image['src'].replace('../', '').split('?')[0]
+                        image_name = episode + '_' + str(i + 1)
+                        image_objs.append({'name': image_name, 'url': image_url})
+                self.download_image_objects(image_objs, self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
+
+    def download_episode_preview_external(self):
+        jp_title = 'まえせつ'
+        AniverseMagazineScanner(jp_title, self.base_folder, 12, suffix='幕').run()
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
