@@ -1131,6 +1131,7 @@ class KumaBearDownload(Fall2020AnimeDownload):
         self.download_key_visual()
         self.download_character()
         self.download_music()
+        self.download_bluray()
 
     def download_episode_preview(self):
         self.download_episode_preview_guess()
@@ -1291,6 +1292,58 @@ class KumaBearDownload(Fall2020AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + " - Music")
             print(e)
+
+    def download_bluray(self):
+        folder = self.create_bluray_directory()
+
+        cache_filepath = folder + '/' + 'cache'
+        processed = []
+        num_processed = 0
+        if os.path.exists(cache_filepath):
+            with open(cache_filepath, 'r') as f:
+                inputs = f.read()
+            processed = inputs.split(';')
+            num_processed = len(processed)
+
+        try:
+            bd_urls = ['privilege', '01', '02', '03']
+            for i in range(len(bd_urls)):
+                if bd_urls[i] in processed:
+                    continue
+                bd_url = self.PAGE_PREFIX + 'bddvd/' + bd_urls[i] + '.html'
+                soup = self.get_soup(bd_url)
+                ph_tags = soup.find_all('div', class_='ph')
+                if ph_tags:
+                    image_objs = []
+                    image_count = 0
+                    for ph_tag in ph_tags:
+                        image = ph_tag.find('img')
+                        if image and image.has_attr('src'):
+                            image_count += 1
+                            image_url = self.PAGE_PREFIX + image['src'].replace('../', '').split('?')[0]
+                            image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                            if self.is_image_exists(image_name, folder):
+                                continue
+                            content_length = requests.head(image_url).headers['Content-Length']
+                            if content_length == '58281' or content_length == '106581':
+                                if i > 0:
+                                    return
+                                else:
+                                    continue
+                            image_objs.append({'name': image_name, 'url': image_url})
+                    self.download_image_objects(image_objs, folder)
+                    if image_count == len(image_objs):
+                        processed.append(bd_url)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Music")
+            print(e)
+
+        if len(processed) > num_processed:
+            with open(cache_filepath, 'w+') as f:
+                for i in range(len(processed)):
+                    if i > 0:
+                        f.write(';')
+                    f.write(processed[i])
 
 
 # Maesetsu!
