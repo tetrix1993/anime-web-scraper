@@ -29,7 +29,7 @@ from PIL import Image
 # One Room S3 https://oneroom-anime.com/ #OneRoom @anime_one_room
 # Rail Romanesque https://railromanesque.jp/ @rail_romanesque #まいてつ #レヱルロマネスク
 # Senyoku no Sigrdrifa https://sigururi.com/ #シグルリ @sigururi [WED]
-# Strike Witches: Road to Berlin http://w-witch.jp/strike_witches-rtb/ #w_witch #s_witch_rtb @RtbWitch
+# Strike Witches: Road to Berlin http://w-witch.jp/strike_witches-rtb/ #w_witch #s_witch_rtb @RtbWitch [THU]
 # Tonikaku Kawaii http://tonikawa.com/ #トニカクカワイイ #tonikawa @tonikawa_anime [FRI]
 
 
@@ -1093,6 +1093,10 @@ class KimisenDownload(Fall2020AnimeDownload):
 
     def download_music(self):
         folder = self.create_custom_directory('music')
+        image_objs = [
+            {'name': 'music_ed', 'url': 'https://pbs.twimg.com/media/Ejum38pVcAMY8iO?format=jpg&name=large'},
+        ]
+        self.download_image_objects(image_objs, folder)
         try:
             soup = self.get_soup(self.PAGE_PREFIX + 'music/')
             contents_inner = soup.find('div', class_='cont-body')
