@@ -2237,7 +2237,7 @@ class StrikeWitches3Download(Fall2020AnimeDownload):
 
     def download_episode_preview_external(self):
         try:
-            jp_title = '第501統合戦闘航空団 ストライクウィッチーズ ROAD to BERLIN'
+            jp_title = 'ストライクウィッチーズ ROAD to BERLIN'
             last_date = datetime.strptime('20201231', '%Y%m%d')
             today = datetime.today()
             if today < last_date:
@@ -2245,6 +2245,7 @@ class StrikeWitches3Download(Fall2020AnimeDownload):
             else:
                 end_date = last_date
             MocaNewsScanner(jp_title, self.base_folder, '20200925', end_date.strftime('%Y%m%d')).run()
+            AniverseMagazineScanner(jp_title, self.base_folder, 12).run()
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + ' - MocaNews')
             print(e)
