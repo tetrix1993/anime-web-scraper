@@ -8,10 +8,10 @@ from PIL import Image
 
 # 100-man no Inochi no Ue ni Ore wa Tatteiru http://1000000-lives.com/ #俺100 @1000000_lives [TUE]
 # Adachi to Shimamura https://www.tbs.co.jp/anime/adashima/ #安達としまむら @adashima_staff [TUE]
-# Assault Lily: Bouquet https://anime.assaultlily-pj.com/ #アサルトリリィ @assaultlily_pj [MON]
+# Assault Lily: Bouquet https://anime.assaultlily-pj.com/ #アサルトリリィ @assaultlily_pj [FRI]
 # Danmachi III http://danmachi.com/danmachi3/ #danmachi @danmachi_anime [SAT]
 # Dogeza de Tanondemita https://dogeza-anime.com/ #土下座で @dgz_anime [WED]
-# Gochuumon wa Usagi desu ka? Bloom https://gochiusa.com/bloom/ #gochiusa @usagi_anime
+# Gochuumon wa Usagi desu ka? Bloom https://gochiusa.com/bloom/ #gochiusa @usagi_anime [FRI]
 # Golden Kamuy 3rd Season https://www.kamuy-anime.com/ #ゴールデンカムイ @kamuy_official [MON]
 # Higurashi no Naku Koro ni (2020) https://higurashianime.com/ #ひぐらし @higu_anime [MON]
 # Iwa Kakeru!: Sport Climbing Girls http://iwakakeru-anime.com/ #いわかける #iwakakeru @iwakakeru_anime [THU]
@@ -21,7 +21,7 @@ from PIL import Image
 # Kimi to Boku no Saigo no Senjou, Aruiwa Sekai ga Hajimaru Seisen https://kimisentv.com/ #キミ戦 #kimisen @kimisen_project [THU]
 # Kuma Kuma Kuma Bear https://kumakumakumabear.com/ #くまクマ熊ベアー #kumabear @kumabear_anime [TUE]
 # Maesetsu https://maesetsu.jp/ #まえせつ @maesetsu_anime [WED]
-# Mahouka Koukou no Rettousei: Raihousha-hen https://mahouka.jp/ #mahouka @mahouka_anime [FRI-Twitter]
+# Mahouka Koukou no Rettousei: Raihousha-hen https://mahouka.jp/ #mahouka @mahouka_anime [FRI]
 # Majo no Tabitabi https://majotabi.jp/ #魔女の旅々 #魔女の旅々はいいぞ #majotabi @majotabi_PR [MON]
 # Maoujou de Oyasumi https://maoujo-anime.com/ #魔王城でおやすみ @maoujo_anime [FRI]
 # Munou na Nana https://munounanana.com/ #無能なナナ @munounanana [WED]
@@ -438,6 +438,7 @@ class GochiUsa3Download(Fall2020AnimeDownload):
     keywords = [title, 'Gochiusa', '3rd']
 
     PAGE_PREFIX = 'https://gochiusa.com/bloom/'
+    STORY_PAGE = 'https://gochiusa.com/bloom/story/'
 
     def __init__(self):
         super().__init__()
@@ -448,7 +449,36 @@ class GochiUsa3Download(Fall2020AnimeDownload):
         self.download_key_visual()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        try:
+            soup = self.get_soup(self.STORY_PAGE, decode=True)
+            div_contents = soup.find('div', id='ContentsListUnit01')
+            if div_contents:
+                a_tags = div_contents.find_all('a')
+                for a_tag in a_tags:
+                    if a_tag.has_attr('href'):
+                        a_tag_text = a_tag.text.strip()
+                        if len(a_tag_text) > 2 and '第' in a_tag_text[0] and '羽' in a_tag_text[-1]:
+                            try:
+                                episode = str(int(a_tag_text.split('第')[1].split('羽')[0])).zfill(2)
+                            except:
+                                continue
+                            if self.is_image_exists(episode + '_1'):
+                                continue
+                            ep_url = self.PAGE_PREFIX + a_tag['href'].replace('../', '')
+                            ep_soup = self.get_soup(ep_url)
+                            ph_divs = ep_soup.find_all('div', class_='ph')
+                            image_objs = []
+                            for i in range(len(ph_divs)):
+                                image = ph_divs[i].find('img')
+                                if image and image.has_attr('src'):
+                                    image_url = self.PAGE_PREFIX + image['src'].replace('../', '').split('?')[0]
+                                    image_name = episode + '_' + str(i + 1)
+                                    image_objs.append({'name': image_name, 'url': image_url})
+                            self.download_image_objects(image_objs, self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
+
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -842,7 +872,7 @@ class KamisamaNiNattaHiDownload(Fall2020AnimeDownload):
                             episode = str(int(a_tag.text)).zfill(2)
                         except:
                             continue
-                        if self.is_image_exists(episode + '_6'):
+                        if self.is_image_exists(episode + '_5'):
                             continue
                         episode_url = self.STORY_PAGE + a_tag['href'].replace('./', '')
                         episode_soup = self.get_soup(episode_url)
@@ -1474,7 +1504,7 @@ class Mahouka2Download(Fall2020AnimeDownload):
         self.download_bluray()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.STORY_PAGE)
+        #self.has_website_updated(self.STORY_PAGE)
         try:
             soup = self.get_soup(self.STORY_PAGE)
             nav = soup.find('nav', class_='story_nav')
