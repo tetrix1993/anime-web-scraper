@@ -1643,13 +1643,19 @@ class MajotabiDownload(Fall2020AnimeDownload):
             os.makedirs(self.base_folder)
 
     def run(self):
-        self.download_episode_preview()
+        soup = self.get_soup(self.PAGE_PREFIX)
+        if soup is None:
+            return
+
+        self.download_episode_preview(soup)
         self.download_episode_preview_guess()
         self.download_key_visual()
-        self.download_character()
+        self.download_character(soup)
+        self.download_bluray(soup)
 
-    def download_episode_preview(self):
-        soup = self.get_soup(self.PAGE_PREFIX)
+    def download_episode_preview(self, soup=None):
+        if not soup:
+            soup = self.get_soup(self.PAGE_PREFIX)
         story_list = soup.find_all('div', class_='story-data')
         for story in story_list:
             slider_div = story.find('div', class_='ep-slider-sceneImage')
@@ -1703,10 +1709,11 @@ class MajotabiDownload(Fall2020AnimeDownload):
         ]
         self.download_image_objects(image_objs, folder)
 
-    def download_character(self):
+    def download_character(self, soup=None):
         folder = self.create_character_directory()
         try:
-            soup = self.get_soup(self.PAGE_PREFIX)
+            if not soup:
+                soup = self.get_soup(self.PAGE_PREFIX)
             characters = soup.find_all('div', class_='chr-img')
             image_objs = []
             for character in characters:
@@ -1719,6 +1726,30 @@ class MajotabiDownload(Fall2020AnimeDownload):
             self.download_image_objects(image_objs, folder)
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + " - Character")
+            print(e)
+
+    def download_bluray(self, soup=None):
+        folder = self.create_bluray_directory()
+        image_objs = [
+            {'name': 'music_op', 'url': 'https://pbs.twimg.com/media/EjVEHVKVgAQ_uWB?format=jpg&name=large'},
+            {'name': 'music_ed', 'url': 'https://pbs.twimg.com/media/Ej5FapIU0AAas9c?format=jpg&name=large'},
+        ]
+        self.download_image_objects(image_objs, folder)
+        try:
+            if not soup:
+                soup = self.get_soup(self.PAGE_PREFIX)
+            data_div = soup.find('div', id='BddvdData')
+            if data_div:
+                images = data_div.find_all('img')
+                image_objs = []
+                for image in images:
+                    if image.has_attr('src'):
+                        image_url = self.PAGE_PREFIX + image['src'].replace('./', '')
+                        image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                        image_objs.append({'name': image_name, 'url': image_url})
+                self.download_image_objects(image_objs, folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Bluray")
             print(e)
 
 
