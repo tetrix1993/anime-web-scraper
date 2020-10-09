@@ -138,7 +138,7 @@ class MainDownload:
             print(e)
         return response
 
-    def download_image(self, url, filepath_without_extension, headers=None, file_type=None):
+    def download_image(self, url, filepath_without_extension, headers=None, to_jpg=False):
         """
         Download image to the filepath
         :param url:
@@ -168,6 +168,8 @@ class MainDownload:
                     filepath = filepath_without_extension + ".jpg"
                 elif 'image/gif' in content_type:
                     filepath = filepath_without_extension + ".gif"
+                elif 'image/webp' in content_type and to_jpg:
+                    filepath = filepath_without_extension + ".jpg"
                 else:
                     extension = url.split('.')[-1]
                     if extension == 'jpg' or extension == 'jpeg':
@@ -184,27 +186,32 @@ class MainDownload:
                 if MainDownload.is_file_exists(filepath):
                     return 1
 
-                if 'image/webp' in content_type and len(extension) > 0:
+                if 'image/webp' in content_type:
                     r.raise_for_status()
                     with open(filepath + '_temp', 'wb') as f:
                         for chunk in r.iter_content(chunk_size=8192):
                             if chunk:
                                 f.write(chunk)
-                    if extension == 'jpg':
+                    if len(extension) > 0:
+                        if extension == 'jpg':
+                            im = Image.open(filepath + '_temp').convert('RGB')
+                            im.save(filepath, 'jpeg')
+                            os.remove(filepath + '_temp')
+                        elif extension == 'png':
+                            im = Image.open(filepath + '_temp').convert('RGB')
+                            im.save(filepath, 'png')
+                            os.remove(filepath + '_temp')
+                        elif extension == 'gif':
+                            im = Image.open(filepath + '_temp')
+                            im.info.pop('background', None)
+                            im.save(filepath, 'gif', save_all=True)
+                            os.remove(filepath + '_temp')
+                        else: #webp
+                            os.rename(filepath + '_temp', filepath)
+                    elif to_jpg:
                         im = Image.open(filepath + '_temp').convert('RGB')
                         im.save(filepath, 'jpeg')
                         os.remove(filepath + '_temp')
-                    elif extension == 'png':
-                        im = Image.open(filepath + '_temp').convert('RGB')
-                        im.save(filepath, 'png')
-                        os.remove(filepath + '_temp')
-                    elif extension == 'gif':
-                        im = Image.open(filepath + '_temp')
-                        im.info.pop('background', None)
-                        im.save(filepath, 'gif', save_all=True)
-                        os.remove(filepath + '_temp')
-                    else: #webp
-                        os.rename(filepath + '_temp', filepath)
                 else:
                     r.raise_for_status()
                     with open(filepath, 'wb') as f:
@@ -386,11 +393,16 @@ class MainDownload:
     def download_image_objects(self, image_objs, filepath):
         is_successful = True
         for image_obj in image_objs:
+            if not isinstance(image_obj, dict) or 'name' not in image_obj.keys() or 'url' not in image_obj.keys():
+                continue
             filename = filepath + '/' + image_obj['name']
             if os.path.exists(filename + '.jpg') or os.path.exists(filename + '.png') or \
                     os.path.exists(filename + '.gif') or os.path.exists(filename + '.webp'):
                 continue
-            result = self.download_image(image_obj['url'], filename)
+            if 'to_jpg' in image_obj.keys() and isinstance(image_obj['to_jpg'], bool) and image_obj['to_jpg']:
+                result = self.download_image(image_obj['url'], filename, to_jpg=True)
+            else:
+                result = self.download_image(image_obj['url'], filename)
             if result == -1:
                 is_successful = False
         return is_successful
