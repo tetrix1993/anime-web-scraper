@@ -5,7 +5,7 @@ from datetime import datetime
 from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 
 
-# Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita https://slime300-anime.com/ #スライム倒して300年
+# Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita https://slime300-anime.com/ #スライム倒して300年 @slime300_PR
 
 
 # Spring 2021 Anime
