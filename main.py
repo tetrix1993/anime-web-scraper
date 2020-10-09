@@ -13,6 +13,7 @@ def run():
                   ReZero2Download(), UzakiChanDownload(), Oregairu3Download()]
     subclasses = Fall2020AnimeDownload.__subclasses__() \
         + Winter2021AnimeDownload.__subclasses__() \
+        + Spring2021AnimeDownload.__subclasses__() \
         + UnconfirmedDownload.__subclasses__()
     for subclass in subclasses:
         downloads.append(subclass())

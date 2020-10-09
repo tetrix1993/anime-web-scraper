@@ -211,7 +211,9 @@ class MainDownload:
                     elif to_jpg:
                         im = Image.open(filepath + '_temp').convert('RGB')
                         im.save(filepath, 'jpeg')
-                        os.remove(filepath + '_temp')
+                        #os.remove(filepath + '_temp')
+                        # Keep a copy
+                        os.rename(filepath + '_temp', filepath[0:len(filepath) - 3] + 'webp')
                 else:
                     r.raise_for_status()
                     with open(filepath, 'wb') as f:
