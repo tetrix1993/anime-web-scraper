@@ -447,6 +447,9 @@ class GochiUsa3Download(Fall2020AnimeDownload):
     def run(self):
         self.download_episode_preview()
         self.download_key_visual()
+        self.download_bluray()
+        self.download_bluray_bonus()
+        self.download_music()
 
     def download_episode_preview(self):
         try:
@@ -479,7 +482,6 @@ class GochiUsa3Download(Fall2020AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
-
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         image_objs = [
@@ -487,6 +489,110 @@ class GochiUsa3Download(Fall2020AnimeDownload):
             {'name': 'kv', 'url': 'https://pbs.twimg.com/media/EdIvRRNUEAI7tTZ?format=jpg&name=medium'}
         ]
         self.download_image_objects(image_objs, folder)
+
+    def download_bluray(self):
+        folder = self.create_bluray_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'bddvd/', decode=True)
+            boxes = soup.find_all('div', class_='nwu_box')
+            for box in boxes:
+                img_tag = box.find('img')
+                if img_tag and img_tag.has_attr('src'):
+                    img_url = self.PAGE_PREFIX + img_tag['src'].replace('../', '')
+                    content_length = requests.head(img_url).headers['Content-Length']
+                    if content_length == '269101':  # Skip Now Printing
+                        continue
+                    title = box.find('div', class_='title')
+                    if title:
+                        a_tag = title.find('a')
+                        if a_tag and a_tag.has_attr('href'):
+                            a_tag_text = a_tag.text.strip()
+                            if len(a_tag_text) > 2 and a_tag_text[-3] == '第' and a_tag_text[-1] == '巻':
+                                try:
+                                    bd_num = str(int(a_tag_text[-2]))
+                                except:
+                                    continue
+                                if self.is_image_exists('bd' + bd_num, folder):
+                                    continue
+                                bd_soup = self.get_soup(self.PAGE_PREFIX + a_tag['href'].replace('../', ''))
+                                phs = bd_soup.find_all('div', class_='ph')
+                                image_objs = []
+                                for i in range(len(phs)):
+                                    image = phs[i].find('img')
+                                    if image and image.has_attr('src'):
+                                        image_url = self.PAGE_PREFIX + \
+                                                    image['src'].replace('../', '').replace('/sn_', '/').split('?')[0]
+                                        cont_length = requests.head(image_url).headers['Content-Length']
+                                        if cont_length == '127825':  # Skip Now Printing
+                                            continue
+                                        if i == 0:
+                                            image_name = 'bd' + bd_num
+                                        else:
+                                            image_name = 'bd' + bd_num + '_' + str(i)
+                                        image_objs.append({'name': image_name, 'url': image_url})
+                                self.download_image_objects(image_objs, folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Blu-Ray')
+            print(e)
+
+    def download_bluray_bonus(self):
+        folder = self.create_bluray_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'bddvd/tokuten.html')
+            phs = soup.find_all('div', class_='ph')
+            image_objs = []
+            for ph in phs:
+                image = ph.find('img')
+                if image and image.has_attr('src'):
+                    image_url = self.PAGE_PREFIX + image['src'].replace('../', '').replace('/sn_', '/').split('?')[0]
+                    cont_length = requests.head(image_url).headers['Content-Length']
+                    if cont_length == '127825':  # Skip Now Printing
+                        continue
+                    image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                    image_objs.append({'name': image_name, 'url': image_url})
+            self.download_image_objects(image_objs, folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Blu-Ray Bonus')
+            print(e)
+
+    def download_music(self):
+        folder = self.create_custom_directory('music')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'cd/list00000000.html')
+            boxes = soup.find_all('div', class_='nwu_box')
+            visited_url = []
+            for box in boxes:
+                img_tag = box.find('img')
+                if img_tag and img_tag.has_attr('src'):
+                    img_url = self.PAGE_PREFIX + img_tag['src'].replace('../', '')
+                    content_length = requests.head(img_url).headers['Content-Length']
+                    if content_length == '59689':  # Skip Now Printing
+                        continue
+                    title = box.find('div', class_='title')
+                    if title:
+                        a_tag = title.find('a')
+                        if a_tag and a_tag.has_attr('href'):
+                            music_url = self.PAGE_PREFIX + a_tag['href'].replace('../', '').split('#')[0]
+                            if music_url in visited_url:
+                                continue
+                            visited_url.append(music_url)
+                            music_soup = self.get_soup(music_url)
+                            phs = music_soup.find_all('div', class_='ph')
+                            image_objs = []
+                            for ph in phs:
+                                image = ph.find('img')
+                                if image and image.has_attr('src'):
+                                    image_url = self.PAGE_PREFIX + \
+                                                image['src'].replace('../', '').replace('/sn_', '/').split('?')[0]
+                                    cont_length = requests.head(image_url).headers['Content-Length']
+                                    if cont_length == '111405':  # Skip Now Printing
+                                        continue
+                                    image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                                    image_objs.append({'name': image_name, 'url': image_url})
+                            self.download_image_objects(image_objs, folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Blu-Ray')
+            print(e)
 
 
 # Golden Kamuy 3rd Season
