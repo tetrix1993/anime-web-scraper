@@ -56,18 +56,40 @@ pip install pillow
 * [WebNewtype](https://webnewtype.com/)
 
 ### New Anime
+The premiere date for the anime listed here has not been announced.
 * [Cheat Kusushi no Slow Life: Isekai ni Tsukurou Drugstore](https://www.cheat-kusushi.jp/)
 * [Ijiranaide, Nagatoro-san](https://www.nagatorosan.jp/)
 * [Kaifuku Jutsushi no Yarinaoshi](http://kaiyari.com/)
+* [Kobayashi-san Chi no Maid Dragon S](https://maidragon.jp/2nd/)
+* [Osananajimi ga Zettai ni Makenai Love Comedy](https://osamake.com/)
+* [Princess Connect! Re:Dive 2nd Season](https://anime.priconne-redive.jp)
+* [Tate no Yuusha no Nariagari 2nd Season](http://shieldhero-anime.jp)
+
+### Spring 2021 Anime
+* [Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita](https://slime300-anime.com/)
+
+### Winter 2021 Anime
+* [Gotoubun no Hanayome ∬](https://www.tbs.co.jp/anime/5hanayome/)
+* [Horimiya](https://horimiya-anime.com/)
+* [Jaku-Chara Tomozaki-kun](http://tomozaki-koushiki.com/)
 * [Mushoku Tensei: Isekai Ittara Honki Dasu](https://mushokutensei.jp/)
+* [Non Non Biyori Nonstop](https://nonnontv.com)
 * [Ore dake Haireru Kakushi Dungeon](https://kakushidungeon-anime.jp/)
+* [Tatoeba Last Dungeon Mae no Mura no Shounen ga Joban no Machi de Kurasu Youna Monogatari](https://lasdan.com/)
+* [Urasekai Picnic](https://www.othersidepicnic.com)
+* [Yuru Camp△ 2nd Season](https://yurucamp.jp/second/)
 
 ### Fall 2020 Anime
 * [100-man no Inochi no Ue ni Ore wa Tatteiru](http://1000000-lives.com/)
+* [Adachi to Shimamura](https://www.tbs.co.jp/anime/adashima/)
+* [Assault Lily: Bouquet](https://anime.assaultlily-pj.com/)
+* [Dogeza de Tanondemita](https://dogeza-anime.com/)
 * [Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka III](http://danmachi.com/danmachi3/)
+* [Golden Kamuy 3rd Season](https://www.kamuy-anime.com/)
 * [Gochuumon wa Usagi Desu ka? Bloom](https://gochiusa.com/bloom/)
-* [Higurashi no Naku Koro ni (2020)](https://higurashianime.com/)
+* [Higurashi no Naku Koro ni Gou](https://higurashianime.com/)
 * [Iwa Kakeru!: Sport Climbing Girls](http://iwakakeru-anime.com/)
+* [Jujutsu Kaisen](https://jujutsukaisen.jp/)
 * [Kamisama ni Natta Hi](https://kamisama-day.jp/)
 * [Kami-tachi ni Hirowareta Otoko](https://kamihiro-anime.com/)
 * [Kimi to Boku no Saigo no Senjou, Aruiwa Sekai ga Hajimaru Seisen](https://kimisentv.com/)
@@ -75,11 +97,12 @@ pip install pillow
 * [Maesetsu!](https://maesetsu.jp/)
 * [Mahouka Koukou no Rettousei: Raihousha-hen](https://mahouka.jp/)
 * [Majo no Tabitabi](https://majotabi.jp/)
-* [Maou-jou de Oyasumi](https://maoujo-anime.com/)
+* [Maoujou de Oyasumi](https://maoujo-anime.com/)
+* [Munou na Nana](https://munounanana.com/)
 * [Ochikobore Fruit Tart](http://ochifuru-anime.com/)
 * [Rail Romanesque](https://railromanesque.jp/)
 * [Senyoku no Sigrdrifa](https://sigururi.com/)
-* [Tatoeba Last Dungeon Mae no Mura no Shounen ga Joban no Machi de Kurasu Youna Monogatari](https://lasdan.com/)
+* [Strike Witches: Road to Berlin](http://w-witch.jp/strike_witches-rtb/)
 * [Tonikaku Kawaii](http://tonikawa.com/)
 
 ### Summer 2020 Anime
@@ -130,4 +153,12 @@ pip install pillow
 * [Runway de Waratte](https://runway-anime.com/)
 * [Somali to Mori no Kamisama](https://somali-anime.com/)
 * [Toaru Kagaku no Railgun T](https://toaru-project.com/railgun_t/)
+
+### Notes
+The anime are grouped according to the season it first premiered. There are four seasons:
+* Winter (January to March)
+* Spring (April to June)
+* Summer (July to September)
+* Fall (October to December)
+
 </details>

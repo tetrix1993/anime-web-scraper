@@ -13,7 +13,7 @@ from PIL import Image
 # Dogeza de Tanondemita https://dogeza-anime.com/ #土下座で @dgz_anime [WED]
 # Gochuumon wa Usagi desu ka? Bloom https://gochiusa.com/bloom/ #gochiusa @usagi_anime [FRI]
 # Golden Kamuy 3rd Season https://www.kamuy-anime.com/ #ゴールデンカムイ @kamuy_official [MON]
-# Higurashi no Naku Koro ni (2020) https://higurashianime.com/ #ひぐらし @higu_anime [MON]
+# Higurashi no Naku Koro ni Gou https://higurashianime.com/ #ひぐらし @higu_anime [MON]
 # Iwa Kakeru!: Sport Climbing Girls http://iwakakeru-anime.com/ #いわかける #iwakakeru @iwakakeru_anime [THU]
 # Jujutsu Kaisen https://jujutsukaisen.jp/ #呪術廻戦 @animejujutsu [MON]
 # Kamisama ni Natta Hi https://kamisama-day.jp/ #神様になった日 @kamisama_Ch_AB [SAT/SUN]
@@ -639,10 +639,10 @@ class GoldenKamuy3Download(Fall2020AnimeDownload):
         self.download_image_objects(image_objs, folder)
 
 
-# Higurashi no Naku Koro ni (2020)
+# Higurashi no Naku Koro ni Gou
 class Higurashi2020Download(Fall2020AnimeDownload):
-    title = "Higurashi no Naku Koro ni (2020)"
-    keywords = [title, "When They Cry"]
+    title = "Higurashi no Naku Koro ni Gou"
+    keywords = [title, "When They Cry", "2020"]
 
     PAGE_PREFIX = 'https://higurashianime.com/'
     STORY_PAGE = 'https://higurashianime.com/intro.html'
