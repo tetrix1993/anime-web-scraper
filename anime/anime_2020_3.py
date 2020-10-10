@@ -4,6 +4,7 @@ from anime.main_download import MainDownload
 from datetime import datetime
 from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 
+# Deca-Dence http://decadence-anime.com/ #デカダンス #DECA_DENCE @decadence_anime
 # Dokyuu Hentai HxEros https://hxeros.com/ #エグゼロス #hxeros @hxeros_anime [WED]
 # Kanojo, Okarishimasu https://kanokari-official.com/ #かのかり #kanokari @kanokari_anime [WED]
 # Maou Gakuin no Futekigousha https://maohgakuin.com/ #魔王学院 @maohgakuin [MON]
@@ -24,6 +25,37 @@ class Summer2020AnimeDownload(MainDownload):
         self.base_folder = self.base_folder + "/2020-3"
         if not os.path.exists(self.base_folder):
             os.makedirs(self.base_folder)
+
+
+# Deca-Dence
+class DecaDenceDownload(Summer2020AnimeDownload):
+    title = 'Deca-Dence'
+    keywords = [title]
+
+    LAST_EPISODE = 12
+
+    def __init__(self):
+        super().__init__()
+        self.init_base_folder('decadence')
+
+    def run(self):
+        self.download_episode_preview()
+
+    def download_episode_preview(self):
+        if self.is_image_exists(str(self.LAST_EPISODE) + '_6'):
+            return
+
+        image_url_template = 'http://decadence-anime.com/assets/story/%s_%s.jpg'
+        for i in range(self.LAST_EPISODE):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_1'):
+                continue
+            for j in range(1, 7, 1):
+                image_name = episode + '_' + str(j)
+                image_url = image_url_template % (str(i + 1), str(j))
+                result = self.download_image(image_url, self.base_folder + '/' + image_name)
+                if result == -1:
+                    return
 
 
 # Dokyuu Hentai HxEros

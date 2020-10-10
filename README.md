@@ -106,6 +106,7 @@ The premiere date for the anime listed here has not been announced.
 * [Tonikaku Kawaii](http://tonikawa.com/)
 
 ### Summer 2020 Anime
+* [Deca-Dence](http://decadence-anime.com/)
 * [Dokyuu Hentai HxEros](https://hxeros.com/)
 * [Kanojo, Okarishimasu](https://kanokari-official.com/)
 * [Maou Gakuin no Futekigousha: Shijou Saikyou no Maou no Shiso, Tensei shite Shison-tachi no Gakkou e](https://maohgakuin.com/)
