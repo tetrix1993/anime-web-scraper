@@ -1,8 +1,10 @@
 # Anime Web Scraper
-Download images of anime's episode previews from official and news websites
+Download images of anime's episode previews from official and news websites.
 
 ## Introduction
 The Anime Web Scraper downloads images of previews of episodes from official websites. The program is written in Python 3.
+
+Click [here](https://youtu.be/K-83J5aZ5P0) to see the demo on YouTube.
 
 ## Setting Up
 1. Download and install the latest version of [Python](https://www.python.org/downloads/)
