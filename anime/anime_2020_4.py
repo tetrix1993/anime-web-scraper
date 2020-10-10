@@ -958,11 +958,13 @@ class KamisamaNiNattaHiDownload(Fall2020AnimeDownload):
         self.download_episode_preview()
         self.download_key_visual()
         self.download_character()
+        self.download_bluray()
+        self.download_bluray_bonus()
         self.download_music()
         self.download_other()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.STORY_PAGE)
+        #self.has_website_updated(self.STORY_PAGE)
         try:
             soup = self.get_soup(self.STORY_PAGE)
             nav = soup.find('nav', class_='page_tab')
@@ -1028,6 +1030,84 @@ class KamisamaNiNattaHiDownload(Fall2020AnimeDownload):
             print("Error in running " + self.__class__.__name__ + " - Character")
             print(e)
         self.download_image_objects(image_objs, folder)
+
+    def download_bluray(self):
+        folder = self.create_bluray_directory()
+        try:
+            for i in range(6):
+                num = i + 1
+                image_name = 'bd' + str(num)
+                if self.is_image_exists(image_name):
+                    continue
+                soup = self.get_soup(self.PAGE_PREFIX + 'bddvd/?no=' + str(num).zfill(2))
+                if soup is None:
+                    continue
+                div = soup.find('div', class_='jk_image')
+                if div:
+                    image = div.find('img')
+                    if image and image.has_attr('src'):
+                        image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                        content_length = requests.head(image_url).headers['Content-Length']
+                        if content_length == '20243': # Now Printing
+                            return
+                        image_objs = [{'name': image_name, 'url': image_url}]
+                        self.download_image_objects(image_objs, folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Blu-Ray")
+            print(e)
+
+    def download_bluray_bonus(self):
+        folder = self.create_bluray_directory()
+        cache_filepath = folder + '/' + 'cache'
+        processed = []
+        num_processed = 0
+        if os.path.exists(cache_filepath):
+            with open(cache_filepath, 'r') as f:
+                inputs = f.read()
+            processed = inputs.split(';')
+            num_processed = len(processed)
+
+        queries = ['cmn', 'ltd']
+        try:
+            for query in queries:
+                if query in processed:
+                    continue
+                page_url = self.PAGE_PREFIX + 'bddvd/?no=' + query
+                if query == 'cmn':
+                    search_tag = 'div'
+                elif query == 'ltd':
+                    search_tag = 'p'
+                else:
+                    continue
+                soup = self.get_soup(page_url)
+                if soup is None:
+                    continue
+                items = soup.find_all(search_tag, class_='item_image')
+                image_objs = []
+                image_count = 0
+                for item in items:
+                    image = item.find('img')
+                    if image and image.has_attr('src'):
+                        image_count += 1
+                        image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                        content_length = requests.head(image_url).headers['Content-Length']
+                        if content_length == '19597':  # Now Printing
+                            continue
+                        image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                        image_objs.append({'name': image_name, 'url': image_url})
+                self.download_image_objects(image_objs, folder)
+                if image_count == len(image_objs):
+                    processed.append(query)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Blu-Ray Bonus")
+            print(e)
+
+        if len(processed) > num_processed:
+            with open(cache_filepath, 'w+') as f:
+                for i in range(len(processed)):
+                    if i > 0:
+                        f.write(';')
+                    f.write(processed[i])
 
     def download_music(self):
         folder = self.create_custom_directory('music')
