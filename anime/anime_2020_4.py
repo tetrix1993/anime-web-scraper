@@ -1671,6 +1671,7 @@ class Mahouka2Download(Fall2020AnimeDownload):
     def download_bluray(self):
         folder = self.create_bluray_directory()
         image_objs = [
+            {'name': 'music_op', 'url': 'https://pbs.twimg.com/media/Ej8Am0hVoAAGbKw?format=jpg&name=large'},
             {'name': 'music_ed', 'url': 'https://pbs.twimg.com/media/EjaDeI-U8AATDHD?format=jpg&name=900x900'},
             {'name': 'bd_1_1', 'url': 'https://pbs.twimg.com/media/EjZfp3DU4AEmx9C?format=jpg&name=4096x4096'},
             {'name': 'bd_1_2', 'url': 'https://pbs.twimg.com/media/EjZfrEUUwAAzXn2?format=jpg&name=large'},
