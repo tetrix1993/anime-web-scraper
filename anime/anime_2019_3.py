@@ -490,10 +490,8 @@ class MaousamaRetryDownload(Summer2019AnimeDownload):
 
 # Okaasan Online
 class OkaasanOnlineDownload(Summer2019AnimeDownload):
-    title = "Maou-sama, Retry!"
-    keywords = ["Tsuujou Kougeki ga Zentai Kougeki de Ni-kai Kougeki no Okaasan wa Suki Desu ka?",
-                "Do You Like Your Mom? Her Normal Attack is Two Attacks at Full Power",
-                "Okaasan online"]
+    title = "Tsuujou Kougeki ga Zentai Kougeki de Ni-kai Kougeki no Okaasan wa Suki Desu ka?"
+    keywords = [title, "Do You Like Your Mom? Her Normal Attack is Two Attacks at Full Power", "Okaasan online"]
 
     PAGE_PREFIX = "https://okaasan-online.com/story/"
     IMAGE_PREFIX = "https://okaasan-online.com"
