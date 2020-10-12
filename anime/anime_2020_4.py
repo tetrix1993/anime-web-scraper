@@ -2124,6 +2124,7 @@ class OchifuruDownload(Fall2020AnimeDownload):
         self.download_episode_preview()
         self.download_key_visual()
         self.download_character()
+        self.download_bluray()
         self.download_music()
 
     def download_episode_preview(self):
@@ -2206,6 +2207,24 @@ class OchifuruDownload(Fall2020AnimeDownload):
                     break
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + ' - Character')
+            print(e)
+
+    def download_bluray(self):
+        folder = self.create_bluray_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'package.html')
+            div = soup.find('div', class_='newsPaging')
+            if div:
+                images = div.find_all('img')
+                image_objs = []
+                for image in images:
+                    if image.has_attr('src'):
+                        image_url = self.PAGE_PREFIX + image['src']
+                        image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                        image_objs.append({'name': image_name, 'url': image_url})
+                self.download_image_objects(image_objs, folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Blu-Ray")
             print(e)
 
     def download_music(self):
