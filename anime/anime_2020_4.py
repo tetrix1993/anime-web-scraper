@@ -2252,6 +2252,7 @@ class OneRoom3Download(Fall2020AnimeDownload):
     keywords = [title, "Third"]
 
     PAGE_PREFIX = "https://oneroom-anime.com/"
+    STORY_PAGE = "https://oneroom-anime.com/story/"
 
     def __init__(self):
         super().__init__()
@@ -2263,7 +2264,47 @@ class OneRoom3Download(Fall2020AnimeDownload):
         self.download_bluray()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        try:
+            soup = self.get_soup(self.STORY_PAGE)
+            story_div = soup.find('div', class_='storyArea')
+            if story_div:
+                lis = story_div.find_all('li')
+                for li in lis:
+                    h4 = li.find('h4')
+                    if h4 and '第' in h4.text and '話' in h4.text:
+                        try:
+                            episode = str(int(h4.text.split('第')[1].split('話')[0])).zfill(2)
+                        except:
+                            continue
+                    else:
+                        continue
+                    if self.is_image_exists(episode + '_1'):
+                        continue
+                    image_objs = []
+                    first_img = li.find('img')
+                    if first_img and first_img.has_attr('src'):
+                        image_objs.append({'name': episode + '_1', 'url': first_img['src']})
+                    a_tag = li.find('a')
+                    if a_tag and a_tag.has_attr('href'):
+                        ep_soup = self.get_soup(a_tag['href'])
+                        article_tag = ep_soup.find('article')
+                        if not article_tag:
+                            continue
+                        main_img = article_tag.find('div', class_='mainImage')
+                        if main_img:
+                            main_img_tag = main_img.find('img')
+                            if main_img_tag and main_img_tag.has_attr('src'):
+                                image_objs.append({'name': episode + '_2', 'url': main_img_tag['src']})
+                        img_lis = article_tag.find_all('li')
+                        for i in range(len(img_lis)):
+                            image = img_lis[i].find('img')
+                            if image and image.has_attr('src'):
+                                image_num = i + 3
+                                image_objs.append({'name': episode + '_' + str(image_num), 'url': image['src']})
+                    self.download_image_objects(image_objs, self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
