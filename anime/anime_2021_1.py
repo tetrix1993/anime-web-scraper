@@ -124,7 +124,7 @@ class TomozakiKunDownload(Winter2021AnimeDownload):
     def run(self):
         self.download_episode_preview()
         self.download_key_visual()
-        #self.download_character()
+        self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX)
@@ -142,6 +142,17 @@ class TomozakiKunDownload(Winter2021AnimeDownload):
     def download_character(self):
         folder = self.create_character_directory()
         image_objs = []
+        image_url_1 = self.PAGE_PREFIX + 'img/character/chara%s_img.png'
+        image_url_2 = self.PAGE_PREFIX + 'img/character/chara%s_name.png'
+        for i in range(20):
+            url_1 = image_url_1 % str(i + 1)
+            if not self.is_valid_url(url_1):
+                break
+            url_2 = image_url_2 % str(i + 1)
+            name_1 = self.extract_image_name_from_url(url_1, with_extension=False)
+            name_2 = self.extract_image_name_from_url(url_2, with_extension=False)
+            image_objs.append({'name': name_1, 'url': url_1})
+            image_objs.append({'name': name_2, 'url': url_2})
         self.download_image_objects(image_objs, folder)
 
 

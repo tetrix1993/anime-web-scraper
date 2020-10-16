@@ -418,6 +418,38 @@ class MainDownload:
             or os.path.exists(filename + '.gif') \
             or os.path.exists(filename + '.webp')
 
+    @staticmethod
+    def is_valid_url(url):
+        if isinstance(url, str) and (url.startswith('http://') or url.startswith('https://')):
+            try:
+                r = requests.head(url)
+                return r.status_code < 400
+            except:
+                pass
+        return False
+
+    @staticmethod
+    def is_matching_content_length(url, lengths):
+        content_lengths = []
+        if isinstance(lengths, int):
+            content_lengths.append(str(lengths))
+        elif isinstance(lengths, str):
+            content_lengths.append(lengths)
+        if isinstance(lengths, list):
+            for length in lengths:
+                if isinstance(length, int):
+                    content_lengths.append(str(length))
+                elif isinstance(length, str):
+                    content_lengths.append(length)
+        try:
+            content_length = requests.head(url).headers['Content-Length']
+            for cl in content_lengths:
+                if cl == content_length:
+                    return True
+        except:
+            pass
+        return False
+
     # Match filter
     def match(self, s_filter):
         if not isinstance(s_filter, SearchFilter):
