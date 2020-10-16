@@ -195,6 +195,46 @@ class AdashimaDownload(Fall2020AnimeDownload):
         ]
         self.download_image_objects(image_objs, folder)
 
+        bd_prefix = 'https://www.tbs.co.jp/anime/adashima/disc/'
+
+        # Blu-Ray Bonus
+        try:
+            soup = self.get_soup('https://www.tbs.co.jp/anime/adashima/disc/store.html')
+            table = soup.find('table', class_='oritoku-table')
+            tds = table.find_all('td', class_='td-img')
+            for td in tds:
+                a_tag = td.find('a')
+                if a_tag and a_tag.has_attr('data-image'):
+                    image_url = bd_prefix + a_tag['data-image']
+                    image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Blu-Ray Bonus')
+            print(e)
+
+        # Blu-Ray
+        try:
+            for i in range(4):
+                volume = str(i + 1)
+                if self.is_image_exists('bd_' + volume, folder):
+                    continue
+                bd_url = 'https://www.tbs.co.jp/anime/adashima/disc/disc0%s.html' % volume
+                soup = self.get_soup(bd_url)
+                div = soup.find('div', class_='disc-img')
+                if div:
+                    image = div.find('img')
+                    if image and image.has_attr('src'):
+                        image_url = bd_prefix + image['src']
+                        if self.is_matching_content_length(image_url, 25371):
+                            break
+                        image_name = 'bd_' + volume
+                        self.add_to_image_list(image_name, image_url)
+                        self.download_image_list(folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Blu-Ray')
+            print(e)
+
 
 # Assault Lily: Bouquet
 class AssaultLilyDownload(Fall2020AnimeDownload):

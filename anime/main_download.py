@@ -2,7 +2,6 @@ import requests
 import random
 import datetime
 import anime.constants as constants
-import urllib.request
 import os
 import re
 from bs4 import BeautifulSoup as bs
@@ -35,8 +34,7 @@ class MainDownload:
     def get_response(url, headers=None, decode=False):
         response = ""
         if headers is None:
-            headers = {
-                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
+            headers = constants.HTTP_HEADER_USER_AGENT
         try:
             result = requests.get(url, headers=headers)
             if decode:
@@ -49,8 +47,7 @@ class MainDownload:
 
     def has_website_updated(self, url, cache_name='story', headers=None, charset=None):
         if headers is None:
-            headers = {
-                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
+            headers = constants.HTTP_HEADER_USER_AGENT
         if charset is None:
             charset = 'utf-8'
         try:
@@ -98,10 +95,8 @@ class MainDownload:
 
     @staticmethod
     def get_soup(url, headers=None, decode=False):
-        if headers == None:
-            headers = {}
-            headers[
-                'User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'
+        if headers is None:
+            headers = constants.HTTP_HEADER_USER_AGENT
         try:
             result = requests.get(url, headers=headers)
             if decode:
@@ -115,10 +110,8 @@ class MainDownload:
     @staticmethod
     def get_json(url, headers=None):
         response = ""
-        if headers == None:
-            headers = {}
-            headers[
-                'User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'
+        if headers is None:
+            headers = constants.HTTP_HEADER_USER_AGENT
         try:
             response = requests.get(url, headers=headers).json()
         except Exception as e:
@@ -128,10 +121,8 @@ class MainDownload:
     @staticmethod
     def post_response(url, headers=None, data=None):
         response = ""
-        if headers == None:
-            headers = {}
-            headers[
-                'User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'
+        if headers is None:
+            headers = constants.HTTP_HEADER_USER_AGENT
         try:
             result = requests.post('https://moca-news.net/pd.php', headers=headers, data=data)
             response = str(result.content.decode())
@@ -148,10 +139,8 @@ class MainDownload:
         :return: 0 - Success, 1 - File Exists, -1 - Error
         """
 
-        if headers == None:
-            headers = {}
-            headers[
-                'User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'
+        if headers is None:
+            headers = constants.HTTP_HEADER_USER_AGENT
 
         # Download image:
         extension = ''
@@ -238,10 +227,8 @@ class MainDownload:
             return -1
 
     def download_image_if_exists(self, url, filepath_without_extension, old_filepath, headers=None):
-        if headers == None:
-            headers = {}
-            headers[
-                'User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'
+        if headers is None:
+            headers = constants.HTTP_HEADER_USER_AGENT
 
         temp_filepath = self.base_folder + "/%032x" % random.getrandbits(128)
         # Download image:
