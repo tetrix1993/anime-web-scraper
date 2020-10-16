@@ -16,6 +16,7 @@ class MainDownload:
     keywords = []
     season = None
     season_name = ""
+    image_list = []
 
     def __init__(self):
         self.base_folder = "download"
@@ -449,6 +450,19 @@ class MainDownload:
         except:
             pass
         return False
+
+    def add_to_image_list(self, name, url, to_jpg=False):
+        image_obj = {'name': name, 'url': url}
+        if to_jpg:
+            image_obj['to_jpg'] = True
+        self.image_list.append(image_obj)
+
+    def download_image_list(self, folder, clear=True):
+        if len(self.image_list) == 0:
+            return
+        self.download_image_objects(self.image_list, folder)
+        if clear:
+            self.image_list.clear()
 
     # Match filter
     def match(self, s_filter):

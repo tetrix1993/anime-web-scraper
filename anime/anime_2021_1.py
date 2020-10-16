@@ -141,7 +141,6 @@ class TomozakiKunDownload(Winter2021AnimeDownload):
 
     def download_character(self):
         folder = self.create_character_directory()
-        image_objs = []
         image_url_1 = self.PAGE_PREFIX + 'img/character/chara%s_img.png'
         image_url_2 = self.PAGE_PREFIX + 'img/character/chara%s_name.png'
         for i in range(20):
@@ -151,9 +150,9 @@ class TomozakiKunDownload(Winter2021AnimeDownload):
             url_2 = image_url_2 % str(i + 1)
             name_1 = self.extract_image_name_from_url(url_1, with_extension=False)
             name_2 = self.extract_image_name_from_url(url_2, with_extension=False)
-            image_objs.append({'name': name_1, 'url': url_1})
-            image_objs.append({'name': name_2, 'url': url_2})
-        self.download_image_objects(image_objs, folder)
+            self.add_to_image_list(name_1, url_1)
+            self.add_to_image_list(name_2, url_2)
+        self.download_image_list(folder)
 
 
 # Mushoku Tensei: Isekai Ittara Honki Dasu
