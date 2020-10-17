@@ -1796,6 +1796,11 @@ class Mahouka2Download(Fall2020AnimeDownload):
             {'name': 'bd_1_1', 'url': 'https://pbs.twimg.com/media/EjZfp3DU4AEmx9C?format=jpg&name=4096x4096'},
             {'name': 'bd_1_2', 'url': 'https://pbs.twimg.com/media/EjZfrEUUwAAzXn2?format=jpg&name=large'},
             {'name': 'bd_bonus_1', 'url': 'https://pbs.twimg.com/media/EjZfyqAUwAAOBrL?format=jpg&name=4096x4096'},
+            {'name': 'bd_bonus_2', 'url': 'https://pbs.twimg.com/media/EkhCx5mU8AAD3nA?format=jpg&name=4096x4096'},
+            {'name': 'bd_bonus_3', 'url': 'https://pbs.twimg.com/media/EkhCy7jU0AYniNf?format=jpg&name=large'},
+            {'name': 'bd_bonus_4', 'url': 'https://pbs.twimg.com/media/EkhDWRpVcAA-lgE?format=jpg&name=large'},
+            {'name': 'bd_bonus_5', 'url': 'https://pbs.twimg.com/media/EkhDXcJVoAEGq9g?format=jpg&name=large'},
+            {'name': 'bd_bonus_6', 'url': 'https://pbs.twimg.com/media/EkhDYR9U8AMFpw3?format=jpg&name=large'},
         ]
         self.download_image_objects(image_objs, folder)
 
@@ -1820,10 +1825,11 @@ class Mahouka2Download(Fall2020AnimeDownload):
                     continue
                 soup = self.get_soup(bd_urls[i])
                 if soup:
-                    package_div = soup.find('div', class_='p-package')
-                    if package_div:
+                    package_divs = soup.find_all('div', class_='pkg_info')
+                    for package_div in package_divs:
                         images = package_div.find_all('img')
                         image_objs = []
+                        stop = False
                         for image in images:
                             if image.has_attr('src'):
                                 image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
@@ -1834,15 +1840,19 @@ class Mahouka2Download(Fall2020AnimeDownload):
                                 if content_length == '12538' or content_length == '22084':  # Skip Now Printing
                                     if 0 < i < 5:
                                         to_process = False
+                                        stop = True
                                         break
                                     else:
                                         continue
                                 image_objs.append({'name': image_name, 'url': image_url})
                                 if 0 < i < 5:  # Evaluate only the first image
+                                    stop = True
                                     break
                         self.download_image_objects(image_objs, folder)
                         if len(images) == len(image_objs):
                             processed.append(package_id[i])
+                        if stop:
+                            break
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + ' - Blu-ray')
             print(e)
