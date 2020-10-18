@@ -2116,6 +2116,7 @@ class MunounaNanaDownload(Fall2020AnimeDownload):
         self.download_episode_preview()
         self.download_key_visual()
         self.download_character()
+        self.download_bluray()
 
     def download_episode_preview(self):
         story_template = 'https://munounanana.com/assets/story/%s_%s.jpg'
@@ -2152,9 +2153,28 @@ class MunounaNanaDownload(Fall2020AnimeDownload):
                     image_url = self.PAGE_PREFIX + img['src'].replace('../', '').split('?')[0]
                     image_name = self.extract_image_name_from_url(image_url, with_extension=False)
                     image_objs.append({'name': image_name, 'url': image_url})
-        except:
-            pass
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Character")
+            print(e)
         self.download_image_objects(image_objs, folder)
+
+    def download_bluray(self):
+        folder = self.create_bluray_directory()
+        try:
+            soup = self.get_soup('https://munounanana.com/bddvd/')
+            containers = soup.find_all('div', class_='bddvd-container')
+            for container in containers:
+                images = container.find_all('img')
+                self.image_list = []
+                for image in images:
+                    if image.has_attr('src'):
+                        image_url = self.PAGE_PREFIX + image['src'].replace('../', '').split('?')[0]
+                        image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                        self.add_to_image_list(name=image_name, url=image_url)
+                self.download_image_list(folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Blu-Ray")
+            print(e)
 
 
 # Ochikobore Fruit Tart
