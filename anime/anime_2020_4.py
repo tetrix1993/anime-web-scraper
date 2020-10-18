@@ -887,8 +887,8 @@ class IwakakeruDownload(Fall2020AnimeDownload):
                                             image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
                                             image_name = self.extract_image_name_from_url(image_url,
                                                                                           with_extension=False)
-                                            if self.is_image_exists(image_name, folder):
-                                                continue
+                                            # if self.is_image_exists(image_name, folder):
+                                            #     continue
                                             bd_content_length = requests.head(image_url).headers['Content-Length']
                                             if bd_content_length == '15283' or bd_content_length == '3379':
                                                 continue
@@ -1584,11 +1584,11 @@ class KumaBearDownload(Fall2020AnimeDownload):
                     for ph_tag in ph_tags:
                         image = ph_tag.find('img')
                         if image and image.has_attr('src'):
-                            image_count += 1
                             image_url = self.PAGE_PREFIX + image['src'].replace('../', '').split('?')[0]
                             image_name = self.extract_image_name_from_url(image_url, with_extension=False)
-                            if self.is_image_exists(image_name, folder):
-                                continue
+                            # if self.is_image_exists(image_name, folder):
+                            #     continue
+                            image_count += 1
                             content_length = requests.head(image_url).headers['Content-Length']
                             if content_length == '58281' or content_length == '106581':
                                 if i > 0:
@@ -1826,16 +1826,18 @@ class Mahouka2Download(Fall2020AnimeDownload):
                 soup = self.get_soup(bd_urls[i])
                 if soup:
                     package_divs = soup.find_all('div', class_='pkg_info')
+                    image_objs = []
+                    image_count = 0
                     for package_div in package_divs:
                         images = package_div.find_all('img')
-                        image_objs = []
                         stop = False
                         for image in images:
                             if image.has_attr('src'):
                                 image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
                                 image_name = self.extract_image_name_from_url(image_url, with_extension=False)
-                                if self.is_image_exists(image_name, folder):
-                                    continue
+                                # if self.is_image_exists(image_name, folder):
+                                #     continue
+                                image_count += 1
                                 content_length = requests.head(image_url).headers['Content-Length']
                                 if content_length == '12538' or content_length == '22084':  # Skip Now Printing
                                     if 0 < i < 5:
@@ -1848,11 +1850,11 @@ class Mahouka2Download(Fall2020AnimeDownload):
                                 if 0 < i < 5:  # Evaluate only the first image
                                     stop = True
                                     break
-                        self.download_image_objects(image_objs, folder)
-                        if len(images) == len(image_objs):
-                            processed.append(package_id[i])
                         if stop:
                             break
+                    self.download_image_objects(image_objs, folder)
+                    if image_count == len(image_objs):
+                        processed.append(package_id[i])
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + ' - Blu-ray')
             print(e)
