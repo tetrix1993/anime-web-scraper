@@ -1005,6 +1005,16 @@ class KamisamaNiNattaHiDownload(Fall2020AnimeDownload):
 
     def download_episode_preview(self):
         #self.has_website_updated(self.STORY_PAGE)
+        # Create episode log
+        cache_filepath = self.base_folder + '/log/episode_cache'
+        processed = []
+        num_processed = 0
+        if os.path.exists(cache_filepath):
+            with open(cache_filepath, 'r') as f:
+                inputs = f.read()
+            processed = inputs.split(';')
+            num_processed = len(processed)
+
         try:
             soup = self.get_soup(self.STORY_PAGE)
             nav = soup.find('nav', class_='page_tab')
@@ -1027,16 +1037,29 @@ class KamisamaNiNattaHiDownload(Fall2020AnimeDownload):
                         div = episode_soup.find('div', class_='main_image')
                         if div:
                             images = div.find_all('img')
-                            image_objs = []
+                            self.image_list = []
+                            img_num = 1
                             for i in range(len(images)):
                                 if images[i].has_attr('src'):
                                     image_url = self.STORY_PAGE + images[i]['src']
-                                    image_name = episode + '_' + str(i + 1)
-                                    image_objs.append({'name': image_name, 'url': image_url})
-                            self.download_image_objects(image_objs, self.base_folder)
+                                    if image_url in processed:
+                                        continue
+                                    while self.is_image_exists(episode + '_' + str(img_num)):
+                                        img_num += 1
+                                    image_name = episode + '_' + str(img_num)
+                                    self.add_to_image_list(image_name, image_url)
+                                    self.download_image_list(self.base_folder)
+                                    processed.append(image_url)
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
+
+        if len(processed) > num_processed:
+            with open(cache_filepath, 'w+') as f:
+                for i in range(len(processed)):
+                    if i > 0:
+                        f.write(';')
+                    f.write(processed[i])
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
