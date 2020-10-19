@@ -1047,9 +1047,9 @@ class KamisamaNiNattaHiDownload(Fall2020AnimeDownload):
                                     while self.is_image_exists(episode + '_' + str(img_num)):
                                         img_num += 1
                                     image_name = episode + '_' + str(img_num)
-                                    self.add_to_image_list(image_name, image_url)
-                                    self.download_image_list(self.base_folder)
-                                    processed.append(image_url)
+                                    result = self.download_image(image_url, self.base_folder + '/' + image_name)
+                                    if result != -1:
+                                        processed.append(image_url)
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
