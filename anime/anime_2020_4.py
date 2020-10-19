@@ -1407,18 +1407,33 @@ class KumaBearDownload(Fall2020AnimeDownload):
                             episode = str(int(a_tag.text.replace('＃', '').replace('#', ''))).zfill(2)
                         except:
                             continue
-                        if self.is_image_exists(episode + '_1'):
+                        if self.is_image_exists(episode + '_6'):
                             continue
+                        new_photo = False
                         episode_url = self.PAGE_PREFIX + a_tag['href'].replace('../', '')
                         episode_soup = self.get_soup(episode_url)
                         wdxmax_div_tag = episode_soup.find('div', class_='wdxmax')
                         if wdxmax_div_tag:
                             images = wdxmax_div_tag.find_all('img')
+                            if self.is_image_exists(episode + '_4') and len(images) == 6:
+                                new_photo = True
                             image_objs = []
+                            k = 4
+                            filesizes = []
+                            if new_photo:
+                                for m in range(4):
+                                    filesizes.append(os.path.getsize(
+                                        self.base_folder + ('/%s_%s.jpg' % (episode, str(m + 1)))))
                             for j in range(len(images)):
                                 if images[j].has_attr('src'):
                                     image_url = self.PAGE_PREFIX + images[j]['src'].replace('../', '').split('?')[0]
-                                    image_name = episode + '_' + str(j + 1)
+                                    if new_photo:
+                                        if self.is_matching_content_length(image_url, filesizes):
+                                            continue
+                                        k += 1
+                                        image_name = episode + '_' + str(k)
+                                    else:
+                                        image_name = episode + '_' + str(j + 1)
                                     image_objs.append({'name': image_name, 'url': image_url})
                             self.download_image_objects(image_objs, self.base_folder)
         except Exception as e:
