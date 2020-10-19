@@ -1415,8 +1415,11 @@ class KumaBearDownload(Fall2020AnimeDownload):
                         wdxmax_div_tag = episode_soup.find('div', class_='wdxmax')
                         if wdxmax_div_tag:
                             images = wdxmax_div_tag.find_all('img')
-                            if self.is_image_exists(episode + '_4') and len(images) == 6:
-                                new_photo = True
+                            if self.is_image_exists(episode + '_4'):
+                                if len(images) == 6:
+                                    new_photo = True
+                                else:
+                                    continue
                             image_objs = []
                             k = 4
                             filesizes = []
