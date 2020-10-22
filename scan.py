@@ -74,13 +74,16 @@ class AniverseMagazineScanner(MainScanner):
         self.last_episode = last_episode
         self.suffix = suffix
 
-    def has_results(self, text):
+    @staticmethod
+    def has_results(text):
         return "<h2>Sorry, nothing found.</h2>" not in text
-    
-    def has_next_page(self, text):
+
+    @staticmethod
+    def has_next_page(text):
         return '<i class="fa fa-long-arrow-right">' in text
 
-    def get_episode_num(self, result, suffix):
+    @staticmethod
+    def get_episode_num(result, suffix):
         split1 = result[0].split(suffix)[0].split('第')
         if len(split1) < 2:
             return -1
@@ -89,7 +92,8 @@ class AniverseMagazineScanner(MainScanner):
         except:
             return -1
 
-    def get_article_id(self, url):
+    @staticmethod
+    def get_article_id(url):
         split1 = url.split('/')
         if len(split1) < 1:
             return ""
@@ -173,14 +177,17 @@ class WebNewtypeScanner(MainScanner):
         self.keyword = keyword
         self.base_folder = base_folder.replace("download/","") + "-wnt"
         self.last_episode = last_episode
-    
-    def has_results(self, text):
+
+    @staticmethod
+    def has_results(text):
         return "<li>記事はありません</li>" not in text
-    
-    def has_next_page(self, text):
+
+    @staticmethod
+    def has_next_page(text):
         return '<img src="/img/pager_right.png"' in text and '<span class="pageNumber"><img src="/img/pager_right.png"' not in text
-    
-    def get_episode_num(self, result):
+
+    @staticmethod
+    def get_episode_num(result):
         split1 = result[0].split('話')[0].split('第')
         if len(split1) < 2:
             return -1
@@ -188,8 +195,9 @@ class WebNewtypeScanner(MainScanner):
             return int(split1[1])
         except:
             return -1
-    
-    def get_article_id(self, url):
+
+    @staticmethod
+    def get_article_id(url):
         split1 = url.split('/')
         if len(split1) < 3:
             return ""
@@ -293,7 +301,8 @@ class MocaNewsScanner(MainScanner):
                 pass
         return date
 
-    def get_episode_num(self, result):
+    @staticmethod
+    def get_episode_num(result):
         split1 = result[0].split('話')[0].split('第')
         if len(split1) < 2:
             return -1
@@ -302,7 +311,8 @@ class MocaNewsScanner(MainScanner):
         except:
             return -1
 
-    def get_article_id(self, text):
+    @staticmethod
+    def get_article_id(text):
         split1 = text.split('/')
         if len(split1) == 6:
             return split1[2] + '/' + split1[3]

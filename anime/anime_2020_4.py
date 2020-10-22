@@ -2235,6 +2235,7 @@ class OchifuruDownload(Fall2020AnimeDownload):
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_external()
         self.download_key_visual()
         self.download_character()
         self.download_bluray()
@@ -2287,6 +2288,10 @@ class OchifuruDownload(Fall2020AnimeDownload):
                 result = self.download_image(image_url, self.base_folder + '/' + image_name)
                 if result == -1:
                     return
+
+    def download_episode_preview_external(self):
+        jp_title = 'おちこぼれフルーツタルト'
+        AniverseMagazineScanner(jp_title, self.base_folder, 12).run()
 
     def download_key_visual(self):
         keyvisual_folder = self.create_key_visual_directory()
