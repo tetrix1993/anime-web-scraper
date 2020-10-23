@@ -220,7 +220,14 @@ class MainDownload:
                 os.makedirs(log_folder)
             logpath = log_folder + '/download.log'
             with open(logpath, 'a+', encoding='utf-8') as f:
-                f.write(timenow + '\t' + filename + '\t' + url + '\n')
+                f.write('%s\t%s\t%s\n' % (timenow, filename, url))
+
+            # Global log path
+            try:
+                with open(constants.GLOBAL_DOWNLOAD_LOG_FILE, 'a+', encoding='utf-8') as f:
+                    f.write('%s\t%s\t%s\t%s\n' % (timenow, self.base_folder, filename, url))
+            except:
+                print('Unable to save global log for file: %s' % filepath)
             return 0
         except Exception as e:
             print("Failed to download " + url + ' - ' + str(e))
