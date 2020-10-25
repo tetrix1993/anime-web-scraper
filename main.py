@@ -4,10 +4,14 @@ import migrate
 
 
 MAX_PROCESSES = 30
+PROCESS_FOLDER = 'process'
 
 
 def run():
     migrate.run()
+    if not os.path.exists(PROCESS_FOLDER):
+        os.makedirs(PROCESS_FOLDER)
+
     downloads = [Kaguyasama2Download(), TeiboDownload()]
     downloads += [HxErosDownload(), KanokariDownload(), MaohgakuinDownload(), MonIshaDownload(),
                   ReZero2Download(), UzakiChanDownload(), Oregairu3Download()]
@@ -28,9 +32,17 @@ def run():
 
 
 def run_process(download):
-    print("Running " + download.__class__.__name__ + " (" + str(os.getpid()) + ")")
+    pid = str(os.getpid())
+    class_name = download.__class__.__name__
+    filepath = PROCESS_FOLDER + '/' + class_name
+    print("Running %s" % class_name)
+    if os.path.exists(PROCESS_FOLDER):
+        with open(filepath, 'w+') as f:
+            f.write(pid)
     download.run()
-    print("Ending " + download.__class__.__name__ + " (" + str(os.getpid()) + ")")
+    print("Ending %s" % class_name)
+    if os.path.exists(filepath):
+        os.remove(filepath)
 
 
 def run_process_function(fn):

@@ -1,16 +1,25 @@
 from search import SearchFilter
-from anime import MainDownload
 from multiprocessing import Pool
 from anime import *
 import migrate
 
 
 MAX_PROCESSES = 30
+PROCESS_FOLDER = 'process'
 
 
 def run_process(download):
-    print("Running " + download.__class__.__name__ + " (" + str(os.getpid()) + ")")
+    pid = str(os.getpid())
+    class_name = download.__class__.__name__
+    filepath = PROCESS_FOLDER + '/' + class_name
+    print("Running %s" % class_name)
+    if os.path.exists(PROCESS_FOLDER):
+        with open(filepath, 'w+') as f:
+            f.write(pid)
     download.run()
+    # print("Ending %s" % class_name)
+    if os.path.exists(filepath):
+        os.remove(filepath)
 
 
 def process_download(downloads):
@@ -30,6 +39,9 @@ def process_download(downloads):
 
 def run():
     migrate.run()
+    if not os.path.exists(PROCESS_FOLDER):
+        os.makedirs(PROCESS_FOLDER)
+
     while True:
         print_intro_message()
         try:
