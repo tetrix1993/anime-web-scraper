@@ -849,6 +849,13 @@ class IwakakeruDownload(Fall2020AnimeDownload):
 
     def download_bluray(self):
         folder = self.create_bluray_directory()
+        music_url = self.PAGE_PREFIX + 'news/wp/wp-content/uploads/2020/10/%s.jpg'
+        image_objs = [
+            {'name': 'music_op', 'url': music_url % 'アニメ盤_LACM-24064'},
+            {'name': 'music_ed', 'url': music_url % 'h1_lacm24067'},
+        ]
+        self.download_image_objects(image_objs, folder)
+
         cache_filepath = folder + '/' + 'cache'
         processed = []
         num_processed = 0
