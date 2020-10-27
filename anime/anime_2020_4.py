@@ -2578,6 +2578,10 @@ class SigrdrifaDownload(Fall2020AnimeDownload):
 
     def download_bluray(self):
         folder = self.create_bluray_directory()
+        image_objs = [
+            {'name': 'img_special_01_2', 'url': 'https://sigururi.com/news/SYS/CONTENTS/2020102619501742165262'}
+        ]
+        self.download_image_objects(image_objs, folder)
         try:
             bd_url_template = self.PAGE_PREFIX + 'bddvd/vol%s/'
             bd_urls = [self.PAGE_PREFIX + 'bddvd/special/'] + [bd_url_template % str(i + 1).zfill(2) for i in range(6)]
