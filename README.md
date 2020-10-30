@@ -59,7 +59,6 @@ pip install pillow
 The premiere date for the anime listed here has not been announced.
 * [Cheat Kusushi no Slow Life: Isekai ni Tsukurou Drugstore](https://www.cheat-kusushi.jp/)
 * [Ijiranaide, Nagatoro-san](https://www.nagatorosan.jp/)
-* [Kaifuku Jutsushi no Yarinaoshi](http://kaiyari.com/)
 * [Kobayashi-san Chi no Maid Dragon S](https://maidragon.jp/2nd/)
 * [Osananajimi ga Zettai ni Makenai Love Comedy](https://osamake.com/)
 * [Princess Connect! Re:Dive 2nd Season](https://anime.priconne-redive.jp)
@@ -72,6 +71,7 @@ The premiere date for the anime listed here has not been announced.
 * [Gotoubun no Hanayome ∬](https://www.tbs.co.jp/anime/5hanayome/)
 * [Horimiya](https://horimiya-anime.com/)
 * [Jaku-Chara Tomozaki-kun](http://tomozaki-koushiki.com/)
+* [Kaifuku Jutsushi no Yarinaoshi](http://kaiyari.com/)
 * [Mushoku Tensei: Isekai Ittara Honki Dasu](https://mushokutensei.jp/)
 * [Non Non Biyori Nonstop](https://nonnontv.com)
 * [Ore dake Haireru Kakushi Dungeon](https://kakushidungeon-anime.jp/)

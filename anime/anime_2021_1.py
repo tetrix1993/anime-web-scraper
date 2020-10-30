@@ -1,13 +1,14 @@
 import os
-import anime.constants as constants
+# import anime.constants as constants
 from anime.main_download import MainDownload
-from datetime import datetime
-from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
+# from datetime import datetime
+# from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 
 
 # Gotoubun no Hanayome S2 https://www.tbs.co.jp/anime/5hanayome/ #五等分の花嫁 @5Hanayome_anime
 # Horimiya https://horimiya-anime.com/ #ホリミヤ @horimiya_anime
 # Jaku-Chara Tomozaki-kun http://tomozaki-koushiki.com/ #友崎くん @tomozakikoshiki
+# Kaifuku Jutsushi no Yarinaoshi http://kaiyari.com/ #回復術士 @kaiyari_anime
 # Mushoku Tensei https://mushokutensei.jp/ #無職転生 @mushokutensei_A
 # Non Non Biyori Nonstop https://nonnontv.com/ #なのん #のんのんびより @nonnontv
 # Ore dake Haireru Kakushi Dungeon https://kakushidungeon-anime.jp/ #隠しダンジョン @kakushidungeon
