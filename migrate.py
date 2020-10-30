@@ -1,8 +1,9 @@
 import os
 import shutil
 import traceback
+from anime import MainDownload, ExternalDownload
 
-VERSION_NUMBER = 9
+VERSION_NUMBER = 10
 DOWNLOAD_DIR = 'download'
 UNCONFIRMED_DIR = DOWNLOAD_DIR + '/unconfirmed'
 MIGRATION_ERROR_LOG = 'migration_error.log'
@@ -46,6 +47,7 @@ def migrate_folders():
     migrate_folder_by_name(UNCONFIRMED_DIR, '2021-1', 'kakushi-dungeon')
     migrate_folder_by_name(UNCONFIRMED_DIR, '2021-1', 'mushoku-tensei')
     migrate_folder_by_name(UNCONFIRMED_DIR, '2021-1', 'kaiyari')
+    migrate_external_folder()
 
 
 def rename_folders():
@@ -109,6 +111,21 @@ def migrate_folder(old_dir, new_dir):
 
 def migrate_folder_by_name(old_dir, new_dir, name):
     migrate_folder(old_dir + '/' + name, new_dir + '/' + name)
+
+
+def migrate_external_folder():
+    for download in MainDownload.__subclasses__():
+        if download is ExternalDownload:
+            continue
+        for sub_download in download.__subclasses__():
+            dl = sub_download()
+            base_folder = dl.base_folder
+            exts = ['aniverse', 'moca', 'wnt']
+            for ext in exts:
+                for j in ['-', '_']:
+                    folder = base_folder + j + ext
+                    if os.path.exists(folder):
+                        migrate_folder(folder, base_folder + '/' + ext)
 
 
 def rename_folder(old_dir, new_dir):

@@ -70,7 +70,7 @@ class AniverseMagazineScanner(MainScanner):
     def __init__(self, keyword, base_folder, last_episode=None, suffix=None):
         super().__init__()
         self.keyword = keyword
-        self.base_folder = base_folder.replace("download/","") + "-aniverse"
+        self.base_folder = base_folder.replace("download/","") + "/aniverse"
         self.last_episode = last_episode
         self.suffix = suffix
 
@@ -175,7 +175,7 @@ class WebNewtypeScanner(MainScanner):
     def __init__(self, keyword, base_folder, last_episode=None):
         super().__init__()
         self.keyword = keyword
-        self.base_folder = base_folder.replace("download/","") + "-wnt"
+        self.base_folder = base_folder.replace("download/","") + "/wnt"
         self.last_episode = last_episode
 
     @staticmethod
@@ -275,7 +275,7 @@ class MocaNewsScanner(MainScanner):
     def __init__(self, keyword, base_folder, start_date, end_date, ignore_cache=False):
         super().__init__()
         self.keyword = keyword
-        self.base_folder = base_folder + "-moca"
+        self.base_folder = base_folder + "/moca"
         self.start_date = datetime.strptime(start_date, '%Y%m%d')
         self.end_date = datetime.strptime(end_date, '%Y%m%d')
         self.ignore_cache = ignore_cache
