@@ -88,35 +88,6 @@ class NagatorosanDownload(UnconfirmedDownload):
         self.download_image_objects(image_objs, folder)
 
 
-# Kaifuku Jutsushi no Yarinaoshi
-class KaiyariDownload(UnconfirmedDownload):
-    title = "Kaifuku Jutsushi no Yarinaoshi"
-    keywords = [title, "Kaiyari", "Redo of Healer"]
-
-    PAGE_PREFIX = "http://kaiyari.com/"
-
-    def __init__(self):
-        super().__init__()
-        self.base_folder = self.base_folder + "/kaiyari"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_key_visual()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        image_objs = [{'name': 'announce', 'url': 'http://kaiyari.com/teaser/images/top-main-vis.jpg'},
-            {'name': 'announce_2', 'url': 'https://pbs.twimg.com/media/EJ0V4iwVUAE-Ep7?format=jpg&name=medium'},
-            {'name': 'teaser', 'url': 'http://kaiyari.com/teaser/images/top-main-vis2.jpg'},
-            {'name': 'teaser_2', 'url': 'https://pbs.twimg.com/media/EaizJUOU8AATcDK?format=jpg&name=medium'}]
-        self.download_image_objects(image_objs, folder)
-
-
 # Kobayashi-san Chi no Maid Dragon S
 class KobayashiMaidDragon2Download(UnconfirmedDownload):
     title = 'Kobayashi-san Chi no Maid Dragon S'

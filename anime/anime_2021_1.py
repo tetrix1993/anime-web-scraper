@@ -155,6 +155,59 @@ class TomozakiKunDownload(Winter2021AnimeDownload):
         self.download_image_list(folder)
 
 
+# Kaifuku Jutsushi no Yarinaoshi
+class KaiyariDownload(Winter2021AnimeDownload):
+    title = "Kaifuku Jutsushi no Yarinaoshi"
+    keywords = [title, "Kaiyari", "Redo of Healer"]
+
+    PAGE_PREFIX = "http://kaiyari.com/"
+
+    def __init__(self):
+        super().__init__()
+        self.base_folder = self.base_folder + "/kaiyari"
+        if not os.path.exists(self.base_folder):
+            os.makedirs(self.base_folder)
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        image_objs = [
+            #{'name': 'announce', 'url': 'http://kaiyari.com/teaser/images/top-main-vis.jpg'},
+            {'name': 'announce', 'url': 'https://pbs.twimg.com/media/Elkq5pRUYAAXjxO?format=jpg&name=4096x4096'},
+            {'name': 'announce_2', 'url': 'https://pbs.twimg.com/media/EJ0V4iwVUAE-Ep7?format=jpg&name=medium'},
+            #{'name': 'teaser', 'url': 'http://kaiyari.com/teaser/images/top-main-vis2.jpg'},
+            {'name': 'teaser', 'url': 'https://pbs.twimg.com/media/Elkq6M2VoAQ_Yky?format=jpg&name=4096x4096'},
+            {'name': 'teaser_2', 'url': 'https://pbs.twimg.com/media/EaizJUOU8AATcDK?format=jpg&name=medium'},
+            {'name': 'kv1', 'url': 'http://kaiyari.com/assets/top/kv1/vis.jpg'},
+            #{'name': 'kv1', 'url': 'https://pbs.twimg.com/media/Elko8BRUcAENWA1?format=jpg&name=4096x4096'}
+        ]
+        self.download_image_objects(image_objs, folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        image_objs = []
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character.html')
+            chr_imgs = soup.find_all('div', class_='chr-img')
+            for chr_img in chr_imgs:
+                image = chr_img.find('img')
+                if image and image.has_attr('src'):
+                    image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                    image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                    image_objs.append({'name': image_name, 'url': image_url})
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Character")
+            print(e)
+        self.download_image_objects(image_objs, folder)
+
+
 # Mushoku Tensei: Isekai Ittara Honki Dasu
 class MushokuTenseiDownload(Winter2021AnimeDownload):
     title = "Mushoku Tensei: Isekai Ittara Honki Dasu"

@@ -2,7 +2,7 @@ import os
 import shutil
 import traceback
 
-VERSION_NUMBER = 8
+VERSION_NUMBER = 9
 DOWNLOAD_DIR = 'download'
 UNCONFIRMED_DIR = DOWNLOAD_DIR + '/unconfirmed'
 MIGRATION_ERROR_LOG = 'migration_error.log'
@@ -45,6 +45,7 @@ def migrate_folders():
     migrate_folder_by_name(UNCONFIRMED_DIR, '2021-1', 'gotoubun2')
     migrate_folder_by_name(UNCONFIRMED_DIR, '2021-1', 'kakushi-dungeon')
     migrate_folder_by_name(UNCONFIRMED_DIR, '2021-1', 'mushoku-tensei')
+    migrate_folder_by_name(UNCONFIRMED_DIR, '2021-1', 'kaiyari')
 
 
 def rename_folders():
