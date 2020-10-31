@@ -38,7 +38,10 @@ class MainDownload:
                     dl = dl.__bases__[0]
                     if issubclass(dl, MainDownload):
                         if dl.folder_name is not None:
-                            path = dl.folder_name + '/' + path
+                            if len(path) > 0:
+                                path = dl.folder_name + '/' + path
+                            else:
+                                path = dl.folder_name
                     else:
                         break
                 else:
