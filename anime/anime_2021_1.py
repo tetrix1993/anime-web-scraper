@@ -31,12 +31,13 @@ class Winter2021AnimeDownload(MainDownload):
 class Gotoubun2Download(Winter2021AnimeDownload):
     title = "Gotoubun no Hanayome 2nd Season"
     keywords = [title, "The Quintessential Quintuplets", "Go-toubun", "5-toubun"]
+    folder_name = 'gotoubun2'
 
     PAGE_PREFIX = 'https://www.tbs.co.jp/anime/5hanayome/'
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder('gotoubun2')
+        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -77,12 +78,13 @@ class Gotoubun2Download(Winter2021AnimeDownload):
 class HorimiyaDownload(Winter2021AnimeDownload):
     title = "Horimiya"
     keywords = [title]
+    folder_name = 'horimiya'
 
     PAGE_PREFIX = 'https://horimiya-anime.com/'
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder('horimiya')
+        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -115,12 +117,13 @@ class HorimiyaDownload(Winter2021AnimeDownload):
 class TomozakiKunDownload(Winter2021AnimeDownload):
     title = "Jaku-Chara Tomozaki-kun"
     keywords = [title, 'The Low Tier Character "Tomozaki-kun"', 'Tomozaki-kun']
+    folder_name = 'tomozakikun'
 
     PAGE_PREFIX = 'http://tomozaki-koushiki.com/'
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder('tomozakikun')
+        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -160,14 +163,13 @@ class TomozakiKunDownload(Winter2021AnimeDownload):
 class KaiyariDownload(Winter2021AnimeDownload):
     title = "Kaifuku Jutsushi no Yarinaoshi"
     keywords = [title, "Kaiyari", "Redo of Healer"]
+    folder_name = 'kaiyari'
 
     PAGE_PREFIX = "http://kaiyari.com/"
 
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/kaiyari"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
+        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -213,12 +215,13 @@ class KaiyariDownload(Winter2021AnimeDownload):
 class MushokuTenseiDownload(Winter2021AnimeDownload):
     title = "Mushoku Tensei: Isekai Ittara Honki Dasu"
     keywords = [title, 'Jobless Reincarnation']
+    folder_name = 'mushoku-tensei'
 
     PAGE_PREFIX = 'https://mushokutensei.jp/'
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder('mushoku-tensei')
+        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -260,6 +263,7 @@ class MushokuTenseiDownload(Winter2021AnimeDownload):
 class NonNonBiyori3Download(Winter2021AnimeDownload):
     title = 'Non Non Biyori Nonstop'
     keywords = [title]
+    folder_name = 'non-non-biyori3'
 
     PAGE_PREFIX = 'https://nonnontv.com'
     # PAGE_PREFIX = 'https://nonnontv2.wp-adm.kadokawa-isys.jp'
@@ -267,7 +271,7 @@ class NonNonBiyori3Download(Winter2021AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder('non-non-biyori3')
+        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -340,12 +344,13 @@ class NonNonBiyori3Download(Winter2021AnimeDownload):
 class KakushiDungeonDownload(Winter2021AnimeDownload):
     title = "Ore dake Haireru Kakushi Dungeon"
     keywords = [title, "The Hidden Dungeon Only I Can Enter"]
+    folder_name = 'kakushi-dungeon'
 
     PAGE_PREFIX = 'https://kakushidungeon-anime.jp/'
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder('kakushi-dungeon')
+        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -387,14 +392,13 @@ class KakushiDungeonDownload(Winter2021AnimeDownload):
 class LasdanDownload(Winter2021AnimeDownload):
     title = "Tatoeba Last Dungeon Mae no Mura no Shounen ga Joban no Machi de Kurasu Youna Monogatari"
     keywords = [title, "Lasdan"]
+    folder_name = 'lasdan'
 
     PAGE_PREFIX = 'https://lasdan.com/'
 
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/lasdan"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
+        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -456,12 +460,13 @@ class LasdanDownload(Winter2021AnimeDownload):
 class UrasekaiPicnicDownload(Winter2021AnimeDownload):
     title = 'Urasekai Picnic'
     keywords = [title, 'Otherside Picnic']
+    folder_name = 'urasekai-picnic'
 
     PAGE_PREFIX = 'https://www.othersidepicnic.com'
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder('urasekai-picnic')
+        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -500,12 +505,13 @@ class UrasekaiPicnicDownload(Winter2021AnimeDownload):
 class YuruCamp2Download(Winter2021AnimeDownload):
     title = "Yuru Camp 2nd Season"
     keywords = [title, 'Yurucamp']
+    folder_name = 'yurucamp2'
 
     PAGE_PREFIX = 'https://yurucamp.jp/second/'
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder('yurucamp2')
+        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()

@@ -40,15 +40,14 @@ class Fall2020AnimeDownload(MainDownload):
 
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/2020-4"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
+        self.init_base_folder('2020-4')
 
 
 # 100-man no Inochi no Ue ni Ore wa Tatteiru
 class HyakumanNoInochiDownload(Fall2020AnimeDownload):
     title = "100-man no Inochi no Ue ni Ore wa Tatteiru"
     keywords = [title, "I'm standing on 1,000,000 lives.", "Hyakuman", "1000000"]
+    folder_name = '100-man-no-inochi'
 
     PAGE_PREFIX = 'http://1000000-lives.com'
     STORY_PAGE = 'http://1000000-lives.com/story/'
@@ -56,7 +55,7 @@ class HyakumanNoInochiDownload(Fall2020AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder('100-man-no-inochi')
+        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -141,6 +140,7 @@ class HyakumanNoInochiDownload(Fall2020AnimeDownload):
 class AdashimaDownload(Fall2020AnimeDownload):
     title = 'Adachi to Shimamura'
     keywords = [title, 'Adashima']
+    folder_name = 'adashima'
 
     PAGE_PREFIX = 'https://www.tbs.co.jp/anime/adashima/'
     STORY_PAGE = 'https://www.tbs.co.jp/anime/adashima/story/'
@@ -148,7 +148,7 @@ class AdashimaDownload(Fall2020AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder('adashima')
+        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -245,13 +245,14 @@ class AdashimaDownload(Fall2020AnimeDownload):
 class AssaultLilyDownload(Fall2020AnimeDownload):
     title = 'Assault Lily: Bouquet'
     keywords = [title]
+    folder_name = 'assault-lily'
 
     PAGE_PREFIX = 'https://anime.assaultlily-pj.com/'
     STORY_PAGE = 'https://anime.assaultlily-pj.com/story/'
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder('assault-lily')
+        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -345,6 +346,7 @@ class AssaultLilyDownload(Fall2020AnimeDownload):
 class Danmachi3Download(Fall2020AnimeDownload):
     title = 'Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka III'
     keywords = [title, 'Danmachi', 'Is It Wrong to Try to Pick Up Girls in a Dungeon? III', '3rd']
+    folder_name = 'danmachi3'
 
     PAGE_PREFIX = 'http://danmachi.com/danmachi3/'
     STORY_PAGE = 'http://danmachi.com/danmachi3/story/index.html'
@@ -353,9 +355,7 @@ class Danmachi3Download(Fall2020AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/danmachi3"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
+        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -410,13 +410,14 @@ class Danmachi3Download(Fall2020AnimeDownload):
 class DogezaDeTanondemitaDownload(Fall2020AnimeDownload):
     title = 'Dogeza de Tanondemita'
     keywords = [title]
+    folder_name = 'dogeza'
 
     PAGE_PREFIX = 'https://dogeza-anime.com/'
     LAST_EPISODE = 13
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder('dogeza')
+        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -481,13 +482,14 @@ class DogezaDeTanondemitaDownload(Fall2020AnimeDownload):
 class GochiUsa3Download(Fall2020AnimeDownload):
     title = "Gochuumon wa Usagi Desu ka? Bloom"
     keywords = [title, 'Gochiusa', '3rd']
+    folder_name = 'gochiusa3'
 
     PAGE_PREFIX = 'https://gochiusa.com/bloom/'
     STORY_PAGE = 'https://gochiusa.com/bloom/story/'
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder('gochiusa3')
+        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -644,6 +646,7 @@ class GochiUsa3Download(Fall2020AnimeDownload):
 class GoldenKamuy3Download(Fall2020AnimeDownload):
     title = "Golden Kamuy 3rd Season"
     keywords = [title, "Kamui"]
+    folder_name = 'golden-kamuy3'
 
     PAGE_URL = "https://kamuy-anime.com/story/%s.html"
     PAGE_PREFIX = "https://kamuy-anime.com/"
@@ -652,7 +655,7 @@ class GoldenKamuy3Download(Fall2020AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder('golden-kamuy3')
+        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -688,6 +691,7 @@ class GoldenKamuy3Download(Fall2020AnimeDownload):
 class Higurashi2020Download(Fall2020AnimeDownload):
     title = "Higurashi no Naku Koro ni Gou"
     keywords = [title, "When They Cry", "2020"]
+    folder_name = 'higurashi2020'
 
     PAGE_PREFIX = 'https://higurashianime.com/'
     STORY_PAGE = 'https://higurashianime.com/intro.html'
@@ -695,9 +699,7 @@ class Higurashi2020Download(Fall2020AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/higurashi2020"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
+        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -771,6 +773,7 @@ class Higurashi2020Download(Fall2020AnimeDownload):
 class IwakakeruDownload(Fall2020AnimeDownload):
     title = "Iwa Kakeru!: Sport Climbing Girls"
     keywords = [title, "Iwakakeru"]
+    folder_name = 'iwakakeru'
 
     PAGE_PREFIX = 'http://iwakakeru-anime.com/'
     STORY_PAGE = 'http://iwakakeru-anime.com/story/'
@@ -778,9 +781,7 @@ class IwakakeruDownload(Fall2020AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/iwakakeru"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
+        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -924,6 +925,7 @@ class IwakakeruDownload(Fall2020AnimeDownload):
 class JujutsuKaisenDownload(Fall2020AnimeDownload):
     title = 'Jujutsu Kaisen'
     keywords = [title]
+    folder_name = 'jujutsu-kaisen'
 
     PAGE_PREFIX = 'https://jujutsukaisen.jp/'
     STORY_PAGE = 'https://jujutsukaisen.jp/episodes/'
@@ -931,7 +933,7 @@ class JujutsuKaisenDownload(Fall2020AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder('jujutsu-kaisen')
+        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -998,13 +1000,14 @@ class JujutsuKaisenDownload(Fall2020AnimeDownload):
 class KamisamaNiNattaHiDownload(Fall2020AnimeDownload):
     title = "Kamisama ni Natta Hi"
     keywords = [title, "The Day I Became a God"]
+    folder_name = 'kamisama-ni-natta-hi'
 
     PAGE_PREFIX = 'https://kamisama-day.jp/'
     STORY_PAGE = 'https://kamisama-day.jp/story/'
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder('kamisama-ni-natta-hi')
+        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -1214,15 +1217,14 @@ class KamisamaNiNattaHiDownload(Fall2020AnimeDownload):
 class KamihiroDownload(Fall2020AnimeDownload):
     title = 'Kami-tachi ni Hirowareta Otoko'
     keywords = [title, 'Kamihiro', 'Kamitachi']
+    folder_name = 'kamihiro'
 
     PAGE_PREFIX = 'https://kamihiro-anime.com'
     STORY_PAGE = 'https://kamihiro-anime.com/story/'
 
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/kamihiro"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
+        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -1311,6 +1313,7 @@ class KamihiroDownload(Fall2020AnimeDownload):
 class KimisenDownload(Fall2020AnimeDownload):
     title = "Kimi to Boku no Saigo no Senjou, Aruiwa Sekai ga Hajimaru Seisen"
     keywords = [title, "Kimisen"]
+    folder_name = 'kimisen'
 
     PAGE_PREFIX = 'https://kimisentv.com/'
     STORY_PAGE = 'https://kimisentv.com/story/'
@@ -1318,9 +1321,7 @@ class KimisenDownload(Fall2020AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/kimisen"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
+        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -1409,15 +1410,14 @@ class KimisenDownload(Fall2020AnimeDownload):
 class KumaBearDownload(Fall2020AnimeDownload):
     title = "Kuma Kuma Kuma Bear"
     keywords = [title, 'Kumabear']
+    folder_name = 'kumabear'
 
     PAGE_PREFIX = 'https://kumakumakumabear.com/'
     STORY_PAGE = 'https://kumakumakumabear.com/story/'
 
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/kumabear"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
+        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -1668,6 +1668,7 @@ class KumaBearDownload(Fall2020AnimeDownload):
 class MaesetsuDownload(Fall2020AnimeDownload):
     title = "Maesetsu!"
     keywords = [title]
+    folder_name = 'maesetsu'
 
     PAGE_PREFIX = 'https://maesetsu.jp/'
     STORY_PAGE = 'https://maesetsu.jp/story/'
@@ -1675,7 +1676,7 @@ class MaesetsuDownload(Fall2020AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder('maesetsu')
+        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -1768,13 +1769,14 @@ class MaesetsuDownload(Fall2020AnimeDownload):
 class Mahouka2Download(Fall2020AnimeDownload):
     title = "Mahouka Koukou no Rettousei: Raihousha-hen"
     keywords = [title, "The Irregular at Magic High School", "2nd"]
+    folder_name = 'mahouka2'
 
     PAGE_PREFIX = 'https://mahouka.jp/'
     STORY_PAGE = 'https://mahouka.jp/story/'
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder('mahouka2')
+        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -1924,15 +1926,14 @@ class Mahouka2Download(Fall2020AnimeDownload):
 class MajotabiDownload(Fall2020AnimeDownload):
     title = "Majo no Tabitabi"
     keywords = [title, "Wandering Witch: The Journey of Elaina", "Majotabi"]
+    folder_name = 'majotabi'
 
     PAGE_PREFIX = 'https://majotabi.jp/'
     LAST_EPISODE = 12
 
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/majotabi"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
+        self.init_base_folder()
 
     def run(self):
         soup = self.get_soup(self.PAGE_PREFIX)
@@ -2049,15 +2050,14 @@ class MajotabiDownload(Fall2020AnimeDownload):
 class MaoujoDownload(Fall2020AnimeDownload):
     title = "Maoujou de Oyasumi"
     keywords = [title, "Maoujo", "Sleepy Princess in the Demon Castle"]
+    folder_name = 'maoujo'
 
     PAGE_PREFIX = 'https://maoujo-anime.com/'
     STORY_PAGE = 'https://maoujo-anime.com/story/'
 
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/maoujo"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
+        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -2156,6 +2156,7 @@ class MaoujoDownload(Fall2020AnimeDownload):
 class MunounaNanaDownload(Fall2020AnimeDownload):
     title = 'Munou na Nana'
     keywords = [title, 'Talentless Nana']
+    folder_name = 'munou-na-nana'
 
     PAGE_PREFIX = 'https://munounanana.com/'
     STORY_PAGE = 'https://munounanana.com/story/'
@@ -2163,7 +2164,7 @@ class MunounaNanaDownload(Fall2020AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder('munou-na-nana')
+        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -2234,6 +2235,7 @@ class MunounaNanaDownload(Fall2020AnimeDownload):
 class OchifuruDownload(Fall2020AnimeDownload):
     title = "Ochikobore Fruit Tart"
     keywords = [title, "Dropout Idol", "Ochifuru"]
+    folder_name = 'ochifuru'
 
     PAGE_PREFIX = 'http://ochifuru-anime.com/'
     STORY_PAGE = 'http://ochifuru-anime.com/story.html'
@@ -2241,9 +2243,7 @@ class OchifuruDownload(Fall2020AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/ochifuru"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
+        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -2380,13 +2380,14 @@ class OchifuruDownload(Fall2020AnimeDownload):
 class OneRoom3Download(Fall2020AnimeDownload):
     title = "One Room 3rd Season"
     keywords = [title, "Third"]
+    folder_name = 'one-room3'
 
     PAGE_PREFIX = "https://oneroom-anime.com/"
     STORY_PAGE = "https://oneroom-anime.com/story/"
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder('one-room3')
+        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -2455,14 +2456,13 @@ class OneRoom3Download(Fall2020AnimeDownload):
 class RailRomanesqueDownload(Fall2020AnimeDownload):
     title = "Rail Romanesque"
     keywords = [title, "Maitetsu"]
+    folder_name = 'rail-romanesque'
 
     PAGE_PREFIX = 'https://railromanesque.jp/'
 
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/rail-romanesque"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
+        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -2496,15 +2496,14 @@ class RailRomanesqueDownload(Fall2020AnimeDownload):
 class SigrdrifaDownload(Fall2020AnimeDownload):
     title = "Senyoku no Sigrdrifa"
     keywords = [title, "Warlords of Sigrdrifa", "Sigururi"]
+    folder_name = 'sigrdrifa'
 
     PAGE_PREFIX = "https://sigururi.com/"
     STORY_PAGE = 'https://sigururi.com/story/'
 
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/sigrdrifa"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
+        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -2650,12 +2649,13 @@ class SigrdrifaDownload(Fall2020AnimeDownload):
 class StrikeWitches3Download(Fall2020AnimeDownload):
     title = 'Strike Witches: Road to Berlin'
     keywords = [title]
+    folder_name = 'strike-witches3'
 
     PAGE_PREFIX = 'http://w-witch.jp/strike_witches-rtb/'
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder('strike-witches3')
+        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -2753,6 +2753,7 @@ class StrikeWitches3Download(Fall2020AnimeDownload):
 class TonikawaDownload(Fall2020AnimeDownload):
     title = "Tonikaku Kawaii"
     keywords = [title, "Tonikawa", "Cawaii", "Fly Me to the Moon"]
+    folder_name = 'tonikawa'
 
     PAGE_PREFIX = 'http://tonikawa.com/'
     STORY_PAGE = 'http://tonikawa.com/story/'
@@ -2760,9 +2761,7 @@ class TonikawaDownload(Fall2020AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/tonikawa"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
+        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()

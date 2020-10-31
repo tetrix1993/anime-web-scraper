@@ -31,15 +31,14 @@ class Spring2020AnimeDownload(MainDownload):
 
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/2020-2"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
+        self.init_base_folder('2020-2')
 
 
 # Arte
 class ArteDownload(Spring2020AnimeDownload):
     title = "Arte"
     keywords = [title]
+    folder_name = 'arte'
 
     PAGE_PREFIX = "http://arte-anime.com/"
     IMAGE_TEMPLATE = 'http://arte-anime.com/U1y9gMfZ/wp-content/themes/arte/images/story/img%s_%s.jpg'
@@ -48,9 +47,7 @@ class ArteDownload(Spring2020AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/arte"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
+        self.init_base_folder()
 
     def run(self):
         try:
@@ -99,6 +96,7 @@ class ArteDownload(Spring2020AnimeDownload):
 class BrandNewAnimalDownload(Spring2020AnimeDownload):
     title = "Brand New Animal"
     keywords = [title, "BNA"]
+    folder_name = 'bna'
 
     STORY_PAGE = "https://bna-anime.com/story/"
     IMAGE_TEMPLATE = 'https://bna-anime.com/story/images/%s_%s.jpg'
@@ -107,9 +105,7 @@ class BrandNewAnimalDownload(Spring2020AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/bna"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
+        self.init_base_folder()
 
     def run(self):
         try:
@@ -153,15 +149,14 @@ class BrandNewAnimalDownload(Spring2020AnimeDownload):
 class GleipnirDownload(Spring2020AnimeDownload):
     title = "Gleipnir"
     keywords = [title]
+    folder_name = 'gleipnir'
     
     PAGE_PREFIX = "http://gleipnir-anime.com"
     STORY_PAGE = 'http://gleipnir-anime.com/story/'
 
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/gleipnir"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
+        self.init_base_folder()
     
     def run(self):
         try:
@@ -192,6 +187,7 @@ class GleipnirDownload(Spring2020AnimeDownload):
 class HachinanDownload(Spring2020AnimeDownload):
     title = "Hachi-nan tte, Sore wa Nai deshou!"
     keywords = [title, "Hachinan", "The 8th Son? Are You Kidding Me?"]
+    folder_name = 'hachinan'
     
     PAGE_PREFIX = "http://hachinan-anime.com"
     STORY_PAGE = "http://hachinan-anime.com/story/"
@@ -201,9 +197,7 @@ class HachinanDownload(Spring2020AnimeDownload):
     
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/hachinan"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
+        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -317,6 +311,7 @@ class HachinanDownload(Spring2020AnimeDownload):
 class Honzuki2Download(Spring2020AnimeDownload):
     title = "Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan wo Erandeiraremasen 2nd Season"
     keywords = [title, "Ascendance of a Bookworm"]
+    folder_name = 'honzuki2'
     
     PAGE_PREFIX = "http://booklove-anime.jp/story/"
     IMAGE_PREFIX = "http://booklove-anime.jp/"
@@ -325,9 +320,7 @@ class Honzuki2Download(Spring2020AnimeDownload):
     
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/honzuki2"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
+        self.init_base_folder()
     
     def run(self):
         self.download_episode_preview()
@@ -398,14 +391,13 @@ class Honzuki2Download(Spring2020AnimeDownload):
 class NamiyoDownload(Spring2020AnimeDownload):
     title = "Nami yo Kiitekure"
     keywords = [title, "Namiyo", "Wave, Listen to Me!"]
+    folder_name = 'namiyo'
 
     STORY_PAGE = 'https://namiyo-anime.com/story/'
 
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/namiyo"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
+        self.init_base_folder()
 
     def run(self):
         try:
@@ -432,6 +424,7 @@ class NamiyoDownload(Spring2020AnimeDownload):
 class TeiboDownload(Spring2020AnimeDownload):
     title = "Houkago Teibou Nisshi"
     keywords = [title, "Teibo", "Diary of Our Days at the Breakwater"]
+    folder_name = 'teibo'
 
     PAGE_PREFIX = "https://teibotv.com/"
     STORY_PAGE = 'https://teibotv.com/story.html'
@@ -442,9 +435,7 @@ class TeiboDownload(Spring2020AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/teibo"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
+        self.init_base_folder()
     
     def run(self):
         self.download_episode_preview()
@@ -534,15 +525,14 @@ class TeiboDownload(Spring2020AnimeDownload):
 class Kaguyasama2Download(Spring2020AnimeDownload):
     title = "Kaguya-sama wa Kokurasetai?: Tensai-tachi no Renai Zunousen"
     keywords = [title, "Kaguya", "Kaguyasama", "Kaguya-sama: Love is War 2nd Season"]
+    folder_name = 'kaguya-sama2'
 
     STORY_PAGE = "https://kaguya.love/story/"
     PAGE_PREFIX = 'https://kaguya.love'
     
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/kaguya-sama2"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
+        self.init_base_folder()
     
     def run(self):
         self.download_episode_preview()
@@ -674,14 +664,13 @@ class Kaguyasama2Download(Spring2020AnimeDownload):
 class KakushigotoDownload(Spring2020AnimeDownload):
     title = "Kakushigoto"
     keywords = [title]
+    folder_name = 'kakushigoto'
 
     STORY_PAGE = "https://kakushigoto-anime.com/story/"
     
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/kakushigoto"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
+        self.init_base_folder()
     
     def run(self):
         self.download_episode_preview()
@@ -734,14 +723,13 @@ class KakushigotoDownload(Spring2020AnimeDownload):
 class Kingdom3Download(Spring2020AnimeDownload):
     title = "Kingdom 3rd Season"
     keywords = [title]
+    folder_name = 'kingdom3'
 
     STORY_PAGE = "https://kingdom-anime.com/story/"
     
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/kingdom3"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
+        self.init_base_folder()
     
     def run(self):
         try:
@@ -773,14 +761,13 @@ class Kingdom3Download(Spring2020AnimeDownload):
 class HamehuraDownload(Spring2020AnimeDownload):
     title = "Otome Game no Hametsu Flag shika Nai Akuyaku Reijou ni Tensei shiteshimatta..."
     keywords = [title, "Hamehura", "My Next Life as a Villainess: All Routes Lead to Doom!"]
+    folder_name = 'hamehura'
 
     STORY_PAGE = "https://hamehura-anime.com/story"
     
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/hamehura"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
+        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -837,6 +824,7 @@ class HamehuraDownload(Spring2020AnimeDownload):
 class PriconneDownload(Spring2020AnimeDownload):
     title = "Princess Connect! Re:Dive"
     keywords = [title, "Priconne"]
+    folder_name = 'priconne'
     
     PAGE_PREFIX = "https://anime.priconne-redive.jp"
     STORY_PREFIX = "https://anime.priconne-redive.jp/story/"
@@ -844,9 +832,7 @@ class PriconneDownload(Spring2020AnimeDownload):
     
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/priconne"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
+        self.init_base_folder()
     
     def run(self):
         self.download_episode_preview()
@@ -948,6 +934,7 @@ class PriconneDownload(Spring2020AnimeDownload):
 class ShachibatoDownload(Spring2020AnimeDownload):
     title = "Shachou, Battle no Jikan Desu!"
     keywords = [title, "Shachibato! President, It's Time for Battle!"]
+    folder_name = 'shachibato'
 
     PAGE_PREFIX = "https://shachibato-anime.com/"
     STORY_PAGE = "https://shachibato-anime.com/story.html"
@@ -957,9 +944,7 @@ class ShachibatoDownload(Spring2020AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/shachibato"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
+        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -1075,15 +1060,14 @@ class ShachibatoDownload(Spring2020AnimeDownload):
 class TamayomiDownload(Spring2020AnimeDownload):
     title = "Tamayomi"
     keywords = [title]
+    folder_name = 'tamayomi'
 
     PAGE_PREFIX = "https://tamayomi.com"
     STORY_PREFIX = "https://tamayomi.com/story/"
     
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/tamayomi"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
+        self.init_base_folder()
     
     def run(self):
         self.download_episode_preview()
@@ -1213,14 +1197,13 @@ class TamayomiDownload(Spring2020AnimeDownload):
 class Tsugumomo2Download(Spring2020AnimeDownload):
     title = "Tsugu Tsugumomo"
     keywords = [title]
+    folder_name = 'tsugumomo2'
 
     STORY_PAGE = "http://tsugumomo.com/story/"
     
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/tsugumomo2"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
+        self.init_base_folder()
     
     def run(self):
         self.download_episode_preview()
@@ -1272,6 +1255,7 @@ class Tsugumomo2Download(Spring2020AnimeDownload):
 class YesterdayDownload(Spring2020AnimeDownload):
     title = "Yesterday wo Utatte"
     keywords = [title, "Sing Yesterday For Me"]
+    folder_name = 'yesterday'
 
     STORY_PAGE = "https://singyesterday.com/story/"
     PAGE_PREFIX = 'https://singyesterday.com/'
@@ -1281,9 +1265,7 @@ class YesterdayDownload(Spring2020AnimeDownload):
     
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/yesterday"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
+        self.init_base_folder()
     
     def run(self):
         try:

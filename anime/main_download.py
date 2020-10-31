@@ -16,16 +16,24 @@ class MainDownload:
     season = None
     season_name = ""
     image_list = []
+    folder_name = 'download'
 
     def __init__(self):
         self.base_folder = "download"
         if not os.path.exists(self.base_folder):
             os.makedirs(self.base_folder)
             
-    def init_base_folder(self, name):
+    def init_base_folder(self, name=None):
+        if not name:
+            name = self.folder_name
         self.base_folder = self.base_folder + "/" + name
         if not os.path.exists(self.base_folder):
             os.makedirs(self.base_folder)
+
+    # def init_base_folder(self):
+    #     self.base_folder = self.base_folder + "/" + self.folder_name
+    #     if not os.path.exists(self.base_folder):
+    #         os.makedirs(self.base_folder)
 
     def run(self):
         pass

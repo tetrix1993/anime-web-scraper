@@ -22,12 +22,13 @@ class Spring2021AnimeDownload(MainDownload):
 class Slime300Download(Spring2021AnimeDownload):
     title = "Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita"
     keywords = [title, "I've Been Killing Slimes for 300 Years and Maxed Out My Level", "Slime 300"]
+    folder_name = 'slime300'
 
     PAGE_PREFIX = 'https://slime300-anime.com'
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder('slime300')
+        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
