@@ -19,16 +19,31 @@ class MainDownload:
     folder_name = 'download'
 
     def __init__(self):
-        self.base_folder = "download"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
-            
-    def init_base_folder(self, name=None):
-        if not name:
-            name = self.folder_name
-        self.base_folder = self.base_folder + "/" + name
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
+        path = self.get_full_path()
+        self.base_folder = path
+        if not os.path.exists(path):
+            os.makedirs(path)
+
+    @classmethod
+    def get_full_path(cls):
+        if cls is MainDownload:
+            return cls.folder_name
+        else:
+            path = ''
+            if cls.folder_name is not None:
+                path = cls.folder_name
+            dl = cls
+            while dl is not MainDownload:
+                if len(dl.__bases__) > 0:
+                    dl = dl.__bases__[0]
+                    if issubclass(dl, MainDownload):
+                        if dl.folder_name is not None:
+                            path = dl.folder_name + '/' + path
+                    else:
+                        break
+                else:
+                    break
+            return path
 
     # def init_base_folder(self):
     #     self.base_folder = self.base_folder + "/" + self.folder_name

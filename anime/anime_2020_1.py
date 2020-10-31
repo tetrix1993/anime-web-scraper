@@ -29,10 +29,10 @@ from scan import WebNewtypeScanner
 class Winter2020AnimeDownload(MainDownload):
     season = "2020-1"
     season_name = "Winter 2020"
+    folder_name = '2020-1'
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder('2020-1')
 
 
 # Darwin's Game
@@ -48,7 +48,6 @@ class DarwinsGameDownload(Winter2020AnimeDownload):
     
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
     
     def run(self):
         self.download_episode_preview()
@@ -132,7 +131,6 @@ class EizoukenDownload(Winter2020AnimeDownload):
     
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
     
     def run(self):
         try:
@@ -173,7 +171,6 @@ class HatenaIllusionDownload(Winter2020AnimeDownload):
     
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
     
     def run(self):
         try:
@@ -205,7 +202,6 @@ class HeyaCampDownload(Winter2020AnimeDownload):
     
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
             
     def run(self):
         try:
@@ -320,7 +316,6 @@ class InfiniteDendrogramDownload(Winter2020AnimeDownload):
     
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
     
     def run(self):
         try:
@@ -364,7 +359,6 @@ class IsekaiQuartet2Download(Winter2020AnimeDownload):
     
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
     
     def run(self):
         try:
@@ -408,7 +402,6 @@ class IshuzokuReviewersDownload(Winter2020AnimeDownload):
     
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
     
     def run(self):
         try:
@@ -463,7 +456,6 @@ class BofuriDownload(Winter2020AnimeDownload):
     
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
     
     def run(self):
         self.download_bluray()
@@ -526,7 +518,6 @@ class HanakoKunDownload(Winter2020AnimeDownload):
     
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
     
     def run(self):
         try:
@@ -571,7 +562,6 @@ class KoisuruAsteroidDownload(Winter2020AnimeDownload):
     
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
     
     def run(self):
         self.download_episode_preview()
@@ -672,7 +662,6 @@ class KyokouSuiriDownload(Winter2020AnimeDownload):
     
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
     
     def run(self):
         try:
@@ -716,7 +705,6 @@ class MurenaseSetonGakuenDownload(Winter2020AnimeDownload):
     
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
     
     def run(self):
         self.download_episode_preview()
@@ -783,7 +771,6 @@ class NekoparaDownload(Winter2020AnimeDownload):
     
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
     
     def run(self):
         self.download_episode_preview()
@@ -892,7 +879,6 @@ class OshibudoDownload(Winter2020AnimeDownload):
     
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
             
     def run(self):
         try:
@@ -927,7 +913,6 @@ class PlundererDownload(Winter2020AnimeDownload):
     
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
     
     def run(self):
         self.download_episode_preview()
@@ -994,7 +979,6 @@ class RikekoiDownload(Winter2020AnimeDownload):
     
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
     
     def run(self):
         try:
@@ -1060,7 +1044,6 @@ class RunwayDeWaratteDownload(Winter2020AnimeDownload):
     
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
     
     def run(self):
         try:
@@ -1095,7 +1078,6 @@ class SomaliDownload(Winter2020AnimeDownload):
     
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
     
     def run(self):
         try:
@@ -1138,7 +1120,6 @@ class RailgunTDownload(Winter2020AnimeDownload):
     
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
     
     def run(self):
         self.download_episode_preview()

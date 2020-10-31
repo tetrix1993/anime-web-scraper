@@ -6,18 +6,17 @@ from anime.main_download import MainDownload
 class Fall2015AnimeDownload(MainDownload):
     season = "2015-4"
     season_name = "Fall 2015"
+    folder_name = '2015-4'
     
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/2015-4"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
 
 
 # Gakusen Toshi Asterisk
 class GakusenToshiAsteriskDownload(Fall2015AnimeDownload):
     title = "Gakusen Toshi Asterisk"
     keywords = ["Gakusen Toshi Asterisk", "The Asterisk War"]
+    folder_name = 'gakusen-toshi-asterisk'
 
     IMAGE_URL = 'https://asterisk-war.com/assets/img/story/%s/ep_slide%s.jpg'
     FINAL_EPISODE = 12
@@ -25,9 +24,6 @@ class GakusenToshiAsteriskDownload(Fall2015AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/gakusen-toshi-asterisk"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
 
     def run(self):
         for i in range(self.FINAL_EPISODE):
@@ -44,6 +40,7 @@ class GakusenToshiAsteriskDownload(Fall2015AnimeDownload):
 class RakudaiKishiDownload(Fall2015AnimeDownload):
     title = "Rakudai Kishi no Cavalry"
     keywords = ["Rakudai Kishi no Cavalry", "Chivalry of a Failed Knight"]
+    folder_name = 'rakudai-kishi'
 
     IMAGE_URL = 'http://ittoshura.com/story/img/onair_p%s_%s.jpg'
     FINAL_EPISODE = 12
@@ -51,9 +48,6 @@ class RakudaiKishiDownload(Fall2015AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/rakudai-kishi"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
 
     def run(self):
         for i in range(self.FINAL_EPISODE):

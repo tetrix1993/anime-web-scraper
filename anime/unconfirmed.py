@@ -15,10 +15,10 @@ from anime.main_download import MainDownload
 class UnconfirmedDownload(MainDownload):
     season = "9999-9"
     season_name = "Unconfirmed"
+    folder_name = 'unconfirmed'
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder('unconfirmed')
 
 
 # Cheat Kusushi no Slow Life: Isekai ni Tsukurou Drugstore
@@ -31,7 +31,6 @@ class CheatKusushiDownload(UnconfirmedDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -57,7 +56,6 @@ class NagatorosanDownload(UnconfirmedDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -93,7 +91,6 @@ class KobayashiMaidDragon2Download(UnconfirmedDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -120,7 +117,6 @@ class OsamakeDownload(UnconfirmedDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -148,7 +144,6 @@ class Priconne2Download(UnconfirmedDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -173,7 +168,6 @@ class TateNoYuusha2Download(UnconfirmedDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()

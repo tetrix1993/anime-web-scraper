@@ -6,18 +6,17 @@ from anime.main_download import MainDownload
 class Winter2018AnimeDownload(MainDownload):
     season = "2018-1"
     season_name = "Winter 2018"
+    folder_name = '2018-1'
     
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/2018-1"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
 
 
 # Beatless
 class BeatlessDownload(Winter2018AnimeDownload):
     title = "Beatless"
     keywords = ["Beatless"]
+    folder_name = 'beatless'
 
     IMAGE_URL = "http://beatless-anime.jp/images/episodes_%s.jpg"
     INTER_IMAGE_URL = "http://beatless-anime.jp/images/episodes_inter%s.jpg"
@@ -26,9 +25,6 @@ class BeatlessDownload(Winter2018AnimeDownload):
     
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/beatless"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
     
     def run(self):
         try:
@@ -55,6 +51,7 @@ class BeatlessDownload(Winter2018AnimeDownload):
 class DarlingInTheFranxxDownload(Winter2018AnimeDownload):
     title = "Darling in the FranXX"
     keywords = ["Darling in the FranXX"]
+    folder_name = 'darling-in-the-franxx'
 
     IMAGE_URL = "https://darli-fra.jp/assets/img/common/story/%s/%s_%s.jpg"
     FINAL_EPISODE = 24
@@ -62,9 +59,6 @@ class DarlingInTheFranxxDownload(Winter2018AnimeDownload):
     
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/darling-in-the-franxx"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
     
     def run(self):
         try:
@@ -87,14 +81,12 @@ class DeathMarchDownload(Winter2018AnimeDownload):
     title = "Death March kara Hajimaru Isekai Kyousoukyoku"
     keywords = ["Death March kara Hajimaru Isekai Kyousoukyoku", "Deathma",
                 "Death March to the Parallel World Rhapsody"]
+    folder_name = 'death-march'
 
     STORY_PAGE = "https://deathma-anime.com/story/"
     
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/death-march"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
     
     def run(self):
         try:
@@ -126,6 +118,7 @@ class DeathMarchDownload(Winter2018AnimeDownload):
 class GrancrestSenkiDownload(Winter2018AnimeDownload):
     title = "Grancrest Senki"
     keywords = ["Grancrest Senki", "Record of Grancrest War"]
+    folder_name = 'grancrest-senki'
 
     IMAGE_URL = "https://grancrest-anime.jp/assets/img/common/story/%s/%s.jpg"
     FINAL_EPISODE = 24
@@ -133,9 +126,6 @@ class GrancrestSenkiDownload(Winter2018AnimeDownload):
     
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/grancrest-senki"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
     
     def run(self):
         try:
@@ -157,6 +147,7 @@ class GrancrestSenkiDownload(Winter2018AnimeDownload):
 class HakumikoDownload(Winter2018AnimeDownload):
     title = "Hakumei to Mikochi"
     keywords = ["Hakumei to Mikochi", "Hakumiko", "Hakumei and Mikochi"]
+    folder_name = 'hakumiko'
 
     IMAGE_URL = "http://hakumiko.com/images/story/%s/p_%s.jpg"
     FINAL_EPISODE = 12
@@ -164,9 +155,6 @@ class HakumikoDownload(Winter2018AnimeDownload):
     
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/hakumiko"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
     
     def run(self):
         try:
@@ -192,6 +180,7 @@ class HakumikoDownload(Winter2018AnimeDownload):
 class TakagisanDownload(Winter2018AnimeDownload):
     title = "Karakai Jouzu no Takagi-san"
     keywords = ["Karakai Jouzu no Takagi-san", "Takagisan", "Teasing Master Takagi-san"]
+    folder_name = 'takagi-san'
     
     IMAGE_URL = "https://takagi3.me/1st/images/story%s_%s.jpg"
     FINAL_EPISODE = 12
@@ -199,9 +188,6 @@ class TakagisanDownload(Winter2018AnimeDownload):
     
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/takagi-san"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
     
     def run(self):
         try:
@@ -223,6 +209,7 @@ class TakagisanDownload(Winter2018AnimeDownload):
 class MarchenMadchenDownload(Winter2018AnimeDownload):
     title = "Marchen Madchen"
     keywords = ["Marchen Madchen", "Maerchen Maedchen", "Fairy Tale Girls"]
+    folder_name = 'marchen-madchen'
 
     PAGE_PREFIX = "https://maerchen-anime.com/"
     STORY_URL = "https://maerchen-anime.com/result/%s.html"
@@ -230,9 +217,6 @@ class MarchenMadchenDownload(Winter2018AnimeDownload):
     
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/marchen-madchen"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
     
     def run(self):
         try:
@@ -255,15 +239,13 @@ class MarchenMadchenDownload(Winter2018AnimeDownload):
 class MitsuboshiColorsDownload(Winter2018AnimeDownload):
     title = "Mitsuboshi Colors"
     keywords = ["Mitsuboshi Colors"]
+    folder_name = 'mitsuboshi-colors'
 
     STORY_URL = "http://mitsuboshi-anime.com/story/vol%s/"
     FINAL_EPISODE = 12
     
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/mitsuboshi-colors"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
     
     def run(self):
         try:
@@ -289,6 +271,7 @@ class MitsuboshiColorsDownload(Winter2018AnimeDownload):
 class Overlord2Download(Winter2018AnimeDownload):
     title = "Overlord II"
     keywords = ["Overlord II", "2", "2nd"]
+    folder_name = 'overlord2'
     
     IMAGE_PREFIX = "http://overlord-anime.com/assets/story/"
     FINAL_EPISODE = 13
@@ -296,9 +279,6 @@ class Overlord2Download(Winter2018AnimeDownload):
     
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/overlord2"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
     
     def run(self):
         try:
@@ -319,6 +299,7 @@ class Overlord2Download(Winter2018AnimeDownload):
 class PopTeamEpicDownload(Winter2018AnimeDownload):
     title = "Pop Team Epic"
     keywords = ["Pop Team Epic", "Poputepipikku"]
+    folder_name = 'pop-team-epic'
 
     IMAGE_URL = "http://hoshiiro.jp/img/story/img_%s_%s.png"
     FINAL_EPISODE = 12
@@ -326,9 +307,6 @@ class PopTeamEpicDownload(Winter2018AnimeDownload):
     
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/pop-team-epic"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
     
     def run(self):
         try:
@@ -350,6 +328,7 @@ class PopTeamEpicDownload(Winter2018AnimeDownload):
 class RamenKoizumiDownload(Winter2018AnimeDownload):
     title = "Ramen Daisuki Koizumi-san"
     keywords = ["Ramen Daisuki Koizumi-san", "Koizumisan", "Ms. Koizumi Loves Ramen Noodles"]
+    folder_name = 'ramen-koizumi'
 
     IMAGE_URL = "http://ramen-koizumi.com/img/story/ep%s/img%s.jpg"
     FINAL_EPISODE = 12
@@ -357,9 +336,6 @@ class RamenKoizumiDownload(Winter2018AnimeDownload):
     
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/ramen-koizumi"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
     
     def run(self):
         try:
@@ -381,6 +357,7 @@ class RamenKoizumiDownload(Winter2018AnimeDownload):
 class RyuohDownload(Winter2018AnimeDownload):
     title = "Ryuuou no Oshigoto!"
     keywords = ["Ryuuou no Oshigoto!", "The Ryuo's Work is Never Done!", "Ryuoh"]
+    folder_name = 'ryuoh'
 
     IMAGE_URL = "http://www.ryuoh-anime.com/story/images/%s-%s.jpg"
     FINAL_EPISODE = 12
@@ -388,9 +365,6 @@ class RyuohDownload(Winter2018AnimeDownload):
     
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/ryuoh"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
     
     def run(self):
         try:
@@ -412,6 +386,7 @@ class RyuohDownload(Winter2018AnimeDownload):
 class SlowStartDownload(Winter2018AnimeDownload):
     title = "Slow Start"
     keywords = ["Slow Start"]
+    folder_name = 'slow-start'
 
     IMAGE_URL = "https://slow-start.com/uploads/story%s_%s.jpg"
     FINAL_EPISODE = 12
@@ -419,9 +394,6 @@ class SlowStartDownload(Winter2018AnimeDownload):
     
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/slow-start"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
     
     def run(self):
         try:
@@ -443,6 +415,7 @@ class SlowStartDownload(Winter2018AnimeDownload):
 class YorimoiDownload(Winter2018AnimeDownload):
     title = "Sora yori mo Tooi Basho"
     keywords = ["Sora yori mo Tooi Basho", "Yorimoi", "A Place Further Than The Universe"]
+    folder_name = 'yorimoi'
 
     IMAGE_URL = "http://yorimoi.com/assets/story/%s_%s.jpg"
     FINAL_EPISODE = 13
@@ -450,9 +423,6 @@ class YorimoiDownload(Winter2018AnimeDownload):
     
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/yorimoi"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
     
     def run(self):
         try:
@@ -474,6 +444,7 @@ class YorimoiDownload(Winter2018AnimeDownload):
 class TojiNoMikoDownload(Winter2018AnimeDownload):
     title = "Toji no Miko"
     keywords = ["Toji no Miko", "Tojimiko", "Katana Maidens"]
+    folder_name = 'toji-no-miko'
     
     PAGE_PREFIX = "http://tojinomiko.jp/"
     STORY_URL = "http://tojinomiko.jp/story/%s.html"
@@ -481,9 +452,6 @@ class TojiNoMikoDownload(Winter2018AnimeDownload):
     
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/toji-no-miko"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
     
     def run(self):
         try:
@@ -506,6 +474,7 @@ class TojiNoMikoDownload(Winter2018AnimeDownload):
 class YuruCampDownload(Winter2018AnimeDownload):
     title = "Yuru Camp"
     keywords = ["Yuru Camp", "Yurucamp", "Laid-Back Camp"]
+    folder_name = 'yurucamp'
 
     IMAGE_URL = "https://yurucamp.jp/first/story/images/%s/%s.jpg"
     FINAL_EPISODE = 12
@@ -513,9 +482,6 @@ class YuruCampDownload(Winter2018AnimeDownload):
     
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/yurucamp"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
     
     def run(self):
         try:

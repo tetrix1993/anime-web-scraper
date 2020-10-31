@@ -28,10 +28,10 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 class Spring2020AnimeDownload(MainDownload):
     season = "2020-2"
     season_name = "Spring 2020"
+    folder_name = '2020-2'
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder('2020-2')
 
 
 # Arte
@@ -47,7 +47,6 @@ class ArteDownload(Spring2020AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
 
     def run(self):
         try:
@@ -105,7 +104,6 @@ class BrandNewAnimalDownload(Spring2020AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
 
     def run(self):
         try:
@@ -156,7 +154,6 @@ class GleipnirDownload(Spring2020AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
     
     def run(self):
         try:
@@ -197,7 +194,6 @@ class HachinanDownload(Spring2020AnimeDownload):
     
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -320,7 +316,6 @@ class Honzuki2Download(Spring2020AnimeDownload):
     
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
     
     def run(self):
         self.download_episode_preview()
@@ -397,7 +392,6 @@ class NamiyoDownload(Spring2020AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
 
     def run(self):
         try:
@@ -435,7 +429,6 @@ class TeiboDownload(Spring2020AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
     
     def run(self):
         self.download_episode_preview()
@@ -532,7 +525,6 @@ class Kaguyasama2Download(Spring2020AnimeDownload):
     
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
     
     def run(self):
         self.download_episode_preview()
@@ -670,7 +662,6 @@ class KakushigotoDownload(Spring2020AnimeDownload):
     
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
     
     def run(self):
         self.download_episode_preview()
@@ -729,7 +720,6 @@ class Kingdom3Download(Spring2020AnimeDownload):
     
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
     
     def run(self):
         try:
@@ -767,7 +757,6 @@ class HamehuraDownload(Spring2020AnimeDownload):
     
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -832,7 +821,6 @@ class PriconneDownload(Spring2020AnimeDownload):
     
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
     
     def run(self):
         self.download_episode_preview()
@@ -944,7 +932,6 @@ class ShachibatoDownload(Spring2020AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -1067,7 +1054,6 @@ class TamayomiDownload(Spring2020AnimeDownload):
     
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
     
     def run(self):
         self.download_episode_preview()
@@ -1203,7 +1189,6 @@ class Tsugumomo2Download(Spring2020AnimeDownload):
     
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
     
     def run(self):
         self.download_episode_preview()
@@ -1265,7 +1250,6 @@ class YesterdayDownload(Spring2020AnimeDownload):
     
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
     
     def run(self):
         try:

@@ -19,10 +19,10 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 class Summer2020AnimeDownload(MainDownload):
     season = "2020-3"
     season_name = "Summer 2020"
+    folder_name = '2020-3'
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder('2020-3')
 
 
 # Deca-Dence
@@ -35,7 +35,6 @@ class DecaDenceDownload(Summer2020AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -68,7 +67,6 @@ class HxErosDownload(Summer2020AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -218,7 +216,6 @@ class KanokariDownload(Summer2020AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -391,7 +388,6 @@ class MaohgakuinDownload(Summer2020AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -553,7 +549,6 @@ class MonIshaDownload(Summer2020AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -664,7 +659,6 @@ class PeterGrillDownload(Summer2020AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -792,7 +786,6 @@ class ReZero2Download(Summer2020AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -871,7 +864,6 @@ class UzakiChanDownload(Summer2020AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -952,7 +944,6 @@ class Oregairu3Download(Summer2020AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()

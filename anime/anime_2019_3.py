@@ -7,26 +7,22 @@ from anime.main_download import MainDownload
 class Summer2019AnimeDownload(MainDownload):
     season = "2019-3"
     season_name = "Summer 2019"
+    folder_name = '2019-3'
 
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/2019-3"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
 
 
 # Arifureta
 class ArifuretaDownload(Summer2019AnimeDownload):
     title = "Arifureta Shokugyou de Sekai Saikyou"
     keywords = ["Arifureta Shokugyou de Sekai Saikyou", "Arifureta: From Commonplace to World's Strongest"]
+    folder_name = 'arifureta'
 
     MAIN_PAGE = "https://arifureta.com/storys/"
 
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/arifureta"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
         
     def run(self):
         self.download_episode_preview()
@@ -106,6 +102,7 @@ class ArifuretaDownload(Summer2019AnimeDownload):
 class DumbbellDownload(Summer2019AnimeDownload):
     title = "Dumbbell Nan Kilo Moteru?"
     keywords = ["Dumbbell Nan Kilo Moteru?", "How heavy are the dumbbells you lift?"]
+    folder_name = 'dumbbell'
 
     PAGE_LINK = "https://dumbbell-anime.jp/story/"
     IMAGE_PREFIX = "https://dumbbell-anime.jp/"
@@ -114,9 +111,6 @@ class DumbbellDownload(Summer2019AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/dumbbell"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
             
     def run(self):
         try:
@@ -147,6 +141,7 @@ class DumbbellDownload(Summer2019AnimeDownload):
 class GranbelmDownload(Summer2019AnimeDownload):
     title = "Granbelm"
     keywords = ["Granbelm"]
+    folder_name = 'granbelm'
     
     PAGE_LINK = "http://granbelm.com/story/"
     FINAL_EPISODE = 13
@@ -154,9 +149,6 @@ class GranbelmDownload(Summer2019AnimeDownload):
     
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/granbelm"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
     
     def run(self):
         try:
@@ -186,6 +178,7 @@ class HensukiDownload(Summer2019AnimeDownload):
     title = "Kawaikereba Hentai demo Suki ni Natte Kuremasu ka?"
     keywords = ["Kawaikereba Hentai demo Suki ni Natte Kuremasu ka?",
                 "Hensuki: Are you willing to fall in love with a pervert, as long as she's a cutie?"]
+    folder_name = 'hensuki'
 
     PAGE_PREFIX = "https://hensuki.com/story/?mode=story"
     IMAGE_PREFIX = "https://hensuki.com/story/"
@@ -194,9 +187,6 @@ class HensukiDownload(Summer2019AnimeDownload):
     
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/hensuki"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
     
     def run(self):
         self.download_episode_preview()
@@ -253,6 +243,7 @@ class HensukiDownload(Summer2019AnimeDownload):
 class IsekaiCheatDownload(Summer2019AnimeDownload):
     title = "Isekai Cheat Magician"
     keywords = ["Isekai Cheat Magician"]
+    folder_name = 'isekai-cheat'
 
     PAGE_LINK = "http://isekai-cheat-magician.com/story/"
     FINAL_EPISODE = 13
@@ -260,9 +251,6 @@ class IsekaiCheatDownload(Summer2019AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/isekai-cheat"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
     
     def run(self):
         self.download_episode_preview()
@@ -315,6 +303,7 @@ class IsekaiCheatDownload(Summer2019AnimeDownload):
 class JyoshimudaDownload(Summer2019AnimeDownload):
     title = "Joshikousei no Mudazukai"
     keywords = ["Joshikousei no Mudazukai", "Wasteful Days of High School Girl"]
+    folder_name = 'jyoshimuda'
 
     PAGE_PREFIX = "http://jyoshimuda.com/story"
     PAGE_SUFFIX = ".html"
@@ -324,9 +313,6 @@ class JyoshimudaDownload(Summer2019AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/jyoshimuda"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
     
     def run(self):
         try:
@@ -358,6 +344,7 @@ class JyoshimudaDownload(Summer2019AnimeDownload):
 class KanataNoAstraDownload(Summer2019AnimeDownload):
     title = "Kanata no Astra"
     keywords = ["Astra Lost in Space"]
+    folder_name = 'kanata-no-astra'
 
     IMAGE_PREFIX = "http://astra-anime.com/"
     PAGE_LINK = "http://astra-anime.com/story/"
@@ -366,9 +353,6 @@ class KanataNoAstraDownload(Summer2019AnimeDownload):
     
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/kanata-no-astra"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
     
     def run(self):
         try:
@@ -397,6 +381,7 @@ class KanataNoAstraDownload(Summer2019AnimeDownload):
 class MachikadoMazokuDownload(Summer2019AnimeDownload):
     title = "Machikado Mazoku"
     keywords = ["Machikado Mazoku", "The Demon Girl Next Door"]
+    folder_name = 'machikado-mazoku'
 
     PAGE_PREFIX = "http://www.tbs.co.jp/anime/machikado/story/"
     # PAGE_SUFFIX = ".html"
@@ -406,9 +391,6 @@ class MachikadoMazokuDownload(Summer2019AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/machikado-mazoku"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
     
     def run(self):
         try:
@@ -452,6 +434,7 @@ class MachikadoMazokuDownload(Summer2019AnimeDownload):
 class MaousamaRetryDownload(Summer2019AnimeDownload):
     title = "Maou-sama, Retry!"
     keywords = ["Maou-sama, Retry!", "Maousama", "Demon Lord, Retry!"]
+    folder_name = 'maousama-retry'
 
     PAGE_PREFIX = "http://maousama-anime.com/story/"
     FINAL_EPISODE = 13
@@ -459,9 +442,6 @@ class MaousamaRetryDownload(Summer2019AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/maousama-retry"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
     
     def run(self):
         try:
@@ -492,6 +472,7 @@ class MaousamaRetryDownload(Summer2019AnimeDownload):
 class OkaasanOnlineDownload(Summer2019AnimeDownload):
     title = "Tsuujou Kougeki ga Zentai Kougeki de Ni-kai Kougeki no Okaasan wa Suki Desu ka?"
     keywords = [title, "Do You Like Your Mom? Her Normal Attack is Two Attacks at Full Power", "Okaasan online"]
+    folder_name = 'okaasan-online'
 
     PAGE_PREFIX = "https://okaasan-online.com/story/"
     IMAGE_PREFIX = "https://okaasan-online.com"
@@ -500,9 +481,6 @@ class OkaasanOnlineDownload(Summer2019AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/okaasan-online"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
     
     def run(self):
         try:
@@ -531,6 +509,7 @@ class OkaasanOnlineDownload(Summer2019AnimeDownload):
 class SounanDesukaDownload(Summer2019AnimeDownload):
     title = "Sounan Desu ka?"
     keywords = ["Sounan Desu ka?", "Are You Lost?"]
+    folder_name = 'sounan-desu-ka'
 
     PAGE_LINK = "http://sounandesuka.jp/"
     FINAL_EPISODE = 13
@@ -538,9 +517,6 @@ class SounanDesukaDownload(Summer2019AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/sounan-desu-ka"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
     
     def run(self):
         try:
@@ -568,6 +544,7 @@ class SounanDesukaDownload(Summer2019AnimeDownload):
 class TejinaDownload(Summer2019AnimeDownload):
     title = "Tejina-senpai"
     keywords = ["Tejina-senpai", "Magical Sempai"]
+    folder_name = 'tejina'
 
     PAGE_LINK = "http://www.tejina-senpai.jp/story.html"
     IMAGE_PREFIX = "http://www.tejina-senpai.jp/"
@@ -576,9 +553,6 @@ class TejinaDownload(Summer2019AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/tejina"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
     
     def run(self):
         try:
@@ -609,6 +583,7 @@ class UchinokoDownload(Summer2019AnimeDownload):
     title = "Uchi no Ko no Tame naraba, Ore wa Moshikashitara Maou mo Taoseru kamo Shirenai."
     keywords = ["Uchi no Ko no Tame naraba, Ore wa Moshikashitara Maou mo Taoseru kamo Shirenai.",
                 "Uchinoko", "Uchimusume", "If It's for My Daughter, I'd Even Defeat a Demon Lord"]
+    folder_name = 'uchinoko'
 
     PAGE_PREFIX = "http://uchinoko-anime.com/story/"
     FINAL_EPISODE = 13
@@ -616,9 +591,6 @@ class UchinokoDownload(Summer2019AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/uchinoko"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
     
     def run(self):
         try:

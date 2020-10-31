@@ -4,12 +4,14 @@ from anime.main_download import MainDownload
 
 
 class ExternalDownload(MainDownload):
+    folder_name = None
+
     def __init__(self):
         super().__init__()
 
 
 class AniverseMagazineDownload(ExternalDownload):
-
+    folder_name = None
     PAGE_PREFIX = "https://aniverse-mag.com/archives/"
     
     def __init__(self, article_id, save_folder, episode, num_of_pictures=0):
@@ -52,7 +54,7 @@ class AniverseMagazineDownload(ExternalDownload):
 
 
 class MocaNewsDownload(ExternalDownload):
-
+    folder_name = None
     PAGE_PREFIX = "https://moca-news.net/article/"
     COOKIE_URL = "https://moca-news.net/pd.php"
     
@@ -115,7 +117,7 @@ class MocaNewsDownload(ExternalDownload):
 
 
 class WebNewtypeDownload(ExternalDownload):
-    
+    folder_name = None
     PAGE_PREFIX = "https://webnewtype.com/news/article/"
     
     def __init__(self, article_id, save_folder, episode):

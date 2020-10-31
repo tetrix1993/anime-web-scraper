@@ -37,10 +37,10 @@ from PIL import Image
 class Fall2020AnimeDownload(MainDownload):
     season = "2020-4"
     season_name = "Fall 2020"
+    folder_name = '2020-4'
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder('2020-4')
 
 
 # 100-man no Inochi no Ue ni Ore wa Tatteiru
@@ -55,7 +55,6 @@ class HyakumanNoInochiDownload(Fall2020AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -148,7 +147,6 @@ class AdashimaDownload(Fall2020AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -252,7 +250,6 @@ class AssaultLilyDownload(Fall2020AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -355,7 +352,6 @@ class Danmachi3Download(Fall2020AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -417,7 +413,6 @@ class DogezaDeTanondemitaDownload(Fall2020AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -489,7 +484,6 @@ class GochiUsa3Download(Fall2020AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -655,7 +649,6 @@ class GoldenKamuy3Download(Fall2020AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -699,7 +692,6 @@ class Higurashi2020Download(Fall2020AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -781,7 +773,6 @@ class IwakakeruDownload(Fall2020AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -933,7 +924,6 @@ class JujutsuKaisenDownload(Fall2020AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -1007,7 +997,6 @@ class KamisamaNiNattaHiDownload(Fall2020AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -1224,7 +1213,6 @@ class KamihiroDownload(Fall2020AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -1321,7 +1309,6 @@ class KimisenDownload(Fall2020AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -1417,7 +1404,6 @@ class KumaBearDownload(Fall2020AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -1676,7 +1662,6 @@ class MaesetsuDownload(Fall2020AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -1776,7 +1761,6 @@ class Mahouka2Download(Fall2020AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -1933,7 +1917,6 @@ class MajotabiDownload(Fall2020AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
 
     def run(self):
         soup = self.get_soup(self.PAGE_PREFIX)
@@ -2057,7 +2040,6 @@ class MaoujoDownload(Fall2020AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -2164,7 +2146,6 @@ class MunounaNanaDownload(Fall2020AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -2243,7 +2224,6 @@ class OchifuruDownload(Fall2020AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -2387,7 +2367,6 @@ class OneRoom3Download(Fall2020AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -2462,7 +2441,6 @@ class RailRomanesqueDownload(Fall2020AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -2503,7 +2481,6 @@ class SigrdrifaDownload(Fall2020AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -2656,7 +2633,6 @@ class StrikeWitches3Download(Fall2020AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -2762,7 +2738,6 @@ class TonikawaDownload(Fall2020AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()

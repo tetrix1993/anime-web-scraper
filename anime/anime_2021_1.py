@@ -21,10 +21,10 @@ from anime.main_download import MainDownload
 class Winter2021AnimeDownload(MainDownload):
     season = "2021-1"
     season_name = "Winter 2021"
+    folder_name = '2021-1'
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder('2021-1')
 
 
 # Gotoubun no Hanayome ∬
@@ -37,7 +37,6 @@ class Gotoubun2Download(Winter2021AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -84,7 +83,6 @@ class HorimiyaDownload(Winter2021AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -123,7 +121,6 @@ class TomozakiKunDownload(Winter2021AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -169,7 +166,6 @@ class KaiyariDownload(Winter2021AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -221,7 +217,6 @@ class MushokuTenseiDownload(Winter2021AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -271,7 +266,6 @@ class NonNonBiyori3Download(Winter2021AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -350,7 +344,6 @@ class KakushiDungeonDownload(Winter2021AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -398,7 +391,6 @@ class LasdanDownload(Winter2021AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -466,7 +458,6 @@ class UrasekaiPicnicDownload(Winter2021AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -511,7 +502,6 @@ class YuruCamp2Download(Winter2021AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()

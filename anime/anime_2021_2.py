@@ -12,10 +12,10 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 class Spring2021AnimeDownload(MainDownload):
     season = "2021-2"
     season_name = "Spring 2021"
+    folder_name = '2021-2'
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder('2021-2')
 
 
 # Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita
@@ -28,7 +28,6 @@ class Slime300Download(Spring2021AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()

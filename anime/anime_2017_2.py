@@ -6,18 +6,17 @@ from anime.main_download import MainDownload
 class Spring2017AnimeDownload(MainDownload):
     season = "2017-2"
     season_name = "Spring 2017"
+    folder_name = '2017-2'
     
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/2017-2"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
 
 
 # Alice to Zouroku
 class AliceToZourokuDownload(Spring2017AnimeDownload):
     title = "Alice to Zouroku"
     keywords = ["Alice to Zouroku", "Alice & Zoroku", "and"]
+    folder_name = 'alice-to-zouroku'
 
     PAGE_URL = 'https://www.alicetozouroku.com/story/story_%s.html'
     IMAGE_PREFIX = 'https://www.alicetozouroku.com'
@@ -25,9 +24,6 @@ class AliceToZourokuDownload(Spring2017AnimeDownload):
     
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/alice-to-zouroku"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
     
     def run(self):
         try:
@@ -49,6 +45,7 @@ class AliceToZourokuDownload(Spring2017AnimeDownload):
 class BusouShoujoMachiavellismDownload(Spring2017AnimeDownload):
     title = "Busou Shoujo Machiavellianism"
     keywords = ["Busou Shoujo Machiavellianism", "Armed Girl's Machiavellism"]
+    folder_name = 'busou-shoujo'
 
     IMAGE_URL = 'http://machiavellism-anime.jp/story/img/%s/%s.jpg'
 
@@ -57,9 +54,6 @@ class BusouShoujoMachiavellismDownload(Spring2017AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/busou-shoujo"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
 
     def run(self):
         for i in range(self.FINAL_EPISODE):
@@ -76,6 +70,7 @@ class BusouShoujoMachiavellismDownload(Spring2017AnimeDownload):
 class ClockworkPlanetDownload(Spring2017AnimeDownload):
     title = "Clockwork Planet"
     keywords = ["Clockwork Planet"]
+    folder_name = 'clockwork-planet'
 
     IMAGE_URL = 'http://www.tbs.co.jp/anime/cp/story/img/story%s/%s.png'
     FINAL_EPISODE = 12
@@ -83,9 +78,6 @@ class ClockworkPlanetDownload(Spring2017AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/clockwork-planet"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
 
     def run(self):
         for i in range(self.FINAL_EPISODE):
@@ -103,14 +95,12 @@ class SwordOratoriaDownload(Spring2017AnimeDownload):
     title = "Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka Gaiden: Sword Oratoria"
     keywords = ["Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka Gaiden: Sword Oratoria", "Danmachi",
                 "Sword Oratoria: Is it Wrong to Try to Pick Up Girls in a Dungeon? On the Side"]
+    folder_name = 'sword-oratoria'
 
     STORY_PAGE = 'http://danmachi.com/sword_oratoria/story/'
 
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/sword-oratoria"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
 
     def run(self):
         image_div = self.get_soup(self.STORY_PAGE).find_all('div', class_='vol-img')
@@ -129,6 +119,7 @@ class SwordOratoriaDownload(Spring2017AnimeDownload):
 class EromangaSenseiDownload(Spring2017AnimeDownload):
     title = "Eromanga Sensei"
     keywords = ["Eromanga Sensei", "Eromanga-Sensei"]
+    folder_name = 'eromanga-sensei'
 
     IMAGE_URL = 'https://eromanga-sensei.com/assets/img/story/%s/%s.jpg'
     FINAL_EPISODE = 12
@@ -136,9 +127,6 @@ class EromangaSenseiDownload(Spring2017AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/eromanga-sensei"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
 
     def run(self):
         for i in range(self.FINAL_EPISODE):
@@ -155,6 +143,7 @@ class EromangaSenseiDownload(Spring2017AnimeDownload):
 class HinakoNoteDownload(Spring2017AnimeDownload):
     title = "Hinako Note"
     keywords = ["Hinako Note"]
+    folder_name = 'hinako-note'
 
     IMAGE_URL = 'http://hinakonote.jp/assets/story/%s_%s.jpg'
 
@@ -163,9 +152,6 @@ class HinakoNoteDownload(Spring2017AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/hinako-note"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
 
     def run(self):
         for i in range(self.FINAL_EPISODE):
@@ -182,6 +168,7 @@ class HinakoNoteDownload(Spring2017AnimeDownload):
 class ReCreatorsDownload(Spring2017AnimeDownload):
     title = "Re:Creators"
     keywords = ["Re:Creators"]
+    folder_name = 're-creators'
 
     IMAGE_URL = 'https://recreators.tv/img/story/story_%s_%s.jpg'
     FINAL_EPISODE = 22
@@ -189,9 +176,6 @@ class ReCreatorsDownload(Spring2017AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/re-creators"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
 
     def run(self):
         for i in range(self.FINAL_EPISODE):
@@ -208,15 +192,13 @@ class ReCreatorsDownload(Spring2017AnimeDownload):
 class RenaiBoukunDownload(Spring2017AnimeDownload):
     title = "Renai Boukun"
     keywords = ["Renai Boukun", "Love Tyrant"]
+    folder_name = 'renai-boukun'
 
     STORY_PAGE = 'https://renaiboukun.com/story/'
     NUM_OF_PICTURES_PER_PAGE = 6
 
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/renai-boukun"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
 
     def run(self):
         try:
@@ -246,15 +228,13 @@ class RokuakaDownload(Spring2017AnimeDownload):
     title = "Rokudenashi Majutsu Koushi to Akashic Records"
     keywords = ["Rokudenashi Majutsu Koushi to Akashic Records", "Rokuaka",
                 "Akashic Records of Bastard Magic Instructor"]
+    folder_name = 'rokuaka'
 
     STORY_PAGE = 'http://rokuaka.jp/story/'
     IMAGE_PREFIX = 'http://rokuaka.jp'
 
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/rokuaka"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
 
     def run(self):
         try:
@@ -280,6 +260,7 @@ class RokuakaDownload(Spring2017AnimeDownload):
 class Saekano2Download(Spring2017AnimeDownload):
     title = "Saenai Heroine no Sodatekata Flat"
     keywords = ["Saenai Heroine no Sodatekata Flat", "Saekano: How to Raise a Boring Girlfriend"]
+    folder_name = 'saekano2'
 
     IMAGE_URL = 'https://www.saenai.tv/images/story/%s/%s.jpg'
     FINAL_EPISODE = 12 # including Episode 0
@@ -287,9 +268,6 @@ class Saekano2Download(Spring2017AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/saekano2"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
 
     def run(self):
         for i in range(self.FINAL_EPISODE):
@@ -306,6 +284,7 @@ class Saekano2Download(Spring2017AnimeDownload):
 class SakuraQuestDownload(Spring2017AnimeDownload):
     title = "Sakura Quest"
     keywords = ["Sakura Quest"]
+    folder_name = 'sakura-quest'
 
     IMAGE_URL = 'http://sakura-quest.com/story/images/%s_%s.jpg'
     FINAL_EPISODE = 25
@@ -313,9 +292,6 @@ class SakuraQuestDownload(Spring2017AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/sakura-quest"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
 
     def run(self):
         for i in range(self.FINAL_EPISODE):
@@ -332,6 +308,7 @@ class SakuraQuestDownload(Spring2017AnimeDownload):
 class SakuradaResetDownload(Spring2017AnimeDownload):
     title = "Sakurada Reset"
     keywords = ["Sakurada Reset", "Sagrada Reset"]
+    folder_name = 'sakurada-reset'
 
     IMAGE_URL = 'http://wwwsp.sagrada-anime.com/img/story/ep%s/img%s.jpg'
     FINAL_EPISODE = 24
@@ -339,9 +316,6 @@ class SakuradaResetDownload(Spring2017AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/sakurada-reset"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
 
     def run(self):
         for i in range(self.FINAL_EPISODE):
@@ -359,6 +333,7 @@ class SukasukaDownload(Spring2017AnimeDownload):
     title = "Shuumatsu Nani Shitemasu ka? Isogashii Desu ka? Sukutte Moratte Ii Desu ka?"
     keywords = ["Shuumatsu Nani Shitemasu ka? Isogashii Desu ka? Sukutte Moratte Ii Desu ka?", "Sukasuka",
                 "WorldEnd: What do you do at the end of the world? Are you busy? Will you save us?"]
+    folder_name = 'sukasuka'
 
     STORY_PAGE = 'http://sukasuka-anime.com/story/%s.html'
     PAGE_PREFIX = 'http://sukasuka-anime.com/'
@@ -366,9 +341,6 @@ class SukasukaDownload(Spring2017AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/sukasuka"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
 
     def run(self):
         for i in range(self.FINAL_EPISODE):
@@ -386,6 +358,7 @@ class SukasukaDownload(Spring2017AnimeDownload):
 class ZeronosyoDownload(Spring2017AnimeDownload):
     title = "Zero kara Hajimeru Mahou no Sho"
     keywords = ["Zero kara Hajimeru Mahou no Sho", "Zeronosyo", "Grimoire of Zero"]
+    folder_name = 'zeronosyo'
 
     IMAGE_URL = 'http://zeronosyo.com/img/story/ep%s/img%s.jpg'
     FINAL_EPISODE = 12
@@ -393,9 +366,6 @@ class ZeronosyoDownload(Spring2017AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/zeronosyo"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
 
     def run(self):
         for i in range(self.FINAL_EPISODE):

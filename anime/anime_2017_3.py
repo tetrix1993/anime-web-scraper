@@ -6,18 +6,17 @@ from anime.main_download import MainDownload
 class Summer2017AnimeDownload(MainDownload):
     season = "2017-3"
     season_name = "Summer 2017"
+    folder_name = '2017-3'
     
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/2017-3"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
 
 
 # Gamers!
 class GamersDownload(Summer2017AnimeDownload):
     title = "Gamers!"
     keywords = ["Gamers!"]
+    folder_name = 'gamers'
 
     PAGE_URL = 'https://www.gamers-anime.com/story/%s.html'
     IMAGE_PREFIX = 'https://www.gamers-anime.com/'
@@ -25,9 +24,6 @@ class GamersDownload(Summer2017AnimeDownload):
     
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/gamers"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
     
     def run(self):
         try:
@@ -51,6 +47,7 @@ class GamersDownload(Summer2017AnimeDownload):
 class IsesumaDownload(Summer2017AnimeDownload):
     title = "Isekai wa Smartphone to Tomo ni"
     keywords = ["Isekai wa Smartphone to Tomo ni", "Isesuma", "In Another World With My Smartphone"]
+    folder_name = 'isesuma'
 
     IMAGE_URL = "http://isesuma-anime.jp/img/story/ep%s/scene%s.png"
     FINAL_EPISODE = 12
@@ -58,9 +55,6 @@ class IsesumaDownload(Summer2017AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/isesuma"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
 
     def run(self):
         for i in range(self.FINAL_EPISODE):
@@ -78,6 +72,7 @@ class IsesumaDownload(Summer2017AnimeDownload):
 class NewGame2Download(Summer2017AnimeDownload):
     title = "New Game!!"
     keywords = ["New Game!!"]
+    folder_name = 'new-game2'
 
     IMAGE_URL = 'http://newgame-anime.com/assets/outline/s2/%s_%s.jpg'
     FINAL_EPISODE = 12
@@ -85,9 +80,6 @@ class NewGame2Download(Summer2017AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/new-game2"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
 
     def run(self):
         for i in range(self.FINAL_EPISODE):
@@ -105,6 +97,7 @@ class NewGame2Download(Summer2017AnimeDownload):
 class TenshiNo3PDownload(Summer2017AnimeDownload):
     title = "Tenshi no 3P!"
     keywords = ["Tenshi no 3P!", "Angel's 3Piece!"]
+    folder_name = 'tenshi-no-3p'
 
     IMAGE_URL = 'http://www.tenshi-no-3p.com/img/story/ep%s/story%s_%s.jpg'
     FINAL_EPISODE = 12
@@ -112,9 +105,6 @@ class TenshiNo3PDownload(Summer2017AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/tenshi-no-3p"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
 
     def run(self):
         for i in range(self.FINAL_EPISODE):
@@ -136,14 +126,12 @@ class TenshiNo3PDownload(Summer2017AnimeDownload):
 class TsurezureChildrenDownload(Summer2017AnimeDownload):
     title = "Tsurezure Children"
     keywords = ["Tsurezure Children", "Tsuredure"]
+    folder_name = 'tsurezure-children'
 
     PAGE_URL = 'http://tsuredure-project.jp/story'
 
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/tsurezure-children"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
 
     def run(self):
         try:
@@ -170,6 +158,7 @@ class YouzitsuDownload(Summer2017AnimeDownload):
     title = "Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e"
     keywords = ["Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e", "Youzitsu", "Youjitsu",
                 "Classroom of the Elite"]
+    folder_name = 'youzitsu'
 
     IMAGE_URL = 'http://you-zitsu.com/assets/story/%s_%s.jpg'
     FINAL_EPISODE = 12
@@ -177,9 +166,6 @@ class YouzitsuDownload(Summer2017AnimeDownload):
 
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/youzitsu"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
 
     def run(self):
         for i in range(self.FINAL_EPISODE):
