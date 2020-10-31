@@ -2636,6 +2636,7 @@ class SigrdrifaDownload(Fall2020AnimeDownload):
             {'name': 'uminohi', 'url': 'https://sigururi.com/SYS/CONTENTS/2020072310293692693264/w708'},
             {'name': 'zanshomimai', 'url': 'https://sigururi.com/news/SYS/CONTENTS/2020083114133842932562/w712'},
             {'name': 'soranohi', 'url': 'https://pbs.twimg.com/media/EiSXMZrU8AA4ThC?format=jpg&name=medium'},
+            {'name': 'halloween', 'url': 'https://pbs.twimg.com/media/EllqxgTVcAEo3UO?format=jpg&name=large'},
             {'name': 'img_miyako', 'url': 'https://sigururi.com/assets/img/special/interview/img_miyako.jpg'},
             {'name': 'img_azuzu', 'url': 'https://sigururi.com/assets/img/special/interview/img_azuzu.jpg'},
             {'name': 'img_sonoka', 'url': 'https://sigururi.com/assets/img/special/interview/img_sonoka.jpg'},

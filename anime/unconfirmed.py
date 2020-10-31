@@ -18,23 +18,20 @@ class UnconfirmedDownload(MainDownload):
 
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/unconfirmed"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
+        self.init_base_folder('unconfirmed')
 
 
 # Cheat Kusushi no Slow Life: Isekai ni Tsukurou Drugstore
 class CheatKusushiDownload(UnconfirmedDownload):
     title = 'Cheat Kusushi no Slow Life: Isekai ni Tsukurou Drugstore'
     keywords = [title, 'Cheat Pharmacist\'s Slow Life: Making a Drugstore in Another World']
+    folder_name = 'cheat-kusushi'
 
     PAGE_PREFIX = 'https://www.cheat-kusushi.jp/'
 
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/cheat-kusushi"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
+        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -54,14 +51,13 @@ class CheatKusushiDownload(UnconfirmedDownload):
 class NagatorosanDownload(UnconfirmedDownload):
     title = 'Ijiranaide, Nagatoro-san'
     keywords = [title, 'Nagatorosan']
+    folder_name = 'nagatoro-san'
 
     PAGE_PREFIX = 'https://www.nagatorosan.jp/'
 
     def __init__(self):
         super().__init__()
-        self.base_folder = self.base_folder + "/nagatoro-san"
-        if not os.path.exists(self.base_folder):
-            os.makedirs(self.base_folder)
+        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -91,12 +87,13 @@ class NagatorosanDownload(UnconfirmedDownload):
 class KobayashiMaidDragon2Download(UnconfirmedDownload):
     title = 'Kobayashi-san Chi no Maid Dragon S'
     keywords = [title, "Miss Kobayashi's Maid Dragon"]
+    folder_name = 'maidragon2'
 
     PAGE_PREFIX = 'https://maidragon.jp/2nd/'
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder('maidragon2')
+        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -117,12 +114,13 @@ class KobayashiMaidDragon2Download(UnconfirmedDownload):
 class OsamakeDownload(UnconfirmedDownload):
     title = 'Osananajimi ga Zettai ni Makenai Love Comedy'
     keywords = [title, 'Osamake']
+    folder_name = 'osamake'
 
     PAGE_PREFIX = 'https://osamake.com/'
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder('osamake')
+        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -144,12 +142,13 @@ class OsamakeDownload(UnconfirmedDownload):
 class Priconne2Download(UnconfirmedDownload):
     title = "Princess Connect! Re:Dive 2nd Season"
     keywords = [title, "Priconne"]
+    folder_name = 'priconne2'
 
     PAGE_PREFIX = "https://anime.priconne-redive.jp"
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder('priconne2')
+        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
@@ -168,12 +167,13 @@ class Priconne2Download(UnconfirmedDownload):
 class TateNoYuusha2Download(UnconfirmedDownload):
     title = "Tate no Yuusha no Nariagari 2nd Season"
     keywords = [title, "The Rising of the Shield Hero"]
+    folder_name = 'tate-no-yuusha2'
 
     PAGE_PREFIX = "http://shieldhero-anime.jp"
 
     def __init__(self):
         super().__init__()
-        self.init_base_folder('tate-no-yuusha2')
+        self.init_base_folder()
 
     def run(self):
         self.download_episode_preview()
