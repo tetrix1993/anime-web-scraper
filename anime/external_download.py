@@ -111,7 +111,7 @@ class MocaNewsDownload(ExternalDownload):
                 image_url = self.PAGE_PREFIX + self.article_id + "/image/" + img_id + self.check_str(art_id, img_id) + ".jpg"
                 headers['Cookie'] = 'imgkey' + img_id + '=' + str(cookie)
                 filepathWithoutExtension = self.base_folder + "/" + self.episode + "_" + pic_num
-                self.download_image(image_url, filepathWithoutExtension, headers)
+                self.download_image(image_url, filepathWithoutExtension, headers, is_mocanews=True)
         except Exception as e:
             print(e)
 
