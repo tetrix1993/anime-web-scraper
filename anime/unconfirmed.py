@@ -38,7 +38,7 @@ class CheatKusushiDownload(UnconfirmedDownload):
         self.download_key_visual()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
 
     def download_key_visual(self):
         keyvisual_folder = self.create_key_visual_directory()
@@ -64,7 +64,7 @@ class HigehiroDownload(UnconfirmedDownload):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -119,7 +119,7 @@ class NagatorosanDownload(UnconfirmedDownload):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -179,7 +179,7 @@ class OsamakeDownload(UnconfirmedDownload):
         self.download_key_visual()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -206,7 +206,7 @@ class Priconne2Download(UnconfirmedDownload):
         self.download_key_visual()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -230,7 +230,7 @@ class TateNoYuusha2Download(UnconfirmedDownload):
         self.download_key_visual()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()

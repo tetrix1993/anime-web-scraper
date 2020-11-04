@@ -156,7 +156,7 @@ class MainDownload:
             print(e)
         return response
 
-    def download_image(self, url, filepath_without_extension, headers=None, to_jpg=False):
+    def download_image(self, url, filepath_without_extension, headers=None, to_jpg=False, is_mocanews=False):
         """
         Download image to the filepath
         :param url:
@@ -168,75 +168,112 @@ class MainDownload:
         if headers is None:
             headers = constants.HTTP_HEADER_USER_AGENT
 
+        max_try_count = 3
+        try_count = 0
+
         # Download image:
-        extension = ''
         try:
-            with requests.get(url, stream=True, headers=headers) as r:
-                # File not found or redirected to main page
-                if r.status_code >= 400:
-                    return -1
-                content_type = r.headers['Content-Type']
-                if 'text' in content_type:
-                    return -1
-                if 'image/png' in content_type:
-                    filepath = filepath_without_extension + ".png"
-                elif 'image/jpeg' in content_type:
-                    filepath = filepath_without_extension + ".jpg"
-                elif 'image/gif' in content_type:
-                    filepath = filepath_without_extension + ".gif"
-                elif 'image/webp' in content_type and to_jpg:
-                    filepath = filepath_without_extension + ".jpg"
-                else:
-                    extension = url.split('.')[-1]
-                    if extension == 'jpg' or extension == 'jpeg':
-                        filepath = filepath_without_extension + ".jpg"
-                    elif extension == 'png':
-                        filepath = filepath_without_extension + ".png"
-                    elif extension == 'gif':
-                        filepath = filepath_without_extension + ".gif"
-                    elif extension == 'webp':
-                        filepath = filepath_without_extension + ".webp"
-                    else:
-                        return -1
+            while try_count < max_try_count:
+                try:
+                    extension = ''
+                    if is_mocanews:
+                        url_split = url.split('/')
+                        if len(url_split) != 8:
+                            print('Invalid MocaNews URL')
+                            return -1
+                        art_id = url_split[5]
+                        img_id = url_split[7].split('-')[0]
+                        try:
+                            int(img_id)
+                        except:
+                            print('Invalid MocaNews URL')
+                            return -1
+                        headers = constants.HTTP_HEADER_USER_AGENT
+                        data = {'art_id': art_id}
+                        cookie = self.post_response('https://moca-news.net/pd.php', headers, data)
+                        headers['Cookie'] = 'imgkey' + img_id + '=' + cookie
 
-                if MainDownload.is_file_exists(filepath):
-                    return 1
+                    filepath = ''
+                    with requests.get(url, stream=True, headers=headers) as r:
+                        # File not found or redirected to main page
+                        if r.status_code >= 400:
+                            return -1
+                        content_type = r.headers['Content-Type']
+                        if 'text' in content_type:
+                            return -1
+                        if 'image/png' in content_type:
+                            filepath = filepath_without_extension + ".png"
+                        elif 'image/jpeg' in content_type:
+                            filepath = filepath_without_extension + ".jpg"
+                        elif 'image/gif' in content_type:
+                            filepath = filepath_without_extension + ".gif"
+                        elif 'image/webp' in content_type and to_jpg:
+                            filepath = filepath_without_extension + ".jpg"
+                        else:
+                            extension = url.split('.')[-1]
+                            if extension == 'jpg' or extension == 'jpeg':
+                                filepath = filepath_without_extension + ".jpg"
+                            elif extension == 'png':
+                                filepath = filepath_without_extension + ".png"
+                            elif extension == 'gif':
+                                filepath = filepath_without_extension + ".gif"
+                            elif extension == 'webp':
+                                filepath = filepath_without_extension + ".webp"
+                            else:
+                                return -1
 
-                if 'image/webp' in content_type:
-                    r.raise_for_status()
-                    with open(filepath + '_temp', 'wb') as f:
-                        for chunk in r.iter_content(chunk_size=8192):
-                            if chunk:
-                                f.write(chunk)
-                    if len(extension) > 0:
-                        if extension == 'jpg':
-                            im = Image.open(filepath + '_temp').convert('RGB')
-                            im.save(filepath, 'jpeg')
-                            os.remove(filepath + '_temp')
-                        elif extension == 'png':
-                            im = Image.open(filepath + '_temp').convert('RGB')
-                            im.save(filepath, 'png')
-                            os.remove(filepath + '_temp')
-                        elif extension == 'gif':
-                            im = Image.open(filepath + '_temp')
-                            im.info.pop('background', None)
-                            im.save(filepath, 'gif', save_all=True)
-                            os.remove(filepath + '_temp')
-                        else: #webp
-                            os.rename(filepath + '_temp', filepath)
-                    elif to_jpg:
-                        im = Image.open(filepath + '_temp').convert('RGB')
-                        im.save(filepath, 'jpeg')
-                        #os.remove(filepath + '_temp')
-                        # Keep a copy
-                        os.rename(filepath + '_temp', filepath[0:len(filepath) - 3] + 'webp')
-                else:
-                    r.raise_for_status()
-                    with open(filepath, 'wb') as f:
-                        for chunk in r.iter_content(chunk_size=8192):
-                            if chunk:
-                                f.write(chunk)
-            print("Downloaded " + url)
+                        if MainDownload.is_file_exists(filepath):
+                            return 1
+
+                        if 'image/webp' in content_type:
+                            r.raise_for_status()
+                            with open(filepath + '_temp', 'wb') as f:
+                                for chunk in r.iter_content(chunk_size=8192):
+                                    if chunk:
+                                        f.write(chunk)
+                            if len(extension) > 0:
+                                if extension == 'jpg':
+                                    im = Image.open(filepath + '_temp').convert('RGB')
+                                    im.save(filepath, 'jpeg')
+                                    os.remove(filepath + '_temp')
+                                elif extension == 'png':
+                                    im = Image.open(filepath + '_temp').convert('RGB')
+                                    im.save(filepath, 'png')
+                                    os.remove(filepath + '_temp')
+                                elif extension == 'gif':
+                                    im = Image.open(filepath + '_temp')
+                                    im.info.pop('background', None)
+                                    im.save(filepath, 'gif', save_all=True)
+                                    os.remove(filepath + '_temp')
+                                else: #webp
+                                    os.rename(filepath + '_temp', filepath)
+                            elif to_jpg:
+                                im = Image.open(filepath + '_temp').convert('RGB')
+                                im.save(filepath, 'jpeg')
+                                #os.remove(filepath + '_temp')
+                                # Keep a copy
+                                os.rename(filepath + '_temp', filepath[0:len(filepath) - 3] + 'webp')
+                        else:
+                            r.raise_for_status()
+                            with open(filepath, 'wb') as f:
+                                for chunk in r.iter_content(chunk_size=8192):
+                                    if chunk:
+                                        f.write(chunk)
+                    if is_mocanews:
+                        if len(filepath) > 0 and os.path.exists(filepath):
+                            image = Image.open(filepath)
+                            width, height = image.size
+                            image.close()
+                            if max(width, height) < 100:
+                                os.remove(filepath)
+                                raise Exception('Image dimensions downloaded from MocaNews is too small')
+                    print("Downloaded " + url)
+                    break
+                except Exception as e:
+                    try_count += 1
+                    print('Download failed: %s (Attempt: %s)' % (url, str(try_count)))
+                    if try_count == max_try_count:
+                        raise e
 
             # Create download log:
             timenow = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -422,7 +459,11 @@ class MainDownload:
             if os.path.exists(filename + '.jpg') or os.path.exists(filename + '.png') or \
                     os.path.exists(filename + '.gif') or os.path.exists(filename + '.webp'):
                 continue
-            if 'to_jpg' in image_obj.keys() and isinstance(image_obj['to_jpg'], bool) and image_obj['to_jpg']:
+
+            if 'is_mocanews' in image_obj.keys() and isinstance(image_obj['is_mocanews'], bool) \
+                    and image_obj['is_mocanews']:
+                result = self.download_image(image_obj['url'], filename, is_mocanews=True)
+            elif 'to_jpg' in image_obj.keys() and isinstance(image_obj['to_jpg'], bool) and image_obj['to_jpg']:
                 result = self.download_image(image_obj['url'], filename, to_jpg=True)
             else:
                 result = self.download_image(image_obj['url'], filename)
@@ -471,10 +512,12 @@ class MainDownload:
             pass
         return False
 
-    def add_to_image_list(self, name, url, to_jpg=False):
+    def add_to_image_list(self, name, url, to_jpg=False, is_mocanews=False):
         image_obj = {'name': name, 'url': url}
         if to_jpg:
             image_obj['to_jpg'] = True
+        if is_mocanews:
+            image_obj['is_mocanews'] = True
         self.image_list.append(image_obj)
 
     def download_image_list(self, folder, clear=True):
