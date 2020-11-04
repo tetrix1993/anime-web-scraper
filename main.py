@@ -61,6 +61,9 @@ def process_download(downloads):
         for result in results:
             result.wait()
 
+    if len(os.listdir(PROCESS_FOLDER)) == 0:
+        os.rmdir(PROCESS_FOLDER)
+
     #if len(downloads) % MAX_PROCESSES == 0:
     #    num_of_iterations = len(downloads) / MAX_PROCESSES
     #else:
