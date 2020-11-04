@@ -90,7 +90,7 @@ class HorimiyaDownload(Winter2021AnimeDownload):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
         #image_objs = []
         #self.download_image_objects(image_objs, self.base_folder)
 
@@ -128,7 +128,7 @@ class TomozakiKunDownload(Winter2021AnimeDownload):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
         #image_objs = []
         #self.download_image_objects(image_objs, self.base_folder)
 
@@ -173,7 +173,7 @@ class KaiyariDownload(Winter2021AnimeDownload):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -224,7 +224,7 @@ class MushokuTenseiDownload(Winter2021AnimeDownload):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -273,7 +273,7 @@ class NonNonBiyori3Download(Winter2021AnimeDownload):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.STORY_PAGE)
+        self.has_website_updated(self.STORY_PAGE, 'index')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -351,7 +351,7 @@ class KakushiDungeonDownload(Winter2021AnimeDownload):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -398,7 +398,7 @@ class LasdanDownload(Winter2021AnimeDownload):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
 
     def download_key_visual(self):
         filepath = self.create_key_visual_directory()
@@ -465,7 +465,7 @@ class UrasekaiPicnicDownload(Winter2021AnimeDownload):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'main')
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -509,7 +509,7 @@ class YuruCamp2Download(Winter2021AnimeDownload):
         #self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
         #image_objs = []
         #self.download_image_objects(image_objs, self.base_folder)
 
