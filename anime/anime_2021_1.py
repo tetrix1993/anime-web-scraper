@@ -471,6 +471,7 @@ class UrasekaiPicnicDownload(Winter2021AnimeDownload):
         folder = self.create_key_visual_directory()
         image_objs = [
             {'name': 'kv1', 'url': 'https://www.othersidepicnic.com/cms/wp-content/themes/othersidepicnic/images/home/kv.jpg'},
+            {'name': 'kv2', 'url': 'https://www.othersidepicnic.com/cms/wp-content/themes/othersidepicnic/images/home/key-visual.jpg'}
         ]
         self.download_image_objects(image_objs, folder)
 

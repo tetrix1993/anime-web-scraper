@@ -1668,6 +1668,7 @@ class MaesetsuDownload(Fall2020AnimeDownload):
         self.download_episode_preview_external()
         self.download_key_visual()
         self.download_character()
+        self.download_bluray()
         self.download_music()
         self.download_other()
 
@@ -1747,6 +1748,58 @@ class MaesetsuDownload(Fall2020AnimeDownload):
                 self.download_image_objects(image_objs, folder)
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + " - Music")
+            print(e)
+
+    def download_bluray(self):
+        folder = self.create_bluray_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'bd/privilege.html')
+            # Blu-Ray Bonus
+            cms_block = soup.find('div', id='cms_block')
+            if cms_block:
+                self.image_list = []
+                bd_bonus_images = cms_block.find_all('img')
+                for image in bd_bonus_images:
+                    if image.has_attr('src'):
+                        image_url = self.PAGE_PREFIX + image['src'].replace('../', '').split('?')[0]
+                        if len(image_url) > 12 and image_url[-12:] == 'newsPict.png':
+                            continue
+                        image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                        self.add_to_image_list(image_name, image_url)
+                self.download_image_list(folder)
+
+            # BLu-rays
+            nav_bar = soup.find('div', id='ContentsListUnit03')
+            if nav_bar:
+                a_tags = nav_bar.find_all('a')
+                for i in range(4):
+                    bd_vol = i + 1
+                    if self.is_image_exists('bd_vol' + str(bd_vol), folder):
+                        continue
+                    if a_tags[i].has_attr('href'):
+                        header_image = a_tags[i].find('img')
+                        if header_image and header_image.has_attr('src'):
+                            header_image_url = self.PAGE_PREFIX + header_image['src'].replace('../', '').split('?')[0]
+                            if self.is_matching_content_length(header_image_url, 54171):
+                                continue
+                            bd_url = self.PAGE_PREFIX + a_tags[i]['href'].replace('../', '')
+                            bd_soup = self.get_soup(bd_url)
+                            bd_cms_block = bd_soup.find('div', id='cms_block')
+                            if bd_cms_block:
+                                images = bd_cms_block.find_all('img')
+                                self.image_list = []
+                                for j in range(len(images)):
+                                    if images[j].has_attr('src'):
+                                        image_name = 'bd_vol' + str(bd_vol)
+                                        if j > 0:
+                                            image_name += '_' + str(j)
+                                        image_url = self.PAGE_PREFIX + images[j]['src'].replace('../', '').split('?')[0]
+                                        if self.is_matching_content_length(image_url, 53979):
+                                            break
+                                        self.add_to_image_list(image_name, image_url)
+                                self.download_image_list(folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Blu-Ray")
             print(e)
 
 
