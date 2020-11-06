@@ -532,7 +532,6 @@ class GochiUsa3Download(Fall2020AnimeDownload):
         contents_base = 19
         block_base = 96
         num_base = 80
-        print(self.__class__.__name__)
         for i in range(8):
             contents = contents_base + i
             block = block_base + i * 4
@@ -540,6 +539,8 @@ class GochiUsa3Download(Fall2020AnimeDownload):
                 num = num_base + j + i * 6
                 image_url = url_base % (str(contents).zfill(8), str(block).zfill(8), str(num).zfill(8))
                 image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                if self.is_image_exists(image_name, folder):
+                    continue
                 result = self.download_image(image_url, folder + '/' + image_name)
                 if result == -1:
                     return
@@ -1286,12 +1287,14 @@ class KamihiroDownload(Fall2020AnimeDownload):
                 else:
                     image_url = url_base % (dt, str(i).zfill(2) + '-' + str(j))
                     image_name = '%s-%s' % (dt, str(i).zfill(2) + '-' + str(j))
+                j += 1
+                if self.is_image_exists(image_name, folder):
+                    continue
                 result = self.download_image(image_url, folder + '/' + image_name)
                 if result == -1:
                     break
                 else:
                     print(self.__class__.__name__ + ' - Guessed successfully!')
-                j += 1
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
