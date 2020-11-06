@@ -487,6 +487,7 @@ class GochiUsa3Download(Fall2020AnimeDownload):
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_guess()
         self.download_key_visual()
         self.download_bluray()
         self.download_bluray_bonus()
@@ -522,6 +523,28 @@ class GochiUsa3Download(Fall2020AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
+
+    def download_episode_preview_guess(self):
+        # Episode 5-1 https://gochiusa.com/bloom/core_sys/images/contents/00000019/block/00000096/00000080.jpg
+        # Episode 5-6 https://gochiusa.com/bloom/core_sys/images/contents/00000019/block/00000096/00000085.jpg
+        folder = self.create_custom_directory('guess')
+        url_base = 'https://gochiusa.com/bloom/core_sys/images/contents/%s/block/%s/%s.jpg'
+        contents_base = 19
+        block_base = 96
+        num_base = 80
+        print(self.__class__.__name__)
+        for i in range(8):
+            contents = contents_base + i
+            block = block_base + i * 4
+            for j in range(6):
+                num = num_base + j + i * 6
+                image_url = url_base % (str(contents).zfill(8), str(block).zfill(8), str(num).zfill(8))
+                image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                result = self.download_image(image_url, folder + '/' + image_name)
+                if result == -1:
+                    return
+                else:
+                    print(self.__class__.__name__ + ' - Guessed successfully!')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -1216,6 +1239,7 @@ class KamihiroDownload(Fall2020AnimeDownload):
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_guess()
         self.download_key_visual()
         self.download_character()
         self.download_music()
@@ -1248,6 +1272,26 @@ class KamihiroDownload(Fall2020AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
+
+    def download_episode_preview_guess(self):
+        folder = self.create_custom_directory('guess')
+        dt = datetime.now().strftime("%m").zfill(2)
+        url_base = 'https://kamihiro-anime.com/wp/wp-content/uploads/2020/%s/%s.png'
+        for i in range(1, 7, 1):
+            j = 0
+            while True:
+                if j == 0:
+                    image_url = url_base % (dt, str(i).zfill(2))
+                    image_name = '%s-%s' % (dt, str(i).zfill(2))
+                else:
+                    image_url = url_base % (dt, str(i).zfill(2) + '-' + str(j))
+                    image_name = '%s-%s' % (dt, str(i).zfill(2) + '-' + str(j))
+                result = self.download_image(image_url, folder + '/' + image_name)
+                if result == -1:
+                    break
+                else:
+                    print(self.__class__.__name__ + ' - Guessed successfully!')
+                j += 1
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -1407,7 +1451,7 @@ class KumaBearDownload(Fall2020AnimeDownload):
 
     def run(self):
         self.download_episode_preview()
-        self.download_episode_preview_guess()
+        #self.download_episode_preview_guess()
         self.download_episode_preview_external()
         self.download_key_visual()
         self.download_character()
