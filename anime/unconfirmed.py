@@ -5,7 +5,6 @@ from anime.main_download import MainDownload
 # Bokutachi no Remake http://bokurema.com/ #ぼくリメ #bokurema @bokurema
 # Cheat Kusushi no Slow Life: Isekai ni Tsukurou Drugstore https://www.cheat-kusushi.jp/ #チート薬師 #スローライフ @cheat_kusushi
 # Hige wo Soru. Soshite Joshikousei wo Hirou. http://higehiro-anime.com/ #higehiro #ひげひろ @higehiro_anime
-# Ijiranaide, Nagatoro-san https://www.nagatorosan.jp/ #長瀞さん @nagatoro_tv
 # Kobayashi-san Chi no Maid Dragon S https://maidragon.jp/2nd/ #maidragon @maidragon_anime
 # Osananajimi ga Zettai ni Makenai Love Comedy https://osamake.com/ #おさまけ
 # Princess Connect! Re:Dive S2 https://anime.priconne-redive.jp/ #アニメプリコネ #プリコネR #プリコネ @priconne_anime
@@ -100,41 +99,6 @@ class HigehiroDownload(UnconfirmedDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + " - Character")
             print(e)
-
-
-# Ijiranaide, Nagatoro-san
-class NagatorosanDownload(UnconfirmedDownload):
-    title = 'Ijiranaide, Nagatoro-san'
-    keywords = [title, 'Nagatorosan']
-    folder_name = 'nagatoro-san'
-
-    PAGE_PREFIX = 'https://www.nagatorosan.jp/'
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_key_visual()
-        self.download_character()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        image_objs = [
-            {'name': 'teaser', 'url': 'https://pbs.twimg.com/media/Eb6NC6rU0AAoaUm?format=jpg&name=medium'},
-            {'name': 'mainimg', 'url': 'https://www.nagatorosan.jp/images/mainimg.jpg'}
-        ]
-        self.download_image_objects(image_objs, folder)
-
-    def download_character(self):
-        folder = self.create_character_directory()
-        image_objs = [
-            {'name': 'img_nagatoro', 'url': 'https://www.nagatorosan.jp/images/img_nagatoro.png'}
-        ]
-        self.download_image_objects(image_objs, folder)
 
 
 # Kobayashi-san Chi no Maid Dragon S

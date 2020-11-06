@@ -5,6 +5,7 @@ from datetime import datetime
 from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 
 
+# Ijiranaide, Nagatoro-san https://www.nagatorosan.jp/ #長瀞さん @nagatoro_tv
 # Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita https://slime300-anime.com/ #スライム倒して300年 @slime300_PR
 
 
@@ -16,6 +17,55 @@ class Spring2021AnimeDownload(MainDownload):
 
     def __init__(self):
         super().__init__()
+
+
+# Ijiranaide, Nagatoro-san
+class NagatorosanDownload(Spring2021AnimeDownload):
+    title = 'Ijiranaide, Nagatoro-san'
+    keywords = [title, 'Nagatorosan']
+    folder_name = 'nagatoro-san'
+
+    PAGE_PREFIX = 'https://www.nagatorosan.jp/'
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        image_objs = [
+            {'name': 'teaser', 'url': 'https://pbs.twimg.com/media/Eb6NC6rU0AAoaUm?format=jpg&name=medium'},
+            {'name': 'mainimg', 'url': 'https://www.nagatorosan.jp/images/mainimg.jpg'},
+            {'name': 'kv1', 'url': 'https://pbs.twimg.com/media/EmIPL3dU0AABjQI?format=jpg&name=medium'},
+            {'name': 'kv1_2', 'url': 'https://www.nagatorosan.jp/img/top/mainimg.jpg'},
+        ]
+        self.download_image_objects(image_objs, folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        self.image_list = []
+        self.add_to_image_list('img_nagatoro', 'https://www.nagatorosan.jp/images/img_nagatoro.png')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            sliders =soup.find_all('div', class_='swiper-slide')
+            for slider in sliders:
+                images = slider.find_all('img')
+                for image in images:
+                    if image.has_attr('src'):
+                        image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                        image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                        self.add_to_image_list(image_name, image_url)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Character")
+            print(e)
+        self.download_image_list(folder)
 
 
 # Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita
