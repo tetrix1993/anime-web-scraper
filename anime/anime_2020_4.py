@@ -513,9 +513,9 @@ class GochiUsa3Download(Fall2020AnimeDownload):
                             ph_divs = ep_soup.find_all('div', class_='ph')
                             image_objs = []
                             for i in range(len(ph_divs)):
-                                image = ph_divs[i].find('img')
-                                if image and image.has_attr('src'):
-                                    image_url = self.PAGE_PREFIX + image['src'].replace('../', '').split('?')[0]
+                                image = ph_divs[i].find('a')
+                                if image and image.has_attr('href'):
+                                    image_url = self.PAGE_PREFIX + image['href'].replace('../', '').split('?')[0]
                                     image_name = episode + '_' + str(i + 1)
                                     image_objs.append({'name': image_name, 'url': image_url})
                             self.download_image_objects(image_objs, self.base_folder)
