@@ -1454,7 +1454,7 @@ class KumaBearDownload(Fall2020AnimeDownload):
 
     def run(self):
         self.download_episode_preview()
-        #self.download_episode_preview_guess()
+        self.download_episode_preview_guess()
         self.download_episode_preview_external()
         self.download_key_visual()
         self.download_character()
@@ -1512,25 +1512,30 @@ class KumaBearDownload(Fall2020AnimeDownload):
             print(e)
 
     def download_episode_preview_guess(self):
+        folder = self.create_custom_directory('guess')
         story_template = 'https://kumakumakumabear.com/core_sys/images/contents/%s/block/%s/%s.jpg'
-        content_num_first = 18
-        block_num_first = 25
-        image_num_first = 30
-        num_of_pic_per_episode = 4
-        for i in range(13):
-            episode = str(i + 1).zfill(2)
-            if self.is_image_exists(episode + '_1'):
-                continue
-            for j in range(4):
-                img_num = str(j + 1)
+        # Start from Episode 6
+        content_num_first = 24
+        block_num_first = 47
+        image_num_first = 38
+        num_of_pic_per_episode = 6
+        for i in range(5, 13):
+            is_success = False
+            for j in range(num_of_pic_per_episode):
                 content_num = str(content_num_first + i).zfill(8)
-                block_num = str(block_num_first + i).zfill(8)
+                block_num = str(block_num_first + i * 2).zfill(8)
                 image_num = str(image_num_first + i * num_of_pic_per_episode + j).zfill(8)
                 image_url = story_template % (content_num, block_num, image_num)
-                image_name = episode + '_' + img_num
-                result = self.download_image(image_url, self.base_folder + '/' + image_name)
-                if result == -1:
-                    return
+                image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                if self.is_image_exists(image_name, folder):
+                    is_success = True
+                    break
+                result = self.download_image(image_url, folder + '/' + image_name)
+                if result == 0:
+                    print(self.__class__.__name__ + ' - Guessed successfully!')
+                    is_success = True
+            if not is_success:
+                return
 
     def download_episode_preview_external(self):
         jp_title = 'くまクマ熊ベアー'
