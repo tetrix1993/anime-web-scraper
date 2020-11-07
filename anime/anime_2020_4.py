@@ -676,6 +676,7 @@ class GoldenKamuy3Download(Fall2020AnimeDownload):
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_guess()
         self.download_key_visual()
 
     def download_episode_preview(self):
@@ -693,6 +694,31 @@ class GoldenKamuy3Download(Fall2020AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
+
+    def download_episode_preview_guess(self):
+        folder = self.create_custom_directory('guess')
+        url_base = 'https://kamuy-anime.com/core_sys/images/contents/%s/block/%s/%s.jpg'
+        first_episode = 26
+        contents_base = 233
+        block_base = 788
+        num_base = 706
+        for i in range(13):
+            episode = str(i + first_episode).zfill(2)
+            if self.is_image_exists(episode + '_1'):
+                continue
+            contents = contents_base + i
+            block = block_base + i * 5
+            for j in range(8):
+                num = num_base + j + i * 8
+                image_url = url_base % (str(contents).zfill(8), str(block).zfill(8), str(num).zfill(8))
+                image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                if self.is_image_exists(image_name, folder):
+                    continue
+                result = self.download_image(image_url, folder + '/' + image_name)
+                if result == -1:
+                    return
+                else:
+                    print(self.__class__.__name__ + ' - Guessed successfully!')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
