@@ -73,14 +73,20 @@ The premiere date for the anime listed here has not been announced.
 
 ### Winter 2021 Anime
 * [Gotoubun no Hanayome ∬](https://www.tbs.co.jp/anime/5hanayome/)
+* [Hataraku Saibou Black](https://saibou-black.com/)
+* [Hataraku Saibou!!](https://hataraku-saibou.com/2nd.html)
 * [Horimiya](https://horimiya-anime.com/)
 * [Jaku-Chara Tomozaki-kun](http://tomozaki-koushiki.com/)
 * [Kaifuku Jutsushi no Yarinaoshi](http://kaiyari.com/)
+* [Kemono Jihen](https://kemonojihen-anime.com/)
+* [Kumo Desu ga, Nani ka?](https://kumo-anime.com/)
 * [Mushoku Tensei: Isekai Ittara Honki Dasu](https://mushokutensei.jp/)
 * [Non Non Biyori Nonstop](https://nonnontv.com)
 * [Ore dake Haireru Kakushi Dungeon](https://kakushidungeon-anime.jp/)
 * [Tatoeba Last Dungeon Mae no Mura no Shounen ga Joban no Machi de Kurasu Youna Monogatari](https://lasdan.com/)
+* [Tensei shitara Slime Datta Ken 2nd Season](https://www.ten-sura.com/anime/tensura)
 * [Urasekai Picnic](https://www.othersidepicnic.com)
+* [World Trigger 2nd Season](http://www.toei-anim.co.jp/tv/wt/)
 * [Yuru Camp△ 2nd Season](https://yurucamp.jp/second/)
 
 ### Fall 2020 Anime

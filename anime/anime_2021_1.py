@@ -17,7 +17,7 @@ from anime.main_download import MainDownload
 # Non Non Biyori Nonstop https://nonnontv.com/ #なのん #のんのんびより @nonnontv
 # Ore dake Haireru Kakushi Dungeon https://kakushidungeon-anime.jp/ #隠しダンジョン @kakushidungeon
 # Tatoeba Last Dungeon https://lasdan.com/ #ラスダン @lasdan_PR
-# Tensei shitara Slime Datta Ken https://www.ten-sura.com/anime/tensura #転スラ #tensura @ten_sura_anime
+# Tensei shitara Slime Datta Ken S2 https://www.ten-sura.com/anime/tensura #転スラ #tensura @ten_sura_anime
 # Urasekai Picnic https://www.othersidepicnic.com/ #裏ピク @OthersidePicnic
 # World Trigger S2 http://www.toei-anim.co.jp/tv/wt/ #ワールドトリガー #トリガーオン @Anime_W_Trigger
 # Yuru Camp S2 https://yurucamp.jp/second/ #ゆるキャン @yurucamp_anime
