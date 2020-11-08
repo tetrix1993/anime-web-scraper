@@ -71,7 +71,17 @@ class MainDownload:
             print(e)
         return response
 
-    def has_website_updated(self, url, cache_name='story', headers=None, charset=None):
+    def has_website_updated(self, url, cache_name='story', headers=None, charset=None, diff=0):
+        """
+        Checks if the given url is updated based on the size of the response by comparing its size with
+        previously saved size in cache. Returns true if it is updated and the contents is saved as log.
+        :param url: URL to check for updates.
+        :param cache_name: Name of the log.
+        :param headers: Headers for HTTP GET request
+        :param charset: Charset used for the website.
+        :param diff: If the difference in sizes are bigger than diff, returns True.
+        :return:
+        """
         if headers is None:
             headers = constants.HTTP_HEADER_USER_AGENT
         if charset is None:
@@ -106,7 +116,7 @@ class MainDownload:
                 except:
                     pass
 
-            if content_length != old_content_length:
+            if content_length != old_content_length and abs(int(content_length) - int(old_content_length)) > diff:
                 print('The website ' + url + ' has been updated.')
                 with open(cache_file, 'w+') as f:
                     f.write(content_length)
