@@ -650,7 +650,7 @@ class UrasekaiPicnicDownload(Winter2021AnimeDownload):
 
 
 # World Trigger S2
-class WorldTriggerDownload(Winter2021AnimeDownload):
+class WorldTrigger2Download(Winter2021AnimeDownload):
     title = "World Trigger 2nd Season"
     keywords = [title]
     folder_name = 'world-trigger2'
