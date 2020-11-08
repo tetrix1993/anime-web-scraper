@@ -6,14 +6,20 @@ from anime.main_download import MainDownload
 
 
 # Gotoubun no Hanayome S2 https://www.tbs.co.jp/anime/5hanayome/ #五等分の花嫁 @5Hanayome_anime
+# Hataraku Saibou S2 https://hataraku-saibou.com/2nd.html #はたらく細胞 @hataraku_saibou
+# Hataraku Saibou Black https://saibou-black.com/ #細胞BLACK @cellsatworkbla1
 # Horimiya https://horimiya-anime.com/ #ホリミヤ @horimiya_anime
 # Jaku-Chara Tomozaki-kun http://tomozaki-koushiki.com/ #友崎くん @tomozakikoshiki
 # Kaifuku Jutsushi no Yarinaoshi http://kaiyari.com/ #回復術士 @kaiyari_anime
+# Kemono Jihen https://kemonojihen-anime.com/ #怪物事変 #kemonojihen @Kemonojihen_tv
+# Kumo Desu ga, Nani ka? https://kumo-anime.com/ #蜘蛛ですが @kumoko_anime
 # Mushoku Tensei https://mushokutensei.jp/ #無職転生 @mushokutensei_A
 # Non Non Biyori Nonstop https://nonnontv.com/ #なのん #のんのんびより @nonnontv
 # Ore dake Haireru Kakushi Dungeon https://kakushidungeon-anime.jp/ #隠しダンジョン @kakushidungeon
 # Tatoeba Last Dungeon https://lasdan.com/ #ラスダン @lasdan_PR
+# Tensei shitara Slime Datta Ken https://www.ten-sura.com/anime/tensura #転スラ #tensura @ten_sura_anime
 # Urasekai Picnic https://www.othersidepicnic.com/ #裏ピク @OthersidePicnic
+# World Trigger S2 http://www.toei-anim.co.jp/tv/wt/ #ワールドトリガー #トリガーオン @Anime_W_Trigger
 # Yuru Camp S2 https://yurucamp.jp/second/ #ゆるキャン @yurucamp_anime
 
 
@@ -71,6 +77,57 @@ class Gotoubun2Download(Winter2021AnimeDownload):
             image_name = self.extract_image_name_from_url(image_url, with_extension=False)
             image_objs.append({'name': image_name, 'url': image_url})
         self.download_image_objects(image_objs, folder)
+
+
+# Hataraku Saibou S2
+class HatarakuSaibou2Download(Winter2021AnimeDownload):
+    title = "Hataraku Saibou!!"
+    keywords = [title, "Cells at Work!", "2nd Season"]
+    folder_name = "hataraku-saibou2"
+
+    PAGE_PREFIX = 'https://hataraku-saibou.com/'
+    MAIN_PAGE = 'https://hataraku-saibou.com/2nd.html'
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.MAIN_PAGE, 'index')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('kv1', 'https://hataraku-saibou.com/assets/img/kv_pc.jpg')
+        self.download_image_list(folder)
+
+
+# Hataraku Saibou Black
+class HatarakuSaibouBlackDownload(Winter2021AnimeDownload):
+    title = "Hataraku Saibou Black"
+    keywords = [title, "Cells at Work! Code Black"]
+    folder_name = "hataraku-saibou-black"
+
+    PAGE_PREFIX = 'https://saibou-black.com/'
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('kv1', 'https://saibou-black.com/assets/img/kv.jpg')
+        self.download_image_list(folder)
 
 
 # Horimiya
@@ -205,6 +262,79 @@ class KaiyariDownload(Winter2021AnimeDownload):
             print("Error in running " + self.__class__.__name__ + " - Character")
             print(e)
         self.download_image_objects(image_objs, folder)
+
+
+# Kemono Jihen
+class KemonoJihenDownload(Winter2021AnimeDownload):
+    title = "Kemono Jihen"
+    keywords = [title, 'Kemonojihen']
+    folder_name = 'kemonojihen'
+
+    PAGE_PREFIX = 'https://kemonojihen-anime.com/'
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('kv1', 'https://kemonojihen-anime.com/img/home/visual_03.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        self.image_list = []
+        url_prefix = 'https://kemonojihen-anime.com/characters/'
+        try:
+            data = self.get_json('https://kemonojihen-anime.com/characters/chara_data.php')
+            if 'charas' in data.keys():
+                charas = data['charas']
+                for chara in charas:
+                    if 'images' in chara.keys():
+                        images = chara['images']
+                        for i in ['thumb', 'visual', 'face']:
+                            if i in images.keys():
+                                image_url = url_prefix + images[i].split('?')[0]
+                                image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                                self.add_to_image_list(image_name, image_url)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Character")
+            print(e)
+        self.download_image_list(folder)
+
+
+# Kumo Desu ga, Nani ka?
+class KumoDesugaNanikaDownload(Winter2021AnimeDownload):
+    title = "Kumo Desu ga, Nani ka?"
+    keywords = [title, 'Kumoko', "So I'm a Spider, So What?"]
+    folder_name = 'kumodesuga'
+
+    PAGE_PREFIX = 'https://kumo-anime.com/'
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('top-main', 'https://kumo-anime.com/teaser/images/top-main.jpg')
+        self.add_to_image_list('top-main2', 'https://kumo-anime.com/teaser/images/top-main2.jpg')
+        self.download_image_list(folder)
 
 
 # Mushoku Tensei: Isekai Ittara Honki Dasu
@@ -448,6 +578,32 @@ class LasdanDownload(Winter2021AnimeDownload):
         self.download_image_objects(image_objs, chara_folder)
 
 
+# Tensei shitara Slime Datta Ken S2
+class Tensura2Download(Winter2021AnimeDownload):
+    title = 'Tensei shitara Slime Datta Ken 2nd Season'
+    keywords = [title, "Tensura", "That Time I Got Reincarnated as a Slime"]
+    folder_name = 'tensura2'
+
+    PAGE_PREFIX = 'https://www.ten-sura.com/anime/tensura'
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('kv1', 'https://www.ten-sura.com/4GfGdAp7/wp-content/themes/tensura_portal/anime/tensura-portal-anime-tensura/assets/images/kv.jpg')
+        self.add_to_image_list('kv2', 'https://www.ten-sura.com/4GfGdAp7/wp-content/themes/tensura_portal/anime/tensura-portal-anime-tensura/assets/images/kv_2.jpg')
+        self.download_image_list(folder)
+
+
 # Urasekai Picnic
 class UrasekaiPicnicDownload(Winter2021AnimeDownload):
     title = 'Urasekai Picnic'
@@ -491,6 +647,24 @@ class UrasekaiPicnicDownload(Winter2021AnimeDownload):
             print("Error in running " + self.__class__.__name__ + " - Character")
             print(e)
         self.download_image_objects(image_objs, folder)
+
+
+# World Trigger S2
+class WorldTriggerDownload(Winter2021AnimeDownload):
+    title = "World Trigger 2nd Season"
+    keywords = [title]
+    folder_name = 'world-trigger2'
+
+    PAGE_PREFIX = 'http://www.toei-anim.co.jp/tv/wt/'
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
 
 
 # Yuru Camp S2
