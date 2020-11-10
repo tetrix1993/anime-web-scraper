@@ -702,6 +702,7 @@ class GoldenKamuy3Download(Fall2020AnimeDownload):
         contents_base = 233
         block_base = 788
         num_base = 706
+        invalid_length = [54936, 45206, 42226, 46380, 48763, 51224, 32391, 44256]
         for i in range(13):
             episode = str(i + first_episode).zfill(2)
             if self.is_image_exists(episode + '_1'):
@@ -712,6 +713,8 @@ class GoldenKamuy3Download(Fall2020AnimeDownload):
                 num = num_base + j + i * 8
                 image_url = url_base % (str(contents).zfill(8), str(block).zfill(8), str(num).zfill(8))
                 image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                if self.is_matching_content_length(image_url, invalid_length[j]):
+                    continue
                 if self.is_image_exists(image_name, folder):
                     continue
                 result = self.download_image(image_url, folder + '/' + image_name)
