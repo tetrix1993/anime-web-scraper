@@ -439,7 +439,9 @@ class DogezaDeTanondemitaDownload(Fall2020AnimeDownload):
         image_objs = [
             {'name': 'vist1', 'url': 'https://dogeza-anime.com/assets/news/vist1.jpg'},
             {'name': 'visk1', 'url': 'https://dogeza-anime.com/assets/news/visk1.jpg'},
-            {'name': 'vis', 'url': 'https://dogeza-anime.com/assets/top/main-k1/vis.jpg'}
+            {'name': 'vis', 'url': 'https://dogeza-anime.com/assets/top/main-k1/vis.jpg'},
+            {'name': 'vis2', 'url': 'https://dogeza-anime.com/assets/top/main-k2/vis.jpg'},
+            #{'name': 'vis2', 'url': 'https://pbs.twimg.com/media/Emik0XfU4AEcfIz?format=jpg&name=4096x4096'}
         ]
         self.download_image_objects(image_objs, folder)
 
