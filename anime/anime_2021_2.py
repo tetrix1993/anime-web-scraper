@@ -7,6 +7,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 
 # Ijiranaide, Nagatoro-san https://www.nagatorosan.jp/ #長瀞さん @nagatoro_tv
 # Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita https://slime300-anime.com/ #スライム倒して300年 @slime300_PR
+# Yakunara Mug Cup mo https://yakumo-project.com/ #やくもtv @yakumo_project
 
 
 # Spring 2021 Anime
@@ -113,3 +114,39 @@ class Slime300Download(Spring2021AnimeDownload):
             print("Error in running " + self.__class__.__name__ + " - Character")
             print(e)
         self.download_image_objects(image_objs, folder)
+
+# Yakunara Mug Cup mo
+class YakunaraMugCupMo(Spring2021AnimeDownload):
+    title = "Yakunara Mug Cup mo"
+    keywords = [title, 'Yakumo', "Let's Make a Mug Too"]
+    folder_name = 'yakumo'
+
+    PAGE_PREFIX = 'https://yakumo-project.com/'
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('teaser', self.PAGE_PREFIX + 'news/images/200729_01.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        for i in range(20):
+            image_url = 'https://yakumo-project.com/images/character_%sfull.png' % str(i + 1)
+            image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+            if self.is_image_exists(image_name, folder):
+                continue
+            result = self.download_image(image_url, folder + '/' + image_name)
+            if result == -1:
+                break
