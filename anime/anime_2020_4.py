@@ -2767,6 +2767,7 @@ class StrikeWitches3Download(Fall2020AnimeDownload):
     folder_name = 'strike-witches3'
 
     PAGE_PREFIX = 'http://w-witch.jp/strike_witches-rtb/'
+    LAST_EPISODE = 12
 
     def __init__(self):
         super().__init__()
@@ -2781,7 +2782,7 @@ class StrikeWitches3Download(Fall2020AnimeDownload):
     def download_episode_preview(self):
         image_url_template = 'http://w-witch.jp/strike_witches-rtb/story/img/%s/%s.jpg'
         stop = False
-        for i in range(1, 13, 1):
+        for i in range(1, self.LAST_EPISODE + 1, 1):
             for j in range(1, 7, 1):
                 image_url = image_url_template % (str(i).zfill(2), str(j).zfill(2))
                 image_name = str(i).zfill(2) + '_' + str(j)
@@ -2790,6 +2791,31 @@ class StrikeWitches3Download(Fall2020AnimeDownload):
                     stop = True
             if stop:
                 break
+
+        try:
+            for m in range(1, self.LAST_EPISODE + 1, 1):
+                episode = str(m).zfill(2)
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                page_url = 'http://w-witch.jp/strike_witches-rtb/story/?mode=detail&id=%s' % episode
+                status_code = requests.head(page_url).status_code
+                if status_code == 200:
+                    soup = self.get_soup(page_url)
+                    bxslider = soup.find('ul', class_='bxslider')
+                    if bxslider:
+                        images = bxslider.find_all('img')
+                        self.image_list = []
+                        for n in range(len(images)):
+                            if images[n].has_attr('src'):
+                                image_url = 'http://w-witch.jp/strike_witches-rtb/story/' + images[n]['src']
+                                image_name = episode + '_' + str(n)
+                                self.add_to_image_list(image_name, image_url)
+                        self.download_image_list(self.base_folder)
+                else:
+                    break
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
     def download_episode_preview_external(self):
         try:
