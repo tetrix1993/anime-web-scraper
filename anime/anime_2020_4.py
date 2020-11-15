@@ -1971,6 +1971,8 @@ class Mahouka2Download(Fall2020AnimeDownload):
             {'name': 'music_ed', 'url': 'https://pbs.twimg.com/media/EjaDeI-U8AATDHD?format=jpg&name=900x900'},
             {'name': 'bd_1_1', 'url': 'https://pbs.twimg.com/media/EjZfp3DU4AEmx9C?format=jpg&name=4096x4096'},
             {'name': 'bd_1_2', 'url': 'https://pbs.twimg.com/media/EjZfrEUUwAAzXn2?format=jpg&name=large'},
+            {'name': 'bd_2', 'url': 'https://pbs.twimg.com/media/ElEkb9KVMAE0XXw?format=jpg&name=large'},
+            {'name': 'bd_3', 'url': 'https://pbs.twimg.com/media/EmxqPFoVcAA0zGu?format=jpg&name=large'},
             {'name': 'bd_bonus_1', 'url': 'https://pbs.twimg.com/media/EjZfyqAUwAAOBrL?format=jpg&name=4096x4096'},
             {'name': 'bd_bonus_2', 'url': 'https://pbs.twimg.com/media/EkhCx5mU8AAD3nA?format=jpg&name=4096x4096'},
             {'name': 'bd_bonus_3', 'url': 'https://pbs.twimg.com/media/EkhCy7jU0AYniNf?format=jpg&name=large'},
