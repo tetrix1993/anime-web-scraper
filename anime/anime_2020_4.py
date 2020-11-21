@@ -1170,13 +1170,76 @@ class KamisamaNiNattaHiDownload(Fall2020AnimeDownload):
                     image = div.find('img')
                     if image and image.has_attr('src'):
                         image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                        if 'printing' in image_url:
+                            break
                         content_length = requests.head(image_url).headers['Content-Length']
                         if content_length == '20243': # Now Printing
-                            return
+                            break
                         image_objs = [{'name': image_name, 'url': image_url}]
                         self.download_image_objects(image_objs, folder)
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + " - Blu-Ray")
+            print(e)
+
+        # Scrape the news for Blu-ray
+        last_id = 55657 # News ID to stop scanning
+        news_cache_file = folder + '/news_cache'
+        if os.path.exists(news_cache_file):
+            try:
+                with open(news_cache_file, 'r', encoding='utf-8') as f:
+                    latest_id = int(f.read())
+                    last_id = latest_id
+            except:
+                latest_id = last_id
+        else:
+            latest_id = last_id
+        try:
+            page = 0
+            stop = False
+            while page < 50:
+                if stop:
+                    break
+                page += 1
+                soup = self.get_soup('https://kamisama-day.jp/news/?p=%s' % str(page), decode=True)
+                news_list = soup.find('div', class_='news_list')
+                if news_list:
+                    news_items = news_list.find_all('li')
+                    for news_item in news_items:
+                        a_tag = news_item.find('a')
+                        if a_tag and a_tag.has_attr('href'):
+                            id = int(a_tag['href'].split('id=')[1])
+                            if id < last_id:
+                                stop = True
+                                break
+                            news_title = news_item.find('p', class_='news_title')
+                            if news_title and 'Blu-ray' in news_title.text and '公開' in news_title.text\
+                                and '第' in news_title.text and '巻' in news_title.text:
+                                volume = news_title.text.split('第')[1].split('巻')[0]
+                                news_url = 'https://kamisama-day.jp/news' + a_tag['href'].replace('.', '')
+                                news_soup = self.get_soup(news_url, decode=True)
+                                news_detail = news_soup.find('div', class_='news_detail')
+                                if news_detail:
+                                    images = news_detail.find_all('img')
+                                    image_objs = []
+                                    for i in range(len(images)):
+                                        if images[i].has_attr('src'):
+                                            image_url = 'https://kamisama-day.jp/news/'\
+                                                        + images[i]['src'].split('/w')[0]
+                                            if i > 0:
+                                                image_name = 'bd_news_%s_%s' % (volume, str(i + 1))
+                                            else:
+                                                image_name = 'bd_news_%s' % volume
+                                            image_objs.append({'name': image_name, 'url': image_url})
+                                    if len(image_objs) > 0:
+                                        self.download_image_objects(image_objs, folder)
+                                        if id > latest_id:
+                                            latest_id = id
+                else:
+                    break
+            with open(news_cache_file, 'w+', encoding='utf-8') as f:
+                f.write(str(latest_id))
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Blu-Ray News")
             print(e)
 
     def download_bluray_bonus(self):
