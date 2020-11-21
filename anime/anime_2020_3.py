@@ -199,7 +199,7 @@ class HxErosDownload(Summer2020AnimeDownload):
                                     image_name = self.extract_image_name_from_url(image_url, with_extension=False)
                                 image_objs.append({'name': image_name, 'url': image_url})
                 self.download_image_objects(image_objs, folder)
-                if (i > 1 and image_count != first_page_image_count) or first_page_image_count == 1:
+                if (i > 1 and not self.is_image_exists('bd_' + str(i), folder)) or first_page_image_count == 1:
                     break
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + ' - Blu-Ray')
