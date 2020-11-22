@@ -407,10 +407,10 @@ class NonNonBiyori3Download(Winter2021AnimeDownload):
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
-        image_objs = [
-            {'name': 'kv1', 'url': 'https://pbs.twimg.com/media/EYq7r4EUcAAQgCa?format=jpg&name=large'},
-            {'name': 'kv2', 'url': self.PAGE_PREFIX + '/tvanime/wp-content/uploads/2020/09/マルシー入り小キービジュアル2-RE_特効済.jpg'},
-        ]
+        key_visual_url = self.PAGE_PREFIX + '/tvanime/wp-content/themes/nonnon_tvanime/assets/img/page/top/v%s/mainvisual.jpg'
+        image_objs = []
+        for i in range(1, 4, 1):
+            image_objs.append({'name': 'kv' + str(i), 'url': key_visual_url % str(i)})
         self.download_image_objects(image_objs, folder)
 
     def download_character(self):
