@@ -126,7 +126,8 @@ class HatarakuSaibouBlackDownload(Winter2021AnimeDownload):
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         self.image_list = []
-        self.add_to_image_list('kv1', 'https://saibou-black.com/assets/img/kv.jpg')
+        self.add_to_image_list('kv1', 'https://pbs.twimg.com/media/EngvcwDVoAAgALQ?format=jpg&name=large')
+        self.add_to_image_list('kv2', 'https://saibou-black.com/assets/img/kv.jpg')
         self.download_image_list(folder)
 
 
@@ -156,6 +157,7 @@ class HorimiyaDownload(Winter2021AnimeDownload):
         image_objs = [
             {'name': 'kv1_1', 'url': 'https://pbs.twimg.com/media/EiH_LNCU8AM5msx?format=png&name=900x900'},
             {'name': 'kv1_2', 'url': 'https://horimiya-anime.com/teaser/img/top/main/img_main.jpg'},
+            {'name': 'kv2', 'url': 'https://horimiya-anime.com/assets/img/top/main/img_main.jpg'},
         ]
         self.download_image_objects(image_objs, folder)
 
