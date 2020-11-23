@@ -536,6 +536,9 @@ class GochiUsa3Download(Fall2020AnimeDownload):
         block_base = 96
         num_base = 80
         for i in range(8):
+            episode = str(i + 5).zfill(2)
+            if self.is_image_exists(episode + '_1'):
+                continue
             contents = contents_base + i
             block = block_base + i * 4
             for j in range(6):
@@ -1615,6 +1618,9 @@ class KumaBearDownload(Fall2020AnimeDownload):
         image_num_first = 38
         num_of_pic_per_episode = 6
         for i in range(5, 13):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_1'):
+                continue
             is_success = False
             for j in range(num_of_pic_per_episode):
                 content_num = str(content_num_first + i).zfill(8)
