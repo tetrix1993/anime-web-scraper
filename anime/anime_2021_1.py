@@ -169,6 +169,28 @@ class HorimiyaDownload(Winter2021AnimeDownload):
         ]
         self.download_image_objects(image_objs, folder)
 
+        chara_url_template = 'https://horimiya-anime.com/assets/img/chara/img/img_chara%s-%s.jpg'
+        try:
+            i = 0
+            stop = False
+            while i <= 20:
+                if stop:
+                    break
+                i += 1
+                for j in range(10):
+                    image_name = 'img_chara%s-%s' % (str(i).zfill(2), str(j + 1))
+                    if self.is_image_exists(image_name, folder):
+                        break
+                    image_url = chara_url_template % (str(i).zfill(2), str(j + 1))
+                    result = self.download_image(image_url, folder + '/' + image_name)
+                    if result == -1:
+                        if j == 0:
+                            stop = True
+                        break
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Character")
+            print(e)
+
 
 # Jaku-Chara Tomozaki-kun
 class TomozakiKunDownload(Winter2021AnimeDownload):
