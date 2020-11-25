@@ -2634,7 +2634,8 @@ class OneRoom3Download(Fall2020AnimeDownload):
         folder = self.create_bluray_directory()
         image_objs = [
             {'name': 'bd_s1s2_1', 'url': 'https://oneroom-anime.com/wordpress/wp-content/uploads/2020/07/237a13f0134854b4d0b8162879eafef1.jpg'},
-            {'name': 'bd_s1s2_2', 'url': 'https://oneroom-anime.com/wordpress/wp-content/uploads/2020/07/5cc4ed2d63953152405ca92e5549c420.jpg'}
+            {'name': 'bd_s1s2_2', 'url': 'https://oneroom-anime.com/wordpress/wp-content/uploads/2020/07/5cc4ed2d63953152405ca92e5549c420.jpg'},
+            {'name': 'oneroom_bd3', 'url': 'https://oneroom-anime.com/wordpress/wp-content/uploads/2020/11/oneroom_bd3.jpg'},
         ]
         self.download_image_objects(image_objs, folder)
 
@@ -2928,6 +2929,12 @@ class StrikeWitches3Download(Fall2020AnimeDownload):
                 break
 
     def download_media(self):
+        folder = self.create_bluray_directory()
+        self.image_list = []
+        self.add_to_image_list('bd1_1', 'https://pbs.twimg.com/media/EnqCinhUUAA8M6z?format=jpg&name=medium')
+        self.add_to_image_list('bd1_2', 'https://pbs.twimg.com/media/EnqCinnVEAA24sK?format=jpg&name=medium')
+        self.download_image_list(folder)
+
         for i in range(2):
             if i == 0:
                 folder = self.create_bluray_directory()
