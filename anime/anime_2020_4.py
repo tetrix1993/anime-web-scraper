@@ -267,7 +267,7 @@ class AssaultLilyDownload(Fall2020AnimeDownload):
                 for a_tag in a_tags:
                     if a_tag.has_attr('href') and self.STORY_PAGE in a_tag['href']:
                         try:
-                            episode = str(int(a_tag['href'].split(self.STORY_PAGE)[1])).zfill(2)
+                            episode = str(int(a_tag.text.split('第')[1].split('話')[0])).zfill(2)
                         except:
                             continue
                         if self.is_image_exists(episode + '_1'):
