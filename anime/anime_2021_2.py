@@ -5,6 +5,7 @@ from datetime import datetime
 from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 
 
+# Hige wo Soru. Soshite Joshikousei wo Hirou. http://higehiro-anime.com/ #higehiro #ひげひろ @higehiro_anime
 # Ijiranaide, Nagatoro-san https://www.nagatorosan.jp/ #長瀞さん @nagatoro_tv
 # Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita https://slime300-anime.com/ #スライム倒して300年 @slime300_PR
 # Yakunara Mug Cup mo https://yakumo-project.com/ #やくもtv @yakumo_project
@@ -18,6 +19,61 @@ class Spring2021AnimeDownload(MainDownload):
 
     def __init__(self):
         super().__init__()
+
+
+# Hige wo Soru. Soshite Joshikousei wo Hirou.
+class HigehiroDownload(Spring2021AnimeDownload):
+    title = 'Hige wo Soru. Soshite Joshikousei wo Hirou.'
+    keywords = [title, 'Higehiro']
+    folder_name = 'higehiro'
+
+    PAGE_PREFIX = 'http://higehiro-anime.com/'
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index', diff=2)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('teaser', 'https://pbs.twimg.com/media/EjO4FTcU0AIPm2X?format=jpg&name=medium')
+        self.add_to_image_list('kv_sayu', 'http://higehiro-anime.com/wp-content/themes/higehiro/images/kv_sayu.png')
+        self.add_to_image_list('kv_yoshida', 'http://higehiro-anime.com/wp-content/themes/higehiro/images/kv_yoshida.png')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        soup = self.get_soup(self.PAGE_PREFIX)
+        try:
+            self.image_list = []
+            lis = soup.find_all('li', class_='thumbnail-item')
+            for li in lis:
+                image = li.find('img')
+                if image and image.has_attr('src'):
+                    image_url = image['src'].split('?')[0]
+                    image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+
+            slide_lis = soup.find_all('li', class_='slide-item')
+            for li in slide_lis:
+                images = li.find_all('img')
+                for image in images:
+                    if image.has_attr('src'):
+                        image_url = image['src'].split('?')[0]
+                        image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                        self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Character")
+            print(e)
 
 
 # Ijiranaide, Nagatoro-san

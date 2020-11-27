@@ -4,7 +4,6 @@ from anime.main_download import MainDownload
 
 # Bokutachi no Remake http://bokurema.com/ #ぼくリメ #bokurema @bokurema
 # Cheat Kusushi no Slow Life: Isekai ni Tsukurou Drugstore https://www.cheat-kusushi.jp/ #チート薬師 #スローライフ @cheat_kusushi
-# Hige wo Soru. Soshite Joshikousei wo Hirou. http://higehiro-anime.com/ #higehiro #ひげひろ @higehiro_anime
 # Kobayashi-san Chi no Maid Dragon S https://maidragon.jp/2nd/ #maidragon @maidragon_anime
 # Osananajimi ga Zettai ni Makenai Love Comedy https://osamake.com/ #おさまけ
 # Princess Connect! Re:Dive S2 https://anime.priconne-redive.jp/ #アニメプリコネ #プリコネR #プリコネ @priconne_anime
@@ -44,61 +43,6 @@ class CheatKusushiDownload(UnconfirmedDownload):
         image_objs = [
             {'name': 'teaser', 'url': 'https://www.cheat-kusushi.jp/img/top-main.png'}]
         self.download_image_objects(image_objs, keyvisual_folder)
-
-
-# Hige wo Soru. Soshite Joshikousei wo Hirou.
-class HigehiroDownload(UnconfirmedDownload):
-    title = 'Hige wo Soru. Soshite Joshikousei wo Hirou.'
-    keywords = [title, 'Higehiro']
-    folder_name = 'higehiro'
-
-    PAGE_PREFIX = 'http://higehiro-anime.com/'
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_key_visual()
-        self.download_character()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index', diff=2)
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('teaser', 'https://pbs.twimg.com/media/EjO4FTcU0AIPm2X?format=jpg&name=medium')
-        self.add_to_image_list('kv_sayu', 'http://higehiro-anime.com/wp-content/themes/higehiro/images/kv_sayu.png')
-        self.add_to_image_list('kv_yoshida', 'http://higehiro-anime.com/wp-content/themes/higehiro/images/kv_yoshida.png')
-        self.download_image_list(folder)
-
-    def download_character(self):
-        folder = self.create_character_directory()
-        soup = self.get_soup(self.PAGE_PREFIX)
-        try:
-            self.image_list = []
-            lis = soup.find_all('li', class_='thumbnail-item')
-            for li in lis:
-                image = li.find('img')
-                if image and image.has_attr('src'):
-                    image_url = image['src'].split('?')[0]
-                    image_name = self.extract_image_name_from_url(image_url, with_extension=False)
-                    self.add_to_image_list(image_name, image_url)
-            self.download_image_list(folder)
-
-            slide_lis = soup.find_all('li', class_='slide-item')
-            for li in slide_lis:
-                images = li.find_all('img')
-                for image in images:
-                    if image.has_attr('src'):
-                        image_url = image['src'].split('?')[0]
-                        image_name = self.extract_image_name_from_url(image_url, with_extension=False)
-                        self.add_to_image_list(image_name, image_url)
-            self.download_image_list(folder)
-        except Exception as e:
-            print("Error in running " + self.__class__.__name__ + " - Character")
-            print(e)
 
 
 # Kobayashi-san Chi no Maid Dragon S
