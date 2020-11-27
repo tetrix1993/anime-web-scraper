@@ -9,6 +9,7 @@ from anime.main_download import MainDownload
 # Princess Connect! Re:Dive S2 https://anime.priconne-redive.jp/ #アニメプリコネ #プリコネR #プリコネ @priconne_anime
 # Seirei Gensouki https://seireigensouki.com/ #精霊幻想記 @seireigensouki
 # Tate no Yuusha S2 http://shieldhero-anime.jp/ #shieldhero #盾の勇者の成り上がり @shieldheroanime
+# Vlad Love https://www.vladlove.com/index.html #ぶらどらぶ #vladlove @VLADLOVE_ANIME
 
 
 # Unconfirmed Season Anime
@@ -191,3 +192,50 @@ class TateNoYuusha2Download(UnconfirmedDownload):
             {'name': 'kv1', 'url': 'https://pbs.twimg.com/media/EhHFvyVU4AA7cUw?format=jpg&name=large'}
         ]
         self.download_image_objects(image_objs, folder)
+
+
+# Vlad Love
+class VladLoveDownload(UnconfirmedDownload):
+    title = 'Vlad Love'
+    keywords = [title, "Vladlove"]
+    folder_name = 'vladlove'
+
+    PAGE_PREFIX = 'https://www.vladlove.com/'
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('visual01', 'https://www.vladlove.com/images/bg_cast.jpg')
+        self.add_to_image_list('visual02', 'https://www.vladlove.com/images/bg_intro.jpg')
+        self.add_to_image_list('visual03', 'https://www.vladlove.com/images/bg_character.jpg')
+        self.add_to_image_list('visual04', 'https://www.vladlove.com/images/img_visual06.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character.html')
+            detail_list = soup.find('ul', class_='characterDetailList')
+            if detail_list:
+                self.image_list = []
+                images = detail_list.find_all('img')
+                for image in images:
+                    if image and image.has_attr('src'):
+                        image_url = self.PAGE_PREFIX + image['src']
+                        image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                        self.add_to_image_list(image_name, image_url)
+                self.download_image_list(folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Character")
+            print(e)

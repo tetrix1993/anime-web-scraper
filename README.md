@@ -58,18 +58,21 @@ pip install pillow
 ### New Anime
 The premiere date for the anime listed here has not been announced.
 * [Cheat Kusushi no Slow Life: Isekai ni Tsukurou Drugstore](https://www.cheat-kusushi.jp/)
-* [Hige wo Soru. Soshite Joshikousei wo Hirou.](http://higehiro-anime.com/)
 * [Kobayashi-san Chi no Maid Dragon S](https://maidragon.jp/2nd/)
 * [Osananajimi ga Zettai ni Makenai Love Comedy](https://osamake.com/)
 * [Princess Connect! Re:Dive 2nd Season](https://anime.priconne-redive.jp)
+* [Seirei Gensouki](https://seireigensouki.com/)
 * [Tate no Yuusha no Nariagari 2nd Season](http://shieldhero-anime.jp)
+* [Vlad Love](https://www.vladlove.com/)
 
 ### Summer 2021 Anime
 * [Genjitsu Shugi Yuusha no Oukoku Saikenki](https://genkoku-anime.com/)
 
 ### Spring 2021 Anime
+* [Hige wo Soru. Soshite Joshikousei wo Hirou.](http://higehiro-anime.com/)
 * [Ijiranaide, Nagatoro-san](https://www.nagatorosan.jp/)
 * [Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita](https://slime300-anime.com/)
+* [Yakunara Mug Cup mo](https://yakumo-project.com/)
 
 ### Winter 2021 Anime
 * [Gotoubun no Hanayome ∬](https://www.tbs.co.jp/anime/5hanayome/)
