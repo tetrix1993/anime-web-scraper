@@ -7,6 +7,7 @@ from anime.main_download import MainDownload
 # Kobayashi-san Chi no Maid Dragon S https://maidragon.jp/2nd/ #maidragon @maidragon_anime
 # Osananajimi ga Zettai ni Makenai Love Comedy https://osamake.com/ #おさまけ
 # Princess Connect! Re:Dive S2 https://anime.priconne-redive.jp/ #アニメプリコネ #プリコネR #プリコネ @priconne_anime
+# Seirei Gensouki https://seireigensouki.com/ #精霊幻想記 @seireigensouki
 # Tate no Yuusha S2 http://shieldhero-anime.jp/ #shieldhero #盾の勇者の成り上がり @shieldheroanime
 
 
@@ -119,6 +120,50 @@ class Priconne2Download(UnconfirmedDownload):
         folder = self.create_key_visual_directory()
         image_objs = [{'name': 'teaser', 'url': 'https://anime.priconne-redive.jp/assets/images/top_kv.png'}]
         self.download_image_objects(image_objs, folder)
+
+
+# Seirei Gensouki
+class SeireiGensoukiDownload(UnconfirmedDownload):
+    title = "Seirei Gensouki"
+    keywords = [title, "Spirit Chronicles"]
+    folder_name = 'seirei-gensouki'
+
+    PAGE_PREFIX = "https://seireigensouki.com/"
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('teaser', 'https://pbs.twimg.com/media/EnytdwVVQAESUct?format=jpg&name=large')
+        #self.add_to_image_list('teaser', 'https://seireigensouki.com/wp/wp-content/uploads/2020/11/SG_teaser_logoc.png')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            self.image_list = []
+            chara_pics = soup.find_all('div', class_='chara-pic')
+            for chara_pic in chara_pics:
+                image = chara_pic.find('img')
+                if image and image.has_attr('src'):
+                    image_url = image['src']
+                    image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Character")
+            print(e)
 
 
 # Tate no Yuusha no Nariagari S2
