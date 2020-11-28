@@ -1560,7 +1560,6 @@ class KumaBearDownload(Fall2020AnimeDownload):
         self.download_bluray()
 
     def download_episode_preview(self):
-        self.download_episode_preview_guess()
         try:
             soup = self.get_soup(self.STORY_PAGE)
             content_div = soup.find('div', id='ContentsListUnit02')
