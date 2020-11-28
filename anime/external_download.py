@@ -14,7 +14,7 @@ class AniverseMagazineDownload(ExternalDownload):
     folder_name = None
     PAGE_PREFIX = "https://aniverse-mag.com/archives/"
     
-    def __init__(self, article_id, save_folder, episode, num_of_pictures=0):
+    def __init__(self, article_id, save_folder, episode, num_of_pictures=0, min_width=None):
         super().__init__()
         self.base_folder = self.base_folder + "/" + save_folder
         if not os.path.exists(self.base_folder):
@@ -22,6 +22,7 @@ class AniverseMagazineDownload(ExternalDownload):
         self.article_id = str(article_id)
         self.episode = str(episode).zfill(2)
         self.num_of_pictures = num_of_pictures
+        self.min_width = min_width
         
     def run(self):
         try:
@@ -38,7 +39,7 @@ class AniverseMagazineDownload(ExternalDownload):
                         continue
                     imageUrl = textBlocks[i].split("\"")[0]
                     filepathWithoutExtension = self.base_folder + "/" + self.episode + "_" + str(i)
-                    self.download_image(imageUrl, filepathWithoutExtension)
+                    self.download_image(imageUrl, filepathWithoutExtension, min_width=self.min_width)
             else:
                 soup = self.get_soup(article_url)
                 items = soup.find_all('dl', class_='gallery-item')
@@ -47,7 +48,7 @@ class AniverseMagazineDownload(ExternalDownload):
                     image_url = items[i].find('img')['data-lazy-src']
                     image_name = self.episode + '_' + str(i + 1).zfill(2)
                     image_objs.append({'name': image_name, 'url': image_url})
-                self.download_image_objects(image_objs, self.base_folder)
+                self.download_image_objects(image_objs, self.base_folder, min_width=self.min_width)
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)

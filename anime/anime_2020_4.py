@@ -289,7 +289,7 @@ class AssaultLilyDownload(Fall2020AnimeDownload):
 
     def download_episode_preview_external(self):
         jp_title = 'アサルトリリィ'
-        AniverseMagazineScanner(jp_title, self.base_folder, 12).run()
+        AniverseMagazineScanner(jp_title, self.base_folder, 12, min_width=800).run()
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -1163,23 +1163,35 @@ class KamisamaNiNattaHiDownload(Fall2020AnimeDownload):
             for i in range(6):
                 num = i + 1
                 image_name = 'bd' + str(num)
-                if self.is_image_exists(image_name):
+                if self.is_image_exists(image_name + '_2'):
                     continue
                 soup = self.get_soup(self.PAGE_PREFIX + 'bddvd/?no=' + str(num).zfill(2))
                 if soup is None:
                     continue
                 div = soup.find('div', class_='jk_image')
-                if div:
-                    image = div.find('img')
-                    if image and image.has_attr('src'):
-                        image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
-                        if 'printing' in image_url:
-                            break
-                        content_length = requests.head(image_url).headers['Content-Length']
-                        if content_length == '20243': # Now Printing
-                            break
-                        image_objs = [{'name': image_name, 'url': image_url}]
-                        self.download_image_objects(image_objs, folder)
+                p_tag = soup.find('p', class_='jk_img')
+                tags = [div, p_tag]
+                stop = False
+                for j in range(len(tags)):
+                    if tags[j]:
+                        image = tags[j].find('img')
+                        if image and image.has_attr('src'):
+                            image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                            if 'printing' in image_url:
+                                stop = True
+                                continue
+                            content_length = requests.head(image_url).headers['Content-Length']
+                            if content_length == '20243': # Now Printing
+                                stop = True
+                                continue
+                            if j == 1:
+                                img_name = image_name + '_2'
+                            else:
+                                img_name = image_name
+                            image_objs = [{'name': img_name, 'url': image_url}]
+                            self.download_image_objects(image_objs, folder)
+                if stop:
+                    break
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + " - Blu-Ray")
             print(e)
@@ -1639,7 +1651,7 @@ class KumaBearDownload(Fall2020AnimeDownload):
 
     def download_episode_preview_external(self):
         jp_title = 'くまクマ熊ベアー'
-        AniverseMagazineScanner(jp_title, self.base_folder, 12).run()
+        AniverseMagazineScanner(jp_title, self.base_folder, 12, min_width=1920).run()
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -1848,7 +1860,7 @@ class MaesetsuDownload(Fall2020AnimeDownload):
 
     def download_episode_preview_external(self):
         jp_title = 'まえせつ'
-        AniverseMagazineScanner(jp_title, self.base_folder, 12, suffix='幕').run()
+        AniverseMagazineScanner(jp_title, self.base_folder, 12, suffix='幕', min_width=1920).run()
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -2490,7 +2502,7 @@ class OchifuruDownload(Fall2020AnimeDownload):
 
     def download_episode_preview_external(self):
         jp_title = 'おちこぼれフルーツタルト'
-        AniverseMagazineScanner(jp_title, self.base_folder, 12).run()
+        AniverseMagazineScanner(jp_title, self.base_folder, 12, min_width=1920).run()
 
     def download_key_visual(self):
         keyvisual_folder = self.create_key_visual_directory()
@@ -2898,7 +2910,7 @@ class StrikeWitches3Download(Fall2020AnimeDownload):
             else:
                 end_date = last_date
             MocaNewsScanner(jp_title, self.base_folder, '20200925', end_date.strftime('%Y%m%d')).run()
-            AniverseMagazineScanner(jp_title, self.base_folder, 12).run()
+            AniverseMagazineScanner(jp_title, self.base_folder, 12, min_width=1200).run()
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + ' - MocaNews')
             print(e)

@@ -166,7 +166,8 @@ class MainDownload:
             print(e)
         return response
 
-    def download_image(self, url, filepath_without_extension, headers=None, to_jpg=False, is_mocanews=False):
+    def download_image(self, url, filepath_without_extension, headers=None, to_jpg=False, is_mocanews=False,
+                       min_width=None):
         """
         Download image to the filepath
         :param url:
@@ -269,6 +270,12 @@ class MainDownload:
                                 for chunk in r.iter_content(chunk_size=8192):
                                     if chunk:
                                         f.write(chunk)
+                    if os.path.exists(filepath) and min_width is not None:
+                        with Image.open(filepath) as im:
+                            width, height = im.size
+                        if width < min_width:
+                            os.remove(filepath)
+                            raise InvalidImageSizeError('Width is smaller than %s px' % str(min_width))
                     if is_mocanews:
                         if len(filepath) > 0 and os.path.exists(filepath):
                             image = Image.open(filepath)
@@ -279,10 +286,12 @@ class MainDownload:
                                 raise Exception('Image dimensions downloaded from MocaNews is too small')
                     print("Downloaded " + url)
                     break
+                except InvalidImageSizeError as e:
+                    raise e
                 except Exception as e:
                     try_count += 1
                     print('Download failed: %s (Attempt: %s)' % (url, str(try_count)))
-                    if try_count == max_try_count:
+                    if try_count >= max_try_count:
                         raise e
 
             # Create download log:
@@ -460,7 +469,7 @@ class MainDownload:
             os.makedirs(filepath)
         return filepath
 
-    def download_image_objects(self, image_objs, filepath):
+    def download_image_objects(self, image_objs, filepath, min_width=None):
         is_successful = True
         for image_obj in image_objs:
             if not isinstance(image_obj, dict) or 'name' not in image_obj.keys() or 'url' not in image_obj.keys():
@@ -472,11 +481,11 @@ class MainDownload:
 
             if 'is_mocanews' in image_obj.keys() and isinstance(image_obj['is_mocanews'], bool) \
                     and image_obj['is_mocanews']:
-                result = self.download_image(image_obj['url'], filename, is_mocanews=True)
+                result = self.download_image(image_obj['url'], filename, is_mocanews=True, min_width=min_width)
             elif 'to_jpg' in image_obj.keys() and isinstance(image_obj['to_jpg'], bool) and image_obj['to_jpg']:
-                result = self.download_image(image_obj['url'], filename, to_jpg=True)
+                result = self.download_image(image_obj['url'], filename, to_jpg=True, min_width=min_width)
             else:
-                result = self.download_image(image_obj['url'], filename)
+                result = self.download_image(image_obj['url'], filename, min_width=min_width)
             if result == -1:
                 is_successful = False
         return is_successful
@@ -553,3 +562,8 @@ class MainDownload:
                     matched_keywords += 1
                     break
         return matched_keywords == len(s_filter.keywords)
+
+
+class InvalidImageSizeError(Exception):
+    """Raised when image size is not as expected"""
+    pass
