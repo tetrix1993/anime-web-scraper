@@ -287,7 +287,7 @@ class MainDownload:
                     print("Downloaded " + url)
                     break
                 except InvalidImageSizeError as e:
-                    raise e
+                    return -1
                 except Exception as e:
                     try_count += 1
                     print('Download failed: %s (Attempt: %s)' % (url, str(try_count)))

@@ -44,9 +44,13 @@ class AniverseMagazineDownload(ExternalDownload):
                 soup = self.get_soup(article_url)
                 items = soup.find_all('dl', class_='gallery-item')
                 image_objs = []
-                for i in range(len(items)):
-                    image_url = 'https://' + items[i].find('img')['data-lazy-src'].split('https://')[-1]
-                    image_name = self.episode + '_' + str(i + 1).zfill(2)
+                i = 0
+                for item in items:
+                    image_url = 'https://' + item.find('img')['data-lazy-src'].split('https://')[-1]
+                    if '300' in image_url[-12:]: # Skip unwanted images that are resized to 300px
+                        continue
+                    i += 1
+                    image_name = self.episode + '_' + str(i).zfill(2)
                     image_objs.append({'name': image_name, 'url': image_url})
                 self.download_image_objects(image_objs, self.base_folder, min_width=self.min_width)
         except Exception as e:
