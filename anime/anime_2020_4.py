@@ -2932,6 +2932,8 @@ class StrikeWitches3Download(Fall2020AnimeDownload):
         self.image_list = []
         self.add_to_image_list('bd1_1', 'https://pbs.twimg.com/media/EnqCinhUUAA8M6z?format=jpg&name=medium')
         self.add_to_image_list('bd1_2', 'https://pbs.twimg.com/media/EnqCinnVEAA24sK?format=jpg&name=medium')
+        self.add_to_image_list('ost', 'https://moca-news.net/article/20201128/2020112818000a_/image/001-euhbrc.jpg',
+                               is_mocanews=True)
         self.download_image_list(folder)
 
         for i in range(2):
