@@ -45,7 +45,7 @@ class AniverseMagazineDownload(ExternalDownload):
                 items = soup.find_all('dl', class_='gallery-item')
                 image_objs = []
                 for i in range(len(items)):
-                    image_url = items[i].find('img')['data-lazy-src']
+                    image_url = 'https://' + items[i].find('img')['data-lazy-src'].split('https://')[-1]
                     image_name = self.episode + '_' + str(i + 1).zfill(2)
                     image_objs.append({'name': image_name, 'url': image_url})
                 self.download_image_objects(image_objs, self.base_folder, min_width=self.min_width)
