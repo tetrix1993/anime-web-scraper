@@ -16,6 +16,7 @@ Click [here](https://youtu.be/K-83J5aZ5P0) to see the demo on YouTube.
 pip install requests
 pip install bs4
 pip install pillow
+pip install portalocker
 ```
 
 ## Running the Program
