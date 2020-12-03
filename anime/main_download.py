@@ -317,7 +317,7 @@ class MainDownload:
                         global_save_success = True
                         break
                 except Exception as e:
-                    time.sleep((k + 1) * 0.5)
+                    time.sleep(0.1)
             if not global_save_success:
                 print('Unable to save global log for file: %s' % filepath)
             return 0
