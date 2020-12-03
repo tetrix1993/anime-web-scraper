@@ -7,6 +7,8 @@ import re
 from bs4 import BeautifulSoup as bs
 from search import *
 import shutil
+import time
+import portalocker
 from PIL import Image
 
 
@@ -305,10 +307,18 @@ class MainDownload:
                 f.write('%s\t%s\t%s\n' % (timenow, filename, url))
 
             # Global log path
-            try:
-                with open(constants.GLOBAL_DOWNLOAD_LOG_FILE, 'a+', encoding='utf-8') as f:
-                    f.write('%s\t%s\t%s\t%s\n' % (timenow, self.base_folder, filename, url))
-            except:
+            global_save_success = False
+            for k in range(10):
+                try:
+                    with open(constants.GLOBAL_DOWNLOAD_LOG_FILE, 'a+', encoding='utf-8') as f:
+                        portalocker.lock(f, portalocker.LOCK_EX)
+                        f.write('%s\t%s\t%s\t%s\n' % (timenow, self.base_folder, filename, url))
+                        portalocker.unlock(f)
+                        global_save_success = True
+                        break
+                except Exception as e:
+                    time.sleep((k + 1) * 0.5)
+            if not global_save_success:
                 print('Unable to save global log for file: %s' % filepath)
             return 0
         except Exception as e:
