@@ -1642,6 +1642,8 @@ class KumaBearDownload(Fall2020AnimeDownload):
                 if self.is_image_exists(image_name, folder):
                     is_success = True
                     break
+                if self.is_matching_content_length(image_url, [33975, 37735, 38600, 36157, 37070, 39358]):
+                    return
                 result = self.download_image(image_url, folder + '/' + image_name)
                 if result == 0:
                     print(self.__class__.__name__ + ' - Guessed successfully!')
