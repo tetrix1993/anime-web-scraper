@@ -2421,12 +2421,19 @@ class MunounaNanaDownload(Fall2020AnimeDownload):
             soup = self.get_soup('https://munounanana.com/bddvd/')
             containers = soup.find_all('div', class_='bddvd-container')
             for container in containers:
+                id = ''
+                if container.has_attr('id'):
+                    id = container['id']
                 images = container.find_all('img')
                 self.image_list = []
                 for image in images:
                     if image.has_attr('src'):
                         image_url = self.PAGE_PREFIX + image['src'].replace('../', '').split('?')[0]
                         image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                        if image_name == 'np': # now printing
+                            continue
+                        if len(id) > 0:
+                            image_name = id + '_' + image_name
                         self.add_to_image_list(name=image_name, url=image_url)
                 self.download_image_list(folder)
         except Exception as e:
