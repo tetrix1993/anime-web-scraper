@@ -72,6 +72,7 @@ The premiere date for the anime listed here has not been announced.
 ### Spring 2021 Anime
 * [Hige wo Soru. Soshite Joshikousei wo Hirou.](http://higehiro-anime.com/)
 * [Ijiranaide, Nagatoro-san](https://www.nagatorosan.jp/)
+* [Kyuukyoku Shinka Shita Full Dive RPG ga Genjitsu Yori mo Kusogee Dattara](https://fulldive-rpg.com/)
 * [Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita](https://slime300-anime.com/)
 * [Yakunara Mug Cup mo](https://yakumo-project.com/)
 
