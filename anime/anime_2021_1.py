@@ -530,9 +530,9 @@ class KakushiDungeonDownload(Winter2021AnimeDownload):
             for chr_img in chr_imgs:
                 picture = chr_img.find('picture')
                 if picture:
-                    img_tag = picture.find('img')
-                    if img_tag and img_tag.has_attr('src'):
-                        img_url = img_tag['src'].replace('../', self.PAGE_PREFIX)
+                    img_tag = picture.find('source')
+                    if img_tag and img_tag.has_attr('srcset'):
+                        img_url = img_tag['srcset'].replace('../', self.PAGE_PREFIX)
                         img_name = self.extract_image_name_from_url(img_url, with_extension=False)
                         image_objs.append({'name': img_name, 'url': img_url})
         except Exception as e:
