@@ -384,13 +384,19 @@ class MushokuTenseiDownload(Winter2021AnimeDownload):
         folder = self.create_key_visual_directory()
         image_objs = [
             {'name': 'teaser', 'url': 'https://pbs.twimg.com/media/EHKOHakU4AUq-A3?format=jpg&name=large'},
-            {'name': 'kv1', 'url': 'https://pbs.twimg.com/media/Ea3MiJFU0AETcOY?format=jpg&name=4096x4096'}
+            {'name': 'kv1', 'url': 'https://pbs.twimg.com/media/Ea3MiJFU0AETcOY?format=jpg&name=4096x4096'},
+            {'name': 'kv2', 'url': 'https://mushokutensei.jp/wp-content/themes/mushoku_re/img/index/img_hero01.jpg'},
         ]
         self.download_image_objects(image_objs, folder)
 
     def download_character(self):
         folder = self.create_character_directory()
-        image_objs = []
+        image_objs = [
+            {'name': 'char_rudeus', 'url': 'https://pbs.twimg.com/media/EnA_xagUYAYBiol?format=jpg&name=4096x4096'},
+            {'name': 'char_roxy', 'url': 'https://pbs.twimg.com/media/EnE0mAHVQAINnGd?format=jpg&name=4096x4096'},
+            {'name': 'char_sylphiette', 'url': 'https://pbs.twimg.com/media/EnE1DPqVoAAVOIN?format=jpg&name=4096x4096'},
+            {'name': 'char_eris', 'url': 'https://pbs.twimg.com/media/EnE1TUQUcAINJCX?format=jpg&name=4096x4096'},
+        ]
         try:
             soup = self.get_soup('https://mushokutensei.jp/character/')
             charaslides = soup.find_all('div', class_='charaslide')
