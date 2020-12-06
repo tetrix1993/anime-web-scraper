@@ -218,6 +218,7 @@ class TomozakiKunDownload(Winter2021AnimeDownload):
         image_objs = [
             {'name': 'announce', 'url': 'https://pbs.twimg.com/media/EToARdRU0AACyGk?format=jpg&name=large'},
             {'name': 'kv1', 'url': 'http://tomozaki-koushiki.com/news/wp-content/uploads/2020/09/キービジュアル.jpg'},
+            {'name': 'kv2', 'url': 'https://pbs.twimg.com/media/EmCdhd0VoAE8-n5?format=jpg&name=4096x4096'},
         ]
         self.download_image_objects(image_objs, folder)
 
