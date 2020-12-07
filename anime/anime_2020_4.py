@@ -2901,7 +2901,7 @@ class StrikeWitches3Download(Fall2020AnimeDownload):
                         for n in range(len(images)):
                             if images[n].has_attr('src'):
                                 image_url = 'http://w-witch.jp/strike_witches-rtb/story/' + images[n]['src']
-                                image_name = episode + '_' + str(n)
+                                image_name = episode + '_' + str(n + 1)
                                 self.add_to_image_list(image_name, image_url)
                         self.download_image_list(self.base_folder)
                 else:
