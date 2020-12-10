@@ -727,6 +727,14 @@ class YuruCamp2Download(Winter2021AnimeDownload):
             {'name': 'mv_l', 'url': 'https://yurucamp.jp/second/images/mv_l.jpg'},
             {'name': 'mv_r', 'url': 'https://yurucamp.jp/second/images/mv_r.jpg'},
             {'name': 'g_visual_01', 'url': 'https://yurucamp.jp/second/images/g_visual_01.jpg'},
+            {'name': 'img_visual2', 'url': 'https://pbs.twimg.com/media/EjNUQLTU8AE0WWQ?format=jpg&name=4096x4096'},
+            {'name': 'img_visual3', 'url': 'https://yurucamp.jp/camping/content/uploads/2020/10/14e33f48d154e171f203f89674fa0b30.jpg'},
+            {'name': 'img_visual4', 'url': 'https://yurucamp.jp/camping/content/uploads/2020/10/159c0e04163a9fd00a97dd24c8843c00.jpg'},
+            {'name': 'g_visual_01', 'url': 'https://yurucamp.jp/second/images/g_visual_01.jpg'},
+            {'name': 'nmv', 'url': 'https://pbs.twimg.com/media/Eo2Arj3U0AAEras?format=jpg&name=4096x4096'},
+            #{'name': 'nmv', 'url': 'https://yurucamp.jp/second/images/nmv.jpg'},
+            {'name': 'nmv1', 'url': 'https://yurucamp.jp/second/images/nmv1.jpg'},
+            {'name': 'nmv2', 'url': 'https://yurucamp.jp/second/images/nmv2.jpg'},
         ]
         self.download_image_objects(image_objs, folder)
 
