@@ -502,6 +502,8 @@ class KakushiDungeonDownload(Winter2021AnimeDownload):
     folder_name = 'kakushi-dungeon'
 
     PAGE_PREFIX = 'https://kakushidungeon-anime.jp/'
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 6
 
     def __init__(self):
         super().__init__()
@@ -512,7 +514,22 @@ class KakushiDungeonDownload(Winter2021AnimeDownload):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        #self.has_website_updated(self.PAGE_PREFIX, 'index')
+        image_template = 'https://kakushidungeon-anime.jp/assets/story/%s_%s.jpg'
+        try:
+            for i in range(self.FINAL_EPISODE):
+                episode = str(i + 1).zfill(2)
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                for j in range(self.IMAGES_PER_EPISODE):
+                    image_url = image_template % (str(i + 1), str(j + 1))
+                    image_name = episode + '_' + str(j + 1)
+                    result = self.download_image(image_url, self.base_folder + '/' + image_name)
+                    if result == -1:
+                        return
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Character")
+            print(e)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
