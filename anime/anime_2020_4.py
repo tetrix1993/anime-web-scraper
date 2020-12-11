@@ -2657,6 +2657,8 @@ class OneRoom3Download(Fall2020AnimeDownload):
             {'name': 'bd_s1s2_1', 'url': 'https://oneroom-anime.com/wordpress/wp-content/uploads/2020/07/237a13f0134854b4d0b8162879eafef1.jpg'},
             {'name': 'bd_s1s2_2', 'url': 'https://oneroom-anime.com/wordpress/wp-content/uploads/2020/07/5cc4ed2d63953152405ca92e5549c420.jpg'},
             {'name': 'oneroom_bd3', 'url': 'https://oneroom-anime.com/wordpress/wp-content/uploads/2020/11/oneroom_bd3.jpg'},
+            {'name': 'music_akira', 'url': 'https://oneroom-anime.com/wordpress/wp-content/uploads/2020/11/6d32cd7cd1377856f470f79565c68841.jpg'},
+            {'name': 'music_saya', 'url': 'https://oneroom-anime.com/wordpress/wp-content/uploads/2020/12/4a2b84d65bbd3c67fdcaa7333c6b015b-1.jpg'},
         ]
         self.download_image_objects(image_objs, folder)
 
