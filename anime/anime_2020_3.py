@@ -812,7 +812,9 @@ class ReZero2Download(Summer2020AnimeDownload):
         image_objs = [
             #{'name': 'kv_old', 'url': 'http://re-zero-anime.jp/tv/assets/top/main-tv1r.jpg'},
             {'name': 'kv', 'url': 'http://re-zero-anime.jp/tv/assets/top/main-tv2.jpg'},
-            {'name': 'kv2', 'url': 'http://re-zero-anime.jp/tv/assets/top/main-tv2b.jpg'}]
+            {'name': 'kv2', 'url': 'http://re-zero-anime.jp/tv/assets/top/main-tv2b.jpg'},
+            {'name': 'kv3', 'url': 'http://re-zero-anime.jp/tv/assets/top/main-tv2d.jpg'},
+        ]
         self.download_image_objects(image_objs, keyvisual_folder)
 
     def download_bluray(self):
