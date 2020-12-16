@@ -91,6 +91,7 @@ The premiere date for the anime listed here has not been announced.
 * [Tatoeba Last Dungeon Mae no Mura no Shounen ga Joban no Machi de Kurasu Youna Monogatari](https://lasdan.com/)
 * [Tensei shitara Slime Datta Ken 2nd Season](https://www.ten-sura.com/anime/tensura)
 * [Urasekai Picnic](https://www.othersidepicnic.com)
+* [Wonder Egg Priority](https://wonder-egg-priority.com/)
 * [World Trigger 2nd Season](http://www.toei-anim.co.jp/tv/wt/)
 * [Yuru Camp△ 2nd Season](https://yurucamp.jp/second/)
 

@@ -19,6 +19,7 @@ from anime.main_download import MainDownload
 # Tatoeba Last Dungeon https://lasdan.com/ #ラスダン @lasdan_PR
 # Tensei shitara Slime Datta Ken S2 https://www.ten-sura.com/anime/tensura #転スラ #tensura @ten_sura_anime
 # Urasekai Picnic https://www.othersidepicnic.com/ #裏ピク @OthersidePicnic
+# Wonder Egg Priority https://wonder-egg-priority.com/ #ワンエグ @WEP_anime
 # World Trigger S2 http://www.toei-anim.co.jp/tv/wt/ #ワールドトリガー #トリガーオン @Anime_W_Trigger
 # Yuru Camp S2 https://yurucamp.jp/second/ #ゆるキャン @yurucamp_anime
 
@@ -695,6 +696,54 @@ class UrasekaiPicnicDownload(Winter2021AnimeDownload):
             print("Error in running " + self.__class__.__name__ + " - Character")
             print(e)
         self.download_image_objects(image_objs, folder)
+
+
+# Wonder Egg Priority
+class WonderEggPriorityDownload(Winter2021AnimeDownload):
+    title = 'Wonder Egg Priority'
+    keywords = [title]
+    folder_name = 'wonder-egg-priority'
+
+    PAGE_PREFIX = 'https://wonder-egg-priority.com'
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('teaser', 'https://pbs.twimg.com/media/Ej1EFuKUwAACTDb?format=jpg&name=4096x4096')
+        self.add_to_image_list('kv1', 'https://wonder-egg-priority.com/assets/img/top/main/visual.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + '/character/')
+            chara_items = soup.find_all('li', class_='character__list__item')
+            chara_names = []
+            for chara_item in chara_items:
+                a_tag = chara_item.find('a')
+                if a_tag and a_tag.has_attr('href'):
+                    split1 = a_tag['href'].split('/')
+                    if len(split1) == 4:
+                        chara_names.append(split1[2])
+            self.image_list = []
+            chara_url_template = self.PAGE_PREFIX + '/assets/img/character/%s/ph_main.png'
+            for name in chara_names:
+                self.add_to_image_list(name, chara_url_template % name)
+            self.download_image_list(folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Character")
+            print(e)
 
 
 # World Trigger S2
