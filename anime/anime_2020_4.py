@@ -910,6 +910,10 @@ class IwakakeruDownload(Fall2020AnimeDownload):
         image_objs = [
             {'name': 'music_op', 'url': music_url % 'アニメ盤_LACM-24064'},
             {'name': 'music_ed', 'url': music_url % 'h1_lacm24067'},
+            {'name': 'bd_1_1', 'url': 'https://pbs.twimg.com/media/Ek_keAmVgAECKeR?format=jpg&name=4096x4096'},
+            {'name': 'bd_1_2', 'url': 'https://pbs.twimg.com/media/Ek_keAgU0AAHRP_?format=jpg&name=4096x4096'},
+            {'name': 'bd_2_1', 'url': 'https://pbs.twimg.com/media/EpZxb0LVQAEg8Fd?format=jpg&name=4096x4096'},
+            {'name': 'bd_2_2', 'url': 'https://pbs.twimg.com/media/EpZxhXeUUAA1UCS?format=jpg&name=4096x4096'},
         ]
         self.download_image_objects(image_objs, folder)
 
