@@ -2429,6 +2429,12 @@ class MunounaNanaDownload(Fall2020AnimeDownload):
 
     def download_bluray(self):
         folder = self.create_bluray_directory()
+        self.image_list = []
+        self.add_to_image_list('bd_1_1', 'https://pbs.twimg.com/media/EkdDc2BU0AAgVh8?format=jpg&name=large')
+        self.add_to_image_list('bd_1_2', 'https://pbs.twimg.com/media/EkdDc2AVcAE5RDs?format=jpg&name=medium')
+        self.add_to_image_list('bd_2_1', 'https://pbs.twimg.com/media/EpgBPAoUwAE46Zm?format=jpg&name=large')
+        self.add_to_image_list('bd_2_2', 'https://pbs.twimg.com/media/EpgBPw0VoAAjFWS?format=jpg&name=large')
+        self.download_image_list(folder)
         try:
             soup = self.get_soup('https://munounanana.com/bddvd/')
             containers = soup.find_all('div', class_='bddvd-container')
