@@ -208,6 +208,7 @@ class TomozakiKunDownload(Winter2021AnimeDownload):
         self.download_episode_preview()
         self.download_key_visual()
         self.download_character()
+        self.download_bluray()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
@@ -237,6 +238,70 @@ class TomozakiKunDownload(Winter2021AnimeDownload):
             self.add_to_image_list(name_1, url_1)
             self.add_to_image_list(name_2, url_2)
         self.download_image_list(folder)
+
+    def download_bluray(self):
+        folder = self.create_bluray_directory()
+        self.download_bluray_volume(folder)
+        self.download_bluray_bonus(folder)
+
+    def download_bluray_volume(self, folder):
+        try:
+            bddvd_url = self.PAGE_PREFIX + 'bddvd/'
+            soup = self.get_soup(bddvd_url)
+            item_list = soup.find('ul', class_='itemList')
+            if item_list:
+                a_tags = item_list.find_all('a')
+                for a_tag in a_tags:
+                    if a_tag.has_attr('href'):
+                        if a_tag['href'] == 'shop.php':
+                            continue
+                        volume = a_tag['href'].replace('vol', '').split('.php')[0]
+                        if self.is_image_exists('bd' + volume, folder):
+                            continue
+                        img = a_tag.find('img')
+                        if img and img.has_attr('src'):
+                            if 'nowprinting' in img['src']:
+                                continue
+                            if len(volume) != 1:
+                                continue
+                            bd_url = bddvd_url + a_tag['href']
+                            bd_soup = self.get_soup(bd_url)
+                            imglist = bd_soup.find('div', class_='box_imgList')
+                            if imglist:
+                                img_list = imglist.find_all('img')
+                                self.image_list = []
+                                for i in range(len(img_list)):
+                                    if img_list[i].has_attr('src'):
+                                        if 'nowprinting' in img_list[i]['src']:
+                                            continue
+                                        image_url = self.PAGE_PREFIX + img_list[i]['src'].replace('../', '')
+                                        if self.is_matching_content_length(image_url, 9318):
+                                            continue
+                                        if i == 0:
+                                            image_name = 'bd' + volume
+                                        else:
+                                            image_name = 'bd' + volume + '_' + str(i)
+                                        self.add_to_image_list(image_name, image_url)
+                                self.download_image_list(folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Blu-ray")
+            print(e)
+
+    def download_bluray_bonus(self, folder):
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'bddvd/shop.php')
+            img_divs = soup.find_all('div', class_='shop_img')
+            self.image_list = []
+            for img_div in img_divs:
+                image = img_div.find('img')
+                if image and image.has_attr('src'):
+                    image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                    image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Blu-ray Bonus")
+            print(e)
 
 
 # Kaifuku Jutsushi no Yarinaoshi
