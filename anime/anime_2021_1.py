@@ -254,6 +254,7 @@ class KaiyariDownload(Winter2021AnimeDownload):
         self.download_episode_preview()
         self.download_key_visual()
         self.download_character()
+        self.download_bluray()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
@@ -288,6 +289,13 @@ class KaiyariDownload(Winter2021AnimeDownload):
             print("Error in running " + self.__class__.__name__ + " - Character")
             print(e)
         self.download_image_objects(image_objs, folder)
+
+    def download_bluray(self):
+        folder = self.create_bluray_directory()
+        self.image_list = []
+        self.add_to_image_list('music_op', 'http://kaiyari.com/assets/music/op.jpg')
+        self.add_to_image_list('music_ed', 'http://kaiyari.com/assets/music/ed.jpg')
+        self.download_image_list(folder)
 
 
 # Kemono Jihen
