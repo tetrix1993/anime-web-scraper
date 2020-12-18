@@ -1160,6 +1160,14 @@ class KamisamaNiNattaHiDownload(Fall2020AnimeDownload):
 
     def download_bluray(self):
         folder = self.create_bluray_directory()
+        self.image_list = []
+        self.add_to_image_list('bd_bonus_draft_1', 'https://pbs.twimg.com/media/EpgmW1RUwAAuQ-R?format=jpg&name=large')
+        self.add_to_image_list('bd_bonus_draft_2', 'https://pbs.twimg.com/media/EpgmYydVEAIC1oa?format=jpg&name=large')
+        self.add_to_image_list('bd_bonus_draft_3', 'https://pbs.twimg.com/media/EpgnPa6VgAA5HQy?format=jpg&name=large')
+        self.add_to_image_list('bd_bonus_draft_4', 'https://pbs.twimg.com/media/EpgnQ-vUcAAaxYO?format=jpg&name=large')
+        self.add_to_image_list('bd_bonus_draft_5', 'https://pbs.twimg.com/media/Epgn8VAUwAEuSlY?format=jpg&name=large')
+        self.add_to_image_list('bd_bonus_draft_6', 'https://pbs.twimg.com/media/Epgn-EGUcAAYKu5?format=jpg&name=large')
+        self.download_image_list(folder)
         try:
             for i in range(6):
                 num = i + 1
