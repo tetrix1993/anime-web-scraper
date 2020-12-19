@@ -126,6 +126,21 @@ class MainDownload:
                           + '.html'
                 with open(webpage, 'w', encoding='utf-8') as f:
                     f.write(content)
+
+                timenow = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                global_save_success = False
+                for k in range(10):
+                    try:
+                        with open(constants.GLOBAL_WEBSITE_LOG_FILE, 'a+', encoding='utf-8') as f:
+                            portalocker.lock(f, portalocker.LOCK_EX)
+                            f.write('%s\t%s\t%s\t%s\n' % (timenow, cache_name, content_length, url))
+                            portalocker.unlock(f)
+                            global_save_success = True
+                            break
+                    except Exception as e:
+                        time.sleep(0.1)
+                if not global_save_success:
+                    print('Unable to save global website log for url: %s' % url)
                 return True
         except Exception as e:
             print(e)
@@ -319,7 +334,7 @@ class MainDownload:
                 except Exception as e:
                     time.sleep(0.1)
             if not global_save_success:
-                print('Unable to save global log for file: %s' % filepath)
+                print('Unable to save global download log for file: %s' % filepath)
             return 0
         except Exception as e:
             print("Failed to download " + url + ' - ' + str(e))
