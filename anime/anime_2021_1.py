@@ -230,7 +230,7 @@ class TomozakiKunDownload(Winter2021AnimeDownload):
         image_url_2 = self.PAGE_PREFIX + 'img/character/chara%s_name.png'
         for i in range(20):
             url_1 = image_url_1 % str(i + 1)
-            if not self.is_valid_url(url_1):
+            if not self.is_valid_url(url_1, is_image=True):
                 break
             url_2 = image_url_2 % str(i + 1)
             name_1 = self.extract_image_name_from_url(url_1, with_extension=False)
@@ -374,6 +374,8 @@ class KemonoJihenDownload(Winter2021AnimeDownload):
     folder_name = 'kemonojihen'
 
     PAGE_PREFIX = 'https://kemonojihen-anime.com/'
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 6
 
     def __init__(self):
         super().__init__()
@@ -384,7 +386,20 @@ class KemonoJihenDownload(Winter2021AnimeDownload):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        template = 'https://kemonojihen-anime.com/story/img/%s/%s_%s.jpg'
+        for i in range(self.FINAL_EPISODE):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_1'):
+                continue
+            first_image_url = template % (episode, episode, '01')
+            if not self.is_valid_url(first_image_url, is_image=True):
+                break
+            self.image_list = []
+            for j in range(self.IMAGES_PER_EPISODE):
+                image_url = template % (episode, episode, str(j + 1).zfill(2))
+                image_name = episode + '_' + str(j + 1)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(self.base_folder)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()

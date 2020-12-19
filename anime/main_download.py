@@ -525,11 +525,11 @@ class MainDownload:
             or os.path.exists(filename + '.webp')
 
     @staticmethod
-    def is_valid_url(url):
+    def is_valid_url(url, is_image=False):
         if isinstance(url, str) and (url.startswith('http://') or url.startswith('https://')):
             try:
                 r = requests.head(url)
-                return r.status_code < 400
+                return r.status_code < 400 and (not is_image or (is_image and 'image/' in r.headers['Content-Type']))
             except:
                 pass
         return False
