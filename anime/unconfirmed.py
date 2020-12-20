@@ -8,6 +8,7 @@ from anime.main_download import MainDownload
 # Osananajimi ga Zettai ni Makenai Love Comedy https://osamake.com/ #おさまけ
 # Princess Connect! Re:Dive S2 https://anime.priconne-redive.jp/ #アニメプリコネ #プリコネR #プリコネ @priconne_anime
 # Seirei Gensouki https://seireigensouki.com/ #精霊幻想記 @seireigensouki
+# Shadows House https://shadowshouse-anime.com/ #シャドーハウス @shadowshouse_yj
 # Shuumatsu no Harem https://end-harem-anime.com/ #終末のハーレム @harem_official_
 # Tate no Yuusha S2 http://shieldhero-anime.jp/ #shieldhero #盾の勇者の成り上がり @shieldheroanime
 # Vlad Love https://www.vladlove.com/index.html #ぶらどらぶ #vladlove @VLADLOVE_ANIME
@@ -166,6 +167,31 @@ class SeireiGensoukiDownload(UnconfirmedDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + " - Character")
             print(e)
+
+
+# Shadows House
+class ShadowsHouseDownload(UnconfirmedDownload):
+    title = "Shadows House"
+    keywords = [title]
+    folder_name = 'shadows-house'
+
+    PAGE_PREFIX = 'https://shadowshouse-anime.com/'
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('teaser', 'https://shadowshouse-anime.com/assets/img/img_kv_pc.jpg')
+        self.download_image_list(folder)
 
 
 # Shuumatsu no Harem
