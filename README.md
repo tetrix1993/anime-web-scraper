@@ -189,7 +189,7 @@ The premiere date for the anime listed here has not been announced.
 * [Watashi, Nouryoku wa Heikinchi de tte Itta yo ne!](https://noukin-anime.com/)
 
 ### Summer 2019 Anime
-* [Arifureta Shokugyou de Sekai Saikyou]("https://arifureta.com/)
+* [Arifureta Shokugyou de Sekai Saikyou](https://arifureta.com/)
 * [Dumbbell Nan Kilo Moteru?](https://dumbbell-anime.jp/)
 * [Granbelm](http://granbelm.com/)
 * [Kawaikereba Hentai demo Suki ni Natte Kuremasu ka?](https://hensuki.com/)
