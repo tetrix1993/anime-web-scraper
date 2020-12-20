@@ -63,6 +63,7 @@ The premiere date for the anime listed here has not been announced.
 * [Osananajimi ga Zettai ni Makenai Love Comedy](https://osamake.com/)
 * [Princess Connect! Re:Dive 2nd Season](https://anime.priconne-redive.jp)
 * [Seirei Gensouki](https://seireigensouki.com/)
+* [Shuumatsu no Harem](https://end-harem-anime.com/)
 * [Tate no Yuusha no Nariagari 2nd Season](http://shieldhero-anime.jp)
 * [Vlad Love](https://www.vladlove.com/)
 
