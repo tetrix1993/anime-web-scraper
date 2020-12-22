@@ -5,8 +5,10 @@ from datetime import datetime
 from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 
 
+# 86 https://anime-86.com/ #エイティシックス @anime_eightysix
 # Hige wo Soru. Soshite Joshikousei wo Hirou. http://higehiro-anime.com/ #higehiro #ひげひろ @higehiro_anime
 # Ijiranaide, Nagatoro-san https://www.nagatorosan.jp/ #長瀞さん @nagatoro_tv
+# Isekai Maou to Shoukan Shoujo no Dorei Majutsu Ω https://isekaimaou-anime.com/ #異世界魔王 @isekaimaou
 # Kyuukyoku Shinka Shita Full Dive RPG ga Genjitsu Yori mo Kusogee Dattara https://fulldive-rpg.com/ #究極進化したフルダイブRPGが現実よりもクソゲーだったら @fulldive_anime
 # Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita https://slime300-anime.com/ #スライム倒して300年 @slime300_PR
 # Yakunara Mug Cup mo https://yakumo-project.com/ #やくもtv @yakumo_project
@@ -20,6 +22,50 @@ class Spring2021AnimeDownload(MainDownload):
 
     def __init__(self):
         super().__init__()
+
+
+# 86
+class EightySixDownload(Spring2021AnimeDownload):
+    title = '86'
+    keywords = [title, 'Eighty Six']
+    folder_name = '86'
+
+    PAGE_PREFIX = 'https://anime-86.com/'
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index', diff=2)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('kv1', 'https://anime-86.com/assets/img/top/img_kv.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        self.image_list = []
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            contents = soup.find_all('div', class_='m-chara__content')
+            for content in contents:
+                figures = content.find_all('figure')
+                for figure in figures:
+                    if figure.has_attr('style') and 'url(' in figure['style']:
+                        image_url = self.PAGE_PREFIX + figure['style'].split('url(')[1].split(');')[0].replace('../', '')
+                        image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                        self.add_to_image_list(image_name, image_url)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Character")
+            print(e)
+        self.download_image_list(folder)
 
 
 # Hige wo Soru. Soshite Joshikousei wo Hirou.
@@ -118,6 +164,50 @@ class NagatorosanDownload(Spring2021AnimeDownload):
                 for image in images:
                     if image.has_attr('src'):
                         image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                        image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                        self.add_to_image_list(image_name, image_url)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Character")
+            print(e)
+        self.download_image_list(folder)
+
+
+# Isekai Maou to Shoukan Shoujo no Dorei Majutsu Ω
+class IsekaiMaou2Download(Spring2021AnimeDownload):
+    title = 'Isekai Maou to Shoukan Shoujo no Dorei Majutsu 2nd Season'
+    keywords = [title, "How Not to Summon a Demon Lord", "Isekaimaou"]
+    folder_name = 'isekai-maou2'
+
+    PAGE_PREFIX = 'https://isekaimaou-anime.com/'
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('teaser', 'https://64.media.tumblr.com/5b236a6eb6f70ee69097815a8b9bc9ce/eb7b1b50731487c4-05/s1280x1920/04c8ff15baf833620d39f90e910d23aff8fa0019.png')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        self.image_list = []
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            visuals = soup.find_all('div', class_='visual--main')
+            for visual in visuals:
+                images = visual.find_all('img')
+                for image in images:
+                    if image.has_attr('src'):
+                        image_url = image['src']
                         image_name = self.extract_image_name_from_url(image_url, with_extension=False)
                         self.add_to_image_list(image_name, image_url)
         except Exception as e:

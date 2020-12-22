@@ -390,7 +390,7 @@ class IsekaiMaouDownload(Summer2018AnimeDownload):
     keywords = ["Isekai Maou to Shoukan Shoujo no Dorei Majutsu", "How Not to Summon a Demon Lord", "Isekaimaou"]
     folder_name = 'isekai-maou'
     
-    STORY_PAGE = "https://isekaimaou-anime.com/story/"
+    STORY_PAGE = "https://season1.isekaimaou-anime.com/story/"
     
     def __init__(self):
         super().__init__()

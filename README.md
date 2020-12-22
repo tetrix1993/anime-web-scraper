@@ -72,8 +72,10 @@ The premiere date for the anime listed here has not been announced.
 * [Genjitsu Shugi Yuusha no Oukoku Saikenki](https://genkoku-anime.com/)
 
 ### Spring 2021 Anime
+* [86](https://anime-86.com/)
 * [Hige wo Soru. Soshite Joshikousei wo Hirou.](http://higehiro-anime.com/)
 * [Ijiranaide, Nagatoro-san](https://www.nagatorosan.jp/)
+* [Isekai Maou to Shoukan Shoujo no Dorei Majutsu Ω](https://isekaimaou-anime.com/)
 * [Kyuukyoku Shinka Shita Full Dive RPG ga Genjitsu Yori mo Kusogee Dattara](https://fulldive-rpg.com/)
 * [Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita](https://slime300-anime.com/)
 * [Yakunara Mug Cup mo](https://yakumo-project.com/)
@@ -267,7 +269,7 @@ The premiere date for the anime listed here has not been announced.
 * [Hataraku Saibou](https://hataraku-saibou.com/)
 * [High Score Girl](http://hi-score-girl.com/)
 * [Hyakuren no Haou to Seiyaku no Valkyria](http://hyakuren-anime.com/)
-* [Isekai Maou to Shoukan Shoujo no Dorei Majutsu](https://isekaimaou-anime.com/)
+* [Isekai Maou to Shoukan Shoujo no Dorei Majutsu](https://season1.isekaimaou-anime.com/)
 * [Island](http://never-island.com/)
 * [Overlord III](http://overlord-anime.com/)
 * [Satsuriku no Tenshi](http://satsuriku.com/)
