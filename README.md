@@ -65,6 +65,7 @@ The premiere date for the anime listed here has not been announced.
 * [Seirei Gensouki](https://seireigensouki.com/)
 * [Shadows House](https://shadowshouse-anime.com/)
 * [Shuumatsu no Harem](https://end-harem-anime.com/)
+* [Slow Loop](https://slowlooptv.com/)
 * [Tate no Yuusha no Nariagari 2nd Season](http://shieldhero-anime.jp)
 * [Vlad Love](https://www.vladlove.com/)
 
