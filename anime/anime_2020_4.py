@@ -193,6 +193,7 @@ class AdashimaDownload(Fall2020AnimeDownload):
             {'name': 'music_ed', 'url': 'https://pbs.twimg.com/media/Elao8sOU0AA1nzm?format=jpg&name=medium'},
             {'name': 'bd_vol_1', 'url': 'https://pbs.twimg.com/media/ElfsmoIUYAECjjH?format=jpg&name=4096x4096'},
             {'name': 'bd_vol_2', 'url': 'https://pbs.twimg.com/media/EoUAHX4UUAswZ5C?format=jpg&name=4096x4096'},
+            {'name': 'bd_vol_3', 'url': 'https://pbs.twimg.com/media/EqAG4bIU0AUwplp?format=jpg&name=4096x4096'},
             {'name': 'bd_bonus_1', 'url': 'https://pbs.twimg.com/media/ElftV_5UcAAVxFC?format=jpg&name=medium'},
             {'name': 'bd_bonus_2', 'url': 'https://pbs.twimg.com/media/ElftthlVgAA3ejg?format=jpg&name=medium'},
             {'name': 'bd_bonus_3', 'url': 'https://pbs.twimg.com/media/Elft8pYVkAAYRIo?format=jpg&name=medium'},
