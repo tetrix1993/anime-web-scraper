@@ -2810,7 +2810,8 @@ class SigrdrifaDownload(Fall2020AnimeDownload):
     def download_bluray(self):
         folder = self.create_bluray_directory()
         image_objs = [
-            {'name': 'img_special_01_2', 'url': 'https://sigururi.com/news/SYS/CONTENTS/2020102619501742165262'}
+            {'name': 'img_special_01_2', 'url': 'https://sigururi.com/news/SYS/CONTENTS/2020102619501742165262'},
+            {'name': 'bd_bonus_all', 'url': 'https://pbs.twimg.com/media/Ep063xuU0AAeAA8?format=jpg&name=large'},
         ]
         self.download_image_objects(image_objs, folder)
         try:
@@ -2864,6 +2865,8 @@ class SigrdrifaDownload(Fall2020AnimeDownload):
             {'name': 'zanshomimai', 'url': 'https://sigururi.com/news/SYS/CONTENTS/2020083114133842932562/w712'},
             {'name': 'soranohi', 'url': 'https://pbs.twimg.com/media/EiSXMZrU8AA4ThC?format=jpg&name=medium'},
             {'name': 'halloween', 'url': 'https://pbs.twimg.com/media/EllqxgTVcAEo3UO?format=jpg&name=large'},
+            {'name': 'laborday', 'url': 'https://64.media.tumblr.com/e3585db2846f52d941e887d8992602be/c0e6e8c14c2bf351-7f/s1280x1920/df006bed62e5d7910ea41ac231df6991002fbdbc.jpg'},
+            {'name': 'christmas', 'url': 'https://pbs.twimg.com/media/Ep-wQZnU0AAOv_F?format=jpg&name=large'},
             {'name': 'img_miyako', 'url': 'https://sigururi.com/assets/img/special/interview/img_miyako.jpg'},
             {'name': 'img_azuzu', 'url': 'https://sigururi.com/assets/img/special/interview/img_azuzu.jpg'},
             {'name': 'img_sonoka', 'url': 'https://sigururi.com/assets/img/special/interview/img_sonoka.jpg'},
