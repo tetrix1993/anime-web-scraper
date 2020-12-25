@@ -54,6 +54,7 @@ pip install portalocker
 ### News Website
 * [Aniverse Magazine](https://aniverse-mag.com/)
 * [Moca News](https://moca-news.net/)
+* [Natalie](https://natalie.mu/)
 * [WebNewtype](https://webnewtype.com/)
 
 ### New Anime
