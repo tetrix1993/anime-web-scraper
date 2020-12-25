@@ -211,9 +211,30 @@ class TomozakiKunDownload(Winter2021AnimeDownload):
         self.download_bluray()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-        #image_objs = []
-        #self.download_image_objects(image_objs, self.base_folder)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            story_boxes = soup.find_all('div', class_='storyBox')
+            for story_box in story_boxes:
+                if story_box.has_attr('id') and 'story' in story_box['id'] and '_box' in story_box['id']:
+                    try:
+                        episode = str(int(story_box['id'].split('_box')[0].split('story')[1])).zfill(2)
+                    except:
+                        continue
+                    if self.is_image_exists(episode + '_1'):
+                        continue
+                    img_list = story_box.find('ul', 'imgList')
+                    if img_list:
+                        images = img_list.find_all('img')
+                        self.image_list = []
+                        for i in range(len(images)):
+                            if images[i].has_attr('src'):
+                                image_url = self.PAGE_PREFIX + images[i]['src'].replace('../', '')
+                                image_name = episode + '_' + str(i + 1)
+                                self.add_to_image_list(image_name, image_url)
+                        self.download_image_list(self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
