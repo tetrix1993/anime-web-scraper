@@ -242,8 +242,8 @@ class TomozakiKunDownload(Winter2021AnimeDownload):
     def download_bluray(self):
         folder = self.create_bluray_directory()
         self.image_list = []
-        self.add_to_image_list('bd_tw_1_1', 'https://pbs.twimg.com/media/EphcE8pUUAASocS?format=jpg&name=900x900')
-        self.add_to_image_list('bd_tw_1_2', 'https://pbs.twimg.com/media/EphcE8nVEAEVsec?format=jpg&name=900x900')
+        self.add_to_image_list('bd_tw_1_1', 'https://pbs.twimg.com/media/EqDDs1iVgAANXji?format=jpg&name=large')
+        self.add_to_image_list('bd_tw_1_2', 'https://pbs.twimg.com/media/EqDDtt9UwAA4Rld?format=jpg&name=large')
         self.download_image_list(folder)
         self.download_bluray_volume(folder)
         self.download_bluray_bonus(folder)
