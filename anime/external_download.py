@@ -121,6 +121,49 @@ class MocaNewsDownload(ExternalDownload):
             print(e)
 
 
+class NatalieDownload(ExternalDownload):
+    folder_name = None
+    PAGE_PREFIX = 'https://natalie.mu/comic/news/'
+
+    def __init__(self, article_id, save_folder, episode, title=None):
+        super().__init__()
+        self.base_folder = self.base_folder + "/" + save_folder
+        if not os.path.exists(self.base_folder):
+            os.makedirs(self.base_folder)
+        self.article_id = str(article_id)
+        if isinstance(episode, int):
+            self.episode = str(episode).zfill(2)
+        else:
+            self.episode = str(episode)
+        self.title = title
+
+    def run(self):
+        if self.is_file_exists(self.base_folder + "/" + self.episode.zfill(2) + "_01.jpg"):
+            return
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + self.article_id)
+            gallery_div = soup.find('div', class_='NA_article_gallery')
+            if not gallery_div:
+                return
+            na_imglist = gallery_div.find('ul', class_='NA_imglist')
+            if not na_imglist:
+                return
+            a_tags = na_imglist.find_all('a')
+            self.image_list = []
+            for i in range(len(a_tags)):
+                if self.title is not None and a_tags[i].has_attr('title') and self.title not in a_tags[i]['title']:
+                    continue
+                image = a_tags[i].find('img')
+                if image and image.has_attr('data-src'):
+                    image_url = image['data-src'].split('?')[0]
+                    image_name = self.episode + '_' + str(i + 1).zfill(2)
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
+
+
 class WebNewtypeDownload(ExternalDownload):
     folder_name = None
     PAGE_PREFIX = "https://webnewtype.com/news/article/"

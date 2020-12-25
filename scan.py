@@ -1,9 +1,7 @@
 import os
 import re
 import requests
-from anime.external_download import AniverseMagazineDownload
-from anime.external_download import WebNewtypeDownload
-from anime.external_download import MocaNewsDownload
+from anime.external_download import AniverseMagazineDownload, WebNewtypeDownload, MocaNewsDownload, NatalieDownload
 from bs4 import BeautifulSoup as bs
 from datetime import datetime
 from datetime import timedelta
@@ -353,9 +351,108 @@ class MocaNewsScanner(MainScanner):
         self.write_cache(self.end_date)
 
 
-if __name__ == '__main__':
-    print('Bofuri: ')
-    AniverseMagazineScanner("痛いのは嫌なので", "").run()
-    print('Plunderer: ')
-    AniverseMagazineScanner("プランダラ", "").run()
-    
+class NatalieScanner(MainScanner):
+    SEARCH_URL_TEMPLATE = 'https://natalie.mu/search?context=news&query=%s&g=comic&page=%s'
+    ARTICLE_URL_TEMPLATE = 'https://natalie.mu/comic/news/%s'
+
+    def __init__(self, keyword, base_folder, last_episode=None, suffix=None):
+        super().__init__()
+        self.keyword = keyword
+        self.base_folder = base_folder.replace("download/","") + "/natalie"
+        self.last_episode = last_episode
+        self.suffix = suffix
+
+    @staticmethod
+    def has_results(soup):
+        empty_section = soup.find('div', class_='NA_section_empty')
+        return empty_section is None
+
+    @staticmethod
+    def has_next_page(soup):
+        next_page = soup.find('li', class_='NA_pager_next')
+        return next_page is not None
+
+    @staticmethod
+    def get_episode_num(result, suffix):
+        split1 = result[0].split(suffix)[0].split('第')
+        if len(split1) < 2:
+            return -1
+        try:
+            return int(split1[1])
+        except:
+            return -1
+
+    @staticmethod
+    def get_article_id(url):
+        split1 = url.split('/')
+        if len(split1) < 1:
+            return ""
+        return split1[len(split1) - 1]
+
+    def process_page(self, soup):
+        cards = soup.find_all('div', 'NA_card-l')
+        for card in cards:
+            a_tag = card.find('a')
+            if a_tag and a_tag.has_attr('href'):
+                url = a_tag['href']
+                article_id = self.get_article_id(url)
+                if len(article_id) == 0:
+                    continue
+                card_title = a_tag.find('p', class_='NA_card_title')
+                if card_title is None or len(card_title.text) == 0:
+                    continue
+                news_title = card_title.text
+                suffix = self.suffix
+                if suffix is None:
+                    suffix = '話'
+
+                regex = '第' + '[０|１|２|３|４|５|６|７|８|９|0-9]+' + suffix
+                prog = re.compile(regex)
+                result = prog.findall(news_title)
+                if self.keyword in news_title and ('最終' + suffix) in news_title and len(result) == 0:
+                    episode = 'last'
+                elif self.keyword in news_title and len(result) > 0:
+                    episode_num = self.get_episode_num(result, suffix)
+                    if episode_num < 1:
+                        continue
+                    episode = str(episode_num).zfill(2)
+                else:
+                    continue
+                if os.path.isfile(self.base_folder + "/" + episode + "_01.jpg"):
+                    return 1
+
+                image_title = None
+                try:
+                    image_title = '第' + str(int(episode)) + suffix
+                except:
+                    pass
+                NatalieDownload(article_id, self.base_folder, episode, title=image_title).run()
+        return 0
+
+    def run(self):
+        if self.last_episode:
+            # Stop processing if the last episode has already been downloaded
+            if self.is_image_exists(str(self.last_episode).zfill(2) + '_01', self.base_folder) or \
+                    self.is_image_exists('last_01', self.base_folder):
+                return
+
+        first_page_url = self.SEARCH_URL_TEMPLATE % (self.keyword, '1')
+        try:
+            soup = self.get_soup(first_page_url)
+            if self.has_results(soup):
+                result = self.process_page(soup)
+                if result == 1:
+                    return
+                page = 2
+                while page <= self.MAXIMUM_PAGES:
+                    if not self.has_next_page(soup):
+                        break
+                    next_url = self.SEARCH_URL_TEMPLATE % (self.keyword, str(page))
+                    soup = self.get_soup(next_url)
+                    result = self.process_page(soup)
+                    if result == 1:
+                        return
+                    page += 1
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
