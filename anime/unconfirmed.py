@@ -7,6 +7,7 @@ from anime.main_download import MainDownload
 # Kobayashi-san Chi no Maid Dragon S https://maidragon.jp/2nd/ #maidragon @maidragon_anime
 # Osananajimi ga Zettai ni Makenai Love Comedy https://osamake.com/ #おさまけ
 # Princess Connect! Re:Dive S2 https://anime.priconne-redive.jp/ #アニメプリコネ #プリコネR #プリコネ @priconne_anime
+# Seijo no Maryoku wa Bannou desu https://seijyonomaryoku.jp/ #seijyonoanime @seijyonoanime
 # Seirei Gensouki https://seireigensouki.com/ #精霊幻想記 @seireigensouki
 # Shadows House https://shadowshouse-anime.com/ #シャドーハウス @shadowshouse_yj
 # Shuumatsu no Harem https://end-harem-anime.com/ #終末のハーレム @harem_official_
@@ -124,6 +125,32 @@ class Priconne2Download(UnconfirmedDownload):
         folder = self.create_key_visual_directory()
         image_objs = [{'name': 'teaser', 'url': 'https://anime.priconne-redive.jp/assets/images/top_kv.png'}]
         self.download_image_objects(image_objs, folder)
+
+
+# Seijo no Maryoku wa Bannou desu
+class SeijonoMaryokuDownload(UnconfirmedDownload):
+    title = 'Seijo no Maryoku wa Bannou desu'
+    keywords = [title, 'seijonomaryoku', 'seijyonomaryoku', "The Saint's Magic Power is Omnipotent"]
+    folder_name = 'seijyonomaryoku'
+
+    PAGE_PREFIX = 'https://seijyonomaryoku.jp/'
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('kv1', 'https://seijyonomaryoku.jp/images/main-visual.jpg')
+        self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/EqDkgusU0AAdO1C?format=jpg&name=large')
+        self.download_image_list(folder)
 
 
 # Seirei Gensouki
