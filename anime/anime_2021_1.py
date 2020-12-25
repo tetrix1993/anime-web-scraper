@@ -1,15 +1,15 @@
 import os
 # import anime.constants as constants
 from anime.main_download import MainDownload
-# from datetime import datetime
-# from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
+from datetime import datetime
+from scan import MocaNewsScanner, NatalieScanner
 
 
 # Gotoubun no Hanayome S2 https://www.tbs.co.jp/anime/5hanayome/ #五等分の花嫁 @5Hanayome_anime
 # Hataraku Saibou S2 https://hataraku-saibou.com/2nd.html #はたらく細胞 @hataraku_saibou
 # Hataraku Saibou Black https://saibou-black.com/ #細胞BLACK @cellsatworkbla1
 # Horimiya https://horimiya-anime.com/ #ホリミヤ @horimiya_anime
-# Jaku-Chara Tomozaki-kun http://tomozaki-koushiki.com/ #友崎くん @tomozakikoshiki
+# Jaku-Chara Tomozaki-kun http://tomozaki-koushiki.com/ #友崎くん @tomozakikoshiki [FRI 10AM]
 # Kaifuku Jutsushi no Yarinaoshi http://kaiyari.com/ #回復術士 @kaiyari_anime
 # Kemono Jihen https://kemonojihen-anime.com/ #怪物事変 #kemonojihen @Kemonojihen_tv
 # Kumo Desu ga, Nani ka? https://kumo-anime.com/ #蜘蛛ですが @kumoko_anime
@@ -18,7 +18,7 @@ from anime.main_download import MainDownload
 # Ore dake Haireru Kakushi Dungeon https://kakushidungeon-anime.jp/ #隠しダンジョン @kakushidungeon
 # Tatoeba Last Dungeon https://lasdan.com/ #ラスダン @lasdan_PR
 # Tensei shitara Slime Datta Ken S2 https://www.ten-sura.com/anime/tensura #転スラ #tensura @ten_sura_anime
-# Urasekai Picnic https://www.othersidepicnic.com/ #裏ピク @OthersidePicnic
+# Urasekai Picnic https://www.othersidepicnic.com/ #裏ピク @OthersidePicnic [FRI AM]
 # Wonder Egg Priority https://wonder-egg-priority.com/ #ワンエグ @WEP_anime
 # World Trigger S2 http://www.toei-anim.co.jp/tv/wt/ #ワールドトリガー #トリガーオン @Anime_W_Trigger
 # Yuru Camp S2 https://yurucamp.jp/second/ #ゆるキャン @yurucamp_anime
@@ -200,12 +200,14 @@ class TomozakiKunDownload(Winter2021AnimeDownload):
     folder_name = 'tomozakikun'
 
     PAGE_PREFIX = 'http://tomozaki-koushiki.com/'
+    FINAL_EPISODE = 12
 
     def __init__(self):
         super().__init__()
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_external()
         self.download_key_visual()
         self.download_character()
         self.download_bluray()
@@ -235,6 +237,17 @@ class TomozakiKunDownload(Winter2021AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
+
+    def download_episode_preview_external(self):
+        jp_title = '弱キャラ友崎くん'
+        last_date = datetime.strptime('20210330', '%Y%m%d')
+        today = datetime.today()
+        if today < last_date:
+            end_date = today
+        else:
+            end_date = last_date
+        MocaNewsScanner(jp_title, self.base_folder, '20201225', end_date.strftime('%Y%m%d')).run()
+        NatalieScanner(jp_title, self.base_folder, last_episode=self.FINAL_EPISODE).run()
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -774,17 +787,50 @@ class UrasekaiPicnicDownload(Winter2021AnimeDownload):
     folder_name = 'urasekai-picnic'
 
     PAGE_PREFIX = 'https://www.othersidepicnic.com'
+    FINAL_EPISODE = 12
 
     def __init__(self):
         super().__init__()
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_external()
         self.download_key_visual()
         self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + '/story/')
+            nav = soup.find('nav', id='l-nav')
+            if nav:
+                a_tags = nav.find_all('a')
+                for a_tag in a_tags:
+                    if a_tag.has_attr('href'):
+                        try:
+                            episode = str(int(a_tag.text.strip())).zfill(2)
+                        except:
+                            continue
+                        if self.is_image_exists(episode + '_1'):
+                            continue
+                        url = self.PAGE_PREFIX + '/' + a_tag['href']
+                        story_soup = self.get_soup(url)
+                        slider = story_soup.find('ul', class_='slider')
+                        if slider:
+                            images = slider.find_all('img')
+                            self.image_list = []
+                            for i in range(len(images)):
+                                if images[i].has_attr('src'):
+                                    image_url = images[i]['src'].replace('-1024x576', '')
+                                    image_name = episode + '_' + str(i + 1)
+                                    self.add_to_image_list(image_name, image_url)
+                            self.download_image_list(self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
+
+    def download_episode_preview_external(self):
+        NatalieScanner('裏世界ピクニック', self.base_folder, last_episode=self.FINAL_EPISODE).run()
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
