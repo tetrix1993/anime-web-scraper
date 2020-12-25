@@ -392,13 +392,18 @@ class NatalieScanner(MainScanner):
     def process_page(self, soup):
         cards = soup.find_all('div', 'NA_card-l')
         for card in cards:
-            a_tag = card.find('a')
-            if a_tag and a_tag.has_attr('href'):
-                url = a_tag['href']
+            a_tags = card.find_all('a')
+            news_info = None
+            for a_tag in a_tags:
+                if a_tag.has_attr('href') and 'news' in a_tag['href']:
+                    news_info = a_tag
+                    break
+            if news_info:
+                url = news_info['href']
                 article_id = self.get_article_id(url)
                 if len(article_id) == 0:
                     continue
-                card_title = a_tag.find('p', class_='NA_card_title')
+                card_title = news_info.find('p', class_='NA_card_title')
                 if card_title is None or len(card_title.text) == 0:
                     continue
                 news_title = card_title.text
