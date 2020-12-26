@@ -704,7 +704,33 @@ class LasdanDownload(Winter2021AnimeDownload):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/', decode=True)
+            episode_list = soup.find('div', id='ContentsListUnit02')
+            if episode_list:
+                a_tags = episode_list.find_all('a')
+                for a_tag in a_tags:
+                    if a_tag.has_attr('href'):
+                        a_tag_text = a_tag.text.strip().replace(' ', '')
+                        if len(a_tag_text) > 2 and '第' in a_tag_text[0] and '話' in a_tag_text[-1]:
+                            try:
+                                episode = str(int(a_tag_text.split('第')[1].split('話')[0])).zfill(2)
+                            except:
+                                continue
+                            url = self.PAGE_PREFIX + a_tag['href'].replace('../', '')
+                            ep_soup = self.get_soup(url)
+                            ph_divs = ep_soup.find_all('div', class_='ph')
+                            self.image_list = []
+                            for i in range(len(ph_divs)):
+                                image = ph_divs[i].find('a')
+                                if image and image.has_attr('href'):
+                                    image_url = self.PAGE_PREFIX + image['href'].replace('../', '').split('?')[0]
+                                    image_name = episode + '_' + str(i + 1)
+                                    self.add_to_image_list(image_name, image_url)
+                            self.download_image_list(self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
     def download_key_visual(self):
         filepath = self.create_key_visual_directory()
