@@ -9,7 +9,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 # Hige wo Soru. Soshite Joshikousei wo Hirou. http://higehiro-anime.com/ #higehiro #ひげひろ @higehiro_anime
 # Ijiranaide, Nagatoro-san https://www.nagatorosan.jp/ #長瀞さん @nagatoro_tv
 # Isekai Maou to Shoukan Shoujo no Dorei Majutsu Ω https://isekaimaou-anime.com/ #異世界魔王 @isekaimaou
-# Kyuukyoku Shinka Shita Full Dive RPG ga Genjitsu Yori mo Kusogee Dattara https://fulldive-rpg.com/ #究極進化したフルダイブRPGが現実よりもクソゲーだったら @fulldive_anime
+# Kyuukyoku Shinka Shita Full Dive RPG ga Genjitsu Yori mo Kusogee Dattara https://fulldive-rpg.com/ #フルダイブ @fulldive_anime
 # Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita https://slime300-anime.com/ #スライム倒して300年 @slime300_PR
 # Yakunara Mug Cup mo https://yakumo-project.com/ #やくもtv @yakumo_project
 
@@ -238,6 +238,7 @@ class FullDiveRPGDownload(Spring2021AnimeDownload):
         folder = self.create_key_visual_directory()
         self.image_list = []
         self.add_to_image_list('visual01', 'https://pbs.twimg.com/media/EoYbnevVoAAnE3-?format=jpg&name=large')
+        self.add_to_image_list('visual01_1', 'https://fulldive-rpg.com/img/main_visual.png')
         self.download_image_list(folder)
 
 
