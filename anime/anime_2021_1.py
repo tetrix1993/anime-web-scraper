@@ -13,6 +13,7 @@ from scan import MocaNewsScanner, NatalieScanner
 # Kaifuku Jutsushi no Yarinaoshi http://kaiyari.com/ #回復術士 @kaiyari_anime
 # Kemono Jihen https://kemonojihen-anime.com/ #怪物事変 #kemonojihen @Kemonojihen_tv
 # Kumo Desu ga, Nani ka? https://kumo-anime.com/ #蜘蛛ですが @kumoko_anime
+# Log Horizon: Entaku Houkai https://www6.nhk.or.jp/anime/program/detail.html?i=loghorizon3 #loghorizon @loghorizon_DORT
 # Mushoku Tensei https://mushokutensei.jp/ #無職転生 @mushokutensei_A
 # Non Non Biyori Nonstop https://nonnontv.com/ #なのん #のんのんびより @nonnontv
 # Ore dake Haireru Kakushi Dungeon https://kakushidungeon-anime.jp/ #隠しダンジョン @kakushidungeon
@@ -486,6 +487,33 @@ class KumoDesugaNanikaDownload(Winter2021AnimeDownload):
         self.image_list = []
         self.add_to_image_list('top-main', 'https://kumo-anime.com/teaser/images/top-main.jpg')
         self.add_to_image_list('top-main2', 'https://kumo-anime.com/teaser/images/top-main2.jpg')
+        self.download_image_list(folder)
+
+
+# Log Horizon: Entaku Houkai
+class LogHorizon3Download(Winter2021AnimeDownload):
+    title = "Log Horizon: Entaku Houkai"
+    keywords = [title, '3rd Season']
+    folder_name = 'loghorizon3'
+
+    MAIN_PAGE = 'https://www6.nhk.or.jp/anime/program/detail.html?i=loghorizon3'
+    IMAGE_PREFIX = 'https://www6.nhk.or.jp/anime/program/common/images/loghorizon3/'
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.MAIN_PAGE, 'index')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('main', self.IMAGE_PREFIX + 'main.jpg')
+        self.add_to_image_list('main2', self.IMAGE_PREFIX + 'main2.jpg')
         self.download_image_list(folder)
 
 
