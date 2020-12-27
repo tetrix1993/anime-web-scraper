@@ -643,7 +643,6 @@ class KakushiDungeonDownload(Winter2021AnimeDownload):
         self.download_bluray()
 
     def download_episode_preview(self):
-        #self.has_website_updated(self.PAGE_PREFIX, 'index')
         image_template = 'https://kakushidungeon-anime.jp/assets/story/%s_%s.jpg'
         try:
             for i in range(self.FINAL_EPISODE):
@@ -693,7 +692,6 @@ class KakushiDungeonDownload(Winter2021AnimeDownload):
         try:
             soup = self.get_soup('https://kakushidungeon-anime.jp/bdcd/index.html')
             articles = soup.find_all('article', class_='content-single')
-            self.image_list = []
             for article in articles:
                 if article.has_attr('id'):
                     prefix = article['id'].strip() + '_'
@@ -726,6 +724,7 @@ class LasdanDownload(Winter2021AnimeDownload):
         self.download_episode_preview()
         self.download_key_visual()
         self.download_character()
+        self.download_bluray()
 
     def download_episode_preview(self):
         try:
@@ -802,6 +801,17 @@ class LasdanDownload(Winter2021AnimeDownload):
             print("Error in running " + self.__class__.__name__ + ' - Character')
             print(e)
         self.download_image_objects(image_objs, chara_folder)
+
+    def download_bluray(self):
+        folder = self.create_bluray_directory()
+        music_url_template = 'https://lasdan.com/core_sys/images/contents/000000%s/block/000000%s/000000%s.jpg'
+        self.image_list = []
+        for i in range(43, 48, 1):
+            j = 1 if i > 45 else 0
+            music_url = music_url_template % (str(15 - j), str(29 + j), str(i))
+            if not self.is_matching_content_length(music_url, 126468):
+                self.add_to_image_list(self.extract_image_name_from_url(music_url, with_extension=False), music_url)
+        self.download_image_list(folder)
 
 
 # Tensei shitara Slime Datta Ken S2
