@@ -16,7 +16,7 @@ from scan import MocaNewsScanner, NatalieScanner
 # Mushoku Tensei https://mushokutensei.jp/ #無職転生 @mushokutensei_A
 # Non Non Biyori Nonstop https://nonnontv.com/ #なのん #のんのんびより @nonnontv
 # Ore dake Haireru Kakushi Dungeon https://kakushidungeon-anime.jp/ #隠しダンジョン @kakushidungeon
-# Tatoeba Last Dungeon https://lasdan.com/ #ラスダン @lasdan_PR
+# Tatoeba Last Dungeon https://lasdan.com/ #ラスダン @lasdan_PR [SAT]
 # Tensei shitara Slime Datta Ken S2 https://www.ten-sura.com/anime/tensura #転スラ #tensura @ten_sura_anime
 # Urasekai Picnic https://www.othersidepicnic.com/ #裏ピク @OthersidePicnic [FRI AM]
 # Wonder Egg Priority https://wonder-egg-priority.com/ #ワンエグ @WEP_anime
@@ -640,6 +640,7 @@ class KakushiDungeonDownload(Winter2021AnimeDownload):
         self.download_episode_preview()
         self.download_key_visual()
         self.download_character()
+        self.download_bluray()
 
     def download_episode_preview(self):
         #self.has_website_updated(self.PAGE_PREFIX, 'index')
@@ -685,6 +686,29 @@ class KakushiDungeonDownload(Winter2021AnimeDownload):
             print("Error in running " + self.__class__.__name__ + " - Character")
             print(e)
         self.download_image_objects(image_objs, folder)
+
+    def download_bluray(self):
+        folder = self.create_bluray_directory()
+        self.image_list = []
+        try:
+            soup = self.get_soup('https://kakushidungeon-anime.jp/bdcd/index.html')
+            articles = soup.find_all('article', class_='content-single')
+            self.image_list = []
+            for article in articles:
+                if article.has_attr('id'):
+                    prefix = article['id'].strip() + '_'
+                else:
+                    prefix = ''
+                images = article.find_all('img')
+                for image in images:
+                    if image.has_attr('src'):
+                        image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                        image_name = prefix + self.extract_image_name_from_url(image_url, with_extension=False)
+                        self.add_to_image_list(image_name, image_url)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Bluray")
+            print(e)
+        self.download_image_list(folder)
 
 
 # Tatoeba Last Dungeon Mae no Mura no Shounen ga Joban no Machi de Kurasu Youna Monogatari
