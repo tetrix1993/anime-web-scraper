@@ -487,6 +487,11 @@ class KumoDesugaNanikaDownload(Winter2021AnimeDownload):
         self.image_list = []
         self.add_to_image_list('top-main', 'https://kumo-anime.com/teaser/images/top-main.jpg')
         self.add_to_image_list('top-main2', 'https://kumo-anime.com/teaser/images/top-main2.jpg')
+        self.add_to_image_list('kv0', 'https://kumo-anime.com/assets/news/kv0.jpg')
+        self.add_to_image_list('kv1', 'https://kumo-anime.com/assets/news/kv1.jpg')
+        self.add_to_image_list('kv2', 'https://kumo-anime.com/assets/news/kv2.jpg')
+        self.add_to_image_list('kv2_visr', 'https://kumo-anime.com/assets/top/kv2/visr.jpg')
+        self.add_to_image_list('kv2_visr2', 'https://kumo-anime.com/assets/top/kv2/visr2.jpg')
         self.download_image_list(folder)
 
 
