@@ -59,7 +59,6 @@ pip install portalocker
 
 ### New Anime
 The premiere date for the anime listed here has not been announced.
-* [Cheat Kusushi no Slow Life: Isekai ni Tsukurou Drugstore](https://www.cheat-kusushi.jp/)
 * [Kobayashi-san Chi no Maid Dragon S](https://maidragon.jp/2nd/)
 * [Osananajimi ga Zettai ni Makenai Love Comedy](https://osamake.com/)
 * [Princess Connect! Re:Dive 2nd Season](https://anime.priconne-redive.jp)
@@ -72,6 +71,7 @@ The premiere date for the anime listed here has not been announced.
 * [Vlad Love](https://www.vladlove.com/)
 
 ### Summer 2021 Anime
+* [Cheat Kusushi no Slow Life: Isekai ni Tsukurou Drugstore](https://www.cheat-kusushi.jp/)
 * [Genjitsu Shugi Yuusha no Oukoku Saikenki](https://genkoku-anime.com/)
 
 ### Spring 2021 Anime

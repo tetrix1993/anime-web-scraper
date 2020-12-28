@@ -3,7 +3,6 @@ import anime.constants as constants
 from anime.main_download import MainDownload
 
 # Bokutachi no Remake http://bokurema.com/ #ぼくリメ #bokurema @bokurema
-# Cheat Kusushi no Slow Life: Isekai ni Tsukurou Drugstore https://www.cheat-kusushi.jp/ #チート薬師 #スローライフ @cheat_kusushi
 # Kobayashi-san Chi no Maid Dragon S https://maidragon.jp/2nd/ #maidragon @maidragon_anime
 # Osananajimi ga Zettai ni Makenai Love Comedy https://osamake.com/ #おさまけ
 # Princess Connect! Re:Dive S2 https://anime.priconne-redive.jp/ #アニメプリコネ #プリコネR #プリコネ @priconne_anime
@@ -24,31 +23,6 @@ class UnconfirmedDownload(MainDownload):
 
     def __init__(self):
         super().__init__()
-
-
-# Cheat Kusushi no Slow Life: Isekai ni Tsukurou Drugstore
-class CheatKusushiDownload(UnconfirmedDownload):
-    title = 'Cheat Kusushi no Slow Life: Isekai ni Tsukurou Drugstore'
-    keywords = [title, 'Cheat Pharmacist\'s Slow Life: Making a Drugstore in Another World']
-    folder_name = 'cheat-kusushi'
-
-    PAGE_PREFIX = 'https://www.cheat-kusushi.jp/'
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_key_visual()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_key_visual(self):
-        keyvisual_folder = self.create_key_visual_directory()
-        image_objs = [
-            {'name': 'teaser', 'url': 'https://www.cheat-kusushi.jp/img/top-main.png'}]
-        self.download_image_objects(image_objs, keyvisual_folder)
 
 
 # Kobayashi-san Chi no Maid Dragon S
