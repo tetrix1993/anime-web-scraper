@@ -414,6 +414,49 @@ class MainDownload:
             print(e)
             return -1
 
+    def download_content(self, url, filepath, headers=None):
+        if MainDownload.is_file_exists(filepath):
+            return 1
+
+        if headers is None:
+            headers = constants.HTTP_HEADER_USER_AGENT
+        try:
+            with requests.get(url, stream=True, headers=headers) as r:
+                if r.status_code >= 400:
+                    return -1
+                with open(filepath, 'wb') as f:
+                    for chunk in r.iter_content(chunk_size=8192):
+                        if chunk:
+                            f.write(chunk)
+
+            # Create download log:
+            timenow = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            filename = filepath.replace(self.base_folder, '')
+            log_folder = self.base_folder + '/log'
+            if not os.path.exists(log_folder):
+                os.makedirs(log_folder)
+            logpath = log_folder + '/download.log'
+            with open(logpath, 'a+', encoding='utf-8') as f:
+                f.write('%s\t%s\t%s\n' % (timenow, filename, url))
+
+            # Global log path
+            global_save_success = False
+            for k in range(10):
+                try:
+                    with open(constants.GLOBAL_DOWNLOAD_LOG_FILE, 'a+', encoding='utf-8') as f:
+                        portalocker.lock(f, portalocker.LOCK_EX)
+                        f.write('%s\t%s\t%s\t%s\n' % (timenow, self.base_folder, filename, url))
+                        portalocker.unlock(f)
+                        global_save_success = True
+                        break
+                except Exception as e:
+                    time.sleep(0.1)
+            if not global_save_success:
+                print('Unable to save global download log for file: %s' % filepath)
+            return 0
+        except:
+            return -1
+
     @staticmethod
     def create_directory(filepath):
         # If directory exists

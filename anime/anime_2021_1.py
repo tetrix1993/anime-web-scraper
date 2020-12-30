@@ -22,7 +22,7 @@ from scan import MocaNewsScanner, NatalieScanner
 # Urasekai Picnic https://www.othersidepicnic.com/ #裏ピク @OthersidePicnic [FRI AM]
 # Wonder Egg Priority https://wonder-egg-priority.com/ #ワンエグ @WEP_anime
 # World Trigger S2 http://www.toei-anim.co.jp/tv/wt/ #ワールドトリガー #トリガーオン @Anime_W_Trigger
-# Yuru Camp S2 https://yurucamp.jp/second/ #ゆるキャン @yurucamp_anime
+# Yuru Camp S2 https://yurucamp.jp/second/ #ゆるキャン @yurucamp_anime [WED]
 
 
 # Winter 2021 Anime
@@ -982,6 +982,7 @@ class WonderEggPriorityDownload(Winter2021AnimeDownload):
         self.download_episode_preview()
         self.download_key_visual()
         self.download_character()
+        self.download_bluray()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
@@ -1012,6 +1013,15 @@ class WonderEggPriorityDownload(Winter2021AnimeDownload):
             self.download_image_list(folder)
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + " - Character")
+            print(e)
+
+    def download_bluray(self):
+        folder = self.create_bluray_directory()
+        try:
+            self.download_content(self.PAGE_PREFIX + '/assets/img/introduction/bgvideo_l.mp4',
+                                  folder + '/bgvideo_l.mp4')
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Blu-ray")
             print(e)
 
 
