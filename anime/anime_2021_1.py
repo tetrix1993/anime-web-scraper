@@ -376,7 +376,7 @@ class KaiyariDownload(Winter2021AnimeDownload):
                     if result == -1:
                         return
         except Exception as e:
-            print("Error in running " + self.__class__.__name__ + " - Character")
+            print("Error in running " + self.__class__.__name__)
             print(e)
 
     def download_key_visual(self):
@@ -705,7 +705,7 @@ class KakushiDungeonDownload(Winter2021AnimeDownload):
                     if result == -1:
                         return
         except Exception as e:
-            print("Error in running " + self.__class__.__name__ + " - Character")
+            print("Error in running " + self.__class__.__name__)
             print(e)
 
     def download_key_visual(self):
@@ -1040,6 +1040,8 @@ class YuruCamp2Download(Winter2021AnimeDownload):
     folder_name = 'yurucamp2'
 
     PAGE_PREFIX = 'https://yurucamp.jp/second/'
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 8
 
     def __init__(self):
         super().__init__()
@@ -1047,12 +1049,24 @@ class YuruCamp2Download(Winter2021AnimeDownload):
     def run(self):
         self.download_episode_preview()
         self.download_key_visual()
-        #self.download_character()
+        self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-        #image_objs = []
-        #self.download_image_objects(image_objs, self.base_folder)
+        image_template = self.PAGE_PREFIX + 'images/episode/%s_%s.jpg'
+        try:
+            for i in range(self.FINAL_EPISODE):
+                episode = str(i + 1).zfill(2)
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                for j in range(self.IMAGES_PER_EPISODE):
+                    image_url = image_template % (episode, str(j + 1))
+                    image_name = episode + '_' + str(j + 1)
+                    result = self.download_image(image_url, self.base_folder + '/' + image_name)
+                    if result == -1:
+                        return
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -1075,5 +1089,16 @@ class YuruCamp2Download(Winter2021AnimeDownload):
 
     def download_character(self):
         folder = self.create_character_directory()
-        image_objs = []
-        self.download_image_objects(image_objs, folder)
+        template = self.PAGE_PREFIX + 'images/chara%s_full.png'
+        template2 = self.PAGE_PREFIX + 'images/chara%s_face%s.png'
+        self.image_list = []
+        for i in range(9):
+            image_url = template % str(i + 1)
+            image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+            self.add_to_image_list(image_name, image_url)
+            if i < 5:
+                for j in range(3):
+                    image_url = template2 % (str(i + 1), str(j + 1))
+                    image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                    self.add_to_image_list(image_name, image_url)
+        self.download_image_list(folder)
