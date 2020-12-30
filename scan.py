@@ -59,6 +59,35 @@ class MainScanner():
             or os.path.exists(filename + '.gif') \
             or os.path.exists(filename + '.webp')
 
+    @staticmethod
+    def convert_kanji_to_number(text):
+        # Only 1 to 99
+        if not isinstance(text, str):
+            return None
+        if len(text) == 0 or len(text) > 3:
+            return None
+
+        kanjis = ['十', '一', '二', '三', '四', '五', '六', '七', '八', '九']
+        eval = []
+        for character in text:
+            for i in range(len(kanjis)):
+                if character == kanjis[i]:
+                    eval.append(i)
+
+        if len(eval) == 1:
+            if eval[0] == 0:
+                return 10
+            else:
+                return eval[0]
+        elif len(eval) == 2:
+            if eval[0] == 0 and eval[1] > 0:
+                return 10 + eval[1]
+            if eval[1] == 0 and eval[0] > 1:
+                return eval[0] * 10
+        elif len(eval) == 3 and eval[1] == 0 and eval[0] > 1:
+            return eval[0] * 10 + eval[2]
+        return None
+
 
 class AniverseMagazineScanner(MainScanner):
     
@@ -89,6 +118,9 @@ class AniverseMagazineScanner(MainScanner):
         try:
             return int(split1[1])
         except:
+            result = MainScanner.convert_kanji_to_number(split1[1])
+            if result is not None:
+                return result
             return -1
 
     @staticmethod
@@ -110,7 +142,7 @@ class AniverseMagazineScanner(MainScanner):
             if suffix is None:
                 suffix = '話'
 
-            regex = '第' + '[０|１|２|３|４|５|６|７|８|９|0-9]+' + suffix
+            regex = '第[０|１|２|３|４|５|６|７|８|９|十|一|二|三|四|五|六|七|八|九|0-9]+' + suffix
             prog = re.compile(regex)
             result = prog.findall(news_title)
             if self.keyword in news_title and ('最終' + suffix) in news_title and len(result) == 0:
@@ -212,7 +244,7 @@ class WebNewtypeScanner(MainScanner):
             if len(split3) < 2:
                 continue
             news_title = split3[1].split('</p>')[0]
-            regex = '第' + '[０|１|２|３|４|５|６|７|８|９|0-9]+' + '話'
+            regex = '第[０|１|２|３|４|５|６|７|８|９|0-9]+話'
             prog = re.compile(regex)
             result = prog.findall(news_title)
             if self.keyword in news_title and '最終話' in news_title and '先行' in news_title:
@@ -320,7 +352,7 @@ class MocaNewsScanner(MainScanner):
 
     def run(self):
         last_read_date = self.read_last_read_date()
-        regex = '第' + '[０|１|２|３|４|５|６|７|８|９|0-9]+' + '話'
+        regex = '第[０|１|２|３|４|５|６|７|８|９|0-9]+話'
         curr_date = self.end_date
         while self.start_date <= curr_date and (last_read_date is None or last_read_date <= curr_date):
             date_str = curr_date.strftime('%Y%m%d')
@@ -380,6 +412,9 @@ class NatalieScanner(MainScanner):
         try:
             return int(split1[1])
         except:
+            result = MainScanner.convert_kanji_to_number(split1[1])
+            if result is not None:
+                return result
             return -1
 
     @staticmethod
@@ -411,7 +446,7 @@ class NatalieScanner(MainScanner):
                 if suffix is None:
                     suffix = '話'
 
-                regex = '第' + '[０|１|２|３|４|５|６|７|８|９|0-9]+' + suffix
+                regex = '第[０|１|２|３|４|５|６|７|８|９|十|一|二|三|四|五|六|七|八|九|0-9]+' + suffix
                 prog = re.compile(regex)
                 result = prog.findall(news_title)
                 if self.keyword in news_title and ('最終' + suffix) in news_title and len(result) == 0:
