@@ -46,7 +46,8 @@ class KobayashiMaidDragon2Download(UnconfirmedDownload):
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         image_objs = [{'name': 'teaser', 'url': 'https://pbs.twimg.com/media/EfEVvJEUwAI6LmD?format=jpg&name=large'},
-                      {'name': 'teaser_covid', 'url': 'https://galleryamh2home.files.wordpress.com/2020/02/1597072728776.jpg'}]
+                      {'name': 'teaser_covid', 'url': 'https://galleryamh2home.files.wordpress.com/2020/02/1597072728776.jpg'},
+                      {'name': 'newyear_2021', 'url': 'https://pbs.twimg.com/media/EqkvG-lUcAInMkK?format=jpg&name=4096x4096'},]
         self.download_image_objects(image_objs, folder)
 
 

@@ -2873,6 +2873,7 @@ class SigrdrifaDownload(Fall2020AnimeDownload):
             {'name': 'img_sonoka', 'url': 'https://sigururi.com/assets/img/special/interview/img_sonoka.jpg'},
             {'name': 'img_clau', 'url': 'https://sigururi.com/assets/img/special/interview/img_clau.jpg'},
             {'name': 'bs11_poster', 'url': 'https://pbs.twimg.com/media/EiuO9YwUYAAQ1U4?format=jpg&name=large'},
+            {'name': 'newyear_2021', 'url': 'https://pbs.twimg.com/media/EqZAkzsVQAAyk_0?format=jpg&name=large'},
         ]
         self.download_image_objects(image_objs, folder)
 

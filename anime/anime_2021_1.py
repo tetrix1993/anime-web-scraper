@@ -615,10 +615,14 @@ class NonNonBiyori3Download(Winter2021AnimeDownload):
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
-        key_visual_url = self.PAGE_PREFIX + '/tvanime/wp-content/themes/nonnon_tvanime/assets/img/page/top/v%s/mainvisual.jpg'
+        key_visual_url = self.PAGE_PREFIX + '/tvanime/wp-content/themes/nonnon_tvanime/assets/img/page/top/v%s/mainvisual.%s'
         image_objs = []
-        for i in range(1, 4, 1):
-            image_objs.append({'name': 'kv' + str(i), 'url': key_visual_url % str(i)})
+        for i in range(1, 5, 1):
+            j = 'jpg'
+            if i == 4:
+                j = 'png'
+            image_objs.append({'name': 'kv' + str(i), 'url': key_visual_url % (str(i), j)})
+        image_objs.append({'name': 'newyear_2021', 'url': 'https://pbs.twimg.com/media/EqkuXFXVkAEv1Oq?format=jpg&name=medium'})
         self.download_image_objects(image_objs, folder)
 
     def download_character(self):
@@ -886,6 +890,7 @@ class Tensura2Download(Winter2021AnimeDownload):
         self.image_list = []
         self.add_to_image_list('kv1', 'https://www.ten-sura.com/4GfGdAp7/wp-content/themes/tensura_portal/anime/tensura-portal-anime-tensura/assets/images/kv.jpg')
         self.add_to_image_list('kv2', 'https://www.ten-sura.com/4GfGdAp7/wp-content/themes/tensura_portal/anime/tensura-portal-anime-tensura/assets/images/kv_2.jpg')
+        self.add_to_image_list('newyear_2021', 'https://www.ten-sura.com/4GfGdAp7/wp-content/themes/tensura_portal/assets/images/2021_new.jpg')
         self.download_image_list(folder)
 
 
