@@ -12,7 +12,7 @@ from scan import MocaNewsScanner, NatalieScanner
 # Jaku-Chara Tomozaki-kun http://tomozaki-koushiki.com/ #友崎くん @tomozakikoshiki [FRI 10AM]
 # Kaifuku Jutsushi no Yarinaoshi http://kaiyari.com/ #回復術士 @kaiyari_anime [WED]
 # Kemono Jihen https://kemonojihen-anime.com/ #怪物事変 #kemonojihen @Kemonojihen_tv
-# Kumo Desu ga, Nani ka? https://kumo-anime.com/ #蜘蛛ですが @kumoko_anime
+# Kumo Desu ga, Nani ka? https://kumo-anime.com/ #蜘蛛ですが @kumoko_anime [FRI]
 # Log Horizon: Entaku Houkai https://www6.nhk.or.jp/anime/program/detail.html?i=loghorizon3 #loghorizon @loghorizon_DORT
 # Mushoku Tensei https://mushokutensei.jp/ #無職転生 @mushokutensei_A
 # Non Non Biyori Nonstop https://nonnontv.com/ #なのん #のんのんびより @nonnontv
@@ -487,6 +487,8 @@ class KumoDesugaNanikaDownload(Winter2021AnimeDownload):
     folder_name = 'kumodesuga'
 
     PAGE_PREFIX = 'https://kumo-anime.com/'
+    FINAL_EPISODE = 24
+    IMAGES_PER_EPISODE = 6
 
     def __init__(self):
         super().__init__()
@@ -496,7 +498,21 @@ class KumoDesugaNanikaDownload(Winter2021AnimeDownload):
         self.download_key_visual()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        image_template = self.PAGE_PREFIX + 'assets/story/%s_%s.jpg'
+        try:
+            for i in range(self.FINAL_EPISODE):
+                episode = str(i + 1).zfill(2)
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                for j in range(self.IMAGES_PER_EPISODE):
+                    image_url = image_template % (str(i + 1), str(j + 1))
+                    image_name = episode + '_' + str(j + 1)
+                    result = self.download_image(image_url, self.base_folder + '/' + image_name)
+                    if result == -1:
+                        return
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
