@@ -98,6 +98,64 @@ class ArifuretaDownload(Summer2019AnimeDownload):
         self.download_image_objects(image_objs, filepath)
 
 
+# Dr. Stone
+class DrStoneDownload(Summer2019AnimeDownload):
+    title = "Dr. Stone"
+    keywords = [title]
+    folder_name = 'dr-stone'
+
+    PAGE_LINK = 'https://dr-stone.jp/'
+    FINAL_EPISODE = 24
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        try:
+            soup = self.get_soup(self.PAGE_LINK + 'story/')
+            lis = soup.find_all('li', class_='storyarea_body_main_story_list_item')
+            for li in lis:
+                a_tag = li.find('a', class_='story_body')
+                if a_tag and a_tag.has_attr('href'):
+                    episode_div = a_tag.find('div', class_='story_body_main_ttl')
+                    if episode_div:
+                        ep_text = episode_div.text.strip()
+                        if len(ep_text) > 2 and ep_text[0] == '第' and ep_text[-1] == '話':
+                            try:
+                                episode_number = int(ep_text.split('話')[0].split('第')[1])
+                                episode = str(episode_number).zfill(2)
+                            except:
+                                continue
+                            if episode_number > self.FINAL_EPISODE:
+                                break
+                            if self.is_image_exists(episode + '_1'):
+                                continue
+                            ep_soup = self.get_soup(a_tag['href'])
+                            divs = ep_soup.find_all('div', class_='storydetail_body_main_subimg_img')
+                            self.image_list = []
+                            for i in range(len(divs)):
+                                if divs[i].has_attr('data-imgload'):
+                                    image_url = divs[i]['data-imgload']
+                                    image_name = episode + '_' + str(i + 1)
+                                    self.add_to_image_list(image_name, image_url)
+                            self.download_image_list(self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        template = self.PAGE_LINK + 'wp-content/themes/dr-stone_web/img/index/img_hero%s.jpg'
+        for i in range(4):
+            self.add_to_image_list('img_hero' + str(i + 1).zfill(2), template % str(i + 1).zfill(2))
+        self.download_image_list(folder)
+
+
 # Dumbbell
 class DumbbellDownload(Summer2019AnimeDownload):
     title = "Dumbbell Nan Kilo Moteru?"

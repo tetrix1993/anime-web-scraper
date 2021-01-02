@@ -85,6 +85,7 @@ The premiere date for the anime listed here has not been announced.
 * [Yakunara Mug Cup mo](https://yakumo-project.com/)
 
 ### Winter 2021 Anime
+* [Dr. Stone: Stone Wars](https://dr-stone.jp/)
 * [Gotoubun no Hanayome ∬](https://www.tbs.co.jp/anime/5hanayome/)
 * [Hataraku Saibou Black](https://saibou-black.com/)
 * [Hataraku Saibou!!](https://hataraku-saibou.com/2nd.html)
@@ -197,6 +198,7 @@ The premiere date for the anime listed here has not been announced.
 
 ### Summer 2019 Anime
 * [Arifureta Shokugyou de Sekai Saikyou](https://arifureta.com/)
+* [Dr. Stone](https://dr-stone.jp/)
 * [Dumbbell Nan Kilo Moteru?](https://dumbbell-anime.jp/)
 * [Granbelm](http://granbelm.com/)
 * [Kawaikereba Hentai demo Suki ni Natte Kuremasu ka?](https://hensuki.com/)

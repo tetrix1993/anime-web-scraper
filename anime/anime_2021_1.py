@@ -5,6 +5,7 @@ from datetime import datetime
 from scan import MocaNewsScanner, NatalieScanner
 
 
+# Dr. Stone: Stone Wars https://dr-stone.jp/ #DrSTONE @DrSTONE_off
 # Gotoubun no Hanayome S2 https://www.tbs.co.jp/anime/5hanayome/ #五等分の花嫁 @5Hanayome_anime
 # Hataraku Saibou S2 https://hataraku-saibou.com/2nd.html #はたらく細胞 @hataraku_saibou
 # Hataraku Saibou Black https://saibou-black.com/ #細胞BLACK @cellsatworkbla1
@@ -33,6 +34,69 @@ class Winter2021AnimeDownload(MainDownload):
 
     def __init__(self):
         super().__init__()
+
+
+# Dr. Stone: Stone Wars
+class DrStone2Download(Winter2021AnimeDownload):
+    title = "Dr. Stone: Stone Wars"
+    keywords = [title, "2nd Season"]
+    folder_name = 'dr-stone2'
+
+    PAGE_LINK = 'https://dr-stone.jp/'
+    FIRST_EPISODE = 25
+    FINAL_EPISODE = 36
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        try:
+            soup = self.get_soup(self.PAGE_LINK + 'story/')
+            lis = soup.find_all('li', class_='storyarea_body_main_story_list_item')
+            for li in lis:
+                a_tag = li.find('a', class_='story_body')
+                if a_tag and a_tag.has_attr('href'):
+                    episode_div = a_tag.find('div', class_='story_body_main_ttl')
+                    if episode_div:
+                        ep_text = episode_div.text.strip()
+                        if len(ep_text) > 2 and ep_text[0] == '第' and ep_text[-1] == '話':
+                            try:
+                                episode_number = int(ep_text.split('話')[0].split('第')[1])
+                                episode = str(episode_number).zfill(2)
+                            except:
+                                continue
+                            if episode_number > self.FINAL_EPISODE:
+                                break
+                            if episode_number < self.FIRST_EPISODE or self.is_image_exists(episode + '_1'):
+                                continue
+                            ep_soup = self.get_soup(a_tag['href'])
+                            divs = ep_soup.find_all('div', class_='storydetail_body_main_subimg_img')
+                            self.image_list = []
+                            for i in range(len(divs)):
+                                if divs[i].has_attr('data-imgload'):
+                                    image_url = divs[i]['data-imgload']
+                                    image_name = episode + '_' + str(i + 1)
+                                    self.add_to_image_list(image_name, image_url)
+                            self.download_image_list(self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        template = self.PAGE_LINK + 'wp-content/themes/dr-stone_web/img/index/img_hero%s.jpg'
+        i = 5
+        while i < 10:
+            image_url = template % str(i).zfill(2)
+            image_name = 'img_hero' + str(i).zfill(2)
+            result = self.download_image(image_url, folder + '/' + image_name)
+            if result == -1:
+                break
+            i += 1
 
 
 # Gotoubun no Hanayome ∬
