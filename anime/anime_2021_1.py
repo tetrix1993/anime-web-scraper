@@ -937,6 +937,63 @@ class LasdanDownload(Winter2021AnimeDownload):
 
     def download_bluray(self):
         folder = self.create_bluray_directory()
+        self.image_list = []
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'bd')
+            list_div = soup.find('div', id='list_05')
+            if list_div:
+                sm_divs = list_div.find_all('div', class_='sm')
+                for sm_div in sm_divs:
+                    a_tag = sm_div.find('a')
+                    if a_tag and a_tag.has_attr('href'):
+                        image = a_tag.find('img')
+                        if image and image.has_attr('src'):
+                            image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                            if self.is_matching_content_length(image_url, 568871):
+                                continue
+                            a_url = self.PAGE_PREFIX + a_tag['href'].replace('../', '')
+                            try:
+                                volume = str(int(a_url.split('/')[-1].split('.html')[0]))
+                            except:
+                                continue
+                            bd_filename = 'bd' + volume
+                            if self.is_image_exists(bd_filename, folder):
+                                continue
+                            a_soup = self.get_soup(a_url)
+                            cms_div = a_soup.find('div', id='cms_block')
+                            if cms_div:
+                                bd_images = cms_div.find_all('img')
+                                for i in range(len(bd_images)):
+                                    if bd_images[i].has_attr('src'):
+                                        bd_image_url = self.PAGE_PREFIX + bd_images[i]['src'].replace('../', '').replace('/sn_', '/').split('?')[0]
+                                        bd_image_name = bd_filename
+                                        if i > 0:
+                                            bd_image_name = bd_image_name + '_' + str(i)
+                                        self.add_to_image_list(bd_image_name, bd_image_url)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Blu-Ray')
+            print(e)
+        self.download_image_list(folder)
+
+        self.image_list = []
+        self.add_to_image_list('bd_bonus1', 'https://pbs.twimg.com/media/Eq5OKyVVkAApAsg?format=jpg&name=large')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'bd/tokuten.html')
+            cms_div = soup.find('div', id='cms_block')
+            if cms_div:
+                images = cms_div.find_all('img')
+                for image in images:
+                    if image.has_attr('src'):
+                        image_url = self.PAGE_PREFIX + image['src'].replace('../', '').replace('/sn_', '/').split('?')[0]
+                        if self.is_matching_content_length(image_url, 568871):
+                            continue
+                        image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                        self.add_to_image_list(image_name, image_url)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Blu-Ray Bonus')
+            print(e)
+        self.download_image_list(folder)
+
         music_url_template = 'https://lasdan.com/core_sys/images/contents/000000%s/block/000000%s/000000%s.jpg'
         self.image_list = []
         for i in range(43, 48, 1):
@@ -945,6 +1002,7 @@ class LasdanDownload(Winter2021AnimeDownload):
             if not self.is_matching_content_length(music_url, 126468):
                 self.add_to_image_list(self.extract_image_name_from_url(music_url, with_extension=False), music_url)
         self.download_image_list(folder)
+
 
 
 # Tensei shitara Slime Datta Ken S2
