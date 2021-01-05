@@ -6,7 +6,7 @@ from scan import MocaNewsScanner, NatalieScanner
 
 
 # Dr. Stone: Stone Wars https://dr-stone.jp/ #DrSTONE @DrSTONE_off
-# Gotoubun no Hanayome S2 https://www.tbs.co.jp/anime/5hanayome/ #五等分の花嫁 @5Hanayome_anime
+# Gotoubun no Hanayome S2 https://www.tbs.co.jp/anime/5hanayome/ #五等分の花嫁 @5Hanayome_anime [TUE]
 # Hataraku Saibou S2 https://hataraku-saibou.com/2nd.html #はたらく細胞 @hataraku_saibou
 # Hataraku Saibou Black https://saibou-black.com/ #細胞BLACK @cellsatworkbla1
 # Horimiya https://horimiya-anime.com/ #ホリミヤ @horimiya_anime
@@ -102,10 +102,12 @@ class DrStone2Download(Winter2021AnimeDownload):
 # Gotoubun no Hanayome ∬
 class Gotoubun2Download(Winter2021AnimeDownload):
     title = "Gotoubun no Hanayome 2nd Season"
-    keywords = [title, "The Quintessential Quintuplets", "Go-toubun", "5-toubun"]
+    keywords = [title, "The Quintessential Quintuplets", "Go-toubun", "5-toubun", "5hanayome", "2nd"]
     folder_name = 'gotoubun2'
 
     PAGE_PREFIX = 'https://www.tbs.co.jp/anime/5hanayome/'
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 6
 
     def __init__(self):
         super().__init__()
@@ -116,14 +118,21 @@ class Gotoubun2Download(Winter2021AnimeDownload):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated('https://www.tbs.co.jp/anime/5hanayome/story/')
-        image_objs = []
-        image_template = self.PAGE_PREFIX + 'story/img/intro_slide%s@2x.jpg'
-        for i in range(6):
-            image_url = image_template % str(i + 1).zfill(2)
-            image_name = self.extract_image_name_from_url(image_url, with_extension=False)
-            image_objs.append({'name': image_name, 'url': image_url})
-        self.download_image_objects(image_objs, self.base_folder)
+        image_template = 'https://www.tbs.co.jp/anime/5hanayome/story/img/story%s/%s.jpg'
+        try:
+            for i in range(self.FINAL_EPISODE):
+                episode = str(i + 1).zfill(2)
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                for j in range(self.IMAGES_PER_EPISODE):
+                    image_url = image_template % (episode, str(j + 1).zfill(2))
+                    image_name = episode + '_' + str(j + 1)
+                    result = self.download_image(image_url, self.base_folder + '/' + image_name)
+                    if result == -1:
+                        return
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()

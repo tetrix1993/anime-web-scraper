@@ -252,7 +252,7 @@ class GirlyAirForceDownload(Winter2019AnimeDownload):
 # Gotoubun no Hanayome
 class GotoubunDownload(Winter2019AnimeDownload):
     title = "Gotoubun no Hanayome"
-    keywords = ["Gotoubun no Hanayome", "The Quintessential Quintuplets", "Go-toubun", "5-toubun"]
+    keywords = [title, "The Quintessential Quintuplets", "Go-toubun", "5-toubun", "5hanayomes"]
     folder_name = 'gotoubun'
 
     PAGE_PREFIX = "http://www.tbs.co.jp/anime/5hanayome/1st/story/"
