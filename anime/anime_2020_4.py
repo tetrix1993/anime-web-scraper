@@ -2251,14 +2251,16 @@ class MajotabiDownload(Fall2020AnimeDownload):
                 soup = self.get_soup(self.PAGE_PREFIX)
             data_div = soup.find('div', id='BddvdData')
             if data_div:
-                images = data_div.find_all('img')
-                image_objs = []
-                for image in images:
-                    if image.has_attr('src'):
-                        image_url = self.PAGE_PREFIX + image['src'].replace('./', '')
-                        image_name = self.extract_image_name_from_url(image_url, with_extension=False)
-                        image_objs.append({'name': image_name, 'url': image_url})
-                self.download_image_objects(image_objs, folder)
+                divs = data_div.find_all(lambda tag: tag.has_attr('id'))
+                for div in divs:
+                    images = div.find_all('img')
+                    image_objs = []
+                    for image in images:
+                        if image.has_attr('src'):
+                            image_url = self.PAGE_PREFIX + image['src'].replace('./', '')
+                            image_name = div['id'] + '_' + self.extract_image_name_from_url(image_url, with_extension=False)
+                            image_objs.append({'name': image_name, 'url': image_url})
+                    self.download_image_objects(image_objs, folder)
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + " - Bluray")
             print(e)
