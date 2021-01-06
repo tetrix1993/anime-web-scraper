@@ -15,7 +15,7 @@ from scan import MocaNewsScanner, NatalieScanner
 # Kemono Jihen https://kemonojihen-anime.com/ #怪物事変 #kemonojihen @Kemonojihen_tv
 # Kumo Desu ga, Nani ka? https://kumo-anime.com/ #蜘蛛ですが @kumoko_anime [FRI]
 # Log Horizon: Entaku Houkai https://www6.nhk.or.jp/anime/program/detail.html?i=loghorizon3 #loghorizon @loghorizon_DORT
-# Mushoku Tensei https://mushokutensei.jp/ #無職転生 @mushokutensei_A
+# Mushoku Tensei https://mushokutensei.jp/ #無職転生 @mushokutensei_A [WED]
 # Non Non Biyori Nonstop https://nonnontv.com/ #なのん #のんのんびより @nonnontv
 # Ore dake Haireru Kakushi Dungeon https://kakushidungeon-anime.jp/ #隠しダンジョン @kakushidungeon
 # Tatoeba Last Dungeon https://lasdan.com/ #ラスダン @lasdan_PR [SAT]
@@ -663,7 +663,7 @@ class MushokuTenseiDownload(Winter2021AnimeDownload):
     keywords = [title, 'Jobless Reincarnation']
     folder_name = 'mushoku-tensei'
 
-    PAGE_PREFIX = 'https://mushokutensei.jp/'
+    PAGE_PREFIX = 'https://mushokutensei.jp'
 
     def __init__(self):
         super().__init__()
@@ -674,14 +674,43 @@ class MushokuTenseiDownload(Winter2021AnimeDownload):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + '/story/')
+            ul = soup.find('ul', id='js_story')
+            if not ul:
+                return
+            a_tags = ul.find_all('a', class_='storyarea')
+            for a_tag in a_tags:
+                if not a_tag.has_attr('href'):
+                    continue
+                try:
+                    episode = str(int(a_tag.find('div', class_='storyarea_ttl')
+                                      .find('span').text.replace('#', '').strip())).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                episode_url = self.PAGE_PREFIX + a_tag['href']
+                episode_soup = self.get_soup(episode_url)
+                images = episode_soup.find_all('div', class_='storycontents_subimg_img')
+                self.image_list = []
+                for i in range(len(images)):
+                    if images[i].has_attr('data-imgload'):
+                        image_name = episode + '_' + str(i + 1)
+                        image_url = images[i]['data-imgload']
+                        self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
+
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         image_objs = [
             {'name': 'teaser', 'url': 'https://pbs.twimg.com/media/EHKOHakU4AUq-A3?format=jpg&name=large'},
             {'name': 'kv1', 'url': 'https://pbs.twimg.com/media/Ea3MiJFU0AETcOY?format=jpg&name=4096x4096'},
-            {'name': 'kv2', 'url': 'https://mushokutensei.jp/wp-content/themes/mushoku_re/img/index/img_hero01.jpg'},
+            {'name': 'kv2', 'url': self.PAGE_PREFIX + '/wp-content/themes/mushoku_re/img/index/img_hero01.jpg'},
             {'name': 'bs11_poster', 'url': 'https://pbs.twimg.com/media/Ep9v3c4U8AISWC6?format=jpg&name=medium'},
         ]
         self.download_image_objects(image_objs, folder)
@@ -695,7 +724,7 @@ class MushokuTenseiDownload(Winter2021AnimeDownload):
             {'name': 'char_eris', 'url': 'https://pbs.twimg.com/media/EnE1TUQUcAINJCX?format=jpg&name=4096x4096'},
         ]
         try:
-            soup = self.get_soup('https://mushokutensei.jp/character/')
+            soup = self.get_soup(self.PAGE_PREFIX + '/character/')
             charaslides = soup.find_all('div', class_='charaslide')
             for charaslide in charaslides:
                 slideclasses = ['charaslide_img', 'charaslide_data_img']
