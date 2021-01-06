@@ -7,7 +7,7 @@ from scan import MocaNewsScanner, NatalieScanner
 
 # Dr. Stone: Stone Wars https://dr-stone.jp/ #DrSTONE @DrSTONE_off
 # Gotoubun no Hanayome S2 https://www.tbs.co.jp/anime/5hanayome/ #五等分の花嫁 @5Hanayome_anime [TUE]
-# Hataraku Saibou S2 https://hataraku-saibou.com/2nd.html #はたらく細胞 @hataraku_saibou
+# Hataraku Saibou S2 https://hataraku-saibou.com/2nd.html #はたらく細胞 @hataraku_saibou [WED]
 # Hataraku Saibou Black https://saibou-black.com/ #細胞BLACK @cellsatworkbla1
 # Horimiya https://horimiya-anime.com/ #ホリミヤ @horimiya_anime
 # Jaku-Chara Tomozaki-kun http://tomozaki-koushiki.com/ #友崎くん @tomozakikoshiki [FRI 10AM]
@@ -161,7 +161,6 @@ class HatarakuSaibou2Download(Winter2021AnimeDownload):
     folder_name = "hataraku-saibou2"
 
     PAGE_PREFIX = 'https://hataraku-saibou.com/'
-    MAIN_PAGE = 'https://hataraku-saibou.com/2nd.html'
 
     def __init__(self):
         super().__init__()
@@ -171,7 +170,38 @@ class HatarakuSaibou2Download(Winter2021AnimeDownload):
         self.download_key_visual()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.MAIN_PAGE, 'index')
+        try:
+            story_url = self.PAGE_PREFIX + 'story/'
+            soup = self.get_soup(story_url)
+            tab = soup.find('div', class_='page_tab')
+            if not tab:
+                return
+            ul = tab.find('ul')
+            if ul:
+                a_tags = ul.find_all('a')
+                for a_tag in a_tags:
+                    if a_tag.has_attr('href') and 'id=' in a_tag['href']:
+                        try:
+                            episode = str(int(a_tag.text)).zfill(2)
+                        except:
+                            continue
+                        if self.is_image_exists(episode + '_1'):
+                            continue
+                        episode_url = story_url + a_tag['href'].replace('./', '')
+                        episode_soup = self.get_soup(episode_url)
+                        div_image = episode_soup.find('div', class_='s_image')
+                        if div_image:
+                            images = div_image.find_all('img')
+                            self.image_list = []
+                            for i in range(len(images)):
+                                if images[i].has_attr('src'):
+                                    image_url = story_url + images[i]['src']
+                                    image_name = episode + '_' + str(i + 1)
+                                    self.add_to_image_list(image_name, image_url)
+                            self.download_image_list(self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
