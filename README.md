@@ -64,7 +64,6 @@ The premiere date for the anime listed here has not been announced.
 * [Princess Connect! Re:Dive 2nd Season](https://anime.priconne-redive.jp)
 * [Seijo no Maryoku wa Bannou desu](https://seijyonomaryoku.jp/)
 * [Seirei Gensouki](https://seireigensouki.com/)
-* [Shadows House](https://shadowshouse-anime.com/)
 * [Shuumatsu no Harem](https://end-harem-anime.com/)
 * [Slow Loop](https://slowlooptv.com/)
 * [Tate no Yuusha no Nariagari 2nd Season](http://shieldhero-anime.jp)
@@ -81,6 +80,7 @@ The premiere date for the anime listed here has not been announced.
 * [Isekai Maou to Shoukan Shoujo no Dorei Majutsu Ω](https://isekaimaou-anime.com/)
 * [Kyuukyoku Shinka Shita Full Dive RPG ga Genjitsu Yori mo Kusogee Dattara](https://fulldive-rpg.com/)
 * [Sentouin, Hakenshimasu!](https://kisaragi-co.jp/)
+* [Shadows House](https://shadowshouse-anime.com/)
 * [Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita](https://slime300-anime.com/)
 * [Yakunara Mug Cup mo](https://yakumo-project.com/)
 

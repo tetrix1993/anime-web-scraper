@@ -11,6 +11,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 # Isekai Maou to Shoukan Shoujo no Dorei Majutsu Ω https://isekaimaou-anime.com/ #異世界魔王 @isekaimaou
 # Kyuukyoku Shinka Shita Full Dive RPG ga Genjitsu Yori mo Kusogee Dattara https://fulldive-rpg.com/ #フルダイブ @fulldive_anime
 # Sentouin, Hakenshimasu! https://kisaragi-co.jp/ #sentoin @sentoin_anime
+# Shadows House https://shadowshouse-anime.com/ #シャドーハウス @shadowshouse_yj
 # Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita https://slime300-anime.com/ #スライム倒して300年 @slime300_PR
 # Yakunara Mug Cup mo https://yakumo-project.com/ #やくもtv @yakumo_project
 
@@ -266,6 +267,31 @@ class SentoinDownload(Spring2021AnimeDownload):
         self.image_list = []
         self.add_to_image_list('teaser', 'https://pbs.twimg.com/media/Eqbrtf7VEAADuiD?format=jpg&name=4096x4096')
         self.add_to_image_list('teaser_1', 'https://kisaragi-co.jp/assets/top/main-t1/vis.png')
+        self.download_image_list(folder)
+
+
+# Shadows House
+class ShadowsHouseDownload(Spring2021AnimeDownload):
+    title = "Shadows House"
+    keywords = [title]
+    folder_name = 'shadows-house'
+
+    PAGE_PREFIX = 'https://shadowshouse-anime.com/'
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('teaser', 'https://shadowshouse-anime.com/assets/img/img_kv_pc.jpg')
         self.download_image_list(folder)
 
 
