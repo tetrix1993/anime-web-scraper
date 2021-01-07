@@ -16,7 +16,7 @@ from scan import MocaNewsScanner, NatalieScanner
 # Kumo Desu ga, Nani ka? https://kumo-anime.com/ #蜘蛛ですが @kumoko_anime [FRI]
 # Log Horizon: Entaku Houkai https://www6.nhk.or.jp/anime/program/detail.html?i=loghorizon3 #loghorizon @loghorizon_DORT
 # Mushoku Tensei https://mushokutensei.jp/ #無職転生 @mushokutensei_A [WED]
-# Non Non Biyori Nonstop https://nonnontv.com/ #なのん #のんのんびより @nonnontv
+# Non Non Biyori Nonstop https://nonnontv.com/ #なのん #のんのんびより @nonnontv [THU]
 # Ore dake Haireru Kakushi Dungeon https://kakushidungeon-anime.jp/ #隠しダンジョン @kakushidungeon
 # Tatoeba Last Dungeon https://lasdan.com/ #ラスダン @lasdan_PR [SAT]
 # Tensei shitara Slime Datta Ken S2 https://www.ten-sura.com/anime/tensura #転スラ #tensura @ten_sura_anime
@@ -759,7 +759,32 @@ class NonNonBiyori3Download(Winter2021AnimeDownload):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.STORY_PAGE, 'index')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + '/tvanime/story/')
+            a_tags = soup.find_all(lambda tag: tag.name == 'a' and tag.has_attr('href')
+                and tag.has_attr('class') and 'story__nav__page__item' in tag['class'])
+            for a_tag in a_tags:
+                try:
+                    episode = str(int(a_tag.find('span').text.split('#')[1].strip())).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                ep_url = self.PAGE_PREFIX + a_tag['href']
+                ep_soup = self.get_soup(ep_url)
+                ul = ep_soup.find('ul', class_='slider__pic')
+                if ul:
+                    images = ul.find_all(lambda tag: tag.name == 'img' and tag.has_attr('src'))
+                    self.image_list = []
+                    for i in range(len(images)):
+                        image_url = self.PAGE_PREFIX + images[i]['src']
+                        image_name = episode + '_' + str(i + 1)
+                        self.add_to_image_list(image_name, image_url)
+                    self.download_image_list(self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
+
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
