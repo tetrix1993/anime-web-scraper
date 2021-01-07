@@ -1294,7 +1294,7 @@ class YuruCamp2Download(Winter2021AnimeDownload):
     folder_name = 'yurucamp2'
 
     PAGE_PREFIX = 'https://yurucamp.jp/second/'
-    FINAL_EPISODE = 12
+    FINAL_EPISODE = 13
     IMAGES_PER_EPISODE = 8
 
     def __init__(self):
@@ -1304,6 +1304,7 @@ class YuruCamp2Download(Winter2021AnimeDownload):
         self.download_episode_preview()
         self.download_key_visual()
         self.download_character()
+        self.download_bluray()
 
     def download_episode_preview(self):
         image_template = self.PAGE_PREFIX + 'images/episode/%s_%s.jpg'
@@ -1356,3 +1357,20 @@ class YuruCamp2Download(Winter2021AnimeDownload):
                     image_name = self.extract_image_name_from_url(image_url, with_extension=False)
                     self.add_to_image_list(image_name, image_url)
         self.download_image_list(folder)
+
+    def download_bluray(self):
+        folder = self.create_bluray_directory()
+        try:
+            soup = self.get_soup('https://yurucamp.jp/news/information/6142')
+            div = soup.find('div', class_='articlein')
+            if div:
+                images = div.find_all(lambda tag: tag.name == 'img' and tag.has_attr('src'))
+                self.image_list = []
+                for image in images:
+                    image_url = self.clear_resize_in_url(image['src'])
+                    image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Blu-Ray')
+            print(e)

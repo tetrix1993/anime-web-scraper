@@ -603,6 +603,16 @@ class MainDownload:
             pass
         return False
 
+    @staticmethod
+    def clear_resize_in_url(url):
+        # Change url in the form http://abc.com/image_name-800x600.jpg to http://abc.com/image-name.jpg
+        regex = '(-[0-9]*x[0-9]*.)([A-Za-z]*)$'
+        result = re.compile(regex).findall(url)
+        if len(result) > 0 and len(result[0]) == 2:
+            return url[0:len(url) - len(result[0][0]) - len(result[0][1])] + '.' + result[0][1]
+        else:
+            return url
+
     def add_to_image_list(self, name, url, to_jpg=False, is_mocanews=False):
         image_obj = {'name': name, 'url': url}
         if to_jpg:
