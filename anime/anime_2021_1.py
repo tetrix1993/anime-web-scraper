@@ -757,6 +757,7 @@ class NonNonBiyori3Download(Winter2021AnimeDownload):
         self.download_episode_preview()
         self.download_key_visual()
         self.download_character()
+        self.download_bluray()
 
     def download_episode_preview(self):
         try:
@@ -847,6 +848,12 @@ class NonNonBiyori3Download(Winter2021AnimeDownload):
                     if i > 0:
                         f.write(';')
                     f.write(processed[i])
+
+    def download_bluray(self):
+        folder = self.create_bluray_directory()
+        self.image_list = []
+        self.add_to_image_list('music_jkt', 'http://nanoripe.com/nanoripe/wp-content/uploads/2021/01/nonnon_days_H1_RGB_Shikaku.jpg')
+        self.download_image_list(folder)
 
 
 # Ore dake Haireru Kakushi Dungeon
