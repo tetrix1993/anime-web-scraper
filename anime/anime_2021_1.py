@@ -116,6 +116,7 @@ class Gotoubun2Download(Winter2021AnimeDownload):
         self.download_episode_preview()
         self.download_key_visual()
         self.download_character()
+        self.download_bluray()
 
     def download_episode_preview(self):
         image_template = 'https://www.tbs.co.jp/anime/5hanayome/story/img/story%s/%s.jpg'
@@ -152,6 +153,24 @@ class Gotoubun2Download(Winter2021AnimeDownload):
             image_name = self.extract_image_name_from_url(image_url, with_extension=False)
             image_objs.append({'name': image_name, 'url': image_url})
         self.download_image_objects(image_objs, folder)
+
+    def download_bluray(self):
+        folder = self.create_bluray_directory()
+        try:
+            music_url = self.PAGE_PREFIX + 'music/'
+            soup = self.get_soup(music_url)
+            divs = soup.find_all(lambda tag: tag.name == 'div' and tag.has_attr('class') and 'music-image' in tag['class'])
+            self.image_list = []
+            for div in divs:
+                image = div.find(lambda tag: tag.name == 'img' and tag.has_attr('srcset'))
+                if image:
+                    image_url = music_url + image['srcset']
+                    image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Blu-Ray')
+            print(e)
 
 
 # Hataraku Saibou S2
@@ -785,7 +804,6 @@ class NonNonBiyori3Download(Winter2021AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
-
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
