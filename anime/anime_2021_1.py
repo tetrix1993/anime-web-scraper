@@ -2,7 +2,7 @@ import os
 # import anime.constants as constants
 from anime.main_download import MainDownload
 from datetime import datetime
-from scan import MocaNewsScanner, NatalieScanner
+from scan import MocaNewsScanner, NatalieScanner, AniverseMagazineScanner
 
 
 # Dr. Stone: Stone Wars https://dr-stone.jp/ #DrSTONE @DrSTONE_off
@@ -1122,7 +1122,6 @@ class LasdanDownload(Winter2021AnimeDownload):
         self.download_image_list(folder)
 
 
-
 # Tensei shitara Slime Datta Ken S2
 class Tensura2Download(Winter2021AnimeDownload):
     title = 'Tensei shitara Slime Datta Ken 2nd Season'
@@ -1136,10 +1135,42 @@ class Tensura2Download(Winter2021AnimeDownload):
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_external()
         self.download_key_visual()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + '/intro/2nd')
+            nav_list = soup.find_all('ul', class_='nav-list')
+            if len(nav_list) < 2:
+                return
+            lis = nav_list[1].find_all('li', class_='nav-list-item')
+            for li in lis:
+                if li.has_attr('data-season') and li['data-season'] == '2':
+                    a_tag = li.find('a')
+                    if a_tag.has_attr('href'):
+                        try:
+                            episode = str(int(a_tag.text.replace('#', '').strip()))
+                        except:
+                            continue
+                        ep_soup = self.get_soup(a_tag['href'])
+                        slider_wrapper = ep_soup.find('div', class_='swiper-wrapper')
+                        if slider_wrapper:
+                            images = slider_wrapper.find_all('img')
+                            self.image_list = []
+                            for i in range(len(images)):
+                                if images[i].has_attr('src'):
+                                    image_url = images[i]['src']
+                                    image_name = episode + '_' + str(i + 1)
+                                    self.add_to_image_list(image_name, image_url)
+                            self.download_image_list(self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
+
+    def download_episode_preview_external(self):
+        jp_title = '転生したらスライムだった件'
+        AniverseMagazineScanner(jp_title, self.base_folder, last_episode=48, min_width=1000, end_date='20210108').run()
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -1170,7 +1201,6 @@ class UrasekaiPicnicDownload(Winter2021AnimeDownload):
         self.download_bluray()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
         try:
             soup = self.get_soup(self.PAGE_PREFIX + '/story/')
             nav = soup.find('nav', id='l-nav')
