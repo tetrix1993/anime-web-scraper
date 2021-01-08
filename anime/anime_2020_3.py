@@ -853,6 +853,10 @@ class ReZero2Download(Summer2020AnimeDownload):
                             image_name = bd_prefix + '_' + str(i + 1)
                     else:
                         image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                        try:
+                            image_name = section_id + '_' + str(int(image_name))
+                        except:
+                            pass
                     image_objs.append({'name': image_name, 'url': image_url})
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + ' - Blu-ray')
