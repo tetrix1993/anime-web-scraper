@@ -433,6 +433,8 @@ class TomozakiKunDownload(Winter2021AnimeDownload):
         self.image_list = []
         self.add_to_image_list('bd_tw_1_1', 'https://pbs.twimg.com/media/EqDDs1iVgAANXji?format=jpg&name=large')
         self.add_to_image_list('bd_tw_1_2', 'https://pbs.twimg.com/media/EqDDtt9UwAA4Rld?format=jpg&name=large')
+        self.add_to_image_list('bd_vol_1_bonus', 'https://pbs.twimg.com/media/ErMwxwrVEAAQ9vU?format=jpg&name=4096x4096')
+        #self.add_to_image_list('bd_vol_1_bonus', 'http://tomozaki-koushiki.com/news/wp-content/uploads/2021/01/ブルーレイ特典画像_.jpg')
         self.download_image_list(folder)
         self.download_bluray_volume(folder)
         self.download_bluray_bonus(folder)
