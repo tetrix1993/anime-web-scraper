@@ -117,6 +117,7 @@ class Gotoubun2Download(Winter2021AnimeDownload):
         self.download_key_visual()
         self.download_character()
         self.download_bluray()
+        self.download_bluray_bonus()
 
     def download_episode_preview(self):
         image_template = 'https://www.tbs.co.jp/anime/5hanayome/story/img/story%s/%s.jpg'
@@ -157,19 +158,61 @@ class Gotoubun2Download(Winter2021AnimeDownload):
     def download_bluray(self):
         folder = self.create_bluray_directory()
         try:
-            music_url = self.PAGE_PREFIX + 'music/'
-            soup = self.get_soup(music_url)
-            divs = soup.find_all(lambda tag: tag.name == 'div' and tag.has_attr('class') and 'music-image' in tag['class'])
-            self.image_list = []
-            for div in divs:
-                image = div.find(lambda tag: tag.name == 'img' and tag.has_attr('srcset'))
-                if image:
-                    image_url = music_url + image['srcset']
-                    image_name = self.extract_image_name_from_url(image_url, with_extension=False)
-                    self.add_to_image_list(image_name, image_url)
-            self.download_image_list(folder)
+            urls = ['music']
+            for i in range(5):
+                urls.append('disc/disc' + str(i + 1).zfill(2) + '.html')
+            for i in range(len(urls)):
+                if i > 0 and self.is_image_exists('bd' + str(i), folder):
+                    continue
+                bd_url = self.PAGE_PREFIX + urls[i]
+                soup = self.get_soup(bd_url, decode=True)
+                divs = soup.find_all(lambda tag: tag.name == 'div' and tag.has_attr('class') and 'music-image' in tag['class'])
+                self.image_list = []
+                for div in divs:
+                    image = div.find(lambda tag: tag.name == 'img' and (tag.has_attr('srcset') or tag.has_attr('src')))
+                    if image:
+                        if i == 0:
+                            bd_prefix = self.PAGE_PREFIX + 'music/'
+                        else:
+                            bd_prefix = self.PAGE_PREFIX + 'disc/'
+                        if image.has_attr('srcset'):
+                            image_url = bd_prefix + image['srcset']
+                        else:
+                            image_url = bd_prefix + image['src']
+                        if 'noimage' in image_url:
+                            if i == 0:
+                                continue
+                            else:
+                                return
+                        if i == 0:
+                            image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                        else:
+                            image_name = 'bd' + str(i)
+                        self.add_to_image_list(image_name, image_url)
+                self.download_image_list(folder)
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + ' - Blu-Ray')
+            print(e)
+
+    def download_bluray_bonus(self):
+        folder = self.create_bluray_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'disc/oritoku.html', decode=True)
+            images = soup.find_all(lambda tag: tag.name == 'img' and tag.has_attr('class') and 'oritoku-img' in tag['class']
+                          and (tag.has_attr('src') or tag.has_attr('srcset')))
+            self.image_list = []
+            for image in images:
+                if image.has_attr('srcset'):
+                    image_url = self.PAGE_PREFIX + image['srcset']
+                else:
+                    image_url = self.PAGE_PREFIX + image['src']
+                if 'noimage' in image_url:
+                    continue
+                image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Blu-Ray Bonus')
             print(e)
 
 
