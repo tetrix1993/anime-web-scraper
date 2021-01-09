@@ -348,6 +348,7 @@ class HorimiyaDownload(Winter2021AnimeDownload):
         self.download_episode_preview()
         self.download_key_visual()
         self.download_character()
+        self.download_bluray()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
@@ -392,6 +393,12 @@ class HorimiyaDownload(Winter2021AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + " - Character")
             print(e)
+
+    def download_bluray(self):
+        folder = self.create_bluray_directory()
+        self.image_list = []
+        self.add_to_image_list('music_ed', 'https://pbs.twimg.com/media/ErR1scoVEAM0pVu?format=jpg&name=large')
+        self.download_image_list(folder)
 
 
 # Jaku-Chara Tomozaki-kun
