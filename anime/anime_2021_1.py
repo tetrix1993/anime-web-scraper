@@ -1327,6 +1327,7 @@ class UrasekaiPicnicDownload(Winter2021AnimeDownload):
 
     PAGE_PREFIX = 'https://www.othersidepicnic.com'
     FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 6
 
     def __init__(self):
         super().__init__()
@@ -1334,6 +1335,7 @@ class UrasekaiPicnicDownload(Winter2021AnimeDownload):
     def run(self):
         self.download_episode_preview()
         self.download_episode_preview_external()
+        self.download_episode_preview_guess()
         self.download_key_visual()
         self.download_character()
         self.download_bluray()
@@ -1370,6 +1372,33 @@ class UrasekaiPicnicDownload(Winter2021AnimeDownload):
 
     def download_episode_preview_external(self):
         NatalieScanner('裏世界ピクニック', self.base_folder, last_episode=self.FINAL_EPISODE).run()
+
+    def download_episode_preview_guess(self):
+        folder = self.create_custom_directory('guess')
+        template = self.PAGE_PREFIX + '/cms/wp-content/uploads/2021/%s/%s_%s.jpg'
+        template2 = self.PAGE_PREFIX + '/cms/wp-content/uploads/2021/%s/ep%s_%s.jpg'
+        dt_month = datetime.now().strftime("%m").zfill(2)
+        for i in range(self.FINAL_EPISODE):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_1'):
+                continue
+            is_success = False
+            for j in [template, template2]:
+                image_url = j % (dt_month, episode, '01')
+                if self.is_valid_url(image_url, is_image=True):
+                    for k in range(self.IMAGES_PER_EPISODE):
+                        valid_image_url = j % (dt_month, episode, str(k + 1).zfill(2))
+                        image_name = episode + '_' + str(k + 1)
+                        result = self.download_image(valid_image_url, folder + '/' + image_name)
+                        if result == 0:
+                            is_success = True
+                            print(self.__class__.__name__ + ' - Guessed successfully!')
+            if not is_success:
+                if len(os.listdir(folder)) == 0:
+                    os.rmdir(folder)
+                return
+        if len(os.listdir(folder)) == 0:
+            os.rmdir(folder)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
