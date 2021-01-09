@@ -985,7 +985,7 @@ class JujutsuKaisenDownload(Fall2020AnimeDownload):
 
     PAGE_PREFIX = 'https://jujutsukaisen.jp/'
     STORY_PAGE = 'https://jujutsukaisen.jp/episodes/'
-    LAST_EPISODE = 12
+    LAST_EPISODE = 24
 
     def __init__(self):
         super().__init__()
