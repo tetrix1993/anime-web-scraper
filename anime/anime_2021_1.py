@@ -1267,6 +1267,9 @@ class Tensura2Download(Winter2021AnimeDownload):
     folder_name = 'tensura2'
 
     PAGE_PREFIX = 'https://www.ten-sura.com/anime/tensura'
+    FIRST_EPISODE = 25
+    FINAL_EPISODE = 48
+    IMAGES_PER_EPISODE = 5
 
     def __init__(self):
         super().__init__()
@@ -1274,6 +1277,7 @@ class Tensura2Download(Winter2021AnimeDownload):
     def run(self):
         self.download_episode_preview()
         self.download_episode_preview_external()
+        self.download_episode_preview_guess()
         self.download_key_visual()
 
     def download_episode_preview(self):
@@ -1305,6 +1309,30 @@ class Tensura2Download(Winter2021AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
+
+    def download_episode_preview_guess(self):
+        folder = self.create_custom_directory('guess')
+        template = 'https://www.ten-sura.com/4GfGdAp7/wp-content/themes/tensura_portal/anime/tensura-portal-anime-tensura/assets/images/story/no%s/img%s.jpg'
+        for i in range(self.FIRST_EPISODE, self.FINAL_EPISODE + 1, 1):
+            episode = str(i).zfill(2)
+            if self.is_image_exists(episode + '_1'):
+                continue
+            is_success = False
+            image_url = template % (str(i + 2).zfill(2), '1')
+            if self.is_valid_url(image_url, is_image=True):
+                for k in range(self.IMAGES_PER_EPISODE):
+                    valid_image_url = template % (str(i + 2).zfill(2), str(k + 1))
+                    image_name = episode + '_' + str(k + 1)
+                    result = self.download_image(valid_image_url, folder + '/' + image_name)
+                    if result == 0:
+                        is_success = True
+                        print(self.__class__.__name__ + ' - Guessed successfully!')
+            if not is_success:
+                if len(os.listdir(folder)) == 0:
+                    os.rmdir(folder)
+                return
+        if len(os.listdir(folder)) == 0:
+            os.rmdir(folder)
 
     def download_episode_preview_external(self):
         jp_title = '転生したらスライムだった件'
