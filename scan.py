@@ -2,6 +2,7 @@ import os
 import re
 import requests
 from anime.external_download import AniverseMagazineDownload, WebNewtypeDownload, MocaNewsDownload, NatalieDownload
+from anime.constants import EXTERNAL_FOLDER_ANIVERSE, EXTERNAL_FOLDER_MOCANEWS, EXTERNAL_FOLDER_NATALIE, EXTERNAL_FOLDER_WEBNEWTYPE
 from bs4 import BeautifulSoup as bs
 from datetime import datetime
 from datetime import timedelta
@@ -97,7 +98,7 @@ class AniverseMagazineScanner(MainScanner):
     def __init__(self, keyword, base_folder, last_episode=None, suffix=None, min_width=None, end_date='00000000'):
         super().__init__()
         self.keyword = keyword
-        self.base_folder = base_folder.replace("download/","") + "/aniverse"
+        self.base_folder = base_folder.replace("download/","") + "/" + EXTERNAL_FOLDER_ANIVERSE
         self.last_episode = last_episode
         self.suffix = suffix
         self.min_width = min_width
@@ -213,7 +214,7 @@ class WebNewtypeScanner(MainScanner):
     def __init__(self, keyword, base_folder, last_episode=None):
         super().__init__()
         self.keyword = keyword
-        self.base_folder = base_folder.replace("download/","") + "/wnt"
+        self.base_folder = base_folder.replace("download/","") + "/" + EXTERNAL_FOLDER_WEBNEWTYPE
         self.last_episode = last_episode
 
     @staticmethod
@@ -313,7 +314,7 @@ class MocaNewsScanner(MainScanner):
     def __init__(self, keyword, base_folder, start_date, end_date, ignore_cache=False):
         super().__init__()
         self.keyword = keyword
-        self.base_folder = base_folder + "/moca"
+        self.base_folder = base_folder + "/" + EXTERNAL_FOLDER_MOCANEWS
         self.start_date = datetime.strptime(start_date, '%Y%m%d')
         self.end_date = datetime.strptime(end_date, '%Y%m%d')
         self.ignore_cache = ignore_cache
@@ -397,7 +398,7 @@ class NatalieScanner(MainScanner):
     def __init__(self, keyword, base_folder, last_episode=None, suffix=None):
         super().__init__()
         self.keyword = keyword
-        self.base_folder = base_folder.replace("download/","") + "/natalie"
+        self.base_folder = base_folder.replace("download/","") + "/" + EXTERNAL_FOLDER_NATALIE
         self.last_episode = last_episode
         self.suffix = suffix
 
