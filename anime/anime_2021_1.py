@@ -1533,15 +1533,21 @@ class WorldTrigger2Download(Winter2021AnimeDownload):
     folder_name = 'world-trigger2'
 
     PAGE_PREFIX = 'http://www.toei-anim.co.jp/tv/wt/'
+    FINAL_EPISODE = 24
 
     def __init__(self):
         super().__init__()
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_external()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_episode_preview_external(self):
+        jp_title = 'ワールドトリガー'
+        NatalieScanner(jp_title, self.base_folder, last_episode=self.FINAL_EPISODE).run()
 
 
 # Yuru Camp S2
