@@ -157,6 +157,9 @@ class Gotoubun2Download(Winter2021AnimeDownload):
 
     def download_bluray(self):
         folder = self.create_bluray_directory()
+        self.image_list = []
+        self.add_to_image_list('bd1_big', 'https://aniverse-mag.com/wp-content/uploads/2021/01/f52988a7c17bf03cfc9369cb7777b84d.jpg', to_jpg=True)
+        self.download_image_list(folder)
         try:
             urls = ['music']
             for i in range(5):
@@ -1091,6 +1094,7 @@ class LasdanDownload(Winter2021AnimeDownload):
         template = self.PAGE_PREFIX + 'core_sys/images/contents/%s/block/%s/%s.jpg'
         for i in range(self.FINAL_EPISODE):
             episode = str(i + 1).zfill(2)
+            is_success = False
             if self.is_image_exists(episode + '_1'):
                 continue
             first = 22 + i
@@ -1100,10 +1104,13 @@ class LasdanDownload(Winter2021AnimeDownload):
                 image_url = template % (str(first).zfill(8), str(second).zfill(8), str(third + j).zfill(8))
                 image_name = episode + '_' + str(j + 1)
                 result = self.download_image(image_url, folder + '/' + image_name)
-                if result == -1:
-                    if len(os.listdir(folder)) == 0:
-                        os.rmdir(folder)
-                    return
+                if result == 0:
+                    print(self.__class__.__name__ + ' - Guessed successfully!')
+                    is_success = True
+            if not is_success:
+                if len(os.listdir(folder)) == 0:
+                    os.rmdir(folder)
+                return
         if len(os.listdir(folder)) == 0:
             os.rmdir(folder)
 
