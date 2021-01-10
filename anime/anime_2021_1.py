@@ -9,7 +9,7 @@ from scan import MocaNewsScanner, NatalieScanner, AniverseMagazineScanner
 # Gotoubun no Hanayome S2 https://www.tbs.co.jp/anime/5hanayome/ #五等分の花嫁 @5Hanayome_anime [TUE]
 # Hataraku Saibou S2 https://hataraku-saibou.com/2nd.html #はたらく細胞 @hataraku_saibou [WED]
 # Hataraku Saibou Black https://saibou-black.com/ #細胞BLACK @cellsatworkbla1 [FRI]
-# Horimiya https://horimiya-anime.com/ #ホリミヤ @horimiya_anime
+# Horimiya https://horimiya-anime.com/ #ホリミヤ #horimiya @horimiya_anime
 # Jaku-Chara Tomozaki-kun http://tomozaki-koushiki.com/ #友崎くん @tomozakikoshiki [FRI 10AM]
 # Kaifuku Jutsushi no Yarinaoshi http://kaiyari.com/ #回復術士 @kaiyari_anime [WED]
 # Kemono Jihen https://kemonojihen-anime.com/ #怪物事変 #kemonojihen @Kemonojihen_tv
@@ -351,9 +351,41 @@ class HorimiyaDownload(Winter2021AnimeDownload):
         self.download_bluray()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-        #image_objs = []
-        #self.download_image_objects(image_objs, self.base_folder)
+        try:
+            story_url = self.PAGE_PREFIX + 'story/'
+            soup = self.get_soup(story_url, decode=True)
+            ul = soup.find('ul', class_='nav-story_list')
+            if ul:
+                lis = ul.find_all('li')
+                for li in lis:
+                    span = li.find('span')
+                    a_tag = li.find('a')
+                    if not span and not a_tag:
+                        continue
+                    if a_tag.has_attr('href') and 'id=' in a_tag['href']:
+                        try:
+                            episode = str(int(span.text.strip())).zfill(2)
+                        except:
+                            continue
+                        if self.is_image_exists(episode + '_1'):
+                            continue
+                        if len(a_tag['href'][0]) > 1 and a_tag['href'][0] == '/':
+                            episode_url = self.PAGE_PREFIX + a_tag['href'][1:]
+                        else:
+                            episode_url = self.PAGE_PREFIX + a_tag['href']
+                        episode_soup = self.get_soup(episode_url)
+                        items = episode_soup.find_all('li', class_='p-story__scene-item')
+                        self.image_list = []
+                        for i in range(len(items)):
+                            image = items[i].find('img')
+                            if image and image.has_attr('src'):
+                                image_url = story_url + image['src']
+                                image_name = episode + '_' + str(i + 1)
+                                self.add_to_image_list(image_name, image_url)
+                        self.download_image_list(self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -398,6 +430,13 @@ class HorimiyaDownload(Winter2021AnimeDownload):
         folder = self.create_bluray_directory()
         self.image_list = []
         self.add_to_image_list('music_ed', 'https://pbs.twimg.com/media/ErR1scoVEAM0pVu?format=jpg&name=large')
+        bd1_template = 'https://moca-news.net/article/20210110/2021011001000a_/image/%s.jpg'
+        bd1_list = ['001-wqqklx', '931-hkhz5y', '932-z9u4nc', '933-hy695q', '934-xnidn4']
+        for i in range(len(bd1_list)):
+            if i > 0:
+                self.add_to_image_list('bd_bonus' + str(i), bd1_template % bd1_list[i], is_mocanews=True)
+            else:
+                self.add_to_image_list('bd1', bd1_template % bd1_list[i], is_mocanews=True)
         self.download_image_list(folder)
 
 
