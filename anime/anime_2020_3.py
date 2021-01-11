@@ -823,8 +823,15 @@ class ReZero2Download(Summer2020AnimeDownload):
 
     def download_bluray(self):
         bluray_url = 'http://re-zero-anime.jp/tv/bluray/'
-        self.has_website_updated(bluray_url, 'bluray')
         folder = self.create_bluray_directory()
+
+        self.image_list = []
+        bd_template = 'https://moca-news.net/article/20210111/2021011119000a_/image/%s.jpg'
+        bd_list = ['921-xin4e3', '922-oa0axh', '923-f2dffv', '924-4tqkx9', '925-sk3pgn', '926-gbguy1']
+        for i in range(len(bd_list)):
+            self.add_to_image_list('bd_bonus' + str(i + 1), bd_template % bd_list[i], is_mocanews=True)
+        self.download_image_list(folder)
+
         image_objs = []
         try:
             soup = self.get_soup(bluray_url)
