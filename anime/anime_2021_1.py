@@ -1,6 +1,7 @@
 import os
 # import anime.constants as constants
 from anime.main_download import MainDownload
+from anime.external_download import MocaNewsDownload
 from datetime import datetime
 from scan import MocaNewsScanner, NatalieScanner, AniverseMagazineScanner
 
@@ -435,13 +436,13 @@ class HorimiyaDownload(Winter2021AnimeDownload):
         folder = self.create_bluray_directory()
         self.image_list = []
         self.add_to_image_list('music_ed', 'https://pbs.twimg.com/media/ErR1scoVEAM0pVu?format=jpg&name=large')
-        bd1_template = 'https://moca-news.net/article/20210110/2021011001000a_/image/%s.jpg'
-        bd1_list = ['001-wqqklx', '931-hkhz5y', '932-z9u4nc', '933-hy695q', '934-xnidn4']
-        for i in range(len(bd1_list)):
-            if i > 0:
-                self.add_to_image_list('bd_bonus' + str(i), bd1_template % bd1_list[i], is_mocanews=True)
+        b1_ids = [1] + [i for i in range(931, 935, 1)]
+        for i in b1_ids:
+            image_url = MocaNewsDownload.generate_image_url('2021011001000a_', i)
+            if i == 1:
+                self.add_to_image_list('bd1', image_url, is_mocanews=True)
             else:
-                self.add_to_image_list('bd1', bd1_template % bd1_list[i], is_mocanews=True)
+                self.add_to_image_list('bd_bonus', image_url, is_mocanews=True)
         self.download_image_list(folder)
 
 

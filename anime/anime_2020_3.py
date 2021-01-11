@@ -1,6 +1,7 @@
 import os
 import anime.constants as constants
 from anime.main_download import MainDownload
+from anime.external_download import MocaNewsDownload
 from datetime import datetime
 from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 
@@ -826,10 +827,9 @@ class ReZero2Download(Summer2020AnimeDownload):
         folder = self.create_bluray_directory()
 
         self.image_list = []
-        bd_template = 'https://moca-news.net/article/20210111/2021011119000a_/image/%s.jpg'
-        bd_list = ['921-xin4e3', '922-oa0axh', '923-f2dffv', '924-4tqkx9', '925-sk3pgn', '926-gbguy1']
-        for i in range(len(bd_list)):
-            self.add_to_image_list('bd_bonus' + str(i + 1), bd_template % bd_list[i], is_mocanews=True)
+        for i in range(6):
+            image_url = MocaNewsDownload.generate_image_url('2021011119000a_', str(921 + i))
+            self.add_to_image_list('bd_bonus', image_url, is_mocanews=True)
         self.download_image_list(folder)
 
         image_objs = []

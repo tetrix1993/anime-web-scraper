@@ -73,8 +73,9 @@ class MocaNewsDownload(ExternalDownload):
             self.episode = str(episode).zfill(2)
         else:
             self.episode = str(episode)
-        
-    def check_str(self, art_id, img_id):
+
+    @staticmethod
+    def check_str(art_id, img_id):
         check_chr = "abcdefghijklmnopqrstuvwxyz0123456789"
         root_chr = "020305071113"
         wk_check_str = "-"
@@ -87,6 +88,13 @@ class MocaNewsDownload(ExternalDownload):
                 ) + pow(int(img_id),(1 / int(root_chr[i:i+2])))) * 100000) % 36
             wk_check_str += check_chr[temp:temp+1]
         return wk_check_str
+
+    @staticmethod
+    def generate_image_url(art_id, img_id):
+        if len(art_id) == 15:
+            image_id = str(img_id).zfill(3) + MocaNewsDownload.check_str(art_id, str(img_id).zfill(3))
+            return 'https://moca-news.net/article/%s/%s/image/%s.jpg' % (art_id[0:8], art_id, image_id)
+        return None
     
     def run(self):
         page_url = self.PAGE_PREFIX + self.article_id + "/01/"
