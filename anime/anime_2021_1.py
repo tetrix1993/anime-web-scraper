@@ -43,19 +43,20 @@ class DrStone2Download(Winter2021AnimeDownload):
     folder_name = 'dr-stone2'
 
     PAGE_LINK = 'https://dr-stone.jp/'
-    FIRST_EPISODE = 25
-    FINAL_EPISODE = 36
+    FIRST_EPISODE = 1
+    FINAL_EPISODE = 13
 
     def __init__(self):
         super().__init__()
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_external()
         self.download_key_visual()
 
     def download_episode_preview(self):
         try:
-            soup = self.get_soup(self.PAGE_LINK + 'story/')
+            soup = self.get_soup(self.PAGE_LINK + 'story/2nd/')
             lis = soup.find_all('li', class_='storyarea_body_main_story_list_item')
             for li in lis:
                 a_tag = li.find('a', class_='story_body')
@@ -85,6 +86,10 @@ class DrStone2Download(Winter2021AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
+
+    def download_episode_preview_external(self):
+        jp_title = 'Ｄｒ．ＳＴＯＮＥ'
+        AniverseMagazineScanner(jp_title, self.base_folder, last_episode=self.FINAL_EPISODE, min_width=800, end_date='20210111').run()
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()

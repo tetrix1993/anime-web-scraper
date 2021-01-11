@@ -116,7 +116,7 @@ class DrStoneDownload(Summer2019AnimeDownload):
 
     def download_episode_preview(self):
         try:
-            soup = self.get_soup(self.PAGE_LINK + 'story/')
+            soup = self.get_soup(self.PAGE_LINK + 'story/1st/')
             lis = soup.find_all('li', class_='storyarea_body_main_story_list_item')
             for li in lis:
                 a_tag = li.find('a', class_='story_body')
