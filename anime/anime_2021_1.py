@@ -5,15 +5,15 @@ from datetime import datetime
 from scan import MocaNewsScanner, NatalieScanner, AniverseMagazineScanner
 
 
-# Dr. Stone: Stone Wars https://dr-stone.jp/ #DrSTONE @DrSTONE_off
+# Dr. Stone: Stone Wars https://dr-stone.jp/ #DrSTONE @DrSTONE_off [MON]
 # Gotoubun no Hanayome S2 https://www.tbs.co.jp/anime/5hanayome/ #五等分の花嫁 @5Hanayome_anime [TUE]
 # Hataraku Saibou S2 https://hataraku-saibou.com/2nd.html #はたらく細胞 @hataraku_saibou [WED]
 # Hataraku Saibou Black https://saibou-black.com/ #細胞BLACK @cellsatworkbla1 [FRI]
 # Horimiya https://horimiya-anime.com/ #ホリミヤ #horimiya @horimiya_anime
-# Jaku-Chara Tomozaki-kun http://tomozaki-koushiki.com/ #友崎くん @tomozakikoshiki [FRI 10AM]
+# Jaku-Chara Tomozaki-kun http://tomozaki-koushiki.com/ #友崎くん @tomozakikoshiki [MON]
 # Kaifuku Jutsushi no Yarinaoshi http://kaiyari.com/ #回復術士 @kaiyari_anime [WED]
 # Kemono Jihen https://kemonojihen-anime.com/ #怪物事変 #kemonojihen @Kemonojihen_tv
-# Kumo Desu ga, Nani ka? https://kumo-anime.com/ #蜘蛛ですが @kumoko_anime [FRI]
+# Kumo Desu ga, Nani ka? https://kumo-anime.com/ #蜘蛛ですが @kumoko_anime [MON]
 # Log Horizon: Entaku Houkai https://www6.nhk.or.jp/anime/program/detail.html?i=loghorizon3 #loghorizon @loghorizon_DORT
 # Mushoku Tensei https://mushokutensei.jp/ #無職転生 @mushokutensei_A [WED]
 # Non Non Biyori Nonstop https://nonnontv.com/ #なのん #のんのんびより @nonnontv [THU]
@@ -21,7 +21,7 @@ from scan import MocaNewsScanner, NatalieScanner, AniverseMagazineScanner
 # Tatoeba Last Dungeon https://lasdan.com/ #ラスダン @lasdan_PR [FRI]
 # Tensei shitara Slime Datta Ken S2 https://www.ten-sura.com/anime/tensura #転スラ #tensura @ten_sura_anime [FRI]
 # Urasekai Picnic https://www.othersidepicnic.com/ #裏ピク @OthersidePicnic [FRI AM]
-# Wonder Egg Priority https://wonder-egg-priority.com/ #ワンエグ @WEP_anime
+# Wonder Egg Priority https://wonder-egg-priority.com/ #ワンエグ @WEP_anime [MON]
 # World Trigger S2 http://www.toei-anim.co.jp/tv/wt/ #ワールドトリガー #トリガーオン @Anime_W_Trigger
 # Yuru Camp S2 https://yurucamp.jp/second/ #ゆるキャン @yurucamp_anime [FRI]
 
@@ -1530,7 +1530,35 @@ class WonderEggPriorityDownload(Winter2021AnimeDownload):
         self.download_bluray()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            story_url = self.PAGE_PREFIX + '/story/'
+            soup = self.get_soup(story_url)
+            ul = soup.find('ul', class_='story-navs')
+            if ul:
+                a_tags = ul.find_all('a')
+                for a_tag in a_tags:
+                    if a_tag.has_attr('href') and 'id=' in a_tag['href']:
+                        try:
+                            episode = str(int(a_tag.text)).zfill(2)
+                        except:
+                            continue
+                        if self.is_image_exists(episode + '_1'):
+                            continue
+                        episode_url = self.PAGE_PREFIX + a_tag['href']
+                        episode_soup = self.get_soup(episode_url)
+                        div_image = episode_soup.find('div', class_='story-images')
+                        if div_image:
+                            images = div_image.find_all('img')
+                            self.image_list = []
+                            for i in range(len(images)):
+                                if images[i].has_attr('src'):
+                                    image_url = story_url + images[i]['src']
+                                    image_name = episode + '_' + str(i + 1)
+                                    self.add_to_image_list(image_name, image_url)
+                            self.download_image_list(self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
