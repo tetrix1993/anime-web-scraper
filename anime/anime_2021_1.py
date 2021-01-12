@@ -437,12 +437,14 @@ class HorimiyaDownload(Winter2021AnimeDownload):
         self.image_list = []
         self.add_to_image_list('music_ed', 'https://pbs.twimg.com/media/ErR1scoVEAM0pVu?format=jpg&name=large')
         b1_ids = [1] + [i for i in range(931, 935, 1)]
+        j = 0
         for i in b1_ids:
             image_url = MocaNewsDownload.generate_image_url('2021011001000a_', i)
             if i == 1:
                 self.add_to_image_list('bd1', image_url, is_mocanews=True)
             else:
-                self.add_to_image_list('bd_bonus', image_url, is_mocanews=True)
+                j += 1
+                self.add_to_image_list('bd_bonus' + str(j), image_url, is_mocanews=True)
         self.download_image_list(folder)
 
 
