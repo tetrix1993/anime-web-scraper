@@ -829,7 +829,7 @@ class ReZero2Download(Summer2020AnimeDownload):
         self.image_list = []
         for i in range(6):
             image_url = MocaNewsDownload.generate_image_url('2021011119000a_', str(921 + i))
-            self.add_to_image_list('bd_bonus', image_url, is_mocanews=True)
+            self.add_to_image_list('bd_bonus' + str(i + 1), image_url, is_mocanews=True)
         self.download_image_list(folder)
 
         image_objs = []
