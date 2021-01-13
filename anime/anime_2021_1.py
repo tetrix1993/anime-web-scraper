@@ -671,6 +671,27 @@ class KaiyariDownload(Winter2021AnimeDownload):
         self.image_list = []
         self.add_to_image_list('music_op', 'http://kaiyari.com/assets/music/op.jpg')
         self.add_to_image_list('music_ed', 'http://kaiyari.com/assets/music/ed.jpg')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'bddvd.html')
+            articles = soup.find_all('article')
+            for article in articles:
+                if article.has_attr('id'):
+                    id = article['id']
+                    if len(id) == 0:
+                        id = 'Bnf'
+                else:
+                    continue
+                images = article.find_all('img')
+                for image in images:
+                    if image.has_attr('src'):
+                        image_url = self.PAGE_PREFIX + image['src'].replace('./', '').split('?')[0]
+                        if len(image_url) > 6 and image_url[-6:] == 'np.png':
+                            continue
+                        image_name = id + '_' + self.extract_image_name_from_url(image_url, with_extension=False)
+                        self.add_to_image_list(image_name, image_url)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Blu-Ray")
+            print(e)
         self.download_image_list(folder)
 
 
