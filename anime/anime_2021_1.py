@@ -1135,19 +1135,22 @@ class KakushiDungeonDownload(Winter2021AnimeDownload):
         folder = self.create_bluray_directory()
         self.image_list = []
         try:
-            soup = self.get_soup('https://kakushidungeon-anime.jp/bdcd/index.html')
-            articles = soup.find_all('article', class_='content-single')
-            for article in articles:
-                if article.has_attr('id'):
-                    prefix = article['id'].strip() + '_'
-                else:
-                    prefix = ''
-                images = article.find_all('img')
-                for image in images:
-                    if image.has_attr('src'):
-                        image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
-                        image_name = prefix + self.extract_image_name_from_url(image_url, with_extension=False)
-                        self.add_to_image_list(image_name, image_url)
+            for i in ['index', 'music']:
+                soup = self.get_soup(self.PAGE_PREFIX + 'bdcd/%s.html' % i)
+                articles = soup.find_all('article', class_='content-single')
+                for article in articles:
+                    if article.has_attr('id'):
+                        prefix = article['id'].strip() + '_'
+                    else:
+                        prefix = ''
+                    images = article.find_all('img')
+                    for image in images:
+                        if image.has_attr('src'):
+                            if 'bdcd-cmt-ic.png' in image['src']:
+                                continue
+                            image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                            image_name = prefix + self.extract_image_name_from_url(image_url, with_extension=False)
+                            self.add_to_image_list(image_name, image_url)
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + " - Bluray")
             print(e)
