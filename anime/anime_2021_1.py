@@ -846,7 +846,7 @@ class MushokuTenseiDownload(Winter2021AnimeDownload):
                     continue
                 if self.is_image_exists(episode + '_1'):
                     continue
-                episode_url = self.PAGE_PREFIX + a_tag['href']
+                episode_url = a_tag['href']
                 episode_soup = self.get_soup(episode_url)
                 images = episode_soup.find_all('div', class_='storycontents_subimg_img')
                 self.image_list = []
