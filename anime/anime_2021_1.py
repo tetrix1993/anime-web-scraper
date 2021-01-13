@@ -10,12 +10,12 @@ from scan import MocaNewsScanner, NatalieScanner, AniverseMagazineScanner
 # Gotoubun no Hanayome S2 https://www.tbs.co.jp/anime/5hanayome/ #五等分の花嫁 @5Hanayome_anime [TUE]
 # Hataraku Saibou S2 https://hataraku-saibou.com/2nd.html #はたらく細胞 @hataraku_saibou [WED]
 # Hataraku Saibou Black https://saibou-black.com/ #細胞BLACK @cellsatworkbla1 [FRI]
-# Horimiya https://horimiya-anime.com/ #ホリミヤ #horimiya @horimiya_anime
+# Horimiya https://horimiya-anime.com/ #ホリミヤ #horimiya @horimiya_anime [SAT]
 # Jaku-Chara Tomozaki-kun http://tomozaki-koushiki.com/ #友崎くん @tomozakikoshiki [MON]
 # Kaifuku Jutsushi no Yarinaoshi http://kaiyari.com/ #回復術士 @kaiyari_anime [WED]
 # Kemono Jihen https://kemonojihen-anime.com/ #怪物事変 #kemonojihen @Kemonojihen_tv [WED]
 # Kumo Desu ga, Nani ka? https://kumo-anime.com/ #蜘蛛ですが @kumoko_anime [MON]
-# Log Horizon: Entaku Houkai https://www6.nhk.or.jp/anime/program/detail.html?i=loghorizon3 #loghorizon @loghorizon_DORT
+# Log Horizon: Entaku Houkai https://www6.nhk.or.jp/anime/program/detail.html?i=loghorizon3 #loghorizon @loghorizon_DORT [WED]
 # Mushoku Tensei https://mushokutensei.jp/ #無職転生 @mushokutensei_A [WED]
 # Non Non Biyori Nonstop https://nonnontv.com/ #なのん #のんのんびより @nonnontv [THU]
 # Ore dake Haireru Kakushi Dungeon https://kakushidungeon-anime.jp/ #隠しダンジョン @kakushidungeon [WED]
@@ -23,7 +23,7 @@ from scan import MocaNewsScanner, NatalieScanner, AniverseMagazineScanner
 # Tensei shitara Slime Datta Ken S2 https://www.ten-sura.com/anime/tensura #転スラ #tensura @ten_sura_anime [FRI]
 # Urasekai Picnic https://www.othersidepicnic.com/ #裏ピク @OthersidePicnic [FRI AM]
 # Wonder Egg Priority https://wonder-egg-priority.com/ #ワンエグ @WEP_anime [MON]
-# World Trigger S2 http://www.toei-anim.co.jp/tv/wt/ #ワールドトリガー #トリガーオン @Anime_W_Trigger
+# World Trigger S2 http://www.toei-anim.co.jp/tv/wt/ #ワールドトリガー #トリガーオン @Anime_W_Trigger [SAT]
 # Yuru Camp S2 https://yurucamp.jp/second/ #ゆるキャン @yurucamp_anime [FRI]
 
 
@@ -812,6 +812,7 @@ class LogHorizon3Download(Winter2021AnimeDownload):
 
     MAIN_PAGE = 'https://www6.nhk.or.jp/anime/program/detail.html?i=loghorizon3'
     IMAGE_PREFIX = 'https://www6.nhk.or.jp/anime/program/common/images/loghorizon3/'
+    FINAL_EPISODE = 12
 
     def __init__(self):
         super().__init__()
@@ -821,7 +822,15 @@ class LogHorizon3Download(Winter2021AnimeDownload):
         self.download_key_visual()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.MAIN_PAGE, 'index')
+        for i in range(self.FINAL_EPISODE):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_1'):
+                continue
+            image_url = self.IMAGE_PREFIX + 'story_' + episode + '.jpg'
+            if self.is_valid_url(image_url):
+                self.download_image(image_url, self.base_folder + '/' + episode + '_1')
+            else:
+                break
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
