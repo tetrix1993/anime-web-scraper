@@ -13,12 +13,12 @@ from scan import MocaNewsScanner, NatalieScanner, AniverseMagazineScanner
 # Horimiya https://horimiya-anime.com/ #ホリミヤ #horimiya @horimiya_anime
 # Jaku-Chara Tomozaki-kun http://tomozaki-koushiki.com/ #友崎くん @tomozakikoshiki [MON]
 # Kaifuku Jutsushi no Yarinaoshi http://kaiyari.com/ #回復術士 @kaiyari_anime [WED]
-# Kemono Jihen https://kemonojihen-anime.com/ #怪物事変 #kemonojihen @Kemonojihen_tv
+# Kemono Jihen https://kemonojihen-anime.com/ #怪物事変 #kemonojihen @Kemonojihen_tv [WED]
 # Kumo Desu ga, Nani ka? https://kumo-anime.com/ #蜘蛛ですが @kumoko_anime [MON]
 # Log Horizon: Entaku Houkai https://www6.nhk.or.jp/anime/program/detail.html?i=loghorizon3 #loghorizon @loghorizon_DORT
 # Mushoku Tensei https://mushokutensei.jp/ #無職転生 @mushokutensei_A [WED]
 # Non Non Biyori Nonstop https://nonnontv.com/ #なのん #のんのんびより @nonnontv [THU]
-# Ore dake Haireru Kakushi Dungeon https://kakushidungeon-anime.jp/ #隠しダンジョン @kakushidungeon
+# Ore dake Haireru Kakushi Dungeon https://kakushidungeon-anime.jp/ #隠しダンジョン @kakushidungeon [WED]
 # Tatoeba Last Dungeon https://lasdan.com/ #ラスダン @lasdan_PR [FRI]
 # Tensei shitara Slime Datta Ken S2 https://www.ten-sura.com/anime/tensura #転スラ #tensura @ten_sura_anime [FRI]
 # Urasekai Picnic https://www.othersidepicnic.com/ #裏ピク @OthersidePicnic [FRI AM]
