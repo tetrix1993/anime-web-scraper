@@ -20,7 +20,10 @@ class AniverseMagazineDownload(ExternalDownload):
         if not os.path.exists(self.base_folder):
             os.makedirs(self.base_folder)
         self.article_id = str(article_id)
-        self.episode = str(episode).zfill(2)
+        if episode:
+            self.episode = str(episode).zfill(2)
+        else:
+            self.episode = None
         self.num_of_pictures = num_of_pictures
         self.min_width = min_width
         
@@ -50,7 +53,10 @@ class AniverseMagazineDownload(ExternalDownload):
                     if '300' in image_url[-12:]: # Skip unwanted images that are resized to 300px
                         continue
                     i += 1
-                    image_name = self.episode + '_' + str(i).zfill(2)
+                    if self.episode is None:
+                        image_name = str(i).zfill(2)
+                    else:
+                        image_name = self.episode + '_' + str(i).zfill(2)
                     image_objs.append({'name': image_name, 'url': image_url})
                 self.download_image_objects(image_objs, self.base_folder, min_width=self.min_width)
         except Exception as e:
@@ -69,7 +75,9 @@ class MocaNewsDownload(ExternalDownload):
         if not os.path.exists(self.base_folder):
             os.makedirs(self.base_folder)
         self.article_id = str(article_id)
-        if isinstance(episode, int):
+        if episode is None:
+            self.episode = None
+        elif isinstance(episode, int):
             self.episode = str(episode).zfill(2)
         else:
             self.episode = str(episode)
@@ -116,14 +124,17 @@ class MocaNewsDownload(ExternalDownload):
                 except Exception as e:
                     continue
                 pic_num = str(i).zfill(2)
-                if self.is_file_exists(self.base_folder + "/" + self.episode + "_" + pic_num + ".jpg"):
+                if self.episode is None:
+                    image_filepath = self.base_folder + "/" + pic_num
+                else:
+                    image_filepath = self.base_folder + "/" + self.episode + "_" + pic_num
+                if self.is_file_exists(image_filepath + ".jpg"):
                     continue
                 cookie = self.post_response(self.COOKIE_URL, headers, data)
                 img_id = str(img_num).zfill(3)
-                image_page_url = self.PAGE_PREFIX + self.article_id + "/image" + img_id + ".html"
                 image_url = self.PAGE_PREFIX + self.article_id + "/image/" + img_id + self.check_str(art_id, img_id) + ".jpg"
                 headers['Cookie'] = 'imgkey' + img_id + '=' + str(cookie)
-                filepathWithoutExtension = self.base_folder + "/" + self.episode + "_" + pic_num
+                filepathWithoutExtension = image_filepath
                 self.download_image(image_url, filepathWithoutExtension, headers, is_mocanews=True)
         except Exception as e:
             print(e)
@@ -139,14 +150,19 @@ class NatalieDownload(ExternalDownload):
         if not os.path.exists(self.base_folder):
             os.makedirs(self.base_folder)
         self.article_id = str(article_id)
-        if isinstance(episode, int):
+        if episode is None:
+            self.episode = None
+        elif isinstance(episode, int):
             self.episode = str(episode).zfill(2)
         else:
             self.episode = str(episode)
         self.title = title
 
     def run(self):
-        if self.is_file_exists(self.base_folder + "/" + self.episode.zfill(2) + "_01.jpg"):
+        if self.episode is None:
+            if self.is_file_exists(self.base_folder + "/01.jpg"):
+                return
+        elif self.is_file_exists(self.base_folder + "/" + self.episode.zfill(2) + "_01.jpg"):
             return
         try:
             soup = self.get_soup(self.PAGE_PREFIX + self.article_id)
@@ -164,7 +180,10 @@ class NatalieDownload(ExternalDownload):
                 image = a_tags[i].find('img')
                 if image and image.has_attr('data-src'):
                     image_url = image['data-src'].split('?')[0]
-                    image_name = self.episode + '_' + str(i + 1).zfill(2)
+                    if self.episode is None:
+                        image_name = str(i + 1).zfill(2)
+                    else:
+                        image_name = self.episode + '_' + str(i + 1).zfill(2)
                     self.add_to_image_list(image_name, image_url)
             self.download_image_list(self.base_folder)
         except Exception as e:
@@ -182,14 +201,19 @@ class WebNewtypeDownload(ExternalDownload):
         if not os.path.exists(self.base_folder):
             os.makedirs(self.base_folder)
         self.article_id = str(article_id)
-        if isinstance(episode, int):
+        if episode is None:
+            self.episode = None
+        elif isinstance(episode, int):
             self.episode = str(episode).zfill(2)
         else:
             self.episode = str(episode)
         
     def run(self):
         try:
-            if self.is_file_exists(self.base_folder + "/" + self.episode.zfill(2) + "_01.jpg"):
+            if self.episode is None:
+                if self.is_file_exists(self.base_folder + "/01.jpg"):
+                    return
+            elif self.is_file_exists(self.base_folder + "/" + self.episode.zfill(2) + "_01.jpg"):
                 return
             response = self.get_response(self.PAGE_PREFIX + self.article_id)
             if len(response) == 0:
@@ -202,9 +226,11 @@ class WebNewtypeDownload(ExternalDownload):
             for i in range(1, len(split3), 1):
                 pic_num = str(i).zfill(2)
                 imageUrl = split3[i].split(".jpg")[0] + ".jpg"
-                filepathWithoutExtension = self.base_folder + "/" + self.episode + "_" + pic_num
+                if self.episode is None:
+                    filepathWithoutExtension = self.base_folder + "/" + pic_num
+                else:
+                    filepathWithoutExtension = self.base_folder + "/" + self.episode.zfill(2) + "_" + pic_num
                 self.download_image(imageUrl, filepathWithoutExtension)
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
-    

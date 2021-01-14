@@ -58,6 +58,8 @@ def run():
             process_query(True, True, False)
         elif choice == 4:
             process_query(True, False, True)
+        elif choice == 5:
+            download_from_news_website()
         elif choice == 0:
             break
         else:
@@ -71,6 +73,7 @@ def print_intro_message():
     print("2 - Search anime by season")
     print("3 - Search anime by keyword and season")
     print("4 - Identify the season the anime belongs to")
+    print("5 - Download from news website")
     print("0 - Exit")
 
 
@@ -240,6 +243,48 @@ def filter_anime_classes(anime_classes, choices):
         if 0 < choice <= len(anime_classes):
             result_classes.append(anime_classes[choice - 1])
     return result_classes
+
+
+def download_from_news_website():
+    while True:
+        print_news_website_choice()
+        try:
+            choice = int(input("Enter choice of news website: ").strip())
+        except:
+            print("Invalid input. Please enter an integer.")
+            continue
+
+        if 0 < choice < 5:
+            id = input('Enter article ID: ').strip()
+            if len(id) == 0:
+                print('Invalid article ID')
+                continue
+            base_folder = 'news/%s/%s'
+            if choice == 1:
+                AniverseMagazineDownload(str(id), base_folder % (constants.EXTERNAL_FOLDER_ANIVERSE, str(id)), None).run()
+            if choice == 2:
+                if len(id) != 15:
+                    print('Invalid article ID')
+                    continue
+                article_id = id[0:8] + '/' + id
+                MocaNewsDownload(article_id, base_folder % (constants.EXTERNAL_FOLDER_MOCANEWS, str(id)), None).run()
+            elif choice == 3:
+                NatalieDownload(str(id), base_folder % (constants.EXTERNAL_FOLDER_NATALIE, str(id)), None).run()
+            elif choice == 4:
+                WebNewtypeDownload(str(id), base_folder % (constants.EXTERNAL_FOLDER_WEBNEWTYPE, str(id)), None).run()
+        elif choice == 0:
+            break
+        else:
+            print("Invalid choice.")
+    print("Exiting...")
+
+
+def print_news_website_choice():
+    print('1 - Aniverse')
+    print('2 - Moca News')
+    print('3 - Natalie')
+    print('4 - WebNewtype')
+    print("0 - Return")
 
 
 if __name__ == "__main__":

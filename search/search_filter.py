@@ -1,11 +1,10 @@
 class SearchFilter:
     keywords = []
-    season = None # an array
+    season = None  # list
 
     def __init__(self, query=None, season=None):
         if query is None:
-            if query is None:
-                self.keywords = []
+            self.keywords = []
         elif isinstance(query, str):
             if len(query) == 0:
                 self.keywords = []
