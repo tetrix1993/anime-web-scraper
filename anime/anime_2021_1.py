@@ -892,7 +892,9 @@ class MushokuTenseiDownload(Winter2021AnimeDownload):
 
     def download_episode_preview_guess(self):
         folder = self.create_custom_directory('guess')
-        template = self.PAGE_PREFIX + '/wp-content/uploads/2021/%s/MusyokuTensei_ep%s_%s.jpg'
+        template_base = self.PAGE_PREFIX + '/wp-content/uploads/2021/%s/'
+        template_first = template_base + 'img_story%s.jpg'
+        template = template_base + 'MusyokuTensei_ep%s_%s.jpg'
         dt_month = datetime.now().strftime("%m").zfill(2)
         for i in range(self.FINAL_EPISODE):
             episode = str(i + 1).zfill(2)
@@ -900,6 +902,15 @@ class MushokuTenseiDownload(Winter2021AnimeDownload):
                 continue
             j = 0
             is_success = False
+            first_image_url = template_first % (dt_month, episode)
+            if self.is_valid_url(first_image_url, is_image=True):
+                j += 1
+                image_name = episode + '_' + str(j)
+                result = self.download_image(first_image_url, folder + '/' + image_name)
+                if result == 0:
+                    is_success = True
+                    print(self.__class__.__name__ + ' - Guessed successfully!')
+
             for k in range(201):
                 if j > self.IMAGES_PER_EPISODE or (j == 0 and k > 50):
                     break
