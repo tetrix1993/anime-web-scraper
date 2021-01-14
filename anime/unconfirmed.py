@@ -4,7 +4,7 @@ from anime.main_download import MainDownload
 
 # Bokutachi no Remake http://bokurema.com/ #ぼくリメ #bokurema @bokurema
 # Itai no wa https://bofuri.jp/story/ #防振り #bofuri @bofuri_anime
-# Kanojo mo Kanojo #kanokano #カノジョも彼女 @kanokano_anime
+# Kanojo mo Kanojo https://kanokano-anime.com/ #kanokano #カノジョも彼女 @kanokano_anime
 # Kobayashi-san Chi no Maid Dragon S https://maidragon.jp/2nd/ #maidragon @maidragon_anime
 # Osananajimi ga Zettai ni Makenai Love Comedy https://osamake.com/ #おさまけ
 # Princess Connect! Re:Dive S2 https://anime.priconne-redive.jp/ #アニメプリコネ #プリコネR #プリコネ @priconne_anime
@@ -73,7 +73,7 @@ class KanokanoDownload(UnconfirmedDownload):
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         self.image_list = []
-        self.add_to_image_list('teaser', 'https://kanokano-anime.com/assets/img/mv-img.png')
+        self.add_to_image_list('teaser', self.PAGE_PREFIX + 'assets/img/mv-img.png')
         self.download_image_list(folder)
 
 
@@ -124,7 +124,7 @@ class OsamakeDownload(UnconfirmedDownload):
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         image_objs = [
-            {'name': 'teaser', 'url': 'https://osamake.com/assets/top/main-t1b/vis.jpg'},
+            {'name': 'teaser', 'url': self.PAGE_PREFIX + 'assets/top/main-t1b/vis.jpg'},
             #{'name': 'teaser', 'url': 'https://pbs.twimg.com/media/EjZnt4CUcAIJeqR?format=jpg&name=4096x4096'},
         ]
         self.download_image_objects(image_objs, folder)
@@ -150,7 +150,7 @@ class Priconne2Download(UnconfirmedDownload):
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
-        image_objs = [{'name': 'teaser', 'url': 'https://anime.priconne-redive.jp/assets/images/top_kv.png'}]
+        image_objs = [{'name': 'teaser', 'url': self.PAGE_PREFIX + '/assets/images/top_kv.png'}]
         self.download_image_objects(image_objs, folder)
 
 
@@ -175,7 +175,7 @@ class SeijonoMaryokuDownload(UnconfirmedDownload):
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         self.image_list = []
-        self.add_to_image_list('kv1', 'https://seijyonomaryoku.jp/images/main-visual.jpg')
+        self.add_to_image_list('kv1', self.PAGE_PREFIX + 'images/main-visual.jpg')
         self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/EqDkgusU0AAdO1C?format=jpg&name=large')
         self.download_image_list(folder)
 
@@ -203,7 +203,7 @@ class SeireiGensoukiDownload(UnconfirmedDownload):
         folder = self.create_key_visual_directory()
         self.image_list = []
         self.add_to_image_list('teaser', 'https://pbs.twimg.com/media/EnytdwVVQAESUct?format=jpg&name=large')
-        #self.add_to_image_list('teaser', 'https://seireigensouki.com/wp/wp-content/uploads/2020/11/SG_teaser_logoc.png')
+        #self.add_to_image_list('teaser', self.PAGE_PREFIX + 'wp/wp-content/uploads/2020/11/SG_teaser_logoc.png')
         self.download_image_list(folder)
 
     def download_character(self):
@@ -377,10 +377,10 @@ class VladLoveDownload(UnconfirmedDownload):
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         self.image_list = []
-        self.add_to_image_list('visual01', 'https://www.vladlove.com/images/bg_cast.jpg')
-        self.add_to_image_list('visual02', 'https://www.vladlove.com/images/bg_intro.jpg')
-        self.add_to_image_list('visual03', 'https://www.vladlove.com/images/bg_character.jpg')
-        self.add_to_image_list('visual04', 'https://www.vladlove.com/images/img_visual06.jpg')
+        self.add_to_image_list('visual01', self.PAGE_PREFIX + 'images/bg_cast.jpg')
+        self.add_to_image_list('visual02', self.PAGE_PREFIX + 'images/bg_intro.jpg')
+        self.add_to_image_list('visual03', self.PAGE_PREFIX + 'images/bg_character.jpg')
+        self.add_to_image_list('visual04', self.PAGE_PREFIX + 'images/img_visual06.jpg')
         self.download_image_list(folder)
 
     def download_character(self):
