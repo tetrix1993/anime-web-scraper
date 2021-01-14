@@ -59,6 +59,8 @@ pip install portalocker
 
 ### New Anime
 The premiere date for the anime listed here has not been announced.
+* [Itai no wa Iya nano de Bougyoryoku ni Kyokufuri Shitai to Omoimasu. 2nd Season](https://bofuri.jp/)
+* [Kanojo mo Kanojo](https://kanokano-anime.com/)
 * [Kobayashi-san Chi no Maid Dragon S](https://maidragon.jp/2nd/)
 * [Osananajimi ga Zettai ni Makenai Love Comedy](https://osamake.com/)
 * [Princess Connect! Re:Dive 2nd Season](https://anime.priconne-redive.jp)

@@ -4,6 +4,7 @@ from anime.main_download import MainDownload
 
 # Bokutachi no Remake http://bokurema.com/ #ぼくリメ #bokurema @bokurema
 # Itai no wa https://bofuri.jp/story/ #防振り #bofuri @bofuri_anime
+# Kanojo mo Kanojo #kanokano #カノジョも彼女 @kanokano_anime
 # Kobayashi-san Chi no Maid Dragon S https://maidragon.jp/2nd/ #maidragon @maidragon_anime
 # Osananajimi ga Zettai ni Makenai Love Comedy https://osamake.com/ #おさまけ
 # Princess Connect! Re:Dive S2 https://anime.priconne-redive.jp/ #アニメプリコネ #プリコネR #プリコネ @priconne_anime
@@ -25,6 +26,7 @@ class UnconfirmedDownload(MainDownload):
         super().__init__()
 
 
+# Itai no wa Iya nano de Bougyoryoku ni Kyokufuri Shitai to Omoimasu. 2nd Season
 class Bofuri2Download(UnconfirmedDownload):
     title = "Itai no wa Iya nano de Bougyoryoku ni Kyokufuri Shitai to Omoimasu. 2nd Season"
     keywords = [title, 'bofuri', "BOFURI: I Don't Want to Get Hurt, so I'll Max Out My Defense.", '2nd']
@@ -47,6 +49,31 @@ class Bofuri2Download(UnconfirmedDownload):
         self.image_list = []
         self.add_to_image_list('animation_works', 'https://pbs.twimg.com/media/ErSRQUmVoAAkgt7?format=jpg&name=large')
         self.add_to_image_list('teaser', 'https://pbs.twimg.com/media/ErSKnRwW8AAjOyU?format=jpg&name=4096x4096')
+        self.download_image_list(folder)
+
+
+# Kanojo mo Kanojo
+class KanokanoDownload(UnconfirmedDownload):
+    title = 'Kanojo mo Kanojo'
+    keywords = [title]
+    folder_name = 'kanokano'
+
+    PAGE_PREFIX = 'https://kanokano-anime.com/'
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('teaser', 'https://kanokano-anime.com/assets/img/mv-img.png')
         self.download_image_list(folder)
 
 
