@@ -317,7 +317,7 @@ class HatarakuSaibouBlackDownload(Winter2021AnimeDownload):
                             continue
                         episode_url = story_url + a_tag['href'].replace('./', '')
                         episode_soup = self.get_soup(episode_url)
-                        div_image = episode_soup.find('div', class_='s_image')
+                        div_image = episode_soup.find('div', class_='p-story__img-swiper')
                         if div_image:
                             images = div_image.find_all('img')
                             self.image_list = []
