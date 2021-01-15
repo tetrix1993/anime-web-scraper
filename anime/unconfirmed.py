@@ -2,7 +2,7 @@ import os
 import anime.constants as constants
 from anime.main_download import MainDownload
 
-# Bokutachi no Remake http://bokurema.com/ #ぼくリメ #bokurema @bokurema
+# Bokutachi no Remake http://bokurema.com/ #ぼくリメ #bokurema @bokurema_anime
 # Itai no wa https://bofuri.jp/story/ #防振り #bofuri @bofuri_anime
 # Kanojo mo Kanojo https://kanokano-anime.com/ #kanokano #カノジョも彼女 @kanokano_anime
 # Osananajimi ga Zettai ni Makenai Love Comedy https://osamake.com/ #おさまけ
@@ -23,6 +23,31 @@ class UnconfirmedDownload(MainDownload):
 
     def __init__(self):
         super().__init__()
+
+
+# Bokutachi no Remake
+class BokuremaDownload(UnconfirmedDownload):
+    title = 'Bokutachi no Remake'
+    keywords = [title, 'Bokurema', 'Remake our Life!']
+    folder_name = 'bokurema'
+
+    PAGE_PREFIX = "http://bokurema.com/"
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('teaser', 'http://bokurema.com/assets/images/teaser_2/main_visual.png')
+        self.download_image_list(folder)
 
 
 # Itai no wa Iya nano de Bougyoryoku ni Kyokufuri Shitai to Omoimasu. 2nd Season
