@@ -14,6 +14,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 # Sentouin, Hakenshimasu! https://kisaragi-co.jp/ #sentoin @sentoin_anime
 # Shadows House https://shadowshouse-anime.com/ #シャドーハウス @shadowshouse_yj
 # Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita https://slime300-anime.com/ #スライム倒して300年 @slime300_PR
+# Vivy: Fluroite Eye's Song https://vivy-portal.com/ #ヴィヴィ @vivy_portal
 # Yakunara Mug Cup mo https://yakumo-project.com/ #やくもtv @yakumo_project
 
 
@@ -387,6 +388,32 @@ class Slime300Download(Spring2021AnimeDownload):
             print("Error in running " + self.__class__.__name__ + " - Character")
             print(e)
         self.download_image_objects(image_objs, folder)
+
+
+# Vivy: Fluorite Eye's Song
+class VivyDownload(Spring2021AnimeDownload):
+    title = "Vivy: Fluorite Eye's Song"
+    keywords = [title, "Vivy -Fluorite Eye's Song"]
+    folder_name = 'vivy'
+
+    PAGE_PREFIX = 'https://vivy-portal.com/'
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('teaser', self.PAGE_PREFIX + 'assets/img/kv_pc.jpg')
+        self.add_to_image_list('teaser_tw', 'https://pbs.twimg.com/media/Erv_rEcUcAMlQ3e?format=jpg&name=medium')
+        self.download_image_list(folder)
 
 
 # Yakunara Mug Cup mo
