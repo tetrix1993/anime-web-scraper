@@ -82,6 +82,7 @@ The premiere date for the anime listed here has not been announced.
 * [Ijiranaide, Nagatoro-san](https://www.nagatorosan.jp/)
 * [Isekai Maou to Shoukan Shoujo no Dorei Majutsu Ω](https://isekaimaou-anime.com/)
 * [Kyuukyoku Shinka Shita Full Dive RPG ga Genjitsu Yori mo Kusogee Dattara](https://fulldive-rpg.com/)
+* [Sayonara Watashi no Cramer](https://sayonara-cramer.com/tv/)
 * [Sentouin, Hakenshimasu!](https://kisaragi-co.jp/)
 * [Shadows House](https://shadowshouse-anime.com/)
 * [Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita](https://slime300-anime.com/)
