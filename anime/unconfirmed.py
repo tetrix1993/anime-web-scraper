@@ -5,7 +5,6 @@ from anime.main_download import MainDownload
 # Bokutachi no Remake http://bokurema.com/ #ぼくリメ #bokurema @bokurema
 # Itai no wa https://bofuri.jp/story/ #防振り #bofuri @bofuri_anime
 # Kanojo mo Kanojo https://kanokano-anime.com/ #kanokano #カノジョも彼女 @kanokano_anime
-# Kobayashi-san Chi no Maid Dragon S https://maidragon.jp/2nd/ #maidragon @maidragon_anime
 # Osananajimi ga Zettai ni Makenai Love Comedy https://osamake.com/ #おさまけ
 # Princess Connect! Re:Dive S2 https://anime.priconne-redive.jp/ #アニメプリコネ #プリコネR #プリコネ @priconne_anime
 # Seijo no Maryoku wa Bannou desu https://seijyonomaryoku.jp/ #seijyonoanime @seijyonoanime
@@ -55,7 +54,7 @@ class Bofuri2Download(UnconfirmedDownload):
 # Kanojo mo Kanojo
 class KanokanoDownload(UnconfirmedDownload):
     title = 'Kanojo mo Kanojo'
-    keywords = [title]
+    keywords = [title, 'Kanokano']
     folder_name = 'kanokano'
 
     PAGE_PREFIX = 'https://kanokano-anime.com/'
@@ -75,32 +74,6 @@ class KanokanoDownload(UnconfirmedDownload):
         self.image_list = []
         self.add_to_image_list('teaser', self.PAGE_PREFIX + 'assets/img/mv-img.png')
         self.download_image_list(folder)
-
-
-# Kobayashi-san Chi no Maid Dragon S
-class KobayashiMaidDragon2Download(UnconfirmedDownload):
-    title = 'Kobayashi-san Chi no Maid Dragon S'
-    keywords = [title, "Miss Kobayashi's Maid Dragon"]
-    folder_name = 'maidragon2'
-
-    PAGE_PREFIX = 'https://maidragon.jp/2nd/'
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_key_visual()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index', diff=2)
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        image_objs = [{'name': 'teaser', 'url': 'https://pbs.twimg.com/media/EfEVvJEUwAI6LmD?format=jpg&name=large'},
-                      {'name': 'teaser_covid', 'url': 'https://galleryamh2home.files.wordpress.com/2020/02/1597072728776.jpg'},
-                      {'name': 'newyear_2021', 'url': 'https://pbs.twimg.com/media/EqkvG-lUcAInMkK?format=jpg&name=4096x4096'},]
-        self.download_image_objects(image_objs, folder)
 
 
 # Osananajimi ga Zettai ni Makenai Love Comedy
