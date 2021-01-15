@@ -8,6 +8,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 # Cheat Kusushi no Slow Life: Isekai ni Tsukurou Drugstore https://www.cheat-kusushi.jp/ #チート薬師 #スローライフ @cheat_kusushi
 # Genjitsu Shugi Yuusha no Oukoku Saikenki https://genkoku-anime.com/ #現国アニメ @genkoku_info
 # Kobayashi-san Chi no Maid Dragon S https://maidragon.jp/2nd/ #maidragon @maidragon_anime
+# Shiroi Suna no Aquatope https://aquatope-anime.com/ #白い砂のアクアトープ @aquatope_anime
 
 
 # Summer 2021 Anime
@@ -128,4 +129,53 @@ class KobayashiMaidDragon2Download(Summer2021AnimeDownload):
         self.add_to_image_list('newyear_2021', 'https://pbs.twimg.com/media/EqkvG-lUcAInMkK?format=jpg&name=4096x4096')
         self.add_to_image_list('kv1_1', 'https://pbs.twimg.com/media/Ervaz89VEAkqjT-?format=jpg&name=900x900')
         self.add_to_image_list('kv1_2', 'https://maidragon.jp/2nd/img/pre/visual_02.png')
+        self.download_image_list(folder)
+
+
+# Shiroi Suna no Aquatobe
+class AquatopeDownload(Summer2021AnimeDownload):
+    title = 'Shiroi Suna no Aquatope'
+    keywords = [title, 'Aquatope of White Sand']
+    folder_name = 'aquatope'
+
+    PAGE_PREFIX = 'https://aquatope-anime.com/'
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('teaser_tw', 'https://pbs.twimg.com/media/ErwuT7rVQAISak1?format=jpg&name=large')
+        self.add_to_image_list('teaser', self.PAGE_PREFIX + 'wp/wp-content/themes/aquatope-teaser/_assets/images/kv/kv_pc@2x.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        self.image_list = []
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            articles = soup.find_all('article', class_='char--slider--block')
+            for article in articles:
+                pictures = article.find_all('picture')
+                for picture in pictures:
+                    source = picture.find('source')
+                    if source and source.has_attr('srcset'):
+                        try:
+                            image_url = source['srcset'].split(',')[-1].split(' ')[0]
+                            image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                            self.add_to_image_list(image_name, image_url)
+                        except:
+                            continue
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Character")
+            print(e)
         self.download_image_list(folder)
