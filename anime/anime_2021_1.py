@@ -849,7 +849,7 @@ class MushokuTenseiDownload(Winter2021AnimeDownload):
     folder_name = 'mushoku-tensei'
 
     PAGE_PREFIX = 'https://mushokutensei.jp'
-    FINAL_EPISODE = 26
+    FINAL_EPISODE = 23
     IMAGES_PER_EPISODE = 5
 
     def __init__(self):
@@ -860,6 +860,7 @@ class MushokuTenseiDownload(Winter2021AnimeDownload):
         self.download_episode_preview_guess()
         self.download_key_visual()
         self.download_character()
+        self.download_bluray()
 
     def download_episode_preview(self):
         try:
@@ -964,6 +965,59 @@ class MushokuTenseiDownload(Winter2021AnimeDownload):
             print("Error in running " + self.__class__.__name__ + " - Character")
             print(e)
         self.download_image_objects(image_objs, folder)
+
+    def download_bluray(self):
+        folder = self.create_bluray_directory()
+        cache_filepath = folder + '/' + 'cache'
+        processed = []
+        num_processed = 0
+        if os.path.exists(cache_filepath):
+            with open(cache_filepath, 'r') as f:
+                inputs = f.read()
+            processed = inputs.split(';')
+            num_processed = len(processed)
+
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + '/bluray/')
+            a_tags = soup.find_all('a', class_='bluraylist')
+            for i in range(len(a_tags)):
+                if not a_tags[i].has_attr('href'):
+                    continue
+                # Always evaluate the first volume's page to check for Blu-ray Bonus Illustrations
+                if i > 0:
+                    img = a_tags[i].find('div', class_='bluraylist_img')
+                    if img is None or not img.has_attr('data-imgload'):
+                        continue
+                    if 'printing' in img['data-imgload']:
+                        continue
+                    if str(i + 1) in processed:
+                        continue
+                bd_soup = self.get_soup(a_tags[i]['href'])
+                content = bd_soup.find('div', class_='content')
+                if content:
+                    images = content.find_all('img')
+                    self.image_list = []
+                    for image in images:
+                        if image.has_attr('src'):
+                            image_url = image['src']
+                            if len(image_url) > 4 and ('printing' in image_url or '.svg' in image_url[-4:]):
+                                continue
+                            image_url = self.clear_resize_in_url(image_url.split('?')[0])
+                            image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                            self.add_to_image_list(image_name, image_url)
+                    self.download_image_list(folder)
+                    if i > 0:
+                        processed.append(str(i + 1))
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Blu-Ray")
+            print(e)
+
+        if len(processed) > num_processed:
+            with open(cache_filepath, 'w+') as f:
+                for i in range(len(processed)):
+                    if i > 0:
+                        f.write(';')
+                    f.write(processed[i])
 
 
 # Non Non Biyori Nonstop
