@@ -1,5 +1,6 @@
 import os
 import math
+from anime.constants import HTTP_HEADER_USER_AGENT
 from anime.main_download import MainDownload
 
 
@@ -26,8 +27,8 @@ class AniverseMagazineDownload(ExternalDownload):
             self.episode = None
         self.num_of_pictures = num_of_pictures
         self.min_width = min_width
-        
-    def run(self):
+
+    def process_article(self):
         try:
             article_url = self.PAGE_PREFIX + self.article_id
             if self.num_of_pictures > 0: # Old Logic
@@ -62,6 +63,12 @@ class AniverseMagazineDownload(ExternalDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
+        
+    def run(self):
+        self.process_article()
+        if len(os.listdir(self.base_folder)) == 0:
+            print('No content is downloaded for article ID: %s' % self.article_id)
+            os.removedirs(self.base_folder)
 
 
 class MocaNewsDownload(ExternalDownload):
@@ -103,19 +110,17 @@ class MocaNewsDownload(ExternalDownload):
             image_id = str(img_id).zfill(3) + MocaNewsDownload.check_str(art_id, str(img_id).zfill(3))
             return 'https://moca-news.net/article/%s/%s/image/%s.jpg' % (art_id[0:8], art_id, image_id)
         return None
-    
-    def run(self):
+
+    def process_article(self):
         page_url = self.PAGE_PREFIX + self.article_id + "/01/"
-        headers = {}
-        headers['User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'
+        headers = HTTP_HEADER_USER_AGENT
         try:
             response = self.get_response(page_url, headers)
             article_id_split = self.article_id.split("/")
             if len(article_id_split) < 2:
                 return
             art_id = article_id_split[1]
-            data = {}
-            data['art_id'] = art_id
+            data = {'art_id': art_id}
             split1 = response.split('<img src="../image/!')
             for i in range(1, len(split1), 1):
                 split2 = split1[i].split('.jpg')[0]
@@ -132,12 +137,20 @@ class MocaNewsDownload(ExternalDownload):
                     continue
                 cookie = self.post_response(self.COOKIE_URL, headers, data)
                 img_id = str(img_num).zfill(3)
-                image_url = self.PAGE_PREFIX + self.article_id + "/image/" + img_id + self.check_str(art_id, img_id) + ".jpg"
+                image_url = self.PAGE_PREFIX + self.article_id + "/image/" + img_id + self.check_str(art_id,
+                                                                                                     img_id) + ".jpg"
                 headers['Cookie'] = 'imgkey' + img_id + '=' + str(cookie)
                 filepathWithoutExtension = image_filepath
                 self.download_image(image_url, filepathWithoutExtension, headers, is_mocanews=True)
         except Exception as e:
             print(e)
+    
+    def run(self):
+        self.process_article()
+        if len(os.listdir(self.base_folder)) == 0:
+            art_id = self.article_id[9:24] if len(self.article_id) == 24 else self.article_id
+            print('No content is downloaded for article ID: %s' % art_id)
+            os.removedirs(self.base_folder)
 
 
 class NatalieDownload(ExternalDownload):
@@ -158,7 +171,7 @@ class NatalieDownload(ExternalDownload):
             self.episode = str(episode)
         self.title = title
 
-    def run(self):
+    def process_article(self):
         if self.episode is None:
             if self.is_file_exists(self.base_folder + "/01.jpg"):
                 return
@@ -190,6 +203,12 @@ class NatalieDownload(ExternalDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+    def run(self):
+        self.process_article()
+        if len(os.listdir(self.base_folder)) == 0:
+            print('No content is downloaded for article ID: %s' % self.article_id)
+            os.removedirs(self.base_folder)
+
 
 class WebNewtypeDownload(ExternalDownload):
     folder_name = None
@@ -207,8 +226,8 @@ class WebNewtypeDownload(ExternalDownload):
             self.episode = str(episode).zfill(2)
         else:
             self.episode = str(episode)
-        
-    def run(self):
+
+    def process_article(self):
         try:
             if self.episode is None:
                 if self.is_file_exists(self.base_folder + "/01.jpg"):
@@ -234,3 +253,9 @@ class WebNewtypeDownload(ExternalDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
+        
+    def run(self):
+        self.process_article()
+        if len(os.listdir(self.base_folder)) == 0:
+            print('No content is downloaded for article ID: %s' % self.article_id)
+            os.removedirs(self.base_folder)
