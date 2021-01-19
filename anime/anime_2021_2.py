@@ -10,6 +10,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 # Ijiranaide, Nagatoro-san https://www.nagatorosan.jp/ #長瀞さん @nagatoro_tv
 # Isekai Maou to Shoukan Shoujo no Dorei Majutsu Ω https://isekaimaou-anime.com/ #異世界魔王 @isekaimaou
 # Kyuukyoku Shinka Shita Full Dive RPG ga Genjitsu Yori mo Kusogee Dattara https://fulldive-rpg.com/ #フルダイブ @fulldive_anime
+# Osananajimi ga Zettai ni Makenai Love Comedy https://osamake.com/ #おさまけ #osamake
 # Sayonara Watashi no Cramer https://sayonara-cramer.com/tv/ #さよなら私のクラマー @cramer_pr
 # Sentouin, Hakenshimasu! https://kisaragi-co.jp/ #sentoin @sentoin_anime
 # Shadows House https://shadowshouse-anime.com/ #シャドーハウス @shadowshouse_yj
@@ -244,6 +245,33 @@ class FullDiveRPGDownload(Spring2021AnimeDownload):
         self.add_to_image_list('visual01', 'https://pbs.twimg.com/media/EoYbnevVoAAnE3-?format=jpg&name=large')
         self.add_to_image_list('visual01_1', 'https://fulldive-rpg.com/img/main_visual.png')
         self.download_image_list(folder)
+
+
+# Osananajimi ga Zettai ni Makenai Love Comedy
+class OsamakeDownload(Spring2021AnimeDownload):
+    title = 'Osananajimi ga Zettai ni Makenai Love Comedy'
+    keywords = [title, 'Osamake']
+    folder_name = 'osamake'
+
+    PAGE_PREFIX = 'https://osamake.com/'
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        image_objs = [
+            {'name': 'teaser', 'url': self.PAGE_PREFIX + 'assets/top/main-t1b/vis.jpg'},
+            #{'name': 'teaser', 'url': 'https://pbs.twimg.com/media/EjZnt4CUcAIJeqR?format=jpg&name=4096x4096'},
+        ]
+        self.download_image_objects(image_objs, folder)
 
 
 # Sayonara Watashi no Cramer

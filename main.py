@@ -39,7 +39,7 @@ def run_process(download):
         with open(filepath, 'w+') as f:
             f.write(pid)
     download.run()
-    print("Ending %s" % class_name)
+    #print("Ending %s" % class_name)
     if os.path.exists(filepath):
         os.remove(filepath)
 

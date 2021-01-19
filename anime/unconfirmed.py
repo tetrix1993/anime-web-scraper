@@ -5,7 +5,6 @@ from anime.main_download import MainDownload
 # Bokutachi no Remake http://bokurema.com/ #ぼくリメ #bokurema @bokurema_anime
 # Itai no wa https://bofuri.jp/story/ #防振り #bofuri @bofuri_anime
 # Kanojo mo Kanojo https://kanokano-anime.com/ #kanokano #カノジョも彼女 @kanokano_anime
-# Osananajimi ga Zettai ni Makenai Love Comedy https://osamake.com/ #おさまけ
 # Princess Connect! Re:Dive S2 https://anime.priconne-redive.jp/ #アニメプリコネ #プリコネR #プリコネ @priconne_anime
 # Seijo no Maryoku wa Bannou desu https://seijyonomaryoku.jp/ #seijyonoanime @seijyonoanime
 # Seirei Gensouki https://seireigensouki.com/ #精霊幻想記 @seireigensouki
@@ -99,33 +98,6 @@ class KanokanoDownload(UnconfirmedDownload):
         self.image_list = []
         self.add_to_image_list('teaser', self.PAGE_PREFIX + 'assets/img/mv-img.png')
         self.download_image_list(folder)
-
-
-# Osananajimi ga Zettai ni Makenai Love Comedy
-class OsamakeDownload(UnconfirmedDownload):
-    title = 'Osananajimi ga Zettai ni Makenai Love Comedy'
-    keywords = [title, 'Osamake']
-    folder_name = 'osamake'
-
-    PAGE_PREFIX = 'https://osamake.com/'
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_key_visual()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        image_objs = [
-            {'name': 'teaser', 'url': self.PAGE_PREFIX + 'assets/top/main-t1b/vis.jpg'},
-            #{'name': 'teaser', 'url': 'https://pbs.twimg.com/media/EjZnt4CUcAIJeqR?format=jpg&name=4096x4096'},
-        ]
-        self.download_image_objects(image_objs, folder)
 
 
 # Princess Connect! Re:Dive 2nd Season
