@@ -9,8 +9,8 @@ from anime.main_download import MainDownload
 # Seijo no Maryoku wa Bannou desu https://seijyonomaryoku.jp/ #seijyonoanime @seijyonoanime
 # Seirei Gensouki https://seireigensouki.com/ #精霊幻想記 @seireigensouki
 # Shuumatsu no Harem https://end-harem-anime.com/ #終末のハーレム @harem_official_
-# Slow Loop https://slowlooptv.com/ @tanteiwamou_
-# Tantei wa Mou, Shindeiru. https://tanmoshi-anime.jp/ #たんもし
+# Slow Loop https://slowlooptv.com/ #slowloop @slowloop_tv
+# Tantei wa Mou, Shindeiru. https://tanmoshi-anime.jp/ #たんもし @tanteiwamou_
 # Tate no Yuusha S2 http://shieldhero-anime.jp/ #shieldhero #盾の勇者の成り上がり @shieldheroanime
 # Vlad Love https://www.vladlove.com/index.html #ぶらどらぶ #vladlove @VLADLOVE_ANIME
 
