@@ -750,10 +750,10 @@ class Kingdom3Download(Spring2020AnimeDownload):
 # Otome Game no Hametsu Flag shika Nai Akuyaku Reijou ni Tensei shiteshimatta...
 class HamehuraDownload(Spring2020AnimeDownload):
     title = "Otome Game no Hametsu Flag shika Nai Akuyaku Reijou ni Tensei shiteshimatta..."
-    keywords = [title, "Hamehura", "My Next Life as a Villainess: All Routes Lead to Doom!"]
+    keywords = [title, "Hamehura", "Hamefura", "My Next Life as a Villainess: All Routes Lead to Doom!"]
     folder_name = 'hamehura'
 
-    STORY_PAGE = "https://hamehura-anime.com/story"
+    PAGE_PREFIX = 'https://hamehura-anime.com/1st/'
     
     def __init__(self):
         super().__init__()
@@ -764,7 +764,7 @@ class HamehuraDownload(Spring2020AnimeDownload):
 
     def download_episode_preview(self):
         try:
-            soup = self.get_soup(self.STORY_PAGE)
+            soup = self.get_soup(self.PAGE_PREFIX + "story")
             story_content = soup.find_all('div', class_='story_content')
             for story in story_content:
                 title = story.find('p', class_='orn_ttl').text
@@ -804,8 +804,8 @@ class HamehuraDownload(Spring2020AnimeDownload):
     def download_key_visual(self):
         filepath = self.create_key_visual_directory()
         image_objs = [
-            {'name': 'kv4', 'url': 'https://hamehura-anime.com/wp/wp-content/uploads/2020/02/4thKV_FIX.jpg'},
-            {'name': 'kv5', 'url': 'https://hamehura-anime.com/wp/wp-content/uploads/2020/03/第5弾キービジュアル.jpg'}]
+            {'name': 'kv4', 'url': self.PAGE_PREFIX + 'wp/wp-content/uploads/2020/02/4thKV_FIX.jpg'},
+            {'name': 'kv5', 'url': self.PAGE_PREFIX + 'wp/wp-content/uploads/2020/03/第5弾キービジュアル.jpg'}]
         self.download_image_objects(image_objs, filepath)
 
 
