@@ -65,6 +65,7 @@ The premiere date for the anime listed here has not been announced.
 * [Princess Connect! Re:Dive 2nd Season](https://anime.priconne-redive.jp)
 * [Seijo no Maryoku wa Bannou desu](https://seijyonomaryoku.jp/)
 * [Seirei Gensouki](https://seireigensouki.com/)
+* [Shin no Nakama ja Nai to Yuusha no Party wo Oidasareta node, Henkyou de Slow Life suru Koto ni Shimashita](https://shinnonakama.com/)
 * [Shuumatsu no Harem](https://end-harem-anime.com/)
 * [Slow Loop](https://slowlooptv.com/)
 * [Tantei wa Mou, Shindeiru.](https://tanmoshi-anime.jp/)
