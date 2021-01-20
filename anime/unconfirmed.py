@@ -9,7 +9,8 @@ from anime.main_download import MainDownload
 # Seijo no Maryoku wa Bannou desu https://seijyonomaryoku.jp/ #seijyonoanime @seijyonoanime
 # Seirei Gensouki https://seireigensouki.com/ #精霊幻想記 @seireigensouki
 # Shuumatsu no Harem https://end-harem-anime.com/ #終末のハーレム @harem_official_
-# Slow Loop https://slowlooptv.com/
+# Slow Loop https://slowlooptv.com/ @tanteiwamou_
+# Tantei wa Mou, Shindeiru. https://tanmoshi-anime.jp/ #たんもし
 # Tate no Yuusha S2 http://shieldhero-anime.jp/ #shieldhero #盾の勇者の成り上がり @shieldheroanime
 # Vlad Love https://www.vladlove.com/index.html #ぶらどらぶ #vladlove @VLADLOVE_ANIME
 
@@ -313,6 +314,50 @@ class SlowLoopDownload(UnconfirmedDownload):
         self.image_list = []
         self.add_to_image_list('announce', 'https://pbs.twimg.com/media/Ep5-SoLUUAAHq36?format=jpg&name=4096x4096')
         self.add_to_image_list('announce_2', self.PAGE_PREFIX + 'images/top/v_001.jpg')
+        self.download_image_list(folder)
+
+
+# Tantei wa Mou, Shindeiru.
+class TanmoshiDownload(UnconfirmedDownload):
+    title = "Tantei wa Mou, Shindeiru."
+    keywords = [title, "Tanmoshi", "The Detective Is Already Dead"]
+    folder_name = 'tanmoshi'
+
+    PAGE_PREFIX = 'https://tanmoshi-anime.jp/'
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('kv1', 'https://pbs.twimg.com/media/EsCTT1KXAAUGy6V?format=jpg&name=4096x4096')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        self.image_list = []
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            wraps = soup.find_all('div', class_='charListWrap')
+            for wrap in wraps:
+                images = wrap.find_all('img')
+                for image in images:
+                    if image.has_attr('src'):
+                        image_url = self.PAGE_PREFIX + image['src']
+                        image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                        self.add_to_image_list(image_name, image_url)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Character")
+            print(e)
         self.download_image_list(folder)
 
 

@@ -67,6 +67,7 @@ The premiere date for the anime listed here has not been announced.
 * [Seirei Gensouki](https://seireigensouki.com/)
 * [Shuumatsu no Harem](https://end-harem-anime.com/)
 * [Slow Loop](https://slowlooptv.com/)
+* [Tantei wa Mou, Shindeiru.](https://tanmoshi-anime.jp/)
 * [Tate no Yuusha no Nariagari 2nd Season](http://shieldhero-anime.jp)
 * [Vlad Love](https://www.vladlove.com/)
 
