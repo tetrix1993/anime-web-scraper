@@ -565,6 +565,9 @@ class GochiUsa3Download(Fall2020AnimeDownload):
 
     def download_bluray(self):
         folder = self.create_bluray_directory()
+        self.image_list = []
+        self.add_to_image_list('bd_box', 'https://pbs.twimg.com/media/EsPmmb6VcAARhF0?format=jpg&name=large')
+        self.download_image_list(folder)
         try:
             soup = self.get_soup(self.PAGE_PREFIX + 'bddvd/', decode=True)
             boxes = soup.find_all('div', class_='nwu_box')
