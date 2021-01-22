@@ -1201,6 +1201,7 @@ class KakushiDungeonDownload(Winter2021AnimeDownload):
     def download_bluray(self):
         folder = self.create_bluray_directory()
         self.image_list = []
+        self.add_to_image_list('music_ed', 'https://pbs.twimg.com/media/EsUxe--UwAAuYHv?format=jpg&name=medium')
         try:
             for i in ['index', 'music']:
                 soup = self.get_soup(self.PAGE_PREFIX + 'bdcd/%s.html' % i)
