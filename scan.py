@@ -211,11 +211,12 @@ class WebNewtypeScanner(MainScanner):
     PAGE_PREFIX = "https://webnewtype.com/"
     SEARCH_PREFIX = "https://webnewtype.com/news/nrsearch/"
     
-    def __init__(self, keyword, base_folder, last_episode=None):
+    def __init__(self, keyword, base_folder, last_episode=None, first_episode=0):
         super().__init__()
         self.keyword = keyword
         self.base_folder = base_folder.replace("download/","") + "/" + EXTERNAL_FOLDER_WEBNEWTYPE
         self.last_episode = last_episode
+        self.first_episode = first_episode
 
     @staticmethod
     def has_results(text):
@@ -266,6 +267,12 @@ class WebNewtypeScanner(MainScanner):
                 continue
             if os.path.isfile(self.base_folder + "/" + episode + "_01.jpg"):
                 return 1
+            is_first_episode = False
+            if self.first_episode != 0 and episode != 'last':
+                if int(episode) < self.first_episode:
+                    return 1
+                elif int(episode) == self.first_episode:
+                    is_first_episode = True
             split4 = split2[i].split('<a href="')
             if len(split4) < 2:
                 continue
@@ -274,6 +281,8 @@ class WebNewtypeScanner(MainScanner):
             if len(article_id) == 0:
                 continue
             WebNewtypeDownload(article_id, self.base_folder, episode).run()
+            if is_first_episode:
+                return 1
         return 0
 
     def run(self):

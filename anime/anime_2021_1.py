@@ -3,7 +3,7 @@ import os
 from anime.main_download import MainDownload
 from anime.external_download import MocaNewsDownload
 from datetime import datetime
-from scan import MocaNewsScanner, NatalieScanner, AniverseMagazineScanner
+from scan import MocaNewsScanner, NatalieScanner, AniverseMagazineScanner, WebNewtypeScanner
 
 
 # Dr. Stone: Stone Wars https://dr-stone.jp/ #DrSTONE @DrSTONE_off [MON]
@@ -1491,7 +1491,8 @@ class Tensura2Download(Winter2021AnimeDownload):
 
     def download_episode_preview_external(self):
         jp_title = '転生したらスライムだった件'
-        AniverseMagazineScanner(jp_title, self.base_folder, last_episode=48, min_width=1000, end_date='20210108').run()
+        WebNewtypeScanner('転生したらスライムだった件', self.base_folder, last_episode=48, first_episode=25).run()
+        #AniverseMagazineScanner(jp_title, self.base_folder, last_episode=48, min_width=1000, end_date='20210108').run()
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
