@@ -368,7 +368,8 @@ class ShadowsHouseDownload(Spring2021AnimeDownload):
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         self.image_list = []
-        self.add_to_image_list('teaser', 'https://shadowshouse-anime.com/assets/img/img_kv_pc.jpg')
+        self.add_to_image_list('teaser', self.PAGE_PREFIX + 'assets/img/img_kv_pc.jpg')
+        self.add_to_image_list('chara_visual_louise', 'https://pbs.twimg.com/media/EsPEImfUYAEkuL1?format=jpg&name=large')
         self.download_image_list(folder)
 
 
