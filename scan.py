@@ -26,6 +26,7 @@ class MainScanner():
             headers['User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'
         try:
             result = requests.get(url, headers=headers)
+            result.raise_for_status()
             if (decode):
                 response = str(result.content.decode())
             else:
@@ -41,6 +42,7 @@ class MainScanner():
             headers['User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'
         try:
             result = requests.get(url, headers=headers)
+            result.raise_for_status()
             if decode:
                 if charset is None:
                     return bs(result.content.decode(), 'html.parser')
@@ -106,11 +108,11 @@ class AniverseMagazineScanner(MainScanner):
 
     @staticmethod
     def has_results(text):
-        return "<h2>Sorry, nothing found.</h2>" not in text
+        return len(text) > 0 and "<h2>Sorry, nothing found.</h2>" not in text
 
     @staticmethod
     def has_next_page(text):
-        return '<i class="fa fa-long-arrow-right">' in text
+        return len(text) > 0 and '<i class="fa fa-long-arrow-right">' in text
 
     @staticmethod
     def get_episode_num(result, suffix):
@@ -220,11 +222,11 @@ class WebNewtypeScanner(MainScanner):
 
     @staticmethod
     def has_results(text):
-        return "<li>記事はありません</li>" not in text
+        return len(text) > 0 and "<li>記事はありません</li>" not in text
 
     @staticmethod
     def has_next_page(text):
-        return '<img src="/img/pager_right.png"' in text and '<span class="pageNumber"><img src="/img/pager_right.png"' not in text
+        return len(text) > 0 and '<img src="/img/pager_right.png"' in text and '<span class="pageNumber"><img src="/img/pager_right.png"' not in text
 
     @staticmethod
     def get_episode_num(result):
@@ -413,11 +415,15 @@ class NatalieScanner(MainScanner):
 
     @staticmethod
     def has_results(soup):
+        if soup is None:
+            return False
         empty_section = soup.find('div', class_='NA_section_empty')
         return empty_section is None
 
     @staticmethod
     def has_next_page(soup):
+        if soup is None:
+            return False
         next_page = soup.find('li', class_='NA_pager_next')
         return next_page is not None
 
