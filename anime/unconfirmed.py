@@ -5,6 +5,7 @@ from anime.main_download import MainDownload
 # Bokutachi no Remake http://bokurema.com/ #ぼくリメ #bokurema @bokurema_anime
 # Itai no wa https://bofuri.jp/story/ #防振り #bofuri @bofuri_anime
 # Kanojo mo Kanojo https://kanokano-anime.com/ #kanokano #カノジョも彼女 @kanokano_anime
+# Megami-ryou no Ryoubo-kun. https://megamiryou.com/ #女神寮 @megamiryou
 # Princess Connect! Re:Dive S2 https://anime.priconne-redive.jp/ #アニメプリコネ #プリコネR #プリコネ @priconne_anime
 # Seijo no Maryoku wa Bannou desu https://seijyonomaryoku.jp/ #seijyonoanime @seijyonoanime
 # Seirei Gensouki https://seireigensouki.com/ #精霊幻想記 @seireigensouki
@@ -99,6 +100,52 @@ class KanokanoDownload(UnconfirmedDownload):
         folder = self.create_key_visual_directory()
         self.image_list = []
         self.add_to_image_list('teaser', self.PAGE_PREFIX + 'assets/img/mv-img.png')
+        self.download_image_list(folder)
+
+
+# Megami-ryou no Ryoubo-kun.
+class MegamiryouDownload(UnconfirmedDownload):
+    title = 'Megami-ryou no Ryoubo-kun'
+    keywords = [title, 'Megamiryou', "Mother of the Goddess' Dormitory"]
+    folder_name = 'megamiryou'
+
+    PAGE_PREFIX = 'https://megamiryou.com/'
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('teaser_tw', 'https://pbs.twimg.com/media/EsTnmn-U0Acx83l?format=jpg&name=large')
+        self.add_to_image_list('teaser', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv_pc.png')
+        self.add_to_image_list('tzOriginImg', self.PAGE_PREFIX + 'core_sys/images/main/tz/tzOriginImg.png')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        self.image_list = []
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            char_wraps = soup.find_all('div', class_='charWrap')
+            for char_wrap in char_wraps:
+                for char in ['charImg', 'charStand']:
+                    char_class = char_wrap.find('div', class_=char)
+                    if char_class:
+                        images = char_class.find_all('img')
+                        for image in images:
+                            if image and image.has_attr('src'):
+                                image_url = self.PAGE_PREFIX + image['src']
+                                image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                                self.add_to_image_list(image_name, image_url)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Character")
+            print(e)
         self.download_image_list(folder)
 
 

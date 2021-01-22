@@ -62,6 +62,7 @@ The premiere date for the anime listed here has not been announced.
 * [Bokutachi no Remake](http://bokurema.com/)
 * [Itai no wa Iya nano de Bougyoryoku ni Kyokufuri Shitai to Omoimasu. 2nd Season](https://bofuri.jp/)
 * [Kanojo mo Kanojo](https://kanokano-anime.com/)
+* [Megami-ryou no Ryoubo-kun.](https://megamiryou.com/)
 * [Princess Connect! Re:Dive 2nd Season](https://anime.priconne-redive.jp)
 * [Seijo no Maryoku wa Bannou desu](https://seijyonomaryoku.jp/)
 * [Seirei Gensouki](https://seireigensouki.com/)
