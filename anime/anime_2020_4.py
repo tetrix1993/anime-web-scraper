@@ -1532,12 +1532,23 @@ class KimisenDownload(Fall2020AnimeDownload):
             soup = self.get_soup(self.PAGE_PREFIX + 'bddvd/')
             sub_containers = soup.find_all('div', class_='sub-container')
             for sub_container in sub_containers:
+                id = None
+                if sub_container.has_attr('id'):
+                    id = sub_container['id']
+                else:
+                    h3_tag = sub_container.find_previous_sibling('h3')
+                    if h3_tag and h3_tag.has_attr('id'):
+                        id = h3_tag['id']
+                if id is None:
+                    continue
                 img_tags = sub_container.find_all('img')
                 image_objs = []
                 for img_tag in img_tags:
                     if img_tag.has_attr('src'):
                         image_url = self.PAGE_PREFIX + img_tag['src'].replace('../', '').split('?')[0]
-                        image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                        if '_np.png' in image_url or '-text.png' in image_url:
+                            continue
+                        image_name = id + '_' + self.extract_image_name_from_url(image_url, with_extension=False)
                         image_objs.append({'name': image_name, 'url': image_url})
                 self.download_image_objects(image_objs, folder)
         except Exception as e:
