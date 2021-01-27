@@ -2829,6 +2829,9 @@ class SigrdrifaDownload(Fall2020AnimeDownload):
         image_objs = [
             {'name': 'img_special_01_2', 'url': 'https://sigururi.com/news/SYS/CONTENTS/2020102619501742165262'},
             {'name': 'bd_bonus_all', 'url': 'https://pbs.twimg.com/media/Ep063xuU0AAeAA8?format=jpg&name=large'},
+            {'name': 'bd_1', 'url': 'https://pbs.twimg.com/media/ElWEhqwVkAAv4eW?format=jpg&name=900x900'},
+            {'name': 'bd_2', 'url': 'https://pbs.twimg.com/media/Ep7VchWU0AQFA4e?format=jpg&name=900x900'},
+            {'name': 'bd_3', 'url': 'https://pbs.twimg.com/media/EsvnKGlUcAUYhRk?format=jpg&name=medium'},
         ]
         self.download_image_objects(image_objs, folder)
         try:
