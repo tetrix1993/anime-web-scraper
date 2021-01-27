@@ -2,9 +2,13 @@
 Download images of anime's episode previews from official and news websites.
 
 ## Introduction
-The Anime Web Scraper downloads images of previews of episodes from official websites. The program is written in Python 3.
+The Anime Web Scraper is a script that downloads images of previews of episodes from official websites. The scraper also detects and downloads character visuals, Blu-ray cover and bonus illustrations for newer anime (mostly from 2020). The program is written in Python 3.
 
 Click [here](https://youtu.be/K-83J5aZ5P0) to see the demo on YouTube.
+
+## Motivations
+
+The motivations for building the scraper is to download contents quickly for blogging purpose (e.g. posting on Twitter).
 
 ## Setting Up
 1. Download and install the latest version of [Python](https://www.python.org/downloads/)
@@ -22,7 +26,7 @@ pip install portalocker
 ## Running the Program
 1. Using the Command Prompt (Terminal for MacOS), change to the directory to where the file `program.py` is located.
 2. Run the following command: `python program.py`
-3. Select the filtering method to search for anime to be selected by entering the number. Enter '0' to exit.\
+3. Select the filtering method (1, 2, or 3) to search for anime to be selected by entering the number. Enter '0' to exit.\
 ![example4.png](/images/example4.png)
     1. Filter by Keyword
         1. Enter the keyword to find matching anime. To list all anime available, just press 'Enter' without specifying any keyword.
@@ -46,6 +50,25 @@ pip install portalocker
 ![example5.png](/images/example7.png)
 5. The images will be saved at the folder `download`.\
 ![example3.jpg](/images/example3.jpg)
+
+### Other Commands in the Program
+1. Option 4 - Identify the season the anime belongs to
+    * Similar to Option `1`, filter by keyword, then select the anime to see which season it belongs to.
+2. Option 5 - Download from news website
+    * Select the news website (Aniverse, MocaNews, Natalie, WebNewtype) to download from.
+    * Upon selecting, enter the Article ID to download the images in the article.
+    * Examples:
+        * Aniverse: Article ID is `12345` from `https://aniverse-mag.com/archives/12345`
+        * MocaNews: Article ID is `2021010101000a_` from `https://moca-news.net/article/20210101/2021010101000a_/01/`
+        * Natalie: Article ID is `12345` from `https://natalie.mu/comic/news/414049`
+        * WebNewtype: Article ID is `12345` from `https://webnewtype.com/news/article/12345/`
+    * The images will be saved at the folder `download\news\{website}\{article_id}`, where
+        * `{website}` is
+            * `aniverse` for Aniverse;
+            * `moca` for MocaNews;
+            * `natalie` for Natalie; and
+            * `wnt` for WebNewtype
+        * `{article_id}` is the Article ID.
 
 ## Websites
 <details>
