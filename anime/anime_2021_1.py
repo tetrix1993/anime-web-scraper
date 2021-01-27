@@ -906,8 +906,10 @@ class MushokuTenseiDownload(Winter2021AnimeDownload):
                 image_url = template_first_2 % (dt_month, '')
             else:
                 image_url = template_first_2 % (dt_month, '-' + str(i))
+            image_name = 'main_' + dt_month + '_' + str(i)
+            if self.is_image_exists(image_name, folder):
+                continue
             if self.is_valid_url(image_url, is_image=True):
-                image_name = 'main_' + dt_month + '_' + str(i)
                 self.download_image(image_url, folder + '/' + image_name)
             else:
                 break
