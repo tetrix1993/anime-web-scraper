@@ -12,9 +12,11 @@ def run():
     if not os.path.exists(PROCESS_FOLDER):
         os.makedirs(PROCESS_FOLDER)
 
-    downloads = [HxErosDownload(), MaohgakuinDownload(), ReZero2Download()]
-    subclasses = Fall2020AnimeDownload.__subclasses__() \
-        + Winter2021AnimeDownload.__subclasses__() \
+    downloads = [HxErosDownload(), ReZero2Download(), AdashimaDownload(), AssaultLilyDownload(),
+                 GochiUsa3Download(), Higurashi2020Download(), IwakakeruDownload(), JujutsuKaisenDownload(),
+                 KamisamaNiNattaHiDownload(), KamihiroDownload(), MaesetsuDownload(), Mahouka2Download(),
+                 OchifuruDownload(), SigrdrifaDownload(), StrikeWitches3Download()]
+    subclasses = Winter2021AnimeDownload.__subclasses__() \
         + Spring2021AnimeDownload.__subclasses__() \
         + Summer2021AnimeDownload.__subclasses__() \
         + UnconfirmedDownload.__subclasses__()
