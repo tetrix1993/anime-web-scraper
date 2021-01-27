@@ -899,6 +899,19 @@ class MushokuTenseiDownload(Winter2021AnimeDownload):
         template_first = template_base + 'img_story%s.jpg'
         template = template_base + 'MusyokuTensei_ep%s_%s.jpg'
         dt_month = datetime.now().strftime("%m").zfill(2)
+
+        template_first_2 = template_base + 'メイン%s.jpg'
+        for i in range(20):
+            if i == 0:
+                image_url = template_first_2 % (dt_month, '')
+            else:
+                image_url = template_first_2 % (dt_month, '-' + str(i))
+            if self.is_valid_url(image_url, is_image=True):
+                image_name = 'main_' + dt_month + '_' + str(i)
+                self.download_image(image_url, folder + '/' + image_name)
+            else:
+                break
+
         for i in range(self.FINAL_EPISODE):
             episode = str(i + 1).zfill(2)
             if self.is_image_exists(episode + '_1'):
