@@ -12,7 +12,7 @@ def run():
     if not os.path.exists(PROCESS_FOLDER):
         os.makedirs(PROCESS_FOLDER)
 
-    downloads = [HxErosDownload(), ReZero2Download(), AdashimaDownload(), AssaultLilyDownload(),
+    downloads = [HxErosDownload(), ReZero2Download(), AssaultLilyDownload(),
                  GochiUsa3Download(), Higurashi2020Download(), IwakakeruDownload(), JujutsuKaisenDownload(),
                  KamisamaNiNattaHiDownload(), KamihiroDownload(), MaesetsuDownload(), Mahouka2Download(),
                  OchifuruDownload(), SigrdrifaDownload(), StrikeWitches3Download()]
