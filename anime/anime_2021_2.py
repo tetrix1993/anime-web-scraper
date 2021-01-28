@@ -371,6 +371,15 @@ class ShadowsHouseDownload(Spring2021AnimeDownload):
         self.add_to_image_list('teaser', self.PAGE_PREFIX + 'assets/img/img_kv_pc.jpg')
         self.add_to_image_list('chara_visual_louise', 'https://pbs.twimg.com/media/EsPEImfUYAEkuL1?format=jpg&name=large')
         self.download_image_list(folder)
+        for i in range(10):
+            image_name = 'img_kv_%s' % str(i + 1).zfill(2)
+            if self.is_image_exists(image_name, folder):
+                continue
+            image_url = self.PAGE_PREFIX + 'assets/img/%s.jpg' % image_name
+            if self.is_valid_url(image_url, is_image=True):
+                self.download_image(image_url, folder + '/' + image_name)
+            else:
+                break
 
 
 # Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita
