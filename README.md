@@ -100,6 +100,7 @@ The premiere date for the anime listed here has not been announced.
 * [Cheat Kusushi no Slow Life: Isekai ni Tsukurou Drugstore](https://www.cheat-kusushi.jp/)
 * [Genjitsu Shugi Yuusha no Oukoku Saikenki](https://genkoku-anime.com/)
 * [Kobayashi-san Chi no Maid Dragon S](https://maidragon.jp/2nd/)
+* [Meikyuu Black Company](https://meikyubc-anime.com/)
 * [Otome Game no Hametsu Flag shika Nai Akuyaku Reijou ni Tensei shiteshimatta... X](https://hamehura-anime.com/)
 * [Shiroi Suna no Aquatope](https://aquatope-anime.com/)
 
