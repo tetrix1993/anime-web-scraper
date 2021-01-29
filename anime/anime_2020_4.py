@@ -919,6 +919,8 @@ class IwakakeruDownload(Fall2020AnimeDownload):
             {'name': 'bd_1_2', 'url': 'https://pbs.twimg.com/media/Ek_keAgU0AAHRP_?format=jpg&name=4096x4096'},
             {'name': 'bd_2_1', 'url': 'https://pbs.twimg.com/media/EpZxb0LVQAEg8Fd?format=jpg&name=4096x4096'},
             {'name': 'bd_2_2', 'url': 'https://pbs.twimg.com/media/EpZxhXeUUAA1UCS?format=jpg&name=4096x4096'},
+            {'name': 'bd_3_1', 'url': 'https://pbs.twimg.com/media/Es4gu_BUUAIjYiv?format=jpg&name=4096x4096'},
+            {'name': 'bd_3_2', 'url': 'https://pbs.twimg.com/media/Es4gu_YU4AM_ojP?format=jpg&name=4096x4096'},
         ]
         self.download_image_objects(image_objs, folder)
 
