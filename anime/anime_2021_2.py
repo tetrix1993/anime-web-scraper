@@ -198,9 +198,11 @@ class IsekaiMaou2Download(Spring2021AnimeDownload):
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
+        upload_url = self.PAGE_PREFIX + 'wp/wp-content/uploads/2021/'
         self.image_list = []
         self.add_to_image_list('teaser', 'https://64.media.tumblr.com/5b236a6eb6f70ee69097815a8b9bc9ce/eb7b1b50731487c4-05/s1280x1920/04c8ff15baf833620d39f90e910d23aff8fa0019.png')
-        self.add_to_image_list('chara_visual_shera', self.PAGE_PREFIX + 'wp/wp-content/uploads/2021/01/異世界魔王Ω_添い寝ビジュアルシェラ_mini.jpg')
+        self.add_to_image_list('chara_visual_shera', upload_url + '01/異世界魔王Ω_添い寝ビジュアルシェラ_mini.jpg')
+        self.add_to_image_list('chara_visual_rem', upload_url + '01/異世界魔王Ω_添い寝ビジュアルレム_mini.jpg')
         self.download_image_list(folder)
 
     def download_character(self):
