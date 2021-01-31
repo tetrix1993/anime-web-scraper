@@ -405,11 +405,12 @@ class Slime300Download(Spring2021AnimeDownload):
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
-        image_objs = [
-            {'name': 'keyvisual01', 'url': self.PAGE_PREFIX + '/static/8e3ba0a8b42628959e71b7f52c737a6a/eeb1b/keyvisual01.png'},
-            {'name': 'keyvisual02', 'url': self.PAGE_PREFIX + '/static/b915596c773e96cb35385563193752e8/eeb1b/keyvisual02.png'},
-        ]
-        self.download_image_objects(image_objs, folder)
+        self.image_list = []
+        self.add_to_image_list('keyvisual01', self.PAGE_PREFIX + '/static/8e3ba0a8b42628959e71b7f52c737a6a/eeb1b/keyvisual01.png')
+        self.add_to_image_list('keyvisual02', self.PAGE_PREFIX + '/static/a2a5d8a583acad23e9276580866d3aac/eeb1b/keyvisual02.png')
+        self.add_to_image_list('keyvisual03', self.PAGE_PREFIX + '/static/a03236e46bc620b60292da71514f9253/40ffe/keyvisual03.png')
+        self.add_to_image_list('keyvisual04', self.PAGE_PREFIX + '/static/98f5d8537a23ebf5b357bac8d63fcf39/eeb1b/keyvisual04.png')
+        self.download_image_list(folder)
 
     def download_character(self):
         folder = self.create_character_directory()
