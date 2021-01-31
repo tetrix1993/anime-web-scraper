@@ -91,6 +91,7 @@ The premiere date for the anime listed here has not been announced.
 * [Seirei Gensouki](https://seireigensouki.com/)
 * [Shikkakumon no Saikyou Kenja](Shikkakumon no Saikyou Kenja)
 * [Shin no Nakama ja Nai to Yuusha no Party wo Oidasareta node, Henkyou de Slow Life suru Koto ni Shimashita](https://shinnonakama.com/)
+* [Shokei Shoujo no Virgin Road](http://virgin-road.com/)
 * [Shuumatsu no Harem](https://end-harem-anime.com/)
 * [Slow Loop](https://slowlooptv.com/)
 * [Tantei wa Mou, Shindeiru.](https://tanmoshi-anime.jp/)
