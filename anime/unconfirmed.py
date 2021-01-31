@@ -14,6 +14,7 @@ from anime.main_download import MainDownload
 # Slow Loop https://slowlooptv.com/ #slowloop @slowloop_tv
 # Tantei wa Mou, Shindeiru. https://tanmoshi-anime.jp/ #たんもし @tanteiwamou_
 # Tate no Yuusha S2 http://shieldhero-anime.jp/ #shieldhero #盾の勇者の成り上がり @shieldheroanime
+# Tensai Ouji no Akaji Kokka Saisei Jutsu: Souda, Baikoku shiyou #天才王子の赤字国家再生術 @tensaiouji_PR
 # Vlad Love https://www.vladlove.com/index.html #ぶらどらぶ #vladlove @VLADLOVE_ANIME
 
 
@@ -456,6 +457,31 @@ class TateNoYuusha2Download(UnconfirmedDownload):
             {'name': 'kv1', 'url': 'https://pbs.twimg.com/media/EhHFvyVU4AA7cUw?format=jpg&name=large'}
         ]
         self.download_image_objects(image_objs, folder)
+
+
+# Tensai Ouji no Akaji Kokka Saisei Jutsu: Souda, Baikoku shiyou
+class TensaiOujiDownload(UnconfirmedDownload):
+    title = 'Tensai Ouji no Akaji Kokka Saisei Jutsu: Souda, Baikoku shiyou'
+    keywords = [title, 'tensaiouji']
+    folder_name = 'tensaiouji'
+
+    PAGE_PREFIX = 'https://tensaiouji-anime.com/'
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('kv', self.PAGE_PREFIX + 'core_sys/images/main/home/kv.jpg')
+        self.download_image_list(folder)
 
 
 # Vlad Love

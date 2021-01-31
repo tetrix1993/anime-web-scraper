@@ -94,6 +94,7 @@ The premiere date for the anime listed here has not been announced.
 * [Slow Loop](https://slowlooptv.com/)
 * [Tantei wa Mou, Shindeiru.](https://tanmoshi-anime.jp/)
 * [Tate no Yuusha no Nariagari 2nd Season](http://shieldhero-anime.jp)
+* [Tensai Ouji no Akaji Kokka Saisei Jutsu: Souda, Baikoku shiyou](https://tensaiouji-anime.com/)
 * [Vlad Love](https://www.vladlove.com/)
 
 ### Summer 2021 Anime
