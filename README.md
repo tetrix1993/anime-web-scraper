@@ -83,6 +83,7 @@ pip install portalocker
 ### New Anime
 The premiere date for the anime listed here has not been announced.
 * [Bokutachi no Remake](http://bokurema.com/)
+* [Goblin Slayer 2nd Season](http://www.goblinslayer.jp/)
 * [Itai no wa Iya nano de Bougyoryoku ni Kyokufuri Shitai to Omoimasu. 2nd Season](https://bofuri.jp/)
 * [Kanojo mo Kanojo](https://kanokano-anime.com/)
 * [Megami-ryou no Ryoubo-kun.](https://megamiryou.com/)

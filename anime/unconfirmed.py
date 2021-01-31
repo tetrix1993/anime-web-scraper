@@ -3,6 +3,7 @@ import anime.constants as constants
 from anime.main_download import MainDownload
 
 # Bokutachi no Remake http://bokurema.com/ #ぼくリメ #bokurema @bokurema_anime
+# Goblin Slayer S2 http://www.goblinslayer.jp/ #ゴブスレ @GoblinSlayer_GA
 # Itai no wa https://bofuri.jp/story/ #防振り #bofuri @bofuri_anime
 # Kanojo mo Kanojo https://kanokano-anime.com/ #kanokano #カノジョも彼女 @kanokano_anime
 # Megami-ryou no Ryoubo-kun. https://megamiryou.com/ #女神寮 @megamiryou
@@ -52,6 +53,31 @@ class BokuremaDownload(UnconfirmedDownload):
         folder = self.create_key_visual_directory()
         self.image_list = []
         self.add_to_image_list('teaser', 'http://bokurema.com/assets/images/teaser_2/main_visual.png')
+        self.download_image_list(folder)
+
+
+# Goblin Slayer 2nd Season
+class GoblinSlayer2Download(UnconfirmedDownload):
+    title = "Goblin Slayer 2nd Season"
+    keywords = [title]
+    folder_name = 'goblin-slayer2'
+
+    PAGE_PREFIX = 'http://www.goblinslayer.jp/'
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('teaser', 'https://pbs.twimg.com/media/EtDYBThUYAEBIWI?format=jpg&name=4096x4096')
         self.download_image_list(folder)
 
 
