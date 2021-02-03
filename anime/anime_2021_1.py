@@ -898,6 +898,7 @@ class MushokuTenseiDownload(Winter2021AnimeDownload):
         template_base = self.PAGE_PREFIX + '/wp-content/uploads/2021/%s/'
         template_first = template_base + 'img_story%s.jpg'
         template = template_base + 'MusyokuTensei_ep%s_%s.jpg'
+        template_r = template_base + 'MusyokuTensei_ep%s_r_%s.jpg'
         dt_month = datetime.now().strftime("%m").zfill(2)
 
         template_first_2 = template_base + 'メイン%s.jpg'
@@ -932,14 +933,15 @@ class MushokuTenseiDownload(Winter2021AnimeDownload):
             for k in range(201):
                 if j > self.IMAGES_PER_EPISODE or (j == 0 and k > 50):
                     break
-                image_url = template % (dt_month, episode, str(k).zfill(4))
-                if self.is_valid_url(image_url, is_image=True):
-                    j += 1
-                    image_name = self.extract_image_name_from_url(image_url, with_extension=False)
-                    result = self.download_image(image_url, folder + '/' + image_name)
-                    if result == 0:
-                        is_success = True
-                        print(self.__class__.__name__ + ' - Guessed successfully!')
+                for template_ in [template, template_r]:
+                    image_url = template_ % (dt_month, episode, str(k).zfill(4))
+                    if self.is_valid_url(image_url, is_image=True):
+                        j += 1
+                        image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                        result = self.download_image(image_url, folder + '/' + image_name)
+                        if result == 0:
+                            is_success = True
+                            print(self.__class__.__name__ + ' - Guessed successfully!')
             if not is_success:
                 if len(os.listdir(folder)) == 0:
                     os.rmdir(folder)
