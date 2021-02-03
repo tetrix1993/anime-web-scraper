@@ -923,7 +923,7 @@ class MushokuTenseiDownload(Winter2021AnimeDownload):
             first_image_url = template_first % (dt_month, episode)
             if self.is_valid_url(first_image_url, is_image=True):
                 j += 1
-                image_name = episode + '_' + str(j)
+                image_name = self.extract_image_name_from_url(first_image_url, with_extension=False)
                 result = self.download_image(first_image_url, folder + '/' + image_name)
                 if result == 0:
                     is_success = True
@@ -935,7 +935,7 @@ class MushokuTenseiDownload(Winter2021AnimeDownload):
                 image_url = template % (dt_month, episode, str(k).zfill(4))
                 if self.is_valid_url(image_url, is_image=True):
                     j += 1
-                    image_name = episode + '_' + str(j)
+                    image_name = self.extract_image_name_from_url(image_url, with_extension=False)
                     result = self.download_image(image_url, folder + '/' + image_name)
                     if result == 0:
                         is_success = True
