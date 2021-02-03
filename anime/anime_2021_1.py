@@ -1799,6 +1799,21 @@ class YuruCamp2Download(Winter2021AnimeDownload):
             {'name': 'nmv2', 'url': 'https://yurucamp.jp/second/images/nmv2.jpg'},
         ]
         self.download_image_objects(image_objs, folder)
+        try:
+            image_name_template = 'wall%s'
+            memorial_url_template = 'https://yurucamp.jp/second/images/download/' + image_name_template + '.jpg'
+            i = 0
+            while i < 100:
+                i += 1
+                image_name = image_name_template % str(i).zfill(2)
+                if self.is_image_exists(image_name, folder):
+                    continue
+                image_url = memorial_url_template % str(i).zfill(2)
+                if self.download_image(image_url, folder + '/' + image_name) == -1:
+                    break
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Key Visual')
+            print(e)
 
     def download_character(self):
         folder = self.create_character_directory()
