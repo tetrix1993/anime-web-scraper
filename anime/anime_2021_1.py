@@ -1715,6 +1715,19 @@ class WonderEggPriorityDownload(Winter2021AnimeDownload):
         try:
             self.download_content(self.PAGE_PREFIX + '/assets/img/introduction/bgvideo_l.mp4',
                                   folder + '/bgvideo_l.mp4')
+            soup = self.get_soup(self.PAGE_PREFIX + '/bddvd/')
+            div = soup.find('div', class_='bddvd__main')
+            if div:
+                images = div.find_all('img')
+                self.image_list = []
+                for image in images:
+                    if image.has_attr('src'):
+                        image_url = self.PAGE_PREFIX + image['src']
+                        if 'coming' in image_url:
+                            continue
+                        image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                        self.add_to_image_list(image_name, image_url)
+                self.download_image_list(folder)
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + " - Blu-ray")
             print(e)
