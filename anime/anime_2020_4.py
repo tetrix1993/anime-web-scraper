@@ -2598,6 +2598,11 @@ class OchifuruDownload(Fall2020AnimeDownload):
                     if image.has_attr('src'):
                         image_url = self.PAGE_PREFIX + image['src']
                         image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                        if 'j_00' in image_name:
+                            try:
+                                image_name = 'bd' + str(int(image_url.split('/')[-2])) + '_' + image_name
+                            except:
+                                image_name = image_url.split('/')[-2] + '_' + image_name
                         image_objs.append({'name': image_name, 'url': image_url})
                 self.download_image_objects(image_objs, folder)
         except Exception as e:
