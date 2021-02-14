@@ -16,6 +16,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 # Sentouin, Hakenshimasu! https://kisaragi-co.jp/ #sentoin @sentoin_anime
 # Shadows House https://shadowshouse-anime.com/ #シャドーハウス @shadowshouse_yj
 # Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita https://slime300-anime.com/ #スライム倒して300年 @slime300_PR
+# Super Cub https://supercub-anime.com/ #スーパーカブ @supercub_anime
 # Vivy: Fluroite Eye's Song https://vivy-portal.com/ #ヴィヴィ @vivy_portal
 # Yakunara Mug Cup mo https://yakumo-project.com/ #やくもtv @yakumo_project
 
@@ -478,6 +479,31 @@ class Slime300Download(Spring2021AnimeDownload):
             print("Error in running " + self.__class__.__name__ + " - Character")
             print(e)
         self.download_image_objects(image_objs, folder)
+
+
+class SuperCubDownload(Spring2021AnimeDownload):
+    title = 'Super Cub'
+    keywords = [title, 'Supercub']
+    folder_name = 'supercub'
+
+    PAGE_PREFIX = 'https://supercub-anime.com/'
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('kv', self.PAGE_PREFIX + 'core_sys/images/main/home/kv.jpg')
+        self.add_to_image_list('kv_tw', 'https://pbs.twimg.com/media/ErvAcsEUcAMljAq?format=jpg&name=4096x4096')
+        self.download_image_list(folder)
 
 
 # Vivy: Fluorite Eye's Song

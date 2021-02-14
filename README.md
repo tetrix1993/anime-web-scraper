@@ -119,6 +119,7 @@ The premiere date for the anime listed here has not been announced.
 * [Sentouin, Hakenshimasu!](https://kisaragi-co.jp/)
 * [Shadows House](https://shadowshouse-anime.com/)
 * [Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita](https://slime300-anime.com/)
+* [Super Cub](https://supercub-anime.com/)
 * [Vivy: Fluorite Eye's Song](https://vivy-portal.com/)
 * [Yakunara Mug Cup mo](https://yakumo-project.com/)
 
