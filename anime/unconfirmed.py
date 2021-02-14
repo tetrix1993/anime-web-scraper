@@ -8,7 +8,6 @@ from anime.main_download import MainDownload
 # Kanojo mo Kanojo https://kanokano-anime.com/ #kanokano #カノジョも彼女 @kanokano_anime
 # Megami-ryou no Ryoubo-kun. https://megamiryou.com/ #女神寮 @megamiryou
 # Princess Connect! Re:Dive S2 https://anime.priconne-redive.jp/ #アニメプリコネ #プリコネR #プリコネ @priconne_anime
-# Seijo no Maryoku wa Bannou desu https://seijyonomaryoku.jp/ #seijyonoanime @seijyonoanime
 # Seirei Gensouki https://seireigensouki.com/ #精霊幻想記 @seireigensouki
 # Shikkakumon no Saikyou Kenja https://shikkakumon.com/ #失格紋 @shikkakumon_PR
 # Shin no Nakama ja Nai to Yuusha no Party wo Oidasareta node, Henkyou de Slow Life suru Koto ni Shimashita https://shinnonakama.com/ #真の仲間 @shinnonakama_tv
@@ -200,50 +199,6 @@ class Priconne2Download(UnconfirmedDownload):
         folder = self.create_key_visual_directory()
         image_objs = [{'name': 'teaser', 'url': self.PAGE_PREFIX + '/assets/images/top_kv.png'}]
         self.download_image_objects(image_objs, folder)
-
-
-# Seijo no Maryoku wa Bannou desu
-class SeijonoMaryokuDownload(UnconfirmedDownload):
-    title = 'Seijo no Maryoku wa Bannou desu'
-    keywords = [title, 'seijonomaryoku', 'seijyonomaryoku', "The Saint's Magic Power is Omnipotent"]
-    folder_name = 'seijyonomaryoku'
-
-    PAGE_PREFIX = 'https://seijyonomaryoku.jp/'
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_key_visual()
-        self.download_character()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('kv1', self.PAGE_PREFIX + 'images/main-visual.jpg')
-        self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/EqDkgusU0AAdO1C?format=jpg&name=large')
-        self.download_image_list(folder)
-
-    def download_character(self):
-        folder = self.create_character_directory()
-        self.image_list = []
-        try:
-            soup = self.get_soup(self.PAGE_PREFIX)
-
-            images = soup.find_all('img', class_='m-character-list-heading-img')
-            for image in images:
-                if image and image.has_attr('src'):
-                    image_url = self.PAGE_PREFIX + image['src']
-                    image_name = self.extract_image_name_from_url(image_url, with_extension=False)
-                    self.add_to_image_list(image_name, image_url)
-        except Exception as e:
-            print("Error in running " + self.__class__.__name__ + " - Character")
-            print(e)
-        self.download_image_list(folder)
 
 
 # Seirei Gensouki

@@ -12,6 +12,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 # Kyuukyoku Shinka Shita Full Dive RPG ga Genjitsu Yori mo Kusogee Dattara https://fulldive-rpg.com/ #フルダイブ @fulldive_anime
 # Osananajimi ga Zettai ni Makenai Love Comedy https://osamake.com/ #おさまけ #osamake
 # Sayonara Watashi no Cramer https://sayonara-cramer.com/tv/ #さよなら私のクラマー @cramer_pr
+# Seijo no Maryoku wa Bannou desu https://seijyonomaryoku.jp/ #seijyonoanime @seijyonoanime
 # Sentouin, Hakenshimasu! https://kisaragi-co.jp/ #sentoin @sentoin_anime
 # Shadows House https://shadowshouse-anime.com/ #シャドーハウス @shadowshouse_yj
 # Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita https://slime300-anime.com/ #スライム倒して300年 @slime300_PR
@@ -317,6 +318,51 @@ class SayonaraCramerDownload(Spring2021AnimeDownload):
                 image = div.find('img')
                 if image and image.has_attr('src'):
                     image_url = image['src']
+                    image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                    self.add_to_image_list(image_name, image_url)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Character")
+            print(e)
+        self.download_image_list(folder)
+
+
+# Seijo no Maryoku wa Bannou desu
+class SeijonoMaryokuDownload(Spring2021AnimeDownload):
+    title = 'Seijo no Maryoku wa Bannou desu'
+    keywords = [title, 'seijonomaryoku', 'seijyonomaryoku', "The Saint's Magic Power is Omnipotent"]
+    folder_name = 'seijyonomaryoku'
+
+    PAGE_PREFIX = 'https://seijyonomaryoku.jp/'
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('kv1', self.PAGE_PREFIX + 'images/main-visual.jpg')
+        self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/EqDkgusU0AAdO1C?format=jpg&name=large')
+        self.add_to_image_list('valentine', self.PAGE_PREFIX + 'images/valentine_big.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        self.image_list = []
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+
+            images = soup.find_all('img', class_='m-character-list-heading-img')
+            for image in images:
+                if image and image.has_attr('src'):
+                    image_url = self.PAGE_PREFIX + image['src']
                     image_name = self.extract_image_name_from_url(image_url, with_extension=False)
                     self.add_to_image_list(image_name, image_url)
         except Exception as e:
