@@ -10,6 +10,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 # Kobayashi-san Chi no Maid Dragon S https://maidragon.jp/2nd/ #maidragon @maidragon_anime
 # Meikyuu Black Company https://meikyubc-anime.com/ #迷宮ブラックカンパニー @meikyubc_anime
 # Otome Game https://hamehura-anime.com/story/ #はめふら #hamehura @hamehura
+# Peach Boy Riverside https://peachboyriverside.com/ #ピーチボーイリバーサイド @peachboy_anime
 # Shiroi Suna no Aquatope https://aquatope-anime.com/ #白い砂のアクアトープ @aquatope_anime
 
 
@@ -181,6 +182,50 @@ class Hamehura2Download(Summer2021AnimeDownload):
         self.add_to_image_list('teaser', self.IMAGE_PREFIX + 'wp-content/uploads/2021/01/はめふらX_ティザービジュアル-1.jpg')
         #self.add_to_image_list('teaser', 'https://pbs.twimg.com/media/EsJL9ZQVkAEDktJ?format=jpg&name=large')
         self.download_image_list(folder)
+
+
+# Peach Boy Riverside
+class PeachBoyRiverside(Summer2021AnimeDownload):
+    title = 'Peach Boy Riverside'
+    keywords = [title]
+    folder_name = 'peachboyriverside'
+
+    PAGE_PREFIX = 'https://peachboyriverside.com/'
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('kv1', self.PAGE_PREFIX + 'wp/wp-content/themes/peachboyriverside_main/_assets/images/top/fv/fv_pc.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        image_name_template = 'char_main_%s@2x'
+        url_template = self.PAGE_PREFIX + 'wp/wp-content/themes/peachboyriverside_main/_assets/images/pages/char/main/'\
+            + image_name_template + '.png'
+        try:
+            for i in range(1, 100, 1):
+                image_name = image_name_template % str(i).zfill(3)
+                if self.is_image_exists(image_name, folder):
+                    continue
+                url = url_template % str(i).zfill(3)
+                result = self.download_image(url, folder + '/' + image_name)
+                if result == -1:
+                    break
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Character")
+            print(e)
 
 
 # Shiroi Suna no Aquatobe

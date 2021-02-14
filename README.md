@@ -105,6 +105,7 @@ The premiere date for the anime listed here has not been announced.
 * [Kobayashi-san Chi no Maid Dragon S](https://maidragon.jp/2nd/)
 * [Meikyuu Black Company](https://meikyubc-anime.com/)
 * [Otome Game no Hametsu Flag shika Nai Akuyaku Reijou ni Tensei shiteshimatta... X](https://hamehura-anime.com/)
+* [Peach Boy Riverside](https://peachboyriverside.com/)
 * [Shiroi Suna no Aquatope](https://aquatope-anime.com/)
 
 ### Spring 2021 Anime
