@@ -82,6 +82,10 @@ class EightySixDownload(Spring2021AnimeDownload):
         self.download_image_list(folder)
 
     def download_media(self):
+        # API Link:
+        # https://edge.api.brightcove.com/playback/v1/accounts/4929511769001/videos/6230722910001
+        # https://edge.api.brightcove.com/playback/v1/accounts/4929511769001/videos/6230722072001
+        # Headers: Accept: application/json;pk=BCpkADawqM1XGilraBDORB63T7mXX_DO0PvAeb0nPGOcNdREe4o42wzOOr9_chEsztXD6gxOSBCVpmrsc3Iczz0I3xEMohICjq69krvIZ8s1P0F1uVZiKjttPKy5vXHsTNB20y3uGjMBFeGj
         folder = self.create_custom_directory('media')
         valentine_01_url = 'http://brightcove04.brightcove.com/34/4929511769001/202102/551/4929511769001_6230722968001_6230722910001.mp4?pubId=4929511769001&videoId=6230722910001'
         valentine_ex_url = 'http://brightcove04.brightcove.com/34/4929511769001/202102/1719/4929511769001_6230723857001_6230722072001.mp4?pubId=4929511769001&videoId=6230722072001'
