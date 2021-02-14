@@ -397,8 +397,9 @@ class HorimiyaDownload(Winter2021AnimeDownload):
         folder = self.create_key_visual_directory()
         image_objs = [
             {'name': 'kv1_1', 'url': 'https://pbs.twimg.com/media/EiH_LNCU8AM5msx?format=png&name=900x900'},
-            {'name': 'kv1_2', 'url': 'https://horimiya-anime.com/teaser/img/top/main/img_main.jpg'},
-            {'name': 'kv2', 'url': 'https://horimiya-anime.com/assets/img/top/main/img_main.jpg'},
+            {'name': 'kv1_2', 'url': self.PAGE_PREFIX + 'teaser/img/top/main/img_main.jpg'},
+            {'name': 'kv2', 'url': self.PAGE_PREFIX + 'assets/img/top/main/img_main.jpg'},
+            {'name': 'kv3', 'url': self.PAGE_PREFIX + 'assets/img/top/main/img_main02.jpg'},
         ]
         self.download_image_objects(image_objs, folder)
 
@@ -436,6 +437,7 @@ class HorimiyaDownload(Winter2021AnimeDownload):
         folder = self.create_bluray_directory()
         self.image_list = []
         self.add_to_image_list('music_ed', 'https://pbs.twimg.com/media/ErR1scoVEAM0pVu?format=jpg&name=large')
+        self.add_to_image_list('bd7_bonus', 'https://pbs.twimg.com/media/EuHiHw5UcA4qJwt?format=jpg&name=medium')
         b1_ids = [1] + [i for i in range(931, 935, 1)]
         j = 0
         for i in b1_ids:
