@@ -46,6 +46,7 @@ class EightySixDownload(Spring2021AnimeDownload):
         self.download_episode_preview()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index', diff=2)
@@ -53,7 +54,13 @@ class EightySixDownload(Spring2021AnimeDownload):
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         self.image_list = []
-        self.add_to_image_list('kv1', 'https://anime-86.com/assets/img/top/img_kv.jpg')
+        self.add_to_image_list('kv1', self.PAGE_PREFIX + 'assets/img/top/img_kv.jpg')
+
+        valentine_prefix = self.PAGE_PREFIX + 'special/valentine/assets/img/86_valentine_'
+        self.add_to_image_list('86_valentine_icon_01', valentine_prefix + 'icon_01.jpg')
+        self.add_to_image_list('86_valentine_icon_ex', valentine_prefix + 'icon_ex.jpg')
+        self.add_to_image_list('86_valentine_wp_01', valentine_prefix + 'wp_01.jpg')
+        self.add_to_image_list('86_valentine_wp_ex', valentine_prefix + 'wp_ex.jpg')
         self.download_image_list(folder)
 
     def download_character(self):
@@ -73,6 +80,13 @@ class EightySixDownload(Spring2021AnimeDownload):
             print("Error in running " + self.__class__.__name__ + " - Character")
             print(e)
         self.download_image_list(folder)
+
+    def download_media(self):
+        folder = self.create_custom_directory('media')
+        valentine_01_url = 'http://brightcove04.brightcove.com/34/4929511769001/202102/551/4929511769001_6230722968001_6230722910001.mp4?pubId=4929511769001&videoId=6230722910001'
+        valentine_ex_url = 'http://brightcove04.brightcove.com/34/4929511769001/202102/1719/4929511769001_6230723857001_6230722072001.mp4?pubId=4929511769001&videoId=6230722072001'
+        self.download_content(valentine_01_url, folder + '/valentine_01.mp4')
+        self.download_content(valentine_ex_url, folder + '/valentine_ex.mp4')
 
 
 # Hige wo Soru. Soshite Joshikousei wo Hirou.

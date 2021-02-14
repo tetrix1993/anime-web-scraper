@@ -428,6 +428,7 @@ class MainDownload:
                     for chunk in r.iter_content(chunk_size=8192):
                         if chunk:
                             f.write(chunk)
+            print('Downloaded %s' % url)
 
             # Create download log:
             timenow = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
