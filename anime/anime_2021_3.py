@@ -11,6 +11,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 # Meikyuu Black Company https://meikyubc-anime.com/ #迷宮ブラックカンパニー @meikyubc_anime
 # Otome Game https://hamehura-anime.com/story/ #はめふら #hamehura @hamehura
 # Peach Boy Riverside https://peachboyriverside.com/ #ピーチボーイリバーサイド @peachboy_anime
+# Sekai Saikou no Ansatsusha, Isekai Kizoku ni Tensei suru https://ansatsu-kizoku.jp/ #暗殺貴族 @ansatsu_kizoku
 # Shiroi Suna no Aquatope https://aquatope-anime.com/ #白い砂のアクアトープ @aquatope_anime
 
 
@@ -226,6 +227,24 @@ class PeachBoyRiverside(Summer2021AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + " - Character")
             print(e)
+
+
+# Sekai Saikou no Ansatsusha, Isekai Kizoku ni Tensei suru
+class AnsatsuKizokuDownload(Summer2021AnimeDownload):
+    title = 'Sekai Saikou no Ansatsusha, Isekai Kizoku ni Tensei suru'
+    keywords = [title, "The world's best assassin, To reincarnate in a different world aristocrat"]
+    folder_name = 'ansatsu-kizoku'
+
+    PAGE_PREFIX = 'https://ansatsu-kizoku.jp/'
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
 
 
 # Shiroi Suna no Aquatobe
