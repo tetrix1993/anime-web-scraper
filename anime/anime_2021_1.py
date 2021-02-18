@@ -1765,7 +1765,8 @@ class YuruCamp2Download(Winter2021AnimeDownload):
     keywords = [title, 'Yurucamp']
     folder_name = 'yurucamp2'
 
-    PAGE_PREFIX = 'https://yurucamp.jp/second/'
+    BASE_PREFIX = 'https://yurucamp.jp/'
+    PAGE_PREFIX = BASE_PREFIX + 'second/'
     FINAL_EPISODE = 13
     IMAGES_PER_EPISODE = 8
 
@@ -1800,18 +1801,18 @@ class YuruCamp2Download(Winter2021AnimeDownload):
         image_objs = [
             {'name': 'teaser1', 'url': 'https://pbs.twimg.com/media/ETy4ZCFUYAEXlLl?format=jpg&name=4096x4096'},
             {'name': 'teaser2', 'url': 'https://pbs.twimg.com/media/ETy4ZC0U4AAbSS_?format=jpg&name=4096x4096'},
-            {'name': 'mv_l', 'url': 'https://yurucamp.jp/second/images/mv_l.jpg'},
-            {'name': 'mv_r', 'url': 'https://yurucamp.jp/second/images/mv_r.jpg'},
-            {'name': 'g_visual_01', 'url': 'https://yurucamp.jp/second/images/g_visual_01.jpg'},
+            {'name': 'mv_l', 'url': self.PAGE_PREFIX + 'images/mv_l.jpg'},
+            {'name': 'mv_r', 'url': self.PAGE_PREFIX + 'images/mv_r.jpg'},
+            {'name': 'g_visual_01', 'url': self.PAGE_PREFIX + 'images/g_visual_01.jpg'},
             {'name': 'img_visual2', 'url': 'https://pbs.twimg.com/media/EjNUQLTU8AE0WWQ?format=jpg&name=4096x4096'},
-            {'name': 'img_visual3', 'url': 'https://yurucamp.jp/camping/content/uploads/2020/10/14e33f48d154e171f203f89674fa0b30.jpg'},
-            {'name': 'img_visual4', 'url': 'https://yurucamp.jp/camping/content/uploads/2020/10/159c0e04163a9fd00a97dd24c8843c00.jpg'},
+            {'name': 'img_visual3', 'url': self.BASE_PREFIX + 'camping/content/uploads/2020/10/14e33f48d154e171f203f89674fa0b30.jpg'},
+            {'name': 'img_visual4', 'url': self.BASE_PREFIX + 'camping/content/uploads/2020/10/159c0e04163a9fd00a97dd24c8843c00.jpg'},
             {'name': 'img_visual5', 'url': 'https://pbs.twimg.com/media/EsPghnxVQAMJ6nP?format=jpg&name=large'},
-            {'name': 'g_visual_01', 'url': 'https://yurucamp.jp/second/images/g_visual_01.jpg'},
+            {'name': 'g_visual_01', 'url': self.PAGE_PREFIX + 'images/g_visual_01.jpg'},
             {'name': 'nmv', 'url': 'https://pbs.twimg.com/media/Eo2Arj3U0AAEras?format=jpg&name=4096x4096'},
             #{'name': 'nmv', 'url': 'https://yurucamp.jp/second/images/nmv.jpg'},
-            {'name': 'nmv1', 'url': 'https://yurucamp.jp/second/images/nmv1.jpg'},
-            {'name': 'nmv2', 'url': 'https://yurucamp.jp/second/images/nmv2.jpg'},
+            {'name': 'nmv1', 'url': self.PAGE_PREFIX + 'images/nmv1.jpg'},
+            {'name': 'nmv2', 'url': self.PAGE_PREFIX + 'images/nmv2.jpg'},
         ]
         self.download_image_objects(image_objs, folder)
         try:
@@ -1848,6 +1849,14 @@ class YuruCamp2Download(Winter2021AnimeDownload):
 
     def download_bluray(self):
         folder = self.create_bluray_directory()
+        self.image_list = []
+        #self.add_to_image_list('music_op', 'https://pbs.twimg.com/media/Ep-m71UUUAEkLG5?format=jpg&name=small')
+        #self.add_to_image_list('music_ed', 'https://pbs.twimg.com/media/Ep-PwosVoAIhGIn?format=jpg&name=medium')
+        #self.add_to_image_list('music_ost', 'https://pbs.twimg.com/media/EuhD12dVoAM2qSe?format=jpg&name=large')
+        self.add_to_image_list('music_op', 'https://images-na.ssl-images-amazon.com/images/I/91QzwEIKguL._AC_SL1500_.jpg')
+        self.add_to_image_list('music_ed', 'https://images-na.ssl-images-amazon.com/images/I/81Ws%2Bmf25tL._AC_SL1500_.jpg')
+        self.add_to_image_list('music_ost', self.BASE_PREFIX + 'camping/content/uploads/2021/02/yuru2ost_jak.jpg')
+        self.download_image_list(folder)
         try:
             soup = self.get_soup('https://yurucamp.jp/news/information/6142')
             div = soup.find('div', class_='articlein')
