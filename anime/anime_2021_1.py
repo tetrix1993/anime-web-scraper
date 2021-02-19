@@ -165,6 +165,9 @@ class Gotoubun2Download(Winter2021AnimeDownload):
         folder = self.create_bluray_directory()
         self.image_list = []
         self.add_to_image_list('bd1_big', 'https://aniverse-mag.com/wp-content/uploads/2021/01/f52988a7c17bf03cfc9369cb7777b84d.jpg', to_jpg=True)
+        #self.add_to_image_list('bd2_big', 'https://aniverse-mag.com/wp-content/uploads/2021/02/704f1147ac034226999fbead9d593edc.jpgg', to_jpg=True)
+        self.add_to_image_list('bd2_big', 'https://pbs.twimg.com/media/Euj7GNJVgAMuDU2?format=jpg&name=large')
+        self.add_to_image_list('game_music', 'https://pbs.twimg.com/media/Eujsxh9VgAQD_PZ?format=jpg&name=large')
         self.download_image_list(folder)
         try:
             urls = ['music']
