@@ -498,6 +498,7 @@ class GochiUsa3Download(Fall2020AnimeDownload):
         self.download_bluray()
         self.download_bluray_bonus()
         self.download_music()
+        self.download_endcard()
 
     def download_episode_preview(self):
         try:
@@ -670,6 +671,23 @@ class GochiUsa3Download(Fall2020AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + ' - Blu-Ray')
             print(e)
+
+    def download_endcard(self):
+        folder = self.create_custom_directory(constants.FOLDER_ENDCARD)
+        self.image_list = []
+        self.add_to_image_list('ec01', 'https://pbs.twimg.com/media/Ej-JQ8FU8AA8fWw?format=jpg&name=large')
+        self.add_to_image_list('ec02', 'https://pbs.twimg.com/media/EkiMbPqU0AAI2ji?format=jpg&name=large')
+        self.add_to_image_list('ec03', 'https://pbs.twimg.com/media/ElGPnjbUcAMVbrY?format=jpg&name=large')
+        self.add_to_image_list('ec04', 'https://pbs.twimg.com/media/ElqStIgVMAEBdhF?format=jpg&name=large')
+        self.add_to_image_list('ec05', 'https://pbs.twimg.com/media/EmOV2KuXYAARJGV?format=jpg&name=large')
+        self.add_to_image_list('ec06', 'https://pbs.twimg.com/media/EmyY4zZUUAUhcMX?format=jpg&name=large')
+        self.add_to_image_list('ec07', 'https://pbs.twimg.com/media/EnWcBSPXMAA5k-U?format=jpg&name=large')
+        self.add_to_image_list('ec08', 'https://pbs.twimg.com/media/En6ZdBIUwAAGra8?format=jpg&name=large')
+        self.add_to_image_list('ec09', 'https://pbs.twimg.com/media/EoegiXdVQAEjPjS?format=jpg&name=large')
+        self.add_to_image_list('ec10', 'https://pbs.twimg.com/media/EpClZweUwAI-jU0?format=jpg&name=large')
+        self.add_to_image_list('ec11', 'https://pbs.twimg.com/media/EpmlW9kU8AIZJjX?format=jpg&name=large')
+        self.add_to_image_list('ec12', 'https://pbs.twimg.com/media/EqKrsFdVEAANsTC?format=jpg&name=large')
+        self.download_image_list(folder)
 
 
 # Golden Kamuy 3rd Season
