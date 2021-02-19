@@ -89,7 +89,7 @@ The premiere date for the anime listed here has not been announced.
 * [Megami-ryou no Ryoubo-kun.](https://megamiryou.com/)
 * [Princess Connect! Re:Dive 2nd Season](https://anime.priconne-redive.jp)
 * [Seirei Gensouki](https://seireigensouki.com/)
-* [Shikkakumon no Saikyou Kenja](Shikkakumon no Saikyou Kenja)
+* [Shikkakumon no Saikyou Kenja](https://shikkakumon.com/)
 * [Shin no Nakama ja Nai to Yuusha no Party wo Oidasareta node, Henkyou de Slow Life suru Koto ni Shimashita](https://shinnonakama.com/)
 * [Shokei Shoujo no Virgin Road](http://virgin-road.com/)
 * [Shuumatsu no Harem](https://end-harem-anime.com/)
