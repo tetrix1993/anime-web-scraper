@@ -472,17 +472,34 @@ class Slime300Download(Spring2021AnimeDownload):
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
+        #self.image_list = []
+        #self.add_to_image_list('keyvisual01', self.PAGE_PREFIX + '/static/8e3ba0a8b42628959e71b7f52c737a6a/eeb1b/keyvisual01.png')
+        #self.add_to_image_list('keyvisual02', self.PAGE_PREFIX + '/static/a2a5d8a583acad23e9276580866d3aac/eeb1b/keyvisual02.png')
+        #self.add_to_image_list('keyvisual03', self.PAGE_PREFIX + '/static/a03236e46bc620b60292da71514f9253/40ffe/keyvisual03.png')
+        #self.add_to_image_list('keyvisual04', self.PAGE_PREFIX + '/static/98f5d8537a23ebf5b357bac8d63fcf39/eeb1b/keyvisual04.png')
+        #self.download_image_list(folder)
+
+        kv_json = self.PAGE_PREFIX + '/page-data/sq/d/621460424.json'
         self.image_list = []
-        self.add_to_image_list('keyvisual01', self.PAGE_PREFIX + '/static/8e3ba0a8b42628959e71b7f52c737a6a/eeb1b/keyvisual01.png')
-        self.add_to_image_list('keyvisual02', self.PAGE_PREFIX + '/static/a2a5d8a583acad23e9276580866d3aac/eeb1b/keyvisual02.png')
-        self.add_to_image_list('keyvisual03', self.PAGE_PREFIX + '/static/a03236e46bc620b60292da71514f9253/40ffe/keyvisual03.png')
-        self.add_to_image_list('keyvisual04', self.PAGE_PREFIX + '/static/98f5d8537a23ebf5b357bac8d63fcf39/eeb1b/keyvisual04.png')
+        try:
+            json_obj = self.get_json(kv_json)
+            data_obj = json_obj['data']
+            for data in data_obj.keys():
+                try:
+                    image_url = self.PAGE_PREFIX + data_obj[data]['childImageSharp']['fluid']['src']
+                    image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                    self.add_to_image_list(image_name, image_url)
+                except:
+                    pass
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Key Visual")
+            print(e)
         self.download_image_list(folder)
 
     def download_character(self):
         folder = self.create_character_directory()
         image_objs = []
-        chara_json = 'https://slime300-anime.com/page-data/sq/d/2919095229.json'
+        chara_json = self.PAGE_PREFIX + '/page-data/sq/d/2919095229.json'
         try:
             json_obj = self.get_json(chara_json)
             data_obj = json_obj['data']
