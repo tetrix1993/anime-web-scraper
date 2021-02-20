@@ -450,6 +450,7 @@ class HorimiyaDownload(Winter2021AnimeDownload):
             else:
                 j += 1
                 self.add_to_image_list('bd_bonus' + str(j), image_url, is_mocanews=True)
+        self.add_to_image_list('bd2', 'https://pbs.twimg.com/media/EulEYB8VgAMh7Eb?format=jpg&name=medium')
         self.download_image_list(folder)
 
 
