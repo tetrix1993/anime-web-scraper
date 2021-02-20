@@ -1,5 +1,5 @@
 import os
-# import anime.constants as constants
+import anime.constants as constants
 from anime.main_download import MainDownload
 from anime.external_download import MocaNewsDownload
 from datetime import datetime
@@ -1175,6 +1175,7 @@ class KakushiDungeonDownload(Winter2021AnimeDownload):
         self.download_key_visual()
         self.download_character()
         self.download_bluray()
+        self.download_endcard()
 
     def download_episode_preview(self):
         image_template = 'https://kakushidungeon-anime.jp/assets/story/%s_%s.jpg'
@@ -1244,6 +1245,18 @@ class KakushiDungeonDownload(Winter2021AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + " - Bluray")
             print(e)
+        self.download_image_list(folder)
+
+    def download_endcard(self):
+        folder = self.create_custom_directory(constants.FOLDER_ENDCARD)
+        self.image_list = []
+        self.add_to_image_list('ec01', 'https://pbs.twimg.com/media/ErNZmC3U0AIfXT1?format=jpg&name=large')
+        self.add_to_image_list('ec02', 'https://pbs.twimg.com/media/Ern5IxeVEAArIgY?format=jpg&name=large')
+        self.add_to_image_list('ec03', 'https://pbs.twimg.com/media/Er1akPIVEAEFH2C?format=jpg&name=medium')
+        self.add_to_image_list('ec04', 'https://pbs.twimg.com/media/EsQoJxuUYAIMZSi?format=jpg&name=large')
+        self.add_to_image_list('ec05', 'https://pbs.twimg.com/media/EtSyGOqVEAQCbSq?format=jpg&name=large')
+        self.add_to_image_list('ec06', 'https://pbs.twimg.com/media/EtxigFXVEAIpeHs?format=jpg&name=large')
+        self.add_to_image_list('ec07', 'https://pbs.twimg.com/media/EuVJhvlU4AI4xmo?format=jpg&name=large')
         self.download_image_list(folder)
 
 
