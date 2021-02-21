@@ -57,11 +57,10 @@ def add_to_db(conn):
         if latest_date and latest_date >= timestamp:
             continue
         base_folder = split1[1].replace(constants.FOLDER_DOWNLOAD + '/', '')
-        split2 = base_folder.split('/')
-        if len(split2) < 2:
-            continue
+        while len(base_folder) > 1 and base_folder[0] == '/':  # Get rid of extra /
+            base_folder = base_folder[1:]
         filepath = split1[2]
-        if len(filepath) > 1 and filepath[0] == '/':
+        while len(filepath) > 1 and filepath[0] == '/':
             filepath = filepath[1:]
         fullpath = base_folder + '/' + filepath
         url = split1[3].replace('\n', '')
