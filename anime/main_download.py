@@ -18,7 +18,7 @@ class MainDownload:
     season = None
     season_name = ""
     image_list = []
-    folder_name = 'download'
+    folder_name = constants.FOLDER_DOWNLOAD
 
     def __init__(self):
         path = self.get_full_path()
