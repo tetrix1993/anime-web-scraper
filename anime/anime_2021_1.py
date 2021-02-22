@@ -1155,6 +1155,23 @@ class NonNonBiyori3Download(Winter2021AnimeDownload):
         folder = self.create_bluray_directory()
         self.image_list = []
         self.add_to_image_list('music_jkt', 'http://nanoripe.com/nanoripe/wp-content/uploads/2021/01/nonnon_days_H1_RGB_Shikaku.jpg')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + '/tvanime/goods/dvd/season3/')
+            c_inner = soup.find('div', class_='c-inner')
+            if c_inner:
+                articles = c_inner.find_all('article')
+                for article in articles:
+                    images = article.find_all('img')
+                    for image in images:
+                        if image.has_attr('src'):
+                            image_url = self.PAGE_PREFIX + image['src']
+                            image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                            if 'now' in image_name:
+                                continue
+                            self.add_to_image_list(image_name, image_url)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Blu-ray")
+            print(e)
         self.download_image_list(folder)
 
 
