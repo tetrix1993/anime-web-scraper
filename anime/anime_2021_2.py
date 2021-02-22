@@ -225,6 +225,8 @@ class IsekaiMaou2Download(Spring2021AnimeDownload):
         self.add_to_image_list('chara_visual_rem', upload_url + '01/異世界魔王Ω_添い寝ビジュアルレム_mini.jpg')
         self.add_to_image_list('chara_visual_lumachina', upload_url + '02/異世界魔王Ω_添い寝ビジュアルルマキーナ_mini.jpg')
         self.add_to_image_list('chara_visual_rose', upload_url + '02/異世界魔王Ω_添い寝ビジュアルロゼ_mini.jpg')
+        self.add_to_image_list('kv1', 'https://pbs.twimg.com/media/EuwlST0VcAAY_hC?format=jpg&name=medium')
+        #self.add_to_image_list('kv1', upload_url + '02/異世界魔王Ω_本ビジュアル_mini_c.jpg')
         self.download_image_list(folder)
 
     def download_character(self):
