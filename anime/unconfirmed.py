@@ -36,7 +36,7 @@ class BokuremaDownload(UnconfirmedDownload):
     keywords = [title, 'Bokurema', 'Remake our Life!']
     folder_name = 'bokurema'
 
-    PAGE_PREFIX = "http://bokurema.com/"
+    PAGE_PREFIX = "http://bokurema.com"
 
     def __init__(self):
         super().__init__()
@@ -44,6 +44,7 @@ class BokuremaDownload(UnconfirmedDownload):
     def run(self):
         self.download_episode_preview()
         self.download_key_visual()
+        self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
@@ -51,7 +52,30 @@ class BokuremaDownload(UnconfirmedDownload):
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         self.image_list = []
-        self.add_to_image_list('teaser', 'http://bokurema.com/assets/images/teaser_2/main_visual.png')
+        self.add_to_image_list('teaser', self.PAGE_PREFIX + '/assets/images/teaser_2/main_visual.png')
+        self.add_to_image_list('kv1', self.PAGE_PREFIX + '/assets/images/index/top_keyvisual_01.png')
+        self.add_to_image_list('kv1_2', self.PAGE_PREFIX + '/assets/images/uploads/2021/02/keyvisual.jpg')
+        self.add_to_image_list('wakuwork_collaboration', self.PAGE_PREFIX + '/assets/images/uploads/2021/02/wakuwork_collaboration.png')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        self.image_list = []
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + '/character/')
+            lis = soup.find_all('li', 'p-character-list__item')
+            for li in lis:
+                label = li.find('label')
+                if label and label.has_attr('class') and len(label['class']) > 0:
+                    character_name = label['class'][0].replace('c-character-select-area--', '')
+                    if len(character_name) > 0:
+                        image_url = '%s/assets/images/character/character_visual_%s.png'\
+                                    % (self.PAGE_PREFIX, character_name)
+                        image_name = 'character_visual_%s' % character_name
+                        self.add_to_image_list(image_name, image_url)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Character")
+            print(e)
         self.download_image_list(folder)
 
 
