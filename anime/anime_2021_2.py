@@ -116,8 +116,12 @@ class HigehiroDownload(Spring2021AnimeDownload):
         folder = self.create_key_visual_directory()
         self.image_list = []
         self.add_to_image_list('teaser', 'https://pbs.twimg.com/media/EjO4FTcU0AIPm2X?format=jpg&name=medium')
-        self.add_to_image_list('kv_sayu', 'http://higehiro-anime.com/wp-content/themes/higehiro/images/kv_sayu.png')
-        self.add_to_image_list('kv_yoshida', 'http://higehiro-anime.com/wp-content/themes/higehiro/images/kv_yoshida.png')
+
+        theme_url = self.PAGE_PREFIX + 'wp-content/themes/higehiro/images/'
+        self.add_to_image_list('kv_sayu', theme_url + 'kv_sayu.png')
+        self.add_to_image_list('kv_yoshida', theme_url + 'kv_yoshida.png')
+        self.add_to_image_list('hige_keyvisual', theme_url + 'hige_keyvisual.jpg')
+
         self.download_image_list(folder)
 
     def download_character(self):
