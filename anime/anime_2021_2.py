@@ -292,6 +292,7 @@ class OsamakeDownload(Spring2021AnimeDownload):
     def run(self):
         self.download_episode_preview()
         self.download_key_visual()
+        self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
@@ -303,6 +304,15 @@ class OsamakeDownload(Spring2021AnimeDownload):
             #{'name': 'teaser', 'url': 'https://pbs.twimg.com/media/EjZnt4CUcAIJeqR?format=jpg&name=4096x4096'},
         ]
         self.download_image_objects(image_objs, folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        for i in range(20):
+            image_url = (self.PAGE_PREFIX + 'assets/character/c/%s.png') % str(i + 1)
+            image_name = 'chara_' + str(i + 1).zfill(2)
+            result = self.download_image(image_url, folder + '/' + image_name)
+            if result == -1:
+                break
 
 
 # Sayonara Watashi no Cramer
