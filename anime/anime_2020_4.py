@@ -836,7 +836,17 @@ class Higurashi2020Download(Fall2020AnimeDownload):
                 for image_tag in image_tags:
                     if image_tag.has_attr('src'):
                         image_url = self.PAGE_PREFIX + image_tag['src']
+                        split1 = image_url.split('/')
+                        number = None
+                        if len(split1) > 2 and len(split1[-2]) == 3:
+                            try:
+                                int(split1[-2])
+                                number = split1[-2]
+                            except:
+                                pass
                         image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                        if number:
+                            image_name = number + '_' + image_name
                         image_objs.append({'name': image_name, 'url': image_url})
                 self.download_image_objects(image_objs, folder)
         except Exception as e:
