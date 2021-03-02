@@ -140,6 +140,20 @@ def process_query(has_keyword, has_season, print_season):
         if len(filtered_season_classes) == 0:
             print("No season is selected.")
             return
+        else:
+            season_output = ''
+            for i in range(len(filtered_season_classes)):
+                if i > 4:
+                    season_output += '...'
+                    break
+                season_output += filtered_season_classes[i].season_name
+                if i < len(filtered_season_classes) - 1:
+                    season_output += ', '
+            if len(filtered_season_classes) == 1:
+                suffix = 'Season'
+            else:
+                suffix = '%s Seasons' % str(len(filtered_season_classes))
+            print('Selected %s: %s' % (suffix, season_output))
 
     sf = SearchFilter(query=keyword, season=season)
     anime_classes = get_all_anime_classes(sf)
