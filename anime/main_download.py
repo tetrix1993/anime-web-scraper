@@ -621,8 +621,8 @@ class MainDownload:
         :param timestamp: Timestamp in Unix Timestamp (nanoseconds)
         :return: Readable text in Year-Month-Day Hour:Minute:Second.Nanoseconds
         '''
-        
-        if len(timestamp) < 10:
+
+        if len(str(timestamp)) < 10:
             return ''
         dt = datetime.datetime.fromtimestamp(int(timestamp) // 1e9)
         return dt.strftime('%Y-%m-%d %H:%M:%S') + '.' + str(timestamp[len(timestamp) - 9: len(timestamp)]).zfill(9)
