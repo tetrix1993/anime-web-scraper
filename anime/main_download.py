@@ -614,6 +614,40 @@ class MainDownload:
         else:
             return url
 
+    @staticmethod
+    def unix_timestamp_to_text(timestamp):
+        '''
+        Convert Unit Timestamp in nanoseconds to readable text
+        :param timestamp: Timestamp in Unix Timestamp (nanoseconds)
+        :return: Readable text in Year-Month-Day Hour:Minute:Second.Nanoseconds
+        '''
+        
+        if len(timestamp) < 10:
+            return ''
+        dt = datetime.datetime.fromtimestamp(int(timestamp) // 1e9)
+        return dt.strftime('%Y-%m-%d %H:%M:%S') + '.' + str(timestamp[len(timestamp) - 9: len(timestamp)]).zfill(9)
+
+    @staticmethod
+    def text_to_unix_timestamp(datetime_str):
+        result = ''
+        split1 = datetime_str.split('.')
+        second_str = split1[0]
+        try:
+            result = str(int(time.mktime(datetime.datetime.strptime(second_str, "%Y-%m-%d").timetuple())))
+        except:
+            pass
+        if len(result) == 0:
+            try:
+                result = str(int(time.mktime(datetime.datetime.strptime(second_str, "%Y-%m-%d %H:%M:%S").timetuple())))
+            except:
+                pass
+        if len(result) > 0:
+            if len(split1) == 2:
+                result += split1[1]
+            else:
+                result += ''.zfill(9)
+        return result
+
     def add_to_image_list(self, name, url, to_jpg=False, is_mocanews=False):
         image_obj = {'name': name, 'url': url}
         if to_jpg:
