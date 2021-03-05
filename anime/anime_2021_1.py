@@ -1654,7 +1654,7 @@ class UrasekaiPicnicDownload(Winter2021AnimeDownload):
         folder = self.create_character_directory()
         image_objs = []
         try:
-            soup = self.get_soup('https://www.othersidepicnic.com/character/')
+            soup = self.get_soup(self.PAGE_PREFIX + '/character/')
             chr_imgs = soup.find_all('div', class_='stand-chara')
             for chr_img in chr_imgs:
                 img_tag = chr_img.find('img')
@@ -1671,6 +1671,19 @@ class UrasekaiPicnicDownload(Winter2021AnimeDownload):
         folder = self.create_bluray_directory()
         self.image_list = []
         self.add_to_image_list('music_op', 'https://pbs.twimg.com/media/Eq4iEpWVgAI_0oq?format=jpg&name=large')
+        self.add_to_image_list('music_ed', self.PAGE_PREFIX + '/cms/wp-content/themes/othersidepicnic/images/music/ending_b_jaket.jpg')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + '/bd/')
+            bd_photos = soup.find_all('div', class_='bdPhoto')
+            for bd_photo in bd_photos:
+                img_tag = bd_photo.find('img')
+                if img_tag and img_tag.has_attr('src'):
+                    img_url = self.PAGE_PREFIX + img_tag['src']
+                    img_name = self.extract_image_name_from_url(img_url, with_extension=False)
+                    self.add_to_image_list(img_name, img_url)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Blu-Ray")
+            print(e)
         self.download_image_list(folder)
 
 
