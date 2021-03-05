@@ -266,6 +266,7 @@ class FullDiveRPGDownload(Spring2021AnimeDownload):
     def run(self):
         self.download_episode_preview()
         self.download_key_visual()
+        self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
@@ -274,7 +275,37 @@ class FullDiveRPGDownload(Spring2021AnimeDownload):
         folder = self.create_key_visual_directory()
         self.image_list = []
         self.add_to_image_list('visual01', 'https://pbs.twimg.com/media/EoYbnevVoAAnE3-?format=jpg&name=large')
-        self.add_to_image_list('visual01_1', 'https://fulldive-rpg.com/img/main_visual.png')
+        self.add_to_image_list('visual01_1', self.PAGE_PREFIX + 'img/main_visual.png')
+        self.add_to_image_list('visual01_2', self.PAGE_PREFIX + 'img/special/contents_gallery_01.jpg')
+        self.add_to_image_list('visual02', 'https://pbs.twimg.com/media/EvtFCncUYAMRtb1?format=jpg&name=large')
+        self.add_to_image_list('visual02_1', self.PAGE_PREFIX + 'img/special/contents_gallery_02.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'img/chara/%s.png'
+        self.image_list = []
+        for i in range(30):
+            num = str(i + 1).zfill(2)
+            filenames = []
+            exist = False
+            for j in ['body_%s_real', 'body_%s_vr', 'face_%s']:
+                filename = j % num
+                filenames.append(filename)
+                if self.is_image_exists(filename, folder):
+                    exist = True
+                    break
+            if exist:
+                continue
+            image_downloaded = 0
+            for name in filenames:
+                image_url = template % name
+                result = self.download_image(image_url, folder + '/' + name)
+                if result == -1:
+                    continue
+                image_downloaded += 1
+            if image_downloaded == 0:
+                break
         self.download_image_list(folder)
 
 
