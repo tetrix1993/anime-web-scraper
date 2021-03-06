@@ -1279,6 +1279,8 @@ class KakushiDungeonDownload(Winter2021AnimeDownload):
         self.add_to_image_list('ec05', 'https://pbs.twimg.com/media/EtSyGOqVEAQCbSq?format=jpg&name=large')
         self.add_to_image_list('ec06', 'https://pbs.twimg.com/media/EtxigFXVEAIpeHs?format=jpg&name=large')
         self.add_to_image_list('ec07', 'https://pbs.twimg.com/media/EuVJhvlU4AI4xmo?format=jpg&name=large')
+        self.add_to_image_list('ec08', 'https://pbs.twimg.com/media/EvK-3t6VgAEH_08?format=jpg&name=large')
+        self.add_to_image_list('ec09', 'https://pbs.twimg.com/media/EvdPTroVcAIlTOM?format=jpg&name=large')
         self.download_image_list(folder)
 
 
