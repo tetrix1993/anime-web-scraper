@@ -6,6 +6,7 @@ from anime.main_download import MainDownload
 # Goblin Slayer S2 http://www.goblinslayer.jp/ #ゴブスレ @GoblinSlayer_GA
 # Itai no wa https://bofuri.jp/story/ #防振り #bofuri @bofuri_anime
 # Kanojo mo Kanojo https://kanokano-anime.com/ #kanokano #カノジョも彼女 @kanokano_anime
+# Mahouka Koukou no Yuutousei https://mahouka-yuutousei.jp/ #mahouka
 # Megami-ryou no Ryoubo-kun. https://megamiryou.com/ #女神寮 @megamiryou
 # Princess Connect! Re:Dive S2 https://anime.priconne-redive.jp/ #アニメプリコネ #プリコネR #プリコネ @priconne_anime
 # Seirei Gensouki https://seireigensouki.com/ #精霊幻想記 @seireigensouki
@@ -152,6 +153,32 @@ class KanokanoDownload(UnconfirmedDownload):
         folder = self.create_key_visual_directory()
         self.image_list = []
         self.add_to_image_list('teaser', self.PAGE_PREFIX + 'assets/img/mv-img.png')
+        self.download_image_list(folder)
+
+
+# Mahouka Koukou no Yuutousei
+class MahoukaYuutouseiDownload(UnconfirmedDownload):
+    title = 'Mahouka Koukou no Yuutousei'
+    keywords = [title, 'The Honor Student at Magic High School']
+    folder_name = 'mahouka-yuutousei'
+
+    PAGE_PREFIX = "https://mahouka-yuutousei.jp/"
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('teaser', self.PAGE_PREFIX + '/teaser/img/top/kv_character.png')
+        self.add_to_image_list('kv1', self.PAGE_PREFIX + '/teaser/img/top/kv.jpg')
         self.download_image_list(folder)
 
 
@@ -511,7 +538,8 @@ class TateNoYuusha2Download(UnconfirmedDownload):
         folder = self.create_key_visual_directory()
         image_objs = [
             {'name': 'announce', 'url': 'https://pbs.twimg.com/media/EDag4MkUwAAQnf0?format=jpg&name=medium'},
-            {'name': 'kv1', 'url': 'https://pbs.twimg.com/media/EhHFvyVU4AA7cUw?format=jpg&name=large'}
+            {'name': 'kv1', 'url': 'https://pbs.twimg.com/media/EhHFvyVU4AA7cUw?format=jpg&name=large'},
+            {'name': 'mv_lg', 'url': self.PAGE_PREFIX + '/assets/img/2nd/mv_lg.jpg'}
         ]
         self.download_image_objects(image_objs, folder)
 

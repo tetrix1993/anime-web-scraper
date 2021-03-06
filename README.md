@@ -86,6 +86,7 @@ The premiere date for the anime listed here has not been announced.
 * [Goblin Slayer 2nd Season](http://www.goblinslayer.jp/)
 * [Itai no wa Iya nano de Bougyoryoku ni Kyokufuri Shitai to Omoimasu. 2nd Season](https://bofuri.jp/)
 * [Kanojo mo Kanojo](https://kanokano-anime.com/)
+* [Mahouka Koukou no Yuutousei](https://mahouka-yuutousei.jp/)
 * [Megami-ryou no Ryoubo-kun.](https://megamiryou.com/)
 * [Princess Connect! Re:Dive 2nd Season](https://anime.priconne-redive.jp)
 * [Seirei Gensouki](https://seireigensouki.com/)
