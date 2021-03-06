@@ -7,6 +7,7 @@ from anime.main_download import MainDownload
 # Itai no wa https://bofuri.jp/story/ #防振り #bofuri @bofuri_anime
 # Kanojo mo Kanojo https://kanokano-anime.com/ #kanokano #カノジョも彼女 @kanokano_anime
 # Mahouka Koukou no Yuutousei https://mahouka-yuutousei.jp/ #mahouka
+# Maou Gakuin no Futekigousha 2nd Season https://maohgakuin.com/ #魔王学院 @maohgakuin
 # Megami-ryou no Ryoubo-kun. https://megamiryou.com/ #女神寮 @megamiryou
 # Princess Connect! Re:Dive S2 https://anime.priconne-redive.jp/ #アニメプリコネ #プリコネR #プリコネ @priconne_anime
 # Seirei Gensouki https://seireigensouki.com/ #精霊幻想記 @seireigensouki
@@ -179,6 +180,32 @@ class MahoukaYuutouseiDownload(UnconfirmedDownload):
         self.image_list = []
         self.add_to_image_list('teaser', self.PAGE_PREFIX + '/teaser/img/top/kv_character.png')
         self.add_to_image_list('kv1', self.PAGE_PREFIX + '/teaser/img/top/kv.jpg')
+        self.download_image_list(folder)
+
+
+# Maou Gakuin no Futekigousha: Shijou Saikyou no Maou no Shiso, Tensei shite Shison-tachi no Gakkou e
+class Maohgakuin2Download(UnconfirmedDownload):
+    title = "Maou Gakuin no Futekigousha: Shijou Saikyou no Maou no Shiso, Tensei shite Shison-tachi no Gakkou e 2nd Season"
+    keywords = [title, 'Maohgakuin', 'The Misfit of Demon King Academy']
+    folder_name = 'maohgakuin2'
+
+    PAGE_PREFIX = "https://maohgakuin.com/"
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('teaser', self.PAGE_PREFIX + 'assets/img/img_main.jpg')
+        # self.add_to_image_list('teaser_tw', 'https://pbs.twimg.com/media/EvylQFOVkAID_0B?format=jpg&name=medium')
         self.download_image_list(folder)
 
 

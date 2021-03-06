@@ -380,12 +380,12 @@ class KanokariDownload(Summer2020AnimeDownload):
 # Maou Gakuin no Futekigousha: Shijou Saikyou no Maou no Shiso, Tensei shite Shison-tachi no Gakkou e
 class MaohgakuinDownload(Summer2020AnimeDownload):
     title = "Maou Gakuin no Futekigousha: Shijou Saikyou no Maou no Shiso, Tensei shite Shison-tachi no Gakkou e"
-    keywords = [title, 'Maohgakuin']
+    keywords = [title, 'Maohgakuin', 'The Misfit of Demon King Academy']
     folder_name = 'maohgakuin'
 
     PAGE_PREFIX = "https://maohgakuin.com/"
-    CHARACTER_PREFIX = 'https://maohgakuin.com/character/'
-    STORY_PAGE = 'https://maohgakuin.com/story/'
+    CHARACTER_PREFIX = PAGE_PREFIX + 'character/'
+    STORY_PAGE = PAGE_PREFIX + 'story/'
 
     def __init__(self):
         super().__init__()
