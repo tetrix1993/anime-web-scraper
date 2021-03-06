@@ -18,7 +18,6 @@ from anime.main_download import MainDownload
 # Shuumatsu no Harem https://end-harem-anime.com/ #終末のハーレム @harem_official_
 # Slow Loop https://slowlooptv.com/ #slowloop @slowloop_tv
 # Tantei wa Mou, Shindeiru. https://tanmoshi-anime.jp/ #たんもし @tanteiwamou_
-# Tate no Yuusha S2 http://shieldhero-anime.jp/ #shieldhero #盾の勇者の成り上がり @shieldheroanime
 # Tensai Ouji no Akaji Kokka Saisei Jutsu: Souda, Baikoku shiyou #天才王子の赤字国家再生術 @tensaiouji_PR
 # Vlad Love https://www.vladlove.com/index.html #ぶらどらぶ #vladlove @VLADLOVE_ANIME
 
@@ -551,6 +550,20 @@ class TanmoshiDownload(UnconfirmedDownload):
         self.add_to_image_list('kv2', 'https://pbs.twimg.com/media/Eug1UGwUYAcgxON?format=jpg&name=4096x4096')
         self.download_image_list(folder)
 
+        template = self.PAGE_PREFIX + 'core_sys/images/main/tz/kv%s.png'
+        for i in range(1, 11, 1):
+            file_name = 'kv' + str(i)
+            if self.is_image_exists(file_name, folder):
+                continue
+            if i == 1:
+                image_url = template % ''
+            else:
+                image_url = template % str(i)
+            if self.is_valid_url(image_url, is_image=True):
+                print('URL exists: ' + image_url)
+            else:
+                break
+
     def download_character(self):
         folder = self.create_character_directory()
         self.image_list = []
@@ -568,34 +581,6 @@ class TanmoshiDownload(UnconfirmedDownload):
             print("Error in running " + self.__class__.__name__ + " - Character")
             print(e)
         self.download_image_list(folder)
-
-
-# Tate no Yuusha no Nariagari S2
-class TateNoYuusha2Download(UnconfirmedDownload):
-    title = "Tate no Yuusha no Nariagari 2nd Season"
-    keywords = [title, "The Rising of the Shield Hero"]
-    folder_name = 'tate-no-yuusha2'
-
-    PAGE_PREFIX = "http://shieldhero-anime.jp"
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_key_visual()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        image_objs = [
-            {'name': 'announce', 'url': 'https://pbs.twimg.com/media/EDag4MkUwAAQnf0?format=jpg&name=medium'},
-            {'name': 'kv1', 'url': 'https://pbs.twimg.com/media/EhHFvyVU4AA7cUw?format=jpg&name=large'},
-            {'name': 'mv_lg', 'url': self.PAGE_PREFIX + '/assets/img/2nd/mv_lg.jpg'}
-        ]
-        self.download_image_objects(image_objs, folder)
 
 
 # Tensai Ouji no Akaji Kokka Saisei Jutsu: Souda, Baikoku shiyou

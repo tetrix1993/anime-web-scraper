@@ -200,7 +200,7 @@ def get_all_anime_classes(s_filter):
         if subclass.__name__ != "ExternalDownload" and subclass.season is not None:
             if s_filter.season is None or (s_filter.season is not None and subclass.season in s_filter.season):
                 for subsubclass in subclass.__subclasses__():
-                    if not subsubclass.enabled and subsubclass.match(subsubclass, s_filter):
+                    if subsubclass.enabled and subsubclass.match(subsubclass, s_filter):
                         anime_classes.append(subsubclass)
 
     anime_classes.sort(key=lambda x: x.title)

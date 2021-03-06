@@ -98,8 +98,11 @@ The premiere date for the anime listed here has not been announced.
 * [Shuumatsu no Harem](https://end-harem-anime.com/)
 * [Slow Loop](https://slowlooptv.com/)
 * [Tantei wa Mou, Shindeiru.](https://tanmoshi-anime.jp/)
-* [Tate no Yuusha no Nariagari 2nd Season](http://shieldhero-anime.jp)
 * [Tensai Ouji no Akaji Kokka Saisei Jutsu: Souda, Baikoku shiyou](https://tensaiouji-anime.com/)
+
+
+### Fall 2021 Anime
+* [Tate no Yuusha no Nariagari 2nd Season](http://shieldhero-anime.jp)
 
 ### Summer 2021 Anime
 * [Cheat Kusushi no Slow Life: Isekai ni Tsukurou Drugstore](https://www.cheat-kusushi.jp/)
