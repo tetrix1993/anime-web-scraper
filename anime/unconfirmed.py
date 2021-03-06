@@ -628,6 +628,7 @@ class VladLoveDownload(UnconfirmedDownload):
     title = 'Vlad Love'
     keywords = [title, "Vladlove"]
     folder_name = 'vladlove'
+    enabled = False
 
     PAGE_PREFIX = 'https://www.vladlove.com/'
 

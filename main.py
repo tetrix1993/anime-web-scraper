@@ -20,7 +20,8 @@ def run():
         + Summer2021AnimeDownload.__subclasses__() \
         + UnconfirmedDownload.__subclasses__()
     for subclass in subclasses:
-        downloads.append(subclass())
+        if subclass.enabled:
+            downloads.append(subclass())
     process_download(downloads)
 
     #downloads = []
