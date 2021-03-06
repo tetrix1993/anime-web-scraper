@@ -54,7 +54,9 @@ class EightySixDownload(Spring2021AnimeDownload):
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         self.image_list = []
-        self.add_to_image_list('kv1', self.PAGE_PREFIX + 'assets/img/top/img_kv.jpg')
+        #self.add_to_image_list('kv', self.PAGE_PREFIX + 'assets/img/top/img_kv.jpg')
+        self.add_to_image_list('kv1', 'https://pbs.twimg.com/media/EvxfN8wU8AI_Dps?format=jpg&name=4096x4096')
+        self.add_to_image_list('kv2', 'https://pbs.twimg.com/media/EvxfN86U8AAoYZx?format=jpg&name=4096x4096')
 
         valentine_prefix = self.PAGE_PREFIX + 'special/valentine/assets/img/86_valentine_'
         self.add_to_image_list('86_valentine_icon_01', valentine_prefix + 'icon_01.jpg')
@@ -66,19 +68,41 @@ class EightySixDownload(Spring2021AnimeDownload):
     def download_character(self):
         folder = self.create_character_directory()
         self.image_list = []
-        try:
-            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
-            contents = soup.find_all('div', class_='m-chara__content')
-            for content in contents:
-                figures = content.find_all('figure')
-                for figure in figures:
-                    if figure.has_attr('style') and 'url(' in figure['style']:
-                        image_url = self.PAGE_PREFIX + figure['style'].split('url(')[1].split(');')[0].replace('../', '')
-                        image_name = self.extract_image_name_from_url(image_url, with_extension=False)
-                        self.add_to_image_list(image_name, image_url)
-        except Exception as e:
-            print("Error in running " + self.__class__.__name__ + " - Character")
-            print(e)
+        #try:
+        #    soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+        #    contents = soup.find_all('div', class_='m-chara__content')
+        #    for content in contents:
+        #        figures = content.find_all('figure')
+        #        for figure in figures:
+        #            if figure.has_attr('style') and 'url(' in figure['style']:
+        #                image_url = self.PAGE_PREFIX + figure['style'].split('url(')[1].split(');')[0].replace('../', '')
+        #                image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+        #                self.add_to_image_list(image_name, image_url)
+        #except Exception as e:
+        #    print("Error in running " + self.__class__.__name__ + " - Character")
+        #    print(e)
+        template = self.PAGE_PREFIX + 'assets/img/character/%s.png'
+        for i in range(30):
+            num = str(i + 1).zfill(2)
+            filenames = []
+            exist = False
+            for j in ['chara_%s', 'chara_face_%s']:
+                filename = j % num
+                filenames.append(filename)
+                if self.is_image_exists(filename, folder):
+                    exist = True
+                    break
+            if exist:
+                continue
+            image_downloaded = 0
+            for name in filenames:
+                image_url = template % name
+                result = self.download_image(image_url, folder + '/' + name)
+                if result == -1:
+                    continue
+                image_downloaded += 1
+            if image_downloaded == 0:
+                break
         self.download_image_list(folder)
 
     def download_media(self):
