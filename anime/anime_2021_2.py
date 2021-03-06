@@ -6,6 +6,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 
 
 # 86 https://anime-86.com/ #エイティシックス @anime_eightysix
+# Dragon, Ie wo Kau #ドラ家 @anime_doraie
 # Hige wo Soru. Soshite Joshikousei wo Hirou. http://higehiro-anime.com/ #higehiro #ひげひろ @higehiro_anime
 # Ijiranaide, Nagatoro-san https://www.nagatorosan.jp/ #長瀞さん @nagatoro_tv
 # Isekai Maou to Shoukan Shoujo no Dorei Majutsu Ω https://isekaimaou-anime.com/ #異世界魔王 @isekaimaou
@@ -115,6 +116,48 @@ class EightySixDownload(Spring2021AnimeDownload):
         valentine_ex_url = 'http://brightcove04.brightcove.com/34/4929511769001/202102/1719/4929511769001_6230723857001_6230722072001.mp4?pubId=4929511769001&videoId=6230722072001'
         self.download_content(valentine_01_url, folder + '/valentine_01.mp4')
         self.download_content(valentine_ex_url, folder + '/valentine_ex.mp4')
+
+
+class DoraieDownload(Spring2021AnimeDownload):
+    title = 'Dragon, Ie wo Kau'
+    keywords = [title, 'Dragon Goes House-Hunting']
+    folder_name = 'doraie'
+
+    PAGE_PREFIX = 'https://doraie.com/'
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index', diff=2)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('kv2', self.PAGE_PREFIX + 'news/wp/wp-content/uploads/2020/11/7e7632e1c37c768e225d8f78d1a5a6f3.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        self.image_list = []
+        try:
+            json_obj = self.get_json(self.PAGE_PREFIX + 'character/chara_data.php')
+            if isinstance(json_obj, dict):
+                if 'charas' in json_obj and isinstance(json_obj['charas'], list):
+                    for chara in json_obj['charas']:
+                        if 'images' in chara and 'visual' in chara['images']:
+                            image_url = self.PAGE_PREFIX + 'character/' + chara['images']['visual'].split('?')[0]
+                            image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                            self.add_to_image_list(image_name, image_url)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Character")
+            print(e)
+        self.download_image_list(folder)
 
 
 # Hige wo Soru. Soshite Joshikousei wo Hirou.
