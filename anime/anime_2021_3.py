@@ -295,9 +295,15 @@ class AnsatsuKizokuDownload(Summer2021AnimeDownload):
 
     def run(self):
         self.download_episode_preview()
+        self.download_key_visual()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.add_to_image_list('teaser', 'https://pbs.twimg.com/media/Ev27c7bUUAIM_47?format=jpg&name=medium')
+        self.download_image_list(folder)
 
 
 # Shin no Nakama ja Nai to Yuusha no Party wo Oidasareta node, Henkyou de Slow Life suru Koto ni Shimashita
