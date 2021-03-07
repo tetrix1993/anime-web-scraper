@@ -397,11 +397,11 @@ class OsamakeDownload(Spring2021AnimeDownload):
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
-        image_objs = [
-            {'name': 'teaser', 'url': self.PAGE_PREFIX + 'assets/top/main-t1b/vis.jpg'},
-            #{'name': 'teaser', 'url': 'https://pbs.twimg.com/media/EjZnt4CUcAIJeqR?format=jpg&name=4096x4096'},
-        ]
-        self.download_image_objects(image_objs, folder)
+        self.image_list = []
+        self.add_to_image_list('teaser', self.PAGE_PREFIX + 'assets/top/main-t1b/vis.jpg')
+        self.add_to_image_list('kv1', self.PAGE_PREFIX + 'assets/top/main-h1/vis.jpg')
+        self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/Ev2vZFhUUAACs3Y?format=jpg&name=large')
+        self.download_image_list(folder)
 
     def download_character(self):
         folder = self.create_character_directory()
