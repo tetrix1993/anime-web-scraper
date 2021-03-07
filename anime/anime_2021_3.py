@@ -5,6 +5,7 @@ from datetime import datetime
 from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 
 
+# Bokutachi no Remake http://bokurema.com/ #ぼくリメ #bokurema @bokurema_anime
 # Cheat Kusushi no Slow Life: Isekai ni Tsukurou Drugstore https://www.cheat-kusushi.jp/ #チート薬師 #スローライフ @cheat_kusushi
 # Genjitsu Shugi Yuusha no Oukoku Saikenki https://genkoku-anime.com/ #現国アニメ @genkoku_info
 # Kobayashi-san Chi no Maid Dragon S https://maidragon.jp/2nd/ #maidragon @maidragon_anime
@@ -13,6 +14,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 # Peach Boy Riverside https://peachboyriverside.com/ #ピーチボーイリバーサイド @peachboy_anime
 # Sekai Saikou no Ansatsusha, Isekai Kizoku ni Tensei suru https://ansatsu-kizoku.jp/ #暗殺貴族 @ansatsu_kizoku
 # Shiroi Suna no Aquatope https://aquatope-anime.com/ #白い砂のアクアトープ @aquatope_anime
+# Tantei wa Mou, Shindeiru. https://tanmoshi-anime.jp/ #たんもし @tanteiwamou_
 
 
 # Summer 2021 Anime
@@ -23,6 +25,56 @@ class Summer2021AnimeDownload(MainDownload):
 
     def __init__(self):
         super().__init__()
+
+
+# Bokutachi no Remake
+class BokuremaDownload(Summer2021AnimeDownload):
+    title = 'Bokutachi no Remake'
+    keywords = [title, 'Bokurema', 'Remake our Life!']
+    folder_name = 'bokurema'
+
+    PAGE_PREFIX = "http://bokurema.com"
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('teaser', self.PAGE_PREFIX + '/assets/images/teaser_2/main_visual.png')
+        self.add_to_image_list('kv1', self.PAGE_PREFIX + '/assets/images/index/top_keyvisual_01.png')
+        self.add_to_image_list('kv1_2', self.PAGE_PREFIX + '/assets/images/uploads/2021/02/keyvisual.jpg')
+        self.add_to_image_list('wakuwork_collaboration', self.PAGE_PREFIX + '/assets/images/uploads/2021/02/wakuwork_collaboration.png')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        self.image_list = []
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + '/character/')
+            lis = soup.find_all('li', 'p-character-list__item')
+            for li in lis:
+                label = li.find('label')
+                if label and label.has_attr('class') and len(label['class']) > 0:
+                    character_name = label['class'][0].replace('c-character-select-area--', '')
+                    if len(character_name) > 0:
+                        image_url = '%s/assets/images/character/character_visual_%s.png'\
+                                    % (self.PAGE_PREFIX, character_name)
+                        image_name = 'character_visual_%s' % character_name
+                        self.add_to_image_list(image_name, image_url)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Character")
+            print(e)
+        self.download_image_list(folder)
+
 
 
 # Cheat Kusushi no Slow Life: Isekai ni Tsukurou Drugstore
@@ -290,6 +342,68 @@ class AquatopeDownload(Summer2021AnimeDownload):
                             self.add_to_image_list(image_name, image_url)
                         except:
                             continue
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Character")
+            print(e)
+        self.download_image_list(folder)
+
+
+# Tantei wa Mou, Shindeiru.
+class TanmoshiDownload(Summer2021AnimeDownload):
+    title = "Tantei wa Mou, Shindeiru."
+    keywords = [title, "Tanmoshi", "The Detective Is Already Dead"]
+    folder_name = 'tanmoshi'
+
+    PAGE_PREFIX = 'https://tanmoshi-anime.jp/'
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('kv1', 'https://pbs.twimg.com/media/EsCTT1KXAAUGy6V?format=jpg&name=4096x4096')
+        self.add_to_image_list('kv2', 'https://pbs.twimg.com/media/Eug1UGwUYAcgxON?format=jpg&name=4096x4096')
+        template = self.PAGE_PREFIX + 'core_sys/images/main/tz/%s.png'
+        for name in ['umbouzu', 'mugiko', 'poni', 'moyashi']:
+            image_name = 'illust_' + name
+            self.add_to_image_list(image_name, template % image_name)
+        self.download_image_list(folder)
+
+        for i in range(1, 11, 1):
+            file_name = 'kv' + str(i)
+            if self.is_image_exists(file_name, folder):
+                continue
+            if i == 1:
+                image_url = template % 'kv'
+            else:
+                image_url = template % ('kv' + str(i))
+            if self.is_valid_url(image_url, is_image=True):
+                print('URL exists: ' + image_url)
+            else:
+                break
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        self.image_list = []
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            wraps = soup.find_all('div', class_='charListWrap')
+            for wrap in wraps:
+                images = wrap.find_all('img')
+                for image in images:
+                    if image.has_attr('src'):
+                        image_url = self.PAGE_PREFIX + image['src']
+                        image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                        self.add_to_image_list(image_name, image_url)
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + " - Character")
             print(e)

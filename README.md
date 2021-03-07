@@ -82,7 +82,6 @@ pip install portalocker
 
 ### New Anime
 The premiere date for the anime listed here has not been announced.
-* [Bokutachi no Remake](http://bokurema.com/)
 * [Goblin Slayer 2nd Season](http://www.goblinslayer.jp/)
 * [Hataraku Maou-sama! 2nd Season](https://maousama.jp/)
 * [Itai no wa Iya nano de Bougyoryoku ni Kyokufuri Shitai to Omoimasu. 2nd Season](https://bofuri.jp/)
@@ -97,7 +96,6 @@ The premiere date for the anime listed here has not been announced.
 * [Shokei Shoujo no Virgin Road](http://virgin-road.com/)
 * [Shuumatsu no Harem](https://end-harem-anime.com/)
 * [Slow Loop](https://slowlooptv.com/)
-* [Tantei wa Mou, Shindeiru.](https://tanmoshi-anime.jp/)
 * [Tensai Ouji no Akaji Kokka Saisei Jutsu: Souda, Baikoku shiyou](https://tensaiouji-anime.com/)
 
 
@@ -105,6 +103,7 @@ The premiere date for the anime listed here has not been announced.
 * [Tate no Yuusha no Nariagari 2nd Season](http://shieldhero-anime.jp)
 
 ### Summer 2021 Anime
+* [Bokutachi no Remake](http://bokurema.com/)
 * [Cheat Kusushi no Slow Life: Isekai ni Tsukurou Drugstore](https://www.cheat-kusushi.jp/)
 * [Genjitsu Shugi Yuusha no Oukoku Saikenki](https://genkoku-anime.com/)
 * [Kobayashi-san Chi no Maid Dragon S](https://maidragon.jp/2nd/)
@@ -113,6 +112,7 @@ The premiere date for the anime listed here has not been announced.
 * [Peach Boy Riverside](https://peachboyriverside.com/)
 * [Sekai Saikou no Ansatsusha, Isekai Kizoku ni Tensei suru](https://ansatsu-kizoku.jp/)
 * [Shiroi Suna no Aquatope](https://aquatope-anime.com/)
+* [Tantei wa Mou, Shindeiru.](https://tanmoshi-anime.jp/)
 
 ### Spring 2021 Anime
 * [86](https://anime-86.com/)

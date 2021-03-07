@@ -2,7 +2,6 @@ import os
 import anime.constants as constants
 from anime.main_download import MainDownload
 
-# Bokutachi no Remake http://bokurema.com/ #ぼくリメ #bokurema @bokurema_anime
 # Goblin Slayer S2 http://www.goblinslayer.jp/ #ゴブスレ @GoblinSlayer_GA
 # Hataraku Maou-sama! https://maousama.jp/ #maousama @anime_maousama
 # Itai no wa https://bofuri.jp/story/ #防振り #bofuri @bofuri_anime
@@ -17,7 +16,6 @@ from anime.main_download import MainDownload
 # Shokei Shoujo no Virgin Road http://virgin-road.com/ #処刑少女 #shokei_anime @virginroad_GA
 # Shuumatsu no Harem https://end-harem-anime.com/ #終末のハーレム @harem_official_
 # Slow Loop https://slowlooptv.com/ #slowloop @slowloop_tv
-# Tantei wa Mou, Shindeiru. https://tanmoshi-anime.jp/ #たんもし @tanteiwamou_
 # Tensai Ouji no Akaji Kokka Saisei Jutsu: Souda, Baikoku shiyou #天才王子の赤字国家再生術 @tensaiouji_PR
 # Vlad Love https://www.vladlove.com/index.html #ぶらどらぶ #vladlove @VLADLOVE_ANIME
 
@@ -30,55 +28,6 @@ class UnconfirmedDownload(MainDownload):
 
     def __init__(self):
         super().__init__()
-
-
-# Bokutachi no Remake
-class BokuremaDownload(UnconfirmedDownload):
-    title = 'Bokutachi no Remake'
-    keywords = [title, 'Bokurema', 'Remake our Life!']
-    folder_name = 'bokurema'
-
-    PAGE_PREFIX = "http://bokurema.com"
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_key_visual()
-        self.download_character()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('teaser', self.PAGE_PREFIX + '/assets/images/teaser_2/main_visual.png')
-        self.add_to_image_list('kv1', self.PAGE_PREFIX + '/assets/images/index/top_keyvisual_01.png')
-        self.add_to_image_list('kv1_2', self.PAGE_PREFIX + '/assets/images/uploads/2021/02/keyvisual.jpg')
-        self.add_to_image_list('wakuwork_collaboration', self.PAGE_PREFIX + '/assets/images/uploads/2021/02/wakuwork_collaboration.png')
-        self.download_image_list(folder)
-
-    def download_character(self):
-        folder = self.create_character_directory()
-        self.image_list = []
-        try:
-            soup = self.get_soup(self.PAGE_PREFIX + '/character/')
-            lis = soup.find_all('li', 'p-character-list__item')
-            for li in lis:
-                label = li.find('label')
-                if label and label.has_attr('class') and len(label['class']) > 0:
-                    character_name = label['class'][0].replace('c-character-select-area--', '')
-                    if len(character_name) > 0:
-                        image_url = '%s/assets/images/character/character_visual_%s.png'\
-                                    % (self.PAGE_PREFIX, character_name)
-                        image_name = 'character_visual_%s' % character_name
-                        self.add_to_image_list(image_name, image_url)
-        except Exception as e:
-            print("Error in running " + self.__class__.__name__ + " - Character")
-            print(e)
-        self.download_image_list(folder)
 
 
 # Goblin Slayer 2nd Season
@@ -521,68 +470,6 @@ class SlowLoopDownload(UnconfirmedDownload):
         self.image_list = []
         self.add_to_image_list('announce', 'https://pbs.twimg.com/media/Ep5-SoLUUAAHq36?format=jpg&name=4096x4096')
         self.add_to_image_list('announce_2', self.PAGE_PREFIX + 'images/top/v_001.jpg')
-        self.download_image_list(folder)
-
-
-# Tantei wa Mou, Shindeiru.
-class TanmoshiDownload(UnconfirmedDownload):
-    title = "Tantei wa Mou, Shindeiru."
-    keywords = [title, "Tanmoshi", "The Detective Is Already Dead"]
-    folder_name = 'tanmoshi'
-
-    PAGE_PREFIX = 'https://tanmoshi-anime.jp/'
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_key_visual()
-        self.download_character()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('kv1', 'https://pbs.twimg.com/media/EsCTT1KXAAUGy6V?format=jpg&name=4096x4096')
-        self.add_to_image_list('kv2', 'https://pbs.twimg.com/media/Eug1UGwUYAcgxON?format=jpg&name=4096x4096')
-        template = self.PAGE_PREFIX + 'core_sys/images/main/tz/%s.png'
-        for name in ['umbouzu', 'mugiko', 'poni', 'moyashi']:
-            image_name = 'illust_' + name
-            self.add_to_image_list(image_name, template % image_name)
-        self.download_image_list(folder)
-
-        for i in range(1, 11, 1):
-            file_name = 'kv' + str(i)
-            if self.is_image_exists(file_name, folder):
-                continue
-            if i == 1:
-                image_url = template % 'kv'
-            else:
-                image_url = template % ('kv' + str(i))
-            if self.is_valid_url(image_url, is_image=True):
-                print('URL exists: ' + image_url)
-            else:
-                break
-
-    def download_character(self):
-        folder = self.create_character_directory()
-        self.image_list = []
-        try:
-            soup = self.get_soup(self.PAGE_PREFIX)
-            wraps = soup.find_all('div', class_='charListWrap')
-            for wrap in wraps:
-                images = wrap.find_all('img')
-                for image in images:
-                    if image.has_attr('src'):
-                        image_url = self.PAGE_PREFIX + image['src']
-                        image_name = self.extract_image_name_from_url(image_url, with_extension=False)
-                        self.add_to_image_list(image_name, image_url)
-        except Exception as e:
-            print("Error in running " + self.__class__.__name__ + " - Character")
-            print(e)
         self.download_image_list(folder)
 
 
