@@ -518,6 +518,7 @@ class SentoinDownload(Spring2021AnimeDownload):
     def run(self):
         self.download_episode_preview()
         self.download_key_visual()
+        self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
@@ -528,6 +529,17 @@ class SentoinDownload(Spring2021AnimeDownload):
         self.add_to_image_list('teaser', 'https://pbs.twimg.com/media/Eqbrtf7VEAADuiD?format=jpg&name=4096x4096')
         self.add_to_image_list('teaser_1', 'https://kisaragi-co.jp/assets/top/main-t1/vis.png')
         self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = 'https://kisaragi-co.jp/assets/top/character/%s.png'
+        for i in range(20):
+            image_name = 'c%s' % str(i + 1)
+            if self.is_image_exists(image_name, folder):
+                continue
+            result = self.download_image(template % image_name, folder + '/' + image_name)
+            if result == -1:
+                break
 
 
 # Shadows House
