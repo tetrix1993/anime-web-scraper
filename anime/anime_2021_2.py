@@ -534,12 +534,13 @@ class SentoinDownload(Spring2021AnimeDownload):
         folder = self.create_character_directory()
         template = 'https://kisaragi-co.jp/assets/top/character/%s.png'
         for i in range(20):
-            image_name = 'c%s' % str(i + 1)
-            if self.is_image_exists(image_name, folder):
-                continue
-            result = self.download_image(template % image_name, folder + '/' + image_name)
-            if result == -1:
-                break
+            for j in ['c', 'f']:
+                image_name = '%s%s' % (j, str(i + 1))
+                if self.is_image_exists(image_name, folder):
+                    continue
+                result = self.download_image(template % image_name, folder + '/' + image_name)
+                if result == -1:
+                    break
 
 
 # Shadows House
