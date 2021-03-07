@@ -548,17 +548,20 @@ class TanmoshiDownload(UnconfirmedDownload):
         self.image_list = []
         self.add_to_image_list('kv1', 'https://pbs.twimg.com/media/EsCTT1KXAAUGy6V?format=jpg&name=4096x4096')
         self.add_to_image_list('kv2', 'https://pbs.twimg.com/media/Eug1UGwUYAcgxON?format=jpg&name=4096x4096')
+        template = self.PAGE_PREFIX + 'core_sys/images/main/tz/%s.png'
+        for name in ['umbouzu', 'mugiko', 'poni', 'moyashi']:
+            image_name = 'illust_' + name
+            self.add_to_image_list(image_name, template % image_name)
         self.download_image_list(folder)
 
-        template = self.PAGE_PREFIX + 'core_sys/images/main/tz/kv%s.png'
         for i in range(1, 11, 1):
             file_name = 'kv' + str(i)
             if self.is_image_exists(file_name, folder):
                 continue
             if i == 1:
-                image_url = template % ''
+                image_url = template % 'kv'
             else:
-                image_url = template % str(i)
+                image_url = template % ('kv' + str(i))
             if self.is_valid_url(image_url, is_image=True):
                 print('URL exists: ' + image_url)
             else:
