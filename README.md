@@ -111,6 +111,7 @@ The premiere date for the anime listed here has not been announced.
 * [Otome Game no Hametsu Flag shika Nai Akuyaku Reijou ni Tensei shiteshimatta... X](https://hamehura-anime.com/)
 * [Peach Boy Riverside](https://peachboyriverside.com/)
 * [Sekai Saikou no Ansatsusha, Isekai Kizoku ni Tensei suru](https://ansatsu-kizoku.jp/)
+* [Shin no Nakama ja Nai to Yuusha no Party wo Oidasareta node, Henkyou de Slow Life suru Koto ni Shimashita](https://shinnonakama.com/)
 * [Shiroi Suna no Aquatope](https://aquatope-anime.com/)
 * [Tantei wa Mou, Shindeiru.](https://tanmoshi-anime.jp/)
 
