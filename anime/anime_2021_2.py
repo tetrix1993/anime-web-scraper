@@ -570,6 +570,8 @@ class ShadowsHouseDownload(Spring2021AnimeDownload):
         self.image_list = []
         self.add_to_image_list('teaser', self.PAGE_PREFIX + 'assets/img/img_kv_pc.jpg')
         self.add_to_image_list('kv', self.PAGE_PREFIX + 'assets/img/top/main/img_kv.jpg')
+        self.add_to_image_list('kv_1', 'https://pbs.twimg.com/media/Ev84_PFVkAELn9Q?format=jpg&name=medium')
+        #self.add_to_image_list('kv_1', self.PAGE_PREFIX + 'news/SYS/CONTENTS/2021030812263644689389')
         #self.add_to_image_list('chara_visual_louise', 'https://pbs.twimg.com/media/EsPEImfUYAEkuL1?format=jpg&name=large')
         self.download_image_list(folder)
         for i in range(10):
