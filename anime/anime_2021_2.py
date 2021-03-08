@@ -560,6 +560,7 @@ class ShadowsHouseDownload(Spring2021AnimeDownload):
     def run(self):
         self.download_episode_preview()
         self.download_key_visual()
+        self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
@@ -568,7 +569,8 @@ class ShadowsHouseDownload(Spring2021AnimeDownload):
         folder = self.create_key_visual_directory()
         self.image_list = []
         self.add_to_image_list('teaser', self.PAGE_PREFIX + 'assets/img/img_kv_pc.jpg')
-        self.add_to_image_list('chara_visual_louise', 'https://pbs.twimg.com/media/EsPEImfUYAEkuL1?format=jpg&name=large')
+        self.add_to_image_list('kv', self.PAGE_PREFIX + 'assets/img/top/main/img_kv.jpg')
+        #self.add_to_image_list('chara_visual_louise', 'https://pbs.twimg.com/media/EsPEImfUYAEkuL1?format=jpg&name=large')
         self.download_image_list(folder)
         for i in range(10):
             image_name = 'img_kv_%s' % str(i + 1).zfill(2)
@@ -578,6 +580,43 @@ class ShadowsHouseDownload(Spring2021AnimeDownload):
             if self.is_valid_url(image_url, is_image=True):
                 self.download_image(image_url, folder + '/' + image_name)
             else:
+                break
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'assets/img/character/visual/%s.png'
+        for i in range(20):
+            num = str(i + 1).zfill(2)
+            filenames = []
+            exist = False
+            for j in ['chara_%s_s', 'chara_%s_d']:
+                filename = j % num
+                filenames.append(filename)
+                if self.is_image_exists(filename, folder):
+                    exist = True
+                    break
+            if exist:
+                continue
+            image_downloaded = 0
+            for name in filenames:
+                image_url = template % name
+                result = self.download_image(image_url, folder + '/' + name)
+                if result == -1:
+                    continue
+                image_downloaded += 1
+            if image_downloaded == 0:
+                break
+
+        # Other Characters
+        other_template = self.PAGE_PREFIX + 'assets/img/character/sub/%s.png'
+        for i in range(20):
+            num = str(i + 1).zfill(2)
+            image_name = 'img_chara-other_%s' % num
+            if self.is_image_exists(image_name, folder):
+                continue
+            image_url = other_template % image_name
+            result = self.download_image(image_url, folder + '/' + image_name)
+            if result == -1:
                 break
 
 
