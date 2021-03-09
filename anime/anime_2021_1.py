@@ -1159,6 +1159,13 @@ class NonNonBiyori3Download(Winter2021AnimeDownload):
         folder = self.create_bluray_directory()
         self.image_list = []
         self.add_to_image_list('music_jkt', 'http://nanoripe.com/nanoripe/wp-content/uploads/2021/01/nonnon_days_H1_RGB_Shikaku.jpg')
+        self.add_to_image_list('bd_bonus_1', 'https://pbs.twimg.com/media/Ev-J9aXVoAA3KjX?format=jpg&name=4096x4096')
+        self.add_to_image_list('bd_bonus_2', 'https://pbs.twimg.com/media/Ev-K95tVgAI43Ub?format=jpg&name=4096x4096')
+        self.add_to_image_list('bd_bonus_3', 'https://pbs.twimg.com/media/Ev-NPDPVEAEXfM7?format=jpg&name=large')
+        self.add_to_image_list('bd_bonus_4', 'https://pbs.twimg.com/media/Ev-OnN9UcAAKESO?format=jpg&name=medium')
+        self.add_to_image_list('bd_bonus_5', 'https://pbs.twimg.com/media/Ev-OvrOUUAM62My?format=jpg&name=large')
+        self.add_to_image_list('bd_bonus_6', 'https://pbs.twimg.com/media/Ev-PZ8pUcAQEcv3?format=jpg&name=large')
+        self.add_to_image_list('bd_bonus_7', 'https://pbs.twimg.com/media/Ev-QEgDUYAAHff9?format=jpg&name=large')
         try:
             soup = self.get_soup(self.PAGE_PREFIX + '/tvanime/goods/dvd/season3/')
             c_inner = soup.find('div', class_='c-inner')
@@ -1408,6 +1415,10 @@ class LasdanDownload(Winter2021AnimeDownload):
     def download_bluray(self):
         folder = self.create_bluray_directory()
         self.image_list = []
+        self.add_to_image_list('bd2_big', 'https://pbs.twimg.com/media/Ev8hdfIVIAIjjPb?format=jpg&name=4096x4096')
+        self.add_to_image_list('bd_bonus_1', 'https://pbs.twimg.com/media/EvhgYzGUYAYO1YC?format=jpg&name=900x900')
+        self.add_to_image_list('bd_bonus_2', 'https://pbs.twimg.com/media/EvhgZKXVcAA3cj_?format=jpg&name=900x900')
+        self.add_to_image_list('bd_bonus_3', 'https://pbs.twimg.com/media/EvhgZgsVcAERV0r?format=jpg&name=900x900')
         try:
             soup = self.get_soup(self.PAGE_PREFIX + 'bd')
             list_div = soup.find('div', id='list_05')
