@@ -1921,6 +1921,11 @@ class YuruCamp2Download(Winter2021AnimeDownload):
         self.add_to_image_list('music_op', 'https://images-na.ssl-images-amazon.com/images/I/91QzwEIKguL._AC_SL1500_.jpg')
         self.add_to_image_list('music_ed', 'https://images-na.ssl-images-amazon.com/images/I/81Ws%2Bmf25tL._AC_SL1500_.jpg')
         self.add_to_image_list('music_ost', self.BASE_PREFIX + 'camping/content/uploads/2021/02/yuru2ost_jak.jpg')
+        self.add_to_image_list('bd_bonus_1', 'https://pbs.twimg.com/media/EwR_gQUUUAIXTI4?format=png&name=900x900')
+        self.add_to_image_list('bd_bonus_2', 'https://pbs.twimg.com/media/EwR_hkPVIAAwPmR?format=png&name=900x900')
+        self.add_to_image_list('bd_bonus_3', 'https://pbs.twimg.com/media/EwR_1pTUUAMgbJU?format=png&name=900x900')
+        self.add_to_image_list('bd_bonus_4', 'https://pbs.twimg.com/media/EwR_1pYVkAA8NYH?format=png&name=900x900')
+        self.add_to_image_list('bd_bonus_5', 'https://pbs.twimg.com/media/EwSBLVhVIAYgk4N?format=png&name=900x900')
         self.download_image_list(folder)
         try:
             soup = self.get_soup('https://yurucamp.jp/news/information/6142')
