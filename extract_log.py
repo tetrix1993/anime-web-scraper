@@ -1,7 +1,7 @@
 import os
 import re
 import xlsxwriter
-from anime import Winter2021AnimeDownload
+from anime import *
 from anime.constants import EXTERNAL_FOLDERS
 
 # This script generates a tab-separated value (TSV) file containing the image URL of the episode previews from a list
@@ -54,13 +54,17 @@ def generate_excel(filename, anime_classes, include_external=False):
 
         # Headers
         worksheet.write(0, 0, 'Anime', header_format)
-        worksheet.write(0, 1, 'Timestamp', header_format)
-        worksheet.write(0, 2, 'File Name', header_format)
-        worksheet.write(0, 3, 'URL', header_format)
+        worksheet.write(0, 1, 'Season', header_format)
+        worksheet.write(0, 2, 'Timestamp', header_format)
+        worksheet.write(0, 3, 'File Name', header_format)
+        worksheet.write(0, 4, 'URL', header_format)
+        worksheet.write(0, 5, 'Core Sys', header_format)
+        worksheet.write(0, 6, 'Sys Contents', header_format)
 
         row = 0
         for i in anime_classes:
             title = i.title
+            season = i.season
             fullpath = i.get_full_path()
             logpath_template = fullpath + '%s/log/download.log'
             logpaths = [logpath_template % '']
@@ -87,9 +91,12 @@ def generate_excel(filename, anime_classes, include_external=False):
                                 output.append(filepath)
                                 row += 1
                                 worksheet.write(row, 0, title, data_format)
-                                worksheet.write(row, 1, timestamp, data_format)
-                                worksheet.write(row, 2, filepath, data_format)
-                                worksheet.write(row, 3, url_split, data_format)
+                                worksheet.write(row, 1, season, data_format)
+                                worksheet.write(row, 2, timestamp, data_format)
+                                worksheet.write(row, 3, filepath, data_format)
+                                worksheet.write(row, 4, url_split, data_format)
+                                worksheet.write_formula(row, 5, '=ISNUMBER(FIND("/core_sys/", E%s))' % str(row + 1))
+                                worksheet.write_formula(row, 6, '=ISNUMBER(FIND("/SYS/CONTENTS/", E%s))' % str(row + 1))
 
 
 if __name__ == '__main__':
