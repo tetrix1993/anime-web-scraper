@@ -120,7 +120,7 @@ class EightySixDownload(Spring2021AnimeDownload):
 
 class DoraieDownload(Spring2021AnimeDownload):
     title = 'Dragon, Ie wo Kau'
-    keywords = [title, 'Dragon Goes House-Hunting']
+    keywords = [title, 'Dragon Goes House-Hunting', 'Doraie']
     folder_name = 'doraie'
 
     PAGE_PREFIX = 'https://doraie.com/'
@@ -140,6 +140,7 @@ class DoraieDownload(Spring2021AnimeDownload):
         folder = self.create_key_visual_directory()
         self.image_list = []
         self.add_to_image_list('kv2', self.PAGE_PREFIX + 'news/wp/wp-content/uploads/2020/11/7e7632e1c37c768e225d8f78d1a5a6f3.jpg')
+        self.add_to_image_list('kv3', self.PAGE_PREFIX + 'news/wp/wp-content/uploads/2021/03/22c816279916034a8e5490b4d831d432.jpg')
         self.download_image_list(folder)
 
     def download_character(self):
