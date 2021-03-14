@@ -1,0 +1,5 @@
+bs4>=0.0.1
+pillow>=6.0.0
+portalocker>=1.6.0
+requests>=2.22.0
+xlsxwriter>=1.2.8

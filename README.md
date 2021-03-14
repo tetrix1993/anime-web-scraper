@@ -15,12 +15,9 @@ The motivations for building the scraper is to download contents quickly for blo
 2. When installing Python, make sure to check 'Add Python 3.X to PATH':\
 ![win_installer.png](/images/win_installer.png)
 3. Open the Command Prompt (for Windows) or Terminal (for MacOS).
-4. Run the following commands:
+4. Run the following command to install all the packages needed to run the program:
 ```
-pip install requests
-pip install bs4
-pip install pillow
-pip install portalocker
+pip install -r requirements.txt
 ```
 
 ## Running the Program
