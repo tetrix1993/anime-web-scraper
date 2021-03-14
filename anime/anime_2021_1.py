@@ -1926,6 +1926,7 @@ class YuruCamp2Download(Winter2021AnimeDownload):
         self.add_to_image_list('bd_bonus_3', 'https://pbs.twimg.com/media/EwR_1pTUUAMgbJU?format=png&name=900x900')
         self.add_to_image_list('bd_bonus_4', 'https://pbs.twimg.com/media/EwR_1pYVkAA8NYH?format=png&name=900x900')
         self.add_to_image_list('bd_bonus_5', 'https://pbs.twimg.com/media/EwSBLVhVIAYgk4N?format=png&name=900x900')
+        self.add_to_image_list('bd_bonus_6', 'https://pbs.twimg.com/media/EwSXw_-VIAQ5F4X?format=png&name=900x900')
         self.download_image_list(folder)
         try:
             soup = self.get_soup('https://yurucamp.jp/news/information/6142')
