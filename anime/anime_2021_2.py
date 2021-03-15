@@ -6,6 +6,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 
 
 # 86 https://anime-86.com/ #エイティシックス @anime_eightysix
+# Fumetsu no Anata e https://anime-fumetsunoanatae.com/ #不滅のあなたへ @nep_fumetsu
 # Dragon, Ie wo Kau #ドラ家 @anime_doraie
 # Hige wo Soru. Soshite Joshikousei wo Hirou. http://higehiro-anime.com/ #higehiro #ひげひろ @higehiro_anime
 # Ijiranaide, Nagatoro-san https://www.nagatorosan.jp/ #長瀞さん @nagatoro_tv
@@ -118,6 +119,72 @@ class EightySixDownload(Spring2021AnimeDownload):
         self.download_content(valentine_ex_url, folder + '/valentine_ex.mp4')
 
 
+# Fumetsu no Anata e
+class FumetsuNoAnataeDownload(Spring2021AnimeDownload):
+    title = 'Fumetsu no Anata e'
+    keywords = [title, 'To Your Eternity']
+    folder_name = 'fumetsunoanatae'
+
+    PAGE_PREFIX = 'https://anime-fumetsunoanatae.com'
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        json_url = self.PAGE_PREFIX + '/assets/data/story-ja.json'
+        image_url_template = self.PAGE_PREFIX + '/story/images/%s_%s/%s.png'
+        self.image_list = []
+        try:
+            json_obj = self.get_json(json_url)
+            if 'list' in json_obj and isinstance(json_obj['list'], list):
+                for obj in json_obj['list']:
+                    if 'series' in obj and 'episodes' in obj and isinstance(obj['series'], int)\
+                            and isinstance(obj['episodes'], int):
+                        episode = str(obj['episodes']).zfill(2)
+                        if self.is_image_exists(episode + '_1'):
+                            continue
+                        for i in range(3):
+                            image_url = image_url_template % (str(obj['series']), str(obj['episodes']), str(i + 1))
+                            image_name = episode + '_' + str(i + 1)
+                            self.add_to_image_list(image_name, image_url)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
+        self.download_image_list(self.base_folder)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('kv', self.PAGE_PREFIX + '/assets/images/top/top-kv_ja.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        json_url = self.PAGE_PREFIX + '/assets/data/character-ja.json'
+        image_url_template = self.PAGE_PREFIX + '/assets/images/characters/%s.png'
+        self.image_list = []
+        try:
+            json_obj = self.get_json(json_url)
+            if 'list' in json_obj and isinstance(json_obj['list'], list):
+                for obj in json_obj['list']:
+                    if 'img_body' in obj:
+                        image_name = obj['img_body']
+                        if self.is_image_exists(image_name, folder):
+                            continue
+                        image_url = image_url_template % image_name
+                        self.add_to_image_list(image_name, image_url)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
+        self.download_image_list(folder)
+
+
+# Dragon, Ie wo Kau
 class DoraieDownload(Spring2021AnimeDownload):
     title = 'Dragon, Ie wo Kau'
     keywords = [title, 'Dragon Goes House-Hunting', 'Doraie']
@@ -688,6 +755,7 @@ class Slime300Download(Spring2021AnimeDownload):
         self.download_image_objects(image_objs, folder)
 
 
+# Super Cub
 class SuperCubDownload(Spring2021AnimeDownload):
     title = 'Super Cub'
     keywords = [title, 'Supercub']

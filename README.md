@@ -114,6 +114,7 @@ The premiere date for the anime listed here has not been announced.
 
 ### Spring 2021 Anime
 * [86](https://anime-86.com/)
+* [Fumetsu no Anata e](https://anime-fumetsunoanatae.com/)
 * [Dragon, Ie wo Kau](https://doraie.com/)
 * [Hige wo Soru. Soshite Joshikousei wo Hirou.](http://higehiro-anime.com/)
 * [Ijiranaide, Nagatoro-san](https://www.nagatorosan.jp/)
