@@ -1398,9 +1398,10 @@ class KamihiroDownload(Fall2020AnimeDownload):
 
     def run(self):
         self.download_episode_preview()
-        self.download_episode_preview_guess()
+        #self.download_episode_preview_guess()
         self.download_key_visual()
         self.download_character()
+        self.download_bluray()
         self.download_music()
 
     def download_episode_preview(self):
@@ -1481,6 +1482,27 @@ class KamihiroDownload(Fall2020AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + " - Character")
             print(e)
+
+    def download_bluray(self):
+        folder = self.create_bluray_directory()
+        self.image_list = []
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + '/bd/')
+            articles = soup.find_all('article')
+            for article in articles:
+                img_tag = article.find('img')
+                if img_tag and img_tag.has_attr('src') and img_tag.has_attr('alt'):
+                    try:
+                        volume = str(int(img_tag['alt'][-1]))
+                    except:
+                        continue
+                    image_url = img_tag['src']
+                    image_name = 'bd' + volume
+                    self.add_to_image_list(image_name, image_url)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Blu-Ray")
+            print(e)
+        self.download_image_list(folder)
 
     def download_music(self):
         folder = self.create_custom_directory('music')
