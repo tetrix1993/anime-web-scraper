@@ -457,17 +457,25 @@ class IrumaKunDownload(Fall2019AnimeDownload):
     keywords = ["Mairimashita! Iruma-kun", "Welcome to Demon School! Iruma-kun", "Irumakun"]
     folder_name = 'iruma-kun'
 
-    PAGE_PREFIX = "https://boku-ben.com/story/"
-    PAGE_SUFFIX = ".html"
-    IMAGE_PREFIX = "https://boku-ben.com"
-    FINAL_EPISODE = 13
-    NUM_OF_PICTURES_PER_PAGE = 3
+    IMAGE_PREFIX = 'https://www6.nhk.or.jp/anime/program/common/images/iruma/'
+    FINAL_EPISODE = 23
     
     def __init__(self):
         super().__init__()
     
     def run(self):
-        pass
+        self.download_episode_preview()
+
+    def download_episode_preview(self):
+        for i in range(self.FINAL_EPISODE):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_1'):
+                continue
+            image_url = self.IMAGE_PREFIX + 'story_' + episode + '.jpg'
+            if self.is_valid_url(image_url):
+                self.download_image(image_url, self.base_folder + '/' + episode + '_1')
+            else:
+                break
         
 
 # Null Peta
