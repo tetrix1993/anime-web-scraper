@@ -754,6 +754,7 @@ class YakunaraMugCupMo(Spring2021AnimeDownload):
         self.download_episode_preview()
         self.download_key_visual()
         self.download_character()
+        self.download_bluray()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
@@ -762,6 +763,9 @@ class YakunaraMugCupMo(Spring2021AnimeDownload):
         folder = self.create_key_visual_directory()
         self.image_list = []
         self.add_to_image_list('teaser', self.PAGE_PREFIX + 'news/images/200729_01.jpg')
+        self.add_to_image_list('mv', self.PAGE_PREFIX + 'assets/img/mv.jpg')
+        self.add_to_image_list('mv_tw', 'https://pbs.twimg.com/media/EwgkOi4UcAIxr8m?format=jpg&name=medium')
+        self.add_to_image_list('mv2', self.PAGE_PREFIX + 'assets/img/mv2.jpg')
         self.download_image_list(folder)
 
     def download_character(self):
@@ -774,3 +778,9 @@ class YakunaraMugCupMo(Spring2021AnimeDownload):
             result = self.download_image(image_url, folder + '/' + image_name)
             if result == -1:
                 break
+
+    def download_bluray(self):
+        folder = self.create_bluray_directory()
+        self.image_list = []
+        self.add_to_image_list('music_op', 'https://pbs.twimg.com/media/EwgnHeUVEAcY0XX?format=jpg&name=medium')
+        self.download_image_list(folder)
