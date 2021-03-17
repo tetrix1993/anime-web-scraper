@@ -1211,14 +1211,14 @@ class KamisamaNiNattaHiDownload(Fall2020AnimeDownload):
             for i in range(6):
                 num = i + 1
                 image_name = 'bd' + str(num)
-                if self.is_image_exists(image_name + '_2'):
+                if self.is_image_exists(image_name + '_2', folder) and self.is_image_exists(image_name + '_3', folder):
                     continue
                 soup = self.get_soup(self.PAGE_PREFIX + 'bddvd/?no=' + str(num).zfill(2))
                 if soup is None:
                     continue
                 div = soup.find('div', class_='jk_image')
-                p_tag = soup.find('p', class_='jk_img')
-                tags = [div, p_tag]
+                p_tags = soup.find_all('p', class_='jk_img')
+                tags = [div] + p_tags
                 stop = False
                 for j in range(len(tags)):
                     if tags[j]:
@@ -1229,11 +1229,11 @@ class KamisamaNiNattaHiDownload(Fall2020AnimeDownload):
                                 stop = True
                                 continue
                             content_length = requests.head(image_url).headers['Content-Length']
-                            if content_length == '20243': # Now Printing
+                            if content_length == '20243':  # Now Printing
                                 stop = True
                                 continue
-                            if j == 1:
-                                img_name = image_name + '_2'
+                            if j >= 1:
+                                img_name = image_name + '_' + str(j + 1)
                             else:
                                 img_name = image_name
                             image_objs = [{'name': img_name, 'url': image_url}]
