@@ -7,7 +7,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 
 # 86 https://anime-86.com/ #エイティシックス @anime_eightysix
 # Fumetsu no Anata e https://anime-fumetsunoanatae.com/ #不滅のあなたへ @nep_fumetsu
-# Dragon, Ie wo Kau #ドラ家 @anime_doraie
+# Dragon, Ie wo Kau https://doraie.com/ #ドラ家 @anime_doraie
 # Hige wo Soru. Soshite Joshikousei wo Hirou. http://higehiro-anime.com/ #higehiro #ひげひろ @higehiro_anime
 # Ijiranaide, Nagatoro-san https://www.nagatorosan.jp/ #長瀞さん @nagatoro_tv
 # Isekai Maou to Shoukan Shoujo no Dorei Majutsu Ω https://isekaimaou-anime.com/ #異世界魔王 @isekaimaou
@@ -573,7 +573,34 @@ class SeijonoMaryokuDownload(Spring2021AnimeDownload):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        self.image_list = []
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story.php')
+            images = soup.find_all('img', class_='m-story-article-img')
+            current_episode = None
+            count = 1
+            for image in images:
+                if image and image.has_attr('src'):
+                    split1 = image['src'].split('/')
+                    if len(split1) == 4:
+                        try:
+                            episode = str(int(split1[2])).zfill(2)
+                        except:
+                            continue
+                        if self.is_image_exists(episode + '_1'):
+                            continue
+                        if current_episode is None or current_episode != episode:
+                            current_episode = episode
+                            count = 1
+                        else:
+                            count += 1
+                        image_url = self.PAGE_PREFIX + image['src']
+                        image_name = episode + '_' + str(count)
+                        self.add_to_image_list(image_name, image_url)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
+        self.download_image_list(self.base_folder)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
