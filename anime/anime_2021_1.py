@@ -867,7 +867,7 @@ class MushokuTenseiDownload(Winter2021AnimeDownload):
 
     def run(self):
         self.download_episode_preview()
-        self.download_episode_preview_guess()
+        # self.download_episode_preview_guess()
         self.download_key_visual()
         self.download_character()
         self.download_bluray()
@@ -1307,7 +1307,7 @@ class LasdanDownload(Winter2021AnimeDownload):
 
     def run(self):
         self.download_episode_preview()
-        self.download_episode_preview_guess()
+        # self.download_episode_preview_guess()
         self.download_key_visual()
         self.download_character()
         self.download_bluray()
@@ -1503,7 +1503,7 @@ class Tensura2Download(Winter2021AnimeDownload):
     def run(self):
         self.download_episode_preview()
         self.download_episode_preview_external()
-        self.download_episode_preview_guess()
+        # self.download_episode_preview_guess()
         self.download_key_visual()
 
     def download_episode_preview(self):
@@ -1590,7 +1590,7 @@ class UrasekaiPicnicDownload(Winter2021AnimeDownload):
     def run(self):
         self.download_episode_preview()
         self.download_episode_preview_external()
-        self.download_episode_preview_guess()
+        # self.download_episode_preview_guess()
         self.download_key_visual()
         self.download_character()
         self.download_bluray()
