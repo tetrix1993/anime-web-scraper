@@ -15,7 +15,8 @@ from anime.main_download import MainDownload
 # Shokei Shoujo no Virgin Road http://virgin-road.com/ #処刑少女 #shokei_anime @virginroad_GA
 # Shuumatsu no Harem https://end-harem-anime.com/ #終末のハーレム @harem_official_
 # Slow Loop https://slowlooptv.com/ #slowloop @slowloop_tv
-# Tensai Ouji no Akaji Kokka Saisei Jutsu: Souda, Baikoku shiyou #天才王子の赤字国家再生術 @tensaiouji_PR
+# Tensai Ouji no Akaji Kokka Saisei Jutsu: Souda, Baikoku shiyou https://tensaiouji-anime.com/ #天才王子の赤字国家再生術 @tensaiouji_PR
+# Tsuki to Laika to Nosferatu https://tsuki-laika-nosferatu.com/ #月とライカ @LAIKA_anime
 # Vlad Love https://www.vladlove.com/index.html #ぶらどらぶ #vladlove @VLADLOVE_ANIME
 
 
@@ -472,6 +473,32 @@ class TensaiOujiDownload(UnconfirmedDownload):
         folder = self.create_key_visual_directory()
         self.image_list = []
         self.add_to_image_list('kv', self.PAGE_PREFIX + 'core_sys/images/main/home/kv.jpg')
+        self.download_image_list(folder)
+
+
+# Tsuki to Laika to Nosferatu
+class TsukiLaikaNosferatuDownload(UnconfirmedDownload):
+    title = 'Tsuki to Laika to Nosferatu'
+    keywords = [title]
+    folder_name = 'tsuki-laika-nosferatu'
+
+    PAGE_PREFIX = 'https://tsuki-laika-nosferatu.com/'
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('teaser', self.PAGE_PREFIX + 'Nr7R6svx/wp-content/themes/laika_tpl_v0/assets/img/top/visual.jpg')
+        self.add_to_image_list('teaser_tw', 'https://pbs.twimg.com/media/EwpkNbsUUAAX00O?format=jpg&name=medium')
         self.download_image_list(folder)
 
 

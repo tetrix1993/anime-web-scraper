@@ -94,6 +94,7 @@ The premiere date for the anime listed here has not been announced.
 * [Shuumatsu no Harem](https://end-harem-anime.com/)
 * [Slow Loop](https://slowlooptv.com/)
 * [Tensai Ouji no Akaji Kokka Saisei Jutsu: Souda, Baikoku shiyou](https://tensaiouji-anime.com/)
+* [Tsuki to Laika to Nosferatu](https://tsuki-laika-nosferatu.com/)
 
 
 ### Fall 2021 Anime
