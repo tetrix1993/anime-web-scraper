@@ -120,6 +120,7 @@ class Gotoubun2Download(Winter2021AnimeDownload):
 
     def run(self):
         self.download_episode_preview()
+        self.download_news()
         self.download_key_visual()
         self.download_character()
         self.download_bluray()
@@ -140,6 +141,35 @@ class Gotoubun2Download(Winter2021AnimeDownload):
                         return
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
+            print(e)
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        try:
+            soup = self.get_soup(news_url, decode=True)
+            dls = soup.find_all('dl', class_='newsall-block')
+            news_obj = self.get_news_log_object()
+            i = 0
+            results = []
+            for dl in dls:
+                i += 1
+                dt_date = dl.find('dt', class_='newsall-date')
+                a_tag = dl.find('a')
+                if dt_date and a_tag and a_tag.has_attr('href'):
+                    article_url = news_url + a_tag['href']
+                    date = dt_date.text
+                    title = a_tag.text
+                    if len(news_obj) > 1 and i == 1 and news_obj[-1]['url'] == article_url:
+                        break
+                    results.append({'date': date, 'title': title, 'url': article_url})
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log(result['date'], result['title'], result['url'])
+                if process_result == 0:
+                    success_count += 1
+            self.print_news_log_success_count(success_count)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - News')
             print(e)
 
     def download_key_visual(self):

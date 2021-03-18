@@ -459,7 +459,13 @@ class MainDownload:
         except:
             return -1
 
-    def create_news_log(self, title, url):
+    def create_news_log(self, date='', title='', url=''):
+        if date is None:
+            date = ''
+        if title is None:
+            title = ''
+        if url is None:
+            url = ''
         try:
             timenow = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             log_folder = self.base_folder + '/log'
@@ -467,8 +473,7 @@ class MainDownload:
                 os.makedirs(log_folder)
             logpath = log_folder + '/news.log'
             with open(logpath, 'a+', encoding='utf-8') as f:
-                f.write('%s\t%s\t%s\n' % (timenow, title, url))
-            print('News Log: %s' % url)
+                f.write('%s\t%s\t%s\t%s\n' % (timenow, date, title, url))
 
             # Global log path
             global_save_success = False
@@ -477,7 +482,7 @@ class MainDownload:
                 try:
                     with open(constants.GLOBAL_NEWS_LOG_FILE, 'a+', encoding='utf-8') as f:
                         portalocker.lock(f, portalocker.LOCK_EX)
-                        f.write('%s\t%s\t%s\t%s\n' % (timenow, folder_name, title, url))
+                        f.write('%s\t%s\t%s\t%s\t%s\n' % (timenow, folder_name, date, title, url))
                         portalocker.unlock(f)
                         global_save_success = True
                         break
@@ -488,6 +493,27 @@ class MainDownload:
         except Exception as e:
             return -1
         return 0
+
+    def get_news_log_object(self):
+        results = []
+        logpath = self.base_folder + '/log/news.log'
+        if not os.path.exists(logpath):
+            return results
+        try:
+            with open(logpath, 'r', encoding='utf-8') as f:
+                lines = f.readlines()
+            for line in lines:
+                split1 = line.replace('\n', '').split('\t')
+                if len(split1) == 4:
+                    results.append({'timestamp': split1[0], 'date': split1[1], 'title': split1[2], 'url': split1[3]})
+        except Exception as e:
+            print('Error in reading news log %s' % logpath)
+            print(e)
+        return results
+
+    def print_news_log_success_count(self, count):
+        if count > 0:
+            print('Updated news for %s (Count: %s)' % (self.__class__.__name__, str(count)))
 
 
     @staticmethod
