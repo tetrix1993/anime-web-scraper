@@ -15,6 +15,7 @@ HTTP_HEADER_USER_AGENT = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 
 FOLDER_OUTPUT = 'out'
 GLOBAL_DOWNLOAD_LOG_FILE = FOLDER_OUTPUT + '/download_log.tsv'
 GLOBAL_WEBSITE_LOG_FILE = FOLDER_OUTPUT + '/website_log.tsv'
+GLOBAL_NEWS_LOG_FILE = FOLDER_OUTPUT + '/news_log.tsv'
 
 EXTERNAL_FOLDER_ANIVERSE = 'aniverse'
 EXTERNAL_FOLDER_MOCANEWS = 'moca'
