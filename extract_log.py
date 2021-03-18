@@ -1,8 +1,6 @@
-import os
-import re
 import xlsxwriter
 from anime import *
-from anime.constants import EXTERNAL_FOLDERS
+from anime.constants import EXTERNAL_FOLDERS, FOLDER_OUTPUT
 
 # This script generates a tab-separated value (TSV) file containing the image URL of the episode previews from a list
 # of anime by extracting details from the download.log file in the log folder stored in each of the anime folder.
@@ -10,7 +8,10 @@ from anime.constants import EXTERNAL_FOLDERS
 
 def run(filename, anime_classes, include_external=False):
     regex = '[0-9]+_[0-9]+'  # Get only images with specific names: 01_1.jpg, 02_5.png etc.
-    with open(filename, 'w+', encoding='utf-8') as f:
+    if not os.path.exists(FOLDER_OUTPUT):
+        os.makedirs(FOLDER_OUTPUT)
+    output_file = FOLDER_OUTPUT + '/' + filename
+    with open(output_file, 'w+', encoding='utf-8') as f:
         for i in anime_classes:
             title = i.title
             fullpath = i.get_full_path()
@@ -42,9 +43,12 @@ def run(filename, anime_classes, include_external=False):
 
 def generate_excel(filename, anime_classes, include_external=False):
     regex = '[0-9]+_[0-9]+'  # Get only images with specific names: 01_1.jpg, 02_5.png etc.
-    if os.path.exists(filename):
-        os.remove(filename)
-    with xlsxwriter.Workbook(filename) as workbook:
+    if not os.path.exists(FOLDER_OUTPUT):
+        os.makedirs(FOLDER_OUTPUT)
+    output_file = FOLDER_OUTPUT + '/' + filename
+    if os.path.exists(output_file):
+        os.remove(output_file)
+    with xlsxwriter.Workbook(output_file) as workbook:
         worksheet = workbook.add_worksheet('Data')
 
         # Formats
@@ -100,5 +104,4 @@ def generate_excel(filename, anime_classes, include_external=False):
 
 
 if __name__ == '__main__':
-    #run('2021-1_Log.tsv', Winter2021AnimeDownload.__subclasses__(), False)
-    generate_excel('2021-1_Log.xlsx', Winter2021AnimeDownload.__subclasses__(), False)
+    pass

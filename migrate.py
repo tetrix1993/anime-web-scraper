@@ -2,14 +2,16 @@ import os
 import shutil
 import traceback
 from anime import MainDownload, ExternalDownload
+from anime.constants import FOLDER_OUTPUT
 
-VERSION_NUMBER = 20
+VERSION_NUMBER = 21
 DOWNLOAD_DIR = 'download'
 UNCONFIRMED_DIR = DOWNLOAD_DIR + '/unconfirmed'
 MIGRATION_ERROR_LOG = 'migration_error.log'
 
 VERSION_FILE = 'migrate_version'
-MOVING_IMAGE_TEMPLATE = 'Moved folder %s to %s'
+MOVING_FOLDER_TEMPLATE = 'Moved folder %s to %s'
+MOVING_FILE_TEMPLATE = 'Moved file %s to %s'
 
 is_successful = True
 
@@ -75,6 +77,9 @@ def run():
         print('Running migration script version ' + str(VERSION_NUMBER))
         if not os.path.exists(UNCONFIRMED_DIR):
             os.makedirs(UNCONFIRMED_DIR)
+        if not os.path.exists(FOLDER_OUTPUT):
+            os.makedirs(FOLDER_OUTPUT)
+        migrate_to_output_folder()
         migrate_folders()
         rename_folders()
         delete_empty_folders()
@@ -116,7 +121,7 @@ def migrate_folder(old_dir, new_dir):
             is_successful = False
             return
         shutil.move(old_dir, new_dir)
-        message = MOVING_IMAGE_TEMPLATE % (old_dir, new_dir)
+        message = MOVING_FOLDER_TEMPLATE % (old_dir, new_dir)
         print(message)
 
 
@@ -163,6 +168,23 @@ def delete_empty_folders():
                 if len(subitem) == 0:
                     os.rmdir(item_dir)
                     print('Removed empty folder ' + item_dir)
+
+
+# Move all files in root directory ending with '.tsv' and '.xlsx'
+def migrate_to_output_folder():
+    global is_successful
+    files = os.listdir()
+    for file in files:
+        if os.path.isfile(file) and (file.endswith('.tsv') or file.endswith('.xlsx')):
+            old_dir = file
+            new_dir = FOLDER_OUTPUT + '/' + file
+            if os.path.exists(new_dir):
+                print('Failed to migrate %s to %s - Folder to be migrated exists' % (old_dir, new_dir))
+                is_successful = False
+                return
+            os.rename(old_dir, new_dir)
+            message = MOVING_FILE_TEMPLATE % (old_dir, new_dir)
+            print(message)
 
 
 if __name__ == '__main__':
