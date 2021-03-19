@@ -148,7 +148,7 @@ class Gotoubun2Download(Winter2021AnimeDownload):
         try:
             soup = self.get_soup(news_url, decode=True)
             dls = soup.find_all('dl', class_='newsall-block')
-            news_obj = self.get_news_log_object()
+            news_obj = self.get_last_news_log_object()
             results = []
             for dl in dls:
                 dt_date = dl.find('dt', class_='newsall-date')
@@ -157,7 +157,7 @@ class Gotoubun2Download(Winter2021AnimeDownload):
                     article_url = news_url + a_tag['href']
                     date = dt_date.text
                     title = a_tag.text
-                    if len(news_obj) > 1 and news_obj[-1]['url'] == article_url:
+                    if news_obj and news_obj['url'] == article_url:
                         break
                     results.append({'date': date, 'title': title, 'url': article_url})
             success_count = 0
@@ -165,7 +165,8 @@ class Gotoubun2Download(Winter2021AnimeDownload):
                 process_result = self.create_news_log(result['date'], result['title'], result['url'])
                 if process_result == 0:
                     success_count += 1
-            self.print_news_log_success_count(success_count)
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + ' - News')
             print(e)
@@ -436,7 +437,7 @@ class HorimiyaDownload(Winter2021AnimeDownload):
                     page_url = news_url + '?p=' + str(page)
                 soup = self.get_soup(page_url, decode=True)
                 lis = soup.find_all('li', class_='c-common-list__item')
-                news_obj = self.get_news_log_object()
+                news_obj = self.get_last_news_log_object()
                 for li in lis:
                     div_date = li.find('div', class_='c-common-list__date')
                     div_title = li.find('div', class_='c-common-list__title')
@@ -445,7 +446,7 @@ class HorimiyaDownload(Winter2021AnimeDownload):
                         article_url = self.PAGE_PREFIX + a_tag['href']
                         date = div_date.text
                         title = div_title.text
-                        if len(news_obj) > 1 and news_obj[-1]['url'] == article_url:
+                        if news_obj and news_obj['url'] == article_url:
                             stop = True
                             break
                         results.append({'date': date, 'title': title, 'url': article_url})
@@ -456,7 +457,8 @@ class HorimiyaDownload(Winter2021AnimeDownload):
                 process_result = self.create_news_log(result['date'], result['title'], result['url'])
                 if process_result == 0:
                     success_count += 1
-            self.print_news_log_success_count(success_count)
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + ' - News')
             print(e)

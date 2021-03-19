@@ -494,7 +494,7 @@ class MainDownload:
             return -1
         return 0
 
-    def get_news_log_object(self):
+    def get_news_log_objects(self):
         results = []
         logpath = self.base_folder + '/log/news.log'
         if not os.path.exists(logpath):
@@ -511,10 +511,36 @@ class MainDownload:
             print(e)
         return results
 
-    def print_news_log_success_count(self, count):
+    def get_last_news_log_object(self):
+        last_news_cache = self.base_folder + '/log/news_cache'
+        if os.path.exists(last_news_cache):
+            try:
+                with open(last_news_cache, 'r', encoding='utf-8') as f:
+                    line = f.read()
+                split1 = line.replace('\n', '').split('\t')
+                if len(split1) == 3:
+                    return {'timestamp': '', 'date': split1[0], 'title': split1[1], 'url': split1[2]}
+            except Exception as e:
+                print('Error in reading news log %s' % last_news_cache)
+                print(e)
+        news_logs = self.get_news_log_objects()
+        if len(news_logs) > 0:
+            latest_log = news_logs[-1]
+            with open(last_news_cache, 'w+', encoding='utf-8') as f:
+                f.write('%s\t%s\t%s' % (latest_log['date'], latest_log['title'], latest_log['url']))
+            return latest_log
+        return None
+
+    def create_news_log_cache(self, count, latest_news_obj):
         if count > 0:
             print('Updated news for %s (Count: %s)' % (self.__class__.__name__, str(count)))
-
+        last_news_cache = self.base_folder + '/log/news_cache'
+        try:
+            with open(last_news_cache, 'w+', encoding='utf-8') as f:
+                f.write('%s\t%s\t%s' % (latest_news_obj['date'], latest_news_obj['title'], latest_news_obj['url']))
+        except Exception as e:
+            print('Unable to create news cache %s ' % last_news_cache)
+            print(e)
 
     @staticmethod
     def create_directory(filepath):
