@@ -177,6 +177,7 @@ class FumetsuNoAnataeDownload(Spring2021AnimeDownload):
 
     def run(self):
         self.download_episode_preview()
+        self.download_news()
         self.download_key_visual()
         self.download_character()
 
@@ -201,6 +202,38 @@ class FumetsuNoAnataeDownload(Spring2021AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
         self.download_image_list(self.base_folder)
+
+    def download_news(self):
+        json_url = self.PAGE_PREFIX + '/assets/data/topics-ja.json'
+        news_obj = self.get_last_news_log_object()
+        try:
+            json_obj = self.get_json(json_url)
+            results = []
+            topics = json_obj['topics']
+            for topic in topics:
+                try:
+                    date = self.format_news_date(topic['date'])
+                    if len(date) == 0:
+                        continue
+                    title = topic['text'].strip()
+                    article_id = ''
+                    if len(topic['url'].strip()) > 0:
+                        article_id = self.PAGE_PREFIX + topic['url'].strip()
+                    if news_obj and news_obj['id'] == article_id and news_obj['title'] == title:
+                        break
+                    results.append(self.create_news_log_object(date, title, article_id))
+                except:
+                    continue
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log_from_news_log_object(result)
+                if process_result == 0:
+                    success_count += 1
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - News")
+            print(e)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
