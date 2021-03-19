@@ -997,6 +997,7 @@ class MushokuTenseiDownload(Winter2021AnimeDownload):
     def run(self):
         self.download_episode_preview()
         # self.download_episode_preview_guess()
+        self.download_news()
         self.download_key_visual()
         self.download_character()
         self.download_bluray()
@@ -1030,6 +1031,38 @@ class MushokuTenseiDownload(Winter2021AnimeDownload):
                 self.download_image_list(self.base_folder)
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
+            print(e)
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + '/news/'
+        try:
+            soup = self.get_soup(news_url, decode=True)
+            ul = soup.find('ul', class_='l_news')
+            if ul is None:
+                return
+            lis = ul.find_all('li')
+            news_obj = self.get_last_news_log_object()
+            results = []
+            for li in lis:
+                tag_date = li.find('div', class_='news_date')
+                tag_title = li.find('div', class_='news_ttl')
+                a_tag = li.find('a')
+                if tag_date and tag_title and a_tag and a_tag.has_attr('href'):
+                    article_id = a_tag['href']
+                    date = tag_date.text.strip()
+                    title = tag_title.text.strip()
+                    if news_obj and news_obj['id'] == article_id:
+                        break
+                    results.append(self.create_news_log_object(date, title, article_id))
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log_from_news_log_object(result)
+                if process_result == 0:
+                    success_count += 1
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - News')
             print(e)
 
     def download_episode_preview_guess(self):
