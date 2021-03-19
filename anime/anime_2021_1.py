@@ -431,13 +431,13 @@ class HorimiyaDownload(Winter2021AnimeDownload):
         stop = False
         try:
             results = []
+            news_obj = self.get_last_news_log_object()
             for page in range(1, 100, 1):
                 page_url = news_url
                 if page > 1:
                     page_url = news_url + '?p=' + str(page)
                 soup = self.get_soup(page_url, decode=True)
                 lis = soup.find_all('li', class_='c-common-list__item')
-                news_obj = self.get_last_news_log_object()
                 for li in lis:
                     div_date = li.find('div', class_='c-common-list__date')
                     div_title = li.find('div', class_='c-common-list__title')

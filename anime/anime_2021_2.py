@@ -838,13 +838,13 @@ class SsssDynazenonDownload(Spring2021AnimeDownload):
         stop = False
         try:
             results = []
+            news_obj = self.get_last_news_log_object()
             for page in range(1, 100, 1):
                 page_url = news_url
                 if page > 1:
                     page_url = news_url + 'page/' + str(page)
                 soup = self.get_soup(page_url, decode=True)
                 articles = soup.find_all('article', class_='c-entry-item')
-                news_obj = self.get_last_news_log_object()
                 for article in articles:
                     if article.find('span', class_='c-entry-tag__item--dynazenon') is None:
                         continue
