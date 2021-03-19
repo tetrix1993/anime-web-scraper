@@ -19,6 +19,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 # Sentouin, Hakenshimasu! https://kisaragi-co.jp/ #sentoin @sentoin_anime
 # Shadows House https://shadowshouse-anime.com/ #シャドーハウス @shadowshouse_yj
 # Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita https://slime300-anime.com/ #スライム倒して300年 @slime300_PR
+# SSSS.Dynazenon https://dynazenon.net/ #SSSS_DYNAZENON @SSSS_PROJECT
 # Super Cub https://supercub-anime.com/ #スーパーカブ @supercub_anime
 # Vivy: Fluroite Eye's Song https://vivy-portal.com/ #ヴィヴィ @vivy_portal
 # Yakunara Mug Cup mo https://yakumo-project.com/ #やくもtv @yakumo_project
@@ -809,6 +810,97 @@ class Slime300Download(Spring2021AnimeDownload):
             print("Error in running " + self.__class__.__name__ + " - Character")
             print(e)
         self.download_image_objects(image_objs, folder)
+
+
+# SSSS.Dynazenon
+class SsssDynazenonDownload(Spring2021AnimeDownload):
+    title = 'SSSS.Dynazenon'
+    keywords = [title]
+    folder_name = 'ssss-dynazenon'
+
+    PAGE_PREFIX = 'https://dynazenon.net/'
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        prefix = 'https://gridman.net'
+        news_url = prefix + '/news/'
+        stop = False
+        try:
+            results = []
+            for page in range(1, 100, 1):
+                page_url = news_url
+                if page > 1:
+                    page_url = news_url + 'page/' + str(page)
+                soup = self.get_soup(page_url, decode=True)
+                articles = soup.find_all('article', class_='c-entry-item')
+                news_obj = self.get_last_news_log_object()
+                for article in articles:
+                    if article.find('span', class_='c-entry-tag__item--dynazenon') is None:
+                        continue
+                    tag_date = article.find('span', class_='c-entry-date')
+                    tag_title = article.find('h1', class_='c-entry-item__title')
+                    a_tag = article.find('a', class_='c-entry-item__link')
+                    if tag_date and tag_title and a_tag and a_tag.has_attr('href'):
+                        article_id = prefix + a_tag['href']
+                        date = self.format_news_date(tag_date.text)
+                        if len(date) == 0:
+                            continue
+                        title = tag_title.text.strip()
+                        if news_obj and news_obj['id'] == article_id:
+                            stop = True
+                            break
+                        results.append(self.create_news_log_object(date, title, article_id))
+                        if article_id == 'https://gridman.net/news/archives/1502':
+                            stop = True
+                            break
+                if stop or soup.find('i', class_='i-arrows-angle-2-r') is None:
+                    break
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log_from_news_log_object(result)
+                if process_result == 0:
+                    success_count += 1
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - News')
+            print(e)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('kv1', self.PAGE_PREFIX + 'img/home/visual_01.jpg')
+        self.add_to_image_list('kv2', self.PAGE_PREFIX + 'img/home/visual_02.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        char_url = self.PAGE_PREFIX + 'character/'
+        json_url = char_url + 'chara_data.php'
+        self.image_list = []
+        try:
+            json_obj = self.get_json(json_url)
+            if 'charas' in json_obj and isinstance(json_obj['charas'], list):
+                for chara in json_obj['charas']:
+                    if 'images' in chara and 'visual' in chara['images']:
+                        image_url = char_url + chara['images']['visual'].split('?')[0]
+                        image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                        self.add_to_image_list(image_name, image_url)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Character")
+            print(e)
+        self.download_image_list(folder)
 
 
 # Super Cub

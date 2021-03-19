@@ -556,6 +556,20 @@ class MainDownload:
         return {'date': date, 'title': title, 'id': _id}
 
     @staticmethod
+    def format_news_date(news_date):
+        output_date_str = ''
+        try:
+            split1 = news_date.split('.')
+            if len(split1) == 3:
+                year = str(int(split1[0])).zfill(4)
+                month = str(int(split1[1])).zfill(2)
+                day = str(int(split1[2])).zfill(2)
+                output_date_str = '%s.%s.%s' % (year, month, day)
+        except:
+            pass
+        return output_date_str
+
+    @staticmethod
     def create_directory(filepath):
         # If directory exists
         if not os.path.exists(filepath):
