@@ -1832,8 +1832,9 @@ class UrasekaiPicnicDownload(Winter2021AnimeDownload):
 
     def run(self):
         self.download_episode_preview()
-        self.download_episode_preview_external()
+        # self.download_episode_preview_external()
         # self.download_episode_preview_guess()
+        self.download_news()
         self.download_key_visual()
         self.download_character()
         self.download_bluray()
@@ -1897,6 +1898,35 @@ class UrasekaiPicnicDownload(Winter2021AnimeDownload):
                 return
         if len(os.listdir(folder)) == 0:
             os.rmdir(folder)
+
+    def download_news(self):
+        try:
+            results = []
+            news_obj = self.get_last_news_log_object()
+            soup = self.get_soup(self.PAGE_PREFIX + '/news/')
+            div = soup.find('div', class_='news_inner')
+            if div:
+                dls = div.find_all('dl')
+                for dl in dls:
+                    tag_date = dl.find('dt')
+                    a_tag = dl.find('a')
+                    if tag_date and a_tag and a_tag.has_attr('href'):
+                        article_id = a_tag['href']
+                        date = tag_date.text.strip()
+                        title = a_tag.text.strip()
+                        if news_obj and news_obj['id'] == article_id:
+                            break
+                        results.append(self.create_news_log_object(date, title, article_id))
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log_from_news_log_object(result)
+                if process_result == 0:
+                    success_count += 1
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - News")
+            print(e)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
