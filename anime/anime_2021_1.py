@@ -758,17 +758,8 @@ class KaiyariDownload(Winter2021AnimeDownload):
                 tag_title = article.find('h2', class_='entry-title')
                 if tag_date and tag_title:
                     article_id = article['id']
-                    date = tag_date.text
-                    try:
-                        split1 = date.split('.')
-                        if len(split1) == 3:
-                            year = str(int(split1[0])).zfill(4)
-                            month = str(int(split1[1])).zfill(2)
-                            day = str(int(split1[2])).zfill(2)
-                            date = '%s.%s.%s' % (year, month, day)
-                        else:
-                            continue
-                    except:
+                    date = self.format_news_date(tag_date.text)
+                    if len(date) == 0:
                         continue
                     title = tag_title.text
                     if news_obj and news_obj['id'] == article_id:
