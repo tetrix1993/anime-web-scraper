@@ -234,6 +234,7 @@ class Hamehura2Download(Summer2021AnimeDownload):
         folder = self.create_key_visual_directory()
         self.image_list = []
         self.add_to_image_list('teaser', self.IMAGE_PREFIX + 'wp-content/uploads/2021/01/はめふらX_ティザービジュアル-1.jpg')
+        self.add_to_image_list('kv1', self.IMAGE_PREFIX + 'wp-content/uploads/2021/03/第1弾キービジュアル.jpg')
         #self.add_to_image_list('teaser', 'https://pbs.twimg.com/media/EsJL9ZQVkAEDktJ?format=jpg&name=large')
         self.download_image_list(folder)
 
