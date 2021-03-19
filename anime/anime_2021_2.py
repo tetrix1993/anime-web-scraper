@@ -275,11 +275,46 @@ class DoraieDownload(Spring2021AnimeDownload):
 
     def run(self):
         self.download_episode_preview()
+        self.download_news()
         self.download_key_visual()
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index', diff=2)
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        try:
+            soup = self.get_soup(news_url)
+            articles = soup.find_all('article', class_='news-item')
+            news_obj = self.get_last_news_log_object()
+            results = []
+            for article in articles:
+                tag_date = article.find('span', class_='news-item__date')
+                tag_title = article.find('span', class_='news-item__title')
+                a_tag = article.find('a', class_='news-item__link')
+                if tag_date and tag_title and a_tag and a_tag.has_attr('href'):
+                    article_id = a_tag['href']
+                    if article_id.startswith('/'):
+                        article_id = article_id[1:]
+                    article_id = self.PAGE_PREFIX + article_id
+                    date = self.format_news_date(tag_date.text.strip())
+                    if len(date) == 0:
+                        continue
+                    title = tag_title.text.strip()
+                    if news_obj and news_obj['id'] == article_id:
+                        break
+                    results.append(self.create_news_log_object(date, title, article_id))
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log_from_news_log_object(result)
+                if process_result == 0:
+                    success_count += 1
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - News')
+            print(e)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
