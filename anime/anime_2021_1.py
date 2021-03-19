@@ -159,10 +159,10 @@ class Gotoubun2Download(Winter2021AnimeDownload):
                     title = a_tag.text
                     if news_obj and news_obj['url'] == article_url:
                         break
-                    results.append({'date': date, 'title': title, 'url': article_url})
+                    results.append(self.create_news_log_object(date, title, article_url))
             success_count = 0
             for result in reversed(results):
-                process_result = self.create_news_log(result['date'], result['title'], result['url'])
+                process_result = self.create_news_log_from_news_log_object(result)
                 if process_result == 0:
                     success_count += 1
             if len(results) > 0:
@@ -449,12 +449,12 @@ class HorimiyaDownload(Winter2021AnimeDownload):
                         if news_obj and news_obj['url'] == article_url:
                             stop = True
                             break
-                        results.append({'date': date, 'title': title, 'url': article_url})
+                        results.append(self.create_news_log_object(date, title, article_url))
                 if stop or soup.find('a', class_='c-pager__btn--next') is None:
                     break
             success_count = 0
             for result in reversed(results):
-                process_result = self.create_news_log(result['date'], result['title'], result['url'])
+                process_result = self.create_news_log_from_news_log_object(result)
                 if process_result == 0:
                     success_count += 1
             if len(results) > 0:

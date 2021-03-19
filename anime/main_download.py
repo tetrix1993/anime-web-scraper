@@ -494,6 +494,9 @@ class MainDownload:
             return -1
         return 0
 
+    def create_news_log_from_news_log_object(self, result):
+        return self.create_news_log(result['date'], result['title'], result['url'])
+
     def get_news_log_objects(self):
         results = []
         logpath = self.base_folder + '/log/news.log'
@@ -541,6 +544,16 @@ class MainDownload:
         except Exception as e:
             print('Unable to create news cache %s ' % last_news_cache)
             print(e)
+
+    @staticmethod
+    def create_news_log_object(date='', title='', url=''):
+        if date is None:
+            date = ''
+        if title is None:
+            title = ''
+        if url is None:
+            url = ''
+        return {'date': date, 'title': title, 'url': url}
 
     @staticmethod
     def create_directory(filepath):
