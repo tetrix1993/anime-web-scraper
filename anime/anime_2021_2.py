@@ -750,7 +750,7 @@ class ShadowsHouseDownload(Spring2021AnimeDownload):
 # Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita
 class Slime300Download(Spring2021AnimeDownload):
     title = "Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita"
-    keywords = [title, "I've Been Killing Slimes for 300 Years and Maxed Out My Level", "Slime 300"]
+    keywords = [title, "I've Been Killing Slimes for 300 Years and Maxed Out My Level", "Slime 300", "slime300"]
     folder_name = 'slime300'
 
     PAGE_PREFIX = 'https://slime300-anime.com'
@@ -760,11 +760,40 @@ class Slime300Download(Spring2021AnimeDownload):
 
     def run(self):
         self.download_episode_preview()
+        self.download_news()
         self.download_key_visual()
         self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        json_url = self.PAGE_PREFIX + '/page-data/news/page-data.json'
+        news_obj = self.get_last_news_log_object()
+        try:
+            json_obj = self.get_json(json_url)
+            results = []
+            nodes = json_obj['result']['data']['allContentfulNews']['nodes']
+            for node in nodes:
+                try:
+                    date = node['date']
+                    title = node['title']
+                    article_id = self.PAGE_PREFIX + '/news/' + node['slug']
+                    if news_obj and news_obj['id'] == article_id:
+                        break
+                    results.append(self.create_news_log_object(date, title, article_id))
+                except:
+                    continue
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log_from_news_log_object(result)
+                if process_result == 0:
+                    success_count += 1
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - News")
+            print(e)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -795,7 +824,7 @@ class Slime300Download(Spring2021AnimeDownload):
     def download_character(self):
         folder = self.create_character_directory()
         image_objs = []
-        chara_json = self.PAGE_PREFIX + '/page-data/sq/d/2919095229.json'
+        chara_json = self.PAGE_PREFIX + '/page-data/sq/d/4136652757.json'
         try:
             json_obj = self.get_json(chara_json)
             data_obj = json_obj['data']
