@@ -404,10 +404,8 @@ class TanmoshiDownload(Summer2021AnimeDownload):
         try:
             results = []
             news_obj = self.get_last_news_log_object()
-            for page in range(1, 2, 1):
-                page_url = news_url
-                #if page > 1:
-                #    page_url = news_url + 'page/' + str(page)
+            page_url = news_url
+            for page in range(1, 100, 1):
                 soup = self.get_soup(page_url, decode=True)
                 list_div = soup.find('div', id='list_01')
                 if not list_div:
@@ -429,6 +427,13 @@ class TanmoshiDownload(Summer2021AnimeDownload):
                         results.append(self.create_news_log_object(date, title, article_id))
                 if stop:
                     break
+                nb_nex = soup.find('li', class_='nb_nex')
+                if nb_nex is None:
+                    break
+                nb_nex_a_tag = nb_nex.find('a')
+                if nb_nex_a_tag is None or not nb_nex_a_tag.has_attr('href'):
+                    break
+                page_url = self.PAGE_PREFIX + nb_nex_a_tag['href'].replace('../', '')
             success_count = 0
             for result in reversed(results):
                 process_result = self.create_news_log_from_news_log_object(result)
