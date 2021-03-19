@@ -149,17 +149,15 @@ class Gotoubun2Download(Winter2021AnimeDownload):
             soup = self.get_soup(news_url, decode=True)
             dls = soup.find_all('dl', class_='newsall-block')
             news_obj = self.get_news_log_object()
-            i = 0
             results = []
             for dl in dls:
-                i += 1
                 dt_date = dl.find('dt', class_='newsall-date')
                 a_tag = dl.find('a')
                 if dt_date and a_tag and a_tag.has_attr('href'):
                     article_url = news_url + a_tag['href']
                     date = dt_date.text
                     title = a_tag.text
-                    if len(news_obj) > 1 and i == 1 and news_obj[-1]['url'] == article_url:
+                    if len(news_obj) > 1 and news_obj[-1]['url'] == article_url:
                         break
                     results.append({'date': date, 'title': title, 'url': article_url})
             success_count = 0
@@ -385,6 +383,7 @@ class HorimiyaDownload(Winter2021AnimeDownload):
 
     def run(self):
         self.download_episode_preview()
+        self.download_news()
         self.download_key_visual()
         self.download_character()
         self.download_bluray()
@@ -424,6 +423,42 @@ class HorimiyaDownload(Winter2021AnimeDownload):
                         self.download_image_list(self.base_folder)
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
+            print(e)
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        stop = False
+        try:
+            results = []
+            for page in range(1, 100, 1):
+                page_url = news_url
+                if page > 1:
+                    page_url = news_url + '?p=' + str(page)
+                soup = self.get_soup(page_url, decode=True)
+                lis = soup.find_all('li', class_='c-common-list__item')
+                news_obj = self.get_news_log_object()
+                for li in lis:
+                    div_date = li.find('div', class_='c-common-list__date')
+                    div_title = li.find('div', class_='c-common-list__title')
+                    a_tag = li.find('a', class_='c-common-list__link')
+                    if div_date and div_title and a_tag and a_tag.has_attr('href'):
+                        article_url = self.PAGE_PREFIX + a_tag['href']
+                        date = div_date.text
+                        title = div_title.text
+                        if len(news_obj) > 1 and news_obj[-1]['url'] == article_url:
+                            stop = True
+                            break
+                        results.append({'date': date, 'title': title, 'url': article_url})
+                if stop or soup.find('a', class_='c-pager__btn--next') is None:
+                    break
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log(result['date'], result['title'], result['url'])
+                if process_result == 0:
+                    success_count += 1
+            self.print_news_log_success_count(success_count)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - News')
             print(e)
 
     def download_key_visual(self):
