@@ -154,12 +154,12 @@ class Gotoubun2Download(Winter2021AnimeDownload):
                 dt_date = dl.find('dt', class_='newsall-date')
                 a_tag = dl.find('a')
                 if dt_date and a_tag and a_tag.has_attr('href'):
-                    article_url = news_url + a_tag['href']
+                    article_id = news_url + a_tag['href']
                     date = dt_date.text
                     title = a_tag.text
-                    if news_obj and news_obj['url'] == article_url:
+                    if news_obj and news_obj['id'] == article_id:
                         break
-                    results.append(self.create_news_log_object(date, title, article_url))
+                    results.append(self.create_news_log_object(date, title, article_id))
             success_count = 0
             for result in reversed(results):
                 process_result = self.create_news_log_from_news_log_object(result)
@@ -443,13 +443,13 @@ class HorimiyaDownload(Winter2021AnimeDownload):
                     div_title = li.find('div', class_='c-common-list__title')
                     a_tag = li.find('a', class_='c-common-list__link')
                     if div_date and div_title and a_tag and a_tag.has_attr('href'):
-                        article_url = self.PAGE_PREFIX + a_tag['href']
+                        article_id = self.PAGE_PREFIX + a_tag['href']
                         date = div_date.text
                         title = div_title.text
-                        if news_obj and news_obj['url'] == article_url:
+                        if news_obj and news_obj['id'] == article_id:
                             stop = True
                             break
-                        results.append(self.create_news_log_object(date, title, article_url))
+                        results.append(self.create_news_log_object(date, title, article_id))
                 if stop or soup.find('a', class_='c-pager__btn--next') is None:
                     break
             success_count = 0
@@ -589,12 +589,12 @@ class TomozakiKunDownload(Winter2021AnimeDownload):
                 tag_date = article.find('time')
                 tag_title = article.find('h3', class_='box_title')
                 if tag_date and tag_title:
-                    article_url = ''
+                    article_id = ''
                     date = tag_date.text
                     title = tag_title.text
                     if news_obj and news_obj['date'] == date and news_obj['title'] == title:
                         break
-                    results.append(self.create_news_log_object(date, title, article_url))
+                    results.append(self.create_news_log_object(date, title, article_id))
             success_count = 0
             for result in reversed(results):
                 process_result = self.create_news_log_from_news_log_object(result)

@@ -459,13 +459,13 @@ class MainDownload:
         except:
             return -1
 
-    def create_news_log(self, date='', title='', url=''):
+    def create_news_log(self, date='', title='', _id=''):
         if date is None:
             date = ''
         if title is None:
             title = ''
-        if url is None:
-            url = ''
+        if _id is None:
+            _id = ''
         try:
             timenow = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             log_folder = self.base_folder + '/log'
@@ -473,7 +473,7 @@ class MainDownload:
                 os.makedirs(log_folder)
             logpath = log_folder + '/news.log'
             with open(logpath, 'a+', encoding='utf-8') as f:
-                f.write('%s\t%s\t%s\t%s\n' % (timenow, date, title, url))
+                f.write('%s\t%s\t%s\t%s\n' % (timenow, date, title, _id))
 
             # Global log path
             global_save_success = False
@@ -482,7 +482,7 @@ class MainDownload:
                 try:
                     with open(constants.GLOBAL_NEWS_LOG_FILE, 'a+', encoding='utf-8') as f:
                         portalocker.lock(f, portalocker.LOCK_EX)
-                        f.write('%s\t%s\t%s\t%s\t%s\n' % (timenow, folder_name, date, title, url))
+                        f.write('%s\t%s\t%s\t%s\t%s\n' % (timenow, folder_name, date, title, _id))
                         portalocker.unlock(f)
                         global_save_success = True
                         break
@@ -495,7 +495,7 @@ class MainDownload:
         return 0
 
     def create_news_log_from_news_log_object(self, result):
-        return self.create_news_log(result['date'], result['title'], result['url'])
+        return self.create_news_log(result['date'], result['title'], result['id'])
 
     def get_news_log_objects(self):
         results = []
@@ -508,7 +508,7 @@ class MainDownload:
             for line in lines:
                 split1 = line.replace('\n', '').split('\t')
                 if len(split1) == 4:
-                    results.append({'timestamp': split1[0], 'date': split1[1], 'title': split1[2], 'url': split1[3]})
+                    results.append({'timestamp': split1[0], 'date': split1[1], 'title': split1[2], 'id': split1[3]})
         except Exception as e:
             print('Error in reading news log %s' % logpath)
             print(e)
@@ -522,7 +522,7 @@ class MainDownload:
                     line = f.read()
                 split1 = line.replace('\n', '').split('\t')
                 if len(split1) == 3:
-                    return {'timestamp': '', 'date': split1[0], 'title': split1[1], 'url': split1[2]}
+                    return {'timestamp': '', 'date': split1[0], 'title': split1[1], 'id': split1[2]}
             except Exception as e:
                 print('Error in reading news log %s' % last_news_cache)
                 print(e)
@@ -530,7 +530,7 @@ class MainDownload:
         if len(news_logs) > 0:
             latest_log = news_logs[-1]
             with open(last_news_cache, 'w+', encoding='utf-8') as f:
-                f.write('%s\t%s\t%s' % (latest_log['date'], latest_log['title'], latest_log['url']))
+                f.write('%s\t%s\t%s' % (latest_log['date'], latest_log['title'], latest_log['id']))
             return latest_log
         return None
 
@@ -540,20 +540,20 @@ class MainDownload:
         last_news_cache = self.base_folder + '/log/news_cache'
         try:
             with open(last_news_cache, 'w+', encoding='utf-8') as f:
-                f.write('%s\t%s\t%s' % (latest_news_obj['date'], latest_news_obj['title'], latest_news_obj['url']))
+                f.write('%s\t%s\t%s' % (latest_news_obj['date'], latest_news_obj['title'], latest_news_obj['id']))
         except Exception as e:
             print('Unable to create news cache %s ' % last_news_cache)
             print(e)
 
     @staticmethod
-    def create_news_log_object(date='', title='', url=''):
+    def create_news_log_object(date='', title='', _id=''):
         if date is None:
             date = ''
         if title is None:
             title = ''
-        if url is None:
-            url = ''
-        return {'date': date, 'title': title, 'url': url}
+        if _id is None:
+            _id = ''
+        return {'date': date, 'title': title, 'id': _id}
 
     @staticmethod
     def create_directory(filepath):
