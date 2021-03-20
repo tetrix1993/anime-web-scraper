@@ -1077,11 +1077,54 @@ class ShadowsHouseDownload(Spring2021AnimeDownload):
 
     def run(self):
         self.download_episode_preview()
+        self.download_news()
         self.download_key_visual()
         self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        stop = False
+        try:
+            results = []
+            news_obj = self.get_last_news_log_object()
+            for page in range(1, 100, 1):
+                page_url = news_url
+                if page > 1:
+                    page_url = news_url + '?p=' + str(page)
+                soup = self.get_soup(page_url, decode=True)
+                lis = soup.find_all('li', class_='p-news__item')
+                for li in lis:
+                    tag_date = li.find('div', class_='p-news__date')
+                    tag_title = li.find('div', class_='p-news__title')
+                    a_tag = li.find('a')
+                    if tag_date and tag_title and a_tag and a_tag.has_attr('href'):
+                        article_id = news_url + a_tag['href'].replace('./', '')
+                        date = tag_date.text.strip()
+                        title = tag_title.text.strip()
+                        if news_obj and news_obj['id'] == article_id:
+                            stop = True
+                            break
+                        results.append(self.create_news_log_object(date, title, article_id))
+                if stop:
+                    break
+                pagination_lis = soup.select('ul.c-pager__list li.c-pager__item')
+                if len(pagination_lis) == 0:
+                    break
+                if 'is-current' in pagination_lis[-1]['class']:
+                    break
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log_from_news_log_object(result)
+                if process_result == 0:
+                    success_count += 1
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - News')
+            print(e)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
