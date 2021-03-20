@@ -52,16 +52,19 @@ def run_process_function(fn):
 
 
 def process_download(downloads):
-    if MAX_PROCESSES <= 0:
+    if MAX_PROCESSES <= 0 or len(downloads) == 0:
         return
 
-    with Pool(MAX_PROCESSES) as p:
-        results = []
-        for download in downloads:
-            result = p.apply_async(run_process, (download,))
-            results.append(result)
-        for result in results:
-            result.wait()
+    if len(downloads) > 1:
+        with Pool(MAX_PROCESSES) as p:
+            results = []
+            for download in downloads:
+                result = p.apply_async(run_process, (download,))
+                results.append(result)
+            for result in results:
+                result.wait()
+    else:
+        run_process(downloads[0])
 
     if len(os.listdir(PROCESS_FOLDER)) == 0:
         os.rmdir(PROCESS_FOLDER)
