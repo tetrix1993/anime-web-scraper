@@ -2915,18 +2915,22 @@ class SigrdrifaDownload(Fall2020AnimeDownload):
                                     image_url = self.PAGE_PREFIX + images[k]['src'][1:]
                                 else:
                                     image_url = images[k]['src']
-                                content_length = requests.head(image_url).headers['Content-Length']
-                                if content_length == '29796' or content_length == '12133': # Skip Now Printing
-                                    if is_volume:
-                                        return
-                                    continue
                                 if is_volume:
+                                    if 'img_jk.jpg' in image_url:  # Now printing
+                                        return
                                     if k == 0:
                                         image_name = 'bd_vol%s' % str(j)
                                     else:
                                         image_name = 'bd_vol%s_%s' % (str(j), str(k))
                                 else:
                                     image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                                if self.is_image_exists(image_name, folder):
+                                    continue
+                                content_length = requests.head(image_url).headers['Content-Length']
+                                if content_length == '29796' or content_length == '12133':  # Skip Now Printing
+                                    if is_volume:
+                                        return
+                                    continue
                                 image_objs.append({'name': image_name, 'url': image_url})
                         self.download_image_objects(image_objs, folder)
         except Exception as e:
