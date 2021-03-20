@@ -95,7 +95,7 @@ The premiere date for the anime listed here has not been announced.
 * [Slow Loop](https://slowlooptv.com/)
 * [Tensai Ouji no Akaji Kokka Saisei Jutsu: Souda, Baikoku shiyou](https://tensaiouji-anime.com/)
 * [Tsuki to Laika to Nosferatu](https://tsuki-laika-nosferatu.com/)
-
+* [Yama no Susume: Next Summit](https://yamanosusume-ns.com/)
 
 ### Fall 2021 Anime
 * [Tate no Yuusha no Nariagari 2nd Season](http://shieldhero-anime.jp)
