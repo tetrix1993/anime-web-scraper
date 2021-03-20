@@ -899,6 +899,7 @@ class SeijonoMaryokuDownload(Spring2021AnimeDownload):
 
     def run(self):
         self.download_episode_preview()
+        self.download_news()
         self.download_key_visual()
         self.download_character()
 
@@ -931,6 +932,36 @@ class SeijonoMaryokuDownload(Spring2021AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
         self.download_image_list(self.base_folder)
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news.php'
+        try:
+            soup = self.get_soup(news_url, decode=True)
+            articles = soup.find_all('article', class_='m-newspage-article')
+            news_obj = self.get_last_news_log_object()
+            results = []
+            for article in articles:
+                if not article.has_attr('id'):
+                    continue
+                tag_date = article.find('time', class_='m-newspage-article-time')
+                tag_title = article.find('h1', class_='m-newspage-article-heading')
+                if tag_date and tag_title and tag_date.has_attr('datetime'):
+                    article_id = article['id']
+                    date = tag_date['datetime'].strip().replace('-', '.')
+                    title = tag_title.text.strip()
+                    if news_obj and news_obj['id'] == article_id:
+                        break
+                    results.append(self.create_news_log_object(date, title, article_id))
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log_from_news_log_object(result)
+                if process_result == 0:
+                    success_count += 1
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - News')
+            print(e)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
