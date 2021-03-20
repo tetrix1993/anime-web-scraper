@@ -338,13 +338,15 @@ class MegamiryouDownload(UnconfirmedDownload):
                 tag_date = article.find('td', class_='day')
                 tag_title = article.find('div', class_='title')
                 a_tag = article.find('a')
-                if tag_date and tag_title and a_tag and a_tag.has_attr('href'):
-                    article_id = self.PAGE_PREFIX + a_tag['href']
+                if tag_date and tag_title:
+                    article_id = ''
+                    if a_tag and a_tag.has_attr('href'):
+                        article_id = self.PAGE_PREFIX + a_tag['href']
                     date = self.format_news_date(tag_date.text.strip().replace('/', '.'))
                     if len(date) == 0:
                         continue
                     title = tag_title.text.strip()
-                    if news_obj and news_obj['id'] == article_id:
+                    if news_obj and news_obj['id'] == article_id and news_obj['title'] == title:
                         break
                     results.append(self.create_news_log_object(date, title, article_id))
             success_count = 0
@@ -556,13 +558,15 @@ class ShikkakumonDownload(UnconfirmedDownload):
                 tag_date = article.find('td', class_='day')
                 tag_title = article.find('div', class_='title')
                 a_tag = article.find('a')
-                if tag_date and tag_title and a_tag and a_tag.has_attr('href'):
-                    article_id = self.PAGE_PREFIX + a_tag['href']
+                if tag_date and tag_title:
+                    article_id = ''
+                    if a_tag and a_tag.has_attr('href'):
+                        article_id = self.PAGE_PREFIX + a_tag['href']
                     date = self.format_news_date(tag_date.text.strip().replace('/', '.'))
                     if len(date) == 0:
                         continue
                     title = tag_title.text.strip()
-                    if news_obj and news_obj['id'] == article_id:
+                    if news_obj and news_obj['id'] == article_id and news_obj['title'] == title:
                         break
                     results.append(self.create_news_log_object(date, title, article_id))
             success_count = 0
