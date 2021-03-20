@@ -443,7 +443,10 @@ class HorimiyaDownload(Winter2021AnimeDownload):
                     div_title = li.find('div', class_='c-common-list__title')
                     a_tag = li.find('a', class_='c-common-list__link')
                     if div_date and div_title and a_tag and a_tag.has_attr('href'):
-                        article_id = self.PAGE_PREFIX + a_tag['href']
+                        id_ = a_tag['href']
+                        if id_.startswith('/'):
+                            id_ = id_[1:]
+                        article_id = self.PAGE_PREFIX + id_
                         date = div_date.text
                         title = div_title.text
                         if news_obj and news_obj['id'] == article_id:
