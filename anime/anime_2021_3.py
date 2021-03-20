@@ -730,6 +730,7 @@ class TanmoshiDownload(Summer2021AnimeDownload):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
@@ -823,3 +824,10 @@ class TanmoshiDownload(Summer2021AnimeDownload):
             print("Error in running " + self.__class__.__name__ + " - Character")
             print(e)
         self.download_image_list(folder)
+
+    def download_media(self):
+        folder = self.create_custom_directory('media')
+        template = self.PAGE_PREFIX + 'core_sys/images/main/cont/special/audio/%s.mp3'
+        for i in ('01_kimizuka', '02_siesta', '03_nagisa', '04_yui', '05_charlotte'):
+            url = template % i
+            self.download_content(url, folder + '/' + i + '.mp3')
