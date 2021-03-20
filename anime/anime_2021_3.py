@@ -786,6 +786,7 @@ class TanmoshiDownload(Summer2021AnimeDownload):
         self.image_list = []
         self.add_to_image_list('kv1', 'https://pbs.twimg.com/media/EsCTT1KXAAUGy6V?format=jpg&name=4096x4096')
         self.add_to_image_list('kv2', 'https://pbs.twimg.com/media/Eug1UGwUYAcgxON?format=jpg&name=4096x4096')
+        self.add_to_image_list('kv3', 'https://pbs.twimg.com/media/Ew13JI0UYAMwHm6?format=jpg&name=4096x4096')
         template = self.PAGE_PREFIX + 'core_sys/images/main/tz/%s.png'
         for name in ['umbouzu', 'mugiko', 'poni', 'moyashi']:
             image_name = 'illust_' + name
