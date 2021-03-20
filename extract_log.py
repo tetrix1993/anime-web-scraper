@@ -103,5 +103,55 @@ def generate_excel(filename, anime_classes, include_external=False):
                                 worksheet.write_formula(row, 6, '=ISNUMBER(FIND("/SYS/CONTENTS/", E%s))' % str(row + 1))
 
 
+def news_log_to_excel(filename, anime_classes):
+    if not os.path.exists(FOLDER_OUTPUT):
+        os.makedirs(FOLDER_OUTPUT)
+    output_file = FOLDER_OUTPUT + '/' + filename
+    if os.path.exists(output_file):
+        os.remove(output_file)
+    with xlsxwriter.Workbook(output_file) as workbook:
+        worksheet = workbook.add_worksheet('Data')
+
+        # Formats
+        header_format = workbook.add_format({'bold': True, 'num_format': '@',
+                                             'font_color': 'white', 'bg_color': '#538DD5'})
+        data_format = workbook.add_format({'num_format': '@'})
+
+        # Headers
+        worksheet.write(0, 0, 'Anime', header_format)
+        worksheet.write(0, 1, 'Season', header_format)
+        worksheet.write(0, 2, 'Timestamp', header_format)
+        worksheet.write(0, 3, 'Date', header_format)
+        worksheet.write(0, 4, 'Title', header_format)
+        worksheet.write(0, 5, 'ID', header_format)
+
+        row = 0
+        for i in anime_classes:
+            title = i.title
+            season = i.season
+            fullpath = i.get_full_path()
+            logpath_template = fullpath + '%s/log/news.log'
+            logpaths = [logpath_template % '']
+            for logpath in logpaths:
+                if os.path.exists(logpath):
+                    with open(logpath, 'r', encoding='utf-8') as f2:
+                        lines = f2.readlines()
+                    for line in lines:
+                        split1 = line.split('\t')
+                        if len(split1) != 4:
+                            continue
+                        timestamp = split1[0]
+                        date = split1[1]
+                        news_title = split1[2]
+                        id_ = split1[3].replace('\n', '')
+                        row += 1
+                        worksheet.write(row, 0, title, data_format)
+                        worksheet.write(row, 1, season, data_format)
+                        worksheet.write(row, 2, timestamp, data_format)
+                        worksheet.write(row, 3, date, data_format)
+                        worksheet.write(row, 4, news_title, data_format)
+                        worksheet.write(row, 5, id_, data_format)
+
+
 if __name__ == '__main__':
     pass
