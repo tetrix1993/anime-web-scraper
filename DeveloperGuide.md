@@ -55,7 +55,7 @@ Checks if the website has updated by comparing the response size saved. Prints a
 | diff | int | No | Returns true if the difference between the size of the responses is greater than the value. Default value: `0` |
 
 ### Class Methods
-### get_full_path
+#### get_full_path
 Gets the path of the folder of the anime classes and external download classes where the files are saved. The filepath are based on the `folder_name` of the class and its parent classes.
 
 For example, `TateNoYuushaDownload` class inherits from `Winter2019AnimeDownload` class, which also inherits from `MainDownload` class:
@@ -69,7 +69,7 @@ For example, `TateNoYuushaDownload` class inherits from `Winter2019AnimeDownload
 Executing `TateNoYuushaDownload.get_full_path()` will return `download/2019-1/tate-no-yuusha`.
 
 ### Static Methods
-### get_soup
+#### get_soup
 Parse HTTP response of the url provided and returns a BeautifulSoup object.
 
 | Name | Type | Required | Description |
@@ -78,7 +78,7 @@ Parse HTTP response of the url provided and returns a BeautifulSoup object.
 | headers | dict | No | Headers used for HTTP GET request. Default value: `None` |
 | decode | bool | No | If true, decode the HTTP response. Default value: `False` |
 
-### get_json
+#### get_json
 Parse HTTP response into JSON object
 
 | Name | Type | Required | Description |
