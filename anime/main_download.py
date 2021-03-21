@@ -178,7 +178,7 @@ class MainDownload:
         if headers is None:
             headers = constants.HTTP_HEADER_USER_AGENT
         try:
-            result = requests.post('https://moca-news.net/pd.php', headers=headers, data=data)
+            result = requests.post(url, headers=headers, data=data)
             response = str(result.content.decode())
         except Exception as e:
             print(e)
