@@ -826,7 +826,7 @@ class TanmoshiDownload(Summer2021AnimeDownload):
         self.download_image_list(folder)
 
     def download_media(self):
-        folder = self.create_custom_directory('media')
+        folder = self.create_media_directory()
         template = self.PAGE_PREFIX + 'core_sys/images/main/cont/special/audio/%s.mp3'
         for i in ('01_kimizuka', '02_siesta', '03_nagisa', '04_yui', '05_charlotte'):
             url = template % i

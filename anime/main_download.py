@@ -647,6 +647,13 @@ class MainDownload:
             os.makedirs(filepath)
         return filepath
 
+    # To replace the bluray directory
+    def create_media_directory(self):
+        filepath = self.base_folder + '/' + constants.FOLDER_MEDIA
+        if not os.path.exists(filepath):
+            os.makedirs(filepath)
+        return filepath
+
     def create_custom_directory(self, dir_name):
         filepath = self.base_folder + '/' + dir_name
         if not os.path.exists(filepath):

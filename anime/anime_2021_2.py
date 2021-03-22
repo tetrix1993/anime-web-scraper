@@ -157,7 +157,7 @@ class EightySixDownload(Spring2021AnimeDownload):
         # https://edge.api.brightcove.com/playback/v1/accounts/4929511769001/videos/6230722910001
         # https://edge.api.brightcove.com/playback/v1/accounts/4929511769001/videos/6230722072001
         # Headers: Accept: application/json;pk=BCpkADawqM1XGilraBDORB63T7mXX_DO0PvAeb0nPGOcNdREe4o42wzOOr9_chEsztXD6gxOSBCVpmrsc3Iczz0I3xEMohICjq69krvIZ8s1P0F1uVZiKjttPKy5vXHsTNB20y3uGjMBFeGj
-        folder = self.create_custom_directory('media')
+        folder = self.create_media_directory()
         valentine_01_url = 'http://brightcove04.brightcove.com/34/4929511769001/202102/551/4929511769001_6230722968001_6230722910001.mp4?pubId=4929511769001&videoId=6230722910001'
         valentine_ex_url = 'http://brightcove04.brightcove.com/34/4929511769001/202102/1719/4929511769001_6230723857001_6230722072001.mp4?pubId=4929511769001&videoId=6230722072001'
         self.download_content(valentine_01_url, folder + '/valentine_01.mp4')
@@ -357,6 +357,7 @@ class HigehiroDownload(Spring2021AnimeDownload):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index', diff=2)
@@ -435,6 +436,12 @@ class HigehiroDownload(Spring2021AnimeDownload):
             print("Error in running " + self.__class__.__name__ + " - Character")
             print(e)
 
+    def download_media(self):
+        folder = self.create_media_directory()
+        self.image_list = []
+        self.add_to_image_list('music_ed', 'https://pbs.twimg.com/media/ExEnxiIVoAkofD0?format=jpg&name=large')
+        self.download_image_list(folder)
+
 
 # Ijiranaide, Nagatoro-san
 class NagatorosanDownload(Spring2021AnimeDownload):
@@ -452,6 +459,7 @@ class NagatorosanDownload(Spring2021AnimeDownload):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
@@ -515,6 +523,13 @@ class NagatorosanDownload(Spring2021AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + " - Character")
             print(e)
+        self.download_image_list(folder)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        self.image_list = []
+        self.add_to_image_list('music_op', 'https://pbs.twimg.com/media/Es0lBfcUcAMusgu?format=jpg&name=medium')
+        self.add_to_image_list('music_ed', self.PAGE_PREFIX + 'img/music/KICM-3365.jpg')
         self.download_image_list(folder)
 
 
