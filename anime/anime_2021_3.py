@@ -68,7 +68,7 @@ class BokuremaDownload(Summer2021AnimeDownload):
                         article_id = a_tag['href']
                         date = '20' + tag_date.text.strip()
                         title = tag_title.text.strip()
-                        if news_obj and news_obj['id'] == article_id:
+                        if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
                             stop = True
                             break
                         results.append(self.create_news_log_object(date, title, article_id))
@@ -151,7 +151,7 @@ class CheatKusushiDownload(Summer2021AnimeDownload):
                     if len(date) == 0:
                         continue
                     title = paras[1].text.strip()
-                    if news_obj and news_obj['title'] == title:
+                    if news_obj and (news_obj['title'] == title or date < news_obj['date']):
                         break
                     results.append(self.create_news_log_object(date, title, article_id))
             success_count = 0
@@ -270,7 +270,8 @@ class KobayashiMaidDragon2Download(Summer2021AnimeDownload):
                         if len(date) == 0:
                             continue
                         title = tag_title.text.strip()
-                        if date.startswith('2019') or (news_obj and news_obj['id'] == article_id):
+                        if date.startswith('2019') or (news_obj and
+                                                       (news_obj['id'] == article_id or date < news_obj['date'])):
                             stop = True
                             break
                         results.append(self.create_news_log_object(date, title, article_id))
@@ -335,7 +336,7 @@ class MeikyuBCDownload(Summer2021AnimeDownload):
                     if len(date) == 0:
                         continue
                     title = dd.text.strip().replace('\n', '')
-                    if news_obj and news_obj['title'] == title:
+                    if news_obj and (news_obj['title'] == title or date < news_obj['date']):
                         break
                     results.append(self.create_news_log_object(date, title, article_id))
             success_count = 0
@@ -396,7 +397,7 @@ class Hamehura2Download(Summer2021AnimeDownload):
                         article_id = a_tag['href']
                         date = tag_date.text.strip()
                         title = tag_title.text.strip()
-                        if news_obj and news_obj['id'] == article_id:
+                        if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
                             stop = True
                             break
                         results.append(self.create_news_log_object(date, title, article_id))
@@ -467,7 +468,7 @@ class PeachBoyRiversideDownload(Summer2021AnimeDownload):
                         article_id = a_tag['href']
                         date = tag_date.text.strip()
                         title = tag_title.text.strip()
-                        if news_obj and news_obj['id'] == article_id:
+                        if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
                             stop = True
                             break
                         results.append(self.create_news_log_object(date, title, article_id))
@@ -548,7 +549,7 @@ class AnsatsuKizokuDownload(Summer2021AnimeDownload):
                     article_id = news_url + a_tag['href']
                     date = tag_date.text.strip().replace('-', '.')
                     title = tag_title.text.strip()
-                    if news_obj and news_obj['id'] == article_id:
+                    if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
                         break
                     results.append(self.create_news_log_object(date, title, article_id))
             success_count = 0
@@ -599,7 +600,7 @@ class ShinnoNakamaDownload(Summer2021AnimeDownload):
                     article_id = news_url + a_tag['href'].replace('./', '')
                     date = tag_date.text.strip()
                     title = tag_title.text.strip()
-                    if news_obj and news_obj['id'] == article_id:
+                    if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
                         break
                     results.append(self.create_news_log_object(date, title, article_id))
             success_count = 0
@@ -662,7 +663,7 @@ class AquatopeDownload(Summer2021AnimeDownload):
                         if len(date) == 0:
                             continue
                         title = tag_title.text.strip()
-                        if news_obj and news_obj['id'] == article_id:
+                        if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
                             stop = True
                             break
                         results.append(self.create_news_log_object(date, title, article_id))
@@ -758,7 +759,8 @@ class TanmoshiDownload(Summer2021AnimeDownload):
                             article_id = self.PAGE_PREFIX + a_tag['href'].replace('../', '')
                         date = tag_date.text.replace('/', '.')
                         title = tag_title.text.strip()
-                        if news_obj and news_obj['id'] == article_id and news_obj['title'] == title:
+                        if news_obj and ((news_obj['id'] == article_id and news_obj['title'] == title)
+                                         or date < news_obj['date']):
                             stop = True
                             break
                         results.append(self.create_news_log_object(date, title, article_id))

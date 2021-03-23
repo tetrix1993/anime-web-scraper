@@ -52,7 +52,8 @@ class TateNoYuusha2Download(Fall2021AnimeDownload):
                     if len(date) == 0:
                         continue
                     title = tag_title.text.strip()
-                    if date.startswith('2019.08') or (news_obj and news_obj['id'] == article_id):
+                    if date.startswith('2019.08') or (news_obj
+                                                      and (news_obj['id'] == article_id or date < news_obj['date'])):
                         break
                     results.append(self.create_news_log_object(date, title, article_id))
             success_count = 0

@@ -76,7 +76,7 @@ class EightySixDownload(Spring2021AnimeDownload):
                         article_id = news_url + a_tag['href'].replace('./', '')
                         date = tag_date.text.strip()
                         title = tag_title.text.strip()
-                        if news_obj and news_obj['id'] == article_id:
+                        if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
                             stop = True
                             break
                         results.append(self.create_news_log_object(date, title, article_id))
@@ -219,7 +219,8 @@ class FumetsuNoAnataeDownload(Spring2021AnimeDownload):
                     article_id = ''
                     if len(topic['url'].strip()) > 0:
                         article_id = self.PAGE_PREFIX + topic['url'].strip()
-                    if news_obj and news_obj['id'] == article_id and news_obj['title'] == title:
+                    if news_obj and ((news_obj['id'] == article_id and news_obj['title'] == title)
+                                     or date < news_obj['date'] ):
                         break
                     results.append(self.create_news_log_object(date, title, article_id))
                 except:
@@ -302,7 +303,7 @@ class DoraieDownload(Spring2021AnimeDownload):
                     if len(date) == 0:
                         continue
                     title = tag_title.text.strip()
-                    if news_obj and news_obj['id'] == article_id:
+                    if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
                         break
                     results.append(self.create_news_log_object(date, title, article_id))
             success_count = 0
@@ -383,7 +384,7 @@ class HigehiroDownload(Spring2021AnimeDownload):
                     if len(date) == 0:
                         continue
                     title = tag_title.text.split(tag_date.text)[1].strip()
-                    if news_obj and news_obj['id'] == article_id:
+                    if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
                         break
                     results.append(self.create_news_log_object(date, title, article_id))
             success_count = 0
@@ -482,7 +483,7 @@ class NagatorosanDownload(Spring2021AnimeDownload):
                     article_id = news_url + a_tag['href']
                     date = tag_date.text.strip().replace('-', '.')
                     title = tag_title.text.strip()
-                    if news_obj and news_obj['id'] == article_id:
+                    if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
                         break
                     results.append(self.create_news_log_object(date, title, article_id))
             success_count = 0
@@ -573,7 +574,7 @@ class IsekaiMaou2Download(Spring2021AnimeDownload):
                         article_id = a_tag['href']
                         date = tag_date.text.strip()
                         title = tag_title.text.strip()
-                        if news_obj and news_obj['id'] == article_id:
+                        if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
                             stop = True
                             break
                         results.append(self.create_news_log_object(date, title, article_id))
@@ -662,7 +663,7 @@ class FullDiveRPGDownload(Spring2021AnimeDownload):
                     article_id = self.PAGE_PREFIX + a_tag['href']
                     date = tag_date.text.strip().replace(' ', '')
                     title = tag_title.text.strip()
-                    if news_obj and news_obj['id'] == article_id:
+                    if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
                         break
                     results.append(self.create_news_log_object(date, title, article_id))
             success_count = 0
@@ -780,7 +781,7 @@ class OsamakeDownload(Spring2021AnimeDownload):
                     if len(date) == 0:
                         continue
                     title = tag_title.text.strip()
-                    if news_obj and news_obj['id'] == article_id:
+                    if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
                         break
                     results.append(self.create_news_log_object(date, title, article_id))
             success_count = 0
@@ -852,7 +853,7 @@ class SayonaraCramerDownload(Spring2021AnimeDownload):
                         article_id = a_tag['href']
                         date = tag_date[0].text.strip()
                         title = tag_title.text.strip()
-                        if news_obj and news_obj['id'] == article_id:
+                        if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
                             stop = True
                             break
                         results.append(self.create_news_log_object(date, title, article_id))
@@ -964,7 +965,7 @@ class SeijonoMaryokuDownload(Spring2021AnimeDownload):
                     article_id = article['id']
                     date = tag_date['datetime'].strip().replace('-', '.')
                     title = tag_title.text.strip()
-                    if news_obj and news_obj['id'] == article_id:
+                    if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
                         break
                     results.append(self.create_news_log_object(date, title, article_id))
             success_count = 0
@@ -1042,7 +1043,7 @@ class SentoinDownload(Spring2021AnimeDownload):
                     if len(date) == 0:
                         continue
                     title = tag_title.text.strip()
-                    if news_obj and news_obj['id'] == article_id:
+                    if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
                         break
                     results.append(self.create_news_log_object(date, title, article_id))
             success_count = 0
@@ -1119,7 +1120,7 @@ class ShadowsHouseDownload(Spring2021AnimeDownload):
                         article_id = news_url + a_tag['href'].replace('./', '')
                         date = tag_date.text.strip()
                         title = tag_title.text.strip()
-                        if news_obj and news_obj['id'] == article_id:
+                        if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
                             stop = True
                             break
                         results.append(self.create_news_log_object(date, title, article_id))
@@ -1230,7 +1231,7 @@ class Slime300Download(Spring2021AnimeDownload):
                     date = node['date']
                     title = node['title']
                     article_id = self.PAGE_PREFIX + '/news/' + node['slug']
-                    if news_obj and news_obj['id'] == article_id:
+                    if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
                         break
                     results.append(self.create_news_log_object(date, title, article_id))
                 except:
@@ -1337,7 +1338,7 @@ class SsssDynazenonDownload(Spring2021AnimeDownload):
                         if len(date) == 0:
                             continue
                         title = tag_title.text.strip()
-                        if news_obj and news_obj['id'] == article_id:
+                        if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
                             stop = True
                             break
                         results.append(self.create_news_log_object(date, title, article_id))
@@ -1425,7 +1426,8 @@ class SuperCubDownload(Spring2021AnimeDownload):
                             article_id = self.PAGE_PREFIX + a_tag['href'].replace('../', '')
                         date = tag_date.text.replace('/', '.')
                         title = tag_title.text.strip()
-                        if news_obj and news_obj['id'] == article_id and news_obj['title'] == title:
+                        if news_obj and ((news_obj['id'] == article_id and news_obj['title'] == title)
+                                         or date < news_obj['date']):
                             stop = True
                             break
                         results.append(self.create_news_log_object(date, title, article_id))
@@ -1496,7 +1498,7 @@ class VivyDownload(Spring2021AnimeDownload):
                         article_id = news_url + a_tag['href'].replace('./', '')
                         date = tag_date.text.strip()
                         title = tag_title.text.strip()
-                        if news_obj and news_obj['id'] == article_id:
+                        if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
                             stop = True
                             break
                         results.append(self.create_news_log_object(date, title, article_id))
@@ -1567,7 +1569,7 @@ class YakunaraMugCupMoDownload(Spring2021AnimeDownload):
                         article_id = news_url + a_tag['href']
                         date = tag_date.text.strip()
                         title = tag_title.text.strip()
-                        if news_obj and news_obj['id'] == article_id:
+                        if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
                             stop = True
                             break
                         results.append(self.create_news_log_object(date, title, article_id))

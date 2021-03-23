@@ -157,7 +157,7 @@ class Gotoubun2Download(Winter2021AnimeDownload):
                     article_id = news_url + a_tag['href']
                     date = dt_date.text
                     title = a_tag.text
-                    if news_obj and news_obj['id'] == article_id:
+                    if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
                         break
                     results.append(self.create_news_log_object(date, title, article_id))
             success_count = 0
@@ -449,7 +449,7 @@ class HorimiyaDownload(Winter2021AnimeDownload):
                         article_id = self.PAGE_PREFIX + id_
                         date = div_date.text
                         title = div_title.text
-                        if news_obj and news_obj['id'] == article_id:
+                        if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
                             stop = True
                             break
                         results.append(self.create_news_log_object(date, title, article_id))
@@ -595,7 +595,8 @@ class TomozakiKunDownload(Winter2021AnimeDownload):
                     article_id = ''
                     date = tag_date.text
                     title = tag_title.text
-                    if news_obj and news_obj['date'] == date and news_obj['title'] == title:
+                    if news_obj and ((news_obj['date'] == date and news_obj['title'] == title)
+                                     or date < news_obj['date']):
                         break
                     results.append(self.create_news_log_object(date, title, article_id))
             success_count = 0
@@ -765,7 +766,7 @@ class KaiyariDownload(Winter2021AnimeDownload):
                     if len(date) == 0:
                         continue
                     title = tag_title.text
-                    if news_obj and news_obj['id'] == article_id:
+                    if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
                         break
                     results.append(self.create_news_log_object(date, title, article_id))
             success_count = 0
@@ -1054,7 +1055,7 @@ class MushokuTenseiDownload(Winter2021AnimeDownload):
                     article_id = a_tag['href']
                     date = tag_date.text.strip()
                     title = tag_title.text.strip()
-                    if news_obj and news_obj['id'] == article_id:
+                    if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
                         break
                     results.append(self.create_news_log_object(date, title, article_id))
             success_count = 0
@@ -1407,7 +1408,7 @@ class KakushiDungeonDownload(Winter2021AnimeDownload):
                     if len(date) == 0:
                         continue
                     title = tag_title.text
-                    if news_obj and news_obj['id'] == article_id:
+                    if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
                         break
                     results.append(self.create_news_log_object(date, title, article_id))
             success_count = 0
@@ -1563,7 +1564,8 @@ class LasdanDownload(Winter2021AnimeDownload):
                             article_id = self.PAGE_PREFIX + a_tag['href'].replace('../', '')
                         date = tag_date.text.replace('/', '.')
                         title = tag_title.text.strip()
-                        if news_obj and news_obj['id'] == article_id and news_obj['title'] == title:
+                        if news_obj and ((news_obj['id'] == article_id and news_obj['title'] == title)
+                                         or date < news_obj['date']):
                             stop = True
                             break
                         results.append(self.create_news_log_object(date, title, article_id))
@@ -1917,7 +1919,7 @@ class UrasekaiPicnicDownload(Winter2021AnimeDownload):
                         article_id = a_tag['href']
                         date = tag_date.text.strip()
                         title = a_tag.text.strip()
-                        if news_obj and news_obj['id'] == article_id:
+                        if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
                             break
                         results.append(self.create_news_log_object(date, title, article_id))
             success_count = 0
@@ -2046,7 +2048,7 @@ class WonderEggPriorityDownload(Winter2021AnimeDownload):
                         article_id = news_url + a_tag['href']
                         date = tag_date.text.strip()
                         title = tag_title.text.strip()
-                        if news_obj and news_obj['id'] == article_id:
+                        if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
                             stop = True
                             break
                         results.append(self.create_news_log_object(date, title, article_id))

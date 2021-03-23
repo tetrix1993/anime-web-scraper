@@ -66,7 +66,8 @@ class GoblinSlayer2Download(UnconfirmedDownload):
                     if len(date) == 0:
                         continue
                     title = a_tag.text.strip()
-                    if date.startswith('2020') or (news_obj and news_obj['id'] == article_id):
+                    if date.startswith('2020') or (news_obj and
+                                                   (news_obj['id'] == article_id or date < news_obj['date'])):
                         break
                     results.append(self.create_news_log_object(date, title, article_id))
             success_count = 0
@@ -149,7 +150,8 @@ class Bofuri2Download(UnconfirmedDownload):
                     if len(date) == 0:
                         continue
                     title = tag_title.text.strip()
-                    if date.startswith('2021.01.04') or (news_obj and news_obj['id'] == article_id):
+                    if date.startswith('2021.01.04') or (news_obj and
+                                                         (news_obj['id'] == article_id or date < news_obj['date'])):
                         break
                     results.append(self.create_news_log_object(date, title, article_id))
             success_count = 0
@@ -206,7 +208,8 @@ class KanokanoDownload(UnconfirmedDownload):
                     if len(date) == 0:
                         continue
                     title = tag_title.text.strip()
-                    if news_obj and news_obj['date'] == date and news_obj['title'] == title:
+                    if news_obj and ((news_obj['date'] == date and news_obj['title'] == title)
+                                     or date < news_obj['date']):
                         break
                     results.append(self.create_news_log_object(date, title, article_id))
             success_count = 0
@@ -262,7 +265,8 @@ class MahoukaYuutouseiDownload(UnconfirmedDownload):
                     if len(date) == 0:
                         continue
                     title = tag_title.text.strip()
-                    if news_obj and news_obj['date'] == date and news_obj['title'] == title:
+                    if news_obj and ((news_obj['date'] == date and news_obj['title'] == title)
+                                     or date < news_obj['date']):
                         break
                     results.append(self.create_news_log_object(date, title, article_id))
             success_count = 0
@@ -346,7 +350,8 @@ class MegamiryouDownload(UnconfirmedDownload):
                     if len(date) == 0:
                         continue
                     title = tag_title.text.strip()
-                    if news_obj and news_obj['id'] == article_id and news_obj['title'] == title:
+                    if news_obj and ((news_obj['id'] == article_id and news_obj['title'] == title)
+                                     or date < news_obj['date']):
                         break
                     results.append(self.create_news_log_object(date, title, article_id))
             success_count = 0
@@ -429,7 +434,8 @@ class Priconne2Download(UnconfirmedDownload):
                         article_id = self.PAGE_PREFIX + a_tag['href'].replace('../', '')
                         date = tag_date.text.strip()
                         title = tag_title.text.strip()
-                        if date.startswith('2020.08.07') or (news_obj and news_obj['id'] == article_id):
+                        if date.startswith('2020.08.07') or (news_obj
+                                                             and (news_obj['id'] == article_id or date < news_obj['date'])):
                             stop = True
                             break
                         results.append(self.create_news_log_object(date, title, article_id))
@@ -489,7 +495,7 @@ class SeireiGensoukiDownload(UnconfirmedDownload):
                     if len(date) == 0:
                         continue
                     title = tag_title.text.strip()
-                    if news_obj and news_obj['id'] == article_id:
+                    if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
                         break
                     results.append(self.create_news_log_object(date, title, article_id))
             success_count = 0
@@ -566,7 +572,8 @@ class ShikkakumonDownload(UnconfirmedDownload):
                     if len(date) == 0:
                         continue
                     title = tag_title.text.strip()
-                    if news_obj and news_obj['id'] == article_id and news_obj['title'] == title:
+                    if news_obj and ((news_obj['id'] == article_id and news_obj['title'] == title)
+                                     or date < news_obj['date']):
                         break
                     results.append(self.create_news_log_object(date, title, article_id))
             success_count = 0
@@ -651,7 +658,8 @@ class ShuumatsuNoHaremDownload(UnconfirmedDownload):
                             article_id = self.PAGE_PREFIX + a_tag['href'].replace('../', '')
                         date = tag_date.text.strip().replace('/', '.')
                         title = tag_title.text.strip()
-                        if news_obj and news_obj['id'] == article_id and news_obj['title'] == title:
+                        if news_obj and ((news_obj['id'] == article_id and news_obj['title'] == title)
+                                         or date < news_obj['date']):
                             stop = True
                             break
                         results.append(self.create_news_log_object(date, title, article_id))
@@ -799,7 +807,8 @@ class TensaiOujiDownload(UnconfirmedDownload):
                             article_id = self.PAGE_PREFIX + a_tag['href'].replace('../', '')
                         date = tag_date.text.strip().replace('/', '.')
                         title = tag_title.text.strip()
-                        if news_obj and news_obj['id'] == article_id and news_obj['title'] == title:
+                        if news_obj and ((news_obj['id'] == article_id and news_obj['title'] == title)
+                                         or date < news_obj['date']):
                             stop = True
                             break
                         results.append(self.create_news_log_object(date, title, article_id))
@@ -871,7 +880,7 @@ class TsukiLaikaNosferatuDownload(UnconfirmedDownload):
                         if len(date) == 0:
                             continue
                         title = tag_title.text.strip()
-                        if news_obj and news_obj['id'] == article_id:
+                        if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
                             stop = True
                             break
                         results.append(self.create_news_log_object(date, title, article_id))
@@ -987,7 +996,8 @@ class YamaNoSusume4Download(UnconfirmedDownload):
                     if len(date) == 0:
                         continue
                     title = tag_title.text.strip()
-                    if news_obj and news_obj['id'] == article_id and news_obj['title'] == title:
+                    if news_obj and ((news_obj['id'] == article_id and news_obj['title'] == title)
+                                     or date < news_obj['date']):
                         break
                     results.append(self.create_news_log_object(date, title, article_id))
             success_count = 0
