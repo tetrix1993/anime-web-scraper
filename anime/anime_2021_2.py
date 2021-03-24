@@ -2,7 +2,7 @@ import os
 import anime.constants as constants
 from anime.main_download import MainDownload
 from datetime import datetime
-from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
+from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner, NatalieScanner
 
 
 # 86 https://anime-86.com/ #エイティシックス @anime_eightysix
@@ -1535,6 +1535,8 @@ class YakunaraMugCupMoDownload(Spring2021AnimeDownload):
     folder_name = 'yakumo'
 
     PAGE_PREFIX = 'https://yakumo-project.com/'
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 5
 
     def __init__(self):
         super().__init__()
@@ -1542,12 +1544,55 @@ class YakunaraMugCupMoDownload(Spring2021AnimeDownload):
     def run(self):
         self.download_episode_preview()
         self.download_news()
+        # self.download_episode_preview_external()
+        self.download_episode_preview_guess()
         self.download_key_visual()
         self.download_character()
         self.download_bluray()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        self.image_list = []
+        story_url = self.PAGE_PREFIX + 'story/'
+        try:
+            soup = self.get_soup(story_url)
+            nav_list = soup.select('ul.story__nav li a')
+            for item in nav_list:
+                if item.has_attr('href') and item['href'].endswith('.php'):
+                    try:
+                        episode = str(int(item.text.replace('#', ''))).zfill(2)
+                    except:
+                        continue
+                    if self.is_image_exists(episode + '_1'):
+                        continue
+                    episode_url = story_url + item['href'].replace('./', '')
+                    episode_soup = self.get_soup(episode_url)
+                    images = episode_soup.select('ul.story__anime--imgs li img')
+                    for i in range(len(images)):
+                        if images[i].has_attr('src'):
+                            image_name = episode + '_' + str(i + 1)
+                            image_url = story_url + images[i]['src'].replace('./', '')
+                            self.add_to_image_list(image_name, image_url)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
+        self.download_image_list(self.base_folder)
+
+    def download_episode_preview_external(self):
+        jp_title = 'やくならマグカップも'
+        NatalieScanner(jp_title, self.base_folder, last_episode=self.FINAL_EPISODE).run()
+
+    def download_episode_preview_guess(self):
+        self.image_list = []
+        image_template = 'https://yakumo-project.com/story/images/%s_%s.jpg'
+        for i in range(self.FINAL_EPISODE):
+            for j in range(self.IMAGES_PER_EPISODE):
+                image_name = '%s_%s' % (str(i + 1).zfill(2), str(j + 1))
+                if self.is_image_exists(image_name):
+                    break
+                image_url = image_template % (str(i + 1).zfill(2), str(j + 1).zfill(2))
+                result = self.download_image(image_url, self.base_folder + '/' + image_name)
+                if result == -1:
+                    return
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + 'news/'
