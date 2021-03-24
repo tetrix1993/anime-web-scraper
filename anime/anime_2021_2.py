@@ -1548,7 +1548,7 @@ class YakunaraMugCupMoDownload(Spring2021AnimeDownload):
         self.download_episode_preview_guess()
         self.download_key_visual()
         self.download_character()
-        self.download_bluray()
+        self.download_media()
 
     def download_episode_preview(self):
         self.image_list = []
@@ -1656,8 +1656,8 @@ class YakunaraMugCupMoDownload(Spring2021AnimeDownload):
             if result == -1:
                 break
 
-    def download_bluray(self):
-        folder = self.create_bluray_directory()
+    def download_media(self):
+        folder = self.create_media_directory()
         self.image_list = []
         self.add_to_image_list('music_op', 'https://pbs.twimg.com/media/EwgnHeUVEAcY0XX?format=jpg&name=medium')
         self.download_image_list(folder)

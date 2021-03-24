@@ -123,7 +123,7 @@ class Gotoubun2Download(Winter2021AnimeDownload):
         self.download_news()
         self.download_key_visual()
         self.download_character()
-        self.download_bluray()
+        self.download_media()
         self.download_bluray_bonus()
 
     def download_episode_preview(self):
@@ -190,8 +190,8 @@ class Gotoubun2Download(Winter2021AnimeDownload):
             image_objs.append({'name': image_name, 'url': image_url})
         self.download_image_objects(image_objs, folder)
 
-    def download_bluray(self):
-        folder = self.create_bluray_directory()
+    def download_media(self):
+        folder = self.create_media_directory()
         self.image_list = []
         self.add_to_image_list('bd1_big', 'https://aniverse-mag.com/wp-content/uploads/2021/01/f52988a7c17bf03cfc9369cb7777b84d.jpg', to_jpg=True)
         #self.add_to_image_list('bd2_big', 'https://aniverse-mag.com/wp-content/uploads/2021/02/704f1147ac034226999fbead9d593edc.jpg', to_jpg=True)
@@ -237,7 +237,7 @@ class Gotoubun2Download(Winter2021AnimeDownload):
             print(e)
 
     def download_bluray_bonus(self):
-        folder = self.create_bluray_directory()
+        folder = self.create_media_directory()
         try:
             soup = self.get_soup(self.PAGE_PREFIX + 'disc/oritoku.html', decode=True)
             images = soup.find_all(lambda tag: tag.name == 'img' and tag.has_attr('class') and 'oritoku-img' in tag['class']
@@ -388,7 +388,7 @@ class HorimiyaDownload(Winter2021AnimeDownload):
         self.download_news()
         self.download_key_visual()
         self.download_character()
-        self.download_bluray()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -507,8 +507,8 @@ class HorimiyaDownload(Winter2021AnimeDownload):
             print("Error in running " + self.__class__.__name__ + " - Character")
             print(e)
 
-    def download_bluray(self):
-        folder = self.create_bluray_directory()
+    def download_media(self):
+        folder = self.create_media_directory()
         self.image_list = []
         self.add_to_image_list('music_ed', 'https://pbs.twimg.com/media/ErR1scoVEAM0pVu?format=jpg&name=large')
         self.add_to_image_list('bd7_bonus', 'https://pbs.twimg.com/media/EuHiHw5UcA4qJwt?format=jpg&name=medium')
@@ -543,7 +543,7 @@ class TomozakiKunDownload(Winter2021AnimeDownload):
         self.download_news()
         self.download_key_visual()
         self.download_character()
-        self.download_bluray()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -635,8 +635,8 @@ class TomozakiKunDownload(Winter2021AnimeDownload):
             self.add_to_image_list(name_2, url_2)
         self.download_image_list(folder)
 
-    def download_bluray(self):
-        folder = self.create_bluray_directory()
+    def download_media(self):
+        folder = self.create_media_directory()
         self.image_list = []
         self.add_to_image_list('bd_tw_1_1', 'https://pbs.twimg.com/media/EqDDs1iVgAANXji?format=jpg&name=large')
         self.add_to_image_list('bd_tw_1_2', 'https://pbs.twimg.com/media/EqDDtt9UwAA4Rld?format=jpg&name=large')
@@ -730,7 +730,7 @@ class KaiyariDownload(Winter2021AnimeDownload):
         self.download_news()
         self.download_key_visual()
         self.download_character()
-        self.download_bluray()
+        self.download_media()
 
     def download_episode_preview(self):
         image_template = self.PAGE_PREFIX + 'assets/story/%s_%s.jpg'
@@ -812,8 +812,8 @@ class KaiyariDownload(Winter2021AnimeDownload):
             print(e)
         self.download_image_objects(image_objs, folder)
 
-    def download_bluray(self):
-        folder = self.create_bluray_directory()
+    def download_media(self):
+        folder = self.create_media_directory()
         self.image_list = []
         self.add_to_image_list('music_op', 'http://kaiyari.com/assets/music/op.jpg')
         self.add_to_image_list('music_ed', 'http://kaiyari.com/assets/music/ed.jpg')
@@ -1005,7 +1005,7 @@ class MushokuTenseiDownload(Winter2021AnimeDownload):
         self.download_news()
         self.download_key_visual()
         self.download_character()
-        self.download_bluray()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -1160,8 +1160,8 @@ class MushokuTenseiDownload(Winter2021AnimeDownload):
             print(e)
         self.download_image_objects(image_objs, folder)
 
-    def download_bluray(self):
-        folder = self.create_bluray_directory()
+    def download_media(self):
+        folder = self.create_media_directory()
         cache_filepath = folder + '/' + 'cache'
         processed = []
         num_processed = 0
@@ -1231,7 +1231,7 @@ class NonNonBiyori3Download(Winter2021AnimeDownload):
         self.download_episode_preview()
         self.download_key_visual()
         self.download_character()
-        self.download_bluray()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -1322,8 +1322,8 @@ class NonNonBiyori3Download(Winter2021AnimeDownload):
                         f.write(';')
                     f.write(processed[i])
 
-    def download_bluray(self):
-        folder = self.create_bluray_directory()
+    def download_media(self):
+        folder = self.create_media_directory()
         self.image_list = []
         self.add_to_image_list('music_jkt', 'http://nanoripe.com/nanoripe/wp-content/uploads/2021/01/nonnon_days_H1_RGB_Shikaku.jpg')
         self.add_to_image_list('bd_bonus_1', 'https://pbs.twimg.com/media/Ev-J9aXVoAA3KjX?format=jpg&name=4096x4096')
@@ -1371,7 +1371,7 @@ class KakushiDungeonDownload(Winter2021AnimeDownload):
         self.download_news()
         self.download_key_visual()
         self.download_character()
-        self.download_bluray()
+        self.download_media()
         self.download_endcard()
 
     def download_episode_preview(self):
@@ -1450,8 +1450,8 @@ class KakushiDungeonDownload(Winter2021AnimeDownload):
             print(e)
         self.download_image_objects(image_objs, folder)
 
-    def download_bluray(self):
-        folder = self.create_bluray_directory()
+    def download_media(self):
+        folder = self.create_media_directory()
         self.image_list = []
         self.add_to_image_list('music_ed', 'https://pbs.twimg.com/media/EsUxe--UwAAuYHv?format=jpg&name=medium')
         try:
@@ -1511,7 +1511,7 @@ class LasdanDownload(Winter2021AnimeDownload):
         self.download_news()
         self.download_key_visual()
         self.download_character()
-        self.download_bluray()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -1662,8 +1662,8 @@ class LasdanDownload(Winter2021AnimeDownload):
             print(e)
         self.download_image_objects(image_objs, chara_folder)
 
-    def download_bluray(self):
-        folder = self.create_bluray_directory()
+    def download_media(self):
+        folder = self.create_media_directory()
         self.image_list = []
         self.add_to_image_list('bd2_big', 'https://pbs.twimg.com/media/Ev8hdfIVIAIjjPb?format=jpg&name=4096x4096')
         self.add_to_image_list('bd_bonus_1', 'https://pbs.twimg.com/media/EvhgYzGUYAYO1YC?format=jpg&name=900x900')
@@ -1843,7 +1843,7 @@ class UrasekaiPicnicDownload(Winter2021AnimeDownload):
         self.download_news()
         self.download_key_visual()
         self.download_character()
-        self.download_bluray()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -1960,8 +1960,8 @@ class UrasekaiPicnicDownload(Winter2021AnimeDownload):
             print(e)
         self.download_image_objects(image_objs, folder)
 
-    def download_bluray(self):
-        folder = self.create_bluray_directory()
+    def download_media(self):
+        folder = self.create_media_directory()
         self.image_list = []
         self.add_to_image_list('music_op', 'https://pbs.twimg.com/media/Eq4iEpWVgAI_0oq?format=jpg&name=large')
         self.add_to_image_list('music_ed', self.PAGE_PREFIX + '/cms/wp-content/themes/othersidepicnic/images/music/ending_b_jaket.jpg')
@@ -1996,7 +1996,7 @@ class WonderEggPriorityDownload(Winter2021AnimeDownload):
         self.download_news()
         self.download_key_visual()
         self.download_character()
-        self.download_bluray()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -2094,8 +2094,8 @@ class WonderEggPriorityDownload(Winter2021AnimeDownload):
             print("Error in running " + self.__class__.__name__ + " - Character")
             print(e)
 
-    def download_bluray(self):
-        folder = self.create_bluray_directory()
+    def download_media(self):
+        folder = self.create_media_directory()
         try:
             self.download_content(self.PAGE_PREFIX + '/assets/img/introduction/bgvideo_l.mp4',
                                   folder + '/bgvideo_l.mp4')
@@ -2159,7 +2159,7 @@ class YuruCamp2Download(Winter2021AnimeDownload):
         self.download_episode_preview()
         self.download_key_visual()
         self.download_character()
-        self.download_bluray()
+        self.download_media()
 
     def download_episode_preview(self):
         image_template = self.PAGE_PREFIX + 'images/episode/%s_%s.jpg'
@@ -2229,8 +2229,8 @@ class YuruCamp2Download(Winter2021AnimeDownload):
                     self.add_to_image_list(image_name, image_url)
         self.download_image_list(folder)
 
-    def download_bluray(self):
-        folder = self.create_bluray_directory()
+    def download_media(self):
+        folder = self.create_media_directory()
         self.image_list = []
         #self.add_to_image_list('music_op', 'https://pbs.twimg.com/media/Ep-m71UUUAEkLG5?format=jpg&name=small')
         #self.add_to_image_list('music_ed', 'https://pbs.twimg.com/media/Ep-PwosVoAIhGIn?format=jpg&name=medium')

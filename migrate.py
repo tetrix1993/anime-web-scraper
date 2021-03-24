@@ -4,7 +4,7 @@ import traceback
 from anime import MainDownload, ExternalDownload
 from anime.constants import FOLDER_OUTPUT
 
-VERSION_NUMBER = 21
+VERSION_NUMBER = 22
 DOWNLOAD_DIR = 'download'
 UNCONFIRMED_DIR = DOWNLOAD_DIR + '/unconfirmed'
 MIGRATION_ERROR_LOG = 'migration_error.log'
@@ -68,6 +68,19 @@ def rename_folders():
     rename_folder('download/2020-2/hachinan/other', 'download/2020-2/hachinan/bd')
     rename_folder('download/2020-2/kaguya-sama2/other', 'download/2020-2/kaguya-sama2/bd')
     rename_folder('download/2020-2/shachibato/other', 'download/2020-2/shachibato/bd')
+
+    rename_folder('download/2021-1/gotoubun2/bd', 'download/2021-1/gotoubun2/media')
+    rename_folder('download/2021-1/horimiya/bd', 'download/2021-1/horimiya/media')
+    rename_folder('download/2021-1/tomozakikun/bd', 'download/2021-1/tomozakikun/media')
+    rename_folder('download/2021-1/kaiyari/bd', 'download/2021-1/kaiyari/media')
+    rename_folder('download/2021-1/mushoku-tensei/bd', 'download/2021-1/mushoku-tensei/media')
+    rename_folder('download/2021-1/non-non-biyori3/bd', 'download/2021-1/non-non-biyori3/media')
+    rename_folder('download/2021-1/kakushi-dungeon/bd', 'download/2021-1/kakushi-dungeon/media')
+    rename_folder('download/2021-1/lasdan/bd', 'download/2021-1/lasdan/media')
+    rename_folder('download/2021-1/urasekai-picnic/bd', 'download/2021-1/urasekai-picnic/media')
+    rename_folder('download/2021-1/wonder-egg-priority/bd', 'download/2021-1/wonder-egg-priority/media')
+    rename_folder('download/2021-1/yurucamp2/bd', 'download/2021-1/yurucamp2/media')
+    rename_folder('download/2021-2/yakumo/bd', 'download/2021-2/yakumo/media')
 
 
 def run():
