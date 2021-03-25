@@ -2,6 +2,7 @@ import os
 import anime.constants as constants
 from anime.main_download import MainDownload
 
+# Do It Yourself!! https://diy-anime.com/ #diyアニメ @diy_anime
 # Goblin Slayer S2 http://www.goblinslayer.jp/ #ゴブスレ @GoblinSlayer_GA
 # Hataraku Maou-sama! https://maousama.jp/ #maousama @anime_maousama
 # Itai no wa https://bofuri.jp/story/ #防振り #bofuri @bofuri_anime
@@ -29,6 +30,75 @@ class UnconfirmedDownload(MainDownload):
 
     def __init__(self):
         super().__init__()
+
+
+# Do It Yourself!!
+class DoItYourselfDownload(UnconfirmedDownload):
+    title = 'Do It Yourself!!'
+    keywords = [title, 'DIY']
+    folder_name = 'diy'
+
+    PAGE_PREFIX = 'https://diy-anime.com/'
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX
+        try:
+            soup = self.get_soup(news_url, decode=True)
+            articles = soup.select('ul.news_List li.news_List_Item')
+            news_obj = self.get_last_news_log_object()
+            results = []
+            for article in articles:
+                tag_date = article.find('time', class_='roboto')
+                a_tag = article.find('a')
+                if tag_date and a_tag and a_tag.has_attr('href'):
+                    article_id = a_tag['href']
+                    date = self.format_news_date(tag_date.text.strip().replace('/', '.'))
+                    if len(date) == 0:
+                        continue
+                    title = a_tag.text.strip()
+                    if news_obj and ((news_obj['id'] == article_id and news_obj['title'] == title)
+                                     or date < news_obj['date']):
+                        break
+                    results.append(self.create_news_log_object(date, title, article_id))
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log_from_news_log_object(result)
+                if process_result == 0:
+                    success_count += 1
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - News')
+            print(e)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('teaser', 'https://pbs.twimg.com/media/ExRRykWU4AEZ6Cy?format=jpg&name=large')
+        self.add_to_image_list('teaser_tw', self.PAGE_PREFIX + 'assets/images/pc/teaser/img_kv.png')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        self.image_list = []
+        for i in range(6):
+            image_name = 'img_chara-%s' % str(i)
+            image_url = self.PAGE_PREFIX + 'assets/images/pc/teaser/' + image_name + '.png'
+            self.add_to_image_list(image_name, image_url)
+        self.download_image_list(folder)
+
 
 
 # Goblin Slayer 2nd Season
