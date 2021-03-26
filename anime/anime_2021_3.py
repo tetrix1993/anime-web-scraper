@@ -314,6 +314,7 @@ class MeikyuBCDownload(Summer2021AnimeDownload):
         self.download_episode_preview()
         self.download_news()
         self.download_key_visual()
+        self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
@@ -354,7 +355,14 @@ class MeikyuBCDownload(Summer2021AnimeDownload):
         folder = self.create_key_visual_directory()
         self.image_list = []
         self.add_to_image_list('teaser', 'https://pbs.twimg.com/media/Es40z-1UYAAg7_x?format=jpg&name=medium')
+        self.add_to_image_list('kv1', self.PAGE_PREFIX + '_image/keyvisual_2.png')
+        self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/ExX7gEEVIAcPU1v?format=jpg&name=medium')
         self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + '_image/charaPop_%s.png'
+        self.download_by_template(folder, template, 2)
 
 
 # Otome Game no Hametsu Flag shika Nai Akuyaku Reijou ni Tensei shiteshimatta... X
