@@ -1235,7 +1235,7 @@ class NonNonBiyori3Download(Winter2021AnimeDownload):
 
     def download_episode_preview(self):
         try:
-            soup = self.get_soup(self.PAGE_PREFIX + '/tvanime/story/')
+            soup = self.get_soup(self.STORY_PAGE)
             a_tags = soup.find_all(lambda tag: tag.name == 'a' and tag.has_attr('href')
                 and tag.has_attr('class') and 'story__nav__page__item' in tag['class'])
             for a_tag in a_tags:
