@@ -463,7 +463,35 @@ class NagatorosanDownload(Spring2021AnimeDownload):
         self.download_media()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        story_prefix = self.PAGE_PREFIX + 'story/'
+        self.image_list = []
+        try:
+            soup = self.get_soup(story_prefix)
+            links = soup.select('div.navi ul li a')
+            for link in links:
+                if link.has_attr('href'):
+                    if link['href'].startswith('introduction'):
+                        continue
+                    try:
+                        episode = str(int(link.text)).zfill(2)
+                    except:
+                        continue
+                    if self.is_image_exists(episode + '_1'):
+                        continue
+                    episode_soup = soup
+                    if link['href'] != './':
+                        episode_soup = self.get_soup(story_prefix + link['href'])
+                    if episode_soup:
+                        images = episode_soup.select('div.story ul.image li img')
+                        for i in range(len(images)):
+                            if images[i].has_attr('src'):
+                                image_name = episode + '_' + str(i + 1)
+                                image_url = self.PAGE_PREFIX + images[i]['src'].replace('../', '')
+                                self.add_to_image_list(image_name, image_url)
+                        self.download_image_list(self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + 'news/'
@@ -499,13 +527,14 @@ class NagatorosanDownload(Spring2021AnimeDownload):
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
-        image_objs = [
-            {'name': 'teaser', 'url': 'https://pbs.twimg.com/media/Eb6NC6rU0AAoaUm?format=jpg&name=medium'},
-            {'name': 'mainimg', 'url': 'https://www.nagatorosan.jp/images/mainimg.jpg'},
-            {'name': 'kv1', 'url': 'https://pbs.twimg.com/media/EmIPL3dU0AABjQI?format=jpg&name=medium'},
-            {'name': 'kv1_2', 'url': 'https://www.nagatorosan.jp/img/top/mainimg.jpg'},
-        ]
-        self.download_image_objects(image_objs, folder)
+        self.image_list = []
+        self.add_to_image_list('teaser', 'https://pbs.twimg.com/media/Eb6NC6rU0AAoaUm?format=jpg&name=medium')
+        self.add_to_image_list('mainimg', self.PAGE_PREFIX + 'images/mainimg.jpg')
+        self.add_to_image_list('kv1', 'https://pbs.twimg.com/media/EmIPL3dU0AABjQI?format=jpg&name=medium')
+        self.add_to_image_list('kv1_2', self.PAGE_PREFIX + 'img/top/mainimg.jpg')
+        self.add_to_image_list('kv2', 'https://pbs.twimg.com/media/ExXb2leUYAQuyZA?format=jpg&name=medium')
+        #self.add_to_image_list('kv2', self.PAGE_PREFIX + 'img/news/img_visual2.jpg')
+        self.download_image_list(folder)
 
     def download_character(self):
         folder = self.create_character_directory()
