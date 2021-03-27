@@ -1612,7 +1612,9 @@ class VivyDownload(Spring2021AnimeDownload):
         self.image_list = []
         self.add_to_image_list('teaser', self.PAGE_PREFIX + 'assets/img/kv_pc.jpg')
         self.add_to_image_list('teaser_tw', 'https://pbs.twimg.com/media/Erv_rEcUcAMlQ3e?format=jpg&name=medium')
+        self.add_to_image_list('kv2', 'https://pbs.twimg.com/media/ExcWgj9UUAEYY53?format=jpg&name=large')
         self.download_image_list(folder)
+        self.download_by_template(folder, self.PAGE_PREFIX + 'assets/img/top/main/kv%s_pc.jpg')
 
 
 # Yakunara Mug Cup mo
