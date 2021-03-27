@@ -788,6 +788,7 @@ class OsamakeDownload(Spring2021AnimeDownload):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
@@ -840,6 +841,39 @@ class OsamakeDownload(Spring2021AnimeDownload):
             result = self.download_image(image_url, folder + '/' + image_name)
             if result == -1:
                 break
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        for page in ['bddvd', 'music']:
+            page_url = 'https://osamake.com/%s.html' % page
+            try:
+                self.image_list = []
+                soup = self.get_soup(page_url)
+                articles = soup.select('#Entries article')
+                for article in articles:
+                    if article.has_attr('id'):
+                        id_ = article['id']
+                        if id_.upper() == 'BNF':
+                            if page == 'bddvd':
+                                id_ = 'bd_' + id_
+                            else:
+                                id_ = 'music_' + id_
+                        images = article.select('img')
+                        for image in images:
+                            if image.has_attr('src'):
+                                if image['src'].endswith('np.png'):
+                                    continue
+                                image_url = self.PAGE_PREFIX + image['src'].replace('./', '')
+                                image_name = id_ + '_' + self.extract_image_name_from_url(image_url,
+                                                                                          with_extension=False)
+                                self.add_to_image_list(image_name, image_url)
+                self.download_image_list(folder)
+            except Exception as e:
+                display = 'Blu-Ray'
+                if display == 'music':
+                    display = 'Music'
+                print("Error in running " + self.__class__.__name__ + ' - ' + display)
+                print(e)
 
 
 # Sayonara Watashi no Cramer
