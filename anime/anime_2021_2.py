@@ -1285,7 +1285,7 @@ class Slime300Download(Spring2021AnimeDownload):
         #self.add_to_image_list('keyvisual04', self.PAGE_PREFIX + '/static/98f5d8537a23ebf5b357bac8d63fcf39/eeb1b/keyvisual04.png')
         #self.download_image_list(folder)
 
-        kv_json = self.PAGE_PREFIX + '/page-data/sq/d/621460424.json'
+        kv_json = self.PAGE_PREFIX + '/page-data/sq/d/2710052649.json'
         self.image_list = []
         try:
             json_obj = self.get_json(kv_json)
