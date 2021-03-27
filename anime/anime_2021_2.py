@@ -673,6 +673,7 @@ class FullDiveRPGDownload(Spring2021AnimeDownload):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
@@ -742,6 +743,29 @@ class FullDiveRPGDownload(Spring2021AnimeDownload):
             if image_downloaded == 0:
                 break
         self.download_image_list(folder)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        for page in ['bluray', 'music']:
+            page_url = self.PAGE_PREFIX + '/%s.html' % page
+            try:
+                self.image_list = []
+                soup = self.get_soup(page_url)
+                images = soup.select('#page_contents img')
+                for image in images:
+                    if image.has_attr('src'):
+                        if image['src'].endswith('music_jake_cs.jpg'):
+                            continue
+                        image_url = self.PAGE_PREFIX + image['src'].replace('./', '')
+                        image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                        self.add_to_image_list(image_name, image_url)
+                self.download_image_list(folder)
+            except Exception as e:
+                display = 'Blu-Ray'
+                if display == 'music':
+                    display = 'Music'
+                print("Error in running " + self.__class__.__name__ + ' - ' + display)
+                print(e)
 
 
 # Mairimashita! Iruma-kun 2nd Season
@@ -845,7 +869,7 @@ class OsamakeDownload(Spring2021AnimeDownload):
     def download_media(self):
         folder = self.create_media_directory()
         for page in ['bddvd', 'music']:
-            page_url = 'https://osamake.com/%s.html' % page
+            page_url = self.PAGE_PREFIX + '/%s.html' % page
             try:
                 self.image_list = []
                 soup = self.get_soup(page_url)
