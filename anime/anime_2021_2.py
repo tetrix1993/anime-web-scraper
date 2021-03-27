@@ -15,7 +15,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner, Na
 # Mairimashita! Iruma-kun S2 https://www6.nhk.or.jp/anime/program/detail.html?i=iruma #魔入りました入間くん @wc_mairuma
 # Osananajimi ga Zettai ni Makenai Love Comedy https://osamake.com/ #おさまけ #osamake
 # Sayonara Watashi no Cramer https://sayonara-cramer.com/tv/ #さよなら私のクラマー @cramer_pr
-# Seijo no Maryoku wa Bannou desu https://seijyonomaryoku.jp/ #seijyonoanime @seijyonoanime
+# Seijo no Maryoku wa Bannou Desu https://seijyonomaryoku.jp/ #seijyonoanime @seijyonoanime
 # Sentouin, Hakenshimasu! https://kisaragi-co.jp/ #sentoin @sentoin_anime
 # Shadows House https://shadowshouse-anime.com/ #シャドーハウス @shadowshouse_yj
 # Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita https://slime300-anime.com/ #スライム倒して300年 @slime300_PR
@@ -989,9 +989,9 @@ class SayonaraCramerDownload(Spring2021AnimeDownload):
         self.download_image_list(folder)
 
 
-# Seijo no Maryoku wa Bannou desu
+# Seijo no Maryoku wa Bannou Desu
 class SeijonoMaryokuDownload(Spring2021AnimeDownload):
-    title = 'Seijo no Maryoku wa Bannou desu'
+    title = 'Seijo no Maryoku wa Bannou Desu'
     keywords = [title, 'seijonomaryoku', 'seijyonomaryoku', "The Saint's Magic Power is Omnipotent"]
     folder_name = 'seijyonomaryoku'
 

@@ -126,7 +126,7 @@ The premiere date for the anime listed here has not been announced.
 * [Mairimashita! Iruma-kun 2nd Season](https://www6.nhk.or.jp/anime/program/detail.html?i=iruma)
 * [Osananajimi ga Zettai ni Makenai Love Comedy](https://osamake.com/)
 * [Sayonara Watashi no Cramer](https://sayonara-cramer.com/tv/)
-* [Seijo no Maryoku wa Bannou desu](https://seijyonomaryoku.jp/)
+* [Seijo no Maryoku wa Bannou Desu](https://seijyonomaryoku.jp/)
 * [Sentouin, Hakenshimasu!](https://kisaragi-co.jp/)
 * [Shadows House](https://shadowshouse-anime.com/)
 * [Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita](https://slime300-anime.com/)
