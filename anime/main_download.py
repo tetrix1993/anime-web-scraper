@@ -787,10 +787,12 @@ class MainDownload:
         while i <= end:
             image_url = template % str(i).zfill(zfill)
             image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+            i += 1
+            if self.is_image_exists(image_name, folder):
+                continue
             result = self.download_image(image_url, folder + '/' + image_name, headers, to_jpg, is_mocanews, min_width)
             if result == -1:
                 break
-            i += 1
 
     # Match filter
     def match(self, s_filter):
