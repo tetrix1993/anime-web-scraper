@@ -8,6 +8,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 # Bokutachi no Remake http://bokurema.com/ #ぼくリメ #bokurema @bokurema_anime
 # Cheat Kusushi no Slow Life: Isekai ni Tsukurou Drugstore https://www.cheat-kusushi.jp/ #チート薬師 #スローライフ @cheat_kusushi
 # Genjitsu Shugi Yuusha no Oukoku Saikenki https://genkoku-anime.com/ #現国アニメ @genkoku_info
+# Kanojo mo Kanojo https://kanokano-anime.com/ #kanokano #カノジョも彼女 @kanokano_anime
 # Kobayashi-san Chi no Maid Dragon S https://maidragon.jp/2nd/ #maidragon @maidragon_anime
 # Meikyuu Black Company https://meikyubc-anime.com/ #迷宮ブラックカンパニー @meikyubc_anime
 # Otome Game https://hamehura-anime.com/story/ #はめふら #hamehura @hamehura
@@ -226,6 +227,71 @@ class GenkokuDownload(Summer2021AnimeDownload):
 
     def download_character(self):
         pass
+
+
+# Kanojo mo Kanojo
+class KanokanoDownload(Summer2021AnimeDownload):
+    title = 'Kanojo mo Kanojo'
+    keywords = [title, 'Kanokano']
+    folder_name = 'kanokano'
+
+    PAGE_PREFIX = 'https://kanokano-anime.com/'
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX
+        try:
+            soup = self.get_soup(news_url, decode=True)
+            articles = soup.select('ul.news-list li.news-list-node')
+            news_obj = self.get_last_news_log_object()
+            results = []
+            for article in articles:
+                tag_date = article.find('div', class_='news-date')
+                tag_title = article.find('div', class_='news-title')
+                if tag_date and tag_title:
+                    article_id = ''
+                    date = self.format_news_date(tag_date.text.strip().replace('/', '.'))
+                    if len(date) == 0:
+                        continue
+                    title = tag_title.text.strip()
+                    if news_obj and ((news_obj['date'] == date and news_obj['title'] == title)
+                                     or date < news_obj['date']):
+                        break
+                    results.append(self.create_news_log_object(date, title, article_id))
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log_from_news_log_object(result)
+                if process_result == 0:
+                    success_count += 1
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - News')
+            print(e)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        # self.add_to_image_list('teaser', self.PAGE_PREFIX + 'assets/img/mv-img.png')
+        self.add_to_image_list('kv1', self.PAGE_PREFIX + 'assets/img/mv-img@2x.png')
+        self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/ExivmbSVEAMCkMG?format=jpg&name=large')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'assets/img/character-detail-img%s@2x.png'
+        self.download_by_template(folder, template, 2)
 
 
 # Kobayashi-san Chi no Maid Dragon S
