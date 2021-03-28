@@ -99,6 +99,7 @@ The premiere date for the anime listed here has not been announced.
 * [Yama no Susume: Next Summit](https://yamanosusume-ns.com/)
 
 ### Fall 2021 Anime
+* [Taishou Otome Otogibanashi](http://taisho-otome.com/)
 * [Tate no Yuusha no Nariagari 2nd Season](http://shieldhero-anime.jp)
 
 ### Summer 2021 Anime

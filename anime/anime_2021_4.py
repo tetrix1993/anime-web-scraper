@@ -5,6 +5,7 @@ from datetime import datetime
 from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 
 
+# Taishou Otome Otogibanashi http://taisho-otome.com/ #大正オトメ #昭和オトメ @otome_otogi
 # Tate no Yuusha S2 http://shieldhero-anime.jp/ #shieldhero #盾の勇者の成り上がり @shieldheroanime
 
 # Fall 2021 Anime
@@ -15,6 +16,34 @@ class Fall2021AnimeDownload(MainDownload):
 
     def __init__(self):
         super().__init__()
+
+
+# Taishou Otome Otogibanashi
+class TaishoOtomeDownload(Fall2021AnimeDownload):
+    title = 'Taishou Otome Otogibanashi'
+    keywords = [title, 'Taisho Otome']
+    folder_name = 'taisho-otome'
+
+    PAGE_PREFIX = 'http://taisho-otome.com/'
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        template = self.PAGE_PREFIX + 'wp/wp-content/themes/taisho-otome/img/index/%s.jpg'
+        template_name = 'img_kv%s'
+        self.image_list = []
+        self.add_to_image_list(template_name % '01', template % (template_name % '01'))
+        self.add_to_image_list(template_name % '02', template % (template_name % '02'))
+        self.download_image_list(folder)
 
 
 # Tate no Yuusha no Nariagari S2
