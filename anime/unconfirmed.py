@@ -454,6 +454,8 @@ class MegamiryouDownload(UnconfirmedDownload):
         self.add_to_image_list('teaser_tw', 'https://pbs.twimg.com/media/EsTnmn-U0Acx83l?format=jpg&name=large')
         self.add_to_image_list('teaser', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv_pc.png')
         self.add_to_image_list('tzOriginImg', self.PAGE_PREFIX + 'core_sys/images/main/tz/tzOriginImg.png')
+        self.add_to_image_list('teaser2_tw', 'https://pbs.twimg.com/media/Exi4zBeXMAEsbA2?format=jpg&name=4096x4096')
+        self.add_to_image_list('teaser2', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv_pc2.png')
         self.download_image_list(folder)
 
     def download_character(self):
