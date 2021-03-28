@@ -1393,12 +1393,38 @@ class SsssDynazenonDownload(Spring2021AnimeDownload):
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_external()
         self.download_news()
         self.download_key_visual()
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        story_prefix = self.PAGE_PREFIX + 'story/'
+        json_url = story_prefix + 'episode_data.php'
+        self.image_list = []
+        try:
+            json_obj = self.get_json(json_url)
+            if isinstance(json_obj, list):
+                for ep_obj in json_obj:
+                    if 'number' in ep_obj and 'images' in ep_obj and isinstance(ep_obj['images'], list):
+                        try:
+                            episode = str(int(ep_obj['number'])).zfill(2)
+                        except:
+                            continue
+                        if self.is_image_exists(episode + '_1'):
+                            continue
+                        for i in range(len(ep_obj['images'])):
+                            image_url = story_prefix + ep_obj['images'][i].split('?')[0]
+                            image_name = episode + '_' + str(i + 1)
+                            self.add_to_image_list(image_name, image_url)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
+        self.download_image_list(self.base_folder)
+
+    def download_episode_preview_external(self):
+        jp_title = 'SSSS.DYNAZENON'
+        AniverseMagazineScanner(jp_title, self.base_folder, last_episode=13, suffix='回', min_width=1200, end_date='20210328').run()
 
     def download_news(self):
         prefix = 'https://gridman.net'
