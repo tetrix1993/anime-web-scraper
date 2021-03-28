@@ -79,6 +79,7 @@ pip install -r requirements.txt
 
 ### New Anime
 The premiere date for the anime listed here has not been announced.
+* [Ano Hi Mita Hana no Namae wo Bokutachi wa Mada Shiranai. 10th Anniversary Project](https://10th.anohana.jp/)
 * [Do It Yourself!!](https://diy-anime.com/)
 * [Goblin Slayer 2nd Season](http://www.goblinslayer.jp/)
 * [Hataraku Maou-sama! 2nd Season](https://maousama.jp/)

@@ -2,6 +2,7 @@ import os
 import anime.constants as constants
 from anime.main_download import MainDownload
 
+# Anohana S2 https://10th.anohana.jp/ #あの花 #anohana @anohana_project
 # Do It Yourself!! https://diy-anime.com/ #diyアニメ @diy_anime
 # Goblin Slayer S2 http://www.goblinslayer.jp/ #ゴブスレ @GoblinSlayer_GA
 # Hataraku Maou-sama! https://maousama.jp/ #maousama @anime_maousama
@@ -30,6 +31,78 @@ class UnconfirmedDownload(MainDownload):
 
     def __init__(self):
         super().__init__()
+
+
+# Ano Hi Mita Hana no Namae wo Bokutachi wa Mada Shiranai. 10th Anniversary Project
+class Anohana2Download(UnconfirmedDownload):
+    title = 'Ano Hi Mita Hana no Namae wo Bokutachi wa Mada Shiranai. 10th Anniversary Project'
+    keywords = [title, 'Anohana', 'The Flower We Saw That Day']
+    folder_name = 'anohana2'
+
+    PAGE_PREFIX = 'https://10th.anohana.jp/'
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        stop = False
+        try:
+            results = []
+            news_obj = self.get_last_news_log_object()
+            page_url = news_url
+            for page in range(1, 100, 1):
+                soup = self.get_soup(page_url, decode=True)
+                lis = soup.select('div.news_list ul li.news_list__item')
+                for li in lis:
+                    tag_date = li.find('p', class_='news_date')
+                    tag_title = li.find('p', class_='news_title')
+                    a_tag = li.find('a')
+                    if tag_date and tag_title:
+                        article_id = ''
+                        if a_tag and a_tag.has_attr('href'):
+                            article_id = news_url + a_tag['href'].replace('./', '').split('&p=')[0]
+                        date = self.format_news_date(tag_date.text.strip())
+                        if len(date) == 0:
+                            continue
+                        title = tag_title.text.strip()
+                        if date.startswith('2020') or (news_obj and
+                                                       ((news_obj['id'] == article_id and news_obj['title'] == title)
+                                                        or date < news_obj['date'])):
+                            stop = True
+                            break
+                        results.append(self.create_news_log_object(date, title, article_id))
+                if stop:
+                    break
+                btn_next = soup.find('p', class_='btn_next')
+                if btn_next is None:
+                    break
+                btn_next_a_tag = btn_next.find('a')
+                if btn_next_a_tag is None or not btn_next_a_tag.has_attr('href'):
+                    break
+                page_url = news_url + btn_next_a_tag['href'].replace('./', '')
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log_from_news_log_object(result)
+                if process_result == 0:
+                    success_count += 1
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - News')
+            print(e)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('teaser', 'https://pbs.twimg.com/media/ExRRykWU4AEZ6Cy?format=jpg&name=large')
+        self.add_to_image_list('teaser_tw', self.PAGE_PREFIX + 'assets/images/pc/teaser/img_kv.png')
+        self.download_image_list(folder)
 
 
 # Do It Yourself!!
