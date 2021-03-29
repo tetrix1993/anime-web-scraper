@@ -1343,9 +1343,12 @@ class Slime300Download(Spring2021AnimeDownload):
         #self.add_to_image_list('keyvisual04', self.PAGE_PREFIX + '/static/98f5d8537a23ebf5b357bac8d63fcf39/eeb1b/keyvisual04.png')
         #self.download_image_list(folder)
 
-        kv_json = self.PAGE_PREFIX + '/page-data/sq/d/2710052649.json'
+        page_data_url = self.PAGE_PREFIX + '/page-data/index/page-data.json'
         self.image_list = []
         try:
+            data_obj = self.get_json(page_data_url)
+            hash_ = data_obj['staticQueryHashes'][-1]
+            kv_json = self.PAGE_PREFIX + ('/page-data/sq/d/%s.json' % hash_.strip())
             json_obj = self.get_json(kv_json)
             data_obj = json_obj['data']
             for data in data_obj.keys():
@@ -1363,8 +1366,11 @@ class Slime300Download(Spring2021AnimeDownload):
     def download_character(self):
         folder = self.create_character_directory()
         image_objs = []
-        chara_json = self.PAGE_PREFIX + '/page-data/sq/d/4136652757.json'
+        page_data_url = self.PAGE_PREFIX + '/page-data/character/page-data.json'
         try:
+            data_obj = self.get_json(page_data_url)
+            hash_ = data_obj['staticQueryHashes'][-1]
+            chara_json = self.PAGE_PREFIX + ('/page-data/sq/d/%s.json' % hash_.strip())
             json_obj = self.get_json(chara_json)
             data_obj = json_obj['data']
             for data in data_obj.keys():
