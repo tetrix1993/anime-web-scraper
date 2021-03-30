@@ -6,8 +6,8 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner, Na
 
 
 # 86 https://anime-86.com/ #エイティシックス @anime_eightysix
-# Fumetsu no Anata e https://anime-fumetsunoanatae.com/ #不滅のあなたへ @nep_fumetsu
 # Dragon, Ie wo Kau https://doraie.com/ #ドラ家 @anime_doraie
+# Fumetsu no Anata e https://anime-fumetsunoanatae.com/ #不滅のあなたへ @nep_fumetsu
 # Hige wo Soru. Soshite Joshikousei wo Hirou. http://higehiro-anime.com/ #higehiro #ひげひろ @higehiro_anime
 # Ijiranaide, Nagatoro-san https://www.nagatorosan.jp/ #長瀞さん @nagatoro_tv
 # Isekai Maou to Shoukan Shoujo no Dorei Majutsu Ω https://isekaimaou-anime.com/ #異世界魔王 @isekaimaou
@@ -164,6 +164,105 @@ class EightySixDownload(Spring2021AnimeDownload):
         self.download_content(valentine_ex_url, folder + '/valentine_ex.mp4')
 
 
+# Dragon, Ie wo Kau
+class DoraieDownload(Spring2021AnimeDownload):
+    title = 'Dragon, Ie wo Kau'
+    keywords = [title, 'Dragon Goes House-Hunting', 'Doraie']
+    folder_name = 'doraie'
+
+    PAGE_PREFIX = 'https://doraie.com/'
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 6
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_episode_preview_external()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        template = self.PAGE_PREFIX + 'story/img/%s/%s_%s.jpg'
+        for i in range(self.FINAL_EPISODE):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_1'):
+                continue
+            first_image_url = template % (episode, episode, '01')
+            if not self.is_valid_url(first_image_url, is_image=True):
+                break
+            self.image_list = []
+            for j in range(self.IMAGES_PER_EPISODE):
+                image_url = template % (episode, episode, str(j + 1).zfill(2))
+                image_name = episode + '_' + str(j + 1)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(self.base_folder)
+
+    def download_episode_preview_external(self):
+        jp_title = 'ドラゴン、家を買う。'
+        AniverseMagazineScanner(jp_title, self.base_folder, last_episode=self.FINAL_EPISODE, min_width=1200, end_date='20210330').run()
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        try:
+            soup = self.get_soup(news_url)
+            articles = soup.find_all('article', class_='news-item')
+            news_obj = self.get_last_news_log_object()
+            results = []
+            for article in articles:
+                tag_date = article.find('span', class_='news-item__date')
+                tag_title = article.find('span', class_='news-item__title')
+                a_tag = article.find('a', class_='news-item__link')
+                if tag_date and tag_title and a_tag and a_tag.has_attr('href'):
+                    article_id = a_tag['href']
+                    if article_id.startswith('/'):
+                        article_id = article_id[1:]
+                    article_id = self.PAGE_PREFIX + article_id
+                    date = self.format_news_date(tag_date.text.strip())
+                    if len(date) == 0:
+                        continue
+                    title = tag_title.text.strip()
+                    if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
+                        break
+                    results.append(self.create_news_log_object(date, title, article_id))
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log_from_news_log_object(result)
+                if process_result == 0:
+                    success_count += 1
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - News')
+            print(e)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('kv2', self.PAGE_PREFIX + 'news/wp/wp-content/uploads/2020/11/7e7632e1c37c768e225d8f78d1a5a6f3.jpg')
+        self.add_to_image_list('kv3', self.PAGE_PREFIX + 'news/wp/wp-content/uploads/2021/03/22c816279916034a8e5490b4d831d432.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        self.image_list = []
+        try:
+            json_obj = self.get_json(self.PAGE_PREFIX + 'character/chara_data.php')
+            if isinstance(json_obj, dict):
+                if 'charas' in json_obj and isinstance(json_obj['charas'], list):
+                    for chara in json_obj['charas']:
+                        if 'images' in chara and 'visual' in chara['images']:
+                            image_url = self.PAGE_PREFIX + 'character/' + chara['images']['visual'].split('?')[0]
+                            image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                            self.add_to_image_list(image_name, image_url)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Character")
+            print(e)
+        self.download_image_list(folder)
+
+
 # Fumetsu no Anata e
 class FumetsuNoAnataeDownload(Spring2021AnimeDownload):
     title = 'Fumetsu no Anata e'
@@ -259,85 +358,6 @@ class FumetsuNoAnataeDownload(Spring2021AnimeDownload):
                         self.add_to_image_list(image_name, image_url)
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
-            print(e)
-        self.download_image_list(folder)
-
-
-# Dragon, Ie wo Kau
-class DoraieDownload(Spring2021AnimeDownload):
-    title = 'Dragon, Ie wo Kau'
-    keywords = [title, 'Dragon Goes House-Hunting', 'Doraie']
-    folder_name = 'doraie'
-
-    PAGE_PREFIX = 'https://doraie.com/'
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_news()
-        self.download_key_visual()
-        self.download_character()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_news(self):
-        news_url = self.PAGE_PREFIX + 'news/'
-        try:
-            soup = self.get_soup(news_url)
-            articles = soup.find_all('article', class_='news-item')
-            news_obj = self.get_last_news_log_object()
-            results = []
-            for article in articles:
-                tag_date = article.find('span', class_='news-item__date')
-                tag_title = article.find('span', class_='news-item__title')
-                a_tag = article.find('a', class_='news-item__link')
-                if tag_date and tag_title and a_tag and a_tag.has_attr('href'):
-                    article_id = a_tag['href']
-                    if article_id.startswith('/'):
-                        article_id = article_id[1:]
-                    article_id = self.PAGE_PREFIX + article_id
-                    date = self.format_news_date(tag_date.text.strip())
-                    if len(date) == 0:
-                        continue
-                    title = tag_title.text.strip()
-                    if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
-                        break
-                    results.append(self.create_news_log_object(date, title, article_id))
-            success_count = 0
-            for result in reversed(results):
-                process_result = self.create_news_log_from_news_log_object(result)
-                if process_result == 0:
-                    success_count += 1
-            if len(results) > 0:
-                self.create_news_log_cache(success_count, results[0])
-        except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - News')
-            print(e)
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('kv2', self.PAGE_PREFIX + 'news/wp/wp-content/uploads/2020/11/7e7632e1c37c768e225d8f78d1a5a6f3.jpg')
-        self.add_to_image_list('kv3', self.PAGE_PREFIX + 'news/wp/wp-content/uploads/2021/03/22c816279916034a8e5490b4d831d432.jpg')
-        self.download_image_list(folder)
-
-    def download_character(self):
-        folder = self.create_character_directory()
-        self.image_list = []
-        try:
-            json_obj = self.get_json(self.PAGE_PREFIX + 'character/chara_data.php')
-            if isinstance(json_obj, dict):
-                if 'charas' in json_obj and isinstance(json_obj['charas'], list):
-                    for chara in json_obj['charas']:
-                        if 'images' in chara and 'visual' in chara['images']:
-                            image_url = self.PAGE_PREFIX + 'character/' + chara['images']['visual'].split('?')[0]
-                            image_name = self.extract_image_name_from_url(image_url, with_extension=False)
-                            self.add_to_image_list(image_name, image_url)
-        except Exception as e:
-            print("Error in running " + self.__class__.__name__ + " - Character")
             print(e)
         self.download_image_list(folder)
 
@@ -1393,6 +1413,7 @@ class SsssDynazenonDownload(Spring2021AnimeDownload):
     folder_name = 'ssss-dynazenon'
 
     PAGE_PREFIX = 'https://dynazenon.net/'
+    FINAL_EPISODE = 13
 
     def __init__(self):
         super().__init__()
@@ -1430,7 +1451,7 @@ class SsssDynazenonDownload(Spring2021AnimeDownload):
 
     def download_episode_preview_external(self):
         jp_title = 'SSSS.DYNAZENON'
-        AniverseMagazineScanner(jp_title, self.base_folder, last_episode=13, suffix='回', min_width=1200, end_date='20210328').run()
+        AniverseMagazineScanner(jp_title, self.base_folder, last_episode=self.FINAL_EPISODE, suffix='回', min_width=1200, end_date='20210328').run()
 
     def download_news(self):
         prefix = 'https://gridman.net'
