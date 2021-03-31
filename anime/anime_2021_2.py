@@ -684,19 +684,59 @@ class FullDiveRPGDownload(Spring2021AnimeDownload):
     folder_name = 'fulldive'
 
     PAGE_PREFIX = 'https://fulldive-rpg.com/'
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 6
 
     def __init__(self):
         super().__init__()
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_guess()
         self.download_news()
         self.download_key_visual()
         self.download_character()
         self.download_media()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story.html', decode=True)
+            ep_list = soup.select('div.story_navi ul.cf li a')
+            for ep in ep_list:
+                if not ep.has_attr('href'):
+                    continue
+                try:
+                    episode = str(int(ep.text.strip().split('#')[1])).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                ep_soup = self.get_soup(self.PAGE_PREFIX + ep['href'])
+                if ep_soup:
+                    images = ep_soup.select('ul.story_large_img li img')
+                    self.image_list = []
+                    for i in range(len(images)):
+                        if images[i].has_attr('src'):
+                            image_url = self.PAGE_PREFIX + images[i]['src'].replace('../', '')
+                            image_name = episode + '_' + str(i + 1)
+                            self.add_to_image_list(image_name, image_url)
+                    self.download_image_list(self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
+
+    def download_episode_preview_guess(self):
+        folder = self.create_custom_directory('guess')
+        template = self.PAGE_PREFIX + 'img/story/ep%s_img%s.jpg'
+        for i in range(self.FINAL_EPISODE):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_1'):
+                continue
+            ep_num = str(i + 1)
+            url_template = template % (ep_num, '%s')
+            result = self.download_by_template(folder, url_template, 2, start=1, end=self.IMAGES_PER_EPISODE)
+            if not result:
+                break
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + 'news.html'
