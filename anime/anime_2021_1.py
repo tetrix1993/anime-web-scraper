@@ -125,6 +125,7 @@ class Gotoubun2Download(Winter2021AnimeDownload):
         self.download_character()
         self.download_media()
         self.download_bluray_bonus()
+        self.download_other()
 
     def download_episode_preview(self):
         image_template = 'https://www.tbs.co.jp/anime/5hanayome/story/img/story%s/%s.jpg'
@@ -256,6 +257,20 @@ class Gotoubun2Download(Winter2021AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + ' - Blu-Ray Bonus')
             print(e)
+
+    def download_other(self):
+        folder = self.create_custom_directory('other')
+        prefix = 'https://www.tbs.co.jp/anime/5hanayome/img/'
+        chara_prefix = 'https://www.tbs.co.jp/anime/5hanayome/character/img/'
+        self.image_list = []
+        self.add_to_image_list('logo_test_af@2x', prefix + 'logo_test_af@2x.png')
+        self.add_to_image_list('key_visual_af', prefix + 'key_visual_af.jpg')
+        for i in range(6):
+            for name in ['character_0%s_af@2x', 'character_name_0%s_af@2x']:
+                image_name = name % str(i)
+                image_url = chara_prefix + image_name + '.png'
+                self.add_to_image_list(image_name, image_url)
+        self.download_image_list(folder)
 
 
 # Hataraku Saibou S2
