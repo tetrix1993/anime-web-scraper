@@ -1065,6 +1065,7 @@ class SeijonoMaryokuDownload(Spring2021AnimeDownload):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         self.image_list = []
@@ -1149,6 +1150,13 @@ class SeijonoMaryokuDownload(Spring2021AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + " - Character")
             print(e)
+        self.download_image_list(folder)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        self.image_list = []
+        self.add_to_image_list('music_op', self.PAGE_PREFIX + 'images/music/blessing/blessing_back.jpg')
+        self.add_to_image_list('music_ed', self.PAGE_PREFIX + 'images/music/page-for-tomorrow/pagefortomorrow.jpg')
         self.download_image_list(folder)
 
 
