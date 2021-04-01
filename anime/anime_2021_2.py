@@ -1159,6 +1159,8 @@ class SentoinDownload(Spring2021AnimeDownload):
     folder_name = 'sentoin'
 
     PAGE_PREFIX = 'https://kisaragi-co.jp/'
+    FINAL_EPISODE = 13
+    IMAGES_PER_EPISODE = 6
 
     def __init__(self):
         super().__init__()
@@ -1170,7 +1172,16 @@ class SentoinDownload(Spring2021AnimeDownload):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        for i in range(self.FINAL_EPISODE):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_1'):
+                continue
+            for j in range(self.IMAGES_PER_EPISODE):
+                image_name = episode + '_' + str(j + 1)
+                image_url = self.PAGE_PREFIX + 'assets/story/%s_%s.jpg' % (str(i + 1), str(j + 1))
+                result = self.download_image(image_url, self.base_folder + '/' + image_name)
+                if result == -1:
+                    return
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + 'news.html'
