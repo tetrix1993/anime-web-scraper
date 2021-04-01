@@ -499,6 +499,7 @@ class GochiUsa3Download(Fall2020AnimeDownload):
         self.download_bluray_bonus()
         self.download_music()
         self.download_endcard()
+        self.download_other()
 
     def download_episode_preview(self):
         try:
@@ -687,6 +688,15 @@ class GochiUsa3Download(Fall2020AnimeDownload):
         self.add_to_image_list('ec10', 'https://pbs.twimg.com/media/EpClZweUwAI-jU0?format=jpg&name=large')
         self.add_to_image_list('ec11', 'https://pbs.twimg.com/media/EpmlW9kU8AIZJjX?format=jpg&name=large')
         self.add_to_image_list('ec12', 'https://pbs.twimg.com/media/EqKrsFdVEAANsTC?format=jpg&name=large')
+        self.download_image_list(folder)
+
+    def download_other(self):
+        folder = self.create_custom_directory('other')
+        self.image_list = []
+        for i in ['all', 'chino', 'cocoa', 'rize', 'chiya', 'syaro', 'megu', 'maya']:
+            image_name = 'gochiusa_aprilfool2021_%s' % i
+            image_url = 'https://gochiusa.com/af/core_sys/images/main/cont/download/%s.png' % image_name
+            self.add_to_image_list(image_name, image_url)
         self.download_image_list(folder)
 
 
