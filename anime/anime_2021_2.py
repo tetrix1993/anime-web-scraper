@@ -978,7 +978,33 @@ class SayonaraCramerDownload(Spring2021AnimeDownload):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX + 'tv/', 'index')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'tv/story/')
+            ep_tags = soup.select('nav.story--nav li a')
+            for ep_tag in ep_tags:
+                if ep_tag.has_attr('href'):
+                    span = ep_tag.find('span')
+                    if span:
+                        try:
+                            episode = str(int(span.text.strip())).zfill(2)
+                        except:
+                            continue
+                        if self.is_image_exists(episode + '_1'):
+                            continue
+                        ep_soup = self.get_soup(ep_tag['href'])
+                        if ep_soup is None:
+                            continue
+                        self.image_list = []
+                        images = ep_soup.select('div.story--main__slider--slide img')
+                        for i in range(len(images)):
+                            if images[i].has_attr('src'):
+                                image_url = images[i]['src']
+                                image_name = episode + '_' + str(i + 1)
+                                self.add_to_image_list(image_name, image_url)
+                        self.download_image_list(self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + 'news/'
