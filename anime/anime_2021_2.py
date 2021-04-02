@@ -1167,7 +1167,7 @@ class SentoinDownload(Spring2021AnimeDownload):
     folder_name = 'sentoin'
 
     PAGE_PREFIX = 'https://kisaragi-co.jp/'
-    FINAL_EPISODE = 13
+    FINAL_EPISODE = 12
     IMAGES_PER_EPISODE = 6
 
     def __init__(self):
@@ -1178,6 +1178,7 @@ class SentoinDownload(Spring2021AnimeDownload):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         for i in range(self.FINAL_EPISODE):
@@ -1244,6 +1245,28 @@ class SentoinDownload(Spring2021AnimeDownload):
                     stop += 1
             if stop == 2:
                 break
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            divs = soup.select('#BddvdData div.bddvd-data')
+            self.image_list = []
+            for div in divs:
+                if div.has_attr('id'):
+                    id_ = div['id']
+                    images = div.select('img')
+                    for image in images:
+                        if image.has_attr('src'):
+                            if image['src'].endswith('np.jpg'):
+                                continue
+                            image_url = self.PAGE_PREFIX + image['src'].replace('./', '')
+                            image_name = id_ + '_' + self.extract_image_name_from_url(image_url, with_extension=False)
+                            self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Media')
+            print(e)
 
 
 # Shadows House
