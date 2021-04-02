@@ -1729,6 +1729,7 @@ class VivyDownload(Spring2021AnimeDownload):
         self.download_episode_preview()
         self.download_news()
         self.download_key_visual()
+        self.download_character()
 
     def download_episode_preview(self):
         try:
@@ -1814,6 +1815,43 @@ class VivyDownload(Spring2021AnimeDownload):
         self.add_to_image_list('kv2', 'https://pbs.twimg.com/media/ExcWgj9UUAEYY53?format=jpg&name=large')
         self.download_image_list(folder)
         self.download_by_template(folder, self.PAGE_PREFIX + 'assets/img/top/main/kv%s_pc.jpg')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        id_list = []
+        try:
+            chara_url = self.PAGE_PREFIX + 'character/'
+            soup = self.get_soup(chara_url)
+            char_items = soup.select('li.p-character__item a')
+            for item in char_items:
+                if item.has_attr('href'):
+                    page_url = chara_url + item['href'].replace('./', '')
+                    try:
+                        id_ = page_url.split('?id=')[1]
+                        id_list.append(id_)
+                        if self.is_image_exists('img_' + id_, folder):
+                            continue
+                    except:
+                        pass
+                    chara_soup = self.get_soup(page_url)
+                    if chara_soup:
+                        images = chara_soup.select('div.p-character__detail img')
+                        self.image_list = []
+                        for image in images:
+                            if image.has_attr('src') and len(image['src']) > 0:
+                                image_url = self.PAGE_PREFIX + image['src'].replace('../../', '')
+                                image_name = self.extract_image_name_from_url(image_url)
+                                self.add_to_image_list(image_name, image_url)
+                        self.download_image_list(folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Character')
+            print(e)
+
+        for id__ in id_list:
+            if self.is_image_exists(id__ + '_01', folder):
+                image_name = id__.lower() + '_%s'
+                template = self.PAGE_PREFIX + 'assets/img/character/img/%s.jpg' % image_name
+                self.download_by_template(folder, template, 2, 2)
 
 
 # Yakunara Mug Cup mo

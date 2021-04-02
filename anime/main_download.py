@@ -594,7 +594,7 @@ class MainDownload:
             return None
 
     @staticmethod
-    def extract_image_name_from_url(text, with_extension=True):
+    def extract_image_name_from_url(text, with_extension=False):
         split1 = text.split('/')[-1]
 
         # Expected input with extension e.g. image.jpg or http://website.com/image.jpg
