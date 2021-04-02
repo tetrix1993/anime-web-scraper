@@ -21,7 +21,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner, Na
 # Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita https://slime300-anime.com/ #スライム倒して300年 @slime300_PR
 # SSSS.Dynazenon https://dynazenon.net/ #SSSS_DYNAZENON @SSSS_PROJECT [SUN]
 # Super Cub https://supercub-anime.com/ #スーパーカブ @supercub_anime
-# Vivy: Fluroite Eye's Song https://vivy-portal.com/ #ヴィヴィ @vivy_portal
+# Vivy: Fluroite Eye's Song https://vivy-portal.com/ #ヴィヴィ @vivy_portal [FRI]
 # Yakunara Mug Cup mo https://yakumo-project.com/ #やくもtv @yakumo_project
 
 
@@ -1724,7 +1724,38 @@ class VivyDownload(Spring2021AnimeDownload):
         self.download_key_visual()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            story_url = self.PAGE_PREFIX + 'story/'
+            soup = self.get_soup(story_url)
+            ep_items = soup.select('li.p-story__ep-item a')
+            for ep_item in ep_items:
+                if ep_item.has_attr('href'):
+                    try:
+                        episode = str(int(ep_item['href'].split('?id=ep')[1])).zfill(2)
+                    except:
+                        continue
+                    if self.is_image_exists(episode + '_1'):
+                        continue
+                    self.image_list = []
+                    first_image = ep_item.find('img')
+                    if first_image and first_image.has_attr('src'):
+                        if first_image['src'][0] == '/':
+                            first_image_url = self.PAGE_PREFIX + first_image['src'][1:]
+                        else:
+                            first_image_url = self.PAGE_PREFIX + first_image['src']
+                        self.add_to_image_list(episode + '_0', first_image_url)
+                    ep_soup = self.get_soup(story_url + ep_item['href'].replace('./', ''))
+                    if ep_soup:
+                        images = ep_soup.select('li.p-story__detail-img-item img')
+                        for i in range(len(images)):
+                            if images[i].has_attr('src'):
+                                image_url = story_url + 'detail/' + images[i]['src']
+                                image_name = episode + '_' + str(i + 1)
+                                self.add_to_image_list(image_name, image_url)
+                    self.download_image_list(self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + 'news/'
