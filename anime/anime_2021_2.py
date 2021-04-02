@@ -1721,12 +1721,14 @@ class VivyDownload(Spring2021AnimeDownload):
     folder_name = 'vivy'
 
     PAGE_PREFIX = 'https://vivy-portal.com/'
+    FINAL_EPISODE = 13
 
     def __init__(self):
         super().__init__()
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_guess()
         self.download_news()
         self.download_key_visual()
         self.download_character()
@@ -1764,6 +1766,17 @@ class VivyDownload(Spring2021AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
+
+    def download_episode_preview_guess(self):
+        folder = self.create_custom_directory('guess')
+        template = self.PAGE_PREFIX + 'assets/img/story/cut/%s.jpg'
+        for i in range(self.FINAL_EPISODE):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_01', folder):
+                continue
+            image_template = template % (episode + '_%s')
+            if not self.download_by_template(folder, image_template, 2):
+                break
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + 'news/'
