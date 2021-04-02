@@ -1311,6 +1311,7 @@ class ShadowsHouseDownload(Spring2021AnimeDownload):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
@@ -1412,6 +1413,12 @@ class ShadowsHouseDownload(Spring2021AnimeDownload):
             result = self.download_image(image_url, folder + '/' + image_name)
             if result == -1:
                 break
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        self.image_list = []
+        self.add_to_image_list('music_ed', 'https://pbs.twimg.com/media/Ex9GZKuU4AEaMU6?format=jpg&name=large')
+        self.download_image_list(folder)
 
 
 # Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita
