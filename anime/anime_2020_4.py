@@ -3123,6 +3123,7 @@ class TonikawaDownload(Fall2020AnimeDownload):
         self.download_episode_preview()
         self.download_episode_preview_guess()
         self.download_key_visual()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -3184,3 +3185,34 @@ class TonikawaDownload(Fall2020AnimeDownload):
             filepath_without_extension = keyvisual_folder + '/' + image_obj['name']
             self.download_image(image_obj['url'], filepath_without_extension)
 
+    def download_media(self):
+        folder = self.create_media_directory()
+        # Bluray
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'blu-ray/')
+            images = soup.select('div.content a')
+            self.image_list = []
+            for image in images:
+                if image.has_attr('href'):
+                    image_url = self.PAGE_PREFIX + image['href'].replace('../', '')
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Blu-ray')
+            print(e)
+
+        # Oyomesan Gallery
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'special/oyomesan-gallery/')
+            images = soup.select('li.swiper-slide a')
+            self.image_list = []
+            for image in images:
+                if image.has_attr('href'):
+                    image_url = self.PAGE_PREFIX + image['href'].replace('../../', '')
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Media Oyomesan Gallery')
+            print(e)
