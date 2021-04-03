@@ -691,6 +691,13 @@ class SeireiGensoukiDownload(UnconfirmedDownload):
             print("Error in running " + self.__class__.__name__ + " - Character")
             print(e)
 
+        self.image_list = []
+        self.add_to_image_list('celia_claire', 'https://seireigensouki.com/wp/wp-content/uploads/2021/03/セリアクレール.jpg')
+        self.add_to_image_list('aishia', 'https://seireigensouki.com/wp/wp-content/uploads/2021/03/アイシア.jpg')
+        self.add_to_image_list('latifa', 'https://seireigensouki.com/wp/wp-content/uploads/2021/04/ラティーファ.jpg')
+        self.add_to_image_list('ayase_miharu', 'https://seireigensouki.com/wp/wp-content/uploads/2021/04/綾瀬美春.jpg')
+        self.download_image_list(folder)
+
 
 # Shikkakumon no Saikyou Kenja
 class ShikkakumonDownload(UnconfirmedDownload):
