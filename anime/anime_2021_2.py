@@ -1478,14 +1478,29 @@ class Slime300Download(Spring2021AnimeDownload):
         #self.add_to_image_list('keyvisual04', self.PAGE_PREFIX + '/static/98f5d8537a23ebf5b357bac8d63fcf39/eeb1b/keyvisual04.png')
         #self.download_image_list(folder)
 
+        self.image_list = []
+        self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/Ej2u1tDU4AAsi_J?format=jpg&name=large')
+        self.add_to_image_list('kv2_tw', 'https://pbs.twimg.com/media/Ej2u3l7U8AIfJ4w?format=jpg&name=large')
+        self.add_to_image_list('kv3_tw', 'https://pbs.twimg.com/media/EtDYnPRVoAAwPdr?format=jpg&name=4096x4096')
+        self.add_to_image_list('kv4_tw', 'https://pbs.twimg.com/media/EtDYnPWU0AUQCXF?format=jpg&name=4096x4096')
+        self.add_to_image_list('kv5_tw', 'https://pbs.twimg.com/media/ExcpTlJUUAEm876?format=jpg&name=4096x4096')
+        self.add_to_image_list('kv6_tw', 'https://pbs.twimg.com/media/EyDcmrkUcAAGNmg?format=jpg&name=4096x4096')
+        self.download_image_list(folder)
+
         page_data_url = self.PAGE_PREFIX + '/page-data/index/page-data.json'
         self.image_list = []
         try:
-            data_obj = self.get_json(page_data_url)
-            hash_ = data_obj['staticQueryHashes'][-1]
-            kv_json = self.PAGE_PREFIX + ('/page-data/sq/d/%s.json' % hash_.strip())
-            json_obj = self.get_json(kv_json)
-            data_obj = json_obj['data']
+            data_main_obj = self.get_json(page_data_url)
+            data_obj = None
+            for hash_ in data_main_obj['staticQueryHashes']:
+                chara_json = self.PAGE_PREFIX + ('/page-data/sq/d/%s.json' % hash_.strip())
+                data_obj = self.get_json(chara_json)['data']
+                if 'logo' not in data_obj:
+                    continue
+                else:
+                    break
+            if data_obj is None:
+                return
             for data in data_obj.keys():
                 try:
                     image_url = self.PAGE_PREFIX + data_obj[data]['childImageSharp']['fluid']['src']
@@ -1503,11 +1518,17 @@ class Slime300Download(Spring2021AnimeDownload):
         image_objs = []
         page_data_url = self.PAGE_PREFIX + '/page-data/character/page-data.json'
         try:
-            data_obj = self.get_json(page_data_url)
-            hash_ = data_obj['staticQueryHashes'][-1]
-            chara_json = self.PAGE_PREFIX + ('/page-data/sq/d/%s.json' % hash_.strip())
-            json_obj = self.get_json(chara_json)
-            data_obj = json_obj['data']
+            data_main_obj = self.get_json(page_data_url)
+            data_obj = None
+            for hash_ in data_main_obj['staticQueryHashes']:
+                chara_json = self.PAGE_PREFIX + ('/page-data/sq/d/%s.json' % hash_.strip())
+                data_obj = self.get_json(chara_json)['data']
+                if 'azusa' not in data_obj:
+                    continue
+                else:
+                    break
+            if data_obj is None:
+                return
             for data in data_obj.keys():
                 try:
                     image_url = self.PAGE_PREFIX + data_obj[data]['childImageSharp']['fluid']['src']
