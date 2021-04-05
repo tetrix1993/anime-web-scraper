@@ -41,8 +41,9 @@ class EightySixDownload(Spring2021AnimeDownload):
     keywords = [title, 'Eighty Six']
     folder_name = '86'
 
-    FINAL_EPISODE = 26
     PAGE_PREFIX = 'https://anime-86.com/'
+    FINAL_EPISODE = 26
+    IMAGES_PER_EPISODE = 5
 
     def __init__(self):
         super().__init__()
@@ -67,7 +68,7 @@ class EightySixDownload(Spring2021AnimeDownload):
                         episode = str(int(span.text.strip().replace('#', ''))).zfill(2)
                     except:
                         continue
-                    if self.is_image_exists(episode + '_5'):
+                    if self.is_image_exists(episode + '_' + str(self.IMAGES_PER_EPISODE)):
                         continue
                     ep_soup = soup
                     if 'is-current' not in li['class']:
@@ -94,10 +95,16 @@ class EightySixDownload(Spring2021AnimeDownload):
         folder = self.create_custom_directory('guess')
         for i in range(self.FINAL_EPISODE):
             episode = str(i + 1).zfill(2)
-            if self.is_image_exists(episode + '_5'):
+            start_num = None
+            for j in range(self.IMAGES_PER_EPISODE):
+                if self.is_image_exists(episode + '_' + str(j + 1)):
+                    start_num = j + 2
+                else:
+                    break
+            if not start_num or start_num > self.IMAGES_PER_EPISODE:
                 continue
             template = self.PAGE_PREFIX + 'assets/img/story/img_ep%s-%s.jpg' % (episode, '%s')
-            if not self.download_by_template(folder, template, 1, start=1, end=5):
+            if not self.download_by_template(folder, template, 1, start=start_num, end=5):
                 break
             print(self.__class__.__name__ + ' - Episode %s guessed correctly!' % episode)
 
@@ -414,19 +421,57 @@ class HigehiroDownload(Spring2021AnimeDownload):
     folder_name = 'higehiro'
 
     PAGE_PREFIX = 'http://higehiro-anime.com/'
+    FINAL_EPISODE = 13
 
     def __init__(self):
         super().__init__()
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_guess()
         self.download_news()
         self.download_key_visual()
         self.download_character()
         self.download_media()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index', diff=2)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            lis = soup.select('li.slide-item')
+            for li in lis:
+                p_tag = li.find('p')
+                if p_tag and '第' in p_tag.text and '話' in p_tag.text:
+                    try:
+                        episode = str(int(p_tag.text.strip().replace('第', '').replace('話', ''))).zfill(2)
+                    except:
+                        continue
+                    if self.is_image_exists(episode + '_1'):
+                        continue
+                    ul = li.find('ul')
+                    if not ul:
+                        continue
+                    images = ul.select('img')
+                    self.image_list = []
+                    for i in range(len(images)):
+                        if images[i].has_attr('src'):
+                            image_url = images[i]['src'].split('?')[0]
+                            image_name = episode + '_' + str(i + 1)
+                            self.add_to_image_list(image_name, image_url)
+                    self.download_image_list(self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
+
+    def download_episode_preview_guess(self):
+        folder = self.create_custom_directory('guess')
+        for i in range(self.FINAL_EPISODE):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_1'):
+                continue
+            template = self.PAGE_PREFIX + 'wp-content/themes/higehiro/images/story/s%s-%s.jpg' % (str(i + 1), '%s')
+            if not self.download_by_template(folder, template, 1, start=1, end=6):
+                break
+            print(self.__class__.__name__ + ' - Episode %s guessed correctly!' % episode)
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + 'news/'
