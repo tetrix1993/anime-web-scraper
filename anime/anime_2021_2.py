@@ -54,7 +54,39 @@ class EightySixDownload(Spring2021AnimeDownload):
         self.download_media()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index', diff=2)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            lis = soup.select('li.p-story__nav-item')
+            for li in lis:
+                a_tag = li.find('a')
+                span = li.find('span')
+                if a_tag and span:
+                    try:
+                        episode = str(int(span.text.strip().replace('#', ''))).zfill(2)
+                    except:
+                        continue
+                    if self.is_image_exists(episode + '_5'):
+                        continue
+                    ep_soup = soup
+                    if 'is-current' not in li['class']:
+                        if not a_tag.has_attr('href'):
+                            continue
+                        if a_tag['href'].startswith('/'):
+                            ep_url = self.PAGE_PREFIX + a_tag['href'][1:]
+                        else:
+                            ep_url = self.PAGE_PREFIX + a_tag['href']
+                        ep_soup = self.get_soup(ep_url)
+                    images = ep_soup.select('li.p-story__img-item img')
+                    self.image_list = []
+                    for i in range(len(images)):
+                        if images[i].has_attr('src'):
+                            image_url = self.PAGE_PREFIX + images[i]['src'].replace('../', '')
+                            image_name = episode + '_' + str(i + 1)
+                            self.add_to_image_list(image_name, image_url)
+                    self.download_image_list(self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + 'news/'
