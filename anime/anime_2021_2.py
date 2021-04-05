@@ -41,6 +41,7 @@ class EightySixDownload(Spring2021AnimeDownload):
     keywords = [title, 'Eighty Six']
     folder_name = '86'
 
+    FINAL_EPISODE = 26
     PAGE_PREFIX = 'https://anime-86.com/'
 
     def __init__(self):
@@ -48,6 +49,7 @@ class EightySixDownload(Spring2021AnimeDownload):
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_guess()
         self.download_news()
         self.download_key_visual()
         self.download_character()
@@ -87,6 +89,17 @@ class EightySixDownload(Spring2021AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
+
+    def download_episode_preview_guess(self):
+        folder = self.create_custom_directory('guess')
+        for i in range(self.FINAL_EPISODE):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_5'):
+                continue
+            template = self.PAGE_PREFIX + 'assets/img/story/img_ep%s-%s.jpg' % (episode, '%s')
+            if not self.download_by_template(folder, template, 1, start=1, end=5):
+                break
+            print(self.__class__.__name__ + ' - Episode %s guessed correctly!' % episode)
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + 'news/'
