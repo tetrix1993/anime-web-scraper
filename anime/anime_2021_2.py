@@ -672,6 +672,53 @@ class NagatorosanDownload(Spring2021AnimeDownload):
         self.add_to_image_list('music_ed', self.PAGE_PREFIX + 'img/music/KICM-3365.jpg')
         self.download_image_list(folder)
 
+        # Blu-ray Bonus
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'blu-ray/tokuten.html')
+            images = soup.select('div.tokuten img')
+            self.image_list = []
+            for image in images:
+                if image.has_attr('src') and not image['src'].endswith('nowprinting.png'):
+                    image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Blu-ray Bonus")
+            print(e)
+
+        # Blu-ray
+        stop = False
+        for i in range(4):
+            if self.is_image_exists('bd' + str(i + 1), folder):
+                continue
+            bd_url = self.PAGE_PREFIX + 'blu-ray/' + str(i + 1).zfill(2) + '.html'
+            try:
+                soup = self.get_soup(bd_url)
+                prefix = 'bd' + str(i + 1)
+                images = soup.select('div.detail img')
+                self.image_list = []
+                for j in range(len(images)):
+                    if images[j].has_attr('src'):
+                        if images[j]['src'].endswith('nowprinting.png'):
+                            if j == 0:
+                                stop = True
+                                break
+                            else:
+                                continue
+                        image_url = self.PAGE_PREFIX + images[j]['src'].replace('../', '')
+                        if j == 0:
+                            image_name = prefix
+                        else:
+                            image_name = prefix + '_' + str(j)
+                        self.add_to_image_list(image_name, image_url)
+                self.download_image_list(folder)
+                if stop:
+                    break
+            except Exception as e:
+                print("Error in running " + self.__class__.__name__ + " - Blu-ray Bonus")
+                print(e)
+
 
 # Isekai Maou to Shoukan Shoujo no Dorei Majutsu Ω
 class IsekaiMaou2Download(Spring2021AnimeDownload):
