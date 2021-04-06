@@ -1376,6 +1376,40 @@ class SeijonoMaryokuDownload(Spring2021AnimeDownload):
         self.add_to_image_list('music_ed', self.PAGE_PREFIX + 'images/music/page-for-tomorrow/pagefortomorrow.jpg')
         self.download_image_list(folder)
 
+        # Blu-ray
+        stop = False
+        for i in ['soft-giveaway', 'soft-campaign', 'soft01', 'soft02', 'soft03']:
+            try:
+                bd_vol = None
+                if i in ['soft01', 'soft02', 'soft03']:
+                    bd_vol = i[-1]
+                    if self.is_image_exists('bd' + bd_vol, folder):
+                        continue
+                bd_url = self.PAGE_PREFIX + i + '.php'
+                soup = self.get_soup(bd_url)
+                images = soup.select('#soft img')
+                self.image_list = []
+                for j in range(len(images)):
+                    if images[j].has_attr('src'):
+                        image_url = self.PAGE_PREFIX + images[j]['src']
+                        if bd_vol:
+                            if 'placeholder' in image_url:
+                                stop = True
+                                break
+                            if j == 0:
+                                image_name = 'bd' + bd_vol
+                            else:
+                                image_name = 'bd' + bd_vol + '_' + str(j)
+                        else:
+                            image_name = self.extract_image_name_from_url(image_url)
+                        self.add_to_image_list(image_name, image_url)
+                self.download_image_list(folder)
+                if stop:
+                    break
+            except Exception as e:
+                print("Error in running " + self.__class__.__name__ + " - Blu-ray %s" % i)
+                print(e)
+
 
 # Sentouin, Hakenshimasu!
 class SentoinDownload(Spring2021AnimeDownload):
