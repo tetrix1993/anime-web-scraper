@@ -1815,6 +1815,30 @@ class SuperCubDownload(Spring2021AnimeDownload):
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            links = soup.select('#ContentsListUnit01 a')
+            for link in links:
+                if link.has_attr('href') and '第' in link.text and '話' in link.text:
+                    try:
+                        episode = str(int(link.text.strip().replace('第', '').replace('話', ''))).zfill(2)
+                    except:
+                        continue
+                    if self.is_image_exists(episode + '_1'):
+                        continue
+                    ep_soup = self.get_soup(self.PAGE_PREFIX + link['href'].replace('../', ''))
+                    if ep_soup:
+                        images = ep_soup.select('ul.tp5 a')
+                        self.image_list = []
+                        for i in range(len(images)):
+                            if images[i].has_attr('href'):
+                                image_url = self.PAGE_PREFIX + images[i]['href'].replace('../', '').split('?')[0]
+                                image_name = episode + '_' + str(i + 1)
+                                self.add_to_image_list(image_name, image_url)
+                        self.download_image_list(self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + 'news/'
@@ -1869,6 +1893,7 @@ class SuperCubDownload(Spring2021AnimeDownload):
         self.image_list = []
         self.add_to_image_list('kv', self.PAGE_PREFIX + 'core_sys/images/main/home/kv.jpg')
         self.add_to_image_list('kv_tw', 'https://pbs.twimg.com/media/ErvAcsEUcAMljAq?format=jpg&name=4096x4096')
+        self.add_to_image_list('visual01', self.PAGE_PREFIX + 'core_sys/images/news/00000011/block/00000038/00000008.jpg')
         self.download_image_list(folder)
 
 
