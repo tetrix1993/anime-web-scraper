@@ -784,7 +784,6 @@ class MainDownload:
     def download_by_template(self, folder, template, zfill=1, start=1, end=99, headers=None,
                              to_jpg=False, is_mocanews=False, min_width=None):
         if isinstance(template, str):
-            print(template)
             templates = [template]
         elif isinstance(template, list):
             templates = template
