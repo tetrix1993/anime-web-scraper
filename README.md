@@ -84,6 +84,7 @@ The premiere date for the anime listed here has not been announced.
 * [Goblin Slayer 2nd Season](http://www.goblinslayer.jp/)
 * [Hataraku Maou-sama! 2nd Season](https://maousama.jp/)
 * [Itai no wa Iya nano de Bougyoryoku ni Kyokufuri Shitai to Omoimasu. 2nd Season](https://bofuri.jp/)
+* [Kakkou no Iinazuke](https://cuckoos-anime.com/)
 * [Kenja no Deshi wo Nanoru Kenja](https://kendeshi-anime.com/)
 * [Mahouka Koukou no Yuutousei](https://mahouka-yuutousei.jp/)
 * [Maou Gakuin no Futekigousha: Shijou Saikyou no Maou no Shiso, Tensei shite Shison-tachi no Gakkou e 2nd Season](https://maohgakuin.com/)
