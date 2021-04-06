@@ -764,11 +764,14 @@ class AquatopeDownload(Summer2021AnimeDownload):
         self.image_list = []
         self.add_to_image_list('teaser_tw', 'https://pbs.twimg.com/media/ErwuT7rVQAISak1?format=jpg&name=large')
         self.add_to_image_list('teaser', self.PAGE_PREFIX + 'wp/wp-content/themes/aquatope-teaser/_assets/images/kv/kv_pc@2x.jpg')
+        self.add_to_image_list('kv1', 'https://pbs.twimg.com/media/EyR238pVgAQLNej?format=jpg&name=large')
         self.download_image_list(folder)
 
     def download_character(self):
         folder = self.create_character_directory()
         self.image_list = []
+        self.add_to_image_list('kukuru_design', self.PAGE_PREFIX + 'wp/wp-content/themes/aquatope-teaser/_assets/images/char/design/kukuru_design.png')
+        self.add_to_image_list('fuuka_design', self.PAGE_PREFIX + 'wp/wp-content/themes/aquatope-teaser/_assets/images/char/design/fuuka_design.png')
         try:
             soup = self.get_soup(self.PAGE_PREFIX)
             articles = soup.find_all('article', class_='char--slider--block')
