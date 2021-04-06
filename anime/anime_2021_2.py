@@ -553,6 +553,33 @@ class HigehiroDownload(Spring2021AnimeDownload):
         self.add_to_image_list('music_ed', 'https://pbs.twimg.com/media/ExEnxiIVoAkofD0?format=jpg&name=large')
         self.download_image_list(folder)
 
+        # Blu-ray
+        try:
+            soup = self.get_soup('https://www.toei-video.co.jp/special/higehiro-anime/')
+            self.image_list = []
+            packages = soup.select('div.package')
+            for i in range(len(packages)):
+                bd_image_name = 'bd' + str(i + 1)
+                if self.is_image_exists(bd_image_name, folder):
+                    continue
+                bd_image = packages[i].find('img')
+                if bd_image and bd_image.has_attr('src'):
+                    if self.is_matching_content_length(bd_image['src'], 8907):
+                        continue
+                    bd_image_url = bd_image['src'].split('?')[0]
+                    self.add_to_image_list(bd_image_name, bd_image_url)
+
+            images = soup.select('div.shoplist img')
+            for image in images:
+                if image.has_attr('src'):
+                    image_url = 'https://www.toei-video.co.jp' + image['src'].split('?')[0]
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Blu-ray")
+            print(e)
+
 
 # Ijiranaide, Nagatoro-san
 class NagatorosanDownload(Spring2021AnimeDownload):
