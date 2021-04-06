@@ -6,11 +6,11 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner, Na
 
 
 # 86 https://anime-86.com/ #エイティシックス @anime_eightysix
-# Dragon, Ie wo Kau https://doraie.com/ #ドラ家 @anime_doraie [TUE]
+# Dragon, Ie wo Kau https://doraie.com/ #ドラ家 @anime_doraie
 # Fumetsu no Anata e https://anime-fumetsunoanatae.com/ #不滅のあなたへ @nep_fumetsu
-# Hige wo Soru. Soshite Joshikousei wo Hirou. http://higehiro-anime.com/ #higehiro #ひげひろ @higehiro_anime
+# Hige wo Soru. Soshite Joshikousei wo Hirou. http://higehiro-anime.com/ #higehiro #ひげひろ @higehiro_anime [TUE]
 # Ijiranaide, Nagatoro-san https://www.nagatorosan.jp/ #長瀞さん @nagatoro_tv
-# Isekai Maou to Shoukan Shoujo no Dorei Majutsu Ω https://isekaimaou-anime.com/ #異世界魔王 @isekaimaou
+# Isekai Maou to Shoukan Shoujo no Dorei Majutsu Ω https://isekaimaou-anime.com/ #異世界魔王 @isekaimaou [TUE]
 # Kyuukyoku Shinka Shita Full Dive RPG ga Genjitsu Yori mo Kusogee Dattara https://fulldive-rpg.com/ #フルダイブ @fulldive_anime [WED]
 # Mairimashita! Iruma-kun S2 https://www6.nhk.or.jp/anime/program/detail.html?i=iruma #魔入りました入間くん @wc_mairuma
 # Osananajimi ga Zettai ni Makenai Love Comedy https://osamake.com/ #おさまけ #osamake
@@ -20,7 +20,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner, Na
 # Shadows House https://shadowshouse-anime.com/ #シャドーハウス @shadowshouse_yj
 # Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita https://slime300-anime.com/ #スライム倒して300年 @slime300_PR
 # SSSS.Dynazenon https://dynazenon.net/ #SSSS_DYNAZENON @SSSS_PROJECT [SUN]
-# Super Cub https://supercub-anime.com/ #スーパーカブ @supercub_anime
+# Super Cub https://supercub-anime.com/ #スーパーカブ @supercub_anime [TUE]
 # Vivy: Fluroite Eye's Song https://vivy-portal.com/ #ヴィヴィ @vivy_portal [FRI]
 # Yakunara Mug Cup mo https://yakumo-project.com/ #やくもtv @yakumo_project
 
@@ -738,7 +738,34 @@ class IsekaiMaou2Download(Spring2021AnimeDownload):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            lis = soup.select('nav.story--topnav li')
+            for li in lis:
+                em = li.find('em')
+                if em:
+                    try:
+                        episode = str(int(em.text.strip())).zfill(2)
+                    except:
+                        continue
+                    if self.is_image_exists(episode + '_1'):
+                        continue
+                    a_tag = li.find('a')
+                    if a_tag and a_tag.has_attr('href'):
+                        ep_soup = self.get_soup(a_tag['href'])
+                        if ep_soup:
+                            images = ep_soup.select('div.ss img')
+                            self.image_list = []
+                            for i in range(len(images)):
+                                if images[i].has_attr('src'):
+                                    image_url = images[i]['src']
+                                    image_name = episode + '_' + str(i + 1)
+                                    self.add_to_image_list(image_name, image_url)
+                            self.download_image_list(self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
+
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + 'news/'
