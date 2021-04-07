@@ -1,7 +1,6 @@
+import json
 import os
-import anime.constants as constants
 from anime.main_download import MainDownload
-from datetime import datetime
 from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner, NatalieScanner
 
 
@@ -1900,6 +1899,7 @@ class SuperCubDownload(Spring2021AnimeDownload):
         self.download_episode_preview()
         self.download_news()
         self.download_key_visual()
+        self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
@@ -1983,6 +1983,52 @@ class SuperCubDownload(Spring2021AnimeDownload):
         self.add_to_image_list('kv_tw', 'https://pbs.twimg.com/media/ErvAcsEUcAMljAq?format=jpg&name=4096x4096')
         self.add_to_image_list('visual01', self.PAGE_PREFIX + 'core_sys/images/news/00000011/block/00000038/00000008.jpg')
         self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        cache_filepath = folder + '/cache'
+        if os.path.exists(cache_filepath):
+            try:
+                with open(cache_filepath, 'r', encoding='utf-8') as f:
+                    chara_list = json.load(f)
+                if not isinstance(chara_list, list):
+                    chara_list = []
+            except Exception:
+                chara_list = []
+        else:
+            chara_list = []
+
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'chara/')
+            a_tags = soup.select('td.l_wdp01 a')
+            for a_tag in a_tags:
+                if a_tag.has_attr('href'):
+                    chara = a_tag['href'].split('/')[-1].replace('.html', '')
+                    if chara not in chara_list:
+                        if chara == 'index':
+                            chara_soup = soup
+                        else:
+                            chara_soup = self.get_soup(self.PAGE_PREFIX + 'chara/' + chara + '.html')
+                        if chara_soup:
+                            images = chara_soup.select('div.charWrap img')
+                            self.image_list = []
+                            for image in images:
+                                if image.has_attr('src'):
+                                    image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                                    image_name = self.extract_image_name_from_url(image_url)
+                                    self.add_to_image_list(image_name, image_url)
+                            self.download_image_list(folder)
+                            chara_list.append(chara)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Character')
+            print(e)
+
+        try:
+            with open(cache_filepath, 'w+', encoding='utf-8') as f:
+                json.dump(chara_list, f)
+        except Exception as e:
+            print("Error in writing to %s" % cache_filepath)
+            print(e)
 
 
 # Vivy: Fluorite Eye's Song
