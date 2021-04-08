@@ -5,7 +5,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner, Na
 
 
 # 86 https://anime-86.com/ #エイティシックス @anime_eightysix
-# Dragon, Ie wo Kau https://doraie.com/ #ドラ家 @anime_doraie
+# Dragon, Ie wo Kau https://doraie.com/ #ドラ家 @anime_doraie [TUE]
 # Fumetsu no Anata e https://anime-fumetsunoanatae.com/ #不滅のあなたへ @nep_fumetsu
 # Hige wo Soru. Soshite Joshikousei wo Hirou. http://higehiro-anime.com/ #higehiro #ひげひろ @higehiro_anime [TUE]
 # Ijiranaide, Nagatoro-san https://www.nagatorosan.jp/ #長瀞さん @nagatoro_tv
@@ -17,7 +17,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner, Na
 # Seijo no Maryoku wa Bannou Desu https://seijyonomaryoku.jp/ #seijyonoanime @seijyonoanime
 # Sentouin, Hakenshimasu! https://kisaragi-co.jp/ #sentoin @sentoin_anime [THU]
 # Shadows House https://shadowshouse-anime.com/ #シャドーハウス @shadowshouse_yj
-# Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita https://slime300-anime.com/ #スライム倒して300年 @slime300_PR
+# Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita https://slime300-anime.com/ #スライム倒して300年 @slime300_PR [THU]
 # SSSS.Dynazenon https://dynazenon.net/ #SSSS_DYNAZENON @SSSS_PROJECT [SUN]
 # Super Cub https://supercub-anime.com/ #スーパーカブ @supercub_anime [TUE]
 # Vivy: Fluroite Eye's Song https://vivy-portal.com/ #ヴィヴィ @vivy_portal [FRI]
@@ -1663,7 +1663,28 @@ class Slime300Download(Spring2021AnimeDownload):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        json_url = self.PAGE_PREFIX + '/page-data/story/page-data.json'
+        try:
+            json_obj = self.get_json(json_url)
+            edges = json_obj['result']['data']['allContentfulStory']['edges']
+            for edge in edges:
+                try:
+                    node = edge['node']
+                    episode = str(int(node['no'])).zfill(2)
+                    if self.is_image_exists(episode + '_01'):
+                        continue
+                    images = node['images']
+                    self.image_list = []
+                    for i in range(len(images)):
+                        image_url = 'https:' + images[i]['fluid']['src'].split('?')[0]
+                        image_name = episode + '_' + str(i + 1).zfill(2)
+                        self.add_to_image_list(image_name, image_url)
+                    self.download_image_list(self.base_folder)
+                except Exception:
+                    continue
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
     def download_news(self):
         json_url = self.PAGE_PREFIX + '/page-data/news/page-data.json'
