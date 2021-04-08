@@ -790,7 +790,7 @@ class MainDownload:
         else:
             raise Exception('Unexpected type for template')
 
-        i = start
+        i = start - 1
         success = False
         while i <= end:
             success_count = 0

@@ -12,7 +12,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner, Na
 # Isekai Maou to Shoukan Shoujo no Dorei Majutsu Ω https://isekaimaou-anime.com/ #異世界魔王 @isekaimaou [TUE]
 # Kyuukyoku Shinka Shita Full Dive RPG ga Genjitsu Yori mo Kusogee Dattara https://fulldive-rpg.com/ #フルダイブ @fulldive_anime [WED]
 # Mairimashita! Iruma-kun S2 https://www6.nhk.or.jp/anime/program/detail.html?i=iruma #魔入りました入間くん @wc_mairuma
-# Osananajimi ga Zettai ni Makenai Love Comedy https://osamake.com/ #おさまけ #osamake
+# Osananajimi ga Zettai ni Makenai Love Comedy https://osamake.com/ #おさまけ #osamake [THU]
 # Sayonara Watashi no Cramer https://sayonara-cramer.com/tv/ #さよなら私のクラマー @cramer_pr [FRI]
 # Seijo no Maryoku wa Bannou Desu https://seijyonomaryoku.jp/ #seijyonoanime @seijyonoanime
 # Sentouin, Hakenshimasu! https://kisaragi-co.jp/ #sentoin @sentoin_anime [THU]
@@ -20,7 +20,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner, Na
 # Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita https://slime300-anime.com/ #スライム倒して300年 @slime300_PR [THU]
 # SSSS.Dynazenon https://dynazenon.net/ #SSSS_DYNAZENON @SSSS_PROJECT [SUN]
 # Super Cub https://supercub-anime.com/ #スーパーカブ @supercub_anime [TUE]
-# Vivy: Fluroite Eye's Song https://vivy-portal.com/ #ヴィヴィ @vivy_portal [FRI]
+# Vivy: Fluroite Eye's Song https://vivy-portal.com/ #ヴィヴィ @vivy_portal [THU]
 # Yakunara Mug Cup mo https://yakumo-project.com/ #やくもtv @yakumo_project
 
 
@@ -1053,19 +1053,52 @@ class OsamakeDownload(Spring2021AnimeDownload):
     folder_name = 'osamake'
 
     PAGE_PREFIX = 'https://osamake.com/'
+    FINAL_EPISODE = 12
 
     def __init__(self):
         super().__init__()
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_guess()
         self.download_news()
         self.download_key_visual()
         self.download_character()
         self.download_media()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story.html')
+            stories = soup.select('div.story-data')
+            for story in stories:
+                if story.has_attr('id') and story['id'].upper() != 'S0':
+                    try:
+                        episode = str(int(story['id'].strip()[1:])).zfill(2)
+                    except Exception:
+                        continue
+                    if self.is_image_exists(episode + '_1'):
+                        continue
+                    images = story.select('div.sld img')
+                    self.image_list = []
+                    for i in range(len(images)):
+                        if images[i].has_attr('src'):
+                            image_url = self.PAGE_PREFIX + images[i]['src'].replace('./', '')
+                            image_name = episode + '_' + str(i + 1)
+                            self.add_to_image_list(image_name, image_url)
+                    self.download_image_list(self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
+
+    def download_episode_preview_guess(self):
+        folder = self.create_custom_directory('guess')
+        for i in range(self.FINAL_EPISODE):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_1'):
+                continue
+            template = self.PAGE_PREFIX + 'assets/story/%s_%s.jpg' % (str(i + 1), '%s')
+            if not self.download_by_template(folder, template, 1):
+                break
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + 'news.html'
