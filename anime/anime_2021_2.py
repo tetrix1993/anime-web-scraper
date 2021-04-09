@@ -1319,28 +1319,28 @@ class SeijonoMaryokuDownload(Spring2021AnimeDownload):
     def download_episode_preview(self):
         self.image_list = []
         try:
-            soup = self.get_soup(self.PAGE_PREFIX + 'story.php')
-            images = soup.find_all('img', class_='m-story-article-img')
-            current_episode = None
-            count = 1
-            for image in images:
-                if image and image.has_attr('src'):
-                    split1 = image['src'].split('/')
-                    if len(split1) == 4:
-                        try:
-                            episode = str(int(split1[2])).zfill(2)
-                        except:
-                            continue
-                        if self.is_image_exists(episode + '_1'):
-                            continue
-                        if current_episode is None or current_episode != episode:
-                            current_episode = episode
-                            count = 1
-                        else:
-                            count += 1
-                        image_url = self.PAGE_PREFIX + image['src']
-                        image_name = episode + '_' + str(count)
-                        self.add_to_image_list(image_name, image_url)
+            soup = self.get_soup(self.PAGE_PREFIX + 'story01.php')
+            links = soup.select('div.m-story-thumbs-container a')
+            for link in links:
+                try:
+                    episode = str(int(link.text.replace('Episode', '').strip())).zfill(2)
+                except Exception:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                if episode == '01':
+                    ep_soup = soup
+                elif link.has_attr('href'):
+                    ep_soup = self.get_soup(self.PAGE_PREFIX + '/' + link['href'])
+                else:
+                    continue
+                if ep_soup:
+                    images = ep_soup.find_all('img', class_='m-story-article-img')
+                    for i in range(len(images)):
+                        if images[i].has_attr('src'):
+                            image_url = self.PAGE_PREFIX + images[i]['src']
+                            image_name = episode + '_' + str(i + 1)
+                            self.add_to_image_list(image_name, image_url)
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
