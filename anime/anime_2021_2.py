@@ -14,7 +14,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner, Na
 # Mairimashita! Iruma-kun S2 https://www6.nhk.or.jp/anime/program/detail.html?i=iruma #魔入りました入間くん @wc_mairuma
 # Osananajimi ga Zettai ni Makenai Love Comedy https://osamake.com/ #おさまけ #osamake [THU]
 # Sayonara Watashi no Cramer https://sayonara-cramer.com/tv/ #さよなら私のクラマー @cramer_pr [FRI]
-# Seijo no Maryoku wa Bannou Desu https://seijyonomaryoku.jp/ #seijyonoanime @seijyonoanime
+# Seijo no Maryoku wa Bannou Desu https://seijyonomaryoku.jp/ #seijyonoanime @seijyonoanime [FRI]
 # Sentouin, Hakenshimasu! https://kisaragi-co.jp/ #sentoin @sentoin_anime [THU]
 # Shadows House https://shadowshouse-anime.com/ #シャドーハウス @shadowshouse_yj
 # Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita https://slime300-anime.com/ #スライム倒して300年 @slime300_PR [THU]
@@ -1694,6 +1694,7 @@ class Slime300Download(Spring2021AnimeDownload):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         json_url = self.PAGE_PREFIX + '/page-data/story/page-data.json'
@@ -1816,6 +1817,36 @@ class Slime300Download(Spring2021AnimeDownload):
                     pass
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + " - Character")
+            print(e)
+        self.download_image_objects(image_objs, folder)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        image_objs = []
+        page_data_url = self.PAGE_PREFIX + '/page-data/bluray-cd/page-data.json'
+        try:
+            data_main_obj = self.get_json(page_data_url)
+            data_obj = None
+            for hash_ in data_main_obj['staticQueryHashes']:
+                chara_json = self.PAGE_PREFIX + ('/page-data/sq/d/%s.json' % hash_.strip())
+                data_obj = self.get_json(chara_json)['data']
+                if 'op01' not in data_obj:
+                    continue
+                else:
+                    break
+            if data_obj is None:
+                return
+            for data in data_obj.keys():
+                try:
+                    if data in ['logo', 'nowprinting']:
+                        continue
+                    image_url = self.PAGE_PREFIX + data_obj[data]['childImageSharp']['fluid']['src']
+                    image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                    image_objs.append({'name': image_name, 'url': image_url})
+                except:
+                    pass
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Media")
             print(e)
         self.download_image_objects(image_objs, folder)
 
