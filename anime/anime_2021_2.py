@@ -1718,14 +1718,20 @@ class ShadowsHouseDownload(Spring2021AnimeDownload):
             bd_list = []
 
         stop = False
-        bd_urls = ['special', 'vol01', 'vol02', 'vol03', 'vol04', 'vol05', 'vol06']
+        bd_urls = ['special', 'music', 'vol01', 'vol02', 'vol03', 'vol04', 'vol05', 'vol06']
         for bd_url in bd_urls:
             if bd_url.startswith('vol') and bd_url in bd_list:
                 continue
-            url = self.PAGE_PREFIX + 'bddvd/' + bd_url + '/'
+            if bd_url == 'music':
+                url = self.PAGE_PREFIX + 'music/'
+            else:
+                url = self.PAGE_PREFIX + 'bddvd/' + bd_url + '/'
             try:
                 soup = self.get_soup(url)
-                images = soup.select('div.p-bddvd img')
+                if bd_url == 'music':
+                    images = soup.select('div.p-music img')
+                else:
+                    images = soup.select('div.p-bddvd img')
                 self.image_list = []
                 for image in images:
                     if image.has_attr('src') and '_np.jpg' not in image['src']:
