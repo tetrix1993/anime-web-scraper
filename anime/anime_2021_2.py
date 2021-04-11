@@ -10,13 +10,13 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner, Na
 # Hige wo Soru. Soshite Joshikousei wo Hirou. http://higehiro-anime.com/ #higehiro #ひげひろ @higehiro_anime [TUE]
 # Ijiranaide, Nagatoro-san https://www.nagatorosan.jp/ #長瀞さん @nagatoro_tv
 # Isekai Maou to Shoukan Shoujo no Dorei Majutsu Ω https://isekaimaou-anime.com/ #異世界魔王 @isekaimaou [TUE]
-# Kyuukyoku Shinka Shita Full Dive RPG ga Genjitsu Yori mo Kusogee Dattara https://fulldive-rpg.com/ #フルダイブ @fulldive_anime [WED]
+# Kyuukyoku Shinka Shita Full Dive RPG ga Genjitsu Yori mo Kusogee Dattara https://fulldive-rpg.com/ #フルダイブ @fulldive_anime [SAT]
 # Mairimashita! Iruma-kun S2 https://www6.nhk.or.jp/anime/program/detail.html?i=iruma #魔入りました入間くん @wc_mairuma
 # Osananajimi ga Zettai ni Makenai Love Comedy https://osamake.com/ #おさまけ #osamake [THU]
 # Sayonara Watashi no Cramer https://sayonara-cramer.com/tv/ #さよなら私のクラマー @cramer_pr [FRI]
 # Seijo no Maryoku wa Bannou Desu https://seijyonomaryoku.jp/ #seijyonoanime @seijyonoanime [FRI]
 # Sentouin, Hakenshimasu! https://kisaragi-co.jp/ #sentoin @sentoin_anime [THU]
-# Shadows House https://shadowshouse-anime.com/ #シャドーハウス @shadowshouse_yj
+# Shadows House https://shadowshouse-anime.com/ #シャドーハウス @shadowshouse_yj [SAT]
 # Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita https://slime300-anime.com/ #スライム倒して300年 @slime300_PR [THU]
 # SSSS.Dynazenon https://dynazenon.net/ #SSSS_DYNAZENON @SSSS_PROJECT [SUN]
 # Super Cub https://supercub-anime.com/ #スーパーカブ @supercub_anime [TUE]
@@ -791,7 +791,6 @@ class IsekaiMaou2Download(Spring2021AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
-
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + 'news/'
@@ -1571,7 +1570,35 @@ class ShadowsHouseDownload(Spring2021AnimeDownload):
         self.download_media()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            story_url = self.PAGE_PREFIX + 'story/'
+            soup = self.get_soup(story_url)
+            lis = soup.select('div.page_tab li')
+            for li in lis:
+                a_tag = li.find('a')
+                if a_tag and a_tag.has_attr('href'):
+                    try:
+                        episode = str(int(a_tag.text.strip())).zfill(2)
+                    except Exception:
+                        continue
+                    if self.is_image_exists(episode + '_1'):
+                        continue
+                    if li.has_attr('class') and 'current' in li['class']:
+                        ep_soup = soup
+                    else:
+                        ep_soup = self.get_soup(story_url + a_tag['href'].replace('./', ''))
+                    if ep_soup:
+                        images = ep_soup.select('div.s_image img')
+                        self.image_list = []
+                        for i in range(len(images)):
+                            if images[i].has_attr('src'):
+                                image_url = story_url + images[i]['src']
+                                image_name = episode + '_' + str(i + 1)
+                                self.add_to_image_list(image_name, image_url)
+                        self.download_image_list(self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + 'news/'
@@ -1676,6 +1703,58 @@ class ShadowsHouseDownload(Spring2021AnimeDownload):
         self.image_list = []
         self.add_to_image_list('music_ed', 'https://pbs.twimg.com/media/Ex9GZKuU4AEaMU6?format=jpg&name=large')
         self.download_image_list(folder)
+
+        # Blu-ray
+        cache_filepath = folder + '/cache'
+        if os.path.exists(cache_filepath):
+            try:
+                with open(cache_filepath, 'r', encoding='utf-8') as f:
+                    bd_list = json.load(f)
+                if not isinstance(bd_list, list):
+                    bd_list = []
+            except Exception:
+                bd_list = []
+        else:
+            bd_list = []
+
+        stop = False
+        bd_urls = ['special', 'vol01', 'vol02', 'vol03', 'vol04', 'vol05', 'vol06']
+        for bd_url in bd_urls:
+            if bd_url.startswith('vol') and bd_url in bd_list:
+                continue
+            url = self.PAGE_PREFIX + 'bddvd/' + bd_url + '/'
+            try:
+                soup = self.get_soup(url)
+                images = soup.select('div.p-bddvd img')
+                self.image_list = []
+                for image in images:
+                    if image.has_attr('src') and '_np.jpg' not in image['src']:
+                        image_url = self.PAGE_PREFIX + image['src'].replace('../../', '')
+                        image_name = self.extract_image_name_from_url(image_url)
+                        self.add_to_image_list(image_name, image_url)
+                if bd_url.startswith('vol'):
+                    if len(self.image_list) > 0:
+                        bd_list.append(bd_url)
+                    else:
+                        stop = True
+                        break
+                self.download_image_list(folder)
+            except Exception as e:
+                print("Error in running " + self.__class__.__name__ + ' - Blu-ray %s' % bd_url)
+                print(e)
+            if stop:
+                break
+
+        try:
+            with open(cache_filepath, 'w+', encoding='utf-8') as f:
+                json.dump(bd_list, f)
+        except Exception as e:
+            print("Error in writing to %s" % cache_filepath)
+            print(e)
+
+        # Blu-ray Guess
+        template = self.PAGE_PREFIX + 'assets/img/bddvd/img_jk_vol%s.jpg'
+        self.download_by_template(folder, template, 2)
 
 
 # Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita
