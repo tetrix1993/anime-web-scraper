@@ -608,6 +608,7 @@ class SeireiGensoukiDownload(Summer2021AnimeDownload):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
@@ -667,6 +668,24 @@ class SeireiGensoukiDownload(Summer2021AnimeDownload):
         self.add_to_image_list('latifa', 'https://seireigensouki.com/wp/wp-content/uploads/2021/04/ラティーファ.jpg')
         self.add_to_image_list('ayase_miharu', 'https://seireigensouki.com/wp/wp-content/uploads/2021/04/綾瀬美春.jpg')
         self.download_image_list(folder)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+
+        # Music
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'music/')
+            images = soup.select('div.page-content img')
+            self.image_list = []
+            for image in images:
+                if image.has_attr('src'):
+                    image_url = image['src']
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Music')
+            print(e)
 
 
 # Sekai Saikou no Ansatsusha, Isekai Kizoku ni Tensei suru
