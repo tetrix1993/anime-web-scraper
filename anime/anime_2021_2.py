@@ -1686,6 +1686,9 @@ class ShadowsHouseDownload(Spring2021AnimeDownload):
             if image_downloaded == 0:
                 break
 
+        special_template = self.PAGE_PREFIX + 'special/shindan/assets/img/character_%s.png'
+        self.download_by_template(folder, special_template, 2)
+
         # Other Characters
         other_template = self.PAGE_PREFIX + 'assets/img/character/sub/%s.png'
         for i in range(20):
