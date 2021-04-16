@@ -8,19 +8,19 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner, Na
 # Dragon, Ie wo Kau https://doraie.com/ #ドラ家 @anime_doraie [TUE]
 # Fumetsu no Anata e https://anime-fumetsunoanatae.com/ #不滅のあなたへ @nep_fumetsu
 # Hige wo Soru. Soshite Joshikousei wo Hirou. http://higehiro-anime.com/ #higehiro #ひげひろ @higehiro_anime [TUE]
-# Ijiranaide, Nagatoro-san https://www.nagatorosan.jp/ #長瀞さん @nagatoro_tv
+# Ijiranaide, Nagatoro-san https://www.nagatorosan.jp/ #長瀞さん @nagatoro_tv [FRI]
 # Isekai Maou to Shoukan Shoujo no Dorei Majutsu Ω https://isekaimaou-anime.com/ #異世界魔王 @isekaimaou [TUE]
 # Kyuukyoku Shinka Shita Full Dive RPG ga Genjitsu Yori mo Kusogee Dattara https://fulldive-rpg.com/ #フルダイブ @fulldive_anime [SAT]
 # Mairimashita! Iruma-kun S2 https://www6.nhk.or.jp/anime/program/detail.html?i=iruma #魔入りました入間くん @wc_mairuma
-# Osananajimi ga Zettai ni Makenai Love Comedy https://osamake.com/ #おさまけ #osamake [THU]
+# Osananajimi ga Zettai ni Makenai Love Comedy https://osamake.com/ #おさまけ #osamake [FRI]
 # Sayonara Watashi no Cramer https://sayonara-cramer.com/tv/ #さよなら私のクラマー @cramer_pr [FRI]
 # Seijo no Maryoku wa Bannou Desu https://seijyonomaryoku.jp/ #seijyonoanime @seijyonoanime [FRI]
 # Sentouin, Hakenshimasu! https://kisaragi-co.jp/ #sentoin @sentoin_anime [THU]
 # Shadows House https://shadowshouse-anime.com/ #シャドーハウス @shadowshouse_yj [SAT]
 # Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita https://slime300-anime.com/ #スライム倒して300年 @slime300_PR [THU]
 # SSSS.Dynazenon https://dynazenon.net/ #SSSS_DYNAZENON @SSSS_PROJECT [SUN]
-# Super Cub https://supercub-anime.com/ #スーパーカブ @supercub_anime [TUE]
-# Vivy: Fluroite Eye's Song https://vivy-portal.com/ #ヴィヴィ @vivy_portal [THU]
+# Super Cub https://supercub-anime.com/ #スーパーカブ @supercub_anime [FRI]
+# Vivy: Fluroite Eye's Song https://vivy-portal.com/ #ヴィヴィ @vivy_portal [FRI]
 # Yakunara Mug Cup mo https://yakumo-project.com/ #やくもtv @yakumo_project
 
 
@@ -618,7 +618,7 @@ class NagatorosanDownload(Spring2021AnimeDownload):
                     if link['href'] != './':
                         episode_soup = self.get_soup(story_prefix + link['href'])
                     if episode_soup:
-                        images = episode_soup.select('div.story ul.image li img')
+                        images = episode_soup.select('div.swiper-container.slider img')
                         for i in range(len(images)):
                             if images[i].has_attr('src'):
                                 image_name = episode + '_' + str(i + 1)
