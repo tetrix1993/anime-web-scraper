@@ -226,7 +226,9 @@ class GenkokuDownload(Summer2021AnimeDownload):
         self.download_image_list(folder)
 
     def download_character(self):
-        pass
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'teaser/images/img_chara_%s.png'
+        self.download_by_template(folder, template, 2)
 
 
 # Kanojo mo Kanojo
