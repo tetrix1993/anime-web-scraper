@@ -13,7 +13,6 @@ from anime.main_download import MainDownload
 # Maou Gakuin no Futekigousha 2nd Season https://maohgakuin.com/ #魔王学院 @maohgakuin
 # Megami-ryou no Ryoubo-kun. https://megamiryou.com/ #女神寮 @megamiryou
 # Princess Connect! Re:Dive S2 https://anime.priconne-redive.jp/ #アニメプリコネ #プリコネR #プリコネ @priconne_anime
-# Seirei Gensouki https://seireigensouki.com/ #精霊幻想記 @seireigensouki
 # Shikkakumon no Saikyou Kenja https://shikkakumon.com/ #失格紋 @shikkakumon_PR
 # Shokei Shoujo no Virgin Road http://virgin-road.com/ #処刑少女 #shokei_anime @virginroad_GA
 # Shuumatsu no Harem https://end-harem-anime.com/ #終末のハーレム @harem_official_
@@ -680,89 +679,6 @@ class Priconne2Download(UnconfirmedDownload):
         folder = self.create_key_visual_directory()
         image_objs = [{'name': 'teaser', 'url': self.PAGE_PREFIX + '/assets/images/top_kv.png'}]
         self.download_image_objects(image_objs, folder)
-
-
-# Seirei Gensouki
-class SeireiGensoukiDownload(UnconfirmedDownload):
-    title = "Seirei Gensouki"
-    keywords = [title, "Spirit Chronicles"]
-    folder_name = 'seirei-gensouki'
-
-    PAGE_PREFIX = "https://seireigensouki.com/"
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_news()
-        self.download_key_visual()
-        self.download_character()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_news(self):
-        news_url = self.PAGE_PREFIX + 'news-list/'
-        try:
-            soup = self.get_soup(news_url, decode=True)
-            articles = soup.select('ul.news-list li.news-item')
-            news_obj = self.get_last_news_log_object()
-            results = []
-            for article in articles:
-                tag_date = article.find('p', class_='news-date')
-                tag_title = article.find('p', class_='news-title')
-                a_tag = article.find('a')
-                if tag_date and tag_title and a_tag and a_tag.has_attr('href'):
-                    article_id = a_tag['href']
-                    date = self.format_news_date(tag_date.text.strip())
-                    if len(date) == 0:
-                        continue
-                    title = tag_title.text.strip()
-                    if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
-                        break
-                    results.append(self.create_news_log_object(date, title, article_id))
-            success_count = 0
-            for result in reversed(results):
-                process_result = self.create_news_log_from_news_log_object(result)
-                if process_result == 0:
-                    success_count += 1
-            if len(results) > 0:
-                self.create_news_log_cache(success_count, results[0])
-        except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - News')
-            print(e)
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('teaser', 'https://pbs.twimg.com/media/EnytdwVVQAESUct?format=jpg&name=large')
-        #self.add_to_image_list('teaser', self.PAGE_PREFIX + 'wp/wp-content/uploads/2020/11/SG_teaser_logoc.png')
-        self.download_image_list(folder)
-
-    def download_character(self):
-        folder = self.create_character_directory()
-        try:
-            soup = self.get_soup(self.PAGE_PREFIX)
-            self.image_list = []
-            chara_pics = soup.find_all('div', class_='chara-pic')
-            for chara_pic in chara_pics:
-                image = chara_pic.find('img')
-                if image and image.has_attr('src'):
-                    image_url = image['src']
-                    image_name = self.extract_image_name_from_url(image_url, with_extension=False)
-                    self.add_to_image_list(image_name, image_url)
-            self.download_image_list(folder)
-        except Exception as e:
-            print("Error in running " + self.__class__.__name__ + " - Character")
-            print(e)
-
-        self.image_list = []
-        self.add_to_image_list('celia_claire', 'https://seireigensouki.com/wp/wp-content/uploads/2021/03/セリアクレール.jpg')
-        self.add_to_image_list('aishia', 'https://seireigensouki.com/wp/wp-content/uploads/2021/03/アイシア.jpg')
-        self.add_to_image_list('latifa', 'https://seireigensouki.com/wp/wp-content/uploads/2021/04/ラティーファ.jpg')
-        self.add_to_image_list('ayase_miharu', 'https://seireigensouki.com/wp/wp-content/uploads/2021/04/綾瀬美春.jpg')
-        self.download_image_list(folder)
 
 
 # Shikkakumon no Saikyou Kenja

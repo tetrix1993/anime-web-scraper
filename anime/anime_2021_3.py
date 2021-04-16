@@ -13,6 +13,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 # Meikyuu Black Company https://meikyubc-anime.com/ #迷宮ブラックカンパニー @meikyubc_anime
 # Otome Game https://hamehura-anime.com/story/ #はめふら #hamehura @hamehura
 # Peach Boy Riverside https://peachboyriverside.com/ #ピーチボーイリバーサイド @peachboy_anime
+# Seirei Gensouki https://seireigensouki.com/ #精霊幻想記 @seireigensouki
 # Sekai Saikou no Ansatsusha, Isekai Kizoku ni Tensei suru https://ansatsu-kizoku.jp/ #暗殺貴族 @ansatsu_kizoku
 # Shin no Nakama ja Nai to Yuusha no Party wo Oidasareta node, Henkyou de Slow Life suru Koto ni Shimashita https://shinnonakama.com/ #真の仲間 @shinnonakama_tv
 # Shiroi Suna no Aquatope https://aquatope-anime.com/ #白い砂のアクアトープ @aquatope_anime
@@ -589,6 +590,83 @@ class PeachBoyRiversideDownload(Summer2021AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + " - Character")
             print(e)
+
+
+# Seirei Gensouki
+class SeireiGensoukiDownload(Summer2021AnimeDownload):
+    title = "Seirei Gensouki"
+    keywords = [title, "Spirit Chronicles"]
+    folder_name = 'seirei-gensouki'
+
+    PAGE_PREFIX = "https://seireigensouki.com/"
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news-list/'
+        try:
+            soup = self.get_soup(news_url, decode=True)
+            articles = soup.select('ul.news-list li.news-item')
+            news_obj = self.get_last_news_log_object()
+            results = []
+            for article in articles:
+                tag_date = article.find('p', class_='news-date')
+                tag_title = article.find('p', class_='news-title')
+                a_tag = article.find('a')
+                if tag_date and tag_title and a_tag and a_tag.has_attr('href'):
+                    article_id = a_tag['href']
+                    date = self.format_news_date(tag_date.text.strip())
+                    if len(date) == 0:
+                        continue
+                    title = tag_title.text.strip()
+                    if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
+                        break
+                    results.append(self.create_news_log_object(date, title, article_id))
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log_from_news_log_object(result)
+                if process_result == 0:
+                    success_count += 1
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - News')
+            print(e)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('teaser', 'https://pbs.twimg.com/media/EnytdwVVQAESUct?format=jpg&name=large')
+        self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/EzFiWEmVUAI4bdm?format=jpg&name=4096x4096')
+        # self.add_to_image_list('teaser', self.PAGE_PREFIX + 'wp/wp-content/uploads/2020/11/SG_teaser_logoc.png')
+        self.download_image_list(folder)
+
+        templates = []
+        for i in ['jpg', 'png']:
+            templates.append(self.PAGE_PREFIX + 'wp/wp-content/themes/seirei_honban/assets/img/page/mainvisual%s.' + i)
+            self.download_by_template(folder, templates, 1)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'wp/wp-content/themes/seirei_honban/assets/img/page/chara-pic%s.png'
+        self.download_by_template(folder, template, 2)
+
+        self.image_list = []
+        self.add_to_image_list('celia_claire', 'https://seireigensouki.com/wp/wp-content/uploads/2021/03/セリアクレール.jpg')
+        self.add_to_image_list('aishia', 'https://seireigensouki.com/wp/wp-content/uploads/2021/03/アイシア.jpg')
+        self.add_to_image_list('latifa', 'https://seireigensouki.com/wp/wp-content/uploads/2021/04/ラティーファ.jpg')
+        self.add_to_image_list('ayase_miharu', 'https://seireigensouki.com/wp/wp-content/uploads/2021/04/綾瀬美春.jpg')
+        self.download_image_list(folder)
 
 
 # Sekai Saikou no Ansatsusha, Isekai Kizoku ni Tensei suru
