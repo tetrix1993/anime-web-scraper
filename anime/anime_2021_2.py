@@ -214,6 +214,63 @@ class EightySixDownload(Spring2021AnimeDownload):
         self.download_content(valentine_01_url, folder + '/valentine_01.mp4')
         self.download_content(valentine_ex_url, folder + '/valentine_ex.mp4')
 
+        self.image_list = []
+        self.add_to_image_list('spearhead', 'https://pbs.twimg.com/media/EzLrAlAVkAMLVso?format=jpg&name=large')
+        self.download_image_list(folder)
+
+        # Blu-ray
+        cache_filepath = folder + '/cache'
+        if os.path.exists(cache_filepath):
+            try:
+                with open(cache_filepath, 'r', encoding='utf-8') as f:
+                    bd_list = json.load(f)
+                if not isinstance(bd_list, list):
+                    bd_list = []
+            except Exception:
+                bd_list = []
+        else:
+            bd_list = []
+
+        stop = False
+        bd_urls = ['special', 'vol01', 'vol02', 'vol03', 'vol04']
+        for bd_url in bd_urls:
+            if bd_url.startswith('vol') and bd_url in bd_list:
+                continue
+            url = self.PAGE_PREFIX + 'bddvd/' + bd_url + '/'
+            try:
+                soup = self.get_soup(url)
+                images = soup.select('div.p-bddvd img')
+                self.image_list = []
+                for image in images:
+                    if image.has_attr('src') and '_np.jpg' not in image['src']:
+                        image_url = self.PAGE_PREFIX + image['src'].replace('../../', '')
+                        image_name = self.extract_image_name_from_url(image_url)
+                        self.add_to_image_list(image_name, image_url)
+                if bd_url.startswith('vol'):
+                    if len(self.image_list) > 0:
+                        bd_list.append(bd_url)
+                    else:
+                        stop = True
+                        break
+                self.download_image_list(folder)
+            except Exception as e:
+                print("Error in running " + self.__class__.__name__ + ' - Blu-ray %s' % bd_url)
+                print(e)
+            if stop:
+                break
+
+        try:
+            with open(cache_filepath, 'w+', encoding='utf-8') as f:
+                json.dump(bd_list, f)
+        except Exception as e:
+            print("Error in writing to %s" % cache_filepath)
+            print(e)
+
+        # Blu-ray Guess
+        templates = [self.PAGE_PREFIX + 'assets/img/bddvd/img_vol%s-1.jpg',
+                     self.PAGE_PREFIX + 'assets/img/bddvd/img_vol%s-2.jpg']
+        self.download_by_template(folder, templates, 2)
+
 
 # Dragon, Ie wo Kau
 class DoraieDownload(Spring2021AnimeDownload):
