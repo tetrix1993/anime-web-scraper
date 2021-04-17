@@ -99,6 +99,9 @@ The premiere date for the anime listed here has not been announced.
 * [Tsuki to Laika to Nosferatu](https://tsuki-laika-nosferatu.com/)
 * [Yama no Susume: Next Summit](https://yamanosusume-ns.com/)
 
+### Winter 2022 Anime
+* [Arifureta Shokugyou de Sekai Saikyou 2nd Season](https://arifureta.com/)
+
 ### Fall 2021 Anime
 * [Taishou Otome Otogibanashi](http://taisho-otome.com/)
 * [Tate no Yuusha no Nariagari 2nd Season](http://shieldhero-anime.jp)
