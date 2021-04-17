@@ -211,11 +211,52 @@ class GenkokuDownload(Summer2021AnimeDownload):
 
     def run(self):
         self.download_episode_preview()
+        self.download_news()
         self.download_key_visual()
         self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        stop = False
+        try:
+            results = []
+            news_obj = self.get_last_news_log_object()
+            page_url = news_url
+            for page in range(1, 2, 1):
+                soup = self.get_soup(page_url, decode=True)
+                articles = soup.select('div.list li.info')
+                for article in articles:
+                    tag_date = article.find('time')
+                    tag_title = article.find('p')
+                    a_tag = article.find('a')
+                    if tag_date and tag_title:
+                        article_id = ''
+                        if a_tag and a_tag.has_attr('href'):
+                            article_id = self.PAGE_PREFIX + a_tag['href'].replace('../', '')
+                        date = self.format_news_date(tag_date.text)
+                        if len(date) == 0:
+                            continue
+                        title = tag_title.text.strip()
+                        if news_obj and ((news_obj['id'] == article_id and news_obj['title'] == title)
+                                         or date < news_obj['date']):
+                            stop = True
+                            break
+                        results.append(self.create_news_log_object(date, title, article_id))
+                if stop:
+                    break
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log_from_news_log_object(result)
+                if process_result == 0:
+                    success_count += 1
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - News')
+            print(e)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -224,12 +265,33 @@ class GenkokuDownload(Summer2021AnimeDownload):
         self.add_to_image_list(name='teaser_moca',
                                url='https://moca-news.net/article/20201104/2020110410000a_/image/001-i2casw.jpg',
                                is_mocanews=True)
+        self.add_to_image_list('kv1', self.PAGE_PREFIX + 'images/top/mainimg.jpg')
         self.download_image_list(folder)
 
     def download_character(self):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'teaser/images/img_chara_%s.png'
         self.download_by_template(folder, template, 2)
+
+        chara_img_template = self.PAGE_PREFIX + 'images/character/img_%s.png'
+        chara_img_face_template = self.PAGE_PREFIX + 'images/character/img_face_%s.png'
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            a_tags = soup.select('#character a')
+            self.image_list = []
+            for a_tag in a_tags:
+                if a_tag.has_attr('href'):
+                    name = a_tag['href'].split('.html')[0]
+                    img_name = 'img_%s' % name
+                    img_face_name = 'img_face_%s' % name
+                    if self.is_image_exists(img_name, folder):
+                        continue
+                    self.add_to_image_list(img_name, chara_img_template % name)
+                    self.add_to_image_list(img_face_name, chara_img_face_template % name)
+            self.download_image_list(folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Character')
+            print(e)
 
 
 # Kanojo mo Kanojo
