@@ -11,7 +11,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner, Na
 # Ijiranaide, Nagatoro-san https://www.nagatorosan.jp/ #長瀞さん @nagatoro_tv [FRI]
 # Isekai Maou to Shoukan Shoujo no Dorei Majutsu Ω https://isekaimaou-anime.com/ #異世界魔王 @isekaimaou [TUE]
 # Kyuukyoku Shinka Shita Full Dive RPG ga Genjitsu Yori mo Kusogee Dattara https://fulldive-rpg.com/ #フルダイブ @fulldive_anime [SAT]
-# Mairimashita! Iruma-kun S2 https://www6.nhk.or.jp/anime/program/detail.html?i=iruma #魔入りました入間くん @wc_mairuma
+# Mairimashita! Iruma-kun S2 https://www.nhk.jp/p/iruma2 #魔入りました入間くん @wc_mairuma
 # Osananajimi ga Zettai ni Makenai Love Comedy https://osamake.com/ #おさまけ #osamake [FRI]
 # Sayonara Watashi no Cramer https://sayonara-cramer.com/tv/ #さよなら私のクラマー @cramer_pr [FRI]
 # Seijo no Maryoku wa Bannou Desu https://seijyonomaryoku.jp/ #seijyonoanime @seijyonoanime [FRI]
@@ -1023,26 +1023,40 @@ class IrumaKun2Download(Spring2021AnimeDownload):
     keywords = ["Mairimashita! Iruma-kun", "Welcome to Demon School! Iruma-kun", "Irumakun"]
     folder_name = 'iruma-kun2'
 
-    IMAGE_PREFIX = 'https://www6.nhk.or.jp/anime/program/common/images/iruma/'
-    FINAL_EPISODE = 23
+    PAGE_PREFIX = 'https://www.nhk.jp/p/iruma2'
 
     def __init__(self):
         super().__init__()
 
     def run(self):
-        pass
-        #self.download_episode_preview()
+        self.download_episode_preview()
 
     def download_episode_preview(self):
-        for i in range(self.FINAL_EPISODE):
-            episode = str(i + 1).zfill(2)
-            if self.is_image_exists(episode + '_1'):
-                continue
-            image_url = self.IMAGE_PREFIX + 'story_' + episode + '.jpg'
-            if self.is_valid_url(image_url):
-                self.download_image(image_url, self.base_folder + '/' + episode + '_1')
-            else:
-                break
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            lis = soup.select('div.series-main li')
+            for li in lis:
+                a_tags = li.select('h3 a')
+                if len(a_tags) > 0 and a_tags[0].has_attr('href'):
+                    try:
+                        episode = str(int(a_tags[0].text.split('(')[1].split(')')[0])).zfill(2)
+                    except:
+                        continue
+                    if self.is_image_exists(episode + '_1'):
+                        continue
+                    ep_soup = self.get_soup(a_tags[0]['href'])
+                    if ep_soup:
+                        images = ep_soup.select('div.series-page amp-lightbox div.base-image')
+                        self.image_list = []
+                        for i in range(len(images)):
+                            if images[i].has_attr('style') and 'background-image:url(' in images[i]['style']:
+                                image_url = images[i]['style'].split('background-image:url(')[1].split(')')[0]
+                                image_name = episode + '_' + str(i + 1)
+                                self.add_to_image_list(image_name, image_url)
+                        self.download_image_list(self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
 
 # Osananajimi ga Zettai ni Makenai Love Comedy
