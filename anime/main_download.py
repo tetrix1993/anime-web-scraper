@@ -792,7 +792,7 @@ class MainDownload:
 
         i = start - 1
         success = False
-        while i <= end:
+        while i < end:
             success_count = 0
             i += 1
             for template_ in templates:
