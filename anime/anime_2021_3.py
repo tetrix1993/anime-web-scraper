@@ -8,6 +8,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 # Bokutachi no Remake http://bokurema.com/ #ぼくリメ #bokurema @bokurema_anime
 # Cheat Kusushi no Slow Life: Isekai ni Tsukurou Drugstore https://www.cheat-kusushi.jp/ #チート薬師 #スローライフ @cheat_kusushi
 # Genjitsu Shugi Yuusha no Oukoku Saikenki https://genkoku-anime.com/ #現国アニメ @genkoku_info
+# Jahy-sama wa Kujikenai! https://jahysama-anime.com/ #ジャヒー様はくじけない @jahysama_anime
 # Kanojo mo Kanojo https://kanokano-anime.com/ #kanokano #カノジョも彼女 @kanokano_anime
 # Kobayashi-san Chi no Maid Dragon S https://maidragon.jp/2nd/ #maidragon @maidragon_anime
 # Meikyuu Black Company https://meikyubc-anime.com/ #迷宮ブラックカンパニー @meikyubc_anime
@@ -292,6 +293,32 @@ class GenkokuDownload(Summer2021AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + ' - Character')
             print(e)
+
+
+# Jahy-sama wa Kujikenai!
+class JahysamaDownload(Summer2021AnimeDownload):
+    title = 'Jahy-sama wa Kujikenai!'
+    keywords = [title, 'Jahysama']
+    folder_name = 'jahysama'
+
+    PAGE_PREFIX = 'https://jahysama-anime.com/'
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('announce', 'https://pbs.twimg.com/media/EzFk_c7VUAUPh5I?format=jpg&name=large')
+        self.add_to_image_list('announce2', self.PAGE_PREFIX + 'img/ogp/ogp.jpg')
+        self.download_image_list(folder)
 
 
 # Kanojo mo Kanojo

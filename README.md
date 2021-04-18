@@ -110,6 +110,7 @@ The premiere date for the anime listed here has not been announced.
 * [Bokutachi no Remake](http://bokurema.com/)
 * [Cheat Kusushi no Slow Life: Isekai ni Tsukurou Drugstore](https://www.cheat-kusushi.jp/)
 * [Genjitsu Shugi Yuusha no Oukoku Saikenki](https://genkoku-anime.com/)
+* [Jahy-sama wa Kujikenai!](https://jahysama-anime.com/)
 * [Kanojo mo Kanojo](https://kanokano-anime.com/)
 * [Kobayashi-san Chi no Maid Dragon S](https://maidragon.jp/2nd/)
 * [Meikyuu Black Company](https://meikyubc-anime.com/)
