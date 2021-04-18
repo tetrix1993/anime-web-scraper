@@ -103,6 +103,7 @@ The premiere date for the anime listed here has not been announced.
 * [Arifureta Shokugyou de Sekai Saikyou 2nd Season](https://arifureta.com/)
 
 ### Fall 2021 Anime
+* [Saihate no Paladin](https://farawaypaladin.com/)
 * [Taishou Otome Otogibanashi](http://taisho-otome.com/)
 * [Tate no Yuusha no Nariagari 2nd Season](http://shieldhero-anime.jp)
 

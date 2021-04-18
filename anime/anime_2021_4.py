@@ -5,6 +5,7 @@ from datetime import datetime
 from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 
 
+# Saihate no Paladin https://farawaypaladin.com/ #最果てのパラディン #faraway_paladin @faraway_paladin
 # Taishou Otome Otogibanashi http://taisho-otome.com/ #大正オトメ #昭和オトメ @otome_otogi
 # Tate no Yuusha S2 http://shieldhero-anime.jp/ #shieldhero #盾の勇者の成り上がり @shieldheroanime
 
@@ -16,6 +17,38 @@ class Fall2021AnimeDownload(MainDownload):
 
     def __init__(self):
         super().__init__()
+
+
+# Saihate no Paladin
+class SaihatenoPaladinDownload(Fall2021AnimeDownload):
+    title = 'Saihate no Paladin'
+    keywords = [title, 'The Faraway Paladin']
+    folder_name = 'saihate-no-paladin'
+
+    PAGE_PREFIX = 'https://farawaypaladin.com/'
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('kv1', 'https://pbs.twimg.com/media/EzKrTkqVkAMxXZW?format=jpg&name=large')
+        self.add_to_image_list('main_visual-min', self.PAGE_PREFIX + 'img/main_visual-min.png')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'img/cara%s.png'
+        self.download_by_template(folder, template, 1)
 
 
 # Taishou Otome Otogibanashi
