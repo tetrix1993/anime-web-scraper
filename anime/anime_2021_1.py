@@ -198,6 +198,8 @@ class Gotoubun2Download(Winter2021AnimeDownload):
         #self.add_to_image_list('bd2_big', 'https://aniverse-mag.com/wp-content/uploads/2021/02/704f1147ac034226999fbead9d593edc.jpg', to_jpg=True)
         self.add_to_image_list('bd2_big', 'https://pbs.twimg.com/media/Euj7GNJVgAMuDU2?format=jpg&name=large')
         self.add_to_image_list('bd3_big', 'https://pbs.twimg.com/media/ExNpsamVcAc9sfx?format=jpg&name=large')
+        self.add_to_image_list('bd4_big', 'https://pbs.twimg.com/media/EzTiubdVcAA5Xpg?format=jpg&name=large')
+        self.add_to_image_list('bd5_big', 'https://pbs.twimg.com/media/EzTiubcUYAM-o80?format=jpg&name=large')
         self.add_to_image_list('game_music', 'https://pbs.twimg.com/media/Eujsxh9VgAQD_PZ?format=jpg&name=large')
         self.download_image_list(folder)
         try:
