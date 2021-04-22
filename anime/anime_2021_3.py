@@ -1099,3 +1099,7 @@ class TanmoshiDownload(Summer2021AnimeDownload):
         for i in ('01_kimizuka', '02_siesta', '03_nagisa', '04_yui', '05_charlotte'):
             url = template % i
             self.download_content(url, folder + '/' + i + '.mp3')
+        template2 = self.PAGE_PREFIX + 'core_sys/images/main/cont/special/audio/0420/%s.mp3'
+        for i in ('01_kimizuka', '02_siesta', '03_nagisa', '04_yui', '05_charlotte'):
+            url = template2 % i
+            self.download_content(url, folder + '/' + i + '_2.mp3')
