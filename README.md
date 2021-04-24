@@ -88,6 +88,7 @@ The premiere date for the anime listed here has not been announced.
 * [Itai no wa Iya nano de Bougyoryoku ni Kyokufuri Shitai to Omoimasu. 2nd Season](https://bofuri.jp/)
 * [Kakkou no Iinazuke](https://cuckoos-anime.com/)
 * [Kenja no Deshi wo Nanoru Kenja](https://kendeshi-anime.com/)
+* [Kono Healer, Mendokusai](https://kono-healer-anime.com/)
 * [Leadale no Daichi nite](https://leadale.net/)
 * [Mahouka Koukou no Yuutousei](https://mahouka-yuutousei.jp/)
 * [Maou Gakuin no Futekigousha: Shijou Saikyou no Maou no Shiso, Tensei shite Shison-tachi no Gakkou e 2nd Season](https://maohgakuin.com/)
