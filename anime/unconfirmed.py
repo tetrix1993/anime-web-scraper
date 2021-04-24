@@ -7,6 +7,7 @@ from anime.main_download import MainDownload
 # Gaikotsu Kishi-sama, Tadaima Isekai e Odekakechuu https://skeleton-knight.com/ #骸骨騎士様 @gaikotsukishi
 # Goblin Slayer S2 http://www.goblinslayer.jp/ #ゴブスレ @GoblinSlayer_GA
 # Hataraku Maou-sama! https://maousama.jp/ #maousama @anime_maousama
+# Isekai Shokudou 2 https://isekai-shokudo2.com/ #異世界食堂 @nekoya_PR
 # Itai no wa https://bofuri.jp/story/ #防振り #bofuri @bofuri_anime
 # Kakkou no Iinazuke https://cuckoos-anime.com/ #カッコウの許嫁 @cuckoo_anime
 # Kenja no Deshi wo Nanoru Kenja https://kendeshi-anime.com/ #賢でし @kendeshi_anime
@@ -303,6 +304,70 @@ class HatarakuMaousama2Download(UnconfirmedDownload):
         self.add_to_image_list('teaser_tw', 'https://pbs.twimg.com/media/EvyqsA_UcAcPT9B?format=jpg&name=large')
         self.add_to_image_list('teaser', self.PAGE_PREFIX + 'assets/img/top/visual.jpg')
         self.download_image_list(folder)
+
+
+# Isekai Shokudou 2
+class IsekaiShokudou2Download(UnconfirmedDownload):
+    title = 'Isekai Shokudou 2'
+    keywords = [title, 'Restaurant to Another World']
+    folder_name = 'isekai-shokudo2'
+
+    PAGE_PREFIX = 'https://isekai-shokudo2.com/'
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news.html'
+        try:
+            soup = self.get_soup(news_url, decode=True)
+            articles = soup.find_all('article', class_='content-entry')
+            news_obj = self.get_last_news_log_object()
+            results = []
+            for article in articles:
+                if not article.has_attr('id'):
+                    continue
+                tag_date = article.find('div', class_='entry-date')
+                tag_title = article.find('h2', class_='entry-title')
+                if tag_date and tag_title:
+                    article_id = article['id']
+                    date = self.format_news_date(tag_date.text.replace('/', '.'))
+                    if len(date) == 0:
+                        continue
+                    title = tag_title.text
+                    if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
+                        break
+                    results.append(self.create_news_log_object(date, title, article_id))
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log_from_news_log_object(result)
+                if process_result == 0:
+                    success_count += 1
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - News')
+            print(e)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('kv1', self.PAGE_PREFIX + 'assets/top/main-t1/vis.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'assets/top/character/c%s.png'
+        self.download_by_template(folder, template, 1)
 
 
 # Kakkou no Iinazuke
