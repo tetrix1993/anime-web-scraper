@@ -216,6 +216,8 @@ class EightySixDownload(Spring2021AnimeDownload):
 
         self.image_list = []
         self.add_to_image_list('spearhead', 'https://pbs.twimg.com/media/EzLrAlAVkAMLVso?format=jpg&name=large')
+        self.add_to_image_list('bd_bonus_1', 'https://pbs.twimg.com/media/Ezlb2fZXIAASwMM?format=jpg&name=4096x4096')
+        self.add_to_image_list('bd_bonus_2', 'https://pbs.twimg.com/media/EzvwlyUWQAQIa0X?format=jpg&name=4096x4096')
         self.download_image_list(folder)
 
         # Blu-ray
