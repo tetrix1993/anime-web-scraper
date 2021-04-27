@@ -671,7 +671,7 @@ class NagatorosanDownload(Spring2021AnimeDownload):
                         episode = str(int(link.text)).zfill(2)
                     except:
                         continue
-                    if self.is_image_exists(episode + '_1'):
+                    if self.is_image_exists(episode + '_5'):
                         continue
                     episode_soup = soup
                     if link['href'] != './':
