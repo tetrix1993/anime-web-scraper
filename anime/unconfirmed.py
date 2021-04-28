@@ -15,7 +15,6 @@ from anime.main_download import MainDownload
 # Leadale no Daichi nite https://leadale.net/ #leadale #リアデイル @leadale_anime
 # Mahouka Koukou no Yuutousei https://mahouka-yuutousei.jp/ #mahouka
 # Maou Gakuin no Futekigousha 2nd Season https://maohgakuin.com/ #魔王学院 @maohgakuin
-# Megami-ryou no Ryoubo-kun. https://megamiryou.com/ #女神寮 @megamiryou
 # Princess Connect! Re:Dive S2 https://anime.priconne-redive.jp/ #アニメプリコネ #プリコネR #プリコネ @priconne_anime
 # Shikkakumon no Saikyou Kenja https://shikkakumon.com/ #失格紋 @shikkakumon_PR
 # Shokei Shoujo no Virgin Road http://virgin-road.com/ #処刑少女 #shokei_anime @virginroad_GA
@@ -767,89 +766,6 @@ class Maohgakuin2Download(UnconfirmedDownload):
         self.image_list = []
         self.add_to_image_list('teaser', self.PAGE_PREFIX + 'assets/img/img_main.jpg')
         # self.add_to_image_list('teaser_tw', 'https://pbs.twimg.com/media/EvylQFOVkAID_0B?format=jpg&name=medium')
-        self.download_image_list(folder)
-
-
-# Megami-ryou no Ryoubo-kun.
-class MegamiryouDownload(UnconfirmedDownload):
-    title = 'Megami-ryou no Ryoubo-kun'
-    keywords = [title, 'Megamiryou', "Mother of the Goddess' Dormitory"]
-    folder_name = 'megamiryou'
-
-    PAGE_PREFIX = 'https://megamiryou.com/'
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_news()
-        self.download_key_visual()
-        self.download_character()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_news(self):
-        news_url = self.PAGE_PREFIX
-        try:
-            soup = self.get_soup(news_url, decode=True)
-            articles = soup.select('#nwu_001_t tr')
-            news_obj = self.get_last_news_log_object()
-            results = []
-            for article in articles:
-                tag_date = article.find('td', class_='day')
-                tag_title = article.find('div', class_='title')
-                a_tag = article.find('a')
-                if tag_date and tag_title:
-                    article_id = ''
-                    if a_tag and a_tag.has_attr('href'):
-                        article_id = self.PAGE_PREFIX + a_tag['href']
-                    date = self.format_news_date(tag_date.text.strip().replace('/', '.'))
-                    if len(date) == 0:
-                        continue
-                    title = tag_title.text.strip()
-                    if news_obj and ((news_obj['id'] == article_id and news_obj['title'] == title)
-                                     or date < news_obj['date']):
-                        break
-                    results.append(self.create_news_log_object(date, title, article_id))
-            success_count = 0
-            for result in reversed(results):
-                process_result = self.create_news_log_from_news_log_object(result)
-                if process_result == 0:
-                    success_count += 1
-            if len(results) > 0:
-                self.create_news_log_cache(success_count, results[0])
-        except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - News')
-            print(e)
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('teaser_tw', 'https://pbs.twimg.com/media/EsTnmn-U0Acx83l?format=jpg&name=large')
-        self.add_to_image_list('teaser', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv_pc.png')
-        self.add_to_image_list('tzOriginImg', self.PAGE_PREFIX + 'core_sys/images/main/tz/tzOriginImg.png')
-        self.add_to_image_list('teaser2_tw', 'https://pbs.twimg.com/media/Exi4zBeXMAEsbA2?format=jpg&name=4096x4096')
-        self.add_to_image_list('teaser2', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv_pc2.png')
-        self.download_image_list(folder)
-
-    def download_character(self):
-        folder = self.create_character_directory()
-        self.image_list = []
-        try:
-            soup = self.get_soup(self.PAGE_PREFIX)
-            char_wraps = soup.find_all('div', class_='charWrap')
-            for char_wrap in char_wraps:
-                for char in ['charImg', 'charStand']:
-                    char_class = char_wrap.find('div', class_=char)
-                    if char_class:
-                        images = char_class.find_all('img')
-                        for image in images:
-                            if image and image.has_attr('src'):
-                                image_url = self.PAGE_PREFIX + image['src']
-                                image_name = self.extract_image_name_from_url(image_url, with_extension=False)
-                                self.add_to_image_list(image_name, image_url)
-        except Exception as e:
-            print("Error in running " + self.__class__.__name__ + " - Character")
-            print(e)
         self.download_image_list(folder)
 
 
