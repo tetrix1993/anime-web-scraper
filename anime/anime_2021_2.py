@@ -2146,6 +2146,7 @@ class SuperCubDownload(Spring2021AnimeDownload):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
@@ -2274,6 +2275,24 @@ class SuperCubDownload(Spring2021AnimeDownload):
                 json.dump(chara_list, f)
         except Exception as e:
             print("Error in writing to %s" % cache_filepath)
+            print(e)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'dbbox/')
+            self.image_list = []
+            images = soup.select('#cms_block img')
+            for image in images:
+                if image.has_attr('src') and not image['src'].endswith('.svg'):
+                    image_url = self.PAGE_PREFIX + image['src'].replace('../', '').split('?')[0]
+                    if self.is_matching_content_length(image_url, 34077):
+                        continue
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Blu-Ray')
             print(e)
 
 
