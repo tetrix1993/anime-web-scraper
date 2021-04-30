@@ -1188,6 +1188,10 @@ class MushokuTenseiDownload(Winter2021AnimeDownload):
             processed = inputs.split(';')
             num_processed = len(processed)
 
+        self.image_list = []
+        self.add_to_image_list('bd1_1', 'http://mushokutensei.jp/wp-content/uploads/2021/02/MT_BOX1_H1-4小.jpg')
+        self.download_image_list(folder)
+
         try:
             soup = self.get_soup(self.PAGE_PREFIX + '/bluray/')
             a_tags = soup.find_all('a', class_='bluraylist')
@@ -1213,7 +1217,7 @@ class MushokuTenseiDownload(Winter2021AnimeDownload):
                             image_url = image['src']
                             if len(image_url) > 4 and ('printing' in image_url or '.svg' in image_url[-4:]):
                                 continue
-                            image_url = self.clear_resize_in_url(image_url.split('?')[0])
+                            image_url = self.clear_resize_in_url(image_url.split('?')[0]).replace('-scaled.jpg', '.jpg')
                             image_name = self.extract_image_name_from_url(image_url, with_extension=False)
                             self.add_to_image_list(image_name, image_url)
                     self.download_image_list(folder)
