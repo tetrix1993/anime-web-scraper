@@ -109,6 +109,7 @@ The premiere date for the anime listed here has not been announced.
 * [Saihate no Paladin](https://farawaypaladin.com/)
 * [Taishou Otome Otogibanashi](http://taisho-otome.com/)
 * [Tate no Yuusha no Nariagari 2nd Season](http://shieldhero-anime.jp)
+* [Yuuki Yuuna wa Yuusha de Aru: Dai Mankai no Shou](https://yuyuyu.tv/season2/)
 
 ### Summer 2021 Anime
 * [Bokutachi no Remake](http://bokurema.com/)
