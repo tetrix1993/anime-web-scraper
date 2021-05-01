@@ -126,10 +126,43 @@ class TaishoOtomeDownload(Fall2021AnimeDownload):
 
     def run(self):
         self.download_episode_preview()
+        self.download_news()
         self.download_key_visual()
+        self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        try:
+            soup = self.get_soup(news_url, decode=True)
+            lis = soup.select('ul.newslist li')
+            news_obj = self.get_last_news_log_object()
+            results = []
+            for li in lis:
+                tag_date = li.find('div', class_='newslist_date')
+                tag_title = li.find('h2', class_='newslist_ttl')
+                a_tag = li.find('a')
+                if tag_date and tag_title and a_tag and a_tag.has_attr('href'):
+                    article_id = news_url + a_tag['href'].replace('./', '')
+                    date = self.format_news_date(tag_date.text.strip().replace('年', '.').replace('月', '.').replace('日', ''))
+                    if len(date) == 0:
+                        continue
+                    title = tag_title.text.strip()
+                    if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
+                        break
+                    results.append(self.create_news_log_object(date, title, article_id))
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log_from_news_log_object(result)
+                if process_result == 0:
+                    success_count += 1
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - News')
+            print(e)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -139,6 +172,11 @@ class TaishoOtomeDownload(Fall2021AnimeDownload):
         self.add_to_image_list(template_name % '01', template % (template_name % '01'))
         self.add_to_image_list(template_name % '02', template % (template_name % '02'))
         self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'wp/wp-content/themes/taisho-otome/img/character/img_chara%s.png'
+        self.download_by_template(folder, template, 2)
 
 
 # Tate no Yuusha no Nariagari S2
