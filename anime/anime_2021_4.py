@@ -6,6 +6,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 
 
 # Saihate no Paladin https://farawaypaladin.com/ #最果てのパラディン #faraway_paladin @faraway_paladin
+# Senpai ga Uzai Kouhai no Hanashi https://senpaiga-uzai-anime.com/ #先輩がうざい後輩の話 @uzai_anime
 # Taishou Otome Otogibanashi http://taisho-otome.com/ #大正オトメ #昭和オトメ @otome_otogi
 # Tate no Yuusha S2 http://shieldhero-anime.jp/ #shieldhero #盾の勇者の成り上がり @shieldheroanime
 # Yuuki Yuuna wa Yuusha de Aru: Dai Mankai no Shou https://yuyuyu.tv/season2/ #yuyuyu @anime_yukiyuna
@@ -51,6 +52,65 @@ class SaihatenoPaladinDownload(Fall2021AnimeDownload):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'img/cara%s.png'
         self.download_by_template(folder, template, 1)
+
+
+# Senpai ga Uzai Kouhai no Hanashi
+class SenpaigaUzaiDownload(Fall2021AnimeDownload):
+    title = 'Senpai ga Uzai Kouhai no Hanashi'
+    keywords = [title]
+    folder_name = 'senpaiga-uzai'
+
+    PAGE_PREFIX = 'https://senpaiga-uzai-anime.com/'
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        try:
+            soup = self.get_soup(news_url, decode=True)
+            articles = soup.select('article.article_contents article')
+            news_obj = self.get_last_news_log_object()
+            results = []
+            for article in articles:
+                if not article.has_attr('id'):
+                    continue
+                tag_date = article.find('time')
+                tag_title = article.find('h3')
+                if tag_date and tag_title:
+                    article_id = article['id']
+                    date = self.format_news_date(tag_date.text)
+                    if len(date) == 0:
+                        continue
+                    title = tag_title.text
+                    if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
+                        break
+                    results.append(self.create_news_log_object(date, title, article_id))
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log_from_news_log_object(result)
+                if process_result == 0:
+                    success_count += 1
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - News')
+            print(e)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('main-visual', self.PAGE_PREFIX + 'img/top/main-visual.png')
+        self.add_to_image_list('visual', 'https://pbs.twimg.com/media/Ez4yUbfVkAMPgny?format=jpg&name=4096x4096')
+        self.download_image_list(folder)
 
 
 # Taishou Otome Otogibanashi
