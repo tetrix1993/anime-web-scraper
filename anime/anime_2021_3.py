@@ -11,6 +11,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 # Jahy-sama wa Kujikenai! https://jahysama-anime.com/ #ジャヒー様はくじけない @jahysama_anime
 # Kanojo mo Kanojo https://kanokano-anime.com/ #kanokano #カノジョも彼女 @kanokano_anime
 # Kobayashi-san Chi no Maid Dragon S https://maidragon.jp/2nd/ #maidragon @maidragon_anime
+# Mahouka Koukou no Yuutousei https://mahouka-yuutousei.jp/ #mahouka
 # Megami-ryou no Ryoubo-kun. https://megamiryou.com/ #女神寮 @megamiryou
 # Meikyuu Black Company https://meikyubc-anime.com/ #迷宮ブラックカンパニー @meikyubc_anime
 # Otome Game https://hamehura-anime.com/story/ #はめふら #hamehura @hamehura
@@ -458,6 +459,64 @@ class KobayashiMaidDragon2Download(Summer2021AnimeDownload):
         self.add_to_image_list('newyear_2021', 'https://pbs.twimg.com/media/EqkvG-lUcAInMkK?format=jpg&name=4096x4096')
         self.add_to_image_list('kv1_1', 'https://pbs.twimg.com/media/Ervaz89VEAkqjT-?format=jpg&name=900x900')
         self.add_to_image_list('kv1_2', 'https://maidragon.jp/2nd/img/pre/visual_02.png')
+        self.download_image_list(folder)
+
+
+# Mahouka Koukou no Yuutousei
+class MahoukaYuutouseiDownload(Summer2021AnimeDownload):
+    title = 'Mahouka Koukou no Yuutousei'
+    keywords = [title, 'The Honor Student at Magic High School']
+    folder_name = 'mahouka-yuutousei'
+
+    PAGE_PREFIX = "https://mahouka-yuutousei.jp/"
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX
+        try:
+            soup = self.get_soup(news_url, decode=True)
+            articles = soup.select('ul.p-news__list li.p-news__item')
+            news_obj = self.get_last_news_log_object()
+            results = []
+            for article in articles:
+                tag_date = article.find('div', class_='p-news__date')
+                tag_title = article.find('div', class_='p-news__title')
+                if tag_date and tag_title:
+                    article_id = ''
+                    date = self.format_news_date(tag_date.text.strip().replace('/', '.'))
+                    if len(date) == 0:
+                        continue
+                    title = tag_title.text.strip()
+                    if news_obj and ((news_obj['date'] == date and news_obj['title'] == title)
+                                     or date < news_obj['date']):
+                        break
+                    results.append(self.create_news_log_object(date, title, article_id))
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log_from_news_log_object(result)
+                if process_result == 0:
+                    success_count += 1
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - News')
+            print(e)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('teaser', self.PAGE_PREFIX + '/teaser/img/top/kv_character.png')
+        self.add_to_image_list('kv1', self.PAGE_PREFIX + '/teaser/img/top/kv.jpg')
         self.download_image_list(folder)
 
 
