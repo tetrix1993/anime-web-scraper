@@ -12,6 +12,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner, Na
 # Isekai Maou to Shoukan Shoujo no Dorei Majutsu Ω https://isekaimaou-anime.com/ #異世界魔王 @isekaimaou [TUE]
 # Kyuukyoku Shinka Shita Full Dive RPG ga Genjitsu Yori mo Kusogee Dattara https://fulldive-rpg.com/ #フルダイブ @fulldive_anime [SAT]
 # Mairimashita! Iruma-kun S2 https://www.nhk.jp/p/iruma2 #魔入りました入間くん @wc_mairuma
+# Odd Taxi https://oddtaxi.jp/ #オッドタクシー @oddtaxi_
 # Osananajimi ga Zettai ni Makenai Love Comedy https://osamake.com/ #おさまけ #osamake [FRI]
 # Sayonara Watashi no Cramer https://sayonara-cramer.com/tv/ #さよなら私のクラマー @cramer_pr [FRI]
 # Seijo no Maryoku wa Bannou Desu https://seijyonomaryoku.jp/ #seijyonoanime @seijyonoanime [FRI]
@@ -1113,6 +1114,50 @@ class IrumaKun2Download(Spring2021AnimeDownload):
                                 image_name = episode + '_' + str(i + 1)
                                 self.add_to_image_list(image_name, image_url)
                         self.download_image_list(self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
+
+
+# Odd Taxi
+class OddTaxiDownload(Spring2021AnimeDownload):
+    title = 'Odd Taxi'
+    keywords = [title]
+    folder_name = 'oddtaxi'
+
+    PAGE_PREFIX = 'https://oddtaxi.jp/'
+    JSON_URL = PAGE_PREFIX + 'wp-json/oddtaxi/init'
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        json_obj = self.get_json(self.JSON_URL)
+        if not json_obj:
+            return
+        self.download_episode_preview(json_obj)
+
+    def download_episode_preview(self, json_obj=None):
+        if not json_obj:
+            json_obj = self.get_json(self.JSON_URL)
+        try:
+            if json_obj:
+                if 'stories' in json_obj and isinstance(json_obj['stories'], list):
+                    for story in reversed(json_obj['stories']):
+                        if 'images' in story and 'num' in story and isinstance(story['images'], list):
+                            episode = str(story['num']).zfill(2)
+                            if self.is_image_exists(episode + '_8'):
+                                continue
+                            images = story['images']
+                            self.image_list = []
+                            for i in range(len(images)):
+                                if isinstance(images[i], str) and len(images[i]) > 0:
+                                    image_url = self.clear_resize_in_url(images[i])
+                                    image_name = episode + '_' + str(i + 1)
+                                    self.add_to_image_list(image_name, image_url)
+                            self.download_image_list(self.base_folder)
+            else:
+                raise Exception('Json Object is invalid')
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
