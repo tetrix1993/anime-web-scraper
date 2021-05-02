@@ -94,7 +94,6 @@ The premiere date for the anime listed here has not been announced.
 * [Maou Gakuin no Futekigousha: Shijou Saikyou no Maou no Shiso, Tensei shite Shison-tachi no Gakkou e 2nd Season](https://maohgakuin.com/)
 * [Princess Connect! Re:Dive 2nd Season](https://anime.priconne-redive.jp)
 * [Shikkakumon no Saikyou Kenja](https://shikkakumon.com/)
-* [Shin no Nakama ja Nai to Yuusha no Party wo Oidasareta node, Henkyou de Slow Life suru Koto ni Shimashita](https://shinnonakama.com/)
 * [Shokei Shoujo no Virgin Road](http://virgin-road.com/)
 * [Shuumatsu no Harem](https://end-harem-anime.com/)
 * [Slow Loop](https://slowlooptv.com/)
