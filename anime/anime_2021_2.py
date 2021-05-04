@@ -1,5 +1,6 @@
 import json
 import os
+from datetime import datetime
 from anime.main_download import MainDownload
 from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner, NatalieScanner
 
@@ -814,12 +815,14 @@ class IsekaiMaou2Download(Spring2021AnimeDownload):
     folder_name = 'isekai-maou2'
 
     PAGE_PREFIX = 'https://isekaimaou-anime.com/'
+    FINAL_EPISODE = 10
 
     def __init__(self):
         super().__init__()
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_guess()
         self.download_news()
         self.download_key_visual()
         self.download_character()
@@ -852,6 +855,17 @@ class IsekaiMaou2Download(Spring2021AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
+
+    def download_episode_preview_guess(self):
+        folder = self.create_custom_directory('guess')
+        dt_month = datetime.now().strftime("%m").zfill(2)
+        for i in range(self.FINAL_EPISODE):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_1'):
+                continue
+            template = f'{self.PAGE_PREFIX}wp/wp-content/uploads/2021/{dt_month}/異世界魔王Ω_{episode}-%s.jpg'
+            if not self.download_by_template(folder, template, 2, start=1, end=6):
+                break
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + 'news/'
