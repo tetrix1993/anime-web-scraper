@@ -527,8 +527,9 @@ class HigehiroDownload(Spring2021AnimeDownload):
             episode = str(i + 1).zfill(2)
             if self.is_image_exists(episode + '_1'):
                 continue
-            template = self.PAGE_PREFIX + 'wp-content/themes/higehiro/images/story/s%s-%s.jpg' % (str(i + 1), '%s')
-            if not self.download_by_template(folder, template, 1, start=1, end=6):
+            template1 = self.PAGE_PREFIX + 'wp-content/themes/higehiro/images/story/s%s-%s.jpg' % (str(i + 1), '%s')
+            template2 = self.PAGE_PREFIX + 'wp-content/themes/higehiro/images/story/s%s-%s.jpg' % (episode, '%s')
+            if not self.download_by_template(folder, [template1, template2], 1, start=1, end=6):
                 break
             print(self.__class__.__name__ + ' - Episode %s guessed correctly!' % episode)
 
