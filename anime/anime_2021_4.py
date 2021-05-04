@@ -40,7 +40,7 @@ class MuvLuvAlternativeDownload(Fall2021AnimeDownload):
         self.download_key_visual()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        self.has_website_updated(self.PAGE_PREFIX, 'index', diff=2)
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + 'news/'
