@@ -3193,7 +3193,7 @@ class TonikawaDownload(Fall2020AnimeDownload):
             images = soup.select('div.content a')
             self.image_list = []
             for image in images:
-                if image.has_attr('href'):
+                if image.has_attr('href') and image['href'].startswith('../'):
                     image_url = self.PAGE_PREFIX + image['href'].replace('../', '')
                     image_name = self.extract_image_name_from_url(image_url)
                     self.add_to_image_list(image_name, image_url)
