@@ -7,6 +7,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 
 # Bokutachi no Remake http://bokurema.com/ #ぼくリメ #bokurema @bokurema_anime
 # Cheat Kusushi no Slow Life: Isekai ni Tsukurou Drugstore https://www.cheat-kusushi.jp/ #チート薬師 #スローライフ @cheat_kusushi
+# Deatte 5-byou de Battle https://dea5-anime.com/ #出会5 #dea5 @dea5_anime
 # Genjitsu Shugi Yuusha no Oukoku Saikenki https://genkoku-anime.com/ #現国アニメ @genkoku_info
 # Jahy-sama wa Kujikenai! https://jahysama-anime.com/ #ジャヒー様はくじけない @jahysama_anime
 # Kanojo mo Kanojo https://kanokano-anime.com/ #kanokano #カノジョも彼女 @kanokano_anime
@@ -198,6 +199,76 @@ class CheatKusushiDownload(Summer2021AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + " - Character")
             print(e)
+        self.download_image_list(folder)
+
+
+# Deatte 5-byou de Battle
+class Dea5Download(Summer2021AnimeDownload):
+    title = 'Deatte 5-byou de Battle'
+    keywords = [title, 'Battle Game in 5 Seconds', 'Dea5']
+    folder_name = 'dea5'
+
+    PAGE_PREFIX = 'https://dea5-anime.com/'
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        stop = False
+        try:
+            results = []
+            news_obj = self.get_last_news_log_object()
+            for page in range(1, 2, 1):
+                if page == 1:
+                    page_url = news_url
+                else:
+                    page_url = news_url + 'page/' + str(page)
+                soup = self.get_soup(page_url, decode=True)
+                articles = soup.select('div.posts div.post')
+                for article in articles:
+                    tag_date = article.find('p', class_='post_date')
+                    tag_title = article.find('p', class_='post_title')
+                    a_tag = article.find('a')
+                    if tag_date and tag_title:
+                        article_id = ''
+                        if a_tag and a_tag.has_attr('href'):
+                            article_id = self.PAGE_PREFIX + a_tag['href'].replace('../', '')
+                        date = self.format_news_date(tag_date.text)
+                        if len(date) == 0:
+                            continue
+                        title = tag_title.text.strip()
+                        if news_obj and ((news_obj['id'] == article_id and news_obj['title'] == title)
+                                         or date < news_obj['date']):
+                            stop = True
+                            break
+                        results.append(self.create_news_log_object(date, title, article_id))
+                if stop:
+                    break
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log_from_news_log_object(result)
+                if process_result == 0:
+                    success_count += 1
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - News')
+            print(e)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('teaser', 'https://pbs.twimg.com/media/EmjTjFDVcAAZT6L?format=jpg&name=900x900')
+        self.add_to_image_list('kv1', self.PAGE_PREFIX + 'wp-content/themes/design/img/index/kv.jpg')
         self.download_image_list(folder)
 
 

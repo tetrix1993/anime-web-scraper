@@ -114,6 +114,7 @@ The premiere date for the anime listed here has not been announced.
 ### Summer 2021 Anime
 * [Bokutachi no Remake](http://bokurema.com/)
 * [Cheat Kusushi no Slow Life: Isekai ni Tsukurou Drugstore](https://www.cheat-kusushi.jp/)
+* [Deatte 5-byou de Battle](https://dea5-anime.com/)
 * [Genjitsu Shugi Yuusha no Oukoku Saikenki](https://genkoku-anime.com/)
 * [Jahy-sama wa Kujikenai!](https://jahysama-anime.com/)
 * [Kanojo mo Kanojo](https://kanokano-anime.com/)
