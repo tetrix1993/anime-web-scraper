@@ -77,7 +77,7 @@ let populateImages = function(images) {
         class_name = 'container-image-25';
     for (i = 0; i < images.length; i++)
     {
-        $content += '<div class="container-image ' + class_name + '"><div class="container-filename">' + images[i].name + '</div><img class="image" title="' + images[i].name + '" src="' + images[i].path + '" alt="' + images[i].name + '" /></div>';
+        $content += '<div class="container-image ' + class_name + '"><div class="container-filename">' + images[i].name + '</div><a href="' + images[i].path + '" target="_blank"><img class="image" title="' + images[i].name + '" src="' + images[i].path + '" alt="' + images[i].name + '" /></a></div>';
     }
     $images.html($content);
 }
