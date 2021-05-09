@@ -2,17 +2,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Image Viewer</title>
+    <title>Content Viewer</title>
     <link rel="stylesheet" href="static/main.css" />
 </head>
 <body>
-    <h2>Image Viewer</h2>
-    <div id="navbar"></div>
-    <div id="subdirs"></div>
-    <br/>
-    <div id="images"></div>
-    <div id="logs"></div>
-    <div id="footer"><button id="btnTop" onclick="goToTop()" hidden/>Go to Top</div>
+    <h1>Content Viewer</h1>
+    <div class="container" id="navbar"></div>
+    <div class="container" id="subdirs" hidden></div>
+    <div class="container" id="audios" hidden></div>
+    <div class="container" id="videos" hidden></div>
+    <div class="container" id="images" hidden></div>
+    <div class="container" id="logs" hidden></div>
+    <div class="container" id="footer" hidden><hr><button id="btnTop" onclick="goToTop()">Go to Top</div>
     <script src="static/jquery-3.6.0.min.js"></script>
     <script src="static/main.js"></script>
 </body>

@@ -3,14 +3,33 @@ body {
   font-family: "Calibri", "Arial", "Times New Roman", Times, serif;
 }
 
-h2 {
+h1 {
   text-align: center;
 }
 
-#logs {
-    margin: 5px 50px;
+video {
+    max-width: 45%;
 }
 
 .image {
     max-width: 100%;
+}
+
+.container {
+    overflow: hidden;
+}
+
+.container-media {
+    float: left;
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+
+.container-filename {
+    font-weight: bold;
+    margin-bottom: 2px;
+}
+
+.container-log {
+    margin: 5px 50px;
 }

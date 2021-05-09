@@ -2,10 +2,12 @@ let $navbar = $('#navbar');
 let $subdirs = $('#subdirs');
 let $images = $('#images');
 let $logs = $('#logs');
-let $btnTop = $('#btnTop');
+let $audios = $('#audios');
+let $videos = $('#videos');
+let $footer = $('#footer');
 
 let getphp = function(dir) {
-    $btnTop.attr("hidden", true);
+    hideDivs();
     $.ajax({
         type: 'GET',
         url: 'static/get.php?dir=' + dir,
@@ -17,8 +19,9 @@ let getphp = function(dir) {
                 populateSubdirs(obj.dir.sub);
                 populateImages(obj.images);
                 populateLogs(obj.logs);
-                if (obj.images.length > 0 || obj.logs.length > 1)
-                    $btnTop.attr("hidden", false);
+                populateAudios(obj.audios);
+                populateVideos(obj.videos);
+                showDivs(obj);
             },
             400: function(xhr, status, error) {
                 alert("Error - " + xhr.responseText);
@@ -64,27 +67,73 @@ let populateSubdirs = function(dirs) {
 
 let populateImages = function(images) {
     $images.empty();
-    $content = '';
+    $content = '<h2>Images</h2>';
     for (i = 0; i < images.length; i++)
     {
-        $content += '<img class="image" title="' + images[i].name + '" src="' + images[i].path + '" alt="' + images[i].name + '" />';
+        $content += '<div class="container-media"><div class="container-filename">' + images[i].name + '</div><img class="image" title="' + images[i].name + '" src="' + images[i].path + '" alt="' + images[i].name + '" /></div>';
     }
     $images.html($content);
 }
 
 let populateLogs = function(logs) {
     $logs.empty();
-    $content = '';
+    $content = '<h2>Logs</h2>';
     for (i = 0; i < logs.length; i++)
     {
-        $content += '<h3>' + logs[i].name + '</h3><iframe src="' + logs[i].path + '" title="' + logs[i].name + '" width="100%" height="300px"></iframe>';
+        $content += '<div class="container-log"><div class="container-filename">' + logs[i].name + '</div><iframe src="' + logs[i].path + '" title="' + logs[i].name + '" width="100%" height="300px"></iframe></div>';
     }
     $logs.html($content);
 }
 
+let populateAudios = function(audios) {
+    $audios.empty();
+    $content = '<h2>Audios</h2>';
+    for (i = 0; i < audios.length; i++)
+    {
+        $content += '<div class="container-media"><div class="container-filename">' + audios[i].name + '</div><audio controls><source src="' + audios[i].path + '">Your browser does not support the audio element.</audio></div>';
+    }
+    $audios.html($content);
+}
+
+let populateVideos = function(videos) {
+    $videos.empty();
+    $content = '<h2>Videos</h2>';
+    for (i = 0; i < videos.length; i++)
+    {
+        $content += '<div class="container-media"><div class="container-filename">' + videos[i].name + '</div><video controls><source src="' + videos[i].path + '">Your browser does not support HTML video.</video></div>';
+    }
+    $videos.html($content);
+}
+
 let goToTop = function() {
-  document.body.scrollTop = 0;
-  document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+}
+
+let hideDivs = function() {
+    list = [$subdirs, $images, $logs, $audios, $videos, $footer];
+    for (i = 0; i < list.length; i++)
+        hideDiv(list[i]);
+}
+
+let hideDiv = function($elem) {
+    $elem.attr('hidden', true);
+}
+
+let showDivs = function(obj) {
+    showDiv(obj.dir.sub, $subdirs);
+    showDiv(obj.images, $images);
+    showDiv(obj.logs, $logs);
+    showDiv(obj.audios, $audios);
+    showDiv(obj.videos, $videos);
+    if (obj.images.length > 0 || obj.logs.length > 1 || obj.audios.length > 0 || obj.videos.length > 0)
+        $footer.attr("hidden", false);
+}
+
+let showDiv = function(list, $elem)
+{
+    if (list.length > 0)
+        $elem.attr('hidden', false);
 }
 
 $(document).ready(function() {
