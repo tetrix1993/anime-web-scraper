@@ -704,17 +704,14 @@ class ValLoveDownload(Fall2019AnimeDownload):
     
     def run(self):
         try:
-            response = self.get_response(self.PAGE_LINK)
-            split1 = response.split("<ul id='episodeList'>")
-            if len(split1) < 2:
-                return
-            split2 = split1[1].split("</ul>")[0]
-            split3 = split2.split('<a href="')
-            for i in range(len(split3)-1, 0, -1):
-                episode = str(len(split3) - i).zfill(2)
+            soup = self.get_soup(self.PAGE_LINK)
+            a_tags = soup.select('#episodeList a')
+            for i in range(len(a_tags)):
+                index = len(a_tags) - i - 1
+                episode = str(i + 1).zfill(2)
                 if self.is_file_exists(self.base_folder + "/" + episode + "_1.jpg"):
                     continue
-                pageLink = self.PAGE_LINK + split3[i].split('"')[0]
+                pageLink = self.PAGE_LINK + a_tags[index]['href']
                 pageResponse = self.get_response(pageLink)
                 split4 = pageResponse.split('<div id="episodeCont">')
                 if len(split4) < 2:
