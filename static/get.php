@@ -6,6 +6,8 @@
         $subDirs = array();
         $images = array();
         $imageTypes = array("jpg", "jpeg", "png", "gif", "webp");
+        $logs = array();
+        $logTypes = array("download.log", "news.log");
         foreach ($files as $file)
         {
             if (str_starts_with($file, '.'))
@@ -24,6 +26,14 @@
                     array_push($images, array("name"=>$file, "path"=>$filepath));
                 }
             }
+
+            // Logs
+            foreach ($logTypes as $logType) {
+                if ($file == $logType)
+                {
+                    array_push($logs, array("name"=>$file, "path"=>$filepath));
+                }
+            }
         }
 
         $dirSplits = explode('/', $currDir);
@@ -40,7 +50,7 @@
         }
         $currDirName = $dirSplits[count($dirSplits) - 1];
 
-        $output = array("dir"=>array("current"=>array("name"=>$currDirName, "path"=>$currDir), "parent"=>$parentDirs, "sub"=>$subDirs), "images"=>$images);
+        $output = array("dir"=>array("current"=>array("name"=>$currDirName, "path"=>$currDir), "parent"=>$parentDirs, "sub"=>$subDirs), "images"=>$images, "logs"=>$logs);
         echo json_encode($output);
     } else {
         http_response_code(400);

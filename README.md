@@ -428,3 +428,16 @@ The anime are grouped according to the season it first premiered. There are four
 * Fall (October to December)
 
 </details>
+
+## Image Viewer
+You may browse the images downloaded by the scraper on a web browser.
+
+### Setting Up for PHP
+1. Download the latest PHP. Click [here](https://www.php.net/) to download.
+2. Set the system environment path to where the PHP is downloaded.
+3. Open Command Prompt/Terminal and input `php -v`. If the PHP version appeared, this means it is installed successfully.
+
+### Instructions
+1. Change directory to where `index.html` is located.
+2. Run `php -S localhost:4000` to run a PHP server at port `4000`. You can specify other port numbers.
+3. Open a web browser and type `localhost:4000` to access the Image Viewer.

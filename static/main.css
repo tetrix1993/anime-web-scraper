@@ -6,3 +6,11 @@ body {
 h2 {
   text-align: center;
 }
+
+#logs {
+    margin: 5px 50px;
+}
+
+.image {
+    max-width: 100%;
+}
