@@ -6,7 +6,7 @@ let $audios = $('#audios');
 let $videos = $('#videos');
 let $footer = $('#footer');
 let $imageSize = $('#imageSize');
-let imageSize = '49';
+let imageSize = '24';
 
 let getphp = function(dir) {
     hideDivs();
@@ -70,14 +70,14 @@ let populateSubdirs = function(dirs) {
 let populateImages = function(images) {
     $images.empty();
     $content = '<h2>Images</h2>';
-    let class_name = 'container-image';
+    let class_name = 'container-image-50';
     if (imageSize == '100')
         class_name = 'container-image-100';
     else if (imageSize == '24')
         class_name = 'container-image-25';
     for (i = 0; i < images.length; i++)
     {
-        $content += '<div class="' + class_name + '"><div class="container-filename">' + images[i].name + '</div><img class="image" title="' + images[i].name + '" src="' + images[i].path + '" alt="' + images[i].name + '" /></div>';
+        $content += '<div class="container-image ' + class_name + '"><div class="container-filename">' + images[i].name + '</div><img class="image" title="' + images[i].name + '" src="' + images[i].path + '" alt="' + images[i].name + '" /></div>';
     }
     $images.html($content);
 }
@@ -155,10 +155,7 @@ let resizeImage = function() {
         imageSize = '49';
         $imageSize.html('50');
     }
-
     $('.container-image').css('max-width', imageSize + '%');
-    $('.container-image-100').css('max-width', imageSize + '%');
-    $('.container-image-25').css('max-width', imageSize + '%');
 }
 
 $(document).ready(function() {

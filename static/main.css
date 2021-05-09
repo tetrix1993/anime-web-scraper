@@ -20,40 +20,39 @@ video {
 }
 
 .container-nav {
-    float: left;
+    display: inline-block;
 }
 
 .container-media {
-    float: left;
+    display: inline-block;
     margin-right: 5px;
     margin-bottom: 5px;
-    max-width: 45%
+    max-width: 45%;
 }
 
 .container-image {
-    float: left;
+    display: inline-block;
     margin-right: 5px;
     margin-bottom: 5px;
-    max-width: 49%
+    vertical-align:top
 }
 
 .container-image-100 {
-    float: left;
-    margin-right: 5px;
-    margin-bottom: 5px;
-    max-width: 100%
+    max-width: 100%;
+}
+
+.container-image-50 {
+    max-width: 49%;
 }
 
 .container-image-25 {
-    float: left;
-    margin-right: 5px;
-    margin-bottom: 5px;
-    max-width: 24%
+    max-width: 24%;
 }
 
 .container-filename {
     font-weight: bold;
     margin-bottom: 2px;
+    word-break: break-word;
 }
 
 .container-log {
