@@ -8,7 +8,7 @@ h1 {
 }
 
 video {
-    max-width: 45%;
+    max-width: 100%;
 }
 
 .image {
@@ -19,10 +19,36 @@ video {
     overflow: hidden;
 }
 
+.container-nav {
+    float: left;
+}
+
 .container-media {
     float: left;
     margin-right: 5px;
     margin-bottom: 5px;
+    max-width: 45%
+}
+
+.container-image {
+    float: left;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    max-width: 49%
+}
+
+.container-image-100 {
+    float: left;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    max-width: 100%
+}
+
+.container-image-25 {
+    float: left;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    max-width: 24%
 }
 
 .container-filename {
