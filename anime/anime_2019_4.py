@@ -701,8 +701,12 @@ class ValLoveDownload(Fall2019AnimeDownload):
     
     def __init__(self):
         super().__init__()
-    
+
     def run(self):
+        self.download_episode_preview()
+        self.download_goods()
+    
+    def download_episode_preview(self):
         try:
             soup = self.get_soup(self.PAGE_LINK)
             a_tags = soup.select('#episodeList a')
@@ -727,6 +731,56 @@ class ValLoveDownload(Fall2019AnimeDownload):
                     self.download_image(imageUrl, filepathWithoutExtension)
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
+            print(e)
+
+    def download_goods(self):
+        folder = self.create_custom_directory('goods')
+        try:
+            prefix = 'https://val-love.com/goods/?page='
+            soup = self.get_soup(prefix + '1')
+            pages_tag = soup.select('div.pagingBox a')
+            daki_count = 0
+            daki_ids = ['1012801', '1012802']
+            if len(pages_tag) > 0:
+                try:
+                    last_page = int(pages_tag[-1].text)
+                    for i in range(last_page):
+                        page = i + 1
+                        if page > 1:
+                            soup = self.get_soup(prefix + str(page))
+                        if soup:
+                            a_tags = soup.select('#goodsList a')
+                            for a_tag in a_tags:
+                                try:
+                                    id_ = a_tag['href'].split('?id=')[1]
+                                except:
+                                    continue
+                                self.image_list = []
+                                is_daki = False
+                                if id_ in daki_ids:
+                                    daki_count += 1
+                                    is_daki = True
+                                    thumb = a_tag.find('p', class_='goodsThumb')
+                                    if thumb and thumb.has_attr('style') and 'background-image:url(' in thumb['style']:
+                                        thumb_url = thumb['style'].replace('background-image:url(', '').replace(')', '')
+                                        thumb_name = 'daki' + str(daki_count) + '_1'
+                                        self.add_to_image_list(thumb_name, thumb_url)
+                                goods_url = 'https://val-love.com/goods/' + a_tag['href']
+                                goods_soup = self.get_soup(goods_url)
+                                if goods_soup:
+                                    image = goods_soup.select('#item_0 img')
+                                    if len(image) > 0:
+                                        image_url = image[0]['src']
+                                        if is_daki:
+                                            image_name = 'daki' + str(daki_count) + '_2'
+                                        else:
+                                            image_name = self.extract_image_name_from_url(image_url)
+                                        self.add_to_image_list(image_name, image_url)
+                                self.download_image_list(folder)
+                except Exception:
+                    pass
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Goods')
             print(e)
 
 
