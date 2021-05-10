@@ -13,6 +13,21 @@
     <div class="container" id="videos" hidden></div>
     <div class="container" id="images" hidden></div>
     <div class="container" id="logs" hidden></div>
+    <div class="container" id="global_logs">
+        <h2>Global Logs</h2>
+        <div class="container-log">
+            <div class="container-filename">download_log.tsv</div>
+            <iframe src="static/get_global_logs.php?name=download" width="100%" height="300px"></iframe>
+        </div>
+        <div class="container-log">
+            <div class="container-filename">news_log.tsv</div>
+            <iframe src="static/get_global_logs.php?name=news" width="100%" height="300px"></iframe>
+        </div>
+        <div class="container-log">
+            <div class="container-filename">website_log.tsv</div>
+            <iframe src="static/get_global_logs.php?name=website" width="100%" height="300px"></iframe>
+        </div>
+    </div>
     <div class="container" id="footer" hidden><hr><button id="btnTop" onclick="goToTop()">Go to Top</div>
     <script src="static/jquery-3.6.0.min.js"></script>
     <script src="static/main.js"></script>

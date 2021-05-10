@@ -2,6 +2,7 @@ let $navbar = $('#navbar');
 let $subdirs = $('#subdirs');
 let $images = $('#images');
 let $logs = $('#logs');
+let $globalLogs = $('#global_logs');
 let $audios = $('#audios');
 let $videos = $('#videos');
 let $footer = $('#footer');
@@ -10,6 +11,7 @@ let imageSize = '24';
 
 let getphp = function(dir) {
     hideDivs();
+    $globalLogs.attr("hidden", (dir != '../download'));
     $.ajax({
         type: 'GET',
         url: 'static/get.php?dir=' + dir,
