@@ -89,7 +89,7 @@ let populateLogs = function(logs) {
     $content = '<h2>Logs</h2>';
     for (i = 0; i < logs.length; i++)
     {
-        $content += '<div class="container-log"><div class="container-filename">' + logs[i].name + '</div><iframe src="' + logs[i].path + '" title="' + logs[i].name + '" width="100%" height="300px"></iframe></div>';
+        $content += '<div class="container-log"><div class="container-filename">' + logs[i].name + '</div><iframe src="../static/get_logs.php?dir=' + logs[i].path + '" title="' + logs[i].name + '" width="100%" height="300px"></iframe></div>';
     }
     $logs.html($content);
 }
@@ -158,6 +158,11 @@ let resizeImage = function() {
         $imageSize.html('50');
     }
     $('.container-image').css('max-width', imageSize + '%');
+}
+
+let reloadFrame = function(id)
+{
+    document.getElementById(id).src = document.getElementById(id).src;
 }
 
 $(document).ready(function() {

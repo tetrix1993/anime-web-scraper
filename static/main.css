@@ -55,6 +55,18 @@ video {
     word-break: break-word;
 }
 
+.container-filename-log {
+    font-weight: bold;
+    margin-bottom: 2px;
+    display: inline-block;
+}
+
+.container-button-log {
+    margin-bottom: 2px;
+    display: inline-block;
+    margin-left: 5px;
+}
+
 .container-log {
     margin: 5px 50px;
 }
