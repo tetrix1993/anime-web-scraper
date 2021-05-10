@@ -74,7 +74,7 @@ class MainDownload:
             print(e)
         return response
 
-    def has_website_updated(self, url, cache_name='story', headers=None, charset=None, diff=0):
+    def has_website_updated(self, url, cache_name='index', headers=None, charset=None, diff=0):
         """
         Checks if the given url is updated based on the size of the response by comparing its size with
         previously saved size in cache. Returns true if it is updated and the contents is saved as log.
