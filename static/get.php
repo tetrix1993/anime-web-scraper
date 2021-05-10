@@ -1,7 +1,7 @@
 <?php
     if (isset($_GET["dir"])) {
         $currDir = $_GET["dir"];
-        $files = scandir($currDir);
+        $files = @scandir($currDir);
         $parentDirs = array();
         $subDirs = array();
         $images = array();
@@ -90,7 +90,7 @@
 
         $output = array("dir"=>array("current"=>array("name"=>$currDirName, "path"=>$currDir), "parent"=>$parentDirs, "sub"=>$subDirs),
             "images"=>$images, "logs"=>$logs, "audios"=>$audios, "videos"=>$videos);
-        echo json_encode($output);
+        echo @json_encode($output);
     } else {
         http_response_code(400);
     }
