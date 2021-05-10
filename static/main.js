@@ -89,7 +89,7 @@ let populateLogs = function(logs) {
     $content = '<h2>Logs</h2>';
     for (i = 0; i < logs.length; i++)
     {
-        $content += '<div class="container-log"><div class="container-filename">' + logs[i].name + '</div><iframe src="../static/get_logs.php?dir=' + logs[i].path + '" title="' + logs[i].name + '" width="100%" height="300px"></iframe></div>';
+        $content += '<div class="container-log"><div class="container-filename-log">' + logs[i].name + '</div><div class="container-button-log"><button onclick="reloadFrame(\'' + logs[i].logname + '\')">Reload</button></div><div class="container-button-log"><button onclick="scrollToTop(\'' + logs[i].logname + '\')">Scroll to Top</button></div><iframe id="' + logs[i].logname + '" src="../static/get_logs.php?dir=' + logs[i].path + '" title="' + logs[i].name + '" width="100%" height="300px"></iframe></div>';
     }
     $logs.html($content);
 }
@@ -117,6 +117,10 @@ let populateVideos = function(videos) {
 let goToTop = function() {
     document.body.scrollTop = 0;
     document.documentElement.scrollTop = 0;
+}
+
+let scrollToTop = function(id) {
+    $('#' + id).contents().scrollTop(0);
 }
 
 let hideDivs = function() {

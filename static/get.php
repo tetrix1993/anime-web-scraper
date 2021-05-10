@@ -44,7 +44,8 @@
             foreach ($logTypes as $logType) {
                 if ($file == $logType)
                 {
-                    array_push($logs, array("name"=>$file, "path"=>$filepath));
+                    $logname = "log_".explode('.log', $file)[0];
+                    array_push($logs, array("name"=>$file, "logname"=>$logname, "path"=>$filepath));
                     $stop = true;
                     break;
                 }

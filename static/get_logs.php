@@ -18,5 +18,6 @@
         http_response_code(400);
     }
 ?></pre>
+<script src="global_log.js"></script>
 </body>
 </html>
