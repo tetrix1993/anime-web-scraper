@@ -28,10 +28,10 @@ let getphp = function(dir) {
                 showDivs(obj);
             },
             400: function(xhr, status, error) {
-                alert("Error - " + xhr.responseText);
+                alert("Error - 400 Bad Request");
             },
             404: function(xhr, status, error) {
-                alert(xhr.responseText);
+                alert("Error - 404 Not Found");
             }
         }
     });

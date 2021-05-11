@@ -1,6 +1,12 @@
 <?php
     if (isset($_GET["dir"])) {
         $currDir = $_GET["dir"];
+        $testPaths = explode('../', $currDir);
+        if (count($testPaths) != 2 || !str_starts_with($currDir, "../"))
+        {
+            http_response_code(400);
+        }
+
         $files = @scandir($currDir);
         $parentDirs = array();
         $subDirs = array();
