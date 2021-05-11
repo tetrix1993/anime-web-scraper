@@ -2,7 +2,7 @@
     if (isset($_GET["dir"])) {
         $currDir = $_GET["dir"];
         $testPaths = explode('../', $currDir);
-        if (count($testPaths) != 2 || !str_starts_with($currDir, "../"))
+        if (count($testPaths) != 2 || !str_starts_with($currDir, "../download"))
         {
             http_response_code(400);
         }
