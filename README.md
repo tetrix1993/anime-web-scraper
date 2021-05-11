@@ -104,6 +104,7 @@ The premiere date for the anime listed here has not been announced.
 * [Arifureta Shokugyou de Sekai Saikyou 2nd Season](https://arifureta.com/)
 
 ### Fall 2021 Anime
+* [Komi-san wa, Komyushou desu.](https://komisan-official.com/)
 * [Muv-Luv Alternative](https://muv-luv-alternative-anime.com/)
 * [Saihate no Paladin](https://farawaypaladin.com/)
 * [Senpai ga Uzai Kouhai no Hanashi](https://senpaiga-uzai-anime.com/)

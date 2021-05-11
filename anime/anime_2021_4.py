@@ -5,6 +5,7 @@ from datetime import datetime
 from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 
 
+# Komi-san wa, Komyushou desu. https://komisan-official.com/ #古見さん #komisan @comisanvote
 # Muv-Luv Alternative https://muv-luv-alternative-anime.com/ #マブラヴ #マブラヴアニメ #muvluv @Muv_Luv_A_anime
 # Saihate no Paladin https://farawaypaladin.com/ #最果てのパラディン #faraway_paladin @faraway_paladin
 # Senpai ga Uzai Kouhai no Hanashi https://senpaiga-uzai-anime.com/ #先輩がうざい後輩の話 @uzai_anime
@@ -21,6 +22,94 @@ class Fall2021AnimeDownload(MainDownload):
 
     def __init__(self):
         super().__init__()
+
+
+# Komi-san wa, Komyushou desu.
+class KomisanDownload(Fall2021AnimeDownload):
+    title = 'Komi-san wa, Komyushou desu.'
+    keywords = [title, 'Comyushou', "Komi Can't Communicate", 'komisan']
+    folder_name = 'komisan'
+
+    PAGE_PREFIX = 'https://komisan-official.com/'
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index', diff=2)
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        stop = False
+        try:
+            results = []
+            news_obj = self.get_last_news_log_object()
+            for page in range(1, 2, 1):
+                page_url = news_url
+                if page > 1:
+                    page_url = news_url + 'page/' + str(page) + '/'
+                soup = self.get_soup(page_url, decode=True)
+                articles = soup.select('article.news-item')
+                for article in articles:
+                    tag_date = article.find('span', class_='news-item__date')
+                    tag_title = article.find('span', class_='news-item__title')
+                    a_tag = article.find('a')
+                    if tag_date and tag_title and a_tag.has_attr('href'):
+                        if a_tag['href'].startswith('/'):
+                            article_id = self.PAGE_PREFIX + a_tag['href'][1:]
+                        else:
+                            article_id = self.PAGE_PREFIX + a_tag['href']
+                        date = self.format_news_date(tag_date.text.strip())
+                        if len(date) == 0:
+                            continue
+                        title = ''.join(tag_title.text.split())
+                        if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
+                            stop = True
+                            break
+                        results.append(self.create_news_log_object(date, title, article_id))
+                if stop:
+                    break
+                # pagination = soup.select('ul.c-pagenation li.c-pagenation__item')
+                # if len(pagination) == 0:
+                #     break
+                # if pagination[-1].has_attr('class') and 'is__current' in pagination[-1]['class']:
+                #     break
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log_from_news_log_object(result)
+                if process_result == 0:
+                    success_count += 1
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - News')
+            print(e)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('teaser_tw', 'https://pbs.twimg.com/media/E1GGa52UYAU7AJu?format=jpg&name=large')
+        self.download_image_list(folder)
+        self.download_by_template(folder, self.PAGE_PREFIX + 'img/teaser/visual_%s_pc.jpg', 2, 1)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        self.image_list = []
+        try:
+            json_obj = self.get_json(self.PAGE_PREFIX + 'character/chara_data.php')
+            if 'charas' in json_obj and isinstance(json_obj['charas'], list):
+                for chara in json_obj['charas']:
+                    if 'images' in chara and 'visual' in chara['images']:
+                        image_url = self.PAGE_PREFIX + chara['images']['visual']
+                        image_name = self.extract_image_name_from_url(image_url)
+                        self.add_to_image_list(image_name, image_url)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Character')
+            print(e)
+        self.download_image_list(folder)
 
 
 # Muv-Luv Alternative
