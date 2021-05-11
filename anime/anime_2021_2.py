@@ -1151,6 +1151,7 @@ class OddTaxiDownload(Spring2021AnimeDownload):
         if not json_obj:
             return
         self.download_episode_preview(json_obj)
+        self.download_news(json_obj)
 
     def download_episode_preview(self, json_obj=None):
         if not json_obj:
@@ -1175,6 +1176,35 @@ class OddTaxiDownload(Spring2021AnimeDownload):
                 raise Exception('Json Object is invalid')
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
+            print(e)
+
+    def download_news(self, json_obj=None):
+        if not json_obj:
+            json_obj = self.get_json(self.JSON_URL)
+        try:
+            if json_obj and 'news' in json_obj and isinstance(json_obj['news'], list):
+                news_obj = self.get_last_news_log_object()
+                results = []
+                for article in json_obj['news']:
+                    if not ('title' in article and 'date' in article and 'id' in article):
+                        continue
+                    date = article['date'][0:10].replace('-', '.')
+                    title = ''.join(article['title'].strip())
+                    article_id = self.PAGE_PREFIX + 'news/' + article['id']
+                    if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
+                        break
+                    results.append(self.create_news_log_object(date, title, article_id))
+                success_count = 0
+                for result in reversed(results):
+                    process_result = self.create_news_log_from_news_log_object(result)
+                    if process_result == 0:
+                        success_count += 1
+                if len(results) > 0:
+                    self.create_news_log_cache(success_count, results[0])
+            else:
+                raise Exception('Json Object is invalid')
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - News')
             print(e)
 
 
