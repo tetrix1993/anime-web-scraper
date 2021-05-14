@@ -1113,6 +1113,7 @@ class AquatopeDownload(Summer2021AnimeDownload):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
@@ -1167,6 +1168,8 @@ class AquatopeDownload(Summer2021AnimeDownload):
         self.add_to_image_list('teaser_tw', 'https://pbs.twimg.com/media/ErwuT7rVQAISak1?format=jpg&name=large')
         self.add_to_image_list('teaser', self.PAGE_PREFIX + 'wp/wp-content/themes/aquatope-teaser/_assets/images/kv/kv_pc@2x.jpg')
         self.add_to_image_list('kv1', 'https://pbs.twimg.com/media/EyR238pVgAQLNej?format=jpg&name=large')
+        self.add_to_image_list('kv2', self.PAGE_PREFIX + 'wp/wp-content/themes/aquatope-main/_assets/images/top/fv/fv_003@2x.jpg')
+        self.add_to_image_list('kv2_big', self.PAGE_PREFIX + 'wp/wp-content/uploads/2021/05/【白い砂のアクアトープ】第2弾キービジュアル.jpg')
         self.download_image_list(folder)
 
     def download_character(self):
@@ -1175,22 +1178,33 @@ class AquatopeDownload(Summer2021AnimeDownload):
         self.add_to_image_list('kukuru_design', self.PAGE_PREFIX + 'wp/wp-content/themes/aquatope-teaser/_assets/images/char/design/kukuru_design.png')
         self.add_to_image_list('fuuka_design', self.PAGE_PREFIX + 'wp/wp-content/themes/aquatope-teaser/_assets/images/char/design/fuuka_design.png')
         try:
-            soup = self.get_soup(self.PAGE_PREFIX)
-            articles = soup.find_all('article', class_='char--slider--block')
-            for article in articles:
-                pictures = article.find_all('picture')
-                for picture in pictures:
-                    source = picture.find('source')
-                    if source and source.has_attr('srcset'):
-                        try:
-                            image_url = source['srcset'].split(',')[-1].split(' ')[0]
-                            image_name = self.extract_image_name_from_url(image_url, with_extension=False)
-                            self.add_to_image_list(image_name, image_url)
-                        except:
-                            continue
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            images = soup.select('picture.chardata--photo__img img')
+            images = images + soup.select('picture.photo img')
+            for image in images:
+                image_url = image['src']
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + " - Character")
             print(e)
+        self.download_image_list(folder)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+
+        # Music
+        self.image_list = []
+        for i in ['music-op', 'music-ed']:
+            url = self.PAGE_PREFIX + i + '/'
+            soup = self.get_soup(url)
+            images = soup.select('picture img')
+            images = images + soup.select('article.data--block img')
+            for image in images:
+                if 'nowprinting' not in image['src']:
+                    image_url = image['src']
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
         self.download_image_list(folder)
 
 
