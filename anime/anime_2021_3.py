@@ -1170,11 +1170,13 @@ class AquatopeDownload(Summer2021AnimeDownload):
         try:
             results = []
             news_obj = self.get_last_news_log_object()
-            for page in range(1, 2, 1):
+            for page in range(1, 20, 1):
                 page_url = news_url
                 if page > 1:
                     page_url = news_url + 'page/' + str(page) + '/'
                 soup = self.get_soup(page_url, decode=True)
+                if len(soup) == 0:
+                    break
                 articles = soup.select('article.news--lineup--block')
                 for article in articles:
                     tag_date = article.find('dt')
