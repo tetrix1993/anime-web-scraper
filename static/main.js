@@ -5,6 +5,7 @@ let $logs = $('#logs');
 let $globalLogs = $('#global_logs');
 let $audios = $('#audios');
 let $videos = $('#videos');
+let $htmlFiles = $('#html_files');
 let $footer = $('#footer');
 let $imageSize = $('#imageSize');
 let imageSize = '24';
@@ -25,6 +26,7 @@ let getphp = function(dir) {
                 populateLogs(obj.logs);
                 populateAudios(obj.audios);
                 populateVideos(obj.videos);
+                populateHtmlFiles(obj.html);
                 showDivs(obj);
             },
             400: function(xhr, status, error) {
@@ -114,6 +116,16 @@ let populateVideos = function(videos) {
     $videos.html($content);
 }
 
+let populateHtmlFiles = function(htmlFiles) {
+    $htmlFiles.empty();
+    $content = '<h2>HTML Files</h2>';
+    for (i = 0; i < htmlFiles.length; i++)
+    {
+        $content += '<div class="container-log"><div class="container-filename-log">' + htmlFiles[i].name + '</div><div class="container-button-log"><button onclick="loadFrame(\'' + htmlFiles[i].htmlname + '\')">Load</button></div><div id="' + htmlFiles[i].htmlname + '" data-src="' + htmlFiles[i].path + '"></div></div>';
+    }
+    $htmlFiles.html($content);
+}
+
 let goToTop = function() {
     document.body.scrollTop = 0;
     document.documentElement.scrollTop = 0;
@@ -124,7 +136,7 @@ let scrollToTop = function(id) {
 }
 
 let hideDivs = function() {
-    list = [$subdirs, $images, $logs, $audios, $videos, $footer];
+    list = [$subdirs, $images, $logs, $audios, $videos, $htmlFiles, $footer];
     for (i = 0; i < list.length; i++)
         hideDiv(list[i]);
 }
@@ -139,7 +151,9 @@ let showDivs = function(obj) {
     showDiv(obj.logs, $logs);
     showDiv(obj.audios, $audios);
     showDiv(obj.videos, $videos);
-    if (obj.images.length > 0 || obj.logs.length > 1 || obj.audios.length > 0 || obj.videos.length > 0)
+    showDiv(obj.html, $htmlFiles);
+    if (obj.images.length > 0 || obj.logs.length > 1 || obj.audios.length > 0 || obj.videos.length > 0 || obj.html.length > 1 ||
+        (obj.logs.length > 0 && obj.html.length > 0))
         $footer.attr("hidden", false);
 }
 
@@ -167,6 +181,13 @@ let resizeImage = function() {
 let reloadFrame = function(id)
 {
     document.getElementById(id).src = document.getElementById(id).src;
+}
+
+let loadFrame = function(id)
+{
+    $frame = $('#' + id);
+    $frame.empty();
+    $frame.html('<iframe src="../static/get_logs.php?dir=' + $frame.attr('data-src') + '" width="100%" height="300px"></iframe>');
 }
 
 $(document).ready(function() {

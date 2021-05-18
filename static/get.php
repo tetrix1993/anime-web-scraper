@@ -18,7 +18,7 @@
         $audioTypes = array("mp3", "ogg", "wav");
         $videos = array();
         $videoTypes = array("mp4");
-
+        $htmlFiles = array();
 
         foreach ($files as $file)
         {
@@ -76,8 +76,17 @@
                 if (str_ends_with($file, '.'.$videoType))
                 {
                     array_push($videos, array("name"=>$file, "path"=>$filepath));
+                    $stop = true;
                     break;
                 }
+            }
+            if ($stop)
+                continue;
+
+            // HTML Sources
+            if (str_ends_with($file, '.html')) {
+                $htmlname = "html_".explode('.html', $file)[0];
+                array_push($htmlFiles, array("name"=>$file, "htmlname"=>$htmlname, "path"=>$filepath));
             }
         }
 
@@ -96,7 +105,7 @@
         $currDirName = $dirSplits[count($dirSplits) - 1];
 
         $output = array("dir"=>array("current"=>array("name"=>$currDirName, "path"=>$currDir), "parent"=>$parentDirs, "sub"=>$subDirs),
-            "images"=>$images, "logs"=>$logs, "audios"=>$audios, "videos"=>$videos);
+            "images"=>$images, "logs"=>$logs, "audios"=>$audios, "videos"=>$videos, "html"=>array_reverse($htmlFiles));
         echo @json_encode($output);
     } else {
         http_response_code(400);
