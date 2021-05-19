@@ -918,9 +918,11 @@ class PeachBoyRiversideDownload(Summer2021AnimeDownload):
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('kv1', self.PAGE_PREFIX + 'wp/wp-content/themes/peachboyriverside_main/_assets/images/top/fv/fv_pc.jpg')
-        self.download_image_list(folder)
+        #self.image_list = []
+        #self.add_to_image_list('kv1', self.PAGE_PREFIX + 'wp/wp-content/themes/peachboyriverside_main/_assets/images/top/fv/fv_pc.jpg')
+        #self.download_image_list(folder)
+        template = self.PAGE_PREFIX + 'wp/wp-content/themes/peachboyriverside_main/_assets/images/top/fv/fv_pc_%s.jpg'
+        self.download_by_template(folder, template, 3, 1)
 
     def download_character(self):
         folder = self.create_character_directory()
