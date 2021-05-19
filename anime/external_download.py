@@ -41,7 +41,7 @@ class AniverseMagazineDownload(ExternalDownload):
                 for i in range(self.num_of_pictures + 1):
                     if i == 0:
                         continue
-                    imageUrl = textBlocks[i].split("\"")[0]
+                    imageUrl = self.clear_resize_in_url(textBlocks[i].split("\"")[0])
                     filepathWithoutExtension = self.base_folder + "/" + self.episode + "_" + str(i)
                     self.download_image(imageUrl, filepathWithoutExtension, min_width=self.min_width)
             else:
@@ -53,6 +53,7 @@ class AniverseMagazineDownload(ExternalDownload):
                     image_url = 'https://' + item.find('img')['data-lazy-src'].split('https://')[-1]
                     if '300' in image_url[-12:]: # Skip unwanted images that are resized to 300px
                         continue
+                    image_url = self.clear_resize_in_url(image_url)
                     i += 1
                     if self.episode is None:
                         image_name = str(i).zfill(2)

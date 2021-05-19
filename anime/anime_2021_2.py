@@ -1224,6 +1224,7 @@ class OsamakeDownload(Spring2021AnimeDownload):
     def run(self):
         self.download_episode_preview()
         self.download_episode_preview_guess()
+        self.download_episode_preview_external()
         self.download_news()
         self.download_key_visual()
         self.download_character()
@@ -1262,6 +1263,11 @@ class OsamakeDownload(Spring2021AnimeDownload):
             template = self.PAGE_PREFIX + 'assets/story/%s_%s.jpg' % (str(i + 1), '%s')
             if not self.download_by_template(folder, template, 1):
                 break
+
+    def download_episode_preview_external(self):
+        jp_title = '幼なじみが絶対に負けないラブコメ'
+        AniverseMagazineScanner(jp_title, self.base_folder, last_episode=self.FINAL_EPISODE, min_width=800,
+                                end_date='20210408').run()
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + 'news.html'
