@@ -612,6 +612,7 @@ class HigehiroDownload(Spring2021AnimeDownload):
         folder = self.create_media_directory()
         self.image_list = []
         self.add_to_image_list('music_ed', 'https://pbs.twimg.com/media/ExEnxiIVoAkofD0?format=jpg&name=large')
+        self.add_to_image_list('bd_bonus_toranoana', 'https://pbs.twimg.com/media/E1pQfvrUcAA4P8z?format=jpg&name=large')
         self.download_image_list(folder)
 
         # Blu-ray
