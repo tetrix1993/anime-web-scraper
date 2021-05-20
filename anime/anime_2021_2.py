@@ -827,6 +827,7 @@ class IsekaiMaou2Download(Spring2021AnimeDownload):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -940,6 +941,25 @@ class IsekaiMaou2Download(Spring2021AnimeDownload):
             print("Error in running " + self.__class__.__name__ + " - Character")
             print(e)
         self.download_image_list(folder)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        for url in ['bd/store/', 'bd/', 'bd/vol1/']:
+            bd_url = self.PAGE_PREFIX + url
+            self.image_list = []
+            try:
+                soup = self.get_soup(bd_url)
+                images = soup.select('main.bd img')
+                for image in images:
+                    if 'nowprinting' in image['src']:
+                        continue
+                    image_url = self.clear_resize_in_url(image['src'])
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+            except Exception as e:
+                print("Error in running " + self.__class__.__name__ + " - Media %s" % url)
+                print(e)
+            self.download_image_list(folder)
 
 
 # Kyuukyoku Shinka Shita Full Dive RPG ga Genjitsu Yori mo Kusogee Dattara
