@@ -1365,24 +1365,20 @@ class TanmoshiDownload(Summer2021AnimeDownload):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'core_sys/images/main/cont/char/%s.png'
         for i in range(20):
-            name = str(i + 1).zfill(2) + '_a'
-            if self.is_image_exists(name, folder):
+            base_name = str(i + 1).zfill(2)
+            name = base_name + '_a'
+            if self.is_image_exists(name, folder) or self.is_image_exists(base_name, folder):
                 continue
             result = self.download_image(template % name, folder + '/' + name)
             if result == -1:
-                name = str(i + 1).zfill(2)
-                if self.is_image_exists(name, folder):
-                    continue
-                result2 = self.download_image(template % name, folder + '/' + name)
+                result2 = self.download_image(template % base_name, folder + '/' + base_name)
                 if result2 == -1:
                     return
             else:
-                name = str(i + 1).zfill(2) + '_b'
+                name = base_name + '_b'
                 if self.is_image_exists(name, folder):
                     continue
-                result2 = self.download_image(template % name, folder + '/' + name)
-                if result2 == -1:
-                    return
+                self.download_image(template % name, folder + '/' + name)
 
         # Old Logic
         #self.image_list = []
