@@ -9,6 +9,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 # Cheat Kusushi no Slow Life: Isekai ni Tsukurou Drugstore https://www.cheat-kusushi.jp/ #チート薬師 #スローライフ @cheat_kusushi
 # Deatte 5-byou de Battle https://dea5-anime.com/ #出会5 #dea5 @dea5_anime
 # Genjitsu Shugi Yuusha no Oukoku Saikenki https://genkoku-anime.com/ #現国アニメ @genkoku_info
+# Higurashi no Naku Koro ni Sotsu https://higurashianime.com/ #ひぐらし @higu_anime
 # Jahy-sama wa Kujikenai! https://jahysama-anime.com/ #ジャヒー様はくじけない @jahysama_anime
 # Kanojo mo Kanojo https://kanokano-anime.com/ #kanokano #カノジョも彼女 @kanokano_anime
 # Kobayashi-san Chi no Maid Dragon S https://maidragon.jp/2nd/ #maidragon @maidragon_anime
@@ -365,6 +366,65 @@ class GenkokuDownload(Summer2021AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + ' - Character')
             print(e)
+
+
+# Higurashi no Naku Koro ni Sotsu
+class HigurashiSotsuDownload(Summer2021AnimeDownload):
+    title = "Higurashi no Naku Koro ni Sotsu"
+    keywords = [title, "When They Cry"]
+    folder_name = 'higurashi-sotsu'
+
+    PAGE_PREFIX = 'https://higurashianime.com/'
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news.html'
+        try:
+            soup = self.get_soup(news_url, decode=True)
+            articles = soup.select('article')
+            news_obj = self.get_last_news_log_object()
+            results = []
+            for article in articles:
+                tag_title = article.find('div', 'title')
+                tag_year = article.find('div', 'year')
+                tag_day = article.find('div', 'day')
+                a_tag = article.find('a')
+                if tag_title and tag_year and tag_day and a_tag:
+                    article_id = self.PAGE_PREFIX + a_tag['href']
+                    date = self.format_news_date(tag_year.text.strip() + '.' + tag_day.text.strip())
+                    if len(date) == 0:
+                        continue
+                    title = ' '.join(tag_title.text.strip().split())
+                    if (news_obj and (news_obj['id'] == article_id or date < news_obj['date'])) or date < '2021.03.19':
+                        break
+                    results.append(self.create_news_log_object(date, title, article_id))
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log_from_news_log_object(result)
+                if process_result == 0:
+                    success_count += 1
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - News')
+            print(e)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('kv', self.PAGE_PREFIX + 'images/index2/v_003.jpg')
+        self.add_to_image_list('kv_tw', 'https://pbs.twimg.com/media/E1w6chJUUAAP723?format=jpg&name=medium')
+        self.download_image_list(folder)
 
 
 # Jahy-sama wa Kujikenai!
@@ -1340,8 +1400,6 @@ class TanmoshiDownload(Summer2021AnimeDownload):
         #    print("Error in running " + self.__class__.__name__ + " - Character")
         #    print(e)
         #self.download_image_list(folder)
-
-
 
     def download_media(self):
         folder = self.create_media_directory()

@@ -118,6 +118,7 @@ The premiere date for the anime listed here has not been announced.
 * [Cheat Kusushi no Slow Life: Isekai ni Tsukurou Drugstore](https://www.cheat-kusushi.jp/)
 * [Deatte 5-byou de Battle](https://dea5-anime.com/)
 * [Genjitsu Shugi Yuusha no Oukoku Saikenki](https://genkoku-anime.com/)
+* [Higurashi no Naku Koro ni Sotsu](https://higurashianime.com/)
 * [Jahy-sama wa Kujikenai!](https://jahysama-anime.com/)
 * [Kanojo mo Kanojo](https://kanokano-anime.com/)
 * [Kobayashi-san Chi no Maid Dragon S](https://maidragon.jp/2nd/)
