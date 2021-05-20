@@ -961,6 +961,17 @@ class IsekaiMaou2Download(Spring2021AnimeDownload):
                 print(e)
             self.download_image_list(folder)
 
+        # End Cards
+        self.image_list = []
+        self.add_to_image_list('ec01', 'https://pbs.twimg.com/media/Eyd3DA5UYAIzlMh?format=jpg&name=large')
+        self.add_to_image_list('ec02', 'https://pbs.twimg.com/media/EzB7zsDVIAEdVYr?format=jpg&name=large')
+        self.add_to_image_list('ec03', 'https://pbs.twimg.com/media/Ezl_TbfVIAEm0tk?format=jpg&name=large')
+        self.add_to_image_list('ec04', 'https://pbs.twimg.com/media/E0I6qaZVcAk4Ib-?format=jpg&name=large')
+        self.add_to_image_list('ec05', 'https://pbs.twimg.com/media/E0txjzzVUAcln7Y?format=jpg&name=large')
+        self.add_to_image_list('ec06', 'https://pbs.twimg.com/media/E1SHDB-VcAEE4Bw?format=jpg&name=large')
+        self.add_to_image_list('ec07', 'https://pbs.twimg.com/media/E12LK07UcAAKz6c?format=jpg&name=large')
+        self.download_image_list(folder)
+
 
 # Kyuukyoku Shinka Shita Full Dive RPG ga Genjitsu Yori mo Kusogee Dattara
 class FullDiveRPGDownload(Spring2021AnimeDownload):
