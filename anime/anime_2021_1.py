@@ -1145,13 +1145,14 @@ class MushokuTenseiDownload(Winter2021AnimeDownload):
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
-        image_objs = [
-            {'name': 'teaser', 'url': 'https://pbs.twimg.com/media/EHKOHakU4AUq-A3?format=jpg&name=large'},
-            {'name': 'kv1', 'url': 'https://pbs.twimg.com/media/Ea3MiJFU0AETcOY?format=jpg&name=4096x4096'},
-            {'name': 'kv2', 'url': self.PAGE_PREFIX + '/wp-content/themes/mushoku_re/img/index/img_hero01.jpg'},
-            {'name': 'bs11_poster', 'url': 'https://pbs.twimg.com/media/Ep9v3c4U8AISWC6?format=jpg&name=medium'},
-        ]
-        self.download_image_objects(image_objs, folder)
+        self.image_list = []
+        self.add_to_image_list('teaser', 'https://pbs.twimg.com/media/EHKOHakU4AUq-A3?format=jpg&name=large')
+        self.add_to_image_list('kv1', 'https://pbs.twimg.com/media/Ea3MiJFU0AETcOY?format=jpg&name=4096x4096')
+        self.add_to_image_list('kv2', self.PAGE_PREFIX + '/wp-content/themes/mushoku_re/img/index/img_hero01.jpg')
+        self.add_to_image_list('bs11_poster', 'https://pbs.twimg.com/media/Ep9v3c4U8AISWC6?format=jpg&name=medium')
+        self.add_to_image_list('kv3', self.PAGE_PREFIX + '/wp-content/themes/mushoku_re/img/index/img_hero03.jpg')
+        self.add_to_image_list('kv3_tw', 'https://pbs.twimg.com/media/E1vURM6VUAA24JR?format=jpg&name=900x900')
+        self.download_image_list(folder)
 
     def download_character(self):
         folder = self.create_character_directory()
