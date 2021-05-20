@@ -9,6 +9,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 # Muv-Luv Alternative https://muv-luv-alternative-anime.com/ #マブラヴ #マブラヴアニメ #muvluv @Muv_Luv_A_anime
 # Saihate no Paladin https://farawaypaladin.com/ #最果てのパラディン #faraway_paladin @faraway_paladin
 # Senpai ga Uzai Kouhai no Hanashi https://senpaiga-uzai-anime.com/ #先輩がうざい後輩の話 @uzai_anime
+# Shin no Nakama ja Nai to Yuusha no Party wo Oidasareta node, Henkyou de Slow Life suru Koto ni Shimashita https://shinnonakama.com/ #真の仲間 @shinnonakama_tv
 # Taishou Otome Otogibanashi http://taisho-otome.com/ #大正オトメ #昭和オトメ @otome_otogi
 # Tate no Yuusha S2 http://shieldhero-anime.jp/ #shieldhero #盾の勇者の成り上がり @shieldheroanime
 # Yuuki Yuuna wa Yuusha de Aru: Dai Mankai no Shou https://yuyuyu.tv/season2/ #yuyuyu @anime_yukiyuna
@@ -271,6 +272,66 @@ class SenpaigaUzaiDownload(Fall2021AnimeDownload):
         self.add_to_image_list('main-visual', self.PAGE_PREFIX + 'img/top/main-visual.png')
         self.add_to_image_list('visual', 'https://pbs.twimg.com/media/Ez4yUbfVkAMPgny?format=jpg&name=4096x4096')
         self.download_image_list(folder)
+
+
+# Shin no Nakama ja Nai to Yuusha no Party wo Oidasareta node, Henkyou de Slow Life suru Koto ni Shimashita
+class ShinnoNakamaDownload(Fall2021AnimeDownload):
+    title = 'Shin no Nakama ja Nai to Yuusha no Party wo Oidasareta node, Henkyou de Slow Life suru Koto ni Shimashita'
+    keywords = [title, 'Shinnonakama', "Banished From The Heroes' Party"]
+    folder_name = 'shinnonakama'
+
+    PAGE_PREFIX = 'https://shinnonakama.com/'
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        try:
+            soup = self.get_soup(news_url, decode=True)
+            lis = soup.select('ul.newsListsWrap li')
+            news_obj = self.get_last_news_log_object()
+            results = []
+            for li in lis:
+                tag_date = li.find('p', class_='update_time')
+                tag_title = li.find('p', class_='update_ttl')
+                a_tag = li.find('a')
+                if tag_date and tag_title and a_tag and a_tag.has_attr('href'):
+                    article_id = news_url + a_tag['href'].replace('./', '')
+                    date = tag_date.text.strip()
+                    title = tag_title.text.strip()
+                    if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
+                        break
+                    results.append(self.create_news_log_object(date, title, article_id))
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log_from_news_log_object(result)
+                if process_result == 0:
+                    success_count += 1
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - News')
+            print(e)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('teaser', 'https://ogre.natalie.mu/media/news/comic/2021/0120/shin_no_nakama_teaser.jpg')
+        self.add_to_image_list('kv2_tw', 'https://pbs.twimg.com/media/E1zuDLNVcAcaAwX?format=jpg&name=4096x4096')
+        self.add_to_image_list('kv2', self.PAGE_PREFIX + 'assets/img/top/kv2.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'assets/img/top/character/chara_%s.png'
+        self.download_by_template(folder, template, 1, 1)
 
 
 # Taishou Otome Otogibanashi

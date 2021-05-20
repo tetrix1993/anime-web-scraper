@@ -108,6 +108,7 @@ The premiere date for the anime listed here has not been announced.
 * [Muv-Luv Alternative](https://muv-luv-alternative-anime.com/)
 * [Saihate no Paladin](https://farawaypaladin.com/)
 * [Senpai ga Uzai Kouhai no Hanashi](https://senpaiga-uzai-anime.com/)
+* [Shin no Nakama ja Nai to Yuusha no Party wo Oidasareta node, Henkyou de Slow Life suru Koto ni Shimashita](https://shinnonakama.com/)
 * [Taishou Otome Otogibanashi](http://taisho-otome.com/)
 * [Tate no Yuusha no Nariagari 2nd Season](http://shieldhero-anime.jp)
 * [Yuuki Yuuna wa Yuusha de Aru: Dai Mankai no Shou](https://yuyuyu.tv/season2/)
@@ -127,7 +128,6 @@ The premiere date for the anime listed here has not been announced.
 * [Peach Boy Riverside](https://peachboyriverside.com/)
 * [Seirei Gensouki](https://seireigensouki.com/)
 * [Sekai Saikou no Ansatsusha, Isekai Kizoku ni Tensei suru](https://ansatsu-kizoku.jp/)
-* [Shin no Nakama ja Nai to Yuusha no Party wo Oidasareta node, Henkyou de Slow Life suru Koto ni Shimashita](https://shinnonakama.com/)
 * [Shiroi Suna no Aquatope](https://aquatope-anime.com/)
 * [Tantei wa Mou, Shindeiru.](https://tanmoshi-anime.jp/)
 

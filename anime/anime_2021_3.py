@@ -19,7 +19,6 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 # Peach Boy Riverside https://peachboyriverside.com/ #ピーチボーイリバーサイド @peachboy_anime
 # Seirei Gensouki https://seireigensouki.com/ #精霊幻想記 @seireigensouki
 # Sekai Saikou no Ansatsusha, Isekai Kizoku ni Tensei suru https://ansatsu-kizoku.jp/ #暗殺貴族 @ansatsu_kizoku
-# Shin no Nakama ja Nai to Yuusha no Party wo Oidasareta node, Henkyou de Slow Life suru Koto ni Shimashita https://shinnonakama.com/ #真の仲間 @shinnonakama_tv
 # Shiroi Suna no Aquatope https://aquatope-anime.com/ #白い砂のアクアトープ @aquatope_anime
 # Tantei wa Mou, Shindeiru. https://tanmoshi-anime.jp/ #たんもし @tanteiwamou_
 
@@ -1090,58 +1089,6 @@ class AnsatsuKizokuDownload(Summer2021AnimeDownload):
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         self.add_to_image_list('teaser', 'https://pbs.twimg.com/media/Ev27c7bUUAIM_47?format=jpg&name=medium')
-        self.download_image_list(folder)
-
-
-# Shin no Nakama ja Nai to Yuusha no Party wo Oidasareta node, Henkyou de Slow Life suru Koto ni Shimashita
-class ShinnoNakamaDownload(Summer2021AnimeDownload):
-    title = 'Shin no Nakama ja Nai to Yuusha no Party wo Oidasareta node, Henkyou de Slow Life suru Koto ni Shimashita'
-    keywords = [title, 'Shinnonakama', "Banished From The Heroes' Party"]
-    folder_name = 'shinnonakama'
-
-    PAGE_PREFIX = 'https://shinnonakama.com/'
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_news()
-        self.download_key_visual()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_news(self):
-        news_url = self.PAGE_PREFIX + 'news/'
-        try:
-            soup = self.get_soup(news_url, decode=True)
-            lis = soup.select('ul.newsListsWrap li')
-            news_obj = self.get_last_news_log_object()
-            results = []
-            for li in lis:
-                tag_date = li.find('p', class_='update_time')
-                tag_title = li.find('p', class_='update_ttl')
-                a_tag = li.find('a')
-                if tag_date and tag_title and a_tag and a_tag.has_attr('href'):
-                    article_id = news_url + a_tag['href'].replace('./', '')
-                    date = tag_date.text.strip()
-                    title = tag_title.text.strip()
-                    if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
-                        break
-                    results.append(self.create_news_log_object(date, title, article_id))
-            success_count = 0
-            for result in reversed(results):
-                process_result = self.create_news_log_from_news_log_object(result)
-                if process_result == 0:
-                    success_count += 1
-            if len(results) > 0:
-                self.create_news_log_cache(success_count, results[0])
-        except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - News')
-            print(e)
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('teaser', 'https://ogre.natalie.mu/media/news/comic/2021/0120/shin_no_nakama_teaser.jpg')
         self.download_image_list(folder)
 
 
