@@ -1281,6 +1281,7 @@ class TanmoshiDownload(Summer2021AnimeDownload):
         self.add_to_image_list('kv2', 'https://pbs.twimg.com/media/Eug1UGwUYAcgxON?format=jpg&name=4096x4096')
         self.add_to_image_list('kv3', 'https://pbs.twimg.com/media/Ew13JI0UYAMwHm6?format=jpg&name=4096x4096')
         self.add_to_image_list('kv4', 'https://pbs.twimg.com/media/EzVZyckVIAQsrG3?format=jpg&name=4096x4096')
+        self.add_to_image_list('kv5', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv5.png')
         template = self.PAGE_PREFIX + 'core_sys/images/main/tz/%s.png'
         for name in ['umbouzu', 'mugiko', 'poni', 'moyashi']:
             image_name = 'illust_' + name
@@ -1302,21 +1303,45 @@ class TanmoshiDownload(Summer2021AnimeDownload):
 
     def download_character(self):
         folder = self.create_character_directory()
-        self.image_list = []
-        try:
-            soup = self.get_soup(self.PAGE_PREFIX)
-            wraps = soup.find_all('div', class_='charListWrap')
-            for wrap in wraps:
-                images = wrap.find_all('img')
-                for image in images:
-                    if image.has_attr('src'):
-                        image_url = self.PAGE_PREFIX + image['src']
-                        image_name = self.extract_image_name_from_url(image_url, with_extension=False)
-                        self.add_to_image_list(image_name, image_url)
-        except Exception as e:
-            print("Error in running " + self.__class__.__name__ + " - Character")
-            print(e)
-        self.download_image_list(folder)
+        template = self.PAGE_PREFIX + 'core_sys/images/main/cont/char/%s.png'
+        for i in range(20):
+            name = str(i + 1).zfill(2) + '_a'
+            if self.is_image_exists(name, folder):
+                continue
+            result = self.download_image(template % name, folder + '/' + name)
+            if result == -1:
+                name = str(i + 1).zfill(2)
+                if self.is_image_exists(name, folder):
+                    continue
+                result2 = self.download_image(template % name, folder + '/' + name)
+                if result2 == -1:
+                    return
+            else:
+                name = str(i + 1).zfill(2) + '_b'
+                if self.is_image_exists(name, folder):
+                    continue
+                result2 = self.download_image(template % name, folder + '/' + name)
+                if result2 == -1:
+                    return
+
+        # Old Logic
+        #self.image_list = []
+        #try:
+        #    soup = self.get_soup(self.PAGE_PREFIX)
+        #    wraps = soup.find_all('div', class_='charListWrap')
+        #    for wrap in wraps:
+        #        images = wrap.find_all('img')
+        #        for image in images:
+        #            if image.has_attr('src'):
+        #                image_url = self.PAGE_PREFIX + image['src']
+        #                image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+        #                self.add_to_image_list(image_name, image_url)
+        #except Exception as e:
+        #    print("Error in running " + self.__class__.__name__ + " - Character")
+        #    print(e)
+        #self.download_image_list(folder)
+
+
 
     def download_media(self):
         folder = self.create_media_directory()
