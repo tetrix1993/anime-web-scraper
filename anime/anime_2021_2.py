@@ -2314,9 +2314,9 @@ class SuperCubDownload(Spring2021AnimeDownload):
             is_success = False
             if self.is_image_exists(episode + '_1'):
                 continue
-            first = 10 + i
-            second = 38 + 6 * i
-            third = 52 + self.IMAGES_PER_EPISODE * i
+            first = 10 + (i - 1)
+            second = 38 + self.IMAGES_PER_EPISODE * (i - 1)
+            third = 52 + self.IMAGES_PER_EPISODE * (i - 1)
             for j in range(self.IMAGES_PER_EPISODE):
                 image_url = template % (str(first).zfill(8), str(second).zfill(8), str(third + j).zfill(8))
                 image_name = episode + '_' + str(j + 1)
