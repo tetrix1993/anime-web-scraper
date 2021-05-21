@@ -556,6 +556,10 @@ class MainDownload:
         return {'date': date, 'title': title, 'id': _id}
 
     @staticmethod
+    def format_news_title(title):
+        return ' '.join(title.strip().split())
+
+    @staticmethod
     def format_news_date(news_date):
         output_date_str = ''
         try:

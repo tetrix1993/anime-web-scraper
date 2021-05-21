@@ -18,7 +18,6 @@ from anime.main_download import MainDownload
 # Shikkakumon no Saikyou Kenja https://shikkakumon.com/ #失格紋 @shikkakumon_PR
 # Shokei Shoujo no Virgin Road http://virgin-road.com/ #処刑少女 #shokei_anime @virginroad_GA
 # Shuumatsu no Harem https://end-harem-anime.com/ #終末のハーレム @harem_official_
-# Slow Loop https://slowlooptv.com/ #slowloop @slowloop_tv
 # Tensai Ouji no Akaji Kokka Saisei Jutsu: Souda, Baikoku shiyou https://tensaiouji-anime.com/ #天才王子の赤字国家再生術 @tensaiouji_PR
 # Tsuki to Laika to Nosferatu https://tsuki-laika-nosferatu.com/ #月とライカ @LAIKA_anime
 # Vlad Love https://www.vladlove.com/index.html #ぶらどらぶ #vladlove @VLADLOVE_ANIME
@@ -979,32 +978,6 @@ class ShuumatsuNoHaremDownload(UnconfirmedDownload):
                     if i > 0:
                         f.write(';')
                     f.write(processed[i])
-
-
-# Slow Loop
-class SlowLoopDownload(UnconfirmedDownload):
-    title = 'Slow Loop'
-    keywords = [title]
-    folder_name = 'slow-loop'
-
-    PAGE_PREFIX = 'https://slowlooptv.com/'
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_key_visual()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('announce', 'https://pbs.twimg.com/media/Ep5-SoLUUAAHq36?format=jpg&name=4096x4096')
-        self.add_to_image_list('announce_2', self.PAGE_PREFIX + 'images/top/v_001.jpg')
-        self.download_image_list(folder)
 
 
 # Tensai Ouji no Akaji Kokka Saisei Jutsu: Souda, Baikoku shiyou

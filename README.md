@@ -95,13 +95,13 @@ The premiere date for the anime listed here has not been announced.
 * [Shikkakumon no Saikyou Kenja](https://shikkakumon.com/)
 * [Shokei Shoujo no Virgin Road](http://virgin-road.com/)
 * [Shuumatsu no Harem](https://end-harem-anime.com/)
-* [Slow Loop](https://slowlooptv.com/)
 * [Tensai Ouji no Akaji Kokka Saisei Jutsu: Souda, Baikoku shiyou](https://tensaiouji-anime.com/)
 * [Tsuki to Laika to Nosferatu](https://tsuki-laika-nosferatu.com/)
 * [Yama no Susume: Next Summit](https://yamanosusume-ns.com/)
 
 ### Winter 2022 Anime
 * [Arifureta Shokugyou de Sekai Saikyou 2nd Season](https://arifureta.com/)
+* [Slow Loop](https://slowlooptv.com/)
 
 ### Fall 2021 Anime
 * [Komi-san wa, Komyushou desu.](https://komisan-official.com/)

@@ -6,6 +6,8 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 
 
 # Arifureta Shokugyou de Sekai Saikyou 2nd Season https://arifureta.com/ #ありふれた #ARIFURETA
+# Slow Loop https://slowlooptv.com/ #slowloop @slowloop_tv
+
 
 # Fall 2021 Anime
 class Winter2022AnimeDownload(MainDownload):
@@ -87,4 +89,64 @@ class Arifureta2Download(Winter2022AnimeDownload):
         self.add_to_image_list('mainvisual08', self.PAGE_PREFIX + 'wp-content/themes/arifureta-v3.2/library/img/main_visual/mainvisual08.png')
         self.add_to_image_list('kv1', self.PAGE_PREFIX + 'wp-content/uploads/2021/04/02.jpg')
         self.add_to_image_list('kv1_art', self.PAGE_PREFIX + 'wp-content/uploads/2021/04/03.jpg')
+        self.download_image_list(folder)
+
+
+# Slow Loop
+class SlowLoopDownload(Winter2022AnimeDownload):
+    title = 'Slow Loop'
+    keywords = [title]
+    folder_name = 'slow-loop'
+
+    PAGE_PREFIX = 'https://slowlooptv.com/'
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news.html'
+        try:
+            soup = self.get_soup(news_url, decode=True)
+            articles = soup.select('article')
+            news_obj = self.get_last_news_log_object()
+            results = []
+            for article in articles:
+                tag_title = article.find('div', class_='news_list_title')
+                tag_date = article.find('div', class_='news_list_day')
+                a_tag = article.find('a')
+                if tag_title and tag_date and a_tag and a_tag.has_attr('href'):
+                    article_id = self.PAGE_PREFIX + a_tag['href']
+                    title = self.format_news_title(tag_title.text)
+                    date = self.format_news_date(tag_date.text.strip().replace('/', '.'))
+                    if len(date) == 0:
+                        continue
+                    if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
+                        break
+                    results.append(self.create_news_log_object(date, title, article_id))
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log_from_news_log_object(result)
+                if process_result == 0:
+                    success_count += 1
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - News')
+            print(e)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('announce', 'https://pbs.twimg.com/media/Ep5-SoLUUAAHq36?format=jpg&name=4096x4096')
+        self.add_to_image_list('announce_2', self.PAGE_PREFIX + 'images/top/v_001.jpg')
+        self.add_to_image_list('teaser', self.PAGE_PREFIX + 'images/top/v_002_02.jpg')
+        self.add_to_image_list('teaser_tw', 'https://pbs.twimg.com/media/E15YSghVgAIdgJf?format=jpg&name=medium')
         self.download_image_list(folder)

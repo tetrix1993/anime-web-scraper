@@ -66,6 +66,7 @@ def migrate_folders():
     migrate_folder_by_name(UNCONFIRMED_DIR, '2021-3', 'mahouka-yuutousei')
     migrate_folder_by_name('2021-3', '2021-4', 'shinnonakama')
     migrate_folder_by_name('2021-3', '2021-4', 'ansatsu-kizoku')
+    migrate_folder_by_name(UNCONFIRMED_DIR, '2022-1', 'slow-loop')
     migrate_external_folder()
 
 
