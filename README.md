@@ -107,6 +107,7 @@ The premiere date for the anime listed here has not been announced.
 * [Komi-san wa, Komyushou desu.](https://komisan-official.com/)
 * [Muv-Luv Alternative](https://muv-luv-alternative-anime.com/)
 * [Saihate no Paladin](https://farawaypaladin.com/)
+* [Sekai Saikou no Ansatsusha, Isekai Kizoku ni Tensei suru](https://ansatsu-kizoku.jp/)
 * [Senpai ga Uzai Kouhai no Hanashi](https://senpaiga-uzai-anime.com/)
 * [Shin no Nakama ja Nai to Yuusha no Party wo Oidasareta node, Henkyou de Slow Life suru Koto ni Shimashita](https://shinnonakama.com/)
 * [Taishou Otome Otogibanashi](http://taisho-otome.com/)
@@ -128,7 +129,6 @@ The premiere date for the anime listed here has not been announced.
 * [Otome Game no Hametsu Flag shika Nai Akuyaku Reijou ni Tensei shiteshimatta... X](https://hamehura-anime.com/)
 * [Peach Boy Riverside](https://peachboyriverside.com/)
 * [Seirei Gensouki](https://seireigensouki.com/)
-* [Sekai Saikou no Ansatsusha, Isekai Kizoku ni Tensei suru](https://ansatsu-kizoku.jp/)
 * [Shiroi Suna no Aquatope](https://aquatope-anime.com/)
 * [Tantei wa Mou, Shindeiru.](https://tanmoshi-anime.jp/)
 
