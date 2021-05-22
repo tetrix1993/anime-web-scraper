@@ -1,5 +1,7 @@
 let $navbar = $('#navbar');
 let $subdirs = $('#subdirs');
+let $title = $('#title');
+let $twitterData = $('#twitter_data');
 let $images = $('#images');
 let $logs = $('#logs');
 let $globalLogs = $('#global_logs');
@@ -27,6 +29,11 @@ let getphp = function(dir) {
                 populateAudios(obj.audios);
                 populateVideos(obj.videos);
                 populateHtmlFiles(obj.html);
+                // Meta Data
+                if ('title' in obj.meta)
+                    populateTitle(obj.meta);
+                if ('twitter' in obj.meta || 'hashtags' in obj.meta)
+                    populateTwitterData(obj.meta.twitter, obj.meta.hashtags);
                 showDivs(obj);
             },
             400: function(xhr, status, error) {
@@ -56,11 +63,9 @@ let populateNavbar = function(dirs) {
 
 let populateSubdirs = function(dirs) {
     $subdirs.empty();
-    $content = 'Sub-directories: ';
     if (dirs.length == 0)
-    {
         return;
-    }
+    $content = 'Sub-directories: ';
 
     for (i = 0; i < dirs.length; i++)
     {
@@ -69,6 +74,44 @@ let populateSubdirs = function(dirs) {
         $content += '<a href="#" onclick="getphp(\'' + dirs[i].path + '\')">' + dirs[i].name + '</a>';
     }
     $subdirs.html($content);
+}
+
+let populateTitle = function(meta) {
+    $title.empty();
+    if (meta.title.length == 0)
+        return;
+    content = 'Title: '
+    if ('website' in meta && meta.website.length > 0)
+        content += '<a href="' + meta.website + '" target="_blank">' + meta.title + '</a>';
+    else
+        content += meta.title;
+    $title.html(content);
+}
+
+let populateTwitterData = function(twitter, hashtags) {
+    $twitterData.empty();
+    if (hashtags.length == 0 || twitter.length == 0)
+        return;
+    content = 'Twitter: ';
+    let twitterContent = '';
+    let hashtagsContent = '';
+    for (i = 0; i < twitter.length; i++)
+    {
+        if (i > 0)
+            twitterContent += " ";
+        twitterContent += '<a href="https://twitter.com/' + twitter[i] + '" target="_blank">@' + twitter[i] + '</a>';
+    }
+    for (i = 0; i < hashtags.length; i++)
+    {
+        if (i > 0)
+            hashtagsContent += " ";
+        hashtagsContent += '<a href="https://twitter.com/hashtag/' + hashtags[i] + '" target="_blank">#' + hashtags[i] + '</a>';
+    }
+    content += twitterContent;
+    if (twitterContent.length > 0 && hashtagsContent.length > 0)
+        content += " | ";
+    content += hashtagsContent;
+    $twitterData.html(content);
 }
 
 let populateImages = function(images) {
@@ -136,7 +179,7 @@ let scrollToTop = function(id) {
 }
 
 let hideDivs = function() {
-    list = [$subdirs, $images, $logs, $audios, $videos, $htmlFiles, $footer];
+    list = [$subdirs, $title, $twitterData, $images, $logs, $audios, $videos, $htmlFiles, $footer];
     for (i = 0; i < list.length; i++)
         hideDiv(list[i]);
 }
@@ -155,6 +198,12 @@ let showDivs = function(obj) {
     if (obj.images.length > 0 || obj.logs.length > 1 || obj.audios.length > 0 || obj.videos.length > 0 || obj.html.length > 1 ||
         (obj.logs.length > 0 && obj.html.length > 0))
         $footer.attr("hidden", false);
+
+    // Meta Data
+    if ('title' in obj.meta)
+        $title.attr('hidden', false);
+    if ('twitter' in obj.meta || 'hashtags' in obj.meta)
+        $twitterData.attr('hidden', false);
 }
 
 let showDiv = function(list, $elem) {

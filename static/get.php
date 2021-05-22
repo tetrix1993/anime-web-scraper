@@ -19,7 +19,9 @@
         $videos = array();
         $videoTypes = array("mp4");
         $htmlFiles = array();
+        $meta = new stdClass();
 
+        $hasCheckMeta = false;
         foreach ($files as $file)
         {
             if (str_starts_with($file, '.'))
@@ -92,6 +94,7 @@
 
         $dirSplits = explode('/', $currDir);
         $parentDir = "";
+        $i = 0;
         foreach ($dirSplits as $dirSplit)
         {
             if (strlen($parentDir) > 0) {
@@ -100,12 +103,18 @@
             $parentDir = $parentDir.$dirSplit;
             if ($dirSplit == "..")
                 continue;
+            $i++;
+            if (!$hasCheckMeta && $i == 3) {
+                if (file_exists($parentDir.'/log/meta.json'))
+                    $meta = @json_decode(@file_get_contents($parentDir.'/log/meta.json'));
+                $hasCheckMeta = true;
+            }
             array_push($parentDirs, array("name"=>$dirSplit, "path"=>$parentDir));
         }
         $currDirName = $dirSplits[count($dirSplits) - 1];
 
         $output = array("dir"=>array("current"=>array("name"=>$currDirName, "path"=>$currDir), "parent"=>$parentDirs, "sub"=>$subDirs),
-            "images"=>$images, "logs"=>$logs, "audios"=>$audios, "videos"=>$videos, "html"=>array_reverse($htmlFiles));
+            "images"=>$images, "logs"=>$logs, "audios"=>$audios, "videos"=>$videos, "html"=>array_reverse($htmlFiles), "meta"=>$meta);
         echo @json_encode($output);
     } else {
         http_response_code(400);

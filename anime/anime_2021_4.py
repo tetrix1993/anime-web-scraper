@@ -30,9 +30,12 @@ class Fall2021AnimeDownload(MainDownload):
 class KomisanDownload(Fall2021AnimeDownload):
     title = 'Komi-san wa, Komyushou desu.'
     keywords = [title, 'Comyushou', "Komi Can't Communicate", 'komisan']
+    website = 'https://komisan-official.com/'
+    twitter = 'comisanvote'
+    hashtags = ['komisan', '古見さん']
     folder_name = 'komisan'
 
-    PAGE_PREFIX = 'https://komisan-official.com/'
+    PAGE_PREFIX = website
 
     def run(self):
         self.download_episode_preview()
@@ -118,9 +121,12 @@ class KomisanDownload(Fall2021AnimeDownload):
 class MuvLuvAlternativeDownload(Fall2021AnimeDownload):
     title = 'Muv-Luv Alternative'
     keywords = [title]
+    website = 'https://muv-luv-alternative-anime.com/'
+    twitter = 'Muv_Luv_A_anime'
+    hashtags = ['muvluv', 'マブラヴ', 'マブラヴアニメ']
     folder_name = 'muv-luv-alt'
 
-    PAGE_PREFIX = 'https://muv-luv-alternative-anime.com/'
+    PAGE_PREFIX = website
 
     def __init__(self):
         super().__init__()
@@ -188,9 +194,12 @@ class MuvLuvAlternativeDownload(Fall2021AnimeDownload):
 class SaihatenoPaladinDownload(Fall2021AnimeDownload):
     title = 'Saihate no Paladin'
     keywords = [title, 'The Faraway Paladin']
+    website = 'https://farawaypaladin.com/'
+    twitter = 'faraway_paladin'
+    hashtags = ['faraway_paladin', '最果てのパラディン']
     folder_name = 'saihate-no-paladin'
 
-    PAGE_PREFIX = 'https://farawaypaladin.com/'
+    PAGE_PREFIX = website
 
     def __init__(self):
         super().__init__()
@@ -220,9 +229,12 @@ class SaihatenoPaladinDownload(Fall2021AnimeDownload):
 class AnsatsuKizokuDownload(Fall2021AnimeDownload):
     title = 'Sekai Saikou no Ansatsusha, Isekai Kizoku ni Tensei suru'
     keywords = [title, "The world's best assassin, To reincarnate in a different world aristocrat"]
+    website = 'https://ansatsu-kizoku.jp/'
+    twitter = 'ansatsu_kizoku'
+    hashtags = '暗殺貴族'
     folder_name = 'ansatsu-kizoku'
 
-    PAGE_PREFIX = 'https://ansatsu-kizoku.jp/'
+    PAGE_PREFIX = website
 
     def __init__(self):
         super().__init__()
@@ -280,9 +292,12 @@ class AnsatsuKizokuDownload(Fall2021AnimeDownload):
 class SenpaigaUzaiDownload(Fall2021AnimeDownload):
     title = 'Senpai ga Uzai Kouhai no Hanashi'
     keywords = [title]
+    website = 'https://senpaiga-uzai-anime.com/'
+    twitter = 'uzai_anime'
+    hashtags = '先輩がうざい後輩の話'
     folder_name = 'senpaiga-uzai'
 
-    PAGE_PREFIX = 'https://senpaiga-uzai-anime.com/'
+    PAGE_PREFIX = website
 
     def __init__(self):
         super().__init__()
@@ -339,9 +354,12 @@ class SenpaigaUzaiDownload(Fall2021AnimeDownload):
 class ShinnoNakamaDownload(Fall2021AnimeDownload):
     title = 'Shin no Nakama ja Nai to Yuusha no Party wo Oidasareta node, Henkyou de Slow Life suru Koto ni Shimashita'
     keywords = [title, 'Shinnonakama', "Banished From The Heroes' Party"]
+    website = 'https://shinnonakama.com/'
+    twitter = 'shinnonakama_tv'
+    hashtags = '真の仲間'
     folder_name = 'shinnonakama'
 
-    PAGE_PREFIX = 'https://shinnonakama.com/'
+    PAGE_PREFIX = website
 
     def run(self):
         self.download_episode_preview()
@@ -399,9 +417,12 @@ class ShinnoNakamaDownload(Fall2021AnimeDownload):
 class TaishoOtomeDownload(Fall2021AnimeDownload):
     title = 'Taishou Otome Otogibanashi'
     keywords = [title, 'Taisho Otome']
+    website = 'http://taisho-otome.com/'
+    twitter = 'otome_otogi'
+    hashtags = ['大正オトメ', '昭和オトメ']
     folder_name = 'taisho-otome'
 
-    PAGE_PREFIX = 'http://taisho-otome.com/'
+    PAGE_PREFIX = website
 
     def __init__(self):
         super().__init__()
@@ -465,9 +486,12 @@ class TaishoOtomeDownload(Fall2021AnimeDownload):
 class TateNoYuusha2Download(Fall2021AnimeDownload):
     title = "Tate no Yuusha no Nariagari 2nd Season"
     keywords = [title, "The Rising of the Shield Hero"]
+    website = "http://shieldhero-anime.jp"
+    twitter = 'shieldheroanime'
+    hashtags = ['shieldhero', '盾の勇者の成り上がり']
     folder_name = 'tate-no-yuusha2'
 
-    PAGE_PREFIX = "http://shieldhero-anime.jp"
+    PAGE_PREFIX = website
 
     def __init__(self):
         super().__init__()
@@ -524,9 +548,12 @@ class TateNoYuusha2Download(Fall2021AnimeDownload):
 class Yuyuyu3Download(Fall2021AnimeDownload):
     title = "Yuuki Yuuna wa Yuusha de Aru: Dai Mankai no Shou"
     keywords = [title, "Yuyuyu", "Yuki Yuna is a Hero"]
+    website = 'https://yuyuyu.tv/season2/'
+    twitter = 'anime_yukiyuna'
+    hashtags = 'yuyuyu'
     folder_name = 'yuyuyu3'
 
-    PAGE_PREFIX = 'https://yuyuyu.tv/season2/'
+    PAGE_PREFIX = website
 
     def __init__(self):
         super().__init__()

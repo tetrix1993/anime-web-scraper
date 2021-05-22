@@ -5,7 +5,7 @@ from datetime import datetime
 from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 
 
-# Arifureta Shokugyou de Sekai Saikyou 2nd Season https://arifureta.com/ #ありふれた #ARIFURETA
+# Arifureta Shokugyou de Sekai Saikyou 2nd Season https://arifureta.com/ #ありふれた #ARIFURETA @ARIFURETA_info
 # Slow Loop https://slowlooptv.com/ #slowloop @slowloop_tv
 
 
@@ -23,9 +23,12 @@ class Winter2022AnimeDownload(MainDownload):
 class Arifureta2Download(Winter2022AnimeDownload):
     title = "Arifureta Shokugyou de Sekai Saikyou 2nd Season"
     keywords = [title, "Arifureta: From Commonplace to World's Strongest 2nd Season"]
+    website = 'https://arifureta.com/'
+    twitter = 'ARIFURETA_info'
+    hashtags = ['ARIFURETA', 'ありふれた']
     folder_name = 'arifureta2'
 
-    PAGE_PREFIX = 'https://arifureta.com/'
+    PAGE_PREFIX = website
 
     def __init__(self):
         super().__init__()
@@ -96,9 +99,12 @@ class Arifureta2Download(Winter2022AnimeDownload):
 class SlowLoopDownload(Winter2022AnimeDownload):
     title = 'Slow Loop'
     keywords = [title]
+    website = 'https://slowlooptv.com/'
+    twitter = 'slowloop_tv'
+    hashtags = 'slowloop'
     folder_name = 'slow-loop'
 
-    PAGE_PREFIX = 'https://slowlooptv.com/'
+    PAGE_PREFIX = website
 
     def __init__(self):
         super().__init__()

@@ -1,6 +1,7 @@
 import requests
 import random
 import datetime
+import json
 import anime.constants as constants
 import os
 import re
@@ -15,17 +16,22 @@ from PIL import Image
 class MainDownload:
     title = ""
     keywords = []
+    website = ""
+    twitter = []  # Twitter Account Names
+    hashtags = []
     season = None
     season_name = ""
     image_list = []
     folder_name = constants.FOLDER_DOWNLOAD
     enabled = True
+    refresh_meta_tag = False
 
     def __init__(self):
         path = self.get_full_path()
         self.base_folder = path
         if not os.path.exists(path):
             os.makedirs(path)
+        self.create_meta_data(refresh=True)
 
     @classmethod
     def get_full_path(cls):
@@ -58,6 +64,30 @@ class MainDownload:
 
     def run(self):
         pass
+
+    def create_meta_data(self, refresh):
+        logpath = self.get_full_path() + '/log'
+        filepath = logpath + '/' + constants.FILE_METADATA
+        split1 = filepath.split('/')
+        if len(split1) == 5 and 'log' == split1[3] and (refresh or not os.path.exists(filepath)):
+            if not os.path.exists(logpath):
+                os.makedirs(logpath)
+
+            twitter_names = []
+            if isinstance(self.twitter, str) and len(self.twitter) > 0:
+                twitter_names = [self.twitter]
+            elif isinstance(self.twitter, list):
+                twitter_names = self.twitter
+
+            hash_tags = []
+            if isinstance(self.hashtags, str) and len(self.hashtags) > 0:
+                hash_tags = [self.hashtags]
+            elif isinstance(self.hashtags, list):
+                hash_tags = self.hashtags
+
+            data = {'title': self.title, 'website': self.website, 'twitter': twitter_names, 'hashtags': hash_tags}
+            with open(filepath, 'w+', encoding='utf-8') as f:
+                json.dump(data, f)
 
     @staticmethod
     def get_response(url, headers=None, decode=False):
