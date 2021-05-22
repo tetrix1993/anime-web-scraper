@@ -13,7 +13,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 # Jahy-sama wa Kujikenai! https://jahysama-anime.com/ #ジャヒー様はくじけない @jahysama_anime
 # Kanojo mo Kanojo https://kanokano-anime.com/ #kanokano #カノジョも彼女 @kanokano_anime
 # Kobayashi-san Chi no Maid Dragon S https://maidragon.jp/2nd/ #maidragon @maidragon_anime
-# Mahouka Koukou no Yuutousei https://mahouka-yuutousei.jp/ #mahouka
+# Mahouka Koukou no Yuutousei https://mahouka-yuutousei.jp/ #mahouka @mahouka_anime
 # Megami-ryou no Ryoubo-kun. https://megamiryou.com/ #女神寮 @megamiryou
 # Meikyuu Black Company https://meikyubc-anime.com/ #迷宮ブラックカンパニー @meikyubc_anime
 # Otome Game https://hamehura-anime.com/story/ #はめふら #hamehura @hamehura
@@ -37,9 +37,12 @@ class Summer2021AnimeDownload(MainDownload):
 class BokuremaDownload(Summer2021AnimeDownload):
     title = 'Bokutachi no Remake'
     keywords = [title, 'Bokurema', 'Remake our Life!']
+    website = "http://bokurema.com"
+    twitter = 'bokurema_anime'
+    hashtags = ['bokurema', 'ぼくリメ']
     folder_name = 'bokurema'
 
-    PAGE_PREFIX = "http://bokurema.com"
+    PAGE_PREFIX = website
 
     def __init__(self):
         super().__init__()
@@ -124,9 +127,12 @@ class BokuremaDownload(Summer2021AnimeDownload):
 class CheatKusushiDownload(Summer2021AnimeDownload):
     title = 'Cheat Kusushi no Slow Life: Isekai ni Tsukurou Drugstore'
     keywords = [title, 'Cheat Pharmacist\'s Slow Life: Making a Drugstore in Another World']
+    website = 'https://www.cheat-kusushi.jp/'
+    twitter = 'cheat_kusushi'
+    hashtags = ['チート薬師', 'スローライフ']
     folder_name = 'cheat-kusushi'
 
-    PAGE_PREFIX = 'https://www.cheat-kusushi.jp/'
+    PAGE_PREFIX = website
 
     def __init__(self):
         super().__init__()
@@ -205,9 +211,12 @@ class CheatKusushiDownload(Summer2021AnimeDownload):
 class Dea5Download(Summer2021AnimeDownload):
     title = 'Deatte 5-byou de Battle'
     keywords = [title, 'Battle Game in 5 Seconds', 'Dea5']
+    website = 'https://dea5-anime.com/'
+    twitter = 'dea5_anime'
+    hashtags = ['出会5', 'dea5']
     folder_name = 'dea5'
 
-    PAGE_PREFIX = 'https://dea5-anime.com/'
+    PAGE_PREFIX = website
 
     def __init__(self):
         super().__init__()
@@ -275,9 +284,12 @@ class Dea5Download(Summer2021AnimeDownload):
 class GenkokuDownload(Summer2021AnimeDownload):
     title = "Genjitsu Shugi Yuusha no Oukoku Saikenki"
     keywords = [title, "Genkoku"]
+    website = 'https://genkoku-anime.com/'
+    twitter = 'genkoku_info'
+    hashtags = '現国アニメ'
     folder_name = 'genkoku'
 
-    PAGE_PREFIX = 'https://genkoku-anime.com/'
+    PAGE_PREFIX = website
 
     def __init__(self):
         super().__init__()
@@ -371,9 +383,12 @@ class GenkokuDownload(Summer2021AnimeDownload):
 class HigurashiSotsuDownload(Summer2021AnimeDownload):
     title = "Higurashi no Naku Koro ni Sotsu"
     keywords = [title, "When They Cry"]
+    website = 'https://higurashianime.com/'
+    twitter = 'higu_anime'
+    hashtags = ['ひぐらし', 'higurashi']
     folder_name = 'higurashi-sotsu'
 
-    PAGE_PREFIX = 'https://higurashianime.com/'
+    PAGE_PREFIX = website
 
     def __init__(self):
         super().__init__()
@@ -430,9 +445,12 @@ class HigurashiSotsuDownload(Summer2021AnimeDownload):
 class JahysamaDownload(Summer2021AnimeDownload):
     title = 'Jahy-sama wa Kujikenai!'
     keywords = [title, 'Jahysama']
+    website = 'https://jahysama-anime.com/'
+    twitter = 'jahysama_anime'
+    hashtags = 'ジャヒー様はくじけない'
     folder_name = 'jahysama'
 
-    PAGE_PREFIX = 'https://jahysama-anime.com/'
+    PAGE_PREFIX = website
 
     def __init__(self):
         super().__init__()
@@ -502,9 +520,12 @@ class JahysamaDownload(Summer2021AnimeDownload):
 class KanokanoDownload(Summer2021AnimeDownload):
     title = 'Kanojo mo Kanojo'
     keywords = [title, 'Kanokano']
+    website = 'https://kanokano-anime.com/'
+    twitter = 'kanokano_anime'
+    hashtags = ['kanokano', 'カノジョも彼女']
     folder_name = 'kanokano'
 
-    PAGE_PREFIX = 'https://kanokano-anime.com/'
+    PAGE_PREFIX = website
 
     def __init__(self):
         super().__init__()
@@ -567,9 +588,12 @@ class KanokanoDownload(Summer2021AnimeDownload):
 class KobayashiMaidDragon2Download(Summer2021AnimeDownload):
     title = 'Kobayashi-san Chi no Maid Dragon S'
     keywords = [title, "Miss Kobayashi's Maid Dragon"]
+    website = 'https://maidragon.jp/2nd/'
+    twitter = 'maidragon_anime'
+    hashtags = 'maidragon'
     folder_name = 'maidragon2'
 
-    PAGE_PREFIX = 'https://maidragon.jp/2nd/'
+    PAGE_PREFIX = website
 
     def __init__(self):
         super().__init__()
@@ -641,9 +665,12 @@ class KobayashiMaidDragon2Download(Summer2021AnimeDownload):
 class MahoukaYuutouseiDownload(Summer2021AnimeDownload):
     title = 'Mahouka Koukou no Yuutousei'
     keywords = [title, 'The Honor Student at Magic High School']
+    website = "https://mahouka-yuutousei.jp/"
+    twitter = 'mahouka_anime'
+    hashtags = 'mahouka'
     folder_name = 'mahouka-yuutousei'
 
-    PAGE_PREFIX = "https://mahouka-yuutousei.jp/"
+    PAGE_PREFIX = website
 
     def __init__(self):
         super().__init__()
@@ -699,9 +726,12 @@ class MahoukaYuutouseiDownload(Summer2021AnimeDownload):
 class MegamiryouDownload(Summer2021AnimeDownload):
     title = 'Megami-ryou no Ryoubo-kun'
     keywords = [title, 'Megamiryou', "Mother of the Goddess' Dormitory"]
+    website = 'https://megamiryou.com/'
+    twitter = 'megamiryou'
+    hashtags = '女神寮'
     folder_name = 'megamiryou'
 
-    PAGE_PREFIX = 'https://megamiryou.com/'
+    PAGE_PREFIX = website
 
     def run(self):
         self.download_episode_preview()
@@ -782,9 +812,12 @@ class MegamiryouDownload(Summer2021AnimeDownload):
 class MeikyuBCDownload(Summer2021AnimeDownload):
     title = 'Meikyuu Black Company'
     keywords = [title, "The Dungeon of Black Company"]
+    website = 'https://meikyubc-anime.com/'
+    twitter = 'meikyubc_anime'
+    hashtags = '迷宮ブラックカンパニー'
     folder_name = 'meikyubc'
 
-    PAGE_PREFIX = 'https://meikyubc-anime.com/'
+    PAGE_PREFIX = website
 
     def run(self):
         self.download_episode_preview()
@@ -845,9 +878,12 @@ class MeikyuBCDownload(Summer2021AnimeDownload):
 class Hamehura2Download(Summer2021AnimeDownload):
     title = "Otome Game no Hametsu Flag shika Nai Akuyaku Reijou ni Tensei shiteshimatta... X"
     keywords = [title, "Hamehura", "Hamefura", "My Next Life as a Villainess: All Routes Lead to Doom!", "2nd"]
+    website = 'https://hamehura-anime.com/'
+    twitter = 'hamehura'
+    hashtags = ['はめふら', 'hamehura']
     folder_name = 'hamehura2'
 
-    PAGE_PREFIX = 'https://hamehura-anime.com/'
+    PAGE_PREFIX = website
     IMAGE_PREFIX = 'https://hamehura-anime.com/2nd/'
 
     def __init__(self):
@@ -916,9 +952,12 @@ class Hamehura2Download(Summer2021AnimeDownload):
 class PeachBoyRiversideDownload(Summer2021AnimeDownload):
     title = 'Peach Boy Riverside'
     keywords = [title]
+    website = 'https://peachboyriverside.com/'
+    twitter = 'peachboy_anime'
+    hashtags = 'ピーチボーイリバーサイド'
     folder_name = 'peachboyriverside'
 
-    PAGE_PREFIX = 'https://peachboyriverside.com/'
+    PAGE_PREFIX = website
 
     def __init__(self):
         super().__init__()
@@ -1005,9 +1044,12 @@ class PeachBoyRiversideDownload(Summer2021AnimeDownload):
 class SeireiGensoukiDownload(Summer2021AnimeDownload):
     title = "Seirei Gensouki"
     keywords = [title, "Spirit Chronicles"]
+    website = "https://seireigensouki.com/"
+    twitter = 'seireigensouki'
+    hashtags = '精霊幻想記'
     folder_name = 'seirei-gensouki'
 
-    PAGE_PREFIX = "https://seireigensouki.com/"
+    PAGE_PREFIX = website
 
     def __init__(self):
         super().__init__()
@@ -1101,9 +1143,12 @@ class SeireiGensoukiDownload(Summer2021AnimeDownload):
 class AquatopeDownload(Summer2021AnimeDownload):
     title = 'Shiroi Suna no Aquatope'
     keywords = [title, 'Aquatope of White Sand']
+    website = 'https://aquatope-anime.com/'
+    twitter = 'aquatope_anime'
+    hashtags = '白い砂のアクアトープ'
     folder_name = 'aquatope'
 
-    PAGE_PREFIX = 'https://aquatope-anime.com/'
+    PAGE_PREFIX = website
 
     def __init__(self):
         super().__init__()
@@ -1214,9 +1259,12 @@ class AquatopeDownload(Summer2021AnimeDownload):
 class TanmoshiDownload(Summer2021AnimeDownload):
     title = "Tantei wa Mou, Shindeiru."
     keywords = [title, "Tanmoshi", "The Detective Is Already Dead"]
+    website = 'https://tanmoshi-anime.jp/'
+    twitter = 'tanteiwamou_'
+    hashtags = ['tanmoshi', 'たんもし']
     folder_name = 'tanmoshi'
 
-    PAGE_PREFIX = 'https://tanmoshi-anime.jp/'
+    PAGE_PREFIX = website
 
     def __init__(self):
         super().__init__()

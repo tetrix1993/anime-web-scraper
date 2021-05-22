@@ -41,9 +41,12 @@ class Winter2021AnimeDownload(MainDownload):
 class DrStone2Download(Winter2021AnimeDownload):
     title = "Dr. Stone: Stone Wars"
     keywords = [title, "2nd Season"]
+    website = 'https://dr-stone.jp/'
+    twitter = 'DrSTONE_off'
+    hashtags = 'DrSTONE'
     folder_name = 'dr-stone2'
 
-    PAGE_LINK = 'https://dr-stone.jp/'
+    PAGE_LINK = website
     FIRST_EPISODE = 1
     FINAL_EPISODE = 13
 
@@ -109,9 +112,12 @@ class DrStone2Download(Winter2021AnimeDownload):
 class Gotoubun2Download(Winter2021AnimeDownload):
     title = "Gotoubun no Hanayome 2nd Season"
     keywords = [title, "The Quintessential Quintuplets", "Go-toubun", "5-toubun", "5hanayome", "2nd"]
+    website = 'https://www.tbs.co.jp/anime/5hanayome/'
+    twitter = '5Hanayome_anime'
+    hashtags = '五等分の花嫁'
     folder_name = 'gotoubun2'
 
-    PAGE_PREFIX = 'https://www.tbs.co.jp/anime/5hanayome/'
+    PAGE_PREFIX = website
     FINAL_EPISODE = 12
     IMAGES_PER_EPISODE = 6
 
@@ -279,9 +285,12 @@ class Gotoubun2Download(Winter2021AnimeDownload):
 class HatarakuSaibou2Download(Winter2021AnimeDownload):
     title = "Hataraku Saibou!!"
     keywords = [title, "Cells at Work!", "2nd Season"]
+    website = 'https://hataraku-saibou.com/'
+    twitter = 'hataraku_saibou'
+    hashtags = 'はたらく細胞'
     folder_name = "hataraku-saibou2"
 
-    PAGE_PREFIX = 'https://hataraku-saibou.com/'
+    PAGE_PREFIX = website
 
     def __init__(self):
         super().__init__()
@@ -335,9 +344,12 @@ class HatarakuSaibou2Download(Winter2021AnimeDownload):
 class HatarakuSaibouBlackDownload(Winter2021AnimeDownload):
     title = "Hataraku Saibou Black"
     keywords = [title, "Cells at Work! Code Black"]
+    website = 'https://saibou-black.com/'
+    twitter = 'cellsatworkbla1'
+    hashtags = '細胞BLACK'
     folder_name = "hataraku-saibou-black"
 
-    PAGE_PREFIX = 'https://saibou-black.com/'
+    PAGE_PREFIX = website
 
     def __init__(self):
         super().__init__()
@@ -393,9 +405,12 @@ class HatarakuSaibouBlackDownload(Winter2021AnimeDownload):
 class HorimiyaDownload(Winter2021AnimeDownload):
     title = "Horimiya"
     keywords = [title]
+    website = 'https://horimiya-anime.com/'
+    twitter = 'horimiya_anime'
+    hashtags = ['ホリミヤ', 'horimiya']
     folder_name = 'horimiya'
 
-    PAGE_PREFIX = 'https://horimiya-anime.com/'
+    PAGE_PREFIX = website
 
     def __init__(self):
         super().__init__()
@@ -546,9 +561,12 @@ class HorimiyaDownload(Winter2021AnimeDownload):
 class TomozakiKunDownload(Winter2021AnimeDownload):
     title = "Jaku-Chara Tomozaki-kun"
     keywords = [title, 'The Low Tier Character "Tomozaki-kun"', 'Tomozaki-kun']
+    website = 'http://tomozaki-koushiki.com/'
+    twitter = 'tomozakikoshiki'
+    hashtags = '友崎くん'
     folder_name = 'tomozakikun'
 
-    PAGE_PREFIX = 'http://tomozaki-koushiki.com/'
+    PAGE_PREFIX = website
     FINAL_EPISODE = 12
 
     def __init__(self):
@@ -733,9 +751,12 @@ class TomozakiKunDownload(Winter2021AnimeDownload):
 class KaiyariDownload(Winter2021AnimeDownload):
     title = "Kaifuku Jutsushi no Yarinaoshi"
     keywords = [title, "Kaiyari", "Redo of Healer"]
+    website = "http://kaiyari.com/"
+    twitter = 'kaiyari_anime'
+    hashtags = '回復術士'
     folder_name = 'kaiyari'
 
-    PAGE_PREFIX = "http://kaiyari.com/"
+    PAGE_PREFIX = website
     FINAL_EPISODE = 12
     IMAGES_PER_EPISODE = 6
 
@@ -862,9 +883,12 @@ class KaiyariDownload(Winter2021AnimeDownload):
 class KemonoJihenDownload(Winter2021AnimeDownload):
     title = "Kemono Jihen"
     keywords = [title, 'Kemonojihen']
+    website = 'https://kemonojihen-anime.com/'
+    twitter = 'Kemonojihen_tv'
+    hashtags = ['怪物事変', 'kemonojihen']
     folder_name = 'kemonojihen'
 
-    PAGE_PREFIX = 'https://kemonojihen-anime.com/'
+    PAGE_PREFIX = website
     FINAL_EPISODE = 12
     IMAGES_PER_EPISODE = 6
 
@@ -924,9 +948,12 @@ class KemonoJihenDownload(Winter2021AnimeDownload):
 class KumoDesugaNanikaDownload(Winter2021AnimeDownload):
     title = "Kumo Desu ga, Nani ka?"
     keywords = [title, 'Kumoko', "So I'm a Spider, So What?"]
+    website = 'https://kumo-anime.com/'
+    twitter = 'kumoko_anime'
+    hashtags = '蜘蛛ですが'
     folder_name = 'kumodesuga'
 
-    PAGE_PREFIX = 'https://kumo-anime.com/'
+    PAGE_PREFIX = website
     FINAL_EPISODE = 24
     IMAGES_PER_EPISODE = 6
 
@@ -971,9 +998,11 @@ class KumoDesugaNanikaDownload(Winter2021AnimeDownload):
 class LogHorizon3Download(Winter2021AnimeDownload):
     title = "Log Horizon: Entaku Houkai"
     keywords = [title, '3rd Season']
+    website = 'https://www6.nhk.or.jp/anime/program/detail.html?i=loghorizon3'
+    twitter = 'loghorizon_DORT'
+    hashtags = 'loghorizon'
     folder_name = 'loghorizon3'
 
-    MAIN_PAGE = 'https://www6.nhk.or.jp/anime/program/detail.html?i=loghorizon3'
     IMAGE_PREFIX = 'https://www6.nhk.or.jp/anime/program/common/images/loghorizon3/'
     FINAL_EPISODE = 12
 
@@ -1007,9 +1036,12 @@ class LogHorizon3Download(Winter2021AnimeDownload):
 class MushokuTenseiDownload(Winter2021AnimeDownload):
     title = "Mushoku Tensei: Isekai Ittara Honki Dasu"
     keywords = [title, 'Jobless Reincarnation']
+    website = 'https://mushokutensei.jp'
+    twitter = 'mushokutensei_A'
+    hashtags = ['無職転生', 'MushokuTensei']
     folder_name = 'mushoku-tensei'
 
-    PAGE_PREFIX = 'https://mushokutensei.jp'
+    PAGE_PREFIX = website
     FINAL_EPISODE = 23
     IMAGES_PER_EPISODE = 5
 
@@ -1240,9 +1272,12 @@ class MushokuTenseiDownload(Winter2021AnimeDownload):
 class NonNonBiyori3Download(Winter2021AnimeDownload):
     title = 'Non Non Biyori Nonstop'
     keywords = [title]
+    website = 'https://nonnontv.com'
+    twitter = 'nonnontv'
+    hashtags = ['のんのんびより', 'なのん']
     folder_name = 'non-non-biyori3'
 
-    PAGE_PREFIX = 'https://nonnontv.com'
+    PAGE_PREFIX = website
     # PAGE_PREFIX = 'https://nonnontv2.wp-adm.kadokawa-isys.jp'
     STORY_PAGE = 'https://nonnontv.com/tvanime/story/season3/s00-3'
 
@@ -1379,9 +1414,12 @@ class NonNonBiyori3Download(Winter2021AnimeDownload):
 class KakushiDungeonDownload(Winter2021AnimeDownload):
     title = "Ore dake Haireru Kakushi Dungeon"
     keywords = [title, "The Hidden Dungeon Only I Can Enter"]
+    website = 'https://kakushidungeon-anime.jp/'
+    twitter = 'kakushidungeon'
+    hashtags = '隠しダンジョン'
     folder_name = 'kakushi-dungeon'
 
-    PAGE_PREFIX = 'https://kakushidungeon-anime.jp/'
+    PAGE_PREFIX = website
     FINAL_EPISODE = 12
     IMAGES_PER_EPISODE = 6
 
@@ -1520,9 +1558,12 @@ class KakushiDungeonDownload(Winter2021AnimeDownload):
 class LasdanDownload(Winter2021AnimeDownload):
     title = "Tatoeba Last Dungeon Mae no Mura no Shounen ga Joban no Machi de Kurasu Youna Monogatari"
     keywords = [title, "Lasdan"]
+    website = 'https://lasdan.com/'
+    twitter = 'lasdan_PR'
+    hashtags = 'ラスダン'
     folder_name = 'lasdan'
 
-    PAGE_PREFIX = 'https://lasdan.com/'
+    PAGE_PREFIX = website
     FINAL_EPISODE = 12
     IMAGES_PER_EPISODE = 6
 
@@ -1763,9 +1804,12 @@ class LasdanDownload(Winter2021AnimeDownload):
 class Tensura2Download(Winter2021AnimeDownload):
     title = 'Tensei shitara Slime Datta Ken 2nd Season'
     keywords = [title, "Tensura", "That Time I Got Reincarnated as a Slime"]
+    website = 'https://www.ten-sura.com/anime/tensura'
+    twitter = 'ten_sura_anime'
+    hashtags = ['転スラ', 'tensura']
     folder_name = 'tensura2'
 
-    PAGE_PREFIX = 'https://www.ten-sura.com/anime/tensura'
+    PAGE_PREFIX = website
     FIRST_EPISODE = 25
     FINAL_EPISODE = 48
     IMAGES_PER_EPISODE = 5
@@ -1851,9 +1895,12 @@ class Tensura2Download(Winter2021AnimeDownload):
 class UrasekaiPicnicDownload(Winter2021AnimeDownload):
     title = 'Urasekai Picnic'
     keywords = [title, 'Otherside Picnic']
+    website = 'https://www.othersidepicnic.com'
+    twitter = 'OthersidePicnic'
+    hashtags = '裏ピク'
     folder_name = 'urasekai-picnic'
 
-    PAGE_PREFIX = 'https://www.othersidepicnic.com'
+    PAGE_PREFIX = website
     FINAL_EPISODE = 12
     IMAGES_PER_EPISODE = 6
 
@@ -2008,9 +2055,12 @@ class UrasekaiPicnicDownload(Winter2021AnimeDownload):
 class WonderEggPriorityDownload(Winter2021AnimeDownload):
     title = 'Wonder Egg Priority'
     keywords = [title]
+    website = 'https://wonder-egg-priority.com'
+    twitter = 'WEP_anime'
+    hashtags = 'ワンエグ'
     folder_name = 'wonder-egg-priority'
 
-    PAGE_PREFIX = 'https://wonder-egg-priority.com'
+    PAGE_PREFIX = website
 
     def __init__(self):
         super().__init__()
@@ -2145,9 +2195,12 @@ class WonderEggPriorityDownload(Winter2021AnimeDownload):
 class WorldTrigger2Download(Winter2021AnimeDownload):
     title = "World Trigger 2nd Season"
     keywords = [title]
+    website = 'http://www.toei-anim.co.jp/tv/wt/'
+    twitter = 'Anime_W_Trigger'
+    hashtags = ['WorldTrigger', 'ワールドトリガー', 'トリガーオン']
     folder_name = 'world-trigger2'
 
-    PAGE_PREFIX = 'http://www.toei-anim.co.jp/tv/wt/'
+    PAGE_PREFIX = website
     FINAL_EPISODE = 24
 
     def __init__(self):
@@ -2169,9 +2222,12 @@ class WorldTrigger2Download(Winter2021AnimeDownload):
 class YuruCamp2Download(Winter2021AnimeDownload):
     title = "Yuru Camp 2nd Season"
     keywords = [title, 'Yurucamp']
+    website = 'https://yurucamp.jp/'
+    twitter = 'yurucamp_anime'
+    hashtags = ['ゆるキャン', 'yurucamp']
     folder_name = 'yurucamp2'
 
-    BASE_PREFIX = 'https://yurucamp.jp/'
+    BASE_PREFIX = website
     PAGE_PREFIX = BASE_PREFIX + 'second/'
     FINAL_EPISODE = 13
     IMAGES_PER_EPISODE = 8

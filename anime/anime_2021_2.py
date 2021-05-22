@@ -38,8 +38,11 @@ class Spring2021AnimeDownload(MainDownload):
 
 # 86
 class EightySixDownload(Spring2021AnimeDownload):
-    title = '86'
+    title = '86 -Eighty Six-'
     keywords = [title, 'Eighty Six']
+    website = 'https://anime-86.com/'
+    twitter = 'anime_eightysix'
+    hashtags = 'エイティシックス'
     folder_name = '86'
 
     PAGE_PREFIX = 'https://anime-86.com/'
@@ -280,9 +283,12 @@ class EightySixDownload(Spring2021AnimeDownload):
 class DoraieDownload(Spring2021AnimeDownload):
     title = 'Dragon, Ie wo Kau'
     keywords = [title, 'Dragon Goes House-Hunting', 'Doraie']
+    website = 'https://doraie.com/'
+    twitter = 'anime_doraie'
+    hashtags = 'ドラ家'
     folder_name = 'doraie'
 
-    PAGE_PREFIX = 'https://doraie.com/'
+    PAGE_PREFIX = website
     FINAL_EPISODE = 12
     IMAGES_PER_EPISODE = 6
 
@@ -379,9 +385,12 @@ class DoraieDownload(Spring2021AnimeDownload):
 class FumetsuNoAnataeDownload(Spring2021AnimeDownload):
     title = 'Fumetsu no Anata e'
     keywords = [title, 'To Your Eternity']
+    website = 'https://anime-fumetsunoanatae.com'
+    twitter = 'nep_fumetsu'
+    hashtags = '不滅のあなたへ'
     folder_name = 'fumetsunoanatae'
 
-    PAGE_PREFIX = 'https://anime-fumetsunoanatae.com'
+    PAGE_PREFIX = website
 
     def __init__(self):
         super().__init__()
@@ -478,9 +487,12 @@ class FumetsuNoAnataeDownload(Spring2021AnimeDownload):
 class HigehiroDownload(Spring2021AnimeDownload):
     title = 'Hige wo Soru. Soshite Joshikousei wo Hirou.'
     keywords = [title, 'Higehiro']
+    website = 'http://higehiro-anime.com/'
+    twitter = 'higehiro_anime'
+    hashtags = ['higehiro', 'ひげひろ']
     folder_name = 'higehiro'
 
-    PAGE_PREFIX = 'http://higehiro-anime.com/'
+    PAGE_PREFIX = website
     FINAL_EPISODE = 13
 
     def __init__(self):
@@ -647,9 +659,12 @@ class HigehiroDownload(Spring2021AnimeDownload):
 class NagatorosanDownload(Spring2021AnimeDownload):
     title = 'Ijiranaide, Nagatoro-san'
     keywords = [title, 'Nagatorosan']
+    website = 'https://www.nagatorosan.jp/'
+    twitter = 'nagatoro_tv'
+    hashtags = '長瀞さん'
     folder_name = 'nagatoro-san'
 
-    PAGE_PREFIX = 'https://www.nagatorosan.jp/'
+    PAGE_PREFIX = website
 
     def __init__(self):
         super().__init__()
@@ -813,9 +828,12 @@ class NagatorosanDownload(Spring2021AnimeDownload):
 class IsekaiMaou2Download(Spring2021AnimeDownload):
     title = 'Isekai Maou to Shoukan Shoujo no Dorei Majutsu 2nd Season'
     keywords = [title, "How Not to Summon a Demon Lord", "Isekaimaou"]
+    website = 'https://isekaimaou-anime.com/'
+    twitter = 'isekaimaou'
+    hashtags = '異世界魔王'
     folder_name = 'isekai-maou2'
 
-    PAGE_PREFIX = 'https://isekaimaou-anime.com/'
+    PAGE_PREFIX = website
     FINAL_EPISODE = 10
 
     def __init__(self):
@@ -977,9 +995,12 @@ class IsekaiMaou2Download(Spring2021AnimeDownload):
 class FullDiveRPGDownload(Spring2021AnimeDownload):
     title = "Kyuukyoku Shinka Shita Full Dive RPG ga Genjitsu Yori mo Kusogee Dattara"
     keywords = [title, "Fulldive", "Kiwame Quest"]
+    website = 'https://fulldive-rpg.com/'
+    twitter = 'fulldive_anime'
+    hashtags = 'フルダイブ'
     folder_name = 'fulldive'
 
-    PAGE_PREFIX = 'https://fulldive-rpg.com/'
+    PAGE_PREFIX = website
     FINAL_EPISODE = 12
     IMAGES_PER_EPISODE = 6
 
@@ -1128,9 +1149,12 @@ class FullDiveRPGDownload(Spring2021AnimeDownload):
 class IrumaKun2Download(Spring2021AnimeDownload):
     title = "Mairimashita! Iruma-kun 2nd Season"
     keywords = ["Mairimashita! Iruma-kun", "Welcome to Demon School! Iruma-kun", "Irumakun"]
+    website = 'https://www.nhk.jp/p/iruma2'
+    twitter = 'wc_mairuma'
+    hashtags = '魔入りました入間くん'
     folder_name = 'iruma-kun2'
 
-    PAGE_PREFIX = 'https://www.nhk.jp/p/iruma2'
+    PAGE_PREFIX = website
 
     def __init__(self):
         super().__init__()
@@ -1170,9 +1194,12 @@ class IrumaKun2Download(Spring2021AnimeDownload):
 class OddTaxiDownload(Spring2021AnimeDownload):
     title = 'Odd Taxi'
     keywords = [title]
+    website = 'https://oddtaxi.jp/'
+    twitter = 'oddtaxi_'
+    hashtags = ['oddtaxi', 'オッドタクシー']
     folder_name = 'oddtaxi'
 
-    PAGE_PREFIX = 'https://oddtaxi.jp/'
+    PAGE_PREFIX = website
     JSON_URL = PAGE_PREFIX + 'wp-json/oddtaxi/init'
 
     def __init__(self):
@@ -1244,9 +1271,12 @@ class OddTaxiDownload(Spring2021AnimeDownload):
 class OsamakeDownload(Spring2021AnimeDownload):
     title = 'Osananajimi ga Zettai ni Makenai Love Comedy'
     keywords = [title, 'Osamake']
+    website = 'https://osamake.com/'
+    twitter = 'osamake'
+    hashtags = ['osamake', 'おさまけ']
     folder_name = 'osamake'
 
-    PAGE_PREFIX = 'https://osamake.com/'
+    PAGE_PREFIX = website
     FINAL_EPISODE = 12
 
     def __init__(self):
@@ -1387,9 +1417,12 @@ class OsamakeDownload(Spring2021AnimeDownload):
 class SayonaraCramerDownload(Spring2021AnimeDownload):
     title = 'Sayonara Watashi no Cramer'
     keywords = [title, 'Good-bye, Cramer!']
+    website = 'https://sayonara-cramer.com/'
+    twitter = 'cramer_pr'
+    hashtags = 'さよなら私のクラマー'
     folder_name = 'sayonara-cramer'
 
-    PAGE_PREFIX = 'https://sayonara-cramer.com/'
+    PAGE_PREFIX = website
 
     def __init__(self):
         super().__init__()
@@ -1502,9 +1535,12 @@ class SayonaraCramerDownload(Spring2021AnimeDownload):
 class SeijonoMaryokuDownload(Spring2021AnimeDownload):
     title = 'Seijo no Maryoku wa Bannou Desu'
     keywords = [title, 'seijonomaryoku', 'seijyonomaryoku', "The Saint's Magic Power is Omnipotent"]
+    website = 'https://seijyonomaryoku.jp/'
+    twitter = 'seijyonoanime'
+    hashtags = ['seijyonoanime', '聖女の魔力は万能です']
     folder_name = 'seijyonomaryoku'
 
-    PAGE_PREFIX = 'https://seijyonomaryoku.jp/'
+    PAGE_PREFIX = website
 
     def __init__(self):
         super().__init__()
@@ -1647,9 +1683,12 @@ class SeijonoMaryokuDownload(Spring2021AnimeDownload):
 class SentoinDownload(Spring2021AnimeDownload):
     title = "Sentouin, Hakenshimasu!"
     keywords = [title, "Sentoin", "Combatants Will Be Dispatched!"]
+    website = 'https://kisaragi-co.jp/'
+    twitter = 'sentoin_anime'
+    hashtags = 'sentoin'
     folder_name = 'sentoin'
 
-    PAGE_PREFIX = 'https://kisaragi-co.jp/'
+    PAGE_PREFIX = website
     FINAL_EPISODE = 12
     IMAGES_PER_EPISODE = 6
 
@@ -1756,9 +1795,12 @@ class SentoinDownload(Spring2021AnimeDownload):
 class ShadowsHouseDownload(Spring2021AnimeDownload):
     title = "Shadows House"
     keywords = [title]
+    website = 'https://shadowshouse-anime.com/'
+    twitter = 'shadowshouse_yj'
+    hashtags = 'シャドーハウス'
     folder_name = 'shadows-house'
 
-    PAGE_PREFIX = 'https://shadowshouse-anime.com/'
+    PAGE_PREFIX = website
 
     def __init__(self):
         super().__init__()
@@ -1971,9 +2013,12 @@ class ShadowsHouseDownload(Spring2021AnimeDownload):
 class Slime300Download(Spring2021AnimeDownload):
     title = "Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita"
     keywords = [title, "I've Been Killing Slimes for 300 Years and Maxed Out My Level", "Slime 300", "slime300"]
+    website = 'https://slime300-anime.com'
+    twitter = 'slime300_PR'
+    hashtags = 'スライム倒して300年'
     folder_name = 'slime300'
 
-    PAGE_PREFIX = 'https://slime300-anime.com'
+    PAGE_PREFIX = website
 
     def __init__(self):
         super().__init__()
@@ -2144,9 +2189,12 @@ class Slime300Download(Spring2021AnimeDownload):
 class SsssDynazenonDownload(Spring2021AnimeDownload):
     title = 'SSSS.Dynazenon'
     keywords = [title]
+    website = 'https://dynazenon.net/'
+    twitter = 'SSSS_PROJECT'
+    hashtags = 'SSSS_DYNAZENON'
     folder_name = 'ssss-dynazenon'
 
-    PAGE_PREFIX = 'https://dynazenon.net/'
+    PAGE_PREFIX = website
     FINAL_EPISODE = 13
 
     def __init__(self):
@@ -2262,9 +2310,12 @@ class SsssDynazenonDownload(Spring2021AnimeDownload):
 class SuperCubDownload(Spring2021AnimeDownload):
     title = 'Super Cub'
     keywords = [title, 'Supercub']
+    website = 'https://supercub-anime.com/'
+    twitter = 'supercub_anime'
+    hashtags = ['SuperCub', 'スーパーカブ']
     folder_name = 'supercub'
 
-    PAGE_PREFIX = 'https://supercub-anime.com/'
+    PAGE_PREFIX = website
     FINAL_EPISODE = 12
     IMAGES_PER_EPISODE = 6
 
@@ -2458,9 +2509,12 @@ class SuperCubDownload(Spring2021AnimeDownload):
 class VivyDownload(Spring2021AnimeDownload):
     title = "Vivy: Fluorite Eye's Song"
     keywords = [title, "Vivy -Fluorite Eye's Song"]
+    website = 'https://vivy-portal.com/'
+    twitter = 'vivy_portal'
+    hashtags = 'ヴィヴィ'
     folder_name = 'vivy'
 
-    PAGE_PREFIX = 'https://vivy-portal.com/'
+    PAGE_PREFIX = website
     FINAL_EPISODE = 13
 
     def __init__(self):
@@ -2637,9 +2691,12 @@ class VivyDownload(Spring2021AnimeDownload):
 class YakunaraMugCupMoDownload(Spring2021AnimeDownload):
     title = "Yakunara Mug Cup mo"
     keywords = [title, 'Yakumo', "Let's Make a Mug Too"]
+    website = 'https://yakumo-project.com/'
+    twitter = 'yakumo_project'
+    hashtags = 'やくもtv'
     folder_name = 'yakumo'
 
-    PAGE_PREFIX = 'https://yakumo-project.com/'
+    PAGE_PREFIX = website
     FINAL_EPISODE = 12
     IMAGES_PER_EPISODE = 5
 

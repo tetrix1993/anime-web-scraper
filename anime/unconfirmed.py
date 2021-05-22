@@ -38,10 +38,13 @@ class UnconfirmedDownload(MainDownload):
 class Anohana2Download(UnconfirmedDownload):
     title = 'Ano Hi Mita Hana no Namae wo Bokutachi wa Mada Shiranai. 10th Anniversary Project'
     keywords = [title, 'Anohana', 'The Flower We Saw That Day']
+    website = 'https://10th.anohana.jp/'
+    twitter = 'anohana_project'
+    hashtags = ['anohana', 'あの花']
     folder_name = 'anohana2'
     enabled = False
 
-    PAGE_PREFIX = 'https://10th.anohana.jp/'
+    PAGE_PREFIX = website
 
     def __init__(self):
         super().__init__()
@@ -114,9 +117,12 @@ class Anohana2Download(UnconfirmedDownload):
 class DoItYourselfDownload(UnconfirmedDownload):
     title = 'Do It Yourself!!'
     keywords = [title, 'DIY']
+    website = 'https://diy-anime.com/'
+    twitter = 'diy_anime'
+    hashtags = 'diyアニメ'
     folder_name = 'diy'
 
-    PAGE_PREFIX = 'https://diy-anime.com/'
+    PAGE_PREFIX = website
 
     def __init__(self):
         super().__init__()
@@ -182,9 +188,12 @@ class DoItYourselfDownload(UnconfirmedDownload):
 class GaikotsuKishiDownload(UnconfirmedDownload):
     title = 'Gaikotsu Kishi-sama, Tadaima Isekai e Odekakechuu'
     keywords = [title, 'Skeleton Knight in Another World', 'Gaikotsukishi']
+    website = 'https://skeleton-knight.com/'
+    twitter = 'gaikotsukishi'
+    hashtags = '骸骨騎士様'
     folder_name = 'gaikotsukishi'
 
-    PAGE_PREFIX = 'https://skeleton-knight.com/'
+    PAGE_PREFIX = website
 
     def __init__(self):
         super().__init__()
@@ -229,9 +238,12 @@ class GaikotsuKishiDownload(UnconfirmedDownload):
 class GoblinSlayer2Download(UnconfirmedDownload):
     title = "Goblin Slayer 2nd Season"
     keywords = [title]
+    website = 'http://www.goblinslayer.jp/'
+    twitter = 'GoblinSlayer_GA'
+    hashtags = 'ゴブスレ'
     folder_name = 'goblin-slayer2'
 
-    PAGE_PREFIX = 'http://www.goblinslayer.jp/'
+    PAGE_PREFIX = website
 
     def __init__(self):
         super().__init__()
@@ -286,9 +298,12 @@ class GoblinSlayer2Download(UnconfirmedDownload):
 class HatarakuMaousama2Download(UnconfirmedDownload):
     title = 'Hataraku Maou-sama! 2nd Season'
     keywords = [title, 'Maousama', 'The Devil is a Part-Timer!']
+    website = 'https://maousama.jp/'
+    twitter = 'anime_maousama'
+    hashtags = 'maousama'
     folder_name = 'hataraku-maousama2'
 
-    PAGE_PREFIX = 'https://maousama.jp/'
+    PAGE_PREFIX = website
 
     def __init__(self):
         super().__init__()
@@ -312,9 +327,12 @@ class HatarakuMaousama2Download(UnconfirmedDownload):
 class IsekaiShokudou2Download(UnconfirmedDownload):
     title = 'Isekai Shokudou 2'
     keywords = [title, 'Restaurant to Another World']
+    website = 'https://isekai-shokudo2.com/'
+    twitter = 'nekoya_PR'
+    hashtags = '異世界食堂'
     folder_name = 'isekai-shokudo2'
 
-    PAGE_PREFIX = 'https://isekai-shokudo2.com/'
+    PAGE_PREFIX = website
 
     def __init__(self):
         super().__init__()
@@ -372,13 +390,78 @@ class IsekaiShokudou2Download(UnconfirmedDownload):
         self.download_by_template(folder, template, 1)
 
 
+# Itai no wa Iya nano de Bougyoryoku ni Kyokufuri Shitai to Omoimasu. 2nd Season
+class Bofuri2Download(UnconfirmedDownload):
+    title = "Itai no wa Iya nano de Bougyoryoku ni Kyokufuri Shitai to Omoimasu. 2nd Season"
+    keywords = [title, 'bofuri', "BOFURI: I Don't Want to Get Hurt, so I'll Max Out My Defense.", '2nd']
+    website = "https://bofuri.jp/"
+    twitter = 'bofuri_anime'
+    hashtags = ['bofuri', '#防振り']
+    folder_name = 'bofuri2'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        try:
+            soup = self.get_soup(news_url, decode=True)
+            articles = soup.select('section.news-data')
+            news_obj = self.get_last_news_log_object()
+            results = []
+            for article in articles:
+                tag_date = article.find('div', class_='date')
+                tag_title = article.find('div', class_='title')
+                a_tag = article.find('a')
+                if tag_date and tag_title and a_tag and a_tag.has_attr('href'):
+                    article_id = news_url + a_tag['href'].replace('./', '')
+                    date = self.format_news_date(tag_date.text.strip().replace('/', '.'))
+                    if len(date) == 0:
+                        continue
+                    title = tag_title.text.strip()
+                    if date.startswith('2021.01.04') or (news_obj and
+                                                         (news_obj['id'] == article_id or date < news_obj['date'])):
+                        break
+                    results.append(self.create_news_log_object(date, title, article_id))
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log_from_news_log_object(result)
+                if process_result == 0:
+                    success_count += 1
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - News')
+            print(e)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('animation_works', 'https://pbs.twimg.com/media/ErSRQUmVoAAkgt7?format=jpg&name=large')
+        self.add_to_image_list('teaser', 'https://pbs.twimg.com/media/ErSKnRwW8AAjOyU?format=jpg&name=4096x4096')
+        self.download_image_list(folder)
+
+
 # Kakkou no Iinazuke
 class KakkounoIinazukeDownload(UnconfirmedDownload):
     title = 'Kakkou no Iinazuke'
     keywords = [title, 'A Couple of Cuckoos']
+    website = 'https://cuckoos-anime.com/'
+    twitter = 'cuckoo_anime'
+    hashtags = 'カッコウの許嫁'
     folder_name = 'kakkou-no-iinazuke'
 
-    PAGE_PREFIX = 'https://cuckoos-anime.com/'
+    PAGE_PREFIX = website
 
     def __init__(self):
         super().__init__()
@@ -437,72 +520,16 @@ class KakkounoIinazukeDownload(UnconfirmedDownload):
         self.download_by_template(folder, template, 1)
 
 
-# Itai no wa Iya nano de Bougyoryoku ni Kyokufuri Shitai to Omoimasu. 2nd Season
-class Bofuri2Download(UnconfirmedDownload):
-    title = "Itai no wa Iya nano de Bougyoryoku ni Kyokufuri Shitai to Omoimasu. 2nd Season"
-    keywords = [title, 'bofuri', "BOFURI: I Don't Want to Get Hurt, so I'll Max Out My Defense.", '2nd']
-    folder_name = 'bofuri2'
-
-    PAGE_PREFIX = "https://bofuri.jp/"
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_news()
-        self.download_key_visual()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_news(self):
-        news_url = self.PAGE_PREFIX + 'news/'
-        try:
-            soup = self.get_soup(news_url, decode=True)
-            articles = soup.select('section.news-data')
-            news_obj = self.get_last_news_log_object()
-            results = []
-            for article in articles:
-                tag_date = article.find('div', class_='date')
-                tag_title = article.find('div', class_='title')
-                a_tag = article.find('a')
-                if tag_date and tag_title and a_tag and a_tag.has_attr('href'):
-                    article_id = news_url + a_tag['href'].replace('./', '')
-                    date = self.format_news_date(tag_date.text.strip().replace('/', '.'))
-                    if len(date) == 0:
-                        continue
-                    title = tag_title.text.strip()
-                    if date.startswith('2021.01.04') or (news_obj and
-                                                         (news_obj['id'] == article_id or date < news_obj['date'])):
-                        break
-                    results.append(self.create_news_log_object(date, title, article_id))
-            success_count = 0
-            for result in reversed(results):
-                process_result = self.create_news_log_from_news_log_object(result)
-                if process_result == 0:
-                    success_count += 1
-            if len(results) > 0:
-                self.create_news_log_cache(success_count, results[0])
-        except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - News')
-            print(e)
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('animation_works', 'https://pbs.twimg.com/media/ErSRQUmVoAAkgt7?format=jpg&name=large')
-        self.add_to_image_list('teaser', 'https://pbs.twimg.com/media/ErSKnRwW8AAjOyU?format=jpg&name=4096x4096')
-        self.download_image_list(folder)
-
-
 # Kenja no Deshi wo Nanoru Kenja
 class KendeshiDownload(UnconfirmedDownload):
     title = 'Kenja no Deshi wo Nanoru Kenja'
     keywords = [title, 'Kendeshi', 'She Professed Herself Pupil of the Wise Man']
+    website = 'https://kendeshi-anime.com/'
+    twitter = 'kendeshi_anime'
+    hashtags = '賢でし'
     folder_name = 'kendeshi'
 
-    PAGE_PREFIX = 'https://kendeshi-anime.com/'
+    PAGE_PREFIX = website
 
     def __init__(self):
         super().__init__()
@@ -570,9 +597,12 @@ class KendeshiDownload(UnconfirmedDownload):
 class KonoHealerDownload(UnconfirmedDownload):
     title = 'Kono Healer, Mendokusai'
     keywords = [title, "This Healer's a Handful"]
+    website = 'https://kono-healer-anime.com/'
+    twitter = 'kono_healer'
+    hashtags = 'このヒーラー'
     folder_name = 'kono-healer'
 
-    PAGE_PREFIX = 'https://kono-healer-anime.com/'
+    PAGE_PREFIX = website
 
     def __init__(self):
         super().__init__()
@@ -631,9 +661,12 @@ class KonoHealerDownload(UnconfirmedDownload):
 class LeadaleDownload(UnconfirmedDownload):
     title = 'Leadale no Daichi nite'
     keywords = [title, 'World of Leadale']
+    website = 'https://leadale.net/'
+    twitter = 'leadale_anime'
+    hashtags = ['leadale', 'リアデイル']
     folder_name = 'leadale'
 
-    PAGE_PREFIX = 'https://leadale.net/'
+    PAGE_PREFIX = website
 
     def __init__(self):
         super().__init__()
@@ -691,9 +724,12 @@ class LeadaleDownload(UnconfirmedDownload):
 class Maohgakuin2Download(UnconfirmedDownload):
     title = "Maou Gakuin no Futekigousha: Shijou Saikyou no Maou no Shiso, Tensei shite Shison-tachi no Gakkou e 2nd Season"
     keywords = [title, 'Maohgakuin', 'The Misfit of Demon King Academy']
+    website = "https://maohgakuin.com/"
+    twitter = 'maohgakuin'
+    hashtags = '魔王学院'
     folder_name = 'maohgakuin2'
 
-    PAGE_PREFIX = "https://maohgakuin.com/"
+    PAGE_PREFIX = website
 
     def __init__(self):
         super().__init__()
@@ -717,9 +753,12 @@ class Maohgakuin2Download(UnconfirmedDownload):
 class Priconne2Download(UnconfirmedDownload):
     title = "Princess Connect! Re:Dive 2nd Season"
     keywords = [title, "Priconne"]
+    website = "https://anime.priconne-redive.jp"
+    twitter = 'priconne_anime'
+    hashtags = ['プリコネ', 'プリコネR', 'アニメプリコネ']
     folder_name = 'priconne2'
 
-    PAGE_PREFIX = "https://anime.priconne-redive.jp"
+    PAGE_PREFIX = website
 
     def __init__(self):
         super().__init__()
@@ -780,9 +819,12 @@ class Priconne2Download(UnconfirmedDownload):
 class ShikkakumonDownload(UnconfirmedDownload):
     title = 'Shikkakumon no Saikyou Kenja'
     keywords = [title]
+    website = 'https://shikkakumon.com/'
+    twitter = 'shikkakumon_PR'
+    hashtags = '失格紋'
     folder_name = 'shikkakumon'
 
-    PAGE_PREFIX = 'https://shikkakumon.com/'
+    PAGE_PREFIX = website
 
     def __init__(self):
         super().__init__()
@@ -841,9 +883,12 @@ class ShikkakumonDownload(UnconfirmedDownload):
 class ShokeiShoujoDownload(UnconfirmedDownload):
     title = 'Shokei Shoujo no Virgin Road'
     keywords = [title]
+    website = 'http://virgin-road.com/'
+    twitter = 'virginroad_GA'
+    hashtags = ['shokei_anime', '処刑少女']
     folder_name = 'shokeishoujo'
 
-    PAGE_PREFIX = 'http://virgin-road.com/'
+    PAGE_PREFIX = website
 
     def run(self):
         self.download_episode_preview()
@@ -864,9 +909,12 @@ class ShokeiShoujoDownload(UnconfirmedDownload):
 class ShuumatsuNoHaremDownload(UnconfirmedDownload):
     title = 'Shuumatsu no Harem'
     keywords = [title, "World's End Harem"]
+    website = 'https://end-harem-anime.com/'
+    twitter = 'harem_official_'
+    hashtags = '終末のハーレム'
     folder_name = 'shuumatsu-no-harem'
 
-    PAGE_PREFIX = 'https://end-harem-anime.com/'
+    PAGE_PREFIX = website
 
     def __init__(self):
         super().__init__()
@@ -988,9 +1036,12 @@ class ShuumatsuNoHaremDownload(UnconfirmedDownload):
 class TensaiOujiDownload(UnconfirmedDownload):
     title = 'Tensai Ouji no Akaji Kokka Saisei Jutsu: Souda, Baikoku shiyou'
     keywords = [title, 'tensaiouji']
+    website = 'https://tensaiouji-anime.com/'
+    twitter = 'tensaiouji_PR'
+    hashtags = '天才王子の赤字国家再生術'
     folder_name = 'tensaiouji'
 
-    PAGE_PREFIX = 'https://tensaiouji-anime.com/'
+    PAGE_PREFIX = website
 
     def __init__(self):
         super().__init__()
@@ -1059,9 +1110,12 @@ class TensaiOujiDownload(UnconfirmedDownload):
 class TsukiLaikaNosferatuDownload(UnconfirmedDownload):
     title = 'Tsuki to Laika to Nosferatu'
     keywords = [title]
+    website = 'https://tsuki-laika-nosferatu.com/'
+    twitter = 'LAIKA_anime'
+    hashtags = '月とライカ'
     folder_name = 'tsuki-laika-nosferatu'
 
-    PAGE_PREFIX = 'https://tsuki-laika-nosferatu.com/'
+    PAGE_PREFIX = website
 
     def __init__(self):
         super().__init__()
@@ -1130,10 +1184,13 @@ class TsukiLaikaNosferatuDownload(UnconfirmedDownload):
 class VladLoveDownload(UnconfirmedDownload):
     title = 'Vlad Love'
     keywords = [title, "Vladlove"]
+    website = 'https://www.vladlove.com/'
+    twitter = 'VLADLOVE_ANIME'
+    hashtags = ['vladlove', 'ぶらどらぶ']
     folder_name = 'vladlove'
     enabled = False
 
-    PAGE_PREFIX = 'https://www.vladlove.com/'
+    PAGE_PREFIX = website
 
     def __init__(self):
         super().__init__()
@@ -1178,9 +1235,12 @@ class VladLoveDownload(UnconfirmedDownload):
 class YamaNoSusume4Download(UnconfirmedDownload):
     title = 'Yama no Susume: Next Summit'
     keywords = [title, "Encouragement of Climb"]
+    website = 'https://yamanosusume-ns.com/'
+    twitter = 'yamanosusume'
+    hashtags = 'ヤマノススメ'
     folder_name = 'yamanosusume4'
 
-    PAGE_PREFIX = 'https://yamanosusume-ns.com/'
+    PAGE_PREFIX = website
 
     def __init__(self):
         super().__init__()
