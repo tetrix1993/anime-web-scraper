@@ -39,7 +39,7 @@ class Arifureta2Download(Winter2022AnimeDownload):
         self.download_key_visual()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        self.has_website_updated(self.PAGE_PREFIX, diff=67)
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + 'news/'
