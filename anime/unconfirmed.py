@@ -39,8 +39,12 @@ class Anohana2Download(UnconfirmedDownload):
     title = 'Ano Hi Mita Hana no Namae wo Bokutachi wa Mada Shiranai. 10th Anniversary Project'
     keywords = [title, 'Anohana', 'The Flower We Saw That Day']
     folder_name = 'anohana2'
+    enabled = False
 
     PAGE_PREFIX = 'https://10th.anohana.jp/'
+
+    def __init__(self):
+        super().__init__()
 
     def run(self):
         self.download_episode_preview()
