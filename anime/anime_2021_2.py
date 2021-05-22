@@ -1750,7 +1750,10 @@ class SentoinDownload(Spring2021AnimeDownload):
         folder = self.create_key_visual_directory()
         self.image_list = []
         self.add_to_image_list('teaser', 'https://pbs.twimg.com/media/Eqbrtf7VEAADuiD?format=jpg&name=4096x4096')
-        self.add_to_image_list('teaser_1', 'https://kisaragi-co.jp/assets/top/main-t1/vis.png')
+        self.add_to_image_list('teaser_1', self.PAGE_PREFIX + 'assets/top/main-t1/vis.png')
+        self.add_to_image_list('topic-1', self.PAGE_PREFIX + 'assets/top/topic-1.jpg')
+        self.add_to_image_list('kv1', 'https://pbs.twimg.com/media/E18L8GgVkAMJFZa?format=jpg&name=4096x4096')
+        #self.add_to_image_list('kv1', self.PAGE_PREFIX + 'assets/news/kv1.jpg')
         self.download_image_list(folder)
 
     def download_character(self):
@@ -1770,10 +1773,14 @@ class SentoinDownload(Spring2021AnimeDownload):
 
     def download_media(self):
         folder = self.create_media_directory()
+        self.image_list = []
+        self.add_to_image_list('collab_komecircus', self.PAGE_PREFIX + 'assets/news/210522-2/main.png')
+        self.download_image_list(folder)
+
+        self.image_list = []
         try:
             soup = self.get_soup(self.PAGE_PREFIX)
             divs = soup.select('#BddvdData div.bddvd-data')
-            self.image_list = []
             for div in divs:
                 if div.has_attr('id'):
                     id_ = div['id']
@@ -1785,10 +1792,10 @@ class SentoinDownload(Spring2021AnimeDownload):
                             image_url = self.PAGE_PREFIX + image['src'].replace('./', '')
                             image_name = id_ + '_' + self.extract_image_name_from_url(image_url, with_extension=False)
                             self.add_to_image_list(image_name, image_url)
-            self.download_image_list(folder)
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + ' - Media')
             print(e)
+        self.download_image_list(folder)
 
 
 # Shadows House
