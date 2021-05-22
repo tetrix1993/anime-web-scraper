@@ -85,7 +85,9 @@ class MainDownload:
             elif isinstance(self.hashtags, list):
                 hash_tags = self.hashtags
 
-            data = {'title': self.title, 'website': self.website, 'twitter': twitter_names, 'hashtags': hash_tags}
+            last_run = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            data = {'title': self.title, 'website': self.website, 'twitter': twitter_names, 'hashtags': hash_tags,
+                    'lastRun': last_run}
             with open(filepath, 'w+', encoding='utf-8') as f:
                 json.dump(data, f)
 

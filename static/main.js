@@ -1,5 +1,6 @@
 let $navbar = $('#navbar');
 let $subdirs = $('#subdirs');
+let $additionalInfo = $('#additionalInfo');
 let $title = $('#title');
 let $twitterData = $('#twitter_data');
 let $images = $('#images');
@@ -8,9 +9,12 @@ let $globalLogs = $('#global_logs');
 let $audios = $('#audios');
 let $videos = $('#videos');
 let $htmlFiles = $('#html_files');
+let $lastRun = $('#lastRun');
 let $footer = $('#footer');
 let $imageSize = $('#imageSize');
 let imageSize = '24';
+
+let additionalInfoVisible = true;
 
 let getphp = function(dir) {
     hideDivs();
@@ -34,6 +38,8 @@ let getphp = function(dir) {
                     populateTitle(obj.meta);
                 if ('twitter' in obj.meta || 'hashtags' in obj.meta)
                     populateTwitterData(obj.meta.twitter, obj.meta.hashtags);
+                if ('lastRun' in obj.meta)
+                    populateLastRun(obj.meta.lastRun);
                 showDivs(obj);
             },
             400: function(xhr, status, error) {
@@ -169,6 +175,14 @@ let populateHtmlFiles = function(htmlFiles) {
     $htmlFiles.html($content);
 }
 
+let populateLastRun = function(lastRun) {
+    $lastRun.empty();
+    if (lastRun.length == 0)
+        return;
+    let content = 'Last run: ' + lastRun;
+    $lastRun.html(content);
+}
+
 let goToTop = function() {
     document.body.scrollTop = 0;
     document.documentElement.scrollTop = 0;
@@ -179,7 +193,7 @@ let scrollToTop = function(id) {
 }
 
 let hideDivs = function() {
-    list = [$subdirs, $title, $twitterData, $images, $logs, $audios, $videos, $htmlFiles, $footer];
+    list = [$subdirs, $title, $twitterData, $images, $logs, $audios, $videos, $htmlFiles, $lastRun, $footer];
     for (i = 0; i < list.length; i++)
         hideDiv(list[i]);
 }
@@ -204,6 +218,8 @@ let showDivs = function(obj) {
         $title.attr('hidden', false);
     if ('twitter' in obj.meta || 'hashtags' in obj.meta)
         $twitterData.attr('hidden', false);
+    if ('lastRun' in obj.meta)
+        $lastRun.attr('hidden', false);
 }
 
 let showDiv = function(list, $elem) {
@@ -237,6 +253,20 @@ let loadFrame = function(id)
     $frame = $('#' + id);
     $frame.empty();
     $frame.html('<iframe src="../static/get_logs.php?dir=' + $frame.attr('data-src') + '" width="100%" height="300px"></iframe>');
+}
+
+let toggleInfo = function()
+{
+    if (additionalInfoVisible)
+    {
+        additionalInfoVisible = false;
+        $additionalInfo.attr('hidden', true);
+    }
+    else
+    {
+        additionalInfoVisible = true;
+        $additionalInfo.attr('hidden', false);
+    }
 }
 
 $(document).ready(function() {

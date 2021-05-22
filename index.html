@@ -7,10 +7,13 @@
 </head>
 <body>
     <h1>Content Viewer</h1>
-    <div class="container" id="navbar_parent"><div class="container-nav" id="navbar"></div>&nbsp;<button id="btnResize" onclick="resizeImage()">Image Size: <span id="imageSize">25</span>%</button></div>
-    <div class="container" id="subdirs" hidden></div>
-    <div class="container" id="title" hidden></div>
-    <div class="container" id="twitter_data" hidden></div>
+    <div class="container" id="navbar_parent"><div class="container-nav" id="navbar"></div>&nbsp;<button id="btnResize" onclick="resizeImage()">Image Size: <span id="imageSize">25</span>%</button>&nbsp;<button id="toggleInfo" onclick="toggleInfo()">Show/Hide Info</button></div>
+    <div id="additionalInfo">
+        <div class="container" id="subdirs" hidden></div>
+        <div class="container" id="title" hidden></div>
+        <div class="container" id="twitter_data" hidden></div>
+        <div class="container" id="lastRun" hidden></div>
+    </div>
     <div class="container" id="audios" hidden></div>
     <div class="container" id="videos" hidden></div>
     <div class="container" id="images" hidden></div>
