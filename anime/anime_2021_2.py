@@ -97,6 +97,7 @@ class EightySixDownload(Spring2021AnimeDownload):
 
     def download_episode_preview_guess(self):
         folder = self.create_custom_directory('guess')
+        is_success = False
         for i in range(self.FINAL_EPISODE):
             episode = str(i + 1).zfill(2)
             start_num = None
@@ -111,6 +112,8 @@ class EightySixDownload(Spring2021AnimeDownload):
             if not self.download_by_template(folder, template, 1, start=start_num, end=5):
                 break
             print(self.__class__.__name__ + ' - Episode %s guessed correctly!' % episode)
+            is_success = True
+        return is_success
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + 'news/'
@@ -536,6 +539,7 @@ class HigehiroDownload(Spring2021AnimeDownload):
 
     def download_episode_preview_guess(self):
         folder = self.create_custom_directory('guess')
+        is_success = False
         for i in range(self.FINAL_EPISODE):
             episode = str(i + 1).zfill(2)
             if self.is_image_exists(episode + '_1'):
@@ -545,6 +549,8 @@ class HigehiroDownload(Spring2021AnimeDownload):
             if not self.download_by_template(folder, [template1, template2], 1, start=1, end=6):
                 break
             print(self.__class__.__name__ + ' - Episode %s guessed correctly!' % episode)
+            is_success = True
+        return is_success
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + 'news/'
@@ -879,6 +885,7 @@ class IsekaiMaou2Download(Spring2021AnimeDownload):
     def download_episode_preview_guess(self):
         folder = self.create_custom_directory('guess')
         dt_month = datetime.now().strftime("%m").zfill(2)
+        is_success = False
         for i in range(self.FINAL_EPISODE):
             episode = str(i + 1).zfill(2)
             if self.is_image_exists(episode + '_1'):
@@ -886,6 +893,9 @@ class IsekaiMaou2Download(Spring2021AnimeDownload):
             template = f'{self.PAGE_PREFIX}wp/wp-content/uploads/2021/{dt_month}/異世界魔王Ω_{episode}-%s.jpg'
             if not self.download_by_template(folder, template, 2, start=1, end=6):
                 break
+            is_success = True
+            print(self.__class__.__name__ + ' - Episode %s guessed correctly!' % episode)
+        return is_success
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + 'news/'
@@ -1045,6 +1055,7 @@ class FullDiveRPGDownload(Spring2021AnimeDownload):
     def download_episode_preview_guess(self):
         folder = self.create_custom_directory('guess')
         template = self.PAGE_PREFIX + 'img/story/ep%s_img%s.jpg'
+        is_success = False
         for i in range(self.FINAL_EPISODE):
             episode = str(i + 1).zfill(2)
             if self.is_image_exists(episode + '_1'):
@@ -1054,6 +1065,9 @@ class FullDiveRPGDownload(Spring2021AnimeDownload):
             result = self.download_by_template(folder, url_template, 2, start=1, end=self.IMAGES_PER_EPISODE)
             if not result:
                 break
+            print(self.__class__.__name__ + ' - Episode %s guessed correctly!' % episode)
+            is_success = True
+        return is_success
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + 'news.html'
@@ -1317,6 +1331,7 @@ class OsamakeDownload(Spring2021AnimeDownload):
 
     def download_episode_preview_guess(self):
         folder = self.create_custom_directory('guess')
+        is_success = False
         for i in range(self.FINAL_EPISODE):
             episode = str(i + 1).zfill(2)
             if self.is_image_exists(episode + '_1'):
@@ -1324,6 +1339,9 @@ class OsamakeDownload(Spring2021AnimeDownload):
             template = self.PAGE_PREFIX + 'assets/story/%s_%s.jpg' % (str(i + 1), '%s')
             if not self.download_by_template(folder, template, 1):
                 break
+            print(self.__class__.__name__ + ' - Episode %s guessed correctly!' % episode)
+            is_success = True
+        return is_success
 
     def download_episode_preview_external(self):
         jp_title = '幼なじみが絶対に負けないラブコメ'
@@ -2367,6 +2385,7 @@ class SuperCubDownload(Spring2021AnimeDownload):
     def download_episode_preview_guess(self):
         folder = self.create_custom_directory('guess')
         template = self.PAGE_PREFIX + 'core_sys/images/contents/%s/block/%s/%s.jpg'
+        is_successful = False
         for i in range(self.FINAL_EPISODE):
             episode = str(i + 1).zfill(2)
             is_success = False
@@ -2382,6 +2401,7 @@ class SuperCubDownload(Spring2021AnimeDownload):
                 if result == 0:
                     print(self.__class__.__name__ + ' - Guessed successfully!')
                     is_success = True
+                    is_successful = True
                 elif result == -1:
                     break
             if not is_success:
@@ -2390,6 +2410,7 @@ class SuperCubDownload(Spring2021AnimeDownload):
                 return
         if len(os.listdir(folder)) == 0:
             os.rmdir(folder)
+        return is_successful
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + 'news/'
@@ -2572,6 +2593,7 @@ class VivyDownload(Spring2021AnimeDownload):
     def download_episode_preview_guess(self):
         folder = self.create_custom_directory('guess')
         template = self.PAGE_PREFIX + 'assets/img/story/cut/%s.jpg'
+        is_success = False
         for i in range(self.FINAL_EPISODE):
             episode = str(i + 1).zfill(2)
             if self.is_image_exists(episode + '_01', folder):
@@ -2579,6 +2601,9 @@ class VivyDownload(Spring2021AnimeDownload):
             image_template = template % (episode + '_%s')
             if not self.download_by_template(folder, image_template, 2):
                 break
+            print(self.__class__.__name__ + ' - Episode %s guessed correctly!' % episode)
+            is_success = True
+        return is_success
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + 'news/'
@@ -2753,6 +2778,7 @@ class YakunaraMugCupMoDownload(Spring2021AnimeDownload):
     def download_episode_preview_guess(self):
         self.image_list = []
         image_template = 'https://yakumo-project.com/story/images/%s_%s.jpg'
+        is_success = False
         for i in range(self.FINAL_EPISODE):
             for j in range(self.IMAGES_PER_EPISODE):
                 image_name = '%s_%s' % (str(i + 1).zfill(2), str(j + 1))
@@ -2762,6 +2788,9 @@ class YakunaraMugCupMoDownload(Spring2021AnimeDownload):
                 result = self.download_image(image_url, self.base_folder + '/' + image_name)
                 if result == -1:
                     return
+                print(self.__class__.__name__ + ' - Episode %s guessed correctly!' % str(i + 1))
+                is_success = True
+        return is_success
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + 'news/'
