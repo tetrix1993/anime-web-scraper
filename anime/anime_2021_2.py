@@ -972,6 +972,11 @@ class IsekaiMaou2Download(Spring2021AnimeDownload):
 
     def download_media(self):
         folder = self.create_media_directory()
+        self.image_list = []
+        self.add_to_image_list('bd1_1', 'https://pbs.twimg.com/media/E2OSa-MVkAQ2x2t?format=jpg&name=medium')
+        self.add_to_image_list('bd1_2', 'https://pbs.twimg.com/media/E2OSbaxUUAA_5xy?format=jpg&name=medium')
+        self.download_image_list(folder)
+
         for url in ['bd/store/', 'bd/', 'bd/vol1/']:
             bd_url = self.PAGE_PREFIX + url
             self.image_list = []
