@@ -129,7 +129,7 @@ class DoItYourselfDownload(UnconfirmedDownload):
 
     def run(self):
         self.download_episode_preview()
-        # self.download_news()
+        self.download_news()
         self.download_key_visual()
         self.download_character()
 
@@ -137,25 +137,47 @@ class DoItYourselfDownload(UnconfirmedDownload):
         self.has_website_updated(self.PAGE_PREFIX, 'index', diff=2)
 
     def download_news(self):
-        news_url = self.PAGE_PREFIX
+        news_url = self.PAGE_PREFIX + 'news/'
         try:
-            soup = self.get_soup(news_url, decode=True)
-            articles = soup.select('ul.news_List li.news_List_Item')
+            page = 0
+            stop = False
             news_obj = self.get_last_news_log_object()
             results = []
-            for article in articles:
-                tag_date = article.find('time', class_='roboto')
-                a_tag = article.find('a')
-                if tag_date and a_tag and a_tag.has_attr('href'):
-                    article_id = a_tag['href']
-                    date = self.format_news_date(tag_date.text.strip().replace('/', '.'))
-                    if len(date) == 0:
-                        continue
-                    title = a_tag.text.strip()
-                    if news_obj and ((news_obj['id'] == article_id and news_obj['title'] == title)
-                                     or date < news_obj['date']):
+            curr_news_url = news_url
+            while len(curr_news_url) > 0:
+                page += 1
+                soup = self.get_soup(curr_news_url, decode=True)
+                articles = soup.select('li.news_List_Item')
+                for article in articles:
+                    tag_date = article.find('time', class_='roboto')
+                    tag_title = article.find('div', class_='ttl')
+                    a_tag = article.find('a')
+                    if tag_date and a_tag and a_tag.has_attr('href'):
+                        article_id = news_url + a_tag['href']
+                        date = self.format_news_date(tag_date.text.strip().replace('/', '.'))
+                        if len(date) == 0:
+                            continue
+                        title = ' '.join(tag_title.text.strip().split())
+                        if news_obj and ((news_obj['id'] == article_id and news_obj['title'] == title)
+                                         or date < news_obj['date']):
+                            stop = True
+                            break
+                        results.append(self.create_news_log_object(date, title, article_id))
+
+                if stop:
+                    break
+                next_page = soup.select('div.paging a.next')
+                if len(next_page) > 0:
+                    try:
+                        next_page_num = int(next_page[0]['href'].split('=')[1])
+                        if next_page_num == page:
+                            break
+                        else:
+                            curr_news_url = next_page[0]['href']
+                    except Exception:
                         break
-                    results.append(self.create_news_log_object(date, title, article_id))
+                else:
+                    break
             success_count = 0
             for result in reversed(results):
                 process_result = self.create_news_log_from_news_log_object(result)
@@ -174,14 +196,13 @@ class DoItYourselfDownload(UnconfirmedDownload):
         self.add_to_image_list('teaser_tw', self.PAGE_PREFIX + 'assets/images/pc/teaser/img_kv.png')
         self.download_image_list(folder)
 
+        template = self.PAGE_PREFIX + 'assets/images/pc/index/img_kv-%s.png'
+        self.download_by_template(folder, template, 1)
+
     def download_character(self):
         folder = self.create_character_directory()
-        self.image_list = []
-        for i in range(6):
-            image_name = 'img_chara-%s' % str(i)
-            image_url = self.PAGE_PREFIX + 'assets/images/pc/teaser/' + image_name + '.png'
-            self.add_to_image_list(image_name, image_url)
-        self.download_image_list(folder)
+        template = self.PAGE_PREFIX + 'assets/images/pc/teaser/img_chara-%s.png'
+        self.download_by_template(folder, template, 1, 0)
 
 
 # Gaikotsu Kishi-sama, Tadaima Isekai e Odekakechuu
