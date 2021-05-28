@@ -2569,7 +2569,12 @@ class VivyDownload(Spring2021AnimeDownload):
             for ep_item in ep_items:
                 if ep_item.has_attr('href'):
                     try:
-                        episode = str(int(ep_item['href'].split('?id=ep')[1])).zfill(2)
+                        str_ = ep_item['href'].split('?id=ep')[1]
+                        final_str = ''
+                        for s in str_:
+                            if s.isdigit():
+                                final_str += s
+                        episode = str(int(final_str)).zfill(2)
                     except:
                         continue
                     if self.is_image_exists(episode + '_1'):
