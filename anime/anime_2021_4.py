@@ -260,7 +260,7 @@ class AnsatsuKizokuDownload(Fall2021AnimeDownload):
                 tag_title = li.find('div', class_='title')
                 a_tag = li.find('a')
                 if tag_date and tag_title and a_tag and a_tag.has_attr('href'):
-                    article_id = news_url + a_tag['href']
+                    article_id = a_tag['href']
                     date = tag_date.text.strip().replace('-', '.')
                     title = tag_title.text.strip()
                     if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
