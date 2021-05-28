@@ -975,6 +975,7 @@ class IsekaiMaou2Download(Spring2021AnimeDownload):
         self.image_list = []
         self.add_to_image_list('bd1_1', 'https://pbs.twimg.com/media/E2OSa-MVkAQ2x2t?format=jpg&name=medium')
         self.add_to_image_list('bd1_2', 'https://pbs.twimg.com/media/E2OSbaxUUAA_5xy?format=jpg&name=medium')
+        self.add_to_image_list('bd1_3', 'https://pbs.twimg.com/media/E2eUWbLVgAUVk66?format=jpg&name=large')
         self.download_image_list(folder)
 
         for url in ['bd/store/', 'bd/', 'bd/vol1/']:
@@ -1003,6 +1004,7 @@ class IsekaiMaou2Download(Spring2021AnimeDownload):
         self.add_to_image_list('ec05', 'https://pbs.twimg.com/media/E0txjzzVUAcln7Y?format=jpg&name=large')
         self.add_to_image_list('ec06', 'https://pbs.twimg.com/media/E1SHDB-VcAEE4Bw?format=jpg&name=large')
         self.add_to_image_list('ec07', 'https://pbs.twimg.com/media/E12LK07UcAAKz6c?format=jpg&name=large')
+        self.add_to_image_list('ec08', 'https://pbs.twimg.com/media/E2aPCEiVUAEXiHh?format=jpg&name=large')
         self.download_image_list(folder)
 
 
