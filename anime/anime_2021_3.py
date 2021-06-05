@@ -593,7 +593,7 @@ class JahysamaDownload(Summer2021AnimeDownload):
 class KanokanoDownload(Summer2021AnimeDownload):
     title = 'Kanojo mo Kanojo'
     keywords = [title, 'Kanokano']
-    website = 'https://kanokano-anime.com/'
+    website = 'https://kanokano-anime.com'
     twitter = 'kanokano_anime'
     hashtags = ['kanokano', 'カノジョも彼女']
     folder_name = 'kanokano'
@@ -613,21 +613,22 @@ class KanokanoDownload(Summer2021AnimeDownload):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
 
     def download_news(self):
-        news_url = self.PAGE_PREFIX
+        news_url = self.PAGE_PREFIX + '/news/'
         try:
             soup = self.get_soup(news_url, decode=True)
-            articles = soup.select('ul.news-list li.news-list-node')
+            articles = soup.select('article.news-lineup__block')
             news_obj = self.get_last_news_log_object()
             results = []
             for article in articles:
-                tag_date = article.find('div', class_='news-date')
-                tag_title = article.find('div', class_='news-title')
-                if tag_date and tag_title:
-                    article_id = ''
-                    date = self.format_news_date(tag_date.text.strip().replace('/', '.'))
+                tag_date = article.find('dt')
+                tag_title = article.find('h2')
+                a_tag = article.find('a')
+                if tag_date and tag_title and a_tag:
+                    article_id = self.PAGE_PREFIX + a_tag['href']
+                    date = self.format_news_date(tag_date.text.strip())
                     if len(date) == 0:
                         continue
-                    title = tag_title.text.strip()
+                    title = ' '.join(tag_title.text.strip().split())
                     if news_obj and ((news_obj['date'] == date and news_obj['title'] == title)
                                      or date < news_obj['date']):
                         break
@@ -647,13 +648,13 @@ class KanokanoDownload(Summer2021AnimeDownload):
         folder = self.create_key_visual_directory()
         self.image_list = []
         # self.add_to_image_list('teaser', self.PAGE_PREFIX + 'assets/img/mv-img.png')
-        self.add_to_image_list('kv1', self.PAGE_PREFIX + 'assets/img/mv-img@2x.png')
+        self.add_to_image_list('kv1', self.PAGE_PREFIX + '/assets/img/mv-img@2x.png')
         self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/ExivmbSVEAMCkMG?format=jpg&name=large')
         self.download_image_list(folder)
 
     def download_character(self):
         folder = self.create_character_directory()
-        template = self.PAGE_PREFIX + 'assets/img/character-detail-img%s@2x.png'
+        template = self.PAGE_PREFIX + '/assets/img/character-detail-img%s@2x.png'
         self.download_by_template(folder, template, 2)
 
 
