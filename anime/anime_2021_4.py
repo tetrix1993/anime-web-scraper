@@ -70,7 +70,7 @@ class KomisanDownload(Fall2021AnimeDownload):
                         date = self.format_news_date(tag_date.text.strip())
                         if len(date) == 0:
                             continue
-                        title = ''.join(tag_title.text.split())
+                        title = ' '.join(tag_title.text.split())
                         if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
                             stop = True
                             break

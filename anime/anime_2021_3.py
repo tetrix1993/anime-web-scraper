@@ -21,6 +21,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 # Seirei Gensouki https://seireigensouki.com/ #精霊幻想記 @seireigensouki
 # Shiroi Suna no Aquatope https://aquatope-anime.com/ #白い砂のアクアトープ @aquatope_anime
 # Tantei wa Mou, Shindeiru. https://tanmoshi-anime.jp/ #たんもし @tanteiwamou_
+# Tsuki ga Michibiku Isekai Douchuu #ツキミチ @tsukimichi_PR
 
 
 # Summer 2021 Anime
@@ -484,7 +485,7 @@ class JahysamaDownload(Summer2021AnimeDownload):
                         date = self.format_news_date(tag_date.text.strip())
                         if len(date) == 0:
                             continue
-                        title = ''.join(tag_title.text.strip())
+                        title = ' '.join(tag_title.text.strip())
                         if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
                             stop = True
                             break
@@ -1400,3 +1401,93 @@ class TanmoshiDownload(Summer2021AnimeDownload):
         for i in ('01_kimizuka', '02_siesta', '03_nagisa', '04_yui', '05_charlotte'):
             url = template2 % i
             self.download_content(url, folder + '/' + i + '_2.mp3')
+
+
+# Tsuki ga Michibiku Isekai Douchuu
+class TsukimichiDownload(Summer2021AnimeDownload):
+    title = "Tsuki ga Michibiku Isekai Douchuu"
+    keywords = [title, "Tsukimichi", "Moonlit Fantasy"]
+    website = 'https://tsukimichi.com/'
+    twitter = 'tsukimichi_PR'
+    hashtags = 'ツキミチ'
+    folder_name = 'tsukimichi'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+        self.download_media()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        stop = False
+        try:
+            results = []
+            news_obj = self.get_last_news_log_object()
+            page_url = news_url
+            for page in range(1, 100, 1):
+                soup = self.get_soup(page_url, decode=True)
+                articles = soup.select('article.md-article__block')
+                for article in articles:
+                    tag_date = article.find('time')
+                    tag_title = article.find('h3')
+                    a_tag = article.find('a')
+                    if tag_date and tag_title and a_tag and a_tag.has_attr('href'):
+                        article_id = self.PAGE_PREFIX + a_tag['href'].replace('../', '')
+                        date = self.format_news_date(' '.join(tag_date.text.split()))
+                        if len(date) == 0:
+                            continue
+                        title = ' '.join(tag_title.text.strip().split())
+                        if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
+                            stop = True
+                            break
+                        results.append(self.create_news_log_object(date, title, article_id))
+                if stop:
+                    break
+                pagenation_list = soup.find('ul', class_='pagenation-list')
+                if pagenation_list is None:
+                    break
+                pagenation_list_lis = pagenation_list.select('li')
+                if len(pagenation_list_lis) == 0:
+                    break
+                next_page_a_tag = pagenation_list_lis[-1].find('a')
+                if not next_page_a_tag or next_page_a_tag['href'] == page_url:
+                    break
+                page_url = next_page_a_tag['href']
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log_from_news_log_object(result)
+                if process_result == 0:
+                    success_count += 1
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - News')
+            print(e)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('teaser', 'https://pbs.twimg.com/media/ElZibOAU0AQ8ewu?format=jpg&name=large')
+        self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/E0dDrRqVgAQ3cH9?format=jpg&name=4096x4096')
+        self.add_to_image_list('kv1', self.PAGE_PREFIX + 'wp/wp-content/themes/tsukimichi-main/_assets/images/top/visual/pc.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        base_url = self.PAGE_PREFIX + 'wp/wp-content/themes/tsukimichi-main/_assets/images/pages/char/'
+        main_template = base_url + 'main/char_%s_pc.png'
+        face_template = base_url + 'face/face_%s.png'
+        self.download_by_template(folder, [main_template, face_template], 3, start=1)
+
+    def download_media(self):
+        pass

@@ -130,6 +130,7 @@ The premiere date for the anime listed here has not been announced.
 * [Seirei Gensouki](https://seireigensouki.com/)
 * [Shiroi Suna no Aquatope](https://aquatope-anime.com/)
 * [Tantei wa Mou, Shindeiru.](https://tanmoshi-anime.jp/)
+* [Tsuki ga Michibiku Isekai Douchuu](https://tsukimichi.com/)
 
 ### Spring 2021 Anime
 * [86](https://anime-86.com/)
