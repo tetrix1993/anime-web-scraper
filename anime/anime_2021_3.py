@@ -667,6 +667,7 @@ class KobayashiMaidDragon2Download(Summer2021AnimeDownload):
     folder_name = 'maidragon2'
 
     PAGE_PREFIX = website
+    BASE_PREFIX = 'https://maidragon.jp/'
 
     def __init__(self):
         super().__init__()
@@ -726,11 +727,18 @@ class KobayashiMaidDragon2Download(Summer2021AnimeDownload):
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         self.image_list = []
+        news_prefix = self.BASE_PREFIX + 'news/wordpress/wp-content/uploads/'
         self.add_to_image_list('teaser', 'https://pbs.twimg.com/media/EfEVvJEUwAI6LmD?format=jpg&name=large')
         self.add_to_image_list('teaser_covid', 'https://pbs.twimg.com/media/EfEVvJEUwAI6LmD?format=jpg&name=large')
         self.add_to_image_list('newyear_2021', 'https://pbs.twimg.com/media/EqkvG-lUcAInMkK?format=jpg&name=4096x4096')
         self.add_to_image_list('kv1_1', 'https://pbs.twimg.com/media/Ervaz89VEAkqjT-?format=jpg&name=900x900')
-        self.add_to_image_list('kv1_2', 'https://maidragon.jp/2nd/img/pre/visual_02.png')
+        self.add_to_image_list('kv1_2', self.PAGE_PREFIX + 'img/pre/visual_02.png')
+        self.add_to_image_list('kv2', news_prefix + '2021/06/KV2.jpg')
+        self.add_to_image_list('onair_visual01', news_prefix + '2021/04/maidragonS_onair_visual01.jpg')
+        self.add_to_image_list('onair_visual02', news_prefix + '2021/05/E0nNpJtUcAI5EU5.jpeg')
+        self.add_to_image_list('onair_visual03', news_prefix + '2021/05/maidragonS_onair_visual03.jpg')
+        self.add_to_image_list('onair_visual04', news_prefix + '2021/05/maidragonS_onair_visual04.jpg')
+        self.add_to_image_list('onair_visual05', news_prefix + '2021/05/maidragonS_onair_visual05.jpg')
         self.download_image_list(folder)
 
 
