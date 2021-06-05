@@ -1073,7 +1073,7 @@ class PeachBoyRiversideDownload(Summer2021AnimeDownload):
         try:
             results = []
             news_obj = self.get_last_news_log_object()
-            for page in range(1, 2, 1):
+            for page in range(1, 100, 1):
                 page_url = news_url
                 if page > 1:
                     page_url = news_url + 'page/' + str(page) + '/'
@@ -1093,10 +1093,8 @@ class PeachBoyRiversideDownload(Summer2021AnimeDownload):
                         results.append(self.create_news_log_object(date, title, article_id))
                 if stop:
                     break
-                pagination = soup.select('ul.pagenation-list li')
+                pagination = soup.select('ul.pagenation-list li.next')
                 if len(pagination) == 0:
-                    break
-                if pagination[-1].has_attr('class') and 'is__current' in pagination[-1]['class']:
                     break
             success_count = 0
             for result in reversed(results):
