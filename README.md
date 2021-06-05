@@ -114,6 +114,7 @@ The premiere date for the anime listed here has not been announced.
 * [Yuuki Yuuna wa Yuusha de Aru: Dai Mankai no Shou](https://yuyuyu.tv/season2/)
 
 ### Summer 2021 Anime
+* [100-man no Inochi no Ue ni Ore wa Tatteiru 2nd Season](https://1000000-lives.com/)
 * [Bokutachi no Remake](http://bokurema.com/)
 * [Cheat Kusushi no Slow Life: Isekai ni Tsukurou Drugstore](https://www.cheat-kusushi.jp/)
 * [Deatte 5-byou de Battle](https://dea5-anime.com/)
