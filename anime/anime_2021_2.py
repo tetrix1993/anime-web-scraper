@@ -1004,7 +1004,9 @@ class IsekaiMaou2Download(Spring2021AnimeDownload):
         self.add_to_image_list('ec05', 'https://pbs.twimg.com/media/E0txjzzVUAcln7Y?format=jpg&name=large')
         self.add_to_image_list('ec06', 'https://pbs.twimg.com/media/E1SHDB-VcAEE4Bw?format=jpg&name=large')
         self.add_to_image_list('ec07', 'https://pbs.twimg.com/media/E12LK07UcAAKz6c?format=jpg&name=large')
-        self.add_to_image_list('ec08', 'https://pbs.twimg.com/media/E2aPCEiVUAEXiHh?format=jpg&name=large')
+        self.add_to_image_list('ec08_1', 'https://pbs.twimg.com/media/E2aPBxWVcAUM7Fv?format=jpg&name=large')
+        self.add_to_image_list('ec08_2', 'https://pbs.twimg.com/media/E2aPCEiVUAEXiHh?format=jpg&name=large')
+        self.add_to_image_list('ec09', 'https://pbs.twimg.com/media/E29wfKCVcAgAR64?format=jpg&name=large')
         self.download_image_list(folder)
 
 
