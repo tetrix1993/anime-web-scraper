@@ -1,6 +1,6 @@
 import os
 import anime.constants as constants
-from anime.main_download import MainDownload, NewsTemplate1
+from anime.main_download import MainDownload, NewsTemplate1, NewsTemplate2
 
 # Anohana S2 https://10th.anohana.jp/ #あの花 #anohana @anohana_project
 # Do It Yourself!! https://diy-anime.com/ #diyアニメ @diy_anime
@@ -345,7 +345,7 @@ class HatarakuMaousama2Download(UnconfirmedDownload):
 
 
 # Isekai Shokudou 2
-class IsekaiShokudou2Download(UnconfirmedDownload):
+class IsekaiShokudou2Download(UnconfirmedDownload, NewsTemplate2):
     title = 'Isekai Shokudou 2'
     keywords = [title, 'Restaurant to Another World']
     website = 'https://isekai-shokudo2.com/'
@@ -368,36 +368,7 @@ class IsekaiShokudou2Download(UnconfirmedDownload):
         self.has_website_updated(self.PAGE_PREFIX)
 
     def download_news(self):
-        news_url = self.PAGE_PREFIX + 'news.html'
-        try:
-            soup = self.get_soup(news_url, decode=True)
-            articles = soup.find_all('article', class_='content-entry')
-            news_obj = self.get_last_news_log_object()
-            results = []
-            for article in articles:
-                if not article.has_attr('id'):
-                    continue
-                tag_date = article.find('div', class_='entry-date')
-                tag_title = article.find('h2', class_='entry-title')
-                if tag_date and tag_title:
-                    article_id = article['id']
-                    date = self.format_news_date(tag_date.text.replace('/', '.'))
-                    if len(date) == 0:
-                        continue
-                    title = tag_title.text
-                    if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
-                        break
-                    results.append(self.create_news_log_object(date, title, article_id))
-            success_count = 0
-            for result in reversed(results):
-                process_result = self.create_news_log_from_news_log_object(result)
-                if process_result == 0:
-                    success_count += 1
-            if len(results) > 0:
-                self.create_news_log_cache(success_count, results[0])
-        except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - News')
-            print(e)
+        self.download_template_news(self.PAGE_PREFIX)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -474,7 +445,7 @@ class Bofuri2Download(UnconfirmedDownload):
 
 
 # Kakkou no Iinazuke
-class KakkounoIinazukeDownload(UnconfirmedDownload):
+class KakkounoIinazukeDownload(UnconfirmedDownload, NewsTemplate2):
     title = 'Kakkou no Iinazuke'
     keywords = [title, 'A Couple of Cuckoos']
     website = 'https://cuckoos-anime.com/'
@@ -497,36 +468,7 @@ class KakkounoIinazukeDownload(UnconfirmedDownload):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
 
     def download_news(self):
-        news_url = self.PAGE_PREFIX + 'news.html'
-        try:
-            soup = self.get_soup(news_url, decode=True)
-            articles = soup.find_all('article', class_='content-entry')
-            news_obj = self.get_last_news_log_object()
-            results = []
-            for article in articles:
-                if not article.has_attr('id'):
-                    continue
-                tag_date = article.find('div', class_='entry-date')
-                tag_title = article.find('h2', class_='entry-title')
-                if tag_date and tag_title:
-                    article_id = article['id']
-                    date = self.format_news_date(tag_date.text.strip())
-                    if len(date) == 0:
-                        continue
-                    title = tag_title.text.strip()
-                    if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
-                        break
-                    results.append(self.create_news_log_object(date, title, article_id))
-            success_count = 0
-            for result in reversed(results):
-                process_result = self.create_news_log_from_news_log_object(result)
-                if process_result == 0:
-                    success_count += 1
-            if len(results) > 0:
-                self.create_news_log_cache(success_count, results[0])
-        except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - News')
-            print(e)
+        self.download_template_news(self.PAGE_PREFIX)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -679,7 +621,7 @@ class KonoHealerDownload(UnconfirmedDownload):
 
 
 # Leadale no Daichi nite
-class LeadaleDownload(UnconfirmedDownload):
+class LeadaleDownload(UnconfirmedDownload, NewsTemplate2):
     title = 'Leadale no Daichi nite'
     keywords = [title, 'World of Leadale']
     website = 'https://leadale.net/'
@@ -701,36 +643,7 @@ class LeadaleDownload(UnconfirmedDownload):
         self.has_website_updated(self.PAGE_PREFIX)
 
     def download_news(self):
-        news_url = self.PAGE_PREFIX + 'news.html'
-        try:
-            soup = self.get_soup(news_url, decode=True)
-            articles = soup.find_all('article', class_='content-entry')
-            news_obj = self.get_last_news_log_object()
-            results = []
-            for article in articles:
-                if not article.has_attr('id'):
-                    continue
-                tag_date = article.find('div', class_='entry-date')
-                tag_title = article.find('h2', class_='entry-title')
-                if tag_date and tag_title:
-                    article_id = article['id']
-                    date = self.format_news_date(tag_date.text)
-                    if len(date) == 0:
-                        continue
-                    title = tag_title.text
-                    if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
-                        break
-                    results.append(self.create_news_log_object(date, title, article_id))
-            success_count = 0
-            for result in reversed(results):
-                process_result = self.create_news_log_from_news_log_object(result)
-                if process_result == 0:
-                    success_count += 1
-            if len(results) > 0:
-                self.create_news_log_cache(success_count, results[0])
-        except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - News')
-            print(e)
+        self.download_template_news(self.PAGE_PREFIX)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()

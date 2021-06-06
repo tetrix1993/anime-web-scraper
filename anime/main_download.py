@@ -886,7 +886,7 @@ class MainDownload:
 
 
 class NewsTemplate1:
-    def download_template_news(self, page_prefix, first_page_url=None):
+    def download_template_news(self, page_prefix, first_page_url=None, stop_date=None):
         if not issubclass(self.__class__, MainDownload):
             return
 
@@ -920,8 +920,9 @@ class NewsTemplate1:
                             article_id = page_prefix + a_tag['href'].replace('../', '')
                         date = tag_date.text.replace('/', '.')
                         title = tag_title.text.strip()
-                        if news_obj and ((news_obj['id'] == article_id and news_obj['title'] == title)
-                                         or date < news_obj['date']):
+                        if (stop_date is not None and date.startswith(stop_date)) or\
+                                (news_obj and ((news_obj['id'] == article_id and news_obj['title'] == title)\
+                                         or date < news_obj['date'])):
                             stop = True
                             break
                         results.append(self.create_news_log_object(date, title, article_id))
@@ -934,6 +935,52 @@ class NewsTemplate1:
                 if nb_nex_a_tag is None or not nb_nex_a_tag.has_attr('href'):
                     break
                 page_url = page_prefix + nb_nex_a_tag['href'].replace('../', '')
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log_from_news_log_object(result)
+                if process_result == 0:
+                    success_count += 1
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - News')
+            print(e)
+
+
+class NewsTemplate2:
+    def download_template_news(self, page_prefix, first_page_url=None, stop_date=None):
+        if not issubclass(self.__class__, MainDownload):
+            return
+
+        if page_prefix.endswith('/'):
+            news_url = page_prefix
+        else:
+            news_url = page_prefix + '/'
+        if first_page_url:
+            news_url += first_page_url
+        else:
+            news_url += 'news.html'
+
+        try:
+            soup = self.get_soup(news_url, decode=True)
+            articles = soup.find_all('article', class_='content-entry')
+            news_obj = self.get_last_news_log_object()
+            results = []
+            for article in articles:
+                if not article.has_attr('id'):
+                    continue
+                tag_date = article.find('div', class_='entry-date')
+                tag_title = article.find('h2', class_='entry-title')
+                if tag_date and tag_title:
+                    article_id = article['id']
+                    date = self.format_news_date(tag_date.text.replace('/', '.'))
+                    if len(date) == 0:
+                        continue
+                    title = ' '.join(tag_title.text.strip().split())
+                    if (stop_date is not None and date.startswith(stop_date)) or\
+                            (news_obj and (news_obj['id'] == article_id or date < news_obj['date'])):
+                        break
+                    results.append(self.create_news_log_object(date, title, article_id))
             success_count = 0
             for result in reversed(results):
                 process_result = self.create_news_log_from_news_log_object(result)
