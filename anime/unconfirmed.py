@@ -1,6 +1,6 @@
 import os
 import anime.constants as constants
-from anime.main_download import MainDownload, NewsTemplate1, NewsTemplate2
+from anime.main_download import MainDownload, NewsTemplate2, NewsTemplate3
 
 # Anohana S2 https://10th.anohana.jp/ #あの花 #anohana @anohana_project
 # Do It Yourself!! https://diy-anime.com/ #diyアニメ @diy_anime
@@ -345,7 +345,7 @@ class HatarakuMaousama2Download(UnconfirmedDownload):
 
 
 # Isekai Shokudou 2
-class IsekaiShokudou2Download(UnconfirmedDownload, NewsTemplate2):
+class IsekaiShokudou2Download(UnconfirmedDownload, NewsTemplate3):
     title = 'Isekai Shokudou 2'
     keywords = [title, 'Restaurant to Another World']
     website = 'https://isekai-shokudo2.com/'
@@ -445,7 +445,7 @@ class Bofuri2Download(UnconfirmedDownload):
 
 
 # Kakkou no Iinazuke
-class KakkounoIinazukeDownload(UnconfirmedDownload, NewsTemplate2):
+class KakkounoIinazukeDownload(UnconfirmedDownload, NewsTemplate3):
     title = 'Kakkou no Iinazuke'
     keywords = [title, 'A Couple of Cuckoos']
     website = 'https://cuckoos-anime.com/'
@@ -621,7 +621,7 @@ class KonoHealerDownload(UnconfirmedDownload):
 
 
 # Leadale no Daichi nite
-class LeadaleDownload(UnconfirmedDownload, NewsTemplate2):
+class LeadaleDownload(UnconfirmedDownload, NewsTemplate3):
     title = 'Leadale no Daichi nite'
     keywords = [title, 'World of Leadale']
     website = 'https://leadale.net/'
@@ -791,7 +791,7 @@ class Priconne2Download(UnconfirmedDownload):
 
 
 # Shikkakumon no Saikyou Kenja
-class ShikkakumonDownload(UnconfirmedDownload, NewsTemplate1):
+class ShikkakumonDownload(UnconfirmedDownload, NewsTemplate2):
     title = 'Shikkakumon no Saikyou Kenja'
     keywords = [title]
     website = 'https://shikkakumon.com/'
@@ -850,7 +850,7 @@ class ShokeiShoujoDownload(UnconfirmedDownload):
 
 
 # Shuumatsu no Harem
-class ShuumatsuNoHaremDownload(UnconfirmedDownload, NewsTemplate1):
+class ShuumatsuNoHaremDownload(UnconfirmedDownload, NewsTemplate2):
     title = 'Shuumatsu no Harem'
     keywords = [title, "World's End Harem"]
     website = 'https://end-harem-anime.com/'
@@ -935,7 +935,7 @@ class ShuumatsuNoHaremDownload(UnconfirmedDownload, NewsTemplate1):
 
 
 # Tensai Ouji no Akaji Kokka Saisei Jutsu: Souda, Baikoku shiyou
-class TensaiOujiDownload(UnconfirmedDownload, NewsTemplate1):
+class TensaiOujiDownload(UnconfirmedDownload, NewsTemplate2):
     title = 'Tensai Ouji no Akaji Kokka Saisei Jutsu: Souda, Baikoku shiyou'
     keywords = [title, 'tensaiouji']
     website = 'https://tensaiouji-anime.com/'

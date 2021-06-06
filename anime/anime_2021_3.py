@@ -1,6 +1,6 @@
 import os
 import anime.constants as constants
-from anime.main_download import MainDownload, NewsTemplate1
+from anime.main_download import MainDownload, NewsTemplate2
 from datetime import datetime
 from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 
@@ -805,7 +805,7 @@ class MahoukaYuutouseiDownload(Summer2021AnimeDownload):
 
 
 # Megami-ryou no Ryoubo-kun.
-class MegamiryouDownload(Summer2021AnimeDownload, NewsTemplate1):
+class MegamiryouDownload(Summer2021AnimeDownload, NewsTemplate2):
     title = 'Megami-ryou no Ryoubo-kun'
     keywords = [title, 'Megamiryou', "Mother of the Goddess' Dormitory"]
     website = 'https://megamiryou.com/'
@@ -1319,7 +1319,7 @@ class AquatopeDownload(Summer2021AnimeDownload):
 
 
 # Tantei wa Mou, Shindeiru.
-class TanmoshiDownload(Summer2021AnimeDownload, NewsTemplate1):
+class TanmoshiDownload(Summer2021AnimeDownload, NewsTemplate2):
     title = "Tantei wa Mou, Shindeiru."
     keywords = [title, "Tanmoshi", "The Detective Is Already Dead"]
     website = 'https://tanmoshi-anime.jp/'

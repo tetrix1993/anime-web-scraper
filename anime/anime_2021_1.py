@@ -1,6 +1,6 @@
 import os
 import anime.constants as constants
-from anime.main_download import MainDownload, NewsTemplate1, NewsTemplate2
+from anime.main_download import MainDownload, NewsTemplate2, NewsTemplate3
 from anime.external_download import MocaNewsDownload
 from datetime import datetime
 from scan import MocaNewsScanner, NatalieScanner, AniverseMagazineScanner, WebNewtypeScanner
@@ -750,7 +750,7 @@ class TomozakiKunDownload(Winter2021AnimeDownload):
 
 
 # Kaifuku Jutsushi no Yarinaoshi
-class KaiyariDownload(Winter2021AnimeDownload, NewsTemplate2):
+class KaiyariDownload(Winter2021AnimeDownload, NewsTemplate3):
     title = "Kaifuku Jutsushi no Yarinaoshi"
     keywords = [title, "Kaiyari", "Redo of Healer"]
     website = "http://kaiyari.com/"
@@ -1384,7 +1384,7 @@ class NonNonBiyori3Download(Winter2021AnimeDownload):
 
 
 # Ore dake Haireru Kakushi Dungeon
-class KakushiDungeonDownload(Winter2021AnimeDownload, NewsTemplate2):
+class KakushiDungeonDownload(Winter2021AnimeDownload, NewsTemplate3):
     title = "Ore dake Haireru Kakushi Dungeon"
     keywords = [title, "The Hidden Dungeon Only I Can Enter"]
     website = 'https://kakushidungeon-anime.jp/'
@@ -1499,7 +1499,7 @@ class KakushiDungeonDownload(Winter2021AnimeDownload, NewsTemplate2):
 
 
 # Tatoeba Last Dungeon Mae no Mura no Shounen ga Joban no Machi de Kurasu Youna Monogatari
-class LasdanDownload(Winter2021AnimeDownload, NewsTemplate1):
+class LasdanDownload(Winter2021AnimeDownload, NewsTemplate2):
     title = "Tatoeba Last Dungeon Mae no Mura no Shounen ga Joban no Machi de Kurasu Youna Monogatari"
     keywords = [title, "Lasdan"]
     website = 'https://lasdan.com/'

@@ -885,7 +885,82 @@ class MainDownload:
         return matched_keywords == len(s_filter.keywords)
 
 
+# Generic template with paging
 class NewsTemplate1:
+    def download_template_news(self, page_prefix, paging_type, article_select, date_select, title_select, a_tag_select,
+                               news_prefix=None, a_tag_prefix=None, stop_date=None, a_tag_replace_from=None,
+                               a_tag_replace_to='', next_page_select=None, next_page_disable_class=None):
+        """
+        :param paging_type 0 = news/page/2  1 = news/?p=2
+        """
+
+        if not issubclass(self.__class__, MainDownload):
+            return
+
+        if page_prefix.endswith('/'):
+            news_url = page_prefix
+        else:
+            news_url = page_prefix + '/'
+        if news_prefix:
+            news_url += news_prefix
+        else:
+            news_url += 'news/'
+
+        stop = False
+        try:
+            results = []
+            news_obj = self.get_last_news_log_object()
+            for page in range(1, 100, 1):
+                page_url = news_url
+                if page > 1:
+                    if paging_type == 1:
+                        page_url = news_url + '?p=' + str(page)
+                    else:
+                        page_url = news_url + 'page/' + str(page)
+                soup = self.get_soup(page_url, decode=True)
+                articles = soup.select(article_select)
+                for article in articles:
+                    tag_dates = article.select(date_select)
+                    tag_titles = article.select(title_select)
+                    a_tags = article.select(a_tag_select)
+                    if len(tag_dates) > 0 and len(tag_titles) > 0 and len(a_tags) > 0 and a_tags[0].has_attr('href'):
+                        article_id_suffix = a_tags[0]['href']
+                        if a_tag_replace_from:
+                            article_id_suffix = article_id_suffix.replace(a_tag_replace_from, a_tag_replace_to)
+                        if a_tag_prefix:
+                            article_id = a_tag_prefix + article_id_suffix
+                        else:
+                            article_id = article_id_suffix
+                        date = self.format_news_date(tag_dates[0].text.strip().replace('/', '.'))
+                        if len(date) == 0:
+                            continue
+                        title = ' '.join(tag_titles[0].text.strip().split())
+                        if (stop_date is not None and date.startswith(stop_date)) or\
+                                (news_obj and (news_obj['id'] == article_id or date < news_obj['date'])):
+                            stop = True
+                            break
+                        results.append(self.create_news_log_object(date, title, article_id))
+                if stop or next_page_select is None:
+                    break
+                next_page_tag = soup.select(next_page_select)
+                if len(next_page_tag) == 0 or next_page_disable_class is None:
+                    break
+                if next_page_tag[0].has_attr('class') and next_page_disable_class in next_page_tag[0]['class']:
+                    break
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log_from_news_log_object(result)
+                if process_result == 0:
+                    success_count += 1
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - News')
+            print(e)
+
+
+# News template
+class NewsTemplate2:
     def download_template_news(self, page_prefix, first_page_url=None, stop_date=None):
         if not issubclass(self.__class__, MainDownload):
             return
@@ -947,7 +1022,7 @@ class NewsTemplate1:
             print(e)
 
 
-class NewsTemplate2:
+class NewsTemplate3:
     def download_template_news(self, page_prefix, first_page_url=None, stop_date=None):
         if not issubclass(self.__class__, MainDownload):
             return
