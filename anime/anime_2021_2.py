@@ -601,7 +601,7 @@ class HigehiroDownload(Spring2021AnimeDownload):
 
 
 # Ijiranaide, Nagatoro-san
-class NagatorosanDownload(Spring2021AnimeDownload):
+class NagatorosanDownload(Spring2021AnimeDownload, NewsTemplate1):
     title = 'Ijiranaide, Nagatoro-san'
     keywords = [title, 'Nagatorosan']
     website = 'https://www.nagatorosan.jp/'
@@ -654,35 +654,9 @@ class NagatorosanDownload(Spring2021AnimeDownload):
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + 'news/'
-        try:
-            soup = self.get_soup(news_url, decode=True)
-            ul = soup.find('ul', class_='list')
-            if not ul:
-                return
-            lis = ul.find_all('li')
-            news_obj = self.get_last_news_log_object()
-            results = []
-            for li in lis:
-                tag_date = li.find('time')
-                tag_title = li.find('p')
-                a_tag = li.find('a')
-                if tag_date and tag_title and a_tag and a_tag.has_attr('href'):
-                    article_id = news_url + a_tag['href']
-                    date = tag_date.text.strip().replace('-', '.')
-                    title = tag_title.text.strip()
-                    if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
-                        break
-                    results.append(self.create_news_log_object(date, title, article_id))
-            success_count = 0
-            for result in reversed(results):
-                process_result = self.create_news_log_from_news_log_object(result)
-                if process_result == 0:
-                    success_count += 1
-            if len(results) > 0:
-                self.create_news_log_cache(success_count, results[0])
-        except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - News')
-            print(e)
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, paging_type=0, article_select='ul.list li',
+                                    date_select='time', title_select='p', id_select='a', a_tag_prefix=news_url,
+                                    date_separator='-')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()

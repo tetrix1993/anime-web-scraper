@@ -889,10 +889,11 @@ class MainDownload:
 class NewsTemplate1:
     def download_template_news(self, page_prefix, paging_type, article_select, date_select, title_select, id_select,
                                id_has_id=False, news_prefix=None, a_tag_prefix=None, stop_date=None,
-                               a_tag_replace_from=None, a_tag_replace_to='', a_tag_start_text_to_remove=None,
-                               next_page_select=None, next_page_disable_class=None):
+                               date_separator=None, a_tag_replace_from=None, a_tag_replace_to='',
+                               a_tag_start_text_to_remove=None, next_page_select=None, next_page_disable_class=None):
         """
         :param paging_type 0 = news/page/2  1 = news/?p=2  2 = /2
+        :param id_select If None = article item element itself, else = the select
         """
 
         if not issubclass(self.__class__, MainDownload):
@@ -925,12 +926,18 @@ class NewsTemplate1:
                 for article in articles:
                     tag_dates = article.select(date_select)
                     tag_titles = article.select(title_select)
-                    tag_ids = article.select(id_select)
+                    if id_select is None:
+                        tag_ids = article
+                    else:
+                        tag_ids = article.select(id_select)
                     if len(tag_dates) > 0 and len(tag_titles) > 0:
                         has_tag_ids = len(tag_ids) > 0
                         if has_tag_ids:
-                            if id_has_id and tag_ids[0].has_attr('id'):
-                                article_id = tag_ids[0]['id']
+                            if id_has_id:
+                                if tag_ids[0].has_attr('id'):
+                                    article_id = tag_ids[0]['id']
+                                else:
+                                    continue
                             elif tag_ids[0].has_attr('href'):
                                 article_id_suffix = tag_ids[0]['href']
                                 if a_tag_replace_from:
@@ -945,7 +952,10 @@ class NewsTemplate1:
                                 continue
                         else:
                             article_id = ''
-                        date = self.format_news_date(tag_dates[0].text.strip().replace('/', '.'))
+                        unformatted_date = tag_dates[0].text.strip()
+                        if date_separator is not None:
+                            unformatted_date = unformatted_date.replace(date_separator, '.')
+                        date = self.format_news_date(unformatted_date)
                         if len(date) == 0:
                             continue
                         title = ' '.join(tag_titles[0].text.strip().split())
