@@ -249,7 +249,7 @@ class EightySixDownload(Spring2021AnimeDownload, NewsTemplate1):
 
 
 # Dragon, Ie wo Kau
-class DoraieDownload(Spring2021AnimeDownload):
+class DoraieDownload(Spring2021AnimeDownload, NewsTemplate1):
     title = 'Dragon, Ie wo Kau'
     keywords = [title, 'Dragon Goes House-Hunting', 'Doraie']
     website = 'https://doraie.com/'
@@ -293,38 +293,10 @@ class DoraieDownload(Spring2021AnimeDownload):
                                 min_width=1200, end_date='20210330', download_id=self.download_id).run()
 
     def download_news(self):
-        news_url = self.PAGE_PREFIX + 'news/'
-        try:
-            soup = self.get_soup(news_url)
-            articles = soup.find_all('article', class_='news-item')
-            news_obj = self.get_last_news_log_object()
-            results = []
-            for article in articles:
-                tag_date = article.find('span', class_='news-item__date')
-                tag_title = article.find('span', class_='news-item__title')
-                a_tag = article.find('a', class_='news-item__link')
-                if tag_date and tag_title and a_tag and a_tag.has_attr('href'):
-                    article_id = a_tag['href']
-                    if article_id.startswith('/'):
-                        article_id = article_id[1:]
-                    article_id = self.PAGE_PREFIX + article_id
-                    date = self.format_news_date(tag_date.text.strip())
-                    if len(date) == 0:
-                        continue
-                    title = tag_title.text.strip()
-                    if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
-                        break
-                    results.append(self.create_news_log_object(date, title, article_id))
-            success_count = 0
-            for result in reversed(results):
-                process_result = self.create_news_log_from_news_log_object(result)
-                if process_result == 0:
-                    success_count += 1
-            if len(results) > 0:
-                self.create_news_log_cache(success_count, results[0])
-        except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - News')
-            print(e)
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, paging_type=0, article_select='article.news-item',
+                                    date_select='span.news-item__date', title_select='span.news-item__title',
+                                    a_tag_select='a.news-item__link', a_tag_prefix=self.PAGE_PREFIX,
+                                    a_tag_start_text_to_remove='/', next_page_select='i.i-dot-arrow-r-12')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()

@@ -889,7 +889,8 @@ class MainDownload:
 class NewsTemplate1:
     def download_template_news(self, page_prefix, paging_type, article_select, date_select, title_select, a_tag_select,
                                news_prefix=None, a_tag_prefix=None, stop_date=None, a_tag_replace_from=None,
-                               a_tag_replace_to='', next_page_select=None, next_page_disable_class=None):
+                               a_tag_replace_to='', a_tag_start_text_to_remove=None, next_page_select=None,
+                               next_page_disable_class=None):
         """
         :param paging_type 0 = news/page/2  1 = news/?p=2
         """
@@ -927,6 +928,8 @@ class NewsTemplate1:
                         article_id_suffix = a_tags[0]['href']
                         if a_tag_replace_from:
                             article_id_suffix = article_id_suffix.replace(a_tag_replace_from, a_tag_replace_to)
+                        if a_tag_start_text_to_remove and article_id_suffix.startswith(a_tag_start_text_to_remove):
+                            article_id_suffix = article_id_suffix[len(a_tag_start_text_to_remove):]
                         if a_tag_prefix:
                             article_id = a_tag_prefix + article_id_suffix
                         else:
@@ -943,9 +946,10 @@ class NewsTemplate1:
                 if stop or next_page_select is None:
                     break
                 next_page_tag = soup.select(next_page_select)
-                if len(next_page_tag) == 0 or next_page_disable_class is None:
+                if len(next_page_tag) == 0:
                     break
-                if next_page_tag[0].has_attr('class') and next_page_disable_class in next_page_tag[0]['class']:
+                if next_page_disable_class is not None and next_page_tag[0].has_attr('class')\
+                        and next_page_disable_class in next_page_tag[0]['class']:
                     break
             success_count = 0
             for result in reversed(results):
