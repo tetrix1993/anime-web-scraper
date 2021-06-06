@@ -3,14 +3,11 @@ from anime import *
 import migrate
 
 
-MAX_PROCESSES = 30
-PROCESS_FOLDER = 'process'
-
-
 def run():
     migrate.run()
-    if not os.path.exists(PROCESS_FOLDER):
-        os.makedirs(PROCESS_FOLDER)
+    update_global_logs()
+    if not os.path.exists(constants.FOLDER_OUTPUT):
+        os.makedirs(constants.FOLDER_OUTPUT)
 
     downloads = [ReZero2Download(), Higurashi2020Download(), HorimiyaDownload(), TomozakiKunDownload(),
                  KumoDesugaNanikaDownload(), MushokuTenseiDownload(), WonderEggPriorityDownload(), Kingdom3Download()]
@@ -32,12 +29,13 @@ def run():
     #process_download(downloads)
 
 
-def run_process(download):
+def run_process(download, download_id):
     pid = str(os.getpid())
+    download.download_id = download_id
     class_name = download.__class__.__name__
-    filepath = PROCESS_FOLDER + '/' + class_name
+    filepath = constants.FOLDER_PROCESS + '/' + class_name
     print("Running %s" % class_name)
-    if os.path.exists(PROCESS_FOLDER):
+    if os.path.exists(constants.FOLDER_PROCESS):
         with open(filepath, 'w+') as f:
             f.write(pid)
     download.run()
@@ -52,22 +50,27 @@ def run_process_function(fn):
 
 
 def process_download(downloads):
-    if MAX_PROCESSES <= 0 or len(downloads) == 0:
+    if not os.path.exists(constants.FOLDER_PROCESS):
+        os.makedirs(constants.FOLDER_PROCESS)
+    if constants.MAX_PROCESSES <= 0 or len(downloads) == 0:
         return
 
     if len(downloads) > 1:
-        with Pool(MAX_PROCESSES) as p:
+        with Pool(min(constants.MAX_PROCESSES, len(downloads))) as p:
             results = []
+            download_id = 1
             for download in downloads:
-                result = p.apply_async(run_process, (download,))
+                result = p.apply_async(run_process, (download, str(download_id).zfill(5)))
                 results.append(result)
+                download_id += 1
             for result in results:
                 result.wait()
     else:
-        run_process(downloads[0])
+        run_process(downloads[0], '00001')
 
-    if len(os.listdir(PROCESS_FOLDER)) == 0:
-        os.rmdir(PROCESS_FOLDER)
+    update_global_logs()
+    if len(os.listdir(constants.FOLDER_PROCESS)) == 0:
+        os.rmdir(constants.FOLDER_PROCESS)
 
     #if len(downloads) % MAX_PROCESSES == 0:
     #    num_of_iterations = len(downloads) / MAX_PROCESSES
@@ -93,6 +96,32 @@ def process_download(downloads):
     
     #for process in processes:
     #    process.join()
+
+
+def update_global_logs():
+    if os.path.exists(constants.GLOBAL_TEMP_FOLDER):
+        files = os.listdir(constants.GLOBAL_TEMP_FOLDER)
+        for file in files:
+            if file.startswith('download_'):
+                logpath = constants.GLOBAL_DOWNLOAD_LOG_FILE
+            elif file.startswith('news_'):
+                logpath = constants.GLOBAL_NEWS_LOG_FILE
+            else:
+                continue
+            filepath = constants.GLOBAL_TEMP_FOLDER + '/' + file
+            with open(logpath, 'a+', encoding='utf-8') as f:
+                with open(filepath, 'r', encoding='utf-8') as f2:
+                    lines = f2.readlines()
+                for line in lines:
+                    if len(line) > 0:
+                        if line[-1] != '\n':
+                            f.write(line + '\n')
+                        else:
+                            f.write(line)
+            os.remove(filepath)
+        files = os.listdir(constants.GLOBAL_TEMP_FOLDER)
+        if len(files) == 0:
+            os.removedirs(constants.GLOBAL_TEMP_FOLDER)
 
 
 def process_download_function(fns):

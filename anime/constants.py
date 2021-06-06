@@ -13,7 +13,10 @@ HTTP_HEADER_USER_AGENT = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 
                                         'AppleWebKit/537.36 (KHTML, like Gecko) ' +
                                         'Chrome/50.0.2661.102 Safari/537.36'}
 
+MAX_PROCESSES = 30
 FOLDER_OUTPUT = 'out'
+FOLDER_PROCESS = 'process'
+GLOBAL_TEMP_FOLDER = FOLDER_OUTPUT + '/temp'
 GLOBAL_DOWNLOAD_LOG_FILE = FOLDER_OUTPUT + '/download_log.tsv'
 GLOBAL_WEBSITE_LOG_FILE = FOLDER_OUTPUT + '/website_log.tsv'
 GLOBAL_NEWS_LOG_FILE = FOLDER_OUTPUT + '/news_log.tsv'

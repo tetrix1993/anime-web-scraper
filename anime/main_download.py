@@ -25,6 +25,7 @@ class MainDownload:
     folder_name = constants.FOLDER_DOWNLOAD
     enabled = True
     refresh_meta_tag = False
+    download_id = None  # For printing global logs
 
     def __init__(self):
         path = self.get_full_path()
@@ -359,19 +360,29 @@ class MainDownload:
                 f.write('%s\t%s\t%s\n' % (timenow, filename, url))
 
             # Global log path
-            global_save_success = False
-            for k in range(10):
+            if self.download_id is None:
+                global_save_success = False
+                for k in range(10):
+                    try:
+                        with open(constants.GLOBAL_DOWNLOAD_LOG_FILE, 'a+', encoding='utf-8') as f:
+                            portalocker.lock(f, portalocker.LOCK_EX)
+                            f.write('%s\t%s\t%s\t%s\n' % (timenow, self.base_folder, filename, url))
+                            portalocker.unlock(f)
+                            global_save_success = True
+                            break
+                    except Exception as e:
+                        time.sleep(0.1)
+                if not global_save_success:
+                    print('Unable to save global download log for file: %s' % filepath)
+            else:
+                if not os.path.exists(constants.GLOBAL_TEMP_FOLDER):
+                    os.makedirs(constants.GLOBAL_TEMP_FOLDER)
                 try:
-                    with open(constants.GLOBAL_DOWNLOAD_LOG_FILE, 'a+', encoding='utf-8') as f:
-                        portalocker.lock(f, portalocker.LOCK_EX)
+                    temp_logpath = constants.GLOBAL_TEMP_FOLDER + '/download_' + self.download_id
+                    with open(temp_logpath, 'a+', encoding='utf-8') as f:
                         f.write('%s\t%s\t%s\t%s\n' % (timenow, self.base_folder, filename, url))
-                        portalocker.unlock(f)
-                        global_save_success = True
-                        break
                 except Exception as e:
-                    time.sleep(0.1)
-            if not global_save_success:
-                print('Unable to save global download log for file: %s' % filepath)
+                    print('Unable to save temp global download log for file: %s' % filepath)
             return 0
         except Exception as e:
             print("Failed to download " + url + ' - ' + str(e))
@@ -508,20 +519,30 @@ class MainDownload:
                 f.write('%s\t%s\t%s\t%s\n' % (timenow, date, title, _id))
 
             # Global log path
-            global_save_success = False
             folder_name = self.base_folder.replace(constants.FOLDER_DOWNLOAD + '/', '')
-            for k in range(10):
+            if self.download_id is None:
+                global_save_success = False
+                for k in range(10):
+                    try:
+                        with open(constants.GLOBAL_NEWS_LOG_FILE, 'a+', encoding='utf-8') as f:
+                            portalocker.lock(f, portalocker.LOCK_EX)
+                            f.write('%s\t%s\t%s\t%s\t%s\n' % (timenow, folder_name, date, title, _id))
+                            portalocker.unlock(f)
+                            global_save_success = True
+                            break
+                    except Exception as e:
+                        time.sleep(0.1)
+                if not global_save_success:
+                    print('Unable to save global news log for %s' % self.title)
+            else:
+                if not os.path.exists(constants.GLOBAL_TEMP_FOLDER):
+                    os.makedirs(constants.GLOBAL_TEMP_FOLDER)
                 try:
-                    with open(constants.GLOBAL_NEWS_LOG_FILE, 'a+', encoding='utf-8') as f:
-                        portalocker.lock(f, portalocker.LOCK_EX)
+                    temp_logpath = constants.GLOBAL_TEMP_FOLDER + '/news_' + self.download_id
+                    with open(temp_logpath, 'a+', encoding='utf-8') as f:
                         f.write('%s\t%s\t%s\t%s\t%s\n' % (timenow, folder_name, date, title, _id))
-                        portalocker.unlock(f)
-                        global_save_success = True
-                        break
                 except Exception as e:
-                    time.sleep(0.1)
-            if not global_save_success:
-                print('Unable to save global news log for %s' % self.title)
+                    print('Unable to save temp global news log for %s' % self.title)
         except Exception as e:
             return -1
         return 0
