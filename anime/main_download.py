@@ -887,9 +887,9 @@ class MainDownload:
 
 # Generic template with paging
 class NewsTemplate1:
-    def download_template_news(self, page_prefix, paging_type, article_select, date_select, title_select, id_select,
-                               id_has_id=False, news_prefix=None, a_tag_prefix=None, stop_date=None,
-                               date_separator=None, a_tag_replace_from=None, a_tag_replace_to='',
+    def download_template_news(self, page_prefix, article_select, date_select, title_select, id_select,
+                               paging_type=0, id_has_id=False, news_prefix=None, a_tag_prefix=None, stop_date=None,
+                               date_separator=None, date_attr=None, a_tag_replace_from=None, a_tag_replace_to='',
                                a_tag_start_text_to_remove=None, next_page_select=None, next_page_disable_class=None,
                                next_page_disable_class_index=0):
         """
@@ -928,7 +928,7 @@ class NewsTemplate1:
                     tag_dates = article.select(date_select)
                     tag_titles = article.select(title_select)
                     if id_select is None:
-                        tag_ids = article
+                        tag_ids = [article]
                     else:
                         tag_ids = article.select(id_select)
                     if len(tag_dates) > 0 and len(tag_titles) > 0:
@@ -953,7 +953,13 @@ class NewsTemplate1:
                                 continue
                         else:
                             article_id = ''
-                        unformatted_date = ' '.join(tag_dates[0].text.strip().split())
+                        if date_attr is None:
+                            unformatted_date = ' '.join(tag_dates[0].text.strip().split())
+                        else:
+                            if tag_dates[0].has_attr(date_attr):
+                                unformatted_date = ' '.join(tag_dates[0][date_attr].strip().split())
+                            else:
+                                continue
                         if date_separator is not None:
                             unformatted_date = unformatted_date.replace(date_separator, '.')
                         date = self.format_news_date(unformatted_date)

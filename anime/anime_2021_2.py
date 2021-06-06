@@ -293,7 +293,7 @@ class DoraieDownload(Spring2021AnimeDownload, NewsTemplate1):
                                 min_width=1200, end_date='20210330', download_id=self.download_id).run()
 
     def download_news(self):
-        self.download_template_news(page_prefix=self.PAGE_PREFIX, paging_type=0, article_select='article.news-item',
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article.news-item',
                                     date_select='span.news-item__date', title_select='span.news-item__title',
                                     id_select='a.news-item__link', a_tag_prefix=self.PAGE_PREFIX,
                                     a_tag_start_text_to_remove='/', next_page_select='i.i-dot-arrow-r-12')
@@ -654,9 +654,8 @@ class NagatorosanDownload(Spring2021AnimeDownload, NewsTemplate1):
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + 'news/'
-        self.download_template_news(page_prefix=self.PAGE_PREFIX, paging_type=0, article_select='ul.list li',
-                                    date_select='time', title_select='p', id_select='a', a_tag_prefix=news_url,
-                                    date_separator='-')
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='ul.list li', date_select='time',
+                                    title_select='p', id_select='a', a_tag_prefix=news_url, date_separator='-')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -811,7 +810,7 @@ class IsekaiMaou2Download(Spring2021AnimeDownload, NewsTemplate1):
         return is_success
 
     def download_news(self):
-        self.download_template_news(page_prefix=self.PAGE_PREFIX, paging_type=0, article_select='article.md-newsblock',
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article.md-newsblock',
                                     date_select='div.date', title_select='h3.ttl', id_select='a',
                                     next_page_select='ul.pagenation-list li', next_page_disable_class='is__current',
                                     next_page_disable_class_index=-1)
@@ -956,10 +955,9 @@ class FullDiveRPGDownload(Spring2021AnimeDownload, NewsTemplate1):
         return is_success
 
     def download_news(self):
-        self.download_template_news(page_prefix=self.PAGE_PREFIX, paging_type=0,
-                                    article_select='div.page_contents_wrapper.cf ul li', date_select='p.page_news_date',
-                                    title_select='p.page_news_title', id_select='a', news_prefix='news.html',
-                                    a_tag_prefix=self.PAGE_PREFIX)
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='div.page_contents_wrapper.cf ul li',
+                                    date_select='p.page_news_date', title_select='p.page_news_title', id_select='a',
+                                    news_prefix='news.html', a_tag_prefix=self.PAGE_PREFIX)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -1315,8 +1313,7 @@ class SayonaraCramerDownload(Spring2021AnimeDownload, NewsTemplate1):
             print(e)
 
     def download_news(self):
-        self.download_template_news(page_prefix=self.PAGE_PREFIX, paging_type=0,
-                                    article_select='article.news-main__block',
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article.news-main__block',
                                     date_select='div.news-main__block--date span', title_select='div.ttl',
                                     id_select='a', next_page_select='ul.pagenation-list li',
                                     next_page_disable_class='is__current', next_page_disable_class_index=-1)
@@ -1349,7 +1346,7 @@ class SayonaraCramerDownload(Spring2021AnimeDownload, NewsTemplate1):
 
 
 # Seijo no Maryoku wa Bannou Desu
-class SeijonoMaryokuDownload(Spring2021AnimeDownload):
+class SeijonoMaryokuDownload(Spring2021AnimeDownload, NewsTemplate1):
     title = 'Seijo no Maryoku wa Bannou Desu'
     keywords = [title, 'seijonomaryoku', 'seijyonomaryoku', "The Saint's Magic Power is Omnipotent"]
     website = 'https://seijyonomaryoku.jp/'
@@ -1400,34 +1397,10 @@ class SeijonoMaryokuDownload(Spring2021AnimeDownload):
         self.download_image_list(self.base_folder)
 
     def download_news(self):
-        news_url = self.PAGE_PREFIX + 'news.php'
-        try:
-            soup = self.get_soup(news_url, decode=True)
-            articles = soup.find_all('article', class_='m-newspage-article')
-            news_obj = self.get_last_news_log_object()
-            results = []
-            for article in articles:
-                if not article.has_attr('id'):
-                    continue
-                tag_date = article.find('time', class_='m-newspage-article-time')
-                tag_title = article.find('h1', class_='m-newspage-article-heading')
-                if tag_date and tag_title and tag_date.has_attr('datetime'):
-                    article_id = article['id']
-                    date = tag_date['datetime'].strip().replace('-', '.')
-                    title = tag_title.text.strip()
-                    if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
-                        break
-                    results.append(self.create_news_log_object(date, title, article_id))
-            success_count = 0
-            for result in reversed(results):
-                process_result = self.create_news_log_from_news_log_object(result)
-                if process_result == 0:
-                    success_count += 1
-            if len(results) > 0:
-                self.create_news_log_cache(success_count, results[0])
-        except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - News')
-            print(e)
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article.m-newspage-article',
+                                    date_select='time.m-newspage-article-time',
+                                    title_select='h1.m-newspage-article-heading', id_select=None, id_has_id=True,
+                                    news_prefix='news.php', date_separator='-', date_attr='datetime')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
