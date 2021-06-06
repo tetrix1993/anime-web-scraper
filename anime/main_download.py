@@ -888,13 +888,34 @@ class MainDownload:
 # Generic template with paging
 class NewsTemplate1:
     def download_template_news(self, page_prefix, article_select, date_select, title_select, id_select,
-                               paging_type=0, id_has_id=False, news_prefix=None, a_tag_prefix=None, stop_date=None,
-                               date_separator=None, date_attr=None, a_tag_replace_from=None, a_tag_replace_to='',
+                               paging_type=0, decode_response=True, response_headers=None, id_has_id=False,
+                               news_prefix=None, a_tag_prefix=None, stop_date=None, date_separator=None, date_attr=None,
+                               date_prefix=None, a_tag_replace_from=None, a_tag_replace_to='',
                                a_tag_start_text_to_remove=None, next_page_select=None, next_page_eval_index_class=None,
                                next_page_eval_index=0, next_page_eval_index_compare_page=False):
         """
-        :param paging_type 0 = news/page/2  1 = news/?p=2  2 = /2
-        :param id_select If None = article item element itself, else = the select
+        :param page_prefix: Start of the page URL to evaluate
+        :param article_select: Selects article item elements
+        :param date_select: Selects element containing date
+        :param title_select: Selects element containing title
+        :param id_select: If None = article item element itself, else = the select
+        :param paging_type: 0 = news/page/2  1 = news/?p=2  2 = /2
+        :param decode_response: Decode HTTP Response
+        :param response_headers: Headers to be included in HTTP Request
+        :param id_has_id: The element has 'id' attribute
+        :param news_prefix: The prefix of the news page excluding page prefix
+        :param a_tag_prefix: The prefix of news page that is missing from the a tag.
+        :param stop_date: Stops evaluating item if date starts with stop_date
+        :param date_separator: Specify separator to be replace to '.'
+        :param date_attr: The attribute of the element where the date is stored
+        :param date_prefix: Text to be appended before the date (e.g. append 20 to 21 = 2021)
+        :param a_tag_replace_from: Text to be replaced in the 'href' attribute
+        :param a_tag_replace_to: Text to replace to in the 'href' attribute
+        :param a_tag_start_text_to_remove: Text to be removed at the beginning of a tag 'href' attribute
+        :param next_page_select: Selects element containing URL that leads to next page
+        :param next_page_eval_index_class: Terminates if next_page_select contains the class
+        :param next_page_eval_index: Index number of the elements selected in next_page_select
+        :param next_page_eval_index_compare_page: Terminates if the next_page_select's text = current page number
         """
 
         if not issubclass(self.__class__, MainDownload):
@@ -922,7 +943,10 @@ class NewsTemplate1:
                         page_url = news_url + str(page)
                     else:
                         page_url = news_url + 'page/' + str(page)
-                soup = self.get_soup(page_url, decode=True)
+                if response_headers:
+                    soup = self.get_soup(page_url, headers=response_headers, decode=decode_response)
+                else:
+                    soup = self.get_soup(page_url, decode=decode_response)
                 articles = soup.select(article_select)
                 for article in articles:
                     tag_dates = article.select(date_select)
@@ -962,6 +986,8 @@ class NewsTemplate1:
                                 continue
                         if date_separator is not None:
                             unformatted_date = unformatted_date.replace(date_separator, '.')
+                        if date_prefix is not None:
+                            unformatted_date = date_prefix + unformatted_date
                         date = self.format_news_date(unformatted_date)
                         if len(date) == 0:
                             continue
