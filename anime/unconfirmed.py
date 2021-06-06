@@ -1,6 +1,6 @@
 import os
 import anime.constants as constants
-from anime.main_download import MainDownload
+from anime.main_download import MainDownload, NewsTemplate1
 
 # Anohana S2 https://10th.anohana.jp/ #あの花 #anohana @anohana_project
 # Do It Yourself!! https://diy-anime.com/ #diyアニメ @diy_anime
@@ -878,7 +878,7 @@ class Priconne2Download(UnconfirmedDownload):
 
 
 # Shikkakumon no Saikyou Kenja
-class ShikkakumonDownload(UnconfirmedDownload):
+class ShikkakumonDownload(UnconfirmedDownload, NewsTemplate1):
     title = 'Shikkakumon no Saikyou Kenja'
     keywords = [title]
     website = 'https://shikkakumon.com/'
@@ -900,38 +900,7 @@ class ShikkakumonDownload(UnconfirmedDownload):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
 
     def download_news(self):
-        news_url = self.PAGE_PREFIX
-        try:
-            soup = self.get_soup(news_url, decode=True)
-            articles = soup.select('#nwu_001_t tr')
-            news_obj = self.get_last_news_log_object()
-            results = []
-            for article in articles:
-                tag_date = article.find('td', class_='day')
-                tag_title = article.find('div', class_='title')
-                a_tag = article.find('a')
-                if tag_date and tag_title:
-                    article_id = ''
-                    if a_tag and a_tag.has_attr('href'):
-                        article_id = self.PAGE_PREFIX + a_tag['href']
-                    date = self.format_news_date(tag_date.text.strip().replace('/', '.'))
-                    if len(date) == 0:
-                        continue
-                    title = tag_title.text.strip()
-                    if news_obj and ((news_obj['id'] == article_id and news_obj['title'] == title)
-                                     or date < news_obj['date']):
-                        break
-                    results.append(self.create_news_log_object(date, title, article_id))
-            success_count = 0
-            for result in reversed(results):
-                process_result = self.create_news_log_from_news_log_object(result)
-                if process_result == 0:
-                    success_count += 1
-            if len(results) > 0:
-                self.create_news_log_cache(success_count, results[0])
-        except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - News')
-            print(e)
+        self.download_template_news(self.PAGE_PREFIX)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -968,7 +937,7 @@ class ShokeiShoujoDownload(UnconfirmedDownload):
 
 
 # Shuumatsu no Harem
-class ShuumatsuNoHaremDownload(UnconfirmedDownload):
+class ShuumatsuNoHaremDownload(UnconfirmedDownload, NewsTemplate1):
     title = 'Shuumatsu no Harem'
     keywords = [title, "World's End Harem"]
     website = 'https://end-harem-anime.com/'
@@ -991,49 +960,7 @@ class ShuumatsuNoHaremDownload(UnconfirmedDownload):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
 
     def download_news(self):
-        news_url = self.PAGE_PREFIX + 'news/list00010000.html'
-        stop = False
-        try:
-            results = []
-            news_obj = self.get_last_news_log_object()
-            page_url = news_url
-            for page in range(1, 100, 1):
-                soup = self.get_soup(page_url, decode=True)
-                trs = soup.select('#list_01 tr')
-                for tr in trs:
-                    tag_date = tr.find('td', class_='day')
-                    tag_title = tr.find('div', class_='title')
-                    a_tag = tr.find('a')
-                    if tag_date and tag_title:
-                        article_id = ''
-                        if a_tag and a_tag.has_attr('href'):
-                            article_id = self.PAGE_PREFIX + a_tag['href'].replace('../', '')
-                        date = tag_date.text.strip().replace('/', '.')
-                        title = tag_title.text.strip()
-                        if news_obj and ((news_obj['id'] == article_id and news_obj['title'] == title)
-                                         or date < news_obj['date']):
-                            stop = True
-                            break
-                        results.append(self.create_news_log_object(date, title, article_id))
-                if stop:
-                    break
-                nb_nex = soup.find('li', class_='nb_nex')
-                if nb_nex is None:
-                    break
-                nb_nex_a_tag = nb_nex.find('a')
-                if nb_nex_a_tag is None or not nb_nex_a_tag.has_attr('href'):
-                    break
-                page_url = self.PAGE_PREFIX + nb_nex_a_tag['href'].replace('../', '')
-            success_count = 0
-            for result in reversed(results):
-                process_result = self.create_news_log_from_news_log_object(result)
-                if process_result == 0:
-                    success_count += 1
-            if len(results) > 0:
-                self.create_news_log_cache(success_count, results[0])
-        except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - News')
-            print(e)
+        self.download_template_news(self.PAGE_PREFIX, 'news/list00010000.html')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -1095,7 +1022,7 @@ class ShuumatsuNoHaremDownload(UnconfirmedDownload):
 
 
 # Tensai Ouji no Akaji Kokka Saisei Jutsu: Souda, Baikoku shiyou
-class TensaiOujiDownload(UnconfirmedDownload):
+class TensaiOujiDownload(UnconfirmedDownload, NewsTemplate1):
     title = 'Tensai Ouji no Akaji Kokka Saisei Jutsu: Souda, Baikoku shiyou'
     keywords = [title, 'tensaiouji']
     website = 'https://tensaiouji-anime.com/'
@@ -1117,49 +1044,7 @@ class TensaiOujiDownload(UnconfirmedDownload):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
 
     def download_news(self):
-        news_url = self.PAGE_PREFIX + 'news/list00010000.html'
-        stop = False
-        try:
-            results = []
-            news_obj = self.get_last_news_log_object()
-            page_url = news_url
-            for page in range(1, 100, 1):
-                soup = self.get_soup(page_url, decode=True)
-                trs = soup.select('#list_01 tr')
-                for tr in trs:
-                    tag_date = tr.find('td', class_='day')
-                    tag_title = tr.find('div', class_='title')
-                    a_tag = tr.find('a')
-                    if tag_date and tag_title:
-                        article_id = ''
-                        if a_tag and a_tag.has_attr('href'):
-                            article_id = self.PAGE_PREFIX + a_tag['href'].replace('../', '')
-                        date = tag_date.text.strip().replace('/', '.')
-                        title = tag_title.text.strip()
-                        if news_obj and ((news_obj['id'] == article_id and news_obj['title'] == title)
-                                         or date < news_obj['date']):
-                            stop = True
-                            break
-                        results.append(self.create_news_log_object(date, title, article_id))
-                if stop:
-                    break
-                nb_nex = soup.find('li', class_='nb_nex')
-                if nb_nex is None:
-                    break
-                nb_nex_a_tag = nb_nex.find('a')
-                if nb_nex_a_tag is None or not nb_nex_a_tag.has_attr('href'):
-                    break
-                page_url = self.PAGE_PREFIX + nb_nex_a_tag['href'].replace('../', '')
-            success_count = 0
-            for result in reversed(results):
-                process_result = self.create_news_log_from_news_log_object(result)
-                if process_result == 0:
-                    success_count += 1
-            if len(results) > 0:
-                self.create_news_log_cache(success_count, results[0])
-        except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - News')
-            print(e)
+        self.download_template_news(self.PAGE_PREFIX, 'news/list00010000.html')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()

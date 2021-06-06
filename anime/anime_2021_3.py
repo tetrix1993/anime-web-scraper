@@ -1,6 +1,6 @@
 import os
 import anime.constants as constants
-from anime.main_download import MainDownload
+from anime.main_download import MainDownload, NewsTemplate1
 from datetime import datetime
 from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 
@@ -805,7 +805,7 @@ class MahoukaYuutouseiDownload(Summer2021AnimeDownload):
 
 
 # Megami-ryou no Ryoubo-kun.
-class MegamiryouDownload(Summer2021AnimeDownload):
+class MegamiryouDownload(Summer2021AnimeDownload, NewsTemplate1):
     title = 'Megami-ryou no Ryoubo-kun'
     keywords = [title, 'Megamiryou', "Mother of the Goddess' Dormitory"]
     website = 'https://megamiryou.com/'
@@ -825,52 +825,7 @@ class MegamiryouDownload(Summer2021AnimeDownload):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
 
     def download_news(self):
-        news_url = self.PAGE_PREFIX + 'news/'
-        stop = False
-        try:
-            results = []
-            news_obj = self.get_last_news_log_object()
-            page_url = news_url
-            for page in range(1, 100, 1):
-                soup = self.get_soup(page_url, decode=True)
-                list_div = soup.find('div', id='list_01')
-                if not list_div:
-                    continue
-                trs = list_div.find_all('tr')
-                for tr in trs:
-                    tag_date = tr.find('td', class_='day')
-                    tag_title = tr.find('div', class_='title')
-                    a_tag = tr.find('a')
-                    if tag_date and tag_title:
-                        article_id = ''
-                        if a_tag and a_tag.has_attr('href'):
-                            article_id = self.PAGE_PREFIX + a_tag['href'].replace('../', '')
-                        date = tag_date.text.replace('/', '.')
-                        title = tag_title.text.strip()
-                        if news_obj and ((news_obj['id'] == article_id and news_obj['title'] == title)
-                                         or date < news_obj['date']):
-                            stop = True
-                            break
-                        results.append(self.create_news_log_object(date, title, article_id))
-                if stop:
-                    break
-                nb_nex = soup.find('li', class_='nb_nex')
-                if nb_nex is None:
-                    break
-                nb_nex_a_tag = nb_nex.find('a')
-                if nb_nex_a_tag is None or not nb_nex_a_tag.has_attr('href'):
-                    break
-                page_url = self.PAGE_PREFIX + nb_nex_a_tag['href'].replace('../', '')
-            success_count = 0
-            for result in reversed(results):
-                process_result = self.create_news_log_from_news_log_object(result)
-                if process_result == 0:
-                    success_count += 1
-            if len(results) > 0:
-                self.create_news_log_cache(success_count, results[0])
-        except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - News')
-            print(e)
+        self.download_template_news(self.PAGE_PREFIX)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -1364,7 +1319,7 @@ class AquatopeDownload(Summer2021AnimeDownload):
 
 
 # Tantei wa Mou, Shindeiru.
-class TanmoshiDownload(Summer2021AnimeDownload):
+class TanmoshiDownload(Summer2021AnimeDownload, NewsTemplate1):
     title = "Tantei wa Mou, Shindeiru."
     keywords = [title, "Tanmoshi", "The Detective Is Already Dead"]
     website = 'https://tanmoshi-anime.jp/'
@@ -1388,52 +1343,7 @@ class TanmoshiDownload(Summer2021AnimeDownload):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
 
     def download_news(self):
-        news_url = self.PAGE_PREFIX + 'news/'
-        stop = False
-        try:
-            results = []
-            news_obj = self.get_last_news_log_object()
-            page_url = news_url
-            for page in range(1, 100, 1):
-                soup = self.get_soup(page_url, decode=True)
-                list_div = soup.find('div', id='list_01')
-                if not list_div:
-                    continue
-                trs = list_div.find_all('tr')
-                for tr in trs:
-                    tag_date = tr.find('td', class_='day')
-                    tag_title = tr.find('div', class_='title')
-                    a_tag = tr.find('a')
-                    if tag_date and tag_title:
-                        article_id = ''
-                        if a_tag and a_tag.has_attr('href'):
-                            article_id = self.PAGE_PREFIX + a_tag['href'].replace('../', '')
-                        date = tag_date.text.replace('/', '.')
-                        title = tag_title.text.strip()
-                        if news_obj and ((news_obj['id'] == article_id and news_obj['title'] == title)
-                                         or date < news_obj['date']):
-                            stop = True
-                            break
-                        results.append(self.create_news_log_object(date, title, article_id))
-                if stop:
-                    break
-                nb_nex = soup.find('li', class_='nb_nex')
-                if nb_nex is None:
-                    break
-                nb_nex_a_tag = nb_nex.find('a')
-                if nb_nex_a_tag is None or not nb_nex_a_tag.has_attr('href'):
-                    break
-                page_url = self.PAGE_PREFIX + nb_nex_a_tag['href'].replace('../', '')
-            success_count = 0
-            for result in reversed(results):
-                process_result = self.create_news_log_from_news_log_object(result)
-                if process_result == 0:
-                    success_count += 1
-            if len(results) > 0:
-                self.create_news_log_cache(success_count, results[0])
-        except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - News')
-            print(e)
+        self.download_template_news(self.PAGE_PREFIX)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
