@@ -887,12 +887,12 @@ class MainDownload:
 
 # Generic template with paging
 class NewsTemplate1:
-    def download_template_news(self, page_prefix, paging_type, article_select, date_select, title_select, a_tag_select,
-                               news_prefix=None, a_tag_prefix=None, stop_date=None, a_tag_replace_from=None,
-                               a_tag_replace_to='', a_tag_start_text_to_remove=None, next_page_select=None,
-                               next_page_disable_class=None):
+    def download_template_news(self, page_prefix, paging_type, article_select, date_select, title_select, id_select,
+                               id_has_id=False, news_prefix=None, a_tag_prefix=None, stop_date=None,
+                               a_tag_replace_from=None, a_tag_replace_to='', a_tag_start_text_to_remove=None,
+                               next_page_select=None, next_page_disable_class=None):
         """
-        :param paging_type 0 = news/page/2  1 = news/?p=2
+        :param paging_type 0 = news/page/2  1 = news/?p=2  2 = /2
         """
 
         if not issubclass(self.__class__, MainDownload):
@@ -916,6 +916,8 @@ class NewsTemplate1:
                 if page > 1:
                     if paging_type == 1:
                         page_url = news_url + '?p=' + str(page)
+                    elif paging_type == 2:
+                        page_url = news_url + str(page)
                     else:
                         page_url = news_url + 'page/' + str(page)
                 soup = self.get_soup(page_url, decode=True)
@@ -923,23 +925,34 @@ class NewsTemplate1:
                 for article in articles:
                     tag_dates = article.select(date_select)
                     tag_titles = article.select(title_select)
-                    a_tags = article.select(a_tag_select)
-                    if len(tag_dates) > 0 and len(tag_titles) > 0 and len(a_tags) > 0 and a_tags[0].has_attr('href'):
-                        article_id_suffix = a_tags[0]['href']
-                        if a_tag_replace_from:
-                            article_id_suffix = article_id_suffix.replace(a_tag_replace_from, a_tag_replace_to)
-                        if a_tag_start_text_to_remove and article_id_suffix.startswith(a_tag_start_text_to_remove):
-                            article_id_suffix = article_id_suffix[len(a_tag_start_text_to_remove):]
-                        if a_tag_prefix:
-                            article_id = a_tag_prefix + article_id_suffix
+                    tag_ids = article.select(id_select)
+                    if len(tag_dates) > 0 and len(tag_titles) > 0:
+                        has_tag_ids = len(tag_ids) > 0
+                        if has_tag_ids:
+                            if id_has_id and tag_ids[0].has_attr('id'):
+                                article_id = tag_ids[0]['id']
+                            elif tag_ids[0].has_attr('href'):
+                                article_id_suffix = tag_ids[0]['href']
+                                if a_tag_replace_from:
+                                    article_id_suffix = article_id_suffix.replace(a_tag_replace_from, a_tag_replace_to)
+                                if a_tag_start_text_to_remove and article_id_suffix.startswith(a_tag_start_text_to_remove):
+                                    article_id_suffix = article_id_suffix[len(a_tag_start_text_to_remove):]
+                                if a_tag_prefix:
+                                    article_id = a_tag_prefix + article_id_suffix
+                                else:
+                                    article_id = article_id_suffix
+                            else:
+                                continue
                         else:
-                            article_id = article_id_suffix
+                            article_id = ''
                         date = self.format_news_date(tag_dates[0].text.strip().replace('/', '.'))
                         if len(date) == 0:
                             continue
                         title = ' '.join(tag_titles[0].text.strip().split())
                         if (stop_date is not None and date.startswith(stop_date)) or\
-                                (news_obj and (news_obj['id'] == article_id or date < news_obj['date'])):
+                                (news_obj and ((has_tag_ids and news_obj['id'] == article_id) or
+                                               (not has_tag_ids and title == news_obj['title']) or
+                                               date < news_obj['date'])):
                             stop = True
                             break
                         results.append(self.create_news_log_object(date, title, article_id))

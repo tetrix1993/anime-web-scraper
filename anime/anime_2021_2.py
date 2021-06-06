@@ -119,7 +119,7 @@ class EightySixDownload(Spring2021AnimeDownload, NewsTemplate1):
         news_url = self.PAGE_PREFIX + 'news/'
         self.download_template_news(page_prefix=self.PAGE_PREFIX, paging_type=1, article_select='li.c-list__item',
                                     date_select='div.c-list__item-date', title_select='div.c-list__item-title',
-                                    a_tag_select='a', a_tag_prefix=news_url, a_tag_replace_from='./',
+                                    id_select='a', a_tag_prefix=news_url, a_tag_replace_from='./',
                                     next_page_select='div.c-pagination__arrow.-next',
                                     next_page_disable_class='is-disable')
 
@@ -295,7 +295,7 @@ class DoraieDownload(Spring2021AnimeDownload, NewsTemplate1):
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, paging_type=0, article_select='article.news-item',
                                     date_select='span.news-item__date', title_select='span.news-item__title',
-                                    a_tag_select='a.news-item__link', a_tag_prefix=self.PAGE_PREFIX,
+                                    id_select='a.news-item__link', a_tag_prefix=self.PAGE_PREFIX,
                                     a_tag_start_text_to_remove='/', next_page_select='i.i-dot-arrow-r-12')
 
     def download_key_visual(self):
