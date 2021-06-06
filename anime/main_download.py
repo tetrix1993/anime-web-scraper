@@ -890,7 +890,8 @@ class NewsTemplate1:
     def download_template_news(self, page_prefix, paging_type, article_select, date_select, title_select, id_select,
                                id_has_id=False, news_prefix=None, a_tag_prefix=None, stop_date=None,
                                date_separator=None, a_tag_replace_from=None, a_tag_replace_to='',
-                               a_tag_start_text_to_remove=None, next_page_select=None, next_page_disable_class=None):
+                               a_tag_start_text_to_remove=None, next_page_select=None, next_page_disable_class=None,
+                               next_page_disable_class_index=0):
         """
         :param paging_type 0 = news/page/2  1 = news/?p=2  2 = /2
         :param id_select If None = article item element itself, else = the select
@@ -971,8 +972,11 @@ class NewsTemplate1:
                 next_page_tag = soup.select(next_page_select)
                 if len(next_page_tag) == 0:
                     break
-                if next_page_disable_class is not None and next_page_tag[0].has_attr('class')\
-                        and next_page_disable_class in next_page_tag[0]['class']:
+                if next_page_disable_class_index >= len(next_page_tag) or next_page_disable_class_index < -1:
+                    break
+                if next_page_disable_class is not None\
+                        and next_page_tag[next_page_disable_class_index].has_attr('class')\
+                        and next_page_disable_class in next_page_tag[next_page_disable_class_index]['class']:
                     break
             success_count = 0
             for result in reversed(results):
