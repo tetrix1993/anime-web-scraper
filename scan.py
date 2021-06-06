@@ -174,7 +174,10 @@ class AniverseMagazineScanner(MainScanner):
             #if episode_num < 1:
             #    continue
             #episode = str(episode_num).zfill(2)
-            if os.path.isfile(self.base_folder + "/" + episode + "_01.jpg"):
+            filepath = self.base_folder + "/" + episode + "_01.jpg"
+            if not filepath.startswith("download/"):
+                filepath = "download/" + filepath
+            if os.path.isfile(filepath):
                 return 1
             split3 = split2[0].split('<a href="')
             if len(split3) < 2:
@@ -271,7 +274,10 @@ class WebNewtypeScanner(MainScanner):
                 episode = str(episode_num).zfill(2)
             else:
                 continue
-            if os.path.isfile(self.base_folder + "/" + episode + "_01.jpg"):
+            filepath = self.base_folder + "/" + episode + "_01.jpg"
+            if not filepath.startswith("download/"):
+                filepath = "download/" + filepath
+            if os.path.isfile(filepath):
                 return 1
             is_first_episode = False
             if self.first_episode != 0 and episode != 'last':
@@ -486,7 +492,10 @@ class NatalieScanner(MainScanner):
                     episode = str(episode_num).zfill(2)
                 else:
                     continue
-                if os.path.isfile(self.base_folder + "/" + episode + "_01.jpg"):
+                filepath = self.base_folder + "/" + episode + "_01.jpg"
+                if not filepath.startswith("download/"):
+                    filepath = "download/" + filepath
+                if os.path.isfile(filepath):
                     return 1
 
                 image_title = None
