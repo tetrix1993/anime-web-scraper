@@ -953,7 +953,7 @@ class NewsTemplate1:
                                 continue
                         else:
                             article_id = ''
-                        unformatted_date = tag_dates[0].text.strip()
+                        unformatted_date = ' '.join(tag_dates[0].text.strip().split())
                         if date_separator is not None:
                             unformatted_date = unformatted_date.replace(date_separator, '.')
                         date = self.format_news_date(unformatted_date)
@@ -991,6 +991,7 @@ class NewsTemplate1:
 
 
 # News template
+# Where exists div.list_01, date = td.day, title = div.title, nagivation next page = nb_nex
 class NewsTemplate2:
     def download_template_news(self, page_prefix, first_page_url=None, stop_date=None):
         if not issubclass(self.__class__, MainDownload):
@@ -1053,6 +1054,7 @@ class NewsTemplate2:
             print(e)
 
 
+# News template which contain article.content-entry, div.entry-date, div.entry-title
 class NewsTemplate3:
     def download_template_news(self, page_prefix, first_page_url=None, stop_date=None):
         if not issubclass(self.__class__, MainDownload):

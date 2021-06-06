@@ -888,7 +888,7 @@ class IsekaiMaou2Download(Spring2021AnimeDownload, NewsTemplate1):
 
 
 # Kyuukyoku Shinka Shita Full Dive RPG ga Genjitsu Yori mo Kusogee Dattara
-class FullDiveRPGDownload(Spring2021AnimeDownload):
+class FullDiveRPGDownload(Spring2021AnimeDownload, NewsTemplate1):
     title = "Kyuukyoku Shinka Shita Full Dive RPG ga Genjitsu Yori mo Kusogee Dattara"
     keywords = [title, "Fulldive", "Kiwame Quest"]
     website = 'https://fulldive-rpg.com/'
@@ -956,33 +956,10 @@ class FullDiveRPGDownload(Spring2021AnimeDownload):
         return is_success
 
     def download_news(self):
-        news_url = self.PAGE_PREFIX + 'news.html'
-        try:
-            soup = self.get_soup(news_url, decode=True)
-            lis = soup.select('div.page_contents_wrapper.cf ul li')
-            news_obj = self.get_last_news_log_object()
-            results = []
-            for li in lis:
-                tag_date = li.find('p', class_='page_news_date')
-                tag_title = li.find('p', class_='page_news_title')
-                a_tag = li.find('a')
-                if tag_date and tag_title and a_tag and a_tag.has_attr('href'):
-                    article_id = self.PAGE_PREFIX + a_tag['href']
-                    date = tag_date.text.strip().replace(' ', '')
-                    title = tag_title.text.strip()
-                    if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
-                        break
-                    results.append(self.create_news_log_object(date, title, article_id))
-            success_count = 0
-            for result in reversed(results):
-                process_result = self.create_news_log_from_news_log_object(result)
-                if process_result == 0:
-                    success_count += 1
-            if len(results) > 0:
-                self.create_news_log_cache(success_count, results[0])
-        except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - News')
-            print(e)
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, paging_type=0,
+                                    article_select='div.page_contents_wrapper.cf ul li', date_select='p.page_news_date',
+                                    title_select='p.page_news_title', id_select='a', news_prefix='news.html',
+                                    a_tag_prefix=self.PAGE_PREFIX)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
