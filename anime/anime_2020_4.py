@@ -292,7 +292,7 @@ class AssaultLilyDownload(Fall2020AnimeDownload):
 
     def download_episode_preview_external(self):
         jp_title = 'アサルトリリィ'
-        AniverseMagazineScanner(jp_title, self.base_folder, 12, min_width=800).run()
+        AniverseMagazineScanner(jp_title, self.base_folder, 12, min_width=800, download_id=self.download_id).run()
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -1744,7 +1744,7 @@ class KumaBearDownload(Fall2020AnimeDownload):
 
     def download_episode_preview_external(self):
         jp_title = 'くまクマ熊ベアー'
-        AniverseMagazineScanner(jp_title, self.base_folder, 12, min_width=1920).run()
+        AniverseMagazineScanner(jp_title, self.base_folder, 12, min_width=1920, download_id=self.download_id).run()
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -1953,7 +1953,8 @@ class MaesetsuDownload(Fall2020AnimeDownload):
 
     def download_episode_preview_external(self):
         jp_title = 'まえせつ'
-        AniverseMagazineScanner(jp_title, self.base_folder, 12, suffix='幕', min_width=1920).run()
+        AniverseMagazineScanner(jp_title, self.base_folder, 12, suffix='幕',
+                                min_width=1920, download_id=self.download_id).run()
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -2610,7 +2611,7 @@ class OchifuruDownload(Fall2020AnimeDownload):
 
     def download_episode_preview_external(self):
         jp_title = 'おちこぼれフルーツタルト'
-        AniverseMagazineScanner(jp_title, self.base_folder, 12, min_width=1920).run()
+        AniverseMagazineScanner(jp_title, self.base_folder, 12, min_width=1920, download_id=self.download_id).run()
 
     def download_key_visual(self):
         keyvisual_folder = self.create_key_visual_directory()
@@ -3035,8 +3036,9 @@ class StrikeWitches3Download(Fall2020AnimeDownload):
                 end_date = today
             else:
                 end_date = last_date
-            MocaNewsScanner(jp_title, self.base_folder, '20200925', end_date.strftime('%Y%m%d')).run()
-            AniverseMagazineScanner(jp_title, self.base_folder, 12, min_width=1200).run()
+            MocaNewsScanner(jp_title, self.base_folder, '20200925',
+                            end_date.strftime('%Y%m%d'), download_id=self.download_id).run()
+            AniverseMagazineScanner(jp_title, self.base_folder, 12, min_width=1200, download_id=self.download_id).run()
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + ' - MocaNews')
             print(e)

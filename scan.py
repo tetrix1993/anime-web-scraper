@@ -8,11 +8,13 @@ from datetime import datetime
 from datetime import timedelta
 
 
-class MainScanner():
+class MainScanner:
 
     MAXIMUM_PAGES = 10
+    download_id = None
     
-    def __init__(self):
+    def __init__(self, download_id):
+        self.download_id = download_id
         pass
         
     def run(self):
@@ -97,8 +99,9 @@ class AniverseMagazineScanner(MainScanner):
     # Example prefix: https://aniverse-mag.com/page/2?s=プランダラ
     SEARCH_URL = "https://aniverse-mag.com/page/%s?s=%s"
     
-    def __init__(self, keyword, base_folder, last_episode=None, suffix=None, min_width=None, end_date='00000000'):
-        super().__init__()
+    def __init__(self, keyword, base_folder, last_episode=None, suffix=None,
+                 min_width=None, end_date='00000000', download_id=None):
+        super().__init__(download_id)
         self.keyword = keyword
         self.base_folder = base_folder.replace("download/","") + "/" + EXTERNAL_FOLDER_ANIVERSE
         self.last_episode = last_episode
@@ -180,7 +183,8 @@ class AniverseMagazineScanner(MainScanner):
             article_id = self.get_article_id(url)
             if len(article_id) == 0:
                 continue
-            AniverseMagazineDownload(article_id, self.base_folder, episode, min_width=self.min_width).run()
+            AniverseMagazineDownload(article_id, self.base_folder, episode,
+                                     min_width=self.min_width, download_id=self.download_id).run()
         
     def run(self):
         if self.last_episode:
@@ -213,8 +217,8 @@ class WebNewtypeScanner(MainScanner):
     PAGE_PREFIX = "https://webnewtype.com/"
     SEARCH_PREFIX = "https://webnewtype.com/news/nrsearch/"
     
-    def __init__(self, keyword, base_folder, last_episode=None, first_episode=0):
-        super().__init__()
+    def __init__(self, keyword, base_folder, last_episode=None, first_episode=0, download_id=None):
+        super().__init__(download_id)
         self.keyword = keyword
         self.base_folder = base_folder.replace("download/","") + "/" + EXTERNAL_FOLDER_WEBNEWTYPE
         self.last_episode = last_episode
@@ -282,7 +286,7 @@ class WebNewtypeScanner(MainScanner):
             article_id = self.get_article_id(url)
             if len(article_id) == 0:
                 continue
-            WebNewtypeDownload(article_id, self.base_folder, episode).run()
+            WebNewtypeDownload(article_id, self.base_folder, episode, download_id=self.download_id).run()
             if is_first_episode:
                 return 1
         return 0
@@ -322,8 +326,8 @@ class MocaNewsScanner(MainScanner):
 
     PAGE_URL_TEMPLATE = 'https://moca-news.net/article/%s/'
 
-    def __init__(self, keyword, base_folder, start_date, end_date, ignore_cache=False):
-        super().__init__()
+    def __init__(self, keyword, base_folder, start_date, end_date, ignore_cache=False, download_id=None):
+        super().__init__(download_id)
         self.keyword = keyword
         self.base_folder = base_folder + "/" + EXTERNAL_FOLDER_MOCANEWS
         self.start_date = datetime.strptime(start_date, '%Y%m%d')
@@ -394,7 +398,8 @@ class MocaNewsScanner(MainScanner):
                         continue
                     image_url = article_div.find('img')['src']
                     article_id = self.get_article_id(image_url)
-                    MocaNewsDownload(article_id, self.base_folder.replace('download/', ''), episode).run()
+                    MocaNewsDownload(article_id, self.base_folder.replace('download/', ''), episode,
+                                     download_id=self.download_id).run()
             except:
                 pass
             curr_date -= timedelta(days=1)
@@ -406,8 +411,8 @@ class NatalieScanner(MainScanner):
     SEARCH_URL_TEMPLATE = 'https://natalie.mu/search?context=news&query=%s&g=comic&page=%s'
     ARTICLE_URL_TEMPLATE = 'https://natalie.mu/comic/news/%s'
 
-    def __init__(self, keyword, base_folder, last_episode=None, suffix=None):
-        super().__init__()
+    def __init__(self, keyword, base_folder, last_episode=None, suffix=None, download_id=None):
+        super().__init__(download_id)
         self.keyword = keyword
         self.base_folder = base_folder.replace("download/","") + "/" + EXTERNAL_FOLDER_NATALIE
         self.last_episode = last_episode
@@ -489,7 +494,8 @@ class NatalieScanner(MainScanner):
                     image_title = '第' + str(int(episode)) + suffix
                 except:
                     pass
-                NatalieDownload(article_id, self.base_folder, episode, title=image_title).run()
+                NatalieDownload(article_id, self.base_folder, episode, title=image_title,
+                                download_id=self.download_id).run()
         return 0
 
     def run(self):

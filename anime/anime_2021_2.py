@@ -323,7 +323,8 @@ class DoraieDownload(Spring2021AnimeDownload):
 
     def download_episode_preview_external(self):
         jp_title = 'ドラゴン、家を買う。'
-        AniverseMagazineScanner(jp_title, self.base_folder, last_episode=self.FINAL_EPISODE, min_width=1200, end_date='20210330').run()
+        AniverseMagazineScanner(jp_title, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                min_width=1200, end_date='20210330', download_id=self.download_id).run()
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + 'news/'
@@ -1308,7 +1309,7 @@ class OsamakeDownload(Spring2021AnimeDownload):
     def run(self):
         self.download_episode_preview()
         self.download_episode_preview_guess()
-        self.download_episode_preview_external()
+        # self.download_episode_preview_external()
         self.download_news()
         self.download_key_visual()
         self.download_character()
@@ -1355,7 +1356,7 @@ class OsamakeDownload(Spring2021AnimeDownload):
     def download_episode_preview_external(self):
         jp_title = '幼なじみが絶対に負けないラブコメ'
         AniverseMagazineScanner(jp_title, self.base_folder, last_episode=self.FINAL_EPISODE, min_width=800,
-                                end_date='20210408').run()
+                                end_date='20210408', download_id=self.download_id).run()
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + 'news.html'
@@ -2236,7 +2237,7 @@ class SsssDynazenonDownload(Spring2021AnimeDownload):
 
     def run(self):
         self.download_episode_preview()
-        self.download_episode_preview_external()
+        # self.download_episode_preview_external()
         self.download_news()
         self.download_key_visual()
         self.download_character()
@@ -2267,7 +2268,8 @@ class SsssDynazenonDownload(Spring2021AnimeDownload):
 
     def download_episode_preview_external(self):
         jp_title = 'SSSS.DYNAZENON'
-        AniverseMagazineScanner(jp_title, self.base_folder, last_episode=self.FINAL_EPISODE, suffix='回', min_width=1200, end_date='20210328').run()
+        AniverseMagazineScanner(jp_title, self.base_folder, last_episode=self.FINAL_EPISODE, suffix='回',
+                                min_width=1200, end_date='20210328', download_id=self.download_id).run()
 
     def download_news(self):
         prefix = 'https://gridman.net'
@@ -2787,7 +2789,7 @@ class YakunaraMugCupMoDownload(Spring2021AnimeDownload):
 
     def download_episode_preview_external(self):
         jp_title = 'やくならマグカップも'
-        NatalieScanner(jp_title, self.base_folder, last_episode=self.FINAL_EPISODE).run()
+        NatalieScanner(jp_title, self.base_folder, last_episode=self.FINAL_EPISODE, download_id=self.download_id).run()
 
     def download_episode_preview_guess(self):
         self.image_list = []

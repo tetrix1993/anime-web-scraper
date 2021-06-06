@@ -7,16 +7,17 @@ from anime.main_download import MainDownload
 class ExternalDownload(MainDownload):
     folder_name = None
 
-    def __init__(self):
+    def __init__(self, download_id):
         super().__init__()
+        self.download_id = download_id
 
 
 class AniverseMagazineDownload(ExternalDownload):
     folder_name = None
     PAGE_PREFIX = "https://aniverse-mag.com/archives/"
     
-    def __init__(self, article_id, save_folder, episode, num_of_pictures=0, min_width=None):
-        super().__init__()
+    def __init__(self, article_id, save_folder, episode, num_of_pictures=0, min_width=None, download_id=None):
+        super().__init__(download_id)
         self.base_folder = self.base_folder + "/" + save_folder
         if not os.path.exists(self.base_folder):
             os.makedirs(self.base_folder)
@@ -77,8 +78,8 @@ class MocaNewsDownload(ExternalDownload):
     PAGE_PREFIX = "https://moca-news.net/article/"
     COOKIE_URL = "https://moca-news.net/pd.php"
     
-    def __init__(self, article_id, save_folder, episode):
-        super().__init__()
+    def __init__(self, article_id, save_folder, episode, download_id=None):
+        super().__init__(download_id)
         self.base_folder = self.base_folder + "/" + save_folder
         if not os.path.exists(self.base_folder):
             os.makedirs(self.base_folder)
@@ -158,8 +159,8 @@ class NatalieDownload(ExternalDownload):
     folder_name = None
     PAGE_PREFIX = 'https://natalie.mu/comic/news/'
 
-    def __init__(self, article_id, save_folder, episode, title=None):
-        super().__init__()
+    def __init__(self, article_id, save_folder, episode, title=None, download_id=None):
+        super().__init__(download_id)
         self.base_folder = self.base_folder + "/" + save_folder
         if not os.path.exists(self.base_folder):
             os.makedirs(self.base_folder)
@@ -215,8 +216,8 @@ class WebNewtypeDownload(ExternalDownload):
     folder_name = None
     PAGE_PREFIX = "https://webnewtype.com/news/article/"
     
-    def __init__(self, article_id, save_folder, episode):
-        super().__init__()
+    def __init__(self, article_id, save_folder, episode, download_id=None):
+        super().__init__(download_id)
         self.base_folder = self.base_folder + "/" + save_folder
         if not os.path.exists(self.base_folder):
             os.makedirs(self.base_folder)

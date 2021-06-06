@@ -174,7 +174,7 @@ class GleipnirDownload(Spring2020AnimeDownload):
                     image_url = images[j]['src'].replace('-1024x576', '')
                     file_path_without_extension = self.base_folder + '/' + episode + '_' + str(j + 1)
                     self.download_image(image_url, file_path_without_extension)
-            WebNewtypeScanner('グレイプニル', self.base_folder, 13).run()
+            WebNewtypeScanner('グレイプニル', self.base_folder, 13, download_id=self.download_id).run()
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
@@ -370,7 +370,8 @@ class Honzuki2Download(Spring2020AnimeDownload):
                 end_date = today
             else:
                 end_date = last_date
-            MocaNewsScanner('本好きの下剋上', self.base_folder, '20200401', end_date.strftime('%Y%m%d')).run()
+            MocaNewsScanner('本好きの下剋上', self.base_folder, '20200401', end_date.strftime('%Y%m%d'),
+                            download_id=self.download_id).run()
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + ' - MocaNews')
             print(e)
@@ -473,7 +474,7 @@ class TeiboDownload(Spring2020AnimeDownload):
             print(e)
 
     def download_episode_preview_external(self):
-        AniverseMagazineScanner('放課後ていぼう日誌', self.base_folder, 12).run()
+        AniverseMagazineScanner('放課後ていぼう日誌', self.base_folder, 12, download_id=self.download_id).run()
 
     def download_key_visual(self):
         filepath = self.create_key_visual_directory()
@@ -1269,7 +1270,7 @@ class YesterdayDownload(Spring2020AnimeDownload):
                         break
                 if result == -1 and is_first_image:
                     break
-            WebNewtypeScanner('イエスタデイをうたって', self.base_folder, 12).run()
+            WebNewtypeScanner('イエスタデイをうたって', self.base_folder, 12, download_id=self.download_id).run()
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)

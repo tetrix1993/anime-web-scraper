@@ -425,7 +425,7 @@ class MaohgakuinDownload(Summer2020AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
-        WebNewtypeScanner('魔王学院の不適合者', self.base_folder, 13).run()
+        WebNewtypeScanner('魔王学院の不適合者', self.base_folder, 13, download_id=self.download_id).run()
 
     def download_key_visual(self):
         keyvisual_folder = self.create_key_visual_directory()
@@ -580,7 +580,7 @@ class MonIshaDownload(Summer2020AnimeDownload):
 
     def download_episode_preview_external(self):
         jp_title = 'モンスター娘のお医者さん'
-        AniverseMagazineScanner(jp_title, self.base_folder, 12).run()
+        AniverseMagazineScanner(jp_title, self.base_folder, 12, download_id=self.download_id).run()
         #last_date = datetime.strptime('20200930', '%Y%m%d')
         #today = datetime.today()
         #if today < last_date:
@@ -724,14 +724,15 @@ class PeterGrillDownload(Summer2020AnimeDownload):
     def download_episode_preview_external(self):
         try:
             jp_title = 'ピーター・グリルと賢者の時間'
-            AniverseMagazineScanner(jp_title, self.base_folder, 12).run()
+            AniverseMagazineScanner(jp_title, self.base_folder, 12, download_id=self.download_id).run()
             last_date = datetime.strptime('20200930', '%Y%m%d')
             today = datetime.today()
             if today < last_date:
                 end_date = today
             else:
                 end_date = last_date
-            MocaNewsScanner(jp_title, self.base_folder, '20200709', end_date.strftime('%Y%m%d')).run()
+            MocaNewsScanner(jp_title, self.base_folder, '20200709', end_date.strftime('%Y%m%d'),
+                            download_id=self.download_id).run()
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + ' - Aniverse')
             print(e)

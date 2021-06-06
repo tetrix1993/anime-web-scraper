@@ -810,7 +810,7 @@ class NekoparaDownload(Winter2020AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
-        WebNewtypeScanner('ネコぱら',self.base_folder, 12).run()
+        WebNewtypeScanner('ネコぱら',self.base_folder, 12, download_id=self.download_id).run()
 
     def download_keyvisual(self):
         filepath = self.create_key_visual_directory()
@@ -1106,7 +1106,7 @@ class SomaliDownload(Winter2020AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
-        WebNewtypeScanner('ソマリと森の神様', self.base_folder, 12).run()
+        WebNewtypeScanner('ソマリと森の神様', self.base_folder, 12, download_id=self.download_id).run()
 
 
 # Toaru Kagaku no Railgun T

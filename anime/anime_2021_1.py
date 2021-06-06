@@ -93,7 +93,8 @@ class DrStone2Download(Winter2021AnimeDownload):
 
     def download_episode_preview_external(self):
         jp_title = 'Ｄｒ．ＳＴＯＮＥ'
-        AniverseMagazineScanner(jp_title, self.base_folder, last_episode=self.FINAL_EPISODE, min_width=800, end_date='20210111').run()
+        AniverseMagazineScanner(jp_title, self.base_folder, last_episode=self.FINAL_EPISODE, min_width=800,
+                                end_date='20210111', download_id=self.download_id).run()
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -614,8 +615,9 @@ class TomozakiKunDownload(Winter2021AnimeDownload):
             end_date = today
         else:
             end_date = last_date
-        MocaNewsScanner(jp_title, self.base_folder, '20201225', end_date.strftime('%Y%m%d')).run()
-        NatalieScanner(jp_title, self.base_folder, last_episode=self.FINAL_EPISODE).run()
+        MocaNewsScanner(jp_title, self.base_folder, '20201225', end_date.strftime('%Y%m%d'),
+                        download_id=self.download_id).run()
+        NatalieScanner(jp_title, self.base_folder, last_episode=self.FINAL_EPISODE, download_id=self.download_id).run()
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + 'news/'
@@ -1879,7 +1881,8 @@ class Tensura2Download(Winter2021AnimeDownload):
 
     def download_episode_preview_external(self):
         jp_title = '転生したらスライムだった件'
-        WebNewtypeScanner('転生したらスライムだった件', self.base_folder, last_episode=48, first_episode=25).run()
+        WebNewtypeScanner('転生したらスライムだった件', self.base_folder,last_episode=48, first_episode=25,
+                          download_id=self.download_id).run()
         #AniverseMagazineScanner(jp_title, self.base_folder, last_episode=48, min_width=1000, end_date='20210108').run()
 
     def download_key_visual(self):
@@ -1947,7 +1950,8 @@ class UrasekaiPicnicDownload(Winter2021AnimeDownload):
             print(e)
 
     def download_episode_preview_external(self):
-        NatalieScanner('裏世界ピクニック', self.base_folder, last_episode=self.FINAL_EPISODE).run()
+        NatalieScanner('裏世界ピクニック', self.base_folder, last_episode=self.FINAL_EPISODE,
+                       download_id=self.download_id).run()
 
     def download_episode_preview_guess(self):
         folder = self.create_custom_directory('guess')
@@ -2215,7 +2219,8 @@ class WorldTrigger2Download(Winter2021AnimeDownload):
 
     def download_episode_preview_external(self):
         jp_title = 'ワールドトリガー'
-        NatalieScanner(jp_title, self.base_folder, last_episode=self.FINAL_EPISODE).run()
+        NatalieScanner(jp_title, self.base_folder, last_episode=self.FINAL_EPISODE,
+                       download_id=self.download_id).run()
 
 
 # Yuru Camp S2
