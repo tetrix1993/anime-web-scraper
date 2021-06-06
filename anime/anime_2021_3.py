@@ -1,6 +1,6 @@
 import os
 import anime.constants as constants
-from anime.main_download import MainDownload, NewsTemplate2
+from anime.main_download import MainDownload, NewsTemplate1, NewsTemplate2
 from datetime import datetime
 from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 
@@ -36,7 +36,7 @@ class Summer2021AnimeDownload(MainDownload):
 
 
 # 100-man no Inochi no Ue ni Ore wa Tatteiru 2nd Season
-class HyakumanNoInochi2Download(Summer2021AnimeDownload):
+class HyakumanNoInochi2Download(Summer2021AnimeDownload, NewsTemplate1):
     title = "100-man no Inochi no Ue ni Ore wa Tatteiru 2nd Season"
     keywords = [title, "I'm standing on 1,000,000 lives.", "Hyakuman", "1000000"]
     website = "https://1000000-lives.com/"
@@ -58,6 +58,11 @@ class HyakumanNoInochi2Download(Summer2021AnimeDownload):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
 
     def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article.c-news-item',
+                                   date_select='span.c-news-item__date', title_select='span.c-news-item__title',
+                                   id_select='a', a_tag_prefix=self.PAGE_PREFIX, stop_date='2020',
+                                   next_page_select='ul.page-numbers li a.next.page-numbers')
+
         news_url = self.PAGE_PREFIX + '/news/'
         stop = False
         try:
