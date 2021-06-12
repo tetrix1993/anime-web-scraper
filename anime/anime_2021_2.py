@@ -883,6 +883,7 @@ class IsekaiMaou2Download(Spring2021AnimeDownload, NewsTemplate1):
         self.add_to_image_list('ec08_1', 'https://pbs.twimg.com/media/E2aPBxWVcAUM7Fv?format=jpg&name=large')
         self.add_to_image_list('ec08_2', 'https://pbs.twimg.com/media/E2aPCEiVUAEXiHh?format=jpg&name=large')
         self.add_to_image_list('ec09', 'https://pbs.twimg.com/media/E29wfKCVcAgAR64?format=jpg&name=large')
+        self.add_to_image_list('ec10', 'https://pbs.twimg.com/media/E3h7EFkVUAIG91-?format=jpg&name=large')
         self.download_image_list(folder)
 
 
