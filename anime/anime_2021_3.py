@@ -1025,7 +1025,7 @@ class TanmoshiDownload(Summer2021AnimeDownload, NewsTemplate2):
 
 
 # Tsuki ga Michibiku Isekai Douchuu
-class TsukimichiDownload(Summer2021AnimeDownload):
+class TsukimichiDownload(Summer2021AnimeDownload, NewsTemplate1):
     title = "Tsuki ga Michibiku Isekai Douchuu"
     keywords = [title, "Tsukimichi", "Moonlit Fantasy"]
     website = 'https://tsukimichi.com/'
@@ -1049,51 +1049,10 @@ class TsukimichiDownload(Summer2021AnimeDownload):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
 
     def download_news(self):
-        news_url = self.PAGE_PREFIX + 'news/'
-        stop = False
-        try:
-            results = []
-            news_obj = self.get_last_news_log_object()
-            page_url = news_url
-            for page in range(1, 100, 1):
-                soup = self.get_soup(page_url, decode=True)
-                articles = soup.select('article.md-article__block')
-                for article in articles:
-                    tag_date = article.find('time')
-                    tag_title = article.find('h3')
-                    a_tag = article.find('a')
-                    if tag_date and tag_title and a_tag and a_tag.has_attr('href'):
-                        article_id = self.PAGE_PREFIX + a_tag['href'].replace('../', '')
-                        date = self.format_news_date(' '.join(tag_date.text.split()))
-                        if len(date) == 0:
-                            continue
-                        title = ' '.join(tag_title.text.strip().split())
-                        if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
-                            stop = True
-                            break
-                        results.append(self.create_news_log_object(date, title, article_id))
-                if stop:
-                    break
-                pagenation_list = soup.find('ul', class_='pagenation-list')
-                if pagenation_list is None:
-                    break
-                pagenation_list_lis = pagenation_list.select('li')
-                if len(pagenation_list_lis) == 0:
-                    break
-                next_page_a_tag = pagenation_list_lis[-1].find('a')
-                if not next_page_a_tag or next_page_a_tag['href'] == page_url:
-                    break
-                page_url = next_page_a_tag['href']
-            success_count = 0
-            for result in reversed(results):
-                process_result = self.create_news_log_from_news_log_object(result)
-                if process_result == 0:
-                    success_count += 1
-            if len(results) > 0:
-                self.create_news_log_cache(success_count, results[0])
-        except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - News')
-            print(e)
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article.md-article__block',
+                                    date_select='time', title_select='h3', id_select='a',
+                                    next_page_select='ul.pagenation-list li',
+                                    next_page_eval_index_class='is__current', next_page_eval_index=-1)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
