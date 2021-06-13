@@ -773,7 +773,7 @@ class PeachBoyRiversideDownload(Summer2021AnimeDownload, NewsTemplate1):
 
 
 # Seirei Gensouki
-class SeireiGensoukiDownload(Summer2021AnimeDownload):
+class SeireiGensoukiDownload(Summer2021AnimeDownload, NewsTemplate1):
     title = "Seirei Gensouki"
     keywords = [title, "Spirit Chronicles"]
     website = "https://seireigensouki.com/"
@@ -797,49 +797,10 @@ class SeireiGensoukiDownload(Summer2021AnimeDownload):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
 
     def download_news(self):
-        news_url = self.PAGE_PREFIX + 'news-list/'
-        stop = False
-        try:
-            news_obj = self.get_last_news_log_object()
-            results = []
-            for page in range(1, 100, 1):
-                if page == 1:
-                    page_url = news_url
-                else:
-                    page_url = news_url + 'page/' + str(page) + '/'
-                soup = self.get_soup(page_url, decode=True)
-                articles = soup.select('ul.news-list li.news-item')
-                for article in articles:
-                    tag_date = article.find('p', class_='news-date')
-                    tag_title = article.find('p', class_='news-title')
-                    a_tag = article.find('a')
-                    if tag_date and tag_title and a_tag and a_tag.has_attr('href'):
-                        article_id = a_tag['href']
-                        date = self.format_news_date(tag_date.text.strip())
-                        if len(date) == 0:
-                            continue
-                        title = tag_title.text.strip()
-                        if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
-                            stop = True
-                            break
-                        results.append(self.create_news_log_object(date, title, article_id))
-                if stop:
-                    break
-                next_button = soup.select('div.pagination div.next')
-                if len(next_button) == 0:
-                    break
-                if next_button[0].has_attr('class') and 'off' in next_button[0]['class']:
-                    break
-            success_count = 0
-            for result in reversed(results):
-                process_result = self.create_news_log_from_news_log_object(result)
-                if process_result == 0:
-                    success_count += 1
-            if len(results) > 0:
-                self.create_news_log_cache(success_count, results[0])
-        except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - News')
-            print(e)
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='ul.news-list li.news-item',
+                                    date_select='p.news-date', title_select='p.news-title', id_select='a',
+                                    news_prefix='news-list/', next_page_select='div.pagination div.next',
+                                    next_page_eval_index_class='off', next_page_eval_index=0)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
