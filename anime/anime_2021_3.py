@@ -407,7 +407,7 @@ class JahysamaDownload(Summer2021AnimeDownload, NewsTemplate1):
 
 
 # Kanojo mo Kanojo
-class KanokanoDownload(Summer2021AnimeDownload):
+class KanokanoDownload(Summer2021AnimeDownload, NewsTemplate1):
     title = 'Kanojo mo Kanojo'
     keywords = [title, 'Kanokano']
     website = 'https://kanokano-anime.com'
@@ -430,36 +430,8 @@ class KanokanoDownload(Summer2021AnimeDownload):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
 
     def download_news(self):
-        news_url = self.PAGE_PREFIX + '/news/'
-        try:
-            soup = self.get_soup(news_url, decode=True)
-            articles = soup.select('article.news-lineup__block')
-            news_obj = self.get_last_news_log_object()
-            results = []
-            for article in articles:
-                tag_date = article.find('dt')
-                tag_title = article.find('h2')
-                a_tag = article.find('a')
-                if tag_date and tag_title and a_tag:
-                    article_id = self.PAGE_PREFIX + a_tag['href']
-                    date = self.format_news_date(tag_date.text.strip())
-                    if len(date) == 0:
-                        continue
-                    title = ' '.join(tag_title.text.strip().split())
-                    if news_obj and ((news_obj['date'] == date and news_obj['title'] == title)
-                                     or date < news_obj['date']):
-                        break
-                    results.append(self.create_news_log_object(date, title, article_id))
-            success_count = 0
-            for result in reversed(results):
-                process_result = self.create_news_log_from_news_log_object(result)
-                if process_result == 0:
-                    success_count += 1
-            if len(results) > 0:
-                self.create_news_log_cache(success_count, results[0])
-        except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - News')
-            print(e)
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article.news-lineup__block',
+                                    date_select='dt', title_select='h2', id_select='a', a_tag_prefix=self.PAGE_PREFIX)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
