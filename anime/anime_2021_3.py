@@ -1060,7 +1060,7 @@ class SeireiGensoukiDownload(Summer2021AnimeDownload):
 
 
 # Shiroi Suna no Aquatope
-class AquatopeDownload(Summer2021AnimeDownload):
+class AquatopeDownload(Summer2021AnimeDownload, NewsTemplate1):
     title = 'Shiroi Suna no Aquatope'
     keywords = [title, 'Aquatope of White Sand']
     website = 'https://aquatope-anime.com/'
@@ -1084,50 +1084,10 @@ class AquatopeDownload(Summer2021AnimeDownload):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
 
     def download_news(self):
-        news_url = self.PAGE_PREFIX + 'news/'
-        stop = False
-        try:
-            results = []
-            news_obj = self.get_last_news_log_object()
-            for page in range(1, 20, 1):
-                page_url = news_url
-                if page > 1:
-                    page_url = news_url + 'page/' + str(page) + '/'
-                soup = self.get_soup(page_url, decode=True)
-                if len(soup) == 0:
-                    break
-                articles = soup.select('article.news--lineup--block')
-                for article in articles:
-                    tag_date = article.find('dt')
-                    tag_title = article.find('h3')
-                    a_tag = article.find('a')
-                    if tag_date and tag_title and a_tag and a_tag.has_attr('href'):
-                        article_id = a_tag['href']
-                        date = self.format_news_date(tag_date.text.strip())
-                        if len(date) == 0:
-                            continue
-                        title = tag_title.text.strip()
-                        if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
-                            stop = True
-                            break
-                        results.append(self.create_news_log_object(date, title, article_id))
-                if stop:
-                    break
-                pagination = soup.select('ul.pagenation-list li')
-                if len(pagination) == 0:
-                    break
-                if pagination[-1].has_attr('class') and 'is__current' in pagination[-1]['class']:
-                    break
-            success_count = 0
-            for result in reversed(results):
-                process_result = self.create_news_log_from_news_log_object(result)
-                if process_result == 0:
-                    success_count += 1
-            if len(results) > 0:
-                self.create_news_log_cache(success_count, results[0])
-        except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - News')
-            print(e)
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article.md-archive__news',
+                                    date_select='time.txt--date', title_select='h3.txt--ttl',
+                                    id_select='a', next_page_select='ul.pagenation-list li',
+                                    next_page_eval_index_class='is__current', next_page_eval_index=-1)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
