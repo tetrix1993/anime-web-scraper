@@ -717,7 +717,7 @@ class Hamehura2Download(Summer2021AnimeDownload, NewsTemplate1):
 
 
 # Peach Boy Riverside
-class PeachBoyRiversideDownload(Summer2021AnimeDownload):
+class PeachBoyRiversideDownload(Summer2021AnimeDownload, NewsTemplate1):
     title = 'Peach Boy Riverside'
     keywords = [title]
     website = 'https://peachboyriverside.com/'
@@ -740,44 +740,10 @@ class PeachBoyRiversideDownload(Summer2021AnimeDownload):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
 
     def download_news(self):
-        news_url = self.PAGE_PREFIX + 'news/'
-        stop = False
-        try:
-            results = []
-            news_obj = self.get_last_news_log_object()
-            for page in range(1, 100, 1):
-                page_url = news_url
-                if page > 1:
-                    page_url = news_url + 'page/' + str(page) + '/'
-                soup = self.get_soup(page_url, decode=True)
-                lis = soup.select('ul.md--articleblock.ver__pages li')
-                for li in lis:
-                    tag_date = li.find('h3')
-                    tag_title = li.find('h4', class_='ttl')
-                    a_tag = li.find('a')
-                    if tag_date and tag_title and a_tag and a_tag.has_attr('href'):
-                        article_id = a_tag['href']
-                        date = tag_date.text.strip()
-                        title = tag_title.text.strip()
-                        if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
-                            stop = True
-                            break
-                        results.append(self.create_news_log_object(date, title, article_id))
-                if stop:
-                    break
-                pagination = soup.select('ul.pagenation-list li.next')
-                if len(pagination) == 0:
-                    break
-            success_count = 0
-            for result in reversed(results):
-                process_result = self.create_news_log_from_news_log_object(result)
-                if process_result == 0:
-                    success_count += 1
-            if len(results) > 0:
-                self.create_news_log_cache(success_count, results[0])
-        except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - News')
-            print(e)
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='ul.md--articleblock.ver__pages li',
+                                    date_select='h3', title_select='h4.ttl', id_select='a',
+                                    next_page_select='ul.pagenation-list li',
+                                    next_page_eval_index_class='is__current', next_page_eval_index=-1)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
