@@ -246,7 +246,7 @@ class Dea5Download(Summer2021AnimeDownload, NewsTemplate1):
 
 
 # Genjitsu Shugi Yuusha no Oukoku Saikenki
-class GenkokuDownload(Summer2021AnimeDownload):
+class GenkokuDownload(Summer2021AnimeDownload, NewsTemplate1):
     title = "Genjitsu Shugi Yuusha no Oukoku Saikenki"
     keywords = [title, "Genkoku"]
     website = 'https://genkoku-anime.com/'
@@ -269,44 +269,9 @@ class GenkokuDownload(Summer2021AnimeDownload):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
 
     def download_news(self):
-        news_url = self.PAGE_PREFIX + 'news/'
-        stop = False
-        try:
-            results = []
-            news_obj = self.get_last_news_log_object()
-            page_url = news_url
-            for page in range(1, 2, 1):
-                soup = self.get_soup(page_url, decode=True)
-                articles = soup.select('div.list li.info')
-                for article in articles:
-                    tag_date = article.find('time')
-                    tag_title = article.find('p')
-                    a_tag = article.find('a')
-                    if tag_date and tag_title:
-                        article_id = ''
-                        if a_tag and a_tag.has_attr('href'):
-                            article_id = self.PAGE_PREFIX + a_tag['href'].replace('../', '')
-                        date = self.format_news_date(tag_date.text)
-                        if len(date) == 0:
-                            continue
-                        title = tag_title.text.strip()
-                        if news_obj and ((news_obj['id'] == article_id and news_obj['title'] == title)
-                                         or date < news_obj['date']):
-                            stop = True
-                            break
-                        results.append(self.create_news_log_object(date, title, article_id))
-                if stop:
-                    break
-            success_count = 0
-            for result in reversed(results):
-                process_result = self.create_news_log_from_news_log_object(result)
-                if process_result == 0:
-                    success_count += 1
-            if len(results) > 0:
-                self.create_news_log_cache(success_count, results[0])
-        except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - News')
-            print(e)
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='div.list li.info', date_select='time',
+                                    title_select='p', id_select='a', a_tag_prefix=self.PAGE_PREFIX,
+                                    a_tag_replace_from='../')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
