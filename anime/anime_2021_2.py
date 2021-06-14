@@ -374,7 +374,7 @@ class FumetsuNoAnataeDownload(Spring2021AnimeDownload):
             episode = str(i + 1).zfill(2)
             if self.is_image_exists(episode + '_1'):
                 continue
-            template = 'https://anime-fumetsunoanatae.com/story/images/1_%s/%s.png' % (str(i + 1), '%s')
+            template = self.PAGE_PREFIX + '/story/images/1_%s/%s.png' % (str(i + 1), '%s')
             if not self.download_by_template(folder, template, 1, 1):
                 break
             print(self.__class__.__name__ + ' - Episode %s guessed correctly!' % episode)
