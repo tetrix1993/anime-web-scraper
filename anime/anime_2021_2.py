@@ -333,12 +333,14 @@ class FumetsuNoAnataeDownload(Spring2021AnimeDownload):
     folder_name = 'fumetsunoanatae'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 20
 
     def __init__(self):
         super().__init__()
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_guess()
         self.download_news()
         self.download_key_visual()
         self.download_character()
@@ -364,6 +366,20 @@ class FumetsuNoAnataeDownload(Spring2021AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
         self.download_image_list(self.base_folder)
+
+    def download_episode_preview_guess(self):
+        folder = self.create_custom_directory('guess')
+        is_success = False
+        for i in range(self.FINAL_EPISODE):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_1'):
+                continue
+            template = 'https://anime-fumetsunoanatae.com/story/images/1_%s/%s.png' % (str(i + 1), '%s')
+            if not self.download_by_template(folder, template, 1, 1):
+                break
+            print(self.__class__.__name__ + ' - Episode %s guessed correctly!' % episode)
+            is_success = True
+        return is_success
 
     def download_news(self):
         json_url = self.PAGE_PREFIX + '/assets/data/topics-ja.json'
