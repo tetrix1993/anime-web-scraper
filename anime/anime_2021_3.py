@@ -1024,6 +1024,28 @@ class TanmoshiDownload(Summer2021AnimeDownload, NewsTemplate2):
             url = template2 % i
             self.download_content(url, folder + '/' + i + '_2.mp3')
 
+        # Blu-rays
+        pages = ['privilege.html', 'campaign.html', '', '02.html', '03.html']
+        bd_template = self.PAGE_PREFIX + 'bd/%s'
+        for i in range(len(pages)):
+            url = bd_template % pages[i]
+            try:
+                soup = self.get_soup(url)
+                images = soup.select('#cms_block img')
+                self.image_list = []
+                for image in images:
+                    image_url = self.PAGE_PREFIX + image['src'].replace('../', '').split('?')[0]
+                    if 'nowprinting' in image_url:
+                        continue
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(folder)
+                if i > 1 and len(self.image_list) == 0:
+                    break
+            except Exception as e:
+                print("Error in running " + self.__class__.__name__ + " - Blu-Ray %s" % url)
+                print(e)
+
 
 # Tsuki ga Michibiku Isekai Douchuu
 class TsukimichiDownload(Summer2021AnimeDownload, NewsTemplate1):
