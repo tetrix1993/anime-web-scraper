@@ -2082,7 +2082,6 @@ class SuperCubDownload(Spring2021AnimeDownload, NewsTemplate2):
         self.download_media()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
         try:
             soup = self.get_soup(self.PAGE_PREFIX + 'story/')
             links = soup.select('#ContentsListUnit01 a')
