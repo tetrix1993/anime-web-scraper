@@ -477,10 +477,9 @@ class HigehiroDownload(Spring2021AnimeDownload):
                         continue
                     if self.is_image_exists(episode + '_1'):
                         continue
-                    ul = li.find('ul')
-                    if not ul:
-                        continue
-                    images = ul.select('img')
+                    images = li.select('ul.img')
+                    if len(images) == 0:
+                        images = li.select('div.images img')
                     self.image_list = []
                     for i in range(len(images)):
                         if images[i].has_attr('src'):
