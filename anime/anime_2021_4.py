@@ -1,10 +1,11 @@
 import os
 import anime.constants as constants
-from anime.main_download import MainDownload
+from anime.main_download import MainDownload, NewsTemplate1
 from datetime import datetime
 from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 
 
+# Kaizoku Oujo http://fena-pirate-princess.com/ #海賊王女 @fena_pirate
 # Komi-san wa, Komyushou desu. https://komisan-official.com/ #古見さん #komisan @comisanvote
 # Muv-Luv Alternative https://muv-luv-alternative-anime.com/ #マブラヴ #マブラヴアニメ #muvluv @Muv_Luv_A_anime
 # Saihate no Paladin https://farawaypaladin.com/ #最果てのパラディン #faraway_paladin @faraway_paladin
@@ -24,6 +25,51 @@ class Fall2021AnimeDownload(MainDownload):
 
     def __init__(self):
         super().__init__()
+
+
+# Kaizoku Oujo
+class KaizokuOujoDownload(Fall2021AnimeDownload, NewsTemplate1):
+    title = 'Kaizoku Oujo'
+    keywords = [title, 'Fena: Pirate Princess']
+    website = 'http://fena-pirate-princess.com/'
+    twitter = 'fena_pirate'
+    hashtags = '海賊王女'
+    folder_name = 'kaizoku-oujo'
+
+    PAGE_PREFIX = website
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article.md-news__li',
+                                    date_select='time', title_select='h3', id_select='a', date_separator='.&nbsp;',
+                                    next_page_select='ul.pagenation-list li',
+                                    next_page_eval_index_class='is__current', next_page_eval_index=-1)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('fv_pc', self.PAGE_PREFIX + 'wp/wp-content/themes/fena-pirate-princess/_assets/images/top/fv_pc.jpg')
+        self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/E4C7eKvXMAMT67c?format=jpg&name=4096x4096')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template1 = self.PAGE_PREFIX + 'wp/wp-content/themes/fena-pirate-princess/_assets/images/char/detail/char_%s_pc.png'
+        template2 = self.PAGE_PREFIX + 'wp/wp-content/themes/fena-pirate-princess/_assets/images/char/ss/char%s.jpg'
+        self.download_by_template(folder, template1, 3, 1)
+        self.download_by_template(folder, template2, 2, 1)
+        template3 = self.PAGE_PREFIX + 'char/char%s-%s.jpg'
+        i = 1
+        while i <= 50 and self.download_by_template(folder, template3 % (str(i).zfill(2), '%s'), 1):
+            i += 1
 
 
 # Komi-san wa, Komyushou desu.

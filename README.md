@@ -103,6 +103,7 @@ The premiere date for the anime listed here has not been announced.
 * [Slow Loop](https://slowlooptv.com/)
 
 ### Fall 2021 Anime
+* [Kaizoku Oujo](http://fena-pirate-princess.com/)
 * [Komi-san wa, Komyushou desu.](https://komisan-official.com/)
 * [Muv-Luv Alternative](https://muv-luv-alternative-anime.com/)
 * [Saihate no Paladin](https://farawaypaladin.com/)
