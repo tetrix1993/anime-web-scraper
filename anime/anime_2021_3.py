@@ -552,9 +552,12 @@ class MahoukaYuutouseiDownload(Summer2021AnimeDownload):
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         self.image_list = []
-        self.add_to_image_list('teaser', self.PAGE_PREFIX + '/teaser/img/top/kv_character.png')
-        self.add_to_image_list('kv1', self.PAGE_PREFIX + '/teaser/img/top/kv.jpg')
+        self.add_to_image_list('teaser', self.PAGE_PREFIX + 'teaser/img/top/kv_character.png')
+        self.add_to_image_list('kv1', self.PAGE_PREFIX + 'teaser/img/top/kv.jpg')
         self.download_image_list(folder)
+
+        frozen_template = self.PAGE_PREFIX + 'assets/img/freeze/img_main_frozen_%s.jpg'
+        self.download_by_template(folder, frozen_template, 2, 1, max_skip=1)
 
 
 # Megami-ryou no Ryoubo-kun.

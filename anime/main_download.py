@@ -839,7 +839,7 @@ class MainDownload:
             self.image_list.clear()
 
     def download_by_template(self, folder, template, zfill=1, start=1, end=99, headers=None,
-                             to_jpg=False, is_mocanews=False, min_width=None):
+                             to_jpg=False, is_mocanews=False, min_width=None, max_skip=0):
         if isinstance(template, str):
             templates = [template]
         elif isinstance(template, list):
@@ -849,6 +849,7 @@ class MainDownload:
 
         i = start - 1
         success = False
+        skip_remaining = max_skip
         while i < end:
             success_count = 0
             i += 1
@@ -857,13 +858,17 @@ class MainDownload:
                 image_name = self.extract_image_name_from_url(image_url, with_extension=False)
                 if self.is_image_exists(image_name, folder):
                     success_count += 1
+                    skip_remaining = max_skip
                     continue
                 result = self.download_image(image_url, folder + '/' + image_name, headers, to_jpg, is_mocanews, min_width)
                 if result != -1:
                     success_count += 1
             if success_count > 0:
                 success = True
+                skip_remaining = max_skip
             else:
+                skip_remaining -= 1
+            if skip_remaining < 0:
                 break
         return success
 
