@@ -497,7 +497,7 @@ class KobayashiMaidDragon2Download(Summer2021AnimeDownload, NewsTemplate1):
 
 
 # Mahouka Koukou no Yuutousei
-class MahoukaYuutouseiDownload(Summer2021AnimeDownload):
+class MahoukaYuutouseiDownload(Summer2021AnimeDownload, NewsTemplate1):
     title = 'Mahouka Koukou no Yuutousei'
     keywords = [title, 'The Honor Student at Magic High School']
     website = "https://mahouka-yuutousei.jp/"
@@ -514,50 +514,48 @@ class MahoukaYuutouseiDownload(Summer2021AnimeDownload):
         self.download_episode_preview()
         self.download_news()
         self.download_key_visual()
+        self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
 
     def download_news(self):
-        news_url = self.PAGE_PREFIX
-        try:
-            soup = self.get_soup(news_url, decode=True)
-            articles = soup.select('ul.p-news__list li.p-news__item')
-            news_obj = self.get_last_news_log_object()
-            results = []
-            for article in articles:
-                tag_date = article.find('div', class_='p-news__date')
-                tag_title = article.find('div', class_='p-news__title')
-                if tag_date and tag_title:
-                    article_id = ''
-                    date = self.format_news_date(tag_date.text.strip().replace('/', '.'))
-                    if len(date) == 0:
-                        continue
-                    title = tag_title.text.strip()
-                    if news_obj and ((news_obj['date'] == date and news_obj['title'] == title)
-                                     or date < news_obj['date']):
-                        break
-                    results.append(self.create_news_log_object(date, title, article_id))
-            success_count = 0
-            for result in reversed(results):
-                process_result = self.create_news_log_from_news_log_object(result)
-                if process_result == 0:
-                    success_count += 1
-            if len(results) > 0:
-                self.create_news_log_cache(success_count, results[0])
-        except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - News')
-            print(e)
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='ul.p-news__list li.p-news__list-item',
+                                    date_select='div.p-news_data__date', title_select='div.p-news_data__title',
+                                    id_select='a', paging_type=1, a_tag_prefix=self.PAGE_PREFIX, date_separator=' ',
+                                    a_tag_start_text_to_remove='/')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         self.image_list = []
         self.add_to_image_list('teaser', self.PAGE_PREFIX + 'teaser/img/top/kv_character.png')
         self.add_to_image_list('kv1', self.PAGE_PREFIX + 'teaser/img/top/kv.jpg')
+        self.add_to_image_list('kv2', self.PAGE_PREFIX + 'assets/img/top/img_main.jpg')
+        self.add_to_image_list('kv2_tw', 'https://pbs.twimg.com/media/E4JzZN9VUAAY8hZ?format=jpg&name=4096x4096')
         self.download_image_list(folder)
 
         frozen_template = self.PAGE_PREFIX + 'assets/img/freeze/img_main_frozen_%s.jpg'
-        self.download_by_template(folder, frozen_template, 2, 1, max_skip=1)
+        self.download_by_template(folder, frozen_template, 2, 1, 16)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            thumb_images = soup.select('div.p-chara_nav__data-img img')
+            names = []
+            for thumb in thumb_images:
+                if thumb.has_attr('src') and '/thumb_' in thumb['src'] and thumb['src'].endswith('.png'):
+                    names.append(thumb['src'].split('/thumb_')[1].split('.png')[0])
+            template = self.PAGE_PREFIX + 'assets/img/character/img_%s.png'
+            self.image_list = []
+            for name in names:
+                image_url = template % name
+                image_name = 'img_' + name
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Character')
+            print(e)
 
 
 # Megami-ryou no Ryoubo-kun.
