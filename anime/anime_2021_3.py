@@ -972,19 +972,6 @@ class TanmoshiDownload(Summer2021AnimeDownload, NewsTemplate2):
             self.add_to_image_list(image_name, template % image_name)
         self.download_image_list(folder)
 
-        for i in range(1, 11, 1):
-            file_name = 'kv' + str(i)
-            if self.is_image_exists(file_name, folder):
-                continue
-            if i == 1:
-                image_url = template % 'kv'
-            else:
-                image_url = template % ('kv' + str(i))
-            if self.is_valid_url(image_url, is_image=True):
-                print('URL exists: ' + image_url)
-            else:
-                break
-
     def download_character(self):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'core_sys/images/main/cont/char/%s.png'
