@@ -83,6 +83,7 @@ The premiere date for the anime listed here has not been announced.
 * [Gaikotsu Kishi-sama, Tadaima Isekai e Odekakechuu](https://skeleton-knight.com/)
 * [Goblin Slayer 2nd Season](http://www.goblinslayer.jp/)
 * [Hataraku Maou-sama! 2nd Season](https://maousama.jp/)
+* [Isekai Ojisan](https://isekaiojisan.com/)
 * [Isekai Shokudou 2](https://isekai-shokudo2.com/)
 * [Itai no wa Iya nano de Bougyoryoku ni Kyokufuri Shitai to Omoimasu. 2nd Season](https://bofuri.jp/)
 * [Kakkou no Iinazuke](https://cuckoos-anime.com/)

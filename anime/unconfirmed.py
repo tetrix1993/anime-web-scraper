@@ -7,6 +7,7 @@ from anime.main_download import MainDownload, NewsTemplate2, NewsTemplate3
 # Gaikotsu Kishi-sama, Tadaima Isekai e Odekakechuu https://skeleton-knight.com/ #骸骨騎士様 @gaikotsukishi
 # Goblin Slayer S2 http://www.goblinslayer.jp/ #ゴブスレ @GoblinSlayer_GA
 # Hataraku Maou-sama! https://maousama.jp/ #maousama @anime_maousama
+# Isekai Ojisan #いせおじ #異世界おじさん @Isekai_Ojisan
 # Isekai Shokudou 2 https://isekai-shokudo2.com/ #異世界食堂 @nekoya_PR
 # Itai no wa https://bofuri.jp/story/ #防振り #bofuri @bofuri_anime
 # Kakkou no Iinazuke https://cuckoos-anime.com/ #カッコウの許嫁 @cuckoo_anime
@@ -341,6 +342,35 @@ class HatarakuMaousama2Download(UnconfirmedDownload):
         self.image_list = []
         self.add_to_image_list('teaser_tw', 'https://pbs.twimg.com/media/EvyqsA_UcAcPT9B?format=jpg&name=large')
         self.add_to_image_list('teaser', self.PAGE_PREFIX + 'assets/img/top/visual.jpg')
+        self.download_image_list(folder)
+
+
+# Isekai Ojisan
+class IsekaiOjisanDownload(UnconfirmedDownload):
+    title = 'Isekai Ojisan'
+    keywords = [title, 'Ojisan In Another World']
+    website = 'https://isekaiojisan.com/'
+    twitter = 'Isekai_Ojisan'
+    hashtags = ['いせおじ', '異世界おじさん']
+    folder_name = 'isekaiojisan'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_kv', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv.png')
+        self.add_to_image_list('tz_kv2', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv2.png')
         self.download_image_list(folder)
 
 
