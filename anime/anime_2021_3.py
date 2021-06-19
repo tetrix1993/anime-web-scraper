@@ -515,6 +515,7 @@ class MahoukaYuutouseiDownload(Summer2021AnimeDownload, NewsTemplate1):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
@@ -556,6 +557,12 @@ class MahoukaYuutouseiDownload(Summer2021AnimeDownload, NewsTemplate1):
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + ' - Character')
             print(e)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        self.image_list = []
+        self.add_to_image_list('music_op', 'https://pbs.twimg.com/media/E4PDegKUYAU61Lz?format=jpg&name=large')
+        self.download_image_list(folder)
 
 
 # Megami-ryou no Ryoubo-kun.
