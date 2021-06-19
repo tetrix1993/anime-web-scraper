@@ -1,6 +1,6 @@
 import os
 import anime.constants as constants
-from anime.main_download import MainDownload, NewsTemplate1, NewsTemplate2
+from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 from datetime import datetime
 from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 
@@ -36,7 +36,7 @@ class Summer2021AnimeDownload(MainDownload):
 
 
 # 100-man no Inochi no Ue ni Ore wa Tatteiru 2nd Season
-class HyakumanNoInochi2Download(Summer2021AnimeDownload, NewsTemplate1):
+class HyakumanNoInochi2Download(Summer2021AnimeDownload, NewsTemplate):
     title = "100-man no Inochi no Ue ni Ore wa Tatteiru 2nd Season"
     keywords = [title, "I'm standing on 1,000,000 lives.", "Hyakuman", "1000000"]
     website = "https://1000000-lives.com/"
@@ -70,7 +70,7 @@ class HyakumanNoInochi2Download(Summer2021AnimeDownload, NewsTemplate1):
 
 
 # Bokutachi no Remake
-class BokuremaDownload(Summer2021AnimeDownload, NewsTemplate1):
+class BokuremaDownload(Summer2021AnimeDownload, NewsTemplate):
     title = 'Bokutachi no Remake'
     keywords = [title, 'Bokurema', 'Remake our Life!']
     website = "https://bokurema.com"
@@ -212,7 +212,7 @@ class CheatKusushiDownload(Summer2021AnimeDownload):
 
 
 # Deatte 5-byou de Battle
-class Dea5Download(Summer2021AnimeDownload, NewsTemplate1):
+class Dea5Download(Summer2021AnimeDownload, NewsTemplate):
     title = 'Deatte 5-byou de Battle'
     keywords = [title, 'Battle Game in 5 Seconds', 'Dea5']
     website = 'https://dea5-anime.com/'
@@ -246,7 +246,7 @@ class Dea5Download(Summer2021AnimeDownload, NewsTemplate1):
 
 
 # Genjitsu Shugi Yuusha no Oukoku Saikenki
-class GenkokuDownload(Summer2021AnimeDownload, NewsTemplate1):
+class GenkokuDownload(Summer2021AnimeDownload, NewsTemplate):
     title = "Genjitsu Shugi Yuusha no Oukoku Saikenki"
     keywords = [title, "Genkoku"]
     website = 'https://genkoku-anime.com/'
@@ -372,7 +372,7 @@ class HigurashiSotsuDownload(Summer2021AnimeDownload):
 
 
 # Jahy-sama wa Kujikenai!
-class JahysamaDownload(Summer2021AnimeDownload, NewsTemplate1):
+class JahysamaDownload(Summer2021AnimeDownload, NewsTemplate):
     title = 'Jahy-sama wa Kujikenai!'
     keywords = [title, 'Jahysama']
     website = 'https://jahysama-anime.com/'
@@ -407,7 +407,7 @@ class JahysamaDownload(Summer2021AnimeDownload, NewsTemplate1):
 
 
 # Kanojo mo Kanojo
-class KanokanoDownload(Summer2021AnimeDownload, NewsTemplate1):
+class KanokanoDownload(Summer2021AnimeDownload, NewsTemplate):
     title = 'Kanojo mo Kanojo'
     keywords = [title, 'Kanokano']
     website = 'https://kanokano-anime.com'
@@ -448,7 +448,7 @@ class KanokanoDownload(Summer2021AnimeDownload, NewsTemplate1):
 
 
 # Kobayashi-san Chi no Maid Dragon S
-class KobayashiMaidDragon2Download(Summer2021AnimeDownload, NewsTemplate1):
+class KobayashiMaidDragon2Download(Summer2021AnimeDownload, NewsTemplate):
     title = 'Kobayashi-san Chi no Maid Dragon S'
     keywords = [title, "Miss Kobayashi's Maid Dragon"]
     website = 'https://maidragon.jp/2nd/'
@@ -497,7 +497,7 @@ class KobayashiMaidDragon2Download(Summer2021AnimeDownload, NewsTemplate1):
 
 
 # Mahouka Koukou no Yuutousei
-class MahoukaYuutouseiDownload(Summer2021AnimeDownload, NewsTemplate1):
+class MahoukaYuutouseiDownload(Summer2021AnimeDownload, NewsTemplate):
     title = 'Mahouka Koukou no Yuutousei'
     keywords = [title, 'The Honor Student at Magic High School']
     website = "https://mahouka-yuutousei.jp/"
@@ -687,7 +687,7 @@ class MeikyuBCDownload(Summer2021AnimeDownload):
 
 
 # Otome Game no Hametsu Flag shika Nai Akuyaku Reijou ni Tensei shiteshimatta... X
-class Hamehura2Download(Summer2021AnimeDownload, NewsTemplate1):
+class Hamehura2Download(Summer2021AnimeDownload, NewsTemplate):
     title = "Otome Game no Hametsu Flag shika Nai Akuyaku Reijou ni Tensei shiteshimatta... X"
     keywords = [title, "Hamehura", "Hamefura", "My Next Life as a Villainess: All Routes Lead to Doom!", "2nd"]
     website = 'https://hamehura-anime.com/'
@@ -725,7 +725,7 @@ class Hamehura2Download(Summer2021AnimeDownload, NewsTemplate1):
 
 
 # Peach Boy Riverside
-class PeachBoyRiversideDownload(Summer2021AnimeDownload, NewsTemplate1):
+class PeachBoyRiversideDownload(Summer2021AnimeDownload, NewsTemplate):
     title = 'Peach Boy Riverside'
     keywords = [title]
     website = 'https://peachboyriverside.com/'
@@ -781,7 +781,7 @@ class PeachBoyRiversideDownload(Summer2021AnimeDownload, NewsTemplate1):
 
 
 # Seirei Gensouki
-class SeireiGensoukiDownload(Summer2021AnimeDownload, NewsTemplate1):
+class SeireiGensoukiDownload(Summer2021AnimeDownload, NewsTemplate):
     title = "Seirei Gensouki"
     keywords = [title, "Spirit Chronicles"]
     website = "https://seireigensouki.com/"
@@ -855,7 +855,7 @@ class SeireiGensoukiDownload(Summer2021AnimeDownload, NewsTemplate1):
 
 
 # Shiroi Suna no Aquatope
-class AquatopeDownload(Summer2021AnimeDownload, NewsTemplate1):
+class AquatopeDownload(Summer2021AnimeDownload, NewsTemplate):
     title = 'Shiroi Suna no Aquatope'
     keywords = [title, 'Aquatope of White Sand']
     website = 'https://aquatope-anime.com/'
@@ -1043,7 +1043,7 @@ class TanmoshiDownload(Summer2021AnimeDownload, NewsTemplate2):
 
 
 # Tsuki ga Michibiku Isekai Douchuu
-class TsukimichiDownload(Summer2021AnimeDownload, NewsTemplate1):
+class TsukimichiDownload(Summer2021AnimeDownload, NewsTemplate):
     title = "Tsuki ga Michibiku Isekai Douchuu"
     keywords = [title, "Tsukimichi", "Moonlit Fantasy"]
     website = 'https://tsukimichi.com/'

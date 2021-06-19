@@ -1,7 +1,7 @@
 import json
 import os
 from datetime import datetime
-from anime.main_download import MainDownload, NewsTemplate1, NewsTemplate2, NewsTemplate3
+from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsTemplate3
 from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner, NatalieScanner
 
 
@@ -37,7 +37,7 @@ class Spring2021AnimeDownload(MainDownload):
 
 
 # 86
-class EightySixDownload(Spring2021AnimeDownload, NewsTemplate1):
+class EightySixDownload(Spring2021AnimeDownload, NewsTemplate):
     title = '86 -Eighty Six-'
     keywords = [title, 'Eighty Six']
     website = 'https://anime-86.com/'
@@ -249,7 +249,7 @@ class EightySixDownload(Spring2021AnimeDownload, NewsTemplate1):
 
 
 # Dragon, Ie wo Kau
-class DoraieDownload(Spring2021AnimeDownload, NewsTemplate1):
+class DoraieDownload(Spring2021AnimeDownload, NewsTemplate):
     title = 'Dragon, Ie wo Kau'
     keywords = [title, 'Dragon Goes House-Hunting', 'Doraie']
     website = 'https://doraie.com/'
@@ -616,7 +616,7 @@ class HigehiroDownload(Spring2021AnimeDownload):
 
 
 # Ijiranaide, Nagatoro-san
-class NagatorosanDownload(Spring2021AnimeDownload, NewsTemplate1):
+class NagatorosanDownload(Spring2021AnimeDownload, NewsTemplate):
     title = 'Ijiranaide, Nagatoro-san'
     keywords = [title, 'Nagatorosan']
     website = 'https://www.nagatorosan.jp/'
@@ -758,7 +758,7 @@ class NagatorosanDownload(Spring2021AnimeDownload, NewsTemplate1):
 
 
 # Isekai Maou to Shoukan Shoujo no Dorei Majutsu Ω
-class IsekaiMaou2Download(Spring2021AnimeDownload, NewsTemplate1):
+class IsekaiMaou2Download(Spring2021AnimeDownload, NewsTemplate):
     title = 'Isekai Maou to Shoukan Shoujo no Dorei Majutsu 2nd Season'
     keywords = [title, "How Not to Summon a Demon Lord", "Isekaimaou"]
     website = 'https://isekaimaou-anime.com/'
@@ -903,7 +903,7 @@ class IsekaiMaou2Download(Spring2021AnimeDownload, NewsTemplate1):
 
 
 # Kyuukyoku Shinka Shita Full Dive RPG ga Genjitsu Yori mo Kusogee Dattara
-class FullDiveRPGDownload(Spring2021AnimeDownload, NewsTemplate1):
+class FullDiveRPGDownload(Spring2021AnimeDownload, NewsTemplate):
     title = "Kyuukyoku Shinka Shita Full Dive RPG ga Genjitsu Yori mo Kusogee Dattara"
     keywords = [title, "Fulldive", "Kiwame Quest"]
     website = 'https://fulldive-rpg.com/'
@@ -1280,7 +1280,7 @@ class OsamakeDownload(Spring2021AnimeDownload, NewsTemplate3):
 
 
 # Sayonara Watashi no Cramer
-class SayonaraCramerDownload(Spring2021AnimeDownload, NewsTemplate1):
+class SayonaraCramerDownload(Spring2021AnimeDownload, NewsTemplate):
     title = 'Sayonara Watashi no Cramer'
     keywords = [title, 'Good-bye, Cramer!']
     website = 'https://sayonara-cramer.com/'
@@ -1362,7 +1362,7 @@ class SayonaraCramerDownload(Spring2021AnimeDownload, NewsTemplate1):
 
 
 # Seijo no Maryoku wa Bannou Desu
-class SeijonoMaryokuDownload(Spring2021AnimeDownload, NewsTemplate1):
+class SeijonoMaryokuDownload(Spring2021AnimeDownload, NewsTemplate):
     title = 'Seijo no Maryoku wa Bannou Desu'
     keywords = [title, 'seijonomaryoku', 'seijyonomaryoku', "The Saint's Magic Power is Omnipotent"]
     website = 'https://seijyonomaryoku.jp/'
@@ -1576,7 +1576,7 @@ class SentoinDownload(Spring2021AnimeDownload, NewsTemplate3):
 
 
 # Shadows House
-class ShadowsHouseDownload(Spring2021AnimeDownload, NewsTemplate1):
+class ShadowsHouseDownload(Spring2021AnimeDownload, NewsTemplate):
     title = "Shadows House"
     keywords = [title]
     website = 'https://shadowshouse-anime.com/'
@@ -2214,7 +2214,7 @@ class SuperCubDownload(Spring2021AnimeDownload, NewsTemplate2):
 
 
 # Vivy: Fluorite Eye's Song
-class VivyDownload(Spring2021AnimeDownload, NewsTemplate1):
+class VivyDownload(Spring2021AnimeDownload, NewsTemplate):
     title = "Vivy: Fluorite Eye's Song"
     keywords = [title, "Vivy -Fluorite Eye's Song"]
     website = 'https://vivy-portal.com/'
@@ -2370,7 +2370,7 @@ class VivyDownload(Spring2021AnimeDownload, NewsTemplate1):
 
 
 # Yakunara Mug Cup mo
-class YakunaraMugCupMoDownload(Spring2021AnimeDownload, NewsTemplate1):
+class YakunaraMugCupMoDownload(Spring2021AnimeDownload, NewsTemplate):
     title = "Yakunara Mug Cup mo"
     keywords = [title, 'Yakumo', "Let's Make a Mug Too"]
     website = 'https://yakumo-project.com/'

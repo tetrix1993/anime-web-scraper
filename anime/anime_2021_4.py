@@ -1,6 +1,6 @@
 import os
 import anime.constants as constants
-from anime.main_download import MainDownload, NewsTemplate1
+from anime.main_download import MainDownload, NewsTemplate
 from datetime import datetime
 from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 
@@ -28,7 +28,7 @@ class Fall2021AnimeDownload(MainDownload):
 
 
 # Kaizoku Oujo
-class KaizokuOujoDownload(Fall2021AnimeDownload, NewsTemplate1):
+class KaizokuOujoDownload(Fall2021AnimeDownload, NewsTemplate):
     title = 'Kaizoku Oujo'
     keywords = [title, 'Fena: Pirate Princess']
     website = 'http://fena-pirate-princess.com/'

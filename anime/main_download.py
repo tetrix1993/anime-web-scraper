@@ -891,7 +891,7 @@ class MainDownload:
 
 
 # Generic template with paging
-class NewsTemplate1:
+class NewsTemplate:
     def download_template_news(self, page_prefix, article_select, date_select, title_select, id_select,
                                paging_type=0, decode_response=True, response_headers=None, id_has_id=False,
                                news_prefix=None, a_tag_prefix=None, stop_date=None, date_separator=None, date_attr=None,
