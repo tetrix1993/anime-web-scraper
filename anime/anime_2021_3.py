@@ -389,6 +389,7 @@ class JahysamaDownload(Summer2021AnimeDownload, NewsTemplate):
         self.download_episode_preview()
         self.download_news()
         self.download_key_visual()
+        self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
@@ -404,6 +405,25 @@ class JahysamaDownload(Summer2021AnimeDownload, NewsTemplate):
         self.add_to_image_list('announce2', self.PAGE_PREFIX + 'img/ogp/ogp.jpg')
         self.add_to_image_list('kv', self.PAGE_PREFIX + 'news/wp-content/uploads/2021/05/mv.jpg')
         self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            self.image_list = []
+            main_images = soup.select('ul.character_list img')
+            container_images = soup.select('div.container_img img')
+            container_details_images = soup.select('div.container_details ul.faces.pc_only img')
+            images = main_images + container_images + container_details_images
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Character')
+            print(e)
 
 
 # Kanojo mo Kanojo
