@@ -9,8 +9,7 @@ def run():
     if not os.path.exists(constants.FOLDER_OUTPUT):
         os.makedirs(constants.FOLDER_OUTPUT)
 
-    downloads = [ReZero2Download(), Higurashi2020Download(), HorimiyaDownload(), TomozakiKunDownload(),
-                 KumoDesugaNanikaDownload(), MushokuTenseiDownload(), WonderEggPriorityDownload(), Kingdom3Download()]
+    downloads = [KumoDesugaNanikaDownload(), MushokuTenseiDownload(), WonderEggPriorityDownload(), Kingdom3Download()]
     subclasses = Spring2021AnimeDownload.__subclasses__() \
         + Summer2021AnimeDownload.__subclasses__() \
         + Fall2021AnimeDownload.__subclasses__() \
