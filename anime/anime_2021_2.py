@@ -585,6 +585,10 @@ class HigehiroDownload(Spring2021AnimeDownload):
         self.image_list = []
         self.add_to_image_list('music_ed', 'https://pbs.twimg.com/media/ExEnxiIVoAkofD0?format=jpg&name=large')
         self.add_to_image_list('bd_bonus_toranoana', 'https://pbs.twimg.com/media/E1pQfvrUcAA4P8z?format=jpg&name=large')
+        self.add_to_image_list('bd_bonus_animate', 'https://pbs.twimg.com/media/E4dq_w9UUAIErz5?format=jpg&name=large')
+        self.add_to_image_list('bd_bonus_amazon_1', 'https://pbs.twimg.com/media/E4jpUOwVoAMNgim?format=jpg&name=medium')
+        self.add_to_image_list('bd_bonus_amazon_2', 'https://pbs.twimg.com/media/E4jpUOzVEAIcvZK?format=jpg&name=medium')
+        self.add_to_image_list('bd_bonus_sofmap', 'https://pbs.twimg.com/media/E4jpbqjUYAMU9zZ?format=jpg&name=medium')
         self.download_image_list(folder)
 
         # Blu-ray
