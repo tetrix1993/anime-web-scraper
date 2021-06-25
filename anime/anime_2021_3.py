@@ -445,6 +445,7 @@ class KanokanoDownload(Summer2021AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
@@ -465,6 +466,12 @@ class KanokanoDownload(Summer2021AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + '/assets/img/character-detail-img%s@2x.png'
         self.download_by_template(folder, template, 2)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        self.image_list = []
+        self.add_to_image_list('music_ed', 'https://pbs.twimg.com/media/E4tIKfwVEAMKBft?format=jpg&name=large')
+        self.download_image_list(folder)
 
 
 # Kobayashi-san Chi no Maid Dragon S
