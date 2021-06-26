@@ -88,6 +88,7 @@ class BokuremaDownload(Summer2021AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
@@ -124,6 +125,12 @@ class BokuremaDownload(Summer2021AnimeDownload, NewsTemplate):
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + " - Character")
             print(e)
+        self.download_image_list(folder)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        self.image_list = []
+        self.add_to_image_list('music_op', self.PAGE_PREFIX + '/assets/images/uploads/2021/06/1469a0880be391b2ea29cc539c8b74b2.png')
         self.download_image_list(folder)
 
 
