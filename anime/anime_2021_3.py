@@ -611,6 +611,19 @@ class MegamiryouDownload(Summer2021AnimeDownload, NewsTemplate2):
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
+        # Episode 1 only
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'news/index00100000.html')
+            images = soup.select('ul.tp5 img')
+            self.image_list = []
+            for i in range(len(images)):
+                image_url = self.PAGE_PREFIX + images[i]['src'].split('?')[0].replace('../', '')
+                image_name = '01_' + str(i + 1)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
     def download_news(self):
         self.download_template_news(self.PAGE_PREFIX)
