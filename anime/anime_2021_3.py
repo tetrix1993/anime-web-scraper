@@ -722,26 +722,39 @@ class MeikyuBCDownload(Summer2021AnimeDownload):
     folder_name = 'meikyubc'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_external()
         self.download_news()
         self.download_key_visual()
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        image_url_template = self.PAGE_PREFIX + '_image/story/story%s_%s.png'
+        for i in range(1, self.FINAL_EPISODE + 1, 1):
+            episode = str(i).zfill(2)
+            if self.is_image_exists(episode + '_1'):
+                continue
+            for j in range(1, 7, 1):
+                image_name = episode + '_' + str(j)
+                image_url = image_url_template % (episode, str(j))
+                if self.download_image(image_url, self.base_folder + '/' + image_name) == -1:
+                    return
+
+    def download_episode_preview_external(self):
+        jp_title = '迷宮ブラックカンパニー'
+        AniverseMagazineScanner(jp_title, self.base_folder, last_episode=self.FINAL_EPISODE, min_width=800,
+                                end_date='20210628', download_id=self.download_id).run()
 
     def download_news(self):
-        news_url = self.PAGE_PREFIX
+        news_url = self.PAGE_PREFIX + 'news.html'
         try:
             soup = self.get_soup(news_url, decode=True)
-            dl = soup.select('#news dl')
-            if len(dl) == 0:
-                return
             news_obj = self.get_last_news_log_object()
             results = []
-            dts = dl[0].select('dt')
+            dts = soup.select('dt')
             for dt in dts:
                 dd = dt.find_next('dd')
                 if dd:
