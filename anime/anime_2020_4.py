@@ -781,7 +781,7 @@ class Higurashi2020Download(Fall2020AnimeDownload):
 
     PAGE_PREFIX = 'https://higurashianime.com/'
     STORY_PAGE = 'https://higurashianime.com/intro.html'
-    LAST_EPISODE = 25
+    FINAL_EPISODE = 24
 
     def __init__(self):
         super().__init__()
@@ -793,11 +793,11 @@ class Higurashi2020Download(Fall2020AnimeDownload):
         self.download_bluray()
 
     def download_episode_preview(self):
-        if self.is_image_exists(str(self.LAST_EPISODE) + '_1'):
+        if self.is_image_exists(str(self.FINAL_EPISODE) + '_1'):
             return
 
         image_url_template = 'https://higurashianime.com/images/story/%s/p_%s.jpg'
-        for i in range(1, self.LAST_EPISODE + 1, 1):
+        for i in range(1, self.FINAL_EPISODE + 1, 1):
             for j in range(1, 7, 1):
                 image_name = str(i).zfill(2) + '_' + str(j)
                 if self.is_image_exists(image_name):

@@ -326,6 +326,9 @@ class HigurashiSotsuDownload(Summer2021AnimeDownload):
     folder_name = 'higurashi-sotsu'
 
     PAGE_PREFIX = website
+    IMAGE_FIRST_EPISODE = 25
+    IMAGE_FINAL_EPISODE = 39
+    FINAL_EPISODE = IMAGE_FINAL_EPISODE - IMAGE_FIRST_EPISODE + 1
 
     def __init__(self):
         super().__init__()
@@ -334,9 +337,23 @@ class HigurashiSotsuDownload(Summer2021AnimeDownload):
         self.download_episode_preview()
         self.download_news()
         self.download_key_visual()
+        self.download_bluray()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        if self.is_image_exists(str(self.FINAL_EPISODE) + '_1'):
+            return
+
+        image_url_template = 'https://higurashianime.com/images/story/%s/p_%s.jpg'
+        for i in range(self.IMAGE_FIRST_EPISODE, self.IMAGE_FINAL_EPISODE + 1, 1):
+            episode = i - self.IMAGE_FIRST_EPISODE + 1
+            for j in range(1, 7, 1):
+                image_name = str(episode).zfill(2) + '_' + str(j)
+                if self.is_image_exists(image_name):
+                    continue
+                image_url = image_url_template % (str(i).zfill(3), str(j).zfill(3))
+                result = self.download_image(image_url, self.base_folder + '/' + image_name)
+                if result == -1:
+                    return
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + 'news.html'
@@ -376,6 +393,34 @@ class HigurashiSotsuDownload(Summer2021AnimeDownload):
         self.add_to_image_list('kv', self.PAGE_PREFIX + 'images/index2/v_003.jpg')
         self.add_to_image_list('kv_tw', 'https://pbs.twimg.com/media/E1w6chJUUAAP723?format=jpg&name=medium')
         self.download_image_list(folder)
+
+    def download_bluray(self):
+        folder = self.create_bluray_directory()
+        try:
+            soup = self.get_soup('https://higurashianime.com/package_sotsu.html')
+            kiji_wraps = soup.find_all('div', class_='kiji_wrap')
+            for kiji_wrap in kiji_wraps:
+                image_tags = kiji_wrap.find_all('img')
+                self.image_list = []
+                for image_tag in image_tags:
+                    if image_tag.has_attr('src'):
+                        image_url = self.PAGE_PREFIX + image_tag['src']
+                        split1 = image_url.split('/')
+                        number = None
+                        if len(split1) > 2 and len(split1[-2]) == 3:
+                            try:
+                                int(split1[-2])
+                                number = split1[-2]
+                            except:
+                                pass
+                        image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                        if number:
+                            image_name = number + '_' + image_name
+                        self.add_to_image_list(image_name, image_url)
+                self.download_image_list(folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Blu-ray')
+            print(e)
 
 
 # Jahy-sama wa Kujikenai!
