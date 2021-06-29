@@ -840,7 +840,32 @@ class Hamehura2Download(Summer2021AnimeDownload, NewsTemplate):
         self.download_key_visual()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            story_url = self.PAGE_PREFIX + 'story/'
+            soup = self.get_soup(story_url, decode=True)
+            lis = soup.select('ul.ver__archive li')
+            for li in lis:
+                a_tag = li.find('a')
+                if a_tag and a_tag.has_attr('href'):
+                    try:
+                        episode = str(int(a_tag.text.strip())).zfill(2)
+                    except Exception:
+                        continue
+                    if self.is_image_exists(episode + '_1'):
+                        continue
+                    ep_soup = self.get_soup(a_tag['href'])
+                    if ep_soup:
+                        images = ep_soup.select('div.story--main__slider--inner img')
+                        self.image_list = []
+                        for i in range(len(images)):
+                            if images[i].has_attr('src'):
+                                image_url = images[i]['src']
+                                image_name = episode + '_' + str(i + 1)
+                                self.add_to_image_list(image_name, image_url)
+                        self.download_image_list(self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article.md-newsblock',
