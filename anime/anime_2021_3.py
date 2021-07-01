@@ -1267,7 +1267,7 @@ class TanmoshiDownload(Summer2021AnimeDownload, NewsTemplate2):
             for a_tag in a_tags:
                 if 'index' not in a_tag['href'] and a_tag['href'].endswith('.html') and '/' in a_tag['href']:
                     try:
-                        episode = str(int(a_tag['href'].split('/')[-1].split('.html')[0]))
+                        episode = str(int(a_tag['href'].split('/')[-1].split('.html')[0])).zfill(2)
                     except Exception:
                         continue
                     if self.is_image_exists(episode + '_1'):
