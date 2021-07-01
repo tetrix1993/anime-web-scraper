@@ -272,9 +272,36 @@ class GenkokuDownload(Summer2021AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            story_url = self.PAGE_PREFIX + 'story/'
+            soup = self.get_soup(story_url)
+            a_tags = soup.select('div.tab a')
+            for a_tag in a_tags:
+                if a_tag.text.strip().startswith('#'):
+                    try:
+                        episode = str(int(a_tag.text.strip().replace('#', ''))).zfill(2)
+                    except Exception:
+                        continue
+                    if self.is_image_exists(episode + '_1'):
+                        continue
+                    if (a_tag.has_attr('class') and 'active' in a_tag['class']) or a_tag['href'] == './':
+                        ep_soup = soup
+                    else:
+                        ep_soup = self.get_soup(story_url + a_tag['href'])
+                    if ep_soup:
+                        images = ep_soup.select('div.swiper-container.slider img')
+                        self.image_list = []
+                        for i in range(len(images)):
+                            image_url = self.PAGE_PREFIX + images[i]['src'].replace('../', '')
+                            image_name = episode + '_' + str(i + 1)
+                            self.add_to_image_list(image_name, image_url)
+                        self.download_image_list(self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='div.list li.info', date_select='time',
@@ -311,6 +338,26 @@ class GenkokuDownload(Summer2021AnimeDownload, NewsTemplate):
                         continue
                     self.add_to_image_list(img_name, chara_img_template % name)
                     self.add_to_image_list(img_face_name, chara_img_face_template % name)
+            self.download_image_list(folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Character')
+            print(e)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        self.image_list = []
+        self.add_to_image_list('bd_box', 'https://pbs.twimg.com/media/E5NV9ZNVEAwj7v9?format=jpg&name=medium')
+        self.add_to_image_list('bd_early_bonus', 'https://pbs.twimg.com/media/E5NWAxbVoAIQtnT?format=jpg&name=medium')
+        self.download_image_list(folder)
+
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'blu-ray/')
+            images = soup.select('#blu-ray img')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + ' - Character')
