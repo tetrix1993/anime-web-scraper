@@ -501,7 +501,6 @@ class KanokanoDownload(Summer2021AnimeDownload, NewsTemplate):
         self.download_media()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
         try:
             soup = self.get_soup(self.PAGE_PREFIX + '/story/')
             blocks = soup.select('div.story-main__detail__block')
