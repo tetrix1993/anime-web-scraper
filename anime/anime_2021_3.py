@@ -20,6 +20,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 # Otome Game https://hamehura-anime.com/story/ #はめふら #hamehura @hamehura
 # Peach Boy Riverside https://peachboyriverside.com/ #ピーチボーイリバーサイド @peachboy_anime
 # Seirei Gensouki https://seireigensouki.com/ #精霊幻想記 @seireigensouki
+# Shinigami Bocchan to Kuro Maid https://bocchan-anime.com/ #死神坊ちゃん @bocchan_anime
 # Shiroi Suna no Aquatope https://aquatope-anime.com/ #白い砂のアクアトープ @aquatope_anime
 # Tantei wa Mou, Shindeiru. https://tanmoshi-anime.jp/ #たんもし @tanteiwamou_
 # Tsuki ga Michibiku Isekai Douchuu #ツキミチ @tsukimichi_PR
@@ -1034,6 +1035,64 @@ class SeireiGensoukiDownload(Summer2021AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + ' - Music')
+            print(e)
+
+
+# Shinigami Bocchan to Kuro Maid
+class ShinigamiBocchanDownload(Summer2021AnimeDownload, NewsTemplate2):
+    title = 'Shinigami Bocchan to Kuro Maid'
+    keywords = [title, 'The Duke of Death and His Maid']
+    website = 'https://bocchan-anime.com/'
+    twitter = 'bocchan_anime'
+    hashtags = '死神坊ちゃん'
+    folder_name = 'shinigami-bocchan'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('teaser', self.PAGE_PREFIX + 'core_sys/images/main/home/kv_tz.png')
+        self.add_to_image_list('kv', self.PAGE_PREFIX + 'core_sys/images/main/home/kv.png')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'chara/')
+            a_tags = soup.select('td.l_wdp01 a')
+            self.image_list = []
+            for a_tag in a_tags:
+                if a_tag.has_attr('href') and '/' in a_tag['href'] and a_tag['href'].endswith('.html'):
+                    href = a_tag['href']
+                    image_name = href.split('/')[-1].split('.html')[0]
+                    if image_name == 'index':
+                        image_name = 'bocchan'
+                    image = a_tag.find('img')
+                    if not image or not image.has_attr('src'):
+                        continue
+                    src = image['src']
+                    src_name = src.split('/')[-1]
+                    image_url = self.PAGE_PREFIX + (src[0:len(src) - len(src_name)] + '001.png').replace('../', '')
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Character')
             print(e)
 
 

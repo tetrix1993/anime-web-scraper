@@ -131,6 +131,7 @@ The premiere date for the anime listed here has not been announced.
 * [Otome Game no Hametsu Flag shika Nai Akuyaku Reijou ni Tensei shiteshimatta... X](https://hamehura-anime.com/)
 * [Peach Boy Riverside](https://peachboyriverside.com/)
 * [Seirei Gensouki](https://seireigensouki.com/)
+* [Shinigami Bocchan to Kuro Maid](https://bocchan-anime.com/)
 * [Shiroi Suna no Aquatope](https://aquatope-anime.com/)
 * [Tantei wa Mou, Shindeiru.](https://tanmoshi-anime.jp/)
 * [Tsuki ga Michibiku Isekai Douchuu](https://tsukimichi.com/)
