@@ -502,6 +502,27 @@ class KanokanoDownload(Summer2021AnimeDownload, NewsTemplate):
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + '/story/')
+            blocks = soup.select('div.story-main__detail__block')
+            for block in blocks:
+                if block.has_attr('id') and block['id'].startswith('StoryBlock'):
+                    try:
+                        episode = str(int(block['id'].split('StoryBlock')[1].strip())).zfill(2)
+                    except Exception:
+                        continue
+                    if self.is_image_exists(episode + '_1'):
+                        continue
+                    images = block.select('div.swiper-slide img')
+                    self.image_list = []
+                    for i in range(len(images)):
+                        image_url = self.PAGE_PREFIX + images[i]['src']
+                        image_name = episode + '_' + str(i + 1)
+                        self.add_to_image_list(image_name, image_url)
+                    self.download_image_list(self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article.news-lineup__block',
