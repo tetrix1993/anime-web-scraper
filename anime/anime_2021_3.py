@@ -615,11 +615,27 @@ class KobayashiMaidDragon2Download(Summer2021AnimeDownload, NewsTemplate):
         self.download_key_visual()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index', diff=2)
+        story_url = self.PAGE_PREFIX + 'story/'
+        try:
+            stories = self.get_json(self.PAGE_PREFIX + 'story/episode_data.php')
+            for story in stories:
+                try:
+                    episode = str(int(story['id'])).zfill(2)
+                except Exception:
+                    continue
+                stories = story['images']
+                self.image_list = []
+                for i in range(len(stories)):
+                    image_url = story_url + stories[i].split('?')[0]
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
     def download_news(self):
         prefix = 'https://maidragon.jp'
-
         self.download_template_news(page_prefix=prefix, article_select='article.c-news-item',
                                     date_select='span.c-news-item__date', title_select='span.c-news-item__title',
                                     id_select='a', a_tag_prefix=prefix, stop_date='2019',
