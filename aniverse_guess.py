@@ -9,31 +9,26 @@ MAX_LIMIT = 50
 MAX_LIMIT_J = 100
 
 
-def run():
-    while True:
-        try:
-            year = input('Enter year: ')
-            if len(year) == 0:
-                break
-            month = input('Enter month: ').zfill(2)
-            folder = BASE_FOLDER + '/' + year + '/' + month
-            for i in range(MAX_LIMIT):
-                success_count = 0
-                for j in range(MAX_LIMIT_J):
-                    first = str(j + 1).zfill(2)
-                    if i == 0:
-                        image_name = first
-                    else:
-                        image_name = first + '-' + str(i)
-                    image_url = TEMPLATE % (year, month, image_name)
-                    result = download_image(image_url, folder, image_name + '.jpg')
-                    if result == -1:
-                        break
-                    success_count += 1
-                if success_count == 0:
+def run(_year, _month):
+    try:
+        folder = BASE_FOLDER + '/' + _year + '/' + _month
+        for i in range(MAX_LIMIT):
+            success_count = 0
+            for j in range(MAX_LIMIT_J):
+                first = str(j + 1).zfill(2)
+                if i == 0:
+                    image_name = first
+                else:
+                    image_name = first + '-' + str(i)
+                image_url = TEMPLATE % (_year, _month, image_name)
+                result = download_image(image_url, folder, image_name + '.jpg')
+                if result == -1:
                     break
-        except Exception as e:
-            print(e)
+                success_count += 1
+            if success_count == 0:
+                break
+    except Exception as e:
+        print(e)
 
 
 def download_image(image_url, folder, filename):
@@ -60,4 +55,9 @@ def download_image(image_url, folder, filename):
 
 
 if __name__ == '__main__':
-    run()
+    while True:
+        year = input('Enter year: ')
+        if len(year) == 0:
+            break
+        month = input('Enter month: ').zfill(2)
+        run(year, month)
