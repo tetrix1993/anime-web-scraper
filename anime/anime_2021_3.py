@@ -1041,19 +1041,50 @@ class SeireiGensoukiDownload(Summer2021AnimeDownload, NewsTemplate):
     folder_name = 'seirei-gensouki'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
 
     def __init__(self):
         super().__init__()
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_external()
         self.download_news()
         self.download_key_visual()
         self.download_character()
         self.download_media()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            story_boxes = soup.select('div.story-box')
+            for story_box in story_boxes:
+                episode = None
+                if story_box.has_attr('class'):
+                    for _class in story_box['class']:
+                        if _class.startswith('story') and _class[5:].strip().isnumeric():
+                            episode = str(int(_class[5:].strip())).zfill(2)
+                            break
+                if episode is None:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                images = story_box.select('div.ss-display img')
+                self.image_list = []
+                for i in range(len(images)):
+                    if images[i].has_attr('src'):
+                        image_url = images[i]['src']
+                        image_name = episode + '_' + str(i + 1)
+                        self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Music')
+            print(e)
+
+    def download_episode_preview_external(self):
+        jp_title = '精霊幻想記'
+        AniverseMagazineScanner(jp_title, self.base_folder, last_episode=self.FINAL_EPISODE, min_width=750,
+                                end_date='20210702', download_id=self.download_id).run()
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='ul.news-list li.news-item',
