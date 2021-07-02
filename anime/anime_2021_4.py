@@ -494,7 +494,7 @@ class TaishoOtomeDownload(Fall2021AnimeDownload):
                 tag_title = li.find('h2', class_='newslist_ttl')
                 a_tag = li.find('a')
                 if tag_date and tag_title and a_tag and a_tag.has_attr('href'):
-                    article_id = news_url + a_tag['href'].replace('./', '')
+                    article_id = a_tag['href']
                     date = self.format_news_date(tag_date.text.strip().replace('年', '.').replace('月', '.').replace('日', ''))
                     if len(date) == 0:
                         continue
@@ -520,6 +520,8 @@ class TaishoOtomeDownload(Fall2021AnimeDownload):
         self.image_list = []
         self.add_to_image_list(template_name % '01', template % (template_name % '01'))
         self.add_to_image_list(template_name % '02', template % (template_name % '02'))
+        self.add_to_image_list(template_name % '03', template % (template_name % '03'))
+        self.add_to_image_list('kv03_tw', 'https://pbs.twimg.com/media/E5TLvmFVkAAV8Oj?format=jpg&name=medium')
         self.download_image_list(folder)
 
     def download_character(self):
