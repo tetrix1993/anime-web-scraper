@@ -593,6 +593,20 @@ class KanokanoDownload(Summer2021AnimeDownload, NewsTemplate):
         self.add_to_image_list('music_ed', 'https://pbs.twimg.com/media/E4tIKfwVEAMKBft?format=jpg&name=large')
         self.download_image_list(folder)
 
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + '/bluraydvd/')
+            images = soup.select('div.bluraydvd-wrap img')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src']
+                image_name = self.extract_image_name_from_url(image_url)
+                if image_name != 'bluraydvd-pic01':
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Blu-ray')
+            print(e)
+
 
 # Kobayashi-san Chi no Maid Dragon S
 class KobayashiMaidDragon2Download(Summer2021AnimeDownload, NewsTemplate):
