@@ -92,7 +92,36 @@ class BokuremaDownload(Summer2021AnimeDownload, NewsTemplate):
         self.download_media()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + '/story/')
+            a_tags = soup.select('li.c-story-list__item a')
+            for a_tag in a_tags:
+                if 'story/' in a_tag['href']:
+                    try:
+                        split1 = a_tag['href'].split('story/')[1]
+                        if split1[-1] == '/':
+                            split1 = split1[:-1]
+                        episode = str(int(split1)).zfill(2)
+                    except Exception:
+                        continue
+                    if self.is_image_exists(episode + '_1'):
+                        continue
+                    if a_tag.has_attr('class') and 'is--active' in a_tag['class']:
+                        ep_soup = soup
+                    else:
+                        ep_soup = self.get_soup(self.PAGE_PREFIX + a_tag['href'])
+                    if ep_soup:
+                        images = ep_soup.select('li.c-singlepage-gallery-picture-list__item img')
+                        self.image_list = []
+                        for i in range(len(images)):
+                            if images[i].has_attr('pre-src'):
+                                image_url = images[i]['pre-src']
+                                image_name = episode + '_' + str(i + 1)
+                                self.add_to_image_list(image_name, image_url)
+                        self.download_image_list(self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='div.p-news-headline',
@@ -133,6 +162,21 @@ class BokuremaDownload(Summer2021AnimeDownload, NewsTemplate):
         self.image_list = []
         self.add_to_image_list('music_op', self.PAGE_PREFIX + '/assets/images/uploads/2021/06/1469a0880be391b2ea29cc539c8b74b2.png')
         self.download_image_list(folder)
+
+        # Blu-ray
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + '/bd/')
+            images = soup.select('div.p-singlepage__inner--bd img')
+            self.image_list = []
+            for image in images:
+                if image.has_attr('pre-src'):
+                    image_url = image['pre-src'].replace('-scaled', '')
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Blu-ray")
+            print(e)
 
 
 # Cheat Kusushi no Slow Life: Isekai ni Tsukurou Drugstore
