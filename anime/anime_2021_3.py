@@ -936,6 +936,7 @@ class Hamehura2Download(Summer2021AnimeDownload, NewsTemplate):
         self.download_episode_preview()
         self.download_news()
         self.download_key_visual()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -978,6 +979,44 @@ class Hamehura2Download(Summer2021AnimeDownload, NewsTemplate):
         self.add_to_image_list('kv1', self.IMAGE_PREFIX + 'wp-content/uploads/2021/03/第1弾キービジュアル.jpg')
         #self.add_to_image_list('teaser', 'https://pbs.twimg.com/media/EsJL9ZQVkAEDktJ?format=jpg&name=large')
         self.download_image_list(folder)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        music_url_template = self.PAGE_PREFIX + 'music-%s/'
+        for i in ['op', 'ed']:
+            if i in processed:
+                continue
+            music_url = music_url_template % i
+            try:
+                soup = self.get_soup(music_url)
+                images = soup.select('#Music img')
+                for image in images:
+                    image_url = image['src']
+                    if 'nowprinting' not in image_url:
+                        image_name = self.extract_image_name_from_url(image_url)
+                        self.add_to_image_list(image_name, image_url)
+                self.download_image_list(folder)
+                processed.append(i)
+            except Exception as e:
+                print("Error in running " + self.__class__.__name__ + ' - Music')
+                print(e)
+        self.create_cache_file(cache_filepath, processed, num_processed)
+
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'package/')
+            images = soup.select('#Package img')
+            self.image_list = []
+            for image in images:
+                image_url = image['src']
+                if 'nowprinting' not in image_url:
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Blu-ray')
+            print(e)
 
 
 # Peach Boy Riverside

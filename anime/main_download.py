@@ -872,6 +872,24 @@ class MainDownload:
                 break
         return success
 
+    @staticmethod
+    def get_processed_items_from_cache_file(cache_filepath):
+        processed_items = []
+        if os.path.exists(cache_filepath):
+            with open(cache_filepath, 'r') as f:
+                inputs = f.read()
+            processed_items = inputs.split(';')
+        return processed_items, len(processed_items)
+
+    @staticmethod
+    def create_cache_file(cache_filepath, processed_items, previous_processed_count):
+        if len(processed_items) > previous_processed_count:
+            with open(cache_filepath, 'w+') as f:
+                for i in range(len(processed_items)):
+                    if i > 0:
+                        f.write(';')
+                    f.write(processed_items[i])
+
     # Match filter
     def match(self, s_filter):
         if not isinstance(s_filter, SearchFilter):
