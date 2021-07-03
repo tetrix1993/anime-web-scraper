@@ -40,6 +40,9 @@ def download_image(image_url, folder, filename):
             return 1
         headers = HTTP_HEADER_USER_AGENT
         with requests.get(image_url, stream=True, headers=headers) as r:
+            if r.status_code == 404:
+                print("[ERROR] File not found: " + image_url)
+                return -1
             r.raise_for_status()
             if 'image' not in r.headers['Content-Type']:
                 return -1
