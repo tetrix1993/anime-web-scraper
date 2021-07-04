@@ -813,6 +813,32 @@ class MahoukaYuutouseiDownload(Summer2021AnimeDownload, NewsTemplate):
         self.add_to_image_list('music_op', 'https://pbs.twimg.com/media/E4PDegKUYAU61Lz?format=jpg&name=large')
         self.download_image_list(folder)
 
+        # Blu-ray
+        bd_url_template = 'https://mahouka-yuutousei.jp/bddvd/%s'
+        for page in ['special', '01', '02', '03', '04', '05']:
+            if page == '01':
+                bd_url = bd_url_template % ''
+            else:
+                bd_url = bd_url_template % (page + '.html')
+            try:
+                soup = self.get_soup(bd_url)
+                images = soup.select('div.p-bddvd img')
+                self.image_list = []
+                for image in images:
+                    if image.has_attr('src') and not image['src'].endswith('_np.jpg'):
+                        if image['src'].startswith('/'):
+                            image_url = self.PAGE_PREFIX + image['src'][1:]
+                        else:
+                            image_url = self.PAGE_PREFIX + image['src']
+                        image_name = self.extract_image_name_from_url(image_url)
+                        self.add_to_image_list(image_name, image_url)
+                if len(self.image_list) == 0:
+                    break
+                self.download_image_list(folder)
+            except Exception as e:
+                print("Error in running " + self.__class__.__name__ + ' - Blu-ray %s.html' % page)
+                print(e)
+
 
 # Megami-ryou no Ryoubo-kun.
 class MegamiryouDownload(Summer2021AnimeDownload, NewsTemplate2):
