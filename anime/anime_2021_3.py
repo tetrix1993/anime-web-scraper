@@ -1392,12 +1392,12 @@ class ShinigamiBocchanDownload(Summer2021AnimeDownload, NewsTemplate2):
             try:
                 soup = self.get_soup(bd_url)
                 if page.isnumeric():
-                    images = soup.select('div.block.line_01')
+                    images = soup.select('div.block.line_01 img')
                 else:
                     images = soup.select('#cms_block img')
                 self.image_list = []
                 for image in images:
-                    if image.has_attr('src') and not image['src'].endswith('_np.jpg'):
+                    if image.has_attr('src'):
                         image_url = self.PAGE_PREFIX + image['src'].replace('../', '').split('?')[0]
                         image_name = self.extract_image_name_from_url(image_url)
                         if self.is_image_exists(image_name):
