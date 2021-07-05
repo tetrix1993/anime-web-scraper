@@ -814,7 +814,7 @@ class MahoukaYuutouseiDownload(Summer2021AnimeDownload, NewsTemplate):
         self.download_image_list(folder)
 
         # Blu-ray
-        bd_url_template = 'https://mahouka-yuutousei.jp/bddvd/%s'
+        bd_url_template = self.PAGE_PREFIX + 'bddvd/%s'
         for page in ['special', '01', '02', '03', '04', '05']:
             if page == '01':
                 bd_url = bd_url_template % ''
@@ -1294,6 +1294,7 @@ class ShinigamiBocchanDownload(Summer2021AnimeDownload, NewsTemplate2):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -1353,6 +1354,65 @@ class ShinigamiBocchanDownload(Summer2021AnimeDownload, NewsTemplate2):
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + ' - Character')
             print(e)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        music_url_template = self.PAGE_PREFIX + 'music/%s'
+        for page in ['', 'ost']:
+            if len(page) == 0:
+                music_url = music_url_template % ''
+            else:
+                music_url = music_url_template % (page + '.html')
+            try:
+                soup = self.get_soup(music_url)
+                images = soup.select('#cms_block img')
+                self.image_list = []
+                for image in images:
+                    image_url = self.PAGE_PREFIX + image['src'].replace('../', '').split('?')[0]
+                    image_name = self.extract_image_name_from_url(image_url)
+                    if 'nowprinting' in image_url:
+                        continue
+                    if self.is_image_exists(image_name):
+                        continue
+                    if self.is_matching_content_length(image_url, 218502):
+                        continue
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(folder)
+            except Exception as e:
+                print("Error in running " + self.__class__.__name__ + ' - Music %s' % music_url)
+                print(e)
+
+        # Blu-ray
+        bd_url_template = self.PAGE_PREFIX + 'bd/%s'
+        for page in ['privilege', 'campaign', '01', '02', '03', '04', '05']:
+            if page == '01':
+                bd_url = bd_url_template % ''
+            else:
+                bd_url = bd_url_template % (page + '.html')
+            try:
+                soup = self.get_soup(bd_url)
+                if page.isnumeric():
+                    images = soup.select('div.block.line_01')
+                else:
+                    images = soup.select('#cms_block img')
+                self.image_list = []
+                for image in images:
+                    if image.has_attr('src') and not image['src'].endswith('_np.jpg'):
+                        image_url = self.PAGE_PREFIX + image['src'].replace('../', '').split('?')[0]
+                        image_name = self.extract_image_name_from_url(image_url)
+                        if self.is_image_exists(image_name):
+                            continue
+                        if image_url.endswith('.gif'):
+                            continue
+                        if self.is_matching_content_length(image_url, [65898, 57601]):
+                            continue
+                        self.add_to_image_list(image_name, image_url)
+                if len(self.image_list) == 0:
+                    break
+                self.download_image_list(folder)
+            except Exception as e:
+                print("Error in running " + self.__class__.__name__ + ' - Blu-ray %s.html' % page)
+                print(e)
 
 
 # Shiroi Suna no Aquatope
