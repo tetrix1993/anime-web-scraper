@@ -9,7 +9,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 # Slow Loop https://slowlooptv.com/ #slowloop @slowloop_tv
 
 
-# Fall 2021 Anime
+# Winter 2022 Anime
 class Winter2022AnimeDownload(MainDownload):
     season = "2022-1"
     season_name = "Winter 2022"

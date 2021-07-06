@@ -14,6 +14,7 @@ def run():
         + Summer2021AnimeDownload.__subclasses__() \
         + Fall2021AnimeDownload.__subclasses__() \
         + Winter2022AnimeDownload.__subclasses__() \
+        + Summer2022AnimeDownload.__subclasses__() \
         + UnconfirmedDownload.__subclasses__()
     for subclass in subclasses:
         if subclass.enabled:

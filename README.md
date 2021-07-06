@@ -99,6 +99,9 @@ The premiere date for the anime listed here has not been announced.
 * [Tsuki to Laika to Nosferatu](https://tsuki-laika-nosferatu.com/)
 * [Yama no Susume: Next Summit](https://yamanosusume-ns.com/)
 
+### Summer 2022 Anime
+* [Soredemo Ayumu wa Yosetekuru](https://soreayu.com/)
+
 ### Winter 2022 Anime
 * [Arifureta Shokugyou de Sekai Saikyou 2nd Season](https://arifureta.com/)
 * [Slow Loop](https://slowlooptv.com/)
