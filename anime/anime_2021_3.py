@@ -242,23 +242,48 @@ class CheatKusushiDownload(Summer2021AnimeDownload):
         super().__init__()
 
     def run(self):
-        self.download_episode_preview()
-        self.download_news()
+        soup = self.get_soup(self.PAGE_PREFIX, decode=True)
+        self.download_episode_preview(soup)
+        self.download_news(soup)
         self.download_key_visual()
-        self.download_character()
+        self.download_character(soup)
+        self.download_media(soup)
 
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+    def download_episode_preview(self, soup=None):
+        try:
+            if soup is None:
+                soup = self.get_soup(self.PAGE_PREFIX)
+            panels = soup.select('div.panel-group div.panel')
+            for panel in panels:
+                h5 = panel.find('h5')
+                if h5:
+                    try:
+                        episode = str(int(h5.text.strip().replace('第', '').replace('話', ''))).zfill(2)
+                    except Exception:
+                        continue
+                    if self.is_image_exists(episode + '_1'):
+                        continue
+                    images = panel.select('div.slider img')
+                    self.image_list = []
+                    for i in range(len(images)):
+                        image_url = self.PAGE_PREFIX + images[i]['src']
+                        image_name = episode + '_' + str(i + 1)
+                        self.add_to_image_list(image_name, image_url)
+                    self.download_image_list(self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
-    def download_news(self):
+    def download_news(self, soup=None):
         news_url = self.PAGE_PREFIX
         try:
-            soup = self.get_soup(news_url, decode=True)
-            divs = soup.select('div.news.bg-news')
+            if soup is None:
+                soup = self.get_soup(news_url, decode=True)
+            lis = soup.select('div.news.newsliner li')
             news_obj = self.get_last_news_log_object()
             results = []
-            for div in divs:
-                paras = div.select('p')
+            for li in lis:
+                paras = li.select('span.txt-s')
                 if len(paras) == 2:
                     article_id = ''
                     date = self.format_news_date(paras[0].text.replace('年', '.')
@@ -283,16 +308,17 @@ class CheatKusushiDownload(Summer2021AnimeDownload):
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         self.image_list = []
-        self.add_to_image_list('teaser', 'https://www.cheat-kusushi.jp/img/top-main.png')
-        self.add_to_image_list('kv1', 'https://cheat-kusushi.jp/assets/img/bg/top.png')
+        self.add_to_image_list('teaser', self.PAGE_PREFIX + 'img/top-main.png')
+        self.add_to_image_list('kv1', self.PAGE_PREFIX + 'assets/img/bg/top.png')
         self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/EqTAkcgU8AAe39d?format=jpg&name=large')
         self.download_image_list(folder)
 
-    def download_character(self):
+    def download_character(self, soup=None):
         folder = self.create_character_directory()
         self.image_list = []
         try:
-            soup = self.get_soup(self.PAGE_PREFIX)
+            if soup is None:
+                soup = self.get_soup(self.PAGE_PREFIX)
             article = soup.find('article', id='js-scroll-to-CHARACTER')
             if article:
                 containers = article.find_all('div', class_='container')
@@ -308,6 +334,32 @@ class CheatKusushiDownload(Summer2021AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + " - Character")
             print(e)
+        self.download_image_list(folder)
+
+    def download_media(self, soup=None):
+        folder = self.create_media_directory()
+        self.image_list = []
+        for i in ['MUSIC', 'BDDVD']:
+            try:
+                if soup is None:
+                    soup = self.get_soup(self.PAGE_PREFIX)
+                article = soup.select('#js-scroll-to-' + i)
+                if len(article) > 0:
+                    containers = article[0].find_all('div', class_='container')
+                    for container in containers:
+                        images = container.find_all('img')
+                        for image in images:
+                            if image.has_attr('src'):
+                                image_url = self.PAGE_PREFIX + image['src']
+                                if '/tip/' in image_url:
+                                    continue
+                                if self.is_matching_content_length(image_url, 96587):
+                                    continue
+                                image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                                self.add_to_image_list(image_name, image_url)
+            except Exception as e:
+                print("Error in running " + self.__class__.__name__ + " - %s" % i)
+                print(e)
         self.download_image_list(folder)
 
 
