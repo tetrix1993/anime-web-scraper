@@ -46,17 +46,59 @@ class HyakumanNoInochi2Download(Summer2021AnimeDownload, NewsTemplate):
     folder_name = '100-man-no-inochi2'
 
     PAGE_PREFIX = 'https://1000000-lives.com'
+    FIRST_EPISODE = 13
+    LAST_EPISODE = 25
 
     def __init__(self):
         super().__init__()
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_guess()
         self.download_news()
         self.download_key_visual()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        story_url = self.PAGE_PREFIX + '/story/'
+        try:
+            stories = self.get_json(story_url + 'episode_data.php')
+            for story in stories:
+                try:
+                    episode_int = int(story['id'])
+                    if episode_int < self.FIRST_EPISODE:
+                        continue
+                    episode = str(episode_int).zfill(2)
+                except Exception:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                stories = story['images']
+                self.image_list = []
+                for i in range(len(stories)):
+                    image_url = story_url + stories[i].split('?')[0].replace('./', '')
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
+
+    def download_episode_preview_guess(self):
+        if self.is_image_exists(str(self.LAST_EPISODE) + '_1'):
+            return
+
+        folder = self.create_custom_directory('guess')
+        image_url_template = self.PAGE_PREFIX + '/story/img/%s/%s_%s.jpg'
+        for i in range(self.FIRST_EPISODE, self.LAST_EPISODE + 1, 1):
+            episode = str(i).zfill(2)
+            if self.is_image_exists(episode + '_1'):
+                continue
+            for j in range(1, 7, 1):
+                image_name = episode + '_' + str(j)
+                image_url = image_url_template % (episode, episode, str(j).zfill(2))
+                result = self.download_image(image_url, folder + '/' + image_name)
+                if result == -1:
+                    return
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article.c-news-item',

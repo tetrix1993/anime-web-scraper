@@ -58,58 +58,33 @@ class HyakumanNoInochiDownload(Fall2020AnimeDownload):
 
     def run(self):
         self.download_episode_preview()
-        self.download_episode_preview_guess()
         self.download_key_visual()
         self.download_character()
 
     def download_episode_preview(self):
+        story_url = self.PAGE_PREFIX + '/story/'
         try:
-            soup = self.get_soup(self.STORY_PAGE)
-            story_list = soup.find('ul', class_='l_storylist')
-            if story_list:
-                stories = story_list.find_all('li')
-                for story in stories:
-                    a_tag = story.find('a')
-                    if a_tag and a_tag.has_attr('href'):
-                        try:
-                            episode = str(int(a_tag['href'].replace('story', '').replace('/', ''))).zfill(2)
-                        except:
-                            continue
-                        if self.is_image_exists(episode + '_1'):
-                            continue
-                        story_url = self.PAGE_PREFIX + a_tag['href']
-                        story_soup = self.get_soup(story_url)
-                        thumblist = story_soup.find('ul', class_='l_thumblist')
-                        if thumblist:
-                            lis = thumblist.find_all('li')
-                            image_objs = []
-                            for i in range(len(lis)):
-                                a_tag = lis[i].find('a')
-                                if a_tag and a_tag.has_attr('data-imgload'):
-                                    image_url = self.PAGE_PREFIX + a_tag['data-imgload']
-                                    image_name = episode + '_' + str(i + 1)
-                                    image_objs.append({'name': image_name, 'url': image_url})
-                            self.download_image_objects(image_objs, self.base_folder)
+            stories = self.get_json(story_url + 'episode_data.php')
+            for story in stories:
+                try:
+                    episode_int = int(story['id'])
+                    if episode_int > self.LAST_EPISODE:
+                        continue
+                    episode = str(episode_int).zfill(2)
+                except Exception:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                stories = story['images']
+                self.image_list = []
+                for i in range(len(stories)):
+                    image_url = story_url + stories[i].split('?')[0].replace('./', '')
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
-
-    def download_episode_preview_guess(self):
-        if self.is_image_exists(str(self.LAST_EPISODE) + '_1'):
-            return
-
-        image_url_template = 'http://1000000-lives.com/img/story/img_story%s.jpg'
-        for i in range(self.LAST_EPISODE):
-            episode = str(i + 1).zfill(2)
-            if self.is_image_exists(episode + '_1'):
-                continue
-            for j in range(1, 7, 1):
-                num = i * 6 + j
-                image_name = episode + '_' + str(j)
-                image_url = image_url_template % str(num).zfill(2)
-                result = self.download_image(image_url, self.base_folder + '/' + image_name)
-                if result == -1:
-                    return
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
