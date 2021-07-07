@@ -867,6 +867,7 @@ class KobayashiMaidDragon2Download(Summer2021AnimeDownload, NewsTemplate):
                         page_soup = self.get_soup(page_url)
                         if page_soup:
                             figures = page_soup.select('figure')
+                            has_nowprinting = False
                             for figure in figures:
                                 if figure.has_attr('data-bg'):
                                     temp_image_url = figure['data-bg']
@@ -889,10 +890,11 @@ class KobayashiMaidDragon2Download(Summer2021AnimeDownload, NewsTemplate):
                                 else:
                                     image_url = page_url + temp_image_url
                                 if 'np_bd.png' in image_url or 'np_cd.png' in image_url:
+                                    has_nowprinting = True
                                     continue
                                 image_name = self.extract_image_name_from_url(image_url)
                                 self.add_to_image_list(image_name, image_url)
-                            if len(self.image_list) > 0:
+                            if len(self.image_list) > 0 and not has_nowprinting:
                                 processed.append(page_name)
                         self.download_image_list(folder)
         except Exception as e:
