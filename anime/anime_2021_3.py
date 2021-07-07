@@ -711,12 +711,14 @@ class KobayashiMaidDragon2Download(Summer2021AnimeDownload, NewsTemplate):
 
     PAGE_PREFIX = website
     BASE_PREFIX = 'https://maidragon.jp/'
+    FINAL_EPISODE = 12
 
     def __init__(self):
         super().__init__()
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_external()
         self.download_news()
         self.download_key_visual()
 
@@ -739,6 +741,11 @@ class KobayashiMaidDragon2Download(Summer2021AnimeDownload, NewsTemplate):
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
+
+    def download_episode_preview_external(self):
+        jp_title = '小林さんちのメイドラゴン'
+        AniverseMagazineScanner(jp_title, self.base_folder, last_episode=self.FINAL_EPISODE, min_width=1200,
+                                end_date='20210707', download_id=self.download_id).run()
 
     def download_news(self):
         prefix = 'https://maidragon.jp'
