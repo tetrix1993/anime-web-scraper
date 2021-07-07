@@ -773,6 +773,7 @@ class KobayashiMaidDragon2Download(Summer2021AnimeDownload, NewsTemplate):
         self.download_episode_preview_external()
         self.download_news()
         self.download_key_visual()
+        self.download_media()
 
     def download_episode_preview(self):
         story_url = self.PAGE_PREFIX + 'story/'
@@ -822,6 +823,82 @@ class KobayashiMaidDragon2Download(Summer2021AnimeDownload, NewsTemplate):
         self.add_to_image_list('onair_visual04', news_prefix + '2021/05/maidragonS_onair_visual04.jpg')
         self.add_to_image_list('onair_visual05', news_prefix + '2021/05/maidragonS_onair_visual05.jpg')
         self.download_image_list(folder)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+
+        # Blu-ray Bonus
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'product/bd/tokuten/')
+            figures = soup.select('figure')
+            self.image_list = []
+            for figure in figures:
+                if figure.has_attr('data-bg'):
+                    image_url = self.PAGE_PREFIX + figure['data-bg'].replace('../../../', '')
+                    if 'np_cd.png' in image_url:
+                        continue
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Blu-ray Bonus')
+            print(e)
+
+        # Music and Bluray
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        try:
+            product_url = self.PAGE_PREFIX + 'product/'
+            soup = self.get_soup(product_url)
+            a_tags = soup.select('div.c-card-list a')
+            for a_tag in a_tags:
+                if a_tag.has_attr('href') and a_tag['href'].startswith('./'):
+                    page_name = a_tag['href'].replace('./', '')
+                    if page_name in processed:
+                        continue
+                    image = a_tag.find('img')
+                    if image is not None and image.has_attr('src') and 'np_cd.png' not in image['src']\
+                            and 'np_bd.png' not in image['src']:
+                        self.image_list = []
+                        top_image_url = product_url + image['src'].replace('./', '')
+                        top_image_name = self.extract_image_name_from_url(top_image_url)
+                        self.add_to_image_list(top_image_name, top_image_url)
+                        page_url = product_url + page_name
+                        page_soup = self.get_soup(page_url)
+                        if page_soup:
+                            figures = page_soup.select('figure')
+                            for figure in figures:
+                                if figure.has_attr('data-bg'):
+                                    temp_image_url = figure['data-bg']
+                                else:
+                                    image = figure.find('img')
+                                    if image.has_attr('data-src'):
+                                        temp_image_url = image['data-src']
+                                    elif image.has_attr('src'):
+                                        temp_image_url = image['src']
+                                    else:
+                                        continue
+                                if temp_image_url.startswith('./'):
+                                    image_url = page_url + temp_image_url[2:]
+                                elif temp_image_url.startswith('../../../'):
+                                    image_url = self.PAGE_PREFIX + temp_image_url[9:]
+                                elif temp_image_url.startswith('../../'):
+                                    image_url = self.PAGE_PREFIX + temp_image_url[6:]
+                                elif temp_image_url.startswith('../'):
+                                    image_url = self.PAGE_PREFIX + temp_image_url[3:]
+                                else:
+                                    image_url = page_url + temp_image_url
+                                if 'np_bd.png' in image_url or 'np_cd.png' in image_url:
+                                    continue
+                                image_name = self.extract_image_name_from_url(image_url)
+                                self.add_to_image_list(image_name, image_url)
+                            if len(self.image_list) > 0:
+                                processed.append(page_name)
+                        self.download_image_list(folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Media')
+            print(e)
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Mahouka Koukou no Yuutousei
