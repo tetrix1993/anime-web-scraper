@@ -47,13 +47,14 @@ class HyakumanNoInochi2Download(Summer2021AnimeDownload, NewsTemplate):
 
     PAGE_PREFIX = 'https://1000000-lives.com'
     FIRST_EPISODE = 13
-    LAST_EPISODE = 25
+    FINAL_EPISODE = 25
 
     def __init__(self):
         super().__init__()
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_external()
         self.download_episode_preview_guess()
         self.download_news()
         self.download_key_visual()
@@ -83,13 +84,18 @@ class HyakumanNoInochi2Download(Summer2021AnimeDownload, NewsTemplate):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
+    def download_episode_preview_external(self):
+        jp_title = '100万の命の上に俺は立っている'
+        AniverseMagazineScanner(jp_title, self.base_folder, last_episode=self.FINAL_EPISODE, min_width=1200,
+                                end_date='20210707', download_id=self.download_id).run()
+
     def download_episode_preview_guess(self):
-        if self.is_image_exists(str(self.LAST_EPISODE) + '_1'):
+        if self.is_image_exists(str(self.FINAL_EPISODE) + '_1'):
             return
 
         folder = self.create_custom_directory('guess')
         image_url_template = self.PAGE_PREFIX + '/story/img/%s/%s_%s.jpg'
-        for i in range(self.FIRST_EPISODE, self.LAST_EPISODE + 1, 1):
+        for i in range(self.FIRST_EPISODE, self.FINAL_EPISODE + 1, 1):
             episode = str(i).zfill(2)
             if self.is_image_exists(episode + '_1'):
                 continue
