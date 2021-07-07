@@ -1830,4 +1830,20 @@ class TsukimichiDownload(Summer2021AnimeDownload, NewsTemplate):
         self.download_by_template(folder, [main_template, face_template], 3, start=1)
 
     def download_media(self):
-        pass
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'bd/store/')
+            self.image_list = []
+            bonus_images = soup.select('div.bd--main__store img')
+            bd_images = soup.select('ul.bd--list__lineup img')
+            images = bonus_images + bd_images
+            for image in images:
+                if not image.has_attr('src') or 'nowprinting' in image['src']:
+                    continue
+                image_url = image['src']
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Blu-ray')
+            print(e)
+        self.download_image_list(folder)
