@@ -53,7 +53,12 @@ class SoreayuDownload(Summer2022AnimeDownload, NewsTemplate):
     def download_character(self):
         folder = self.create_character_directory()
         try:
-            r = requests.get(self.PAGE_PREFIX + '_nuxt/ec0fc60.js')
+            soup = self.get_soup(self.PAGE_PREFIX + 'character')
+            links = soup.select('link')
+            if len(links) == 0:
+                return
+            js_file = self.PAGE_PREFIX + links[-1]['href'][1:]
+            r = requests.get(js_file)
             r.raise_for_status()
             results = r.content.decode().split('"img/')
             self.image_list = []
