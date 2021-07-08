@@ -1,7 +1,6 @@
 import os
-import anime.constants as constants
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
-from datetime import datetime
+from datetime import datetime, timedelta
 from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 
 
@@ -1644,6 +1643,8 @@ class AquatopeDownload(Summer2021AnimeDownload, NewsTemplate):
     folder_name = 'aquatope'
 
     PAGE_PREFIX = website
+    IMAGES_PER_EPISODE = 6
+    FINAL_EPISODE = 24
 
     def __init__(self):
         super().__init__()
@@ -1654,6 +1655,7 @@ class AquatopeDownload(Summer2021AnimeDownload, NewsTemplate):
         self.download_key_visual()
         self.download_character()
         self.download_media()
+        # self.download_episode_preview_guess()
 
     def download_episode_preview(self):
         try:
@@ -1682,6 +1684,28 @@ class AquatopeDownload(Summer2021AnimeDownload, NewsTemplate):
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
+
+    def download_episode_preview_guess(self):
+        folder = self.create_custom_directory('guess')
+        template = self.PAGE_PREFIX + 'wp/wp-content/uploads/2021/%s/UT%s_%s@2x.jpg'
+        month = (datetime.now() + timedelta(hours=1)).strftime('%m')
+        for i in range(self.FINAL_EPISODE):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(f'{episode}_1'):
+                continue
+            success_count = 0
+            for j in range(301):
+                image_url = template % (month, episode, str(j).zfill(6))
+                print(image_url)
+                image_name = self.extract_image_name_from_url(image_url)
+                if self.is_image_exists(image_name, folder):
+                    success_count += 1
+                    continue
+                result = self.download_image(image_url, folder + '/' + image_name)
+                if result == -1 and success_count == 0 and j == 50:
+                    break
+            if success_count == 0:
+                break
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article.md-archive__news',
