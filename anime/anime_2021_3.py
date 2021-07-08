@@ -1704,6 +1704,40 @@ class AquatopeDownload(Summer2021AnimeDownload, NewsTemplate):
                     self.add_to_image_list(image_name, image_url)
         self.download_image_list(folder)
 
+        # Blu-ray Bonus
+        self.image_list = []
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'bd/store/')
+            images = soup.select('section.bd--store__main img')
+            for image in images:
+                if not image.has_attr('src') or 'np_square' in image['src']:
+                    continue
+                image_url = image['src']
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Blu-ray Bonus')
+            print(e)
+        self.download_image_list(folder)
+
+        # Blu-ray
+        self.image_list = []
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'bd/')
+            images = soup.select('main img')
+            for image in images:
+                if not image.has_attr('src'):
+                    continue
+                image_url = image['src']
+                image_name = self.extract_image_name_from_url(image_url)
+                if image_name.startswith('np'):
+                    continue
+                self.add_to_image_list(image_name, image_url)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Blu-ray')
+            print(e)
+        self.download_image_list(folder)
+
 
 # Tantei wa Mou, Shindeiru.
 class TanmoshiDownload(Summer2021AnimeDownload, NewsTemplate2):
