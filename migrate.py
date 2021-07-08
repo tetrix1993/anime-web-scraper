@@ -4,7 +4,7 @@ import traceback
 from anime import MainDownload, ExternalDownload
 from anime.constants import FOLDER_OUTPUT
 
-VERSION_NUMBER = 28
+VERSION_NUMBER = 29
 DOWNLOAD_DIR = 'download'
 UNCONFIRMED_DIR = DOWNLOAD_DIR + '/unconfirmed'
 MIGRATION_ERROR_LOG = 'migration_error.log'
@@ -56,7 +56,7 @@ def migrate_folders():
     migrate_folder_by_name(UNCONFIRMED_DIR, '2021-3', 'maidragon2')
     migrate_folder_by_name(UNCONFIRMED_DIR, '2021-2', 'osamake')
     migrate_folder_by_name(UNCONFIRMED_DIR, '2021-2', 'seijyonomaryoku')
-    migrate_folder_by_name(UNCONFIRMED_DIR, '2021-4', 'tate-no-yuusha2')
+    migrate_folder_by_name(UNCONFIRMED_DIR, '2022-2', 'tate-no-yuusha2')
     migrate_folder_by_name(UNCONFIRMED_DIR, '2021-3', 'bokurema')
     migrate_folder_by_name(UNCONFIRMED_DIR, '2021-3', 'tanmoshi')
     migrate_folder_by_name(UNCONFIRMED_DIR, '2021-3', 'shinnonakama')
@@ -67,6 +67,7 @@ def migrate_folders():
     migrate_folder_by_name('2021-3', '2021-4', 'shinnonakama')
     migrate_folder_by_name('2021-3', '2021-4', 'ansatsu-kizoku')
     migrate_folder_by_name(UNCONFIRMED_DIR, '2022-1', 'slow-loop')
+    migrate_folder_by_name('2021-4', '2022-2', 'tate-no-yuusha2')
     migrate_external_folder()
 
 

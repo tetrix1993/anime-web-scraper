@@ -102,6 +102,9 @@ The premiere date for the anime listed here has not been announced.
 ### Summer 2022 Anime
 * [Soredemo Ayumu wa Yosetekuru](https://soreayu.com/)
 
+### Spring 2022 Anime
+* [Tate no Yuusha no Nariagari 2nd Season](http://shieldhero-anime.jp)
+
 ### Winter 2022 Anime
 * [Arifureta Shokugyou de Sekai Saikyou 2nd Season](https://arifureta.com/)
 * [Slow Loop](https://slowlooptv.com/)
@@ -115,7 +118,6 @@ The premiere date for the anime listed here has not been announced.
 * [Senpai ga Uzai Kouhai no Hanashi](https://senpaiga-uzai-anime.com/)
 * [Shin no Nakama ja Nai to Yuusha no Party wo Oidasareta node, Henkyou de Slow Life suru Koto ni Shimashita](https://shinnonakama.com/)
 * [Taishou Otome Otogibanashi](http://taisho-otome.com/)
-* [Tate no Yuusha no Nariagari 2nd Season](http://shieldhero-anime.jp)
 * [Yuuki Yuuna wa Yuusha de Aru: Dai Mankai no Shou](https://yuyuyu.tv/season2/)
 
 ### Summer 2021 Anime
