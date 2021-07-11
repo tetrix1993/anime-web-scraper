@@ -117,6 +117,7 @@ The premiere date for the anime listed here has not been announced.
 * [Sekai Saikou no Ansatsusha, Isekai Kizoku ni Tensei suru](https://ansatsu-kizoku.jp/)
 * [Senpai ga Uzai Kouhai no Hanashi](https://senpaiga-uzai-anime.com/)
 * [Shin no Nakama ja Nai to Yuusha no Party wo Oidasareta node, Henkyou de Slow Life suru Koto ni Shimashita](https://shinnonakama.com/)
+* [Shinka no Mi: Shiranai Uchi ni Kachigumi Jinsei](https://www.shinkanomi-anime.com/)
 * [Taishou Otome Otogibanashi](http://taisho-otome.com/)
 * [Yuuki Yuuna wa Yuusha de Aru: Dai Mankai no Shou](https://yuyuyu.tv/season2/)
 

@@ -12,6 +12,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 # Sekai Saikou no Ansatsusha, Isekai Kizoku ni Tensei suru https://ansatsu-kizoku.jp/ #暗殺貴族 @ansatsu_kizoku
 # Senpai ga Uzai Kouhai no Hanashi https://senpaiga-uzai-anime.com/ #先輩がうざい後輩の話 @uzai_anime
 # Shin no Nakama ja Nai to Yuusha no Party wo Oidasareta node, Henkyou de Slow Life suru Koto ni Shimashita https://shinnonakama.com/ #真の仲間 @shinnonakama_tv
+# Shinka no Mi: Shiranai Uchi ni Kachigumi Jinsei https://www.shinkanomi-anime.com/ #進化の実 #勝ち組人生 #ゴリラ系女子 @shinkanomianime
 # Taishou Otome Otogibanashi http://taisho-otome.com/ #大正オトメ #昭和オトメ @otome_otogi
 # Yuuki Yuuna wa Yuusha de Aru: Dai Mankai no Shou https://yuyuyu.tv/season2/ #yuyuyu @anime_yukiyuna
 
@@ -456,6 +457,38 @@ class ShinnoNakamaDownload(Fall2021AnimeDownload):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'assets/img/top/character/chara_%s.png'
         self.download_by_template(folder, template, 1, 1)
+
+
+# Shinka no Mi: Shiranai Uchi ni Kachigumi Jinsei
+class ShinkanomiDownload(Fall2021AnimeDownload):
+    title = 'Shinka no Mi: Shiranai Uchi ni Kachigumi Jinsei'
+    keywords = [title, 'Shinkanomi']
+    website = 'https://www.shinkanomi-anime.com/'
+    twitter = 'shinkanomianime'
+    hashtags = ['進化の実', '勝ち組人生', 'ゴリラ系女子']
+    folder_name = 'shinkanomi'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        pass
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('teaser', 'https://pbs.twimg.com/media/E52FLnzUcAEMg80?format=jpg&name=medium')
+        self.download_image_list(folder)
 
 
 # Taishou Otome Otogibanashi
