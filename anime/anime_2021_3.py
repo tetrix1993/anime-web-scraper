@@ -1895,6 +1895,7 @@ class TanmoshiDownload(Summer2021AnimeDownload, NewsTemplate2):
         self.add_to_image_list('kv4', 'https://pbs.twimg.com/media/EzVZyckVIAQsrG3?format=jpg&name=4096x4096')
         self.add_to_image_list('kv5', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv5.png')
         self.add_to_image_list('kv6', 'https://pbs.twimg.com/media/E32w0I2UcAMfmZe?format=jpg&name=4096x4096')
+        self.add_to_image_list('kv7', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv7.jpg')
         template = self.PAGE_PREFIX + 'core_sys/images/main/tz/%s.png'
         for name in ['umbouzu', 'mugiko', 'poni', 'moyashi']:
             image_name = 'illust_' + name
