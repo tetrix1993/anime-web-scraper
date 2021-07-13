@@ -236,6 +236,7 @@ class CheatKusushiDownload(Summer2021AnimeDownload):
     folder_name = 'cheat-kusushi'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
 
     def __init__(self):
         super().__init__()
@@ -243,6 +244,7 @@ class CheatKusushiDownload(Summer2021AnimeDownload):
     def run(self):
         soup = self.get_soup(self.PAGE_PREFIX, decode=True)
         self.download_episode_preview(soup)
+        self.download_episode_preview_external()
         self.download_news(soup)
         self.download_key_visual()
         self.download_character(soup)
@@ -272,6 +274,11 @@ class CheatKusushiDownload(Summer2021AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
+
+    def download_episode_preview_external(self):
+        jp_title = 'チート薬師のスローライフ'
+        AniverseMagazineScanner(jp_title, self.base_folder, last_episode=self.FINAL_EPISODE, min_width=750,
+                                end_date='20210706', download_id=self.download_id).run()
 
     def download_news(self, soup=None):
         news_url = self.PAGE_PREFIX
