@@ -1902,6 +1902,11 @@ class TanmoshiDownload(Summer2021AnimeDownload, NewsTemplate2):
             self.add_to_image_list(image_name, template % image_name)
         self.download_image_list(folder)
 
+        kv_template = self.PAGE_PREFIX + 'core_sys/images/main/tz/kv%s'
+        kv_template_1 = kv_template + '.jpg'
+        kv_template_2 = kv_template + '.png'
+        self.download_by_template(folder, [kv_template_1, kv_template_2], 1, 2)
+
     def download_character(self):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'core_sys/images/main/cont/char/%s.png'
