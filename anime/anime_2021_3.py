@@ -1078,6 +1078,7 @@ class MegamiryouDownload(Summer2021AnimeDownload, NewsTemplate2):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -1138,6 +1139,44 @@ class MegamiryouDownload(Summer2021AnimeDownload, NewsTemplate2):
             print("Error in running " + self.__class__.__name__ + " - Character")
             print(e)
         self.download_image_list(folder)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        self.image_list = []
+        self.add_to_image_list('music', self.PAGE_PREFIX + 'core_sys/images/contents/00000008/block/00000022/00000035.jpg')
+        self.download_image_list(folder)
+
+        # Blu-ray
+        bd_url_template = self.PAGE_PREFIX + 'bd/%s'
+        for page in ['privilege', 'campaign', '01', '02']:
+            if page == '01':
+                bd_url = bd_url_template % ''
+            else:
+                bd_url = bd_url_template % (page + '.html')
+            try:
+                soup = self.get_soup(bd_url)
+                images = soup.select('#cms_block img')
+                self.image_list = []
+                has_image = False
+                for image in images:
+                    if image.has_attr('src'):
+                        image_url = self.PAGE_PREFIX + image['src'].replace('../', '').split('?')[0]
+                        if 'np_bd' in image_url:
+                            continue
+                        image_name = self.extract_image_name_from_url(image_url)
+                        if self.is_image_exists(image_name):
+                            has_image = True
+                            continue
+                        if self.is_matching_content_length(image_url, 19182):
+                            continue
+                        self.add_to_image_list(image_name, image_url)
+                        has_image = True
+                if not has_image and page.isnumeric():
+                    break
+                self.download_image_list(folder)
+            except Exception as e:
+                print("Error in running " + self.__class__.__name__ + ' - Blu-ray %s.html' % page)
+                print(e)
 
 
 # Meikyuu Black Company
@@ -1631,18 +1670,21 @@ class ShinigamiBocchanDownload(Summer2021AnimeDownload, NewsTemplate2):
                 else:
                     images = soup.select('#cms_block img')
                 self.image_list = []
+                has_image = False
                 for image in images:
                     if image.has_attr('src'):
                         image_url = self.PAGE_PREFIX + image['src'].replace('../', '').split('?')[0]
                         image_name = self.extract_image_name_from_url(image_url)
                         if self.is_image_exists(image_name):
+                            has_image = True
                             continue
                         if image_url.endswith('.gif'):
                             continue
                         if self.is_matching_content_length(image_url, [65898, 57601]):
                             continue
                         self.add_to_image_list(image_name, image_url)
-                if len(self.image_list) == 0:
+                        has_image = True
+                if not has_image and page.isnumeric():
                     break
                 self.download_image_list(folder)
             except Exception as e:
