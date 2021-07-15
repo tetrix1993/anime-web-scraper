@@ -17,7 +17,7 @@ from anime.main_download import MainDownload, NewsTemplate2, NewsTemplate3
 # Maou Gakuin no Futekigousha 2nd Season https://maohgakuin.com/ #魔王学院 @maohgakuin
 # Princess Connect! Re:Dive S2 https://anime.priconne-redive.jp/ #アニメプリコネ #プリコネR #プリコネ @priconne_anime
 # Shikkakumon no Saikyou Kenja https://shikkakumon.com/ #失格紋 @shikkakumon_PR
-# Shokei Shoujo no Virgin Road http://virgin-road.com/ #処刑少女 #shokei_anime @virginroad_GA
+# Shokei Shoujo no Virgin Road http://virgin-road.com/ #処刑少女 #shokei_anime @VirginroadAnime
 # Shuumatsu no Harem https://end-harem-anime.com/ #終末のハーレム @harem_official_
 # Tensai Ouji no Akaji Kokka Saisei Jutsu: Souda, Baikoku shiyou https://tensaiouji-anime.com/ #天才王子の赤字国家再生術 @tensaiouji_PR
 # Tsuki to Laika to Nosferatu https://tsuki-laika-nosferatu.com/ #月とライカ @LAIKA_anime
@@ -858,7 +858,7 @@ class ShokeiShoujoDownload(UnconfirmedDownload):
     title = 'Shokei Shoujo no Virgin Road'
     keywords = [title]
     website = 'http://virgin-road.com/'
-    twitter = 'virginroad_GA'
+    twitter = 'VirginroadAnime'
     hashtags = ['shokei_anime', '処刑少女']
     folder_name = 'shokeishoujo'
 
