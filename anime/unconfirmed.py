@@ -9,6 +9,7 @@ from anime.main_download import MainDownload, NewsTemplate2, NewsTemplate3
 # Hataraku Maou-sama! https://maousama.jp/ #maousama @anime_maousama
 # Isekai Ojisan #いせおじ #異世界おじさん @Isekai_Ojisan
 # Isekai Shokudou 2 https://isekai-shokudo2.com/ #異世界食堂 @nekoya_PR
+# Isekai Yakkyoku https://isekai-yakkyoku.jp/ #異世界薬局 @isekai_yakkyoku
 # Itai no wa https://bofuri.jp/story/ #防振り #bofuri @bofuri_anime
 # Kakkou no Iinazuke https://cuckoos-anime.com/ #カッコウの許嫁 @cuckoo_anime
 # Kenja no Deshi wo Nanoru Kenja https://kendeshi-anime.com/ #賢でし @kendeshi_anime
@@ -410,6 +411,44 @@ class IsekaiShokudou2Download(UnconfirmedDownload, NewsTemplate3):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'assets/top/character/c%s.png'
         self.download_by_template(folder, template, 1)
+
+
+# Isekai Yakkyoku
+class IsekaiYakkyokuDownload(UnconfirmedDownload, NewsTemplate2):
+    title = 'Isekai Yakkyoku'
+    keywords = [title]
+    website = 'https://isekai-yakkyoku.jp/'
+    twitter = 'isekai_yakkyoku'
+    hashtags = '異世界薬局'
+    folder_name = 'isekai-yakkyoku'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('teaser', 'https://pbs.twimg.com/media/E6Rh8S_VcAQWTLG?format=jpg&name=4096x4096')
+        self.add_to_image_list('kv', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv.jpg')
+        self.download_image_list(folder)
+
+        kv_template = self.PAGE_PREFIX + 'core_sys/images/main/tz/kv%s'
+        kv_template1 = kv_template + '.jpg'
+        kv_template2 = kv_template + '.png'
+        self.download_by_template(folder, [kv_template1, kv_template2], 1, 2)
 
 
 # Itai no wa Iya nano de Bougyoryoku ni Kyokufuri Shitai to Omoimasu. 2nd Season

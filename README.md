@@ -85,6 +85,7 @@ The premiere date for the anime listed here has not been announced.
 * [Hataraku Maou-sama! 2nd Season](https://maousama.jp/)
 * [Isekai Ojisan](https://isekaiojisan.com/)
 * [Isekai Shokudou 2](https://isekai-shokudo2.com/)
+* [Isekai Yakkyoku](https://isekai-yakkyoku.jp/)
 * [Itai no wa Iya nano de Bougyoryoku ni Kyokufuri Shitai to Omoimasu. 2nd Season](https://bofuri.jp/)
 * [Kakkou no Iinazuke](https://cuckoos-anime.com/)
 * [Kenja no Deshi wo Nanoru Kenja](https://kendeshi-anime.com/)
