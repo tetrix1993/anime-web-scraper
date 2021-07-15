@@ -839,7 +839,7 @@ class MainDownload:
             self.image_list.clear()
 
     def download_by_template(self, folder, template, zfill=1, start=1, end=99, headers=None,
-                             to_jpg=False, is_mocanews=False, min_width=None, max_skip=0):
+                             to_jpg=False, is_mocanews=False, min_width=None, max_skip=0, prefix=''):
         if isinstance(template, str):
             templates = [template]
         elif isinstance(template, list):
@@ -855,7 +855,7 @@ class MainDownload:
             i += 1
             for template_ in templates:
                 image_url = template_ % str(i).zfill(zfill)
-                image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                image_name = prefix + self.extract_image_name_from_url(image_url, with_extension=False)
                 if self.is_image_exists(image_name, folder):
                     success_count += 1
                     skip_remaining = max_skip

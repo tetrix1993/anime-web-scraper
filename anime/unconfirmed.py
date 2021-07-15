@@ -867,6 +867,7 @@ class ShokeiShoujoDownload(UnconfirmedDownload):
     def run(self):
         self.download_episode_preview()
         self.download_key_visual()
+        self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
@@ -876,7 +877,19 @@ class ShokeiShoujoDownload(UnconfirmedDownload):
         self.image_list = []
         self.add_to_image_list('teaser', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv.png')
         self.add_to_image_list('teaser_tw', 'https://pbs.twimg.com/media/EtDn9lYU0AAKje-?format=jpg&name=4096x4096')
+        self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/E6Ur9dWVIAEE3Ee?format=jpg&name=4096x4096')
         self.download_image_list(folder)
+
+        kv_template = self.PAGE_PREFIX + 'core_sys/images/main/tz/kv%s'
+        kv_template1 = kv_template + '.jpg'
+        kv_template2 = kv_template + '.png'
+        self.download_by_template(folder, [kv_template1, kv_template2], 1, 1)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template1 = self.PAGE_PREFIX + 'core_sys/images/main/tz/char_%s.png'
+        template2 = self.PAGE_PREFIX + 'core_sys/images/main/tz/char_%sface.png'
+        self.download_by_template(folder, [template1, template2], 1, 1, prefix='tz_')
 
 
 # Shuumatsu no Harem
