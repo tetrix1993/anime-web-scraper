@@ -1802,6 +1802,9 @@ class AquatopeDownload(Summer2021AnimeDownload, NewsTemplate):
 
     def download_media(self):
         folder = self.create_media_directory()
+        self.image_list = []
+        self.add_to_image_list('bd_rakuten', 'https://pbs.twimg.com/media/E6TmzlDUUAU9kpK?format=jpg&name=900x900')
+        self.download_image_list(folder)
 
         # Music
         self.image_list = []
