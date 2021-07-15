@@ -1913,7 +1913,7 @@ class TanmoshiDownload(Summer2021AnimeDownload, NewsTemplate2):
             first = 9 + i
             second = 22 + 4 * i
             third = 35 + 5 * i
-            third_last = 110 + 3 * i
+            third_last = 112 + i
             for j in range(self.IMAGES_PER_EPISODE):
                 if j < 5:
                     image_url = template % (str(first).zfill(8), str(second).zfill(8), str(third + j).zfill(8))
