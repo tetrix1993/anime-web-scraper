@@ -113,6 +113,7 @@ The premiere date for the anime listed here has not been announced.
 ### Fall 2021 Anime
 * [Kaizoku Oujo](http://fena-pirate-princess.com/)
 * [Komi-san wa, Komyushou desu.](https://komisan-official.com/)
+* [Mieruko-chan](https://mierukochan.jp/)
 * [Muv-Luv Alternative](https://muv-luv-alternative-anime.com/)
 * [Saihate no Paladin](https://farawaypaladin.com/)
 * [Sekai Saikou no Ansatsusha, Isekai Kizoku ni Tensei suru](https://ansatsu-kizoku.jp/)

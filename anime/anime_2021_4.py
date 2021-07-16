@@ -1,12 +1,13 @@
 import os
 import anime.constants as constants
-from anime.main_download import MainDownload, NewsTemplate
+from anime.main_download import MainDownload, NewsTemplate, NewsTemplate3
 from datetime import datetime
 from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 
 
 # Kaizoku Oujo http://fena-pirate-princess.com/ #海賊王女 @fena_pirate
 # Komi-san wa, Komyushou desu. https://komisan-official.com/ #古見さん #komisan @comisanvote
+# Mieruko-chan https://mierukochan.jp/ #見える子ちゃん @mierukochan_PR
 # Muv-Luv Alternative https://muv-luv-alternative-anime.com/ #マブラヴ #マブラヴアニメ #muvluv @Muv_Luv_A_anime
 # Saihate no Paladin https://farawaypaladin.com/ #最果てのパラディン #faraway_paladin @faraway_paladin
 # Sekai Saikou no Ansatsusha, Isekai Kizoku ni Tensei suru https://ansatsu-kizoku.jp/ #暗殺貴族 @ansatsu_kizoku
@@ -161,6 +162,52 @@ class KomisanDownload(Fall2021AnimeDownload):
             print("Error in running " + self.__class__.__name__ + ' - Character')
             print(e)
         self.download_image_list(folder)
+
+
+# Mieruko-chan
+class MierukochanDownload(Fall2021AnimeDownload, NewsTemplate3):
+    title = 'Mieruko-chan'
+    keywords = [title, 'Mieruko']
+    website = 'https://mierukochan.jp/'
+    twitter = 'mierukochan_PR'
+    hashtags = '見える子ちゃん'
+    folder_name = 'mierukochan'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz2_tw_1', 'https://pbs.twimg.com/media/E6aARStVcAMhcZB?format=jpg&name=medium')
+        self.add_to_image_list('tz2_tw_2', 'https://pbs.twimg.com/media/E6aARTMVEAMu5YQ?format=jpg&name=medium')
+        self.download_image_list(folder)
+
+        top_template1 = self.PAGE_PREFIX + 'assets/top/t%s/vis-on.png'
+        top_template2 = self.PAGE_PREFIX + 'assets/top/t%s/vis-off.png'
+        self.download_by_template(folder, [top_template1, top_template2], 1, 1)
+
+        news_template = self.PAGE_PREFIX + 'assets/news/vis-t%s.jpg'
+        self.download_by_template(folder, news_template, 1, 1)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'assets/character/c/%s.png'
+        self.download_by_template(folder, template, 1, 1, prefix='char_')
 
 
 # Muv-Luv Alternative
