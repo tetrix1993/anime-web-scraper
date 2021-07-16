@@ -715,6 +715,9 @@ class KakushigotoDownload(Spring2020AnimeDownload):
 class Kingdom3Download(Spring2020AnimeDownload):
     title = "Kingdom 3rd Season"
     keywords = [title]
+    website = 'https://kingdom-anime.com/'
+    twitter = 'kingdom_animePR'
+    hashtags = 'キングダム'
     folder_name = 'kingdom3'
 
     STORY_PAGE = "https://kingdom-anime.com/story/"
@@ -731,10 +734,16 @@ class Kingdom3Download(Spring2020AnimeDownload):
                     episode = self.get_episode_number(ep.find('span', class_='hd').text)
                     if episode is None:
                         continue
-                    if self.is_file_exists(self.base_folder + "/" + episode + "_1.jpg") or self.is_file_exists(
-                            self.base_folder + "/" + episode + "_1.png"):
+                    if self.is_file_exists(self.base_folder + "/" + episode + "_0.jpg") or self.is_file_exists(
+                            self.base_folder + "/" + episode + "_0.png"):
                         continue
-                    ep_url = self.STORY_PAGE + ep.find('a')['href']
+                    a_tag = ep.find('a')
+                    try:
+                        thumb_image_url = a_tag.find('div', class_='ep_thumb')['style'].split('(')[1].split(')')[0]
+                        self.download_image(thumb_image_url, self.base_folder + '/' + episode + '_0')
+                    except:
+                        continue
+                    ep_url = self.STORY_PAGE + a_tag['href']
                     ep_soup = self.get_soup(ep_url)
                     images = ep_soup.find('div', id='episodeCont').find_all('img')
                     for j in range(len(images)):
