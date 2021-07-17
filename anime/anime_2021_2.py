@@ -1060,12 +1060,13 @@ class IrumaKun2Download(Spring2021AnimeDownload):
     def download_episode_preview(self):
         try:
             soup = self.get_soup(self.PAGE_PREFIX)
-            lis = soup.select('div.series-main li')
-            for li in lis:
-                a_tags = li.select('h3 a')
+            divs = soup.select('div.title-desc-wrapper')
+            for div in divs:
+                a_tags = div.select('a')
                 if len(a_tags) > 0 and a_tags[0].has_attr('href'):
                     try:
-                        episode = str(int(a_tags[0].text.split('(')[1].split(')')[0])).zfill(2)
+                        h3_tag = a_tags[0].select('h3')[0]
+                        episode = str(int(h3_tag.text.split('(')[1].split(')')[0])).zfill(2)
                     except:
                         continue
                     if self.is_image_exists(episode + '_1'):
