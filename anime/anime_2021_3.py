@@ -1033,6 +1033,7 @@ class MahoukaYuutouseiDownload(Summer2021AnimeDownload, NewsTemplate):
         folder = self.create_media_directory()
         self.image_list = []
         self.add_to_image_list('music_op', 'https://pbs.twimg.com/media/E4PDegKUYAU61Lz?format=jpg&name=large')
+        self.add_to_image_list('music_ed', 'https://pbs.twimg.com/media/E6gb4GxUcAQgZ3V?format=jpg&name=large')
         self.download_image_list(folder)
 
         # Blu-ray
