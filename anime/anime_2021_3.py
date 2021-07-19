@@ -389,7 +389,30 @@ class Dea5Download(Summer2021AnimeDownload, NewsTemplate):
         self.download_key_visual()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            a_tags = soup.select('div.list a')
+            for a_tag in a_tags:
+                if a_tag.has_attr('href') and 'storylist' in a_tag['href']:
+                    try:
+                        episode = str(int(a_tag['href'].split('/')[-1])).zfill(2)
+                    except Exception:
+                        continue
+                    if self.is_image_exists(episode + '_1'):
+                        continue
+                    ep_soup = self.get_soup(a_tag['href'])
+                    if ep_soup:
+                        self.image_list = []
+                        images = ep_soup.select('div.swiper-slide img')
+                        for i in range(len(images)):
+                            if images[i].has_attr('src'):
+                                image_url = images[i]['src']
+                                image_name = episode + '_' + str(i + 1)
+                            self.add_to_image_list(image_name, image_url)
+                        self.download_image_list(self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='div.posts div.post',
@@ -1194,7 +1217,7 @@ class MeikyuBCDownload(Summer2021AnimeDownload):
 
     def run(self):
         self.download_episode_preview()
-        # self.download_episode_preview_external()
+        self.download_episode_preview_external()
         self.download_news()
         self.download_key_visual()
         self.download_character()
