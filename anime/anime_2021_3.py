@@ -127,12 +127,14 @@ class BokuremaDownload(Summer2021AnimeDownload, NewsTemplate):
     folder_name = 'bokurema'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
 
     def __init__(self):
         super().__init__()
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_guess()
         self.download_news()
         self.download_key_visual()
         self.download_character()
@@ -169,6 +171,31 @@ class BokuremaDownload(Summer2021AnimeDownload, NewsTemplate):
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
+
+    def download_episode_preview_guess(self):
+        folder = self.create_custom_directory('guess')
+        template = self.PAGE_PREFIX + '/assets/images/uploads/2021/%s/%s.jpg'
+        month = (datetime.now() + timedelta(hours=1)).strftime('%m')
+        img_names = ['03830aa61ae38593b75cec35702d7df7', '0cfafc5a86934f17ec16fc84cf038bb5',
+                     'bcd8cf99465216eefff88407b2b38ab1', '23f7e86f51d91c9f42f43bbf4013020e',
+                     '472aef46107f00e97a7ba3e1468a7d36', '5c15c4fefc4c57fb82db0d1f2eacdd6f']
+        is_successful = False
+        for i in range(self.FINAL_EPISODE):
+            if self.is_image_exists(month + '_' + str(i) + '_1', folder):
+                continue
+            for j in range(len(img_names)):
+                if i == 0:
+                    image_url = template % (month, img_names[j])
+                else:
+                    image_url = template % (month, img_names[j] + '-' + str(i))
+                image_name = month + '_' + str(i) + '_' + str(j + 1)
+                result = self.download_image(image_url, folder + '/' + image_name)
+                if result == -1:
+                    return is_successful
+                is_successful = True
+        if is_successful:
+            print(self.__class__.__name__ + ' - Guessed correctly!')
+        return is_successful
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='div.p-news-headline',
