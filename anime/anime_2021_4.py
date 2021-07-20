@@ -15,6 +15,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 # Shin no Nakama ja Nai to Yuusha no Party wo Oidasareta node, Henkyou de Slow Life suru Koto ni Shimashita https://shinnonakama.com/ #真の仲間 @shinnonakama_tv
 # Shinka no Mi: Shiranai Uchi ni Kachigumi Jinsei https://www.shinkanomi-anime.com/ #進化の実 #勝ち組人生 #ゴリラ系女子 @shinkanomianime
 # Taishou Otome Otogibanashi http://taisho-otome.com/ #大正オトメ #昭和オトメ @otome_otogi
+# Tsuki to Laika to Nosferatu https://tsuki-laika-nosferatu.com/ #月とライカ @LAIKA_anime
 # Yuuki Yuuna wa Yuusha de Aru: Dai Mankai no Shou https://yuyuyu.tv/season2/ #yuyuyu @anime_yukiyuna
 
 
@@ -607,6 +608,85 @@ class TaishoOtomeDownload(Fall2021AnimeDownload):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'wp/wp-content/themes/taisho-otome/img/character/img_chara%s.png'
         self.download_by_template(folder, template, 2)
+
+
+# Tsuki to Laika to Nosferatu
+class TsukiLaikaNosferatuDownload(Fall2021AnimeDownload, NewsTemplate):
+    title = 'Tsuki to Laika to Nosferatu'
+    keywords = [title]
+    website = 'https://tsuki-laika-nosferatu.com/'
+    twitter = 'LAIKA_anime'
+    hashtags = '月とライカ'
+    folder_name = 'tsuki-laika-nosferatu'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+        self.download_media()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article.news-box',
+                                    date_select='p.news-box-date', title_select='h3.news-box-ttl', id_select='a',
+                                    next_page_select='ul.pagenation-list li',
+                                    next_page_eval_index_class='is__current', next_page_eval_index=-1)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        template = self.PAGE_PREFIX + 'Nr7R6svx/wp-content/themes/laika_tpl_v%s/assets/img/top/visual.jpg'
+        self.add_to_image_list('teaser', template % '0')
+        self.add_to_image_list('teaser_tw', 'https://pbs.twimg.com/media/EwpkNbsUUAAX00O?format=jpg&name=medium')
+        self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/E6uztaAVUAU40vC?format=jpg&name=medium')
+        self.download_image_list(folder)
+
+        try:
+            for i in range(20):
+                image_url = template % str(i + 1)
+                image_name = 'kv' + str(i + 1)
+                result = self.download_image(image_url, folder + '/' + image_name)
+                if result == -1:
+                    break
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Key Visual')
+            print(e)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'Nr7R6svx/wp-content/themes/laika_tpl_v1/assets/img/character/%s.png'
+        self.download_by_template(folder, template, 1, 0, prefix='char_')
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'products/cd')
+            a_tags = soup.select('a.products-box-link')
+            for a_tag in a_tags:
+                if a_tag.has_attr('href'):
+                    cover_image = a_tag.find('img')
+                    if cover_image and cover_image.has_attr('src') and 'nowprinting' not in cover_image['src']:
+                        cd_soup = self.get_soup(a_tag['href'])
+                        if cd_soup:
+                            images = cd_soup.select('#contents-main img')
+                            self.image_list = []
+                            for image in images:
+                                if image.has_attr('src') and 'nowprinting' not in image['src']:
+                                    image_url = image['src']
+                                    image_name = self.extract_image_name_from_url(image_url)
+                                    self.add_to_image_list(image_name, image_url)
+                            self.download_image_list(folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Music')
+            print(e)
 
 
 # Yuuki Yuuna wa Yuusha de Aru: Dai Mankai no Shou

@@ -21,7 +21,6 @@ from anime.main_download import MainDownload, NewsTemplate2, NewsTemplate3
 # Shokei Shoujo no Virgin Road http://virgin-road.com/ #処刑少女 #shokei_anime @VirginroadAnime
 # Shuumatsu no Harem https://end-harem-anime.com/ #終末のハーレム @harem_official_
 # Tensai Ouji no Akaji Kokka Saisei Jutsu: Souda, Baikoku shiyou https://tensaiouji-anime.com/ #天才王子の赤字国家再生術 @tensaiouji_PR
-# Tsuki to Laika to Nosferatu https://tsuki-laika-nosferatu.com/ #月とライカ @LAIKA_anime
 # Vlad Love https://www.vladlove.com/index.html #ぶらどらぶ #vladlove @VLADLOVE_ANIME
 # Yama no Susume: Next Summit https://yamanosusume-ns.com/ #ヤマノススメ @yamanosusume
 
@@ -1045,80 +1044,6 @@ class TensaiOujiDownload(UnconfirmedDownload, NewsTemplate2):
         folder = self.create_key_visual_directory()
         self.image_list = []
         self.add_to_image_list('kv', self.PAGE_PREFIX + 'core_sys/images/main/home/kv.jpg')
-        self.download_image_list(folder)
-
-
-# Tsuki to Laika to Nosferatu
-class TsukiLaikaNosferatuDownload(UnconfirmedDownload):
-    title = 'Tsuki to Laika to Nosferatu'
-    keywords = [title]
-    website = 'https://tsuki-laika-nosferatu.com/'
-    twitter = 'LAIKA_anime'
-    hashtags = '月とライカ'
-    folder_name = 'tsuki-laika-nosferatu'
-
-    PAGE_PREFIX = website
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_news()
-        self.download_key_visual()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_news(self):
-        news_url = self.PAGE_PREFIX + 'news/'
-        stop = False
-        try:
-            results = []
-            news_obj = self.get_last_news_log_object()
-            for page in range(1, 100, 1):
-                page_url = news_url
-                if page > 1:
-                    page_url = news_url + 'page/' + str(page) + '/'
-                soup = self.get_soup(page_url, decode=True)
-                articles = soup.find_all('article', class_='news-box')
-                for article in articles:
-                    tag_date = article.find('p', 'news-box-date')
-                    tag_title = article.find('h3', class_='news-box-ttl')
-                    a_tag = article.find('a')
-                    if tag_date and tag_title and a_tag and a_tag.has_attr('href'):
-                        article_id = a_tag['href']
-                        date = self.format_news_date(tag_date.text.strip())
-                        if len(date) == 0:
-                            continue
-                        title = tag_title.text.strip()
-                        if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
-                            stop = True
-                            break
-                        results.append(self.create_news_log_object(date, title, article_id))
-                if stop:
-                    break
-                pagination = soup.select('ul.pagenation-list li')
-                if len(pagination) == 0:
-                    break
-                if pagination[-1].has_attr('class') and 'is__current' in pagination[-1]['class']:
-                    break
-            success_count = 0
-            for result in reversed(results):
-                process_result = self.create_news_log_from_news_log_object(result)
-                if process_result == 0:
-                    success_count += 1
-            if len(results) > 0:
-                self.create_news_log_cache(success_count, results[0])
-        except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - News')
-            print(e)
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('teaser', self.PAGE_PREFIX + 'Nr7R6svx/wp-content/themes/laika_tpl_v0/assets/img/top/visual.jpg')
-        self.add_to_image_list('teaser_tw', 'https://pbs.twimg.com/media/EwpkNbsUUAAX00O?format=jpg&name=medium')
         self.download_image_list(folder)
 
 
