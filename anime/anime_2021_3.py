@@ -2126,11 +2126,10 @@ class TanmoshiDownload(Summer2021AnimeDownload, NewsTemplate2):
             url = template2 % i
             self.download_content(url, folder + '/' + i + '_2.mp3')
 
-        # Blu-rays
-        pages = ['privilege.html', 'campaign.html', '', '02.html', '03.html']
-        bd_template = self.PAGE_PREFIX + 'bd/%s'
+        # Music & Blu-rays
+        pages = ['music/', 'bd/privilege.html', 'bd/campaign.html', 'bd/', 'bd/02.html', 'bd/03.html']
         for i in range(len(pages)):
-            url = bd_template % pages[i]
+            url = self.PAGE_PREFIX + pages[i]
             try:
                 soup = self.get_soup(url)
                 images = soup.select('#cms_block img')
@@ -2140,9 +2139,13 @@ class TanmoshiDownload(Summer2021AnimeDownload, NewsTemplate2):
                     if 'nowprinting' in image_url:
                         continue
                     image_name = self.extract_image_name_from_url(image_url)
+                    if self.is_image_exists(image_name, folder):
+                        continue
+                    if self.is_matching_content_length(image_url, 23929):
+                        continue
                     self.add_to_image_list(image_name, image_url)
                 self.download_image_list(folder)
-                if i > 1 and len(self.image_list) == 0:
+                if i > 2 and len(self.image_list) == 0:
                     break
             except Exception as e:
                 print("Error in running " + self.__class__.__name__ + " - Blu-Ray %s" % url)
