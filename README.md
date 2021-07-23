@@ -96,6 +96,7 @@ The premiere date for the anime listed here has not been announced.
 * [Shikkakumon no Saikyou Kenja](https://shikkakumon.com/)
 * [Shokei Shoujo no Virgin Road](http://virgin-road.com/)
 * [Shuumatsu no Harem](https://end-harem-anime.com/)
+* [Summertime Render](https://summertime-anime.com/)
 * [Tensai Ouji no Akaji Kokka Saisei Jutsu: Souda, Baikoku shiyou](https://tensaiouji-anime.com/)
 * [Yama no Susume: Next Summit](https://yamanosusume-ns.com/)
 

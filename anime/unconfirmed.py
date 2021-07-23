@@ -1,6 +1,6 @@
 import os
 import anime.constants as constants
-from anime.main_download import MainDownload, NewsTemplate2, NewsTemplate3
+from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsTemplate3
 
 # Anohana S2 https://10th.anohana.jp/ #あの花 #anohana @anohana_project
 # Do It Yourself!! https://diy-anime.com/ #diyアニメ @diy_anime
@@ -20,6 +20,7 @@ from anime.main_download import MainDownload, NewsTemplate2, NewsTemplate3
 # Shikkakumon no Saikyou Kenja https://shikkakumon.com/ #失格紋 @shikkakumon_PR
 # Shokei Shoujo no Virgin Road http://virgin-road.com/ #処刑少女 #shokei_anime @VirginroadAnime
 # Shuumatsu no Harem https://end-harem-anime.com/ #終末のハーレム @harem_official_
+# Summertime Render https://summertime-anime.com/ #サマータイムレンダ #サマレン @summertime_PR
 # Tensai Ouji no Akaji Kokka Saisei Jutsu: Souda, Baikoku shiyou https://tensaiouji-anime.com/ #天才王子の赤字国家再生術 @tensaiouji_PR
 # Vlad Love https://www.vladlove.com/index.html #ぶらどらぶ #vladlove @VLADLOVE_ANIME
 # Yama no Susume: Next Summit https://yamanosusume-ns.com/ #ヤマノススメ @yamanosusume
@@ -1014,6 +1015,42 @@ class ShuumatsuNoHaremDownload(UnconfirmedDownload, NewsTemplate2):
                     if i > 0:
                         f.write(';')
                     f.write(processed[i])
+
+
+# Summertime Render
+class SummertimeRenderDownload(UnconfirmedDownload, NewsTemplate):
+    title = 'Summertime Render'
+    keywords = [title]
+    website = 'https://summertime-anime.com/'
+    twitter = 'summertime_PR'
+    hashtags = ['サマータイムレンダ', 'サマレン']
+    folder_name = 'summertime-render'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article.md-article__li',
+                                    date_select='time', title_select='h5', id_select='a',
+                                    next_page_select='ul.pagenation-list li',
+                                    next_page_eval_index_class='is__current', next_page_eval_index=-1)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz', self.PAGE_PREFIX + 'wp/wp-content/themes/summertime-teaser/_assets/images/kv/kv_pc.jpg')
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/E63h3z-VEAMtJYy?format=jpg&name=medium')
+        self.download_image_list(folder)
 
 
 # Tensai Ouji no Akaji Kokka Saisei Jutsu: Souda, Baikoku shiyou
