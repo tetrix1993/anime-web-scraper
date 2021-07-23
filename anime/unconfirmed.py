@@ -371,6 +371,7 @@ class IsekaiOjisanDownload(UnconfirmedDownload):
         self.image_list = []
         self.add_to_image_list('tz_kv', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv.png')
         self.add_to_image_list('tz_kv2', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv2.png')
+        self.add_to_image_list('tz_kv_', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv.jpg')
         self.download_image_list(folder)
 
 
