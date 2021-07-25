@@ -873,7 +873,7 @@ class IsekaiMaou2Download(Spring2021AnimeDownload, NewsTemplate):
         self.add_to_image_list('bd1_3', 'https://pbs.twimg.com/media/E2eUWbLVgAUVk66?format=jpg&name=large')
         self.download_image_list(folder)
 
-        for url in ['bd/store/', 'bd/', 'bd/vol1/']:
+        for url in ['bd/store/', 'bd/', 'bd/vol1/', 'bd/vol2/', 'bd/vol3/']:
             bd_url = self.PAGE_PREFIX + url
             self.image_list = []
             try:
