@@ -1284,13 +1284,21 @@ class MeikyuBCDownload(Summer2021AnimeDownload):
 
     def download_episode_preview(self):
         image_url_template = self.PAGE_PREFIX + '_image/story/story%s_%s.jpg'
+        image_url_template2 = self.PAGE_PREFIX + '_image/story/story%s_%s.png'
         for i in range(1, self.FINAL_EPISODE + 1, 1):
             episode = str(i).zfill(2)
             if self.is_image_exists(episode + '_1'):
                 continue
+            skip_first_template = False
             for j in range(1, 7, 1):
                 image_name = episode + '_' + str(j)
-                image_url = image_url_template % (episode, str(j))
+                if not skip_first_template:
+                    image_url = image_url_template % (episode, str(j))
+                    if self.download_image(image_url, self.base_folder + '/' + image_name) == -1:
+                        skip_first_template = True
+                    else:
+                        continue
+                image_url = image_url_template2 % (episode, str(j))
                 if self.download_image(image_url, self.base_folder + '/' + image_name) == -1:
                     return
 
