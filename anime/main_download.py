@@ -823,6 +823,35 @@ class MainDownload:
                 result += ''.zfill(9)
         return result
 
+    @staticmethod
+    def convert_kanji_to_number(text):
+        # Only 1 to 99
+        if not isinstance(text, str):
+            return None
+        if len(text) == 0 or len(text) > 3:
+            return None
+
+        kanjis = ['十', '一', '二', '三', '四', '五', '六', '七', '八', '九']
+        eval = []
+        for character in text:
+            for i in range(len(kanjis)):
+                if character == kanjis[i]:
+                    eval.append(i)
+
+        if len(eval) == 1:
+            if eval[0] == 0:
+                return 10
+            else:
+                return eval[0]
+        elif len(eval) == 2:
+            if eval[0] == 0 and eval[1] > 0:
+                return 10 + eval[1]
+            if eval[1] == 0 and eval[0] > 1:
+                return eval[0] * 10
+        elif len(eval) == 3 and eval[1] == 0 and eval[0] > 1:
+            return eval[0] * 10 + eval[2]
+        return None
+
     def add_to_image_list(self, name, url, to_jpg=False, is_mocanews=False):
         image_obj = {'name': name, 'url': url}
         if to_jpg:

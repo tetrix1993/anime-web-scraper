@@ -2181,7 +2181,7 @@ class TsukimichiDownload(Summer2021AnimeDownload, NewsTemplate):
                 if not a_tag.has_attr('href'):
                     continue
                 try:
-                    episode = str(int(a_tag.text.strip())).zfill(2)
+                    episode = str(int(self.convert_kanji_to_number(a_tag.text.strip()))).zfill(2)
                 except Exception:
                     continue
                 if self.is_image_exists(episode + '_1'):
