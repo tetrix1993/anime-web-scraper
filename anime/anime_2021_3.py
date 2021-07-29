@@ -830,7 +830,7 @@ class KanokanoDownload(Summer2021AnimeDownload, NewsTemplate):
             for image in images:
                 image_url = self.PAGE_PREFIX + image['src']
                 image_name = self.extract_image_name_from_url(image_url)
-                if image_name != 'bluraydvd-pic01':
+                if not image_name.endswith('-np.png'):
                     self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)
         except Exception as e:
