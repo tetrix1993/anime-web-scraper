@@ -8,7 +8,6 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Goblin Slayer S2 http://www.goblinslayer.jp/ #ゴブスレ @GoblinSlayer_GA
 # Hataraku Maou-sama! https://maousama.jp/ #maousama @anime_maousama
 # Isekai Ojisan #いせおじ #異世界おじさん @Isekai_Ojisan
-# Isekai Shokudou 2 https://isekai-shokudo2.com/ #異世界食堂 @nekoya_PR
 # Isekai Yakkyoku https://isekai-yakkyoku.jp/ #異世界薬局 @isekai_yakkyoku
 # Itai no wa https://bofuri.jp/story/ #防振り #bofuri @bofuri_anime
 # Kakkou no Iinazuke https://cuckoos-anime.com/ #カッコウの許嫁 @cuckoo_anime
@@ -374,44 +373,6 @@ class IsekaiOjisanDownload(UnconfirmedDownload):
         self.add_to_image_list('tz_kv2', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv2.png')
         self.add_to_image_list('tz_kv_', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv.jpg')
         self.download_image_list(folder)
-
-
-# Isekai Shokudou 2
-class IsekaiShokudou2Download(UnconfirmedDownload, NewsTemplate3):
-    title = 'Isekai Shokudou 2'
-    keywords = [title, 'Restaurant to Another World']
-    website = 'https://isekai-shokudo2.com/'
-    twitter = 'nekoya_PR'
-    hashtags = '異世界食堂'
-    folder_name = 'isekai-shokudo2'
-
-    PAGE_PREFIX = website
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_news()
-        self.download_key_visual()
-        self.download_character()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
-
-    def download_news(self):
-        self.download_template_news(self.PAGE_PREFIX)
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('kv1', self.PAGE_PREFIX + 'assets/top/main-t1/vis.jpg')
-        self.download_image_list(folder)
-
-    def download_character(self):
-        folder = self.create_character_directory()
-        template = self.PAGE_PREFIX + 'assets/top/character/c%s.png'
-        self.download_by_template(folder, template, 1)
 
 
 # Isekai Yakkyoku

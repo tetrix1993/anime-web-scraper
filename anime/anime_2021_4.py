@@ -5,6 +5,7 @@ from datetime import datetime
 from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 
 
+# Isekai Shokudou 2 https://isekai-shokudo2.com/ #異世界食堂 @nekoya_PR
 # Kaizoku Oujo http://fena-pirate-princess.com/ #海賊王女 @fena_pirate
 # Komi-san wa, Komyushou desu. https://komisan-official.com/ #古見さん #komisan @comisanvote
 # Mieruko-chan https://mierukochan.jp/ #見える子ちゃん @mierukochan_PR
@@ -27,6 +28,45 @@ class Fall2021AnimeDownload(MainDownload):
 
     def __init__(self):
         super().__init__()
+
+
+# Isekai Shokudou 2
+class IsekaiShokudou2Download(Fall2021AnimeDownload, NewsTemplate3):
+    title = 'Isekai Shokudou 2'
+    keywords = [title, 'Restaurant to Another World']
+    website = 'https://isekai-shokudo2.com/'
+    twitter = 'nekoya_PR'
+    hashtags = '異世界食堂'
+    folder_name = 'isekai-shokudo2'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('kv1', self.PAGE_PREFIX + 'assets/top/main-t1/vis.jpg')
+        self.add_to_image_list('vis-kv1', self.PAGE_PREFIX + 'assets/top/vis-kv1/vis.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'assets/top/character/c%s.png'
+        self.download_by_template(folder, template, 1)
 
 
 # Kaizoku Oujo

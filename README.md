@@ -84,7 +84,6 @@ The premiere date for the anime listed here has not been announced.
 * [Goblin Slayer 2nd Season](http://www.goblinslayer.jp/)
 * [Hataraku Maou-sama! 2nd Season](https://maousama.jp/)
 * [Isekai Ojisan](https://isekaiojisan.com/)
-* [Isekai Shokudou 2](https://isekai-shokudo2.com/)
 * [Isekai Yakkyoku](https://isekai-yakkyoku.jp/)
 * [Itai no wa Iya nano de Bougyoryoku ni Kyokufuri Shitai to Omoimasu. 2nd Season](https://bofuri.jp/)
 * [Kakkou no Iinazuke](https://cuckoos-anime.com/)
@@ -111,6 +110,7 @@ The premiere date for the anime listed here has not been announced.
 * [Slow Loop](https://slowlooptv.com/)
 
 ### Fall 2021 Anime
+* [Isekai Shokudou 2](https://isekai-shokudo2.com/)
 * [Kaizoku Oujo](http://fena-pirate-princess.com/)
 * [Komi-san wa, Komyushou desu.](https://komisan-official.com/)
 * [Mieruko-chan](https://mierukochan.jp/)
