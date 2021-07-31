@@ -694,23 +694,23 @@ class JahysamaDownload(Summer2021AnimeDownload, NewsTemplate):
     def download_episode_preview(self):
         try:
             soup = self.get_soup(self.PAGE_PREFIX + 'story/')
-            uls = soup.select('ul.img_thum')
-            for ul in uls:
-                images = ul.select('img')
-                if len(images) > 0:
-                    if 'ep' in images[0]['src']:
-                        try:
-                            episode = str(int(images[0]['src'].split('/')[-2].split('ep')[1])).zfill(2)
-                        except Exception:
-                            continue
-                        if self.is_image_exists(episode + '_1'):
-                            continue
-                        self.image_list = []
-                        for i in range(len(images)):
-                            image_url = self.PAGE_PREFIX + images[i]['src'].replace('../', '')
-                            image_name = episode + '_' + str(i + 1)
-                            self.add_to_image_list(image_name, image_url)
-                        self.download_image_list(self.base_folder)
+            divs = soup.select('div.box_story')
+            for div in divs:
+                num = div.find('div', class_='story_ttl_num')
+                if num:
+                    try:
+                        episode = str(int(num.text.strip().replace('#', ''))).zfill(2)
+                    except Exception:
+                        continue
+                    if self.is_image_exists(episode + '_1'):
+                        continue
+                    self.image_list = []
+                    images = div.select('ul.img_thum img')
+                    for i in range(len(images)):
+                        image_url = self.PAGE_PREFIX + images[i]['src'].replace('../', '')
+                        image_name = episode + '_' + str(i + 1)
+                        self.add_to_image_list(image_name, image_url)
+                    self.download_image_list(self.base_folder)
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
