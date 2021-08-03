@@ -690,6 +690,7 @@ class JahysamaDownload(Summer2021AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -745,6 +746,40 @@ class JahysamaDownload(Summer2021AnimeDownload, NewsTemplate):
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + ' - Character')
             print(e)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        product_url = self.PAGE_PREFIX + 'products/'
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        try:
+            soup = self.get_soup(product_url)
+            a_tags = soup.select('ol.list_goods li a')
+            for a_tag in a_tags:
+                if a_tag.has_attr('href') and a_tag['href'] not in processed:
+                    top_image = a_tag.find('img')
+                    if top_image.has_attr('src') and 'nowprinting' not in top_image['src']:
+                        self.image_list = []
+                        top_image_url = self.PAGE_PREFIX + top_image['src'].replace('../', '')
+                        top_image_name = self.extract_image_name_from_url(top_image_url)
+                        self.add_to_image_list(top_image_name, top_image_url)
+                        page_name = a_tag['href']
+                        page_url = product_url + page_name
+                        page_soup = self.get_soup(page_url)
+                        if page_soup:
+                            images = page_soup.select('dd.img img')
+                            for image in images:
+                                if image.has_attr('src') and 'nowprinting' not in image['src']:
+                                    image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                                    image_name = self.extract_image_name_from_url(image_url)
+                                    self.add_to_image_list(image_name, image_url)
+                        if len(self.image_list) > 1:
+                            self.download_image_list(folder)
+                            processed.append(page_name)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Media')
+            print(e)
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Kanojo mo Kanojo
