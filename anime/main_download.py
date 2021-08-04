@@ -34,6 +34,27 @@ class MainDownload:
             os.makedirs(path)
         self.create_meta_data(refresh=True)
 
+    def download_episode_preview(self):
+        pass
+
+    def download_episode_preview_guess(self):
+        pass
+
+    def download_episode_preview_external(self):
+        pass
+
+    def download_news(self):
+        pass
+
+    def download_key_visual(self):
+        pass
+
+    def download_character(self):
+        pass
+
+    def download_media(self):
+        pass
+
     @classmethod
     def get_full_path(cls):
         if cls is MainDownload:
