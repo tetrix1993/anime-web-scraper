@@ -1685,6 +1685,8 @@ class SeireiGensoukiDownload(Summer2021AnimeDownload, NewsTemplate):
                 for image in images:
                     if image.has_attr('src') and len(image['src'].strip()) > 0:
                         image_url = image['src']
+                        if self.is_matching_content_length(image_url, 15367):  # Skip Now Printing
+                            continue
                         image_name = self.extract_image_name_from_url(image_url)
                         self.add_to_image_list(image_name, image_url)
                 self.download_image_list(folder)
