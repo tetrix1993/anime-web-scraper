@@ -103,6 +103,7 @@ The premiere date for the anime listed here has not been announced.
 * [Soredemo Ayumu wa Yosetekuru](https://soreayu.com/)
 
 ### Spring 2022 Anime
+* [Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan wo Erandeiraremasen 3rd Season](http://booklove-anime.jp/)
 * [Tate no Yuusha no Nariagari 2nd Season](http://shieldhero-anime.jp)
 
 ### Winter 2022 Anime
