@@ -758,7 +758,8 @@ class JahysamaDownload(Summer2021AnimeDownload, NewsTemplate):
             for a_tag in a_tags:
                 if a_tag.has_attr('href') and a_tag['href'] not in processed:
                     top_image = a_tag.find('img')
-                    if top_image.has_attr('src') and 'nowprinting' not in top_image['src']:
+                    if (top_image.has_attr('src') and 'nowprinting' not in top_image['src']) \
+                            or a_tag['href'].endswith('bd-06'):
                         self.image_list = []
                         top_image_url = self.PAGE_PREFIX + top_image['src'].replace('../', '')
                         top_image_name = self.extract_image_name_from_url(top_image_url)
@@ -767,15 +768,36 @@ class JahysamaDownload(Summer2021AnimeDownload, NewsTemplate):
                         page_url = product_url + page_name
                         page_soup = self.get_soup(page_url)
                         if page_soup:
-                            images = page_soup.select('dd.img img')
-                            for image in images:
-                                if image.has_attr('src') and 'nowprinting' not in image['src']:
-                                    image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
-                                    image_name = self.extract_image_name_from_url(image_url)
-                                    self.add_to_image_list(image_name, image_url)
+                            if page_name.endswith('bd-06'):
+                                images = page_soup.select('div.bonus_item img')
+                                for image in images:
+                                    if image.has_attr('src'):
+                                        image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                                        if self.is_matching_content_length(image_url, 43374):
+                                            continue
+                                        image_name = self.extract_image_name_from_url(image_url)
+                                        if self.is_image_exists(image_name, folder):
+                                            if not self.is_content_length_same_as_existing(
+                                                    image_url, image_name, folder):
+                                                print(f'{self.__class__.__name__} - {image_name} has different size')
+                                            continue
+                                        self.add_to_image_list(image_name, image_url)
+                            else:
+                                images = page_soup.select('dd.img img') + page_soup.select('div.img_right img')
+                                for image in images:
+                                    if image.has_attr('src') and 'nowprinting' not in image['src']:
+                                        image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                                        image_name = self.extract_image_name_from_url(image_url)
+                                        if self.is_image_exists(image_name, folder):
+                                            if 'bd-' in page_name[-5:] and not self.is_content_length_same_as_existing(
+                                                    image_url, image_name, folder):
+                                                print(f'{self.__class__.__name__} - {image_name} has different size')
+                                            continue
+                                        self.add_to_image_list(image_name, image_url)
                         if len(self.image_list) > 1:
                             self.download_image_list(folder)
-                            processed.append(page_name)
+                            if not page_name.startswith('detail.php?p=1&id=bd-'):
+                                processed.append(page_name)
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + ' - Media')
             print(e)

@@ -800,6 +800,25 @@ class MainDownload:
             pass
         return False
 
+    def is_content_length_same_as_existing(self, url, name, filepath=None):
+        if filepath is None:
+            filepath = self.base_folder
+        filename = filepath + '/' + name
+        filename_with_extension = ''
+        for ext in ['jpg', 'png', 'gif', 'webp']:
+            if os.path.exists(filename + '.' + ext):
+                filename_with_extension = filename + '.' + ext
+                break
+        if len(filename_with_extension) == 0:
+            return False
+        try:
+            existing_length = os.path.getsize(filename_with_extension)
+            content_length = int(requests.head(url).headers['Content-Length'])
+        except Exception as e:
+            print(e)
+            return False
+        return existing_length == content_length
+
     @staticmethod
     def clear_resize_in_url(url):
         # Change url in the form http://abc.com/image_name-800x600.jpg to http://abc.com/image-name.jpg
