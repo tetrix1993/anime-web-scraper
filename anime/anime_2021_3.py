@@ -681,12 +681,15 @@ class JahysamaDownload(Summer2021AnimeDownload, NewsTemplate):
     folder_name = 'jahysama'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 20
+    IMAGES_PER_EPISODE = 4
 
     def __init__(self):
         super().__init__()
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_guess()
         self.download_news()
         self.download_key_visual()
         self.download_character()
@@ -715,6 +718,33 @@ class JahysamaDownload(Summer2021AnimeDownload, NewsTemplate):
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
+
+    def download_episode_preview_guess(self):
+        folder = self.create_custom_directory('guess')
+        template = self.PAGE_PREFIX + 'img/story/ep%s/img%s.jpg'
+        is_successful = False
+        for i in range(self.FINAL_EPISODE):
+            episode = str(i + 1).zfill(2)
+            is_success = False
+            if self.is_image_exists(episode + '_1'):
+                continue
+            for j in range(self.IMAGES_PER_EPISODE):
+                image_url = template % (episode, str(j + 1).zfill(2))
+                image_name = episode + '_' + str(j + 1)
+                result = self.download_image(image_url, folder + '/' + image_name)
+                if result == 0:
+                    print(self.__class__.__name__ + ' - Guessed successfully!')
+                    is_success = True
+                    is_successful = True
+                elif result == -1:
+                    break
+            if not is_success:
+                if len(os.listdir(folder)) == 0:
+                    os.rmdir(folder)
+                return
+        if len(os.listdir(folder)) == 0:
+            os.rmdir(folder)
+        return is_successful
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.news_list_item',
