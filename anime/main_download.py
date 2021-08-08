@@ -908,13 +908,17 @@ class MainDownload:
             self.image_list.clear()
 
     def download_by_template(self, folder, template, zfill=1, start=1, end=99, headers=None,
-                             to_jpg=False, is_mocanews=False, min_width=None, max_skip=0, prefix=''):
+                             to_jpg=False, is_mocanews=False, min_width=None, max_skip=0, prefix='',
+                             save_zfill=None):
         if isinstance(template, str):
             templates = [template]
         elif isinstance(template, list):
             templates = template
         else:
             raise Exception('Unexpected type for template')
+
+        if save_zfill is None:
+            save_zfill = zfill
 
         i = start - 1
         success = False
@@ -924,7 +928,8 @@ class MainDownload:
             i += 1
             for template_ in templates:
                 image_url = template_ % str(i).zfill(zfill)
-                image_name = prefix + self.extract_image_name_from_url(image_url, with_extension=False)
+                saved_url = template_ % str(i).zfill(save_zfill)  # For the purpose of saved image name
+                image_name = prefix + self.extract_image_name_from_url(saved_url, with_extension=False)
                 if self.is_image_exists(image_name, folder):
                     success_count += 1
                     skip_remaining = max_skip

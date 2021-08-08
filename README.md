@@ -89,7 +89,6 @@ The premiere date for the anime listed here has not been announced.
 * [Kakkou no Iinazuke](https://cuckoos-anime.com/)
 * [Kenja no Deshi wo Nanoru Kenja](https://kendeshi-anime.com/)
 * [Kono Healer, Mendokusai](https://kono-healer-anime.com/)
-* [Leadale no Daichi nite](https://leadale.net/)
 * [Maou Gakuin no Futekigousha: Shijou Saikyou no Maou no Shiso, Tensei shite Shison-tachi no Gakkou e 2nd Season](https://maohgakuin.com/)
 * [Princess Connect! Re:Dive 2nd Season](https://anime.priconne-redive.jp)
 * [Shikkakumon no Saikyou Kenja](https://shikkakumon.com/)
@@ -108,6 +107,7 @@ The premiere date for the anime listed here has not been announced.
 
 ### Winter 2022 Anime
 * [Arifureta Shokugyou de Sekai Saikyou 2nd Season](https://arifureta.com/)
+* [Leadale no Daichi nite](https://leadale.net/)
 * [Slow Loop](https://slowlooptv.com/)
 
 ### Fall 2021 Anime

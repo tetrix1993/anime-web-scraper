@@ -1,11 +1,12 @@
 import os
 import anime.constants as constants
-from anime.main_download import MainDownload
+from anime.main_download import MainDownload, NewsTemplate3
 from datetime import datetime
 from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 
 
 # Arifureta Shokugyou de Sekai Saikyou 2nd Season https://arifureta.com/ #ありふれた #ARIFURETA @ARIFURETA_info
+# Leadale no Daichi nite https://leadale.net/ #leadale #リアデイル @leadale_anime
 # Slow Loop https://slowlooptv.com/ #slowloop @slowloop_tv
 
 
@@ -93,6 +94,51 @@ class Arifureta2Download(Winter2022AnimeDownload):
         self.add_to_image_list('kv1', self.PAGE_PREFIX + 'wp-content/uploads/2021/04/02.jpg')
         self.add_to_image_list('kv1_art', self.PAGE_PREFIX + 'wp-content/uploads/2021/04/03.jpg')
         self.download_image_list(folder)
+
+
+# Leadale no Daichi nite
+class LeadaleDownload(Winter2022AnimeDownload, NewsTemplate3):
+    title = 'Leadale no Daichi nite'
+    keywords = [title, 'World of Leadale']
+    website = 'https://leadale.net/'
+    twitter = 'leadale_anime'
+    hashtags = ['leadale', 'リアデイル']
+    folder_name = 'leadale'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_character()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(self.PAGE_PREFIX)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'assets/character/c/%s.png'
+        self.download_by_template(folder, template, 1, 1, prefix='c', save_zfill=2)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('kv1', self.PAGE_PREFIX + 'assets/top/main-t1/vis.jpg')
+        self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/Ezi8NqIVkAMv0Yv?format=jpg&name=medium')
+        self.add_to_image_list('kv2_tw', 'https://pbs.twimg.com/media/E8Ouua3UUAIFSvH?format=jpg&name=medium')
+        self.download_image_list(folder)
+
+        template = self.PAGE_PREFIX + 'assets/news/kv-t%s.jpg'
+        template2 = self.PAGE_PREFIX + 'assets/special/vis/%s.jpg'
+        self.download_by_template(folder, template, 1, 1)
+        self.download_by_template(folder, template2, 1, 1, prefix='kv_s')
 
 
 # Slow Loop
