@@ -53,10 +53,11 @@ class HyakumanNoInochi2Download(Summer2021AnimeDownload, NewsTemplate):
 
     def run(self):
         self.download_episode_preview()
-        self.download_episode_preview_external()
+        # self.download_episode_preview_external()
         self.download_episode_preview_guess()
         self.download_news()
         self.download_key_visual()
+        self.download_character()
 
     def download_episode_preview(self):
         story_url = self.PAGE_PREFIX + '/story/'
@@ -107,14 +108,34 @@ class HyakumanNoInochi2Download(Summer2021AnimeDownload, NewsTemplate):
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article.c-news-item',
-                                   date_select='span.c-news-item__date', title_select='span.c-news-item__title',
-                                   id_select='a', a_tag_prefix=self.PAGE_PREFIX, stop_date='2020',
-                                   next_page_select='ul.page-numbers li a.next.page-numbers')
+                                    date_select='span.c-news-item__date', title_select='span.c-news-item__title',
+                                    id_select='a', a_tag_prefix=self.PAGE_PREFIX, stop_date='2020',
+                                    next_page_select='ul.page-numbers li a.next.page-numbers')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
-        self.add_to_image_list('teaser', self.PAGE_PREFIX + '/img/home/visual_03.jpg')
-        self.download_image_list(folder)
+        template = self.PAGE_PREFIX + '/img/home/visual_%s.jpg'
+        self.download_by_template(folder, template, 2, 1)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        chara_url = self.PAGE_PREFIX + '/character/'
+        try:
+            json_obj = self.get_json(chara_url + 'chara_data.php')
+            image_keys = ['visual_pc', 'bg_pc']
+            for chara in json_obj['charas']:
+                if 'images' in chara:
+                    images = chara['images']
+                    self.image_list = []
+                    for key in image_keys:
+                        if key in images:
+                            image_url = chara_url + images[key].split('?')[0]
+                            image_name = self.extract_image_name_from_url(image_url)
+                            self.add_to_image_list(image_name, image_url)
+                    self.download_image_list(folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
 
 # Bokutachi no Remake
