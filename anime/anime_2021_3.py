@@ -1299,7 +1299,7 @@ class MegamiryouDownload(Summer2021AnimeDownload, NewsTemplate2):
             if self.is_image_exists(episode + '_1'):
                 continue
             first = 20 + i
-            second = 36 + 6 * i
+            second = 38 + 4 * i
             third = 40 + 6 * i
             for j in range(self.IMAGES_PER_EPISODE):
                 image_url = template % (str(first).zfill(8), str(second).zfill(8), str(third + j).zfill(8))
