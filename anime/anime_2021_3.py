@@ -204,6 +204,7 @@ class BokuremaDownload(Summer2021AnimeDownload, NewsTemplate):
         for i in range(self.FINAL_EPISODE):
             if self.is_image_exists(month + '_' + str(i) + '_1', folder):
                 continue
+            stop = False
             for j in range(len(img_names)):
                 if i == 0:
                     image_url = template % (month, img_names[j])
@@ -212,8 +213,11 @@ class BokuremaDownload(Summer2021AnimeDownload, NewsTemplate):
                 image_name = month + '_' + str(i) + '_' + str(j + 1)
                 result = self.download_image(image_url, folder + '/' + image_name)
                 if result == -1:
-                    return is_successful
+                    stop = True
+                    break
                 is_successful = True
+            if stop:
+                break
         if is_successful:
             print(self.__class__.__name__ + ' - Guessed correctly!')
         return is_successful
@@ -1966,11 +1970,11 @@ class AquatopeDownload(Summer2021AnimeDownload, NewsTemplate):
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_guess()
         self.download_news()
         self.download_key_visual()
         self.download_character()
         self.download_media()
-        # self.download_episode_preview_guess()
 
     def download_episode_preview(self):
         try:
@@ -2002,25 +2006,30 @@ class AquatopeDownload(Summer2021AnimeDownload, NewsTemplate):
 
     def download_episode_preview_guess(self):
         folder = self.create_custom_directory('guess')
-        template = self.PAGE_PREFIX + 'wp/wp-content/uploads/2021/%s/UT%s_%s@2x.jpg'
+        template = self.PAGE_PREFIX + 'wp/wp-content/uploads/2021/%s/%s.jpg'
         month = (datetime.now() + timedelta(hours=1)).strftime('%m')
+        is_successful = False
         for i in range(self.FINAL_EPISODE):
-            episode = str(i + 1).zfill(2)
-            if self.is_image_exists(f'{episode}_1'):
+            if self.is_image_exists(month + '_' + str(i) + '_1', folder):
                 continue
-            success_count = 0
-            for j in range(301):
-                image_url = template % (month, episode, str(j).zfill(6))
-                print(image_url)
-                image_name = self.extract_image_name_from_url(image_url)
-                if self.is_image_exists(image_name, folder):
-                    success_count += 1
-                    continue
+            stop = False
+            for j in range(self.IMAGES_PER_EPISODE):
+                img_name = str(j + 1).zfill(2)
+                if i == 0:
+                    image_url = template % (month, img_name)
+                else:
+                    image_url = template % (month, img_name + '-' + str(i))
+                image_name = month + '_' + str(i) + '_' + str(j + 1)
                 result = self.download_image(image_url, folder + '/' + image_name)
-                if result == -1 and success_count == 0 and j == 50:
+                if result == -1:
+                    stop = True
                     break
-            if success_count == 0:
+                is_successful = True
+            if stop:
                 break
+        if is_successful:
+            print(self.__class__.__name__ + ' - Guessed correctly!')
+        return is_successful
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article.md-archive__news',
