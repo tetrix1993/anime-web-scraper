@@ -423,13 +423,13 @@ class AnsatsuKizokuDownload(Fall2021AnimeDownload):
 
 
 # Senpai ga Uzai Kouhai no Hanashi
-class SenpaigaUzaiDownload(Fall2021AnimeDownload):
+class SenpaigaUzaiDownload(Fall2021AnimeDownload, NewsTemplate):
     title = 'Senpai ga Uzai Kouhai no Hanashi'
     keywords = [title]
     website = 'https://senpaiga-uzai-anime.com/'
     twitter = 'uzai_anime'
     hashtags = '先輩がうざい後輩の話'
-    folder_name = 'senpaiga-uzai'
+    folder_name = 'senpaigauzai'
 
     PAGE_PREFIX = website
 
@@ -440,48 +440,29 @@ class SenpaigaUzaiDownload(Fall2021AnimeDownload):
         self.download_episode_preview()
         self.download_news()
         self.download_key_visual()
+        self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
 
     def download_news(self):
-        news_url = self.PAGE_PREFIX + 'news/'
-        try:
-            soup = self.get_soup(news_url, decode=True)
-            articles = soup.select('article.article_contents article')
-            news_obj = self.get_last_news_log_object()
-            results = []
-            for article in articles:
-                if not article.has_attr('id'):
-                    continue
-                tag_date = article.find('time')
-                tag_title = article.find('h3')
-                if tag_date and tag_title:
-                    article_id = article['id']
-                    date = self.format_news_date(tag_date.text)
-                    if len(date) == 0:
-                        continue
-                    title = tag_title.text
-                    if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
-                        break
-                    results.append(self.create_news_log_object(date, title, article_id))
-            success_count = 0
-            for result in reversed(results):
-                process_result = self.create_news_log_from_news_log_object(result)
-                if process_result == 0:
-                    success_count += 1
-            if len(results) > 0:
-                self.create_news_log_cache(success_count, results[0])
-        except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - News')
-            print(e)
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article.foo',
+                                    date_select='time', title_select='h3', id_select=None, id_has_id=True)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         self.image_list = []
         self.add_to_image_list('main-visual', self.PAGE_PREFIX + 'img/top/main-visual.png')
         self.add_to_image_list('visual', 'https://pbs.twimg.com/media/Ez4yUbfVkAMPgny?format=jpg&name=4096x4096')
+        self.add_to_image_list('mainimg', self.PAGE_PREFIX + 'images/top/mainimg.jpg')
+        self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/E8gG12BVkAEMaF_?format=jpg&name=large')
         self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template1 = self.PAGE_PREFIX + 'images/character/img_chara_%s.png'
+        template2 = self.PAGE_PREFIX + 'images/character/img_face_%s.png'
+        self.download_by_template(folder, [template1, template2], 2, 1)
 
 
 # Shin no Nakama ja Nai to Yuusha no Party wo Oidasareta node, Henkyou de Slow Life suru Koto ni Shimashita
