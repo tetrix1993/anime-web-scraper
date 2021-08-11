@@ -289,6 +289,7 @@ class CheatKusushiDownload(Summer2021AnimeDownload):
 
     PAGE_PREFIX = website
     FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 3
 
     def __init__(self):
         super().__init__()
@@ -296,8 +297,9 @@ class CheatKusushiDownload(Summer2021AnimeDownload):
     def run(self):
         soup = self.get_soup(self.PAGE_PREFIX, decode=True)
         self.download_episode_preview(soup)
-        self.download_episode_preview_external()
         self.download_news(soup)
+        self.download_episode_preview_external()
+        self.download_episode_preview_guess()
         self.download_key_visual()
         self.download_character(soup)
         self.download_media(soup)
@@ -326,6 +328,47 @@ class CheatKusushiDownload(Summer2021AnimeDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
+
+    def download_episode_preview_guess(self):
+        folder = self.create_custom_directory('guess')
+        is_successful = False
+        existing_images = os.listdir(folder)
+        try:
+            template = self.PAGE_PREFIX + 'assets/img/st/%s/%s-%s.jpg'
+            for i in range(self.FINAL_EPISODE):
+                episode = str(i + 1).zfill(2)
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                has_existing_image = False
+                for existing_image in existing_images:
+                    if existing_image.startswith(episode + '-'):
+                        has_existing_image = True
+                        break
+                if has_existing_image:
+                    continue
+                image_count = 0
+                for j in range(200):
+                    if j > 50 and image_count == 0:
+                        break
+                    image_url = template % (episode, episode, str(j).zfill(3))
+                    image_name = folder + '/' + self.extract_image_name_from_url(image_url)
+                    result = self.download_image(image_url, image_name)
+                    if result == -1:
+                        continue
+                    else:
+                        image_count += 1
+                    if image_count == 3:
+                        break
+                if image_count == 0:
+                    break
+                else:
+                    is_successful = True
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Guess')
+            print(e)
+        if is_successful:
+            print(self.__class__.__name__ + ' - Guessed correctly!')
+        return is_successful
 
     def download_episode_preview_external(self):
         jp_title = 'チート薬師のスローライフ'
