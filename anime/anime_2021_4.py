@@ -529,10 +529,10 @@ class ShinnoNakamaDownload(Fall2021AnimeDownload):
 
 
 # Shinka no Mi: Shiranai Uchi ni Kachigumi Jinsei
-class ShinkanomiDownload(Fall2021AnimeDownload):
+class ShinkanomiDownload(Fall2021AnimeDownload, NewsTemplate):
     title = 'Shinka no Mi: Shiranai Uchi ni Kachigumi Jinsei'
     keywords = [title, 'Shinkanomi']
-    website = 'https://www.shinkanomi-anime.com/'
+    website = 'https://www.shinkanomi-anime.com'
     twitter = 'shinkanomianime'
     hashtags = ['進化の実', '勝ち組人生', 'ゴリラ系女子']
     folder_name = 'shinkanomi'
@@ -546,18 +546,40 @@ class ShinkanomiDownload(Fall2021AnimeDownload):
         self.download_episode_preview()
         self.download_news()
         self.download_key_visual()
+        self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
 
     def download_news(self):
-        pass
+        # Paging logic may be wrong
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='ul.news-list li.news-list__item',
+                                    date_select='span.news-list__date', title_select='h2.news-list__title',
+                                    id_select='a', next_page_select='div.pagination div.next',
+                                    next_page_eval_index_class='off', next_page_eval_index=0)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         self.image_list = []
         self.add_to_image_list('teaser', 'https://pbs.twimg.com/media/E52FLnzUcAEMg80?format=jpg&name=medium')
+        self.add_to_image_list('kv1_1', self.PAGE_PREFIX + '/cms/wp-content/uploads/2021/08/2.jpg')
+        self.add_to_image_list('kv1_2', self.PAGE_PREFIX + '/cms/wp-content/uploads/2021/08/3.jpg')
         self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + '/character/')
+            images = soup.select('ul.character-list img')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src']
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Character')
+            print(e)
 
 
 # Taishou Otome Otogibanashi
