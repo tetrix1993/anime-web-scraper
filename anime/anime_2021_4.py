@@ -7,7 +7,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 
 # Isekai Shokudou 2 https://isekai-shokudo2.com/ #異世界食堂 @nekoya_PR
 # Kaizoku Oujo http://fena-pirate-princess.com/ #海賊王女 @fena_pirate
-# Komi-san wa, Komyushou desu. https://komisan-official.com/ #古見さん #komisan @comisanvote
+# Komi-san wa, Comyushou desu. https://komisan-official.com/ #古見さん #komisan @comisanvote
 # Mieruko-chan https://mierukochan.jp/ #見える子ちゃん @mierukochan_PR
 # Muv-Luv Alternative https://muv-luv-alternative-anime.com/ #マブラヴ #マブラヴアニメ #muvluv @Muv_Luv_A_anime
 # Saihate no Paladin https://farawaypaladin.com/ #最果てのパラディン #faraway_paladin @faraway_paladin
@@ -114,9 +114,9 @@ class KaizokuOujoDownload(Fall2021AnimeDownload, NewsTemplate):
             i += 1
 
 
-# Komi-san wa, Komyushou desu.
-class KomisanDownload(Fall2021AnimeDownload):
-    title = 'Komi-san wa, Komyushou desu.'
+# Komi-san wa, Comyushou desu.
+class KomisanDownload(Fall2021AnimeDownload, NewsTemplate):
+    title = 'Komi-san wa, Comyushou desu.'
     keywords = [title, 'Comyushou', "Komi Can't Communicate", 'komisan']
     website = 'https://komisan-official.com/'
     twitter = 'comisanvote'
@@ -135,51 +135,11 @@ class KomisanDownload(Fall2021AnimeDownload):
         self.has_website_updated(self.PAGE_PREFIX, 'index', diff=2)
 
     def download_news(self):
-        news_url = self.PAGE_PREFIX + 'news/'
-        stop = False
-        try:
-            results = []
-            news_obj = self.get_last_news_log_object()
-            for page in range(1, 2, 1):
-                page_url = news_url
-                if page > 1:
-                    page_url = news_url + 'page/' + str(page) + '/'
-                soup = self.get_soup(page_url, decode=True)
-                articles = soup.select('article.news-item')
-                for article in articles:
-                    tag_date = article.find('span', class_='news-item__date')
-                    tag_title = article.find('span', class_='news-item__title')
-                    a_tag = article.find('a')
-                    if tag_date and tag_title and a_tag.has_attr('href'):
-                        if a_tag['href'].startswith('/'):
-                            article_id = self.PAGE_PREFIX + a_tag['href'][1:]
-                        else:
-                            article_id = self.PAGE_PREFIX + a_tag['href']
-                        date = self.format_news_date(tag_date.text.strip())
-                        if len(date) == 0:
-                            continue
-                        title = ' '.join(tag_title.text.split())
-                        if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
-                            stop = True
-                            break
-                        results.append(self.create_news_log_object(date, title, article_id))
-                if stop:
-                    break
-                # pagination = soup.select('ul.c-pagenation li.c-pagenation__item')
-                # if len(pagination) == 0:
-                #     break
-                # if pagination[-1].has_attr('class') and 'is__current' in pagination[-1]['class']:
-                #     break
-            success_count = 0
-            for result in reversed(results):
-                process_result = self.create_news_log_from_news_log_object(result)
-                if process_result == 0:
-                    success_count += 1
-            if len(results) > 0:
-                self.create_news_log_cache(success_count, results[0])
-        except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - News')
-            print(e)
+        # Paging logic may be wrong
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article.news-item',
+                                    date_select='span.news-item__date', title_select='span.news-item__title',
+                                    id_select='a.news-item__link', a_tag_prefix=self.PAGE_PREFIX,
+                                    a_tag_start_text_to_remove='/', next_page_select='i.i-dot-arrow-r-12')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
