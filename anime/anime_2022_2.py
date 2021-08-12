@@ -2,6 +2,7 @@ import requests
 from anime.main_download import MainDownload, NewsTemplate
 
 
+# Aharen-san wa Hakarenai https://aharen-pr.com/ #阿波連さん @aharen_pr
 # Honzuki S3 http://booklove-anime.jp/story/ #本好きの下剋上 @anime_booklove
 # Tate no Yuusha S2 http://shieldhero-anime.jp/ #shieldhero #盾の勇者の成り上がり @shieldheroanime
 
@@ -14,6 +15,61 @@ class Spring2022AnimeDownload(MainDownload):
 
     def __init__(self):
         super().__init__()
+
+
+# Aharen-san wa Hakarenai
+class AharensanDownload(Spring2022AnimeDownload, NewsTemplate):
+    title = 'Aharen-san wa Hakarenai'
+    keywords = [title]
+    website = 'https://aharen-pr.com/'
+    twitter = 'aharen_pr'
+    hashtags = '阿波連さん'
+    folder_name = 'aharensan'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        # Paging logic might be wrong
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article.md-news__li',
+                                    date_select='time', title_select='h3', id_select='a', date_separator='.&nbsp;',
+                                    next_page_select='ul.pagenation-list li',
+                                    next_page_eval_index_class='is__current', next_page_eval_index=-1)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz', self.PAGE_PREFIX + 'wp/wp-content/themes/aharen-teaser/_assets/images/kv/kv_pc.jpg')
+        # self.add_to_image_list('tz_2', self.PAGE_PREFIX + 'wp/wp-content/uploads/2021/07/阿波連さんははかれない_ティザービジュアル.jpg')
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/E7ohr6yVIAEQI6z?format=jpg&name=large')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        self.image_list = []
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('picture.chardetail--img img')
+            for image in images:
+                if image.has_attr('src'):
+                    image_url = image['src']
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Character')
+            print(e)
+        self.download_image_list(folder)
 
 
 # Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan wo Erandeiraremasen 3rd Season
