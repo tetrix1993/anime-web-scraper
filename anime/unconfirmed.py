@@ -19,7 +19,6 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Shokei Shoujo no Virgin Road http://virgin-road.com/ #処刑少女 #shokei_anime @VirginroadAnime
 # Shuumatsu no Harem https://end-harem-anime.com/ #終末のハーレム @harem_official_
 # Summertime Render https://summertime-anime.com/ #サマータイムレンダ #サマレン @summertime_PR
-# Tensai Ouji no Akaji Kokka Saisei Jutsu: Souda, Baikoku shiyou https://tensaiouji-anime.com/ #天才王子の赤字国家再生術 @tensaiouji_PR
 # Vlad Love https://www.vladlove.com/index.html #ぶらどらぶ #vladlove @VLADLOVE_ANIME
 # Yama no Susume: Next Summit https://yamanosusume-ns.com/ #ヤマノススメ @yamanosusume
 
@@ -976,38 +975,6 @@ class SummertimeRenderDownload(UnconfirmedDownload, NewsTemplate):
         self.image_list = []
         self.add_to_image_list('tz', self.PAGE_PREFIX + 'wp/wp-content/themes/summertime-teaser/_assets/images/kv/kv_pc.jpg')
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/E63h3z-VEAMtJYy?format=jpg&name=medium')
-        self.download_image_list(folder)
-
-
-# Tensai Ouji no Akaji Kokka Saisei Jutsu: Souda, Baikoku shiyou
-class TensaiOujiDownload(UnconfirmedDownload, NewsTemplate2):
-    title = 'Tensai Ouji no Akaji Kokka Saisei Jutsu: Souda, Baikoku shiyou'
-    keywords = [title, 'tensaiouji']
-    website = 'https://tensaiouji-anime.com/'
-    twitter = 'tensaiouji_PR'
-    hashtags = '天才王子の赤字国家再生術'
-    folder_name = 'tensaiouji'
-
-    PAGE_PREFIX = website
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_news()
-        self.download_key_visual()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_news(self):
-        self.download_template_news(self.PAGE_PREFIX, 'news/list00010000.html')
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('kv', self.PAGE_PREFIX + 'core_sys/images/main/home/kv.jpg')
         self.download_image_list(folder)
 
 

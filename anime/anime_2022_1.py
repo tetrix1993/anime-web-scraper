@@ -1,6 +1,6 @@
 import os
 import anime.constants as constants
-from anime.main_download import MainDownload, NewsTemplate3
+from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsTemplate3
 from datetime import datetime
 from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 
@@ -8,6 +8,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 # Arifureta Shokugyou de Sekai Saikyou 2nd Season https://arifureta.com/ #ありふれた #ARIFURETA @ARIFURETA_info
 # Leadale no Daichi nite https://leadale.net/ #leadale #リアデイル @leadale_anime
 # Slow Loop https://slowlooptv.com/ #slowloop @slowloop_tv
+# Tensai Ouji no Akaji Kokka Saisei Jutsu: Souda, Baikoku shiyou https://tensaiouji-anime.com/ #天才王子 #天才王子の赤字国家再生術 @tensaiouji_PR
 
 
 # Winter 2022 Anime
@@ -202,3 +203,42 @@ class SlowLoopDownload(Winter2022AnimeDownload):
         self.add_to_image_list('teaser', self.PAGE_PREFIX + 'images/top/v_002_02.jpg')
         self.add_to_image_list('teaser_tw', 'https://pbs.twimg.com/media/E15YSghVgAIdgJf?format=jpg&name=medium')
         self.download_image_list(folder)
+
+
+# Tensai Ouji no Akaji Kokka Saisei Jutsu: Souda, Baikoku shiyou
+class TensaiOujiDownload(Winter2022AnimeDownload, NewsTemplate2):
+    title = 'Tensai Ouji no Akaji Kokka Saisei Jutsu: Souda, Baikoku shiyou'
+    keywords = [title, 'tensaiouji']
+    website = 'https://tensaiouji-anime.com/'
+    twitter = 'tensaiouji_PR'
+    hashtags = ['天才王子', '天才王子の赤字国家再生術']
+    folder_name = 'tensaiouji'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(self.PAGE_PREFIX, 'news/list00010000.html')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('kv', self.PAGE_PREFIX + 'core_sys/images/main/home/kv.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'core_sys/images/main/cont/char/c%s_%s.png'
+        templates = [template % ('%s', '01'), template % ('%s', '02')]
+        self.download_by_template(folder, templates, 2, 1)

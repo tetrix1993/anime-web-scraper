@@ -95,7 +95,6 @@ The premiere date for the anime listed here has not been announced.
 * [Shokei Shoujo no Virgin Road](http://virgin-road.com/)
 * [Shuumatsu no Harem](https://end-harem-anime.com/)
 * [Summertime Render](https://summertime-anime.com/)
-* [Tensai Ouji no Akaji Kokka Saisei Jutsu: Souda, Baikoku shiyou](https://tensaiouji-anime.com/)
 * [Yama no Susume: Next Summit](https://yamanosusume-ns.com/)
 
 ### Summer 2022 Anime
@@ -110,6 +109,7 @@ The premiere date for the anime listed here has not been announced.
 * [Arifureta Shokugyou de Sekai Saikyou 2nd Season](https://arifureta.com/)
 * [Leadale no Daichi nite](https://leadale.net/)
 * [Slow Loop](https://slowlooptv.com/)
+* [Tensai Ouji no Akaji Kokka Saisei Jutsu: Souda, Baikoku shiyou](https://tensaiouji-anime.com/)
 
 ### Fall 2021 Anime
 * [Isekai Shokudou 2](https://isekai-shokudo2.com/)
