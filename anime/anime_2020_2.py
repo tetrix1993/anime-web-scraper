@@ -900,7 +900,7 @@ class PriconneDownload(Spring2020AnimeDownload):
             chara_filepath = self.base_folder + '/' + constants.FOLDER_CHARACTER
             if not os.path.exists(chara_filepath):
                 os.makedirs(chara_filepath)
-            chara_soup = self.get_soup('https://anime.priconne-redive.jp/character/')
+            chara_soup = self.get_soup(self.PAGE_PREFIX + '/character/', decode=True)
             full_image_urls = []
             thumb_image_urls = []
             chara_names = []
@@ -908,13 +908,13 @@ class PriconneDownload(Spring2020AnimeDownload):
                 main_lis = chara_soup.find('ul', class_='main-list').find_all('li')
                 for li in main_lis:
                     chara_names.append(li.find('p', class_='name').text)
-                    full_image_urls.append(self.PAGE_PREFIX + li.find('a')['href'])
-                    thumb_image_urls.append(self.PAGE_PREFIX + li.find('img')['src'])
+                    full_image_urls.append(self.PAGE_PREFIX + li.find('a')['href'].replace('../', '/'))
+                    thumb_image_urls.append(self.PAGE_PREFIX + li.find('img')['src'].replace('../', '/'))
                 sub_lis = chara_soup.find('ul', class_='sub-list').find_all('li')
                 for li in sub_lis:
                     chara_names.append(li.find('p', class_='name').text)
-                    full_image_urls.append(self.PAGE_PREFIX + li.find('a')['href'])
-                    thumb_image_urls.append(self.PAGE_PREFIX + li.find('img')['src'])
+                    full_image_urls.append(self.PAGE_PREFIX + li.find('a')['href'].replace('../', '/'))
+                    thumb_image_urls.append(self.PAGE_PREFIX + li.find('img')['src'].replace('../', '/'))
             except:
                 pass
             if len(full_image_urls) == len(thumb_image_urls) == len(chara_names):
