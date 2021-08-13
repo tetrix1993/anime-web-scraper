@@ -90,7 +90,6 @@ The premiere date for the anime listed here has not been announced.
 * [Kenja no Deshi wo Nanoru Kenja](https://kendeshi-anime.com/)
 * [Kono Healer, Mendokusai](https://kono-healer-anime.com/)
 * [Maou Gakuin no Futekigousha: Shijou Saikyou no Maou no Shiso, Tensei shite Shison-tachi no Gakkou e 2nd Season](https://maohgakuin.com/)
-* [Princess Connect! Re:Dive 2nd Season](https://anime.priconne-redive.jp)
 * [Shikkakumon no Saikyou Kenja](https://shikkakumon.com/)
 * [Shokei Shoujo no Virgin Road](http://virgin-road.com/)
 * [Shuumatsu no Harem](https://end-harem-anime.com/)
@@ -108,6 +107,7 @@ The premiere date for the anime listed here has not been announced.
 ### Winter 2022 Anime
 * [Arifureta Shokugyou de Sekai Saikyou 2nd Season](https://arifureta.com/)
 * [Leadale no Daichi nite](https://leadale.net/)
+* [Princess Connect! Re:Dive Season 2](https://anime.priconne-redive.jp)
 * [Slow Loop](https://slowlooptv.com/)
 * [Tensai Ouji no Akaji Kokka Saisei Jutsu: Souda, Baikoku shiyou](https://tensaiouji-anime.com/)
 
@@ -237,7 +237,7 @@ The premiere date for the anime listed here has not been announced.
 * [Kingdom 3rd Season](https://kingdom-anime.com/)
 * [Otome Game no Hametsu Flag shika Nai Akuyaku Reijou ni Tensei shiteshimatta...](https://hamehura-anime.com/1st/)
 * [Nami yo Kiitekure](https://namiyo-anime.com/)
-* [Princess Connect! Re:Dive](https://anime.priconne-redive.jp)
+* [Princess Connect! Re:Dive](https://anime.priconne-redive.jp/archive/1st/)
 * [Shachou, Battle no Jikan Desu!](https://shachibato-anime.com/)
 * [Tamayomi](https://tamayomi.com)
 * [Tsugu Tsugumomo](http://tsugumomo.com/)

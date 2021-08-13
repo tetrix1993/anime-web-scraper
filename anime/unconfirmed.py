@@ -14,7 +14,6 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Kenja no Deshi wo Nanoru Kenja https://kendeshi-anime.com/ #賢でし @kendeshi_anime
 # Kono Healer, Mendokusai https://kono-healer-anime.com/ #このヒーラー @kono_healer
 # Maou Gakuin no Futekigousha 2nd Season https://maohgakuin.com/ #魔王学院 @maohgakuin
-# Princess Connect! Re:Dive S2 https://anime.priconne-redive.jp/ #アニメプリコネ #プリコネR #プリコネ @priconne_anime
 # Shikkakumon no Saikyou Kenja https://shikkakumon.com/ #失格紋 @shikkakumon_PR
 # Shokei Shoujo no Virgin Road http://virgin-road.com/ #処刑少女 #shokei_anime @VirginroadAnime
 # Shuumatsu no Harem https://end-harem-anime.com/ #終末のハーレム @harem_official_
@@ -717,72 +716,6 @@ class Maohgakuin2Download(UnconfirmedDownload):
         self.add_to_image_list('teaser', self.PAGE_PREFIX + 'assets/img/img_main.jpg')
         # self.add_to_image_list('teaser_tw', 'https://pbs.twimg.com/media/EvylQFOVkAID_0B?format=jpg&name=medium')
         self.download_image_list(folder)
-
-
-# Princess Connect! Re:Dive 2nd Season
-class Priconne2Download(UnconfirmedDownload):
-    title = "Princess Connect! Re:Dive 2nd Season"
-    keywords = [title, "Priconne"]
-    website = "https://anime.priconne-redive.jp"
-    twitter = 'priconne_anime'
-    hashtags = ['プリコネ', 'プリコネR', 'アニメプリコネ']
-    folder_name = 'priconne2'
-
-    PAGE_PREFIX = website
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_news()
-        self.download_key_visual()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_news(self):
-        news_url = self.PAGE_PREFIX + '/news/'
-        stop = False
-        try:
-            results = []
-            news_obj = self.get_last_news_log_object()
-            for page in range(1, 100, 1):
-                page_url = news_url
-                if page > 1:
-                    page_url = news_url + '?page=' + str(page)
-                soup = self.get_soup(page_url, decode=True)
-                articles = soup.select('ul.news-list li.article')
-                for article in articles:
-                    tag_date = article.find('p', class_='date')
-                    tag_title = article.find('div', class_='desc')
-                    a_tag = article.find('a')
-                    if tag_date and tag_title and a_tag and a_tag.has_attr('href'):
-                        article_id = self.PAGE_PREFIX + a_tag['href'].replace('../', '')
-                        date = tag_date.text.strip()
-                        title = tag_title.text.strip()
-                        if date.startswith('2020.08.07') or (news_obj
-                                                             and (news_obj['id'] == article_id or date < news_obj['date'])):
-                            stop = True
-                            break
-                        results.append(self.create_news_log_object(date, title, article_id))
-                if stop or len(soup.select('div.more')) == 0:
-                    break
-            success_count = 0
-            for result in reversed(results):
-                process_result = self.create_news_log_from_news_log_object(result)
-                if process_result == 0:
-                    success_count += 1
-            if len(results) > 0:
-                self.create_news_log_cache(success_count, results[0])
-        except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - News')
-            print(e)
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        image_objs = [{'name': 'teaser', 'url': self.PAGE_PREFIX + '/assets/images/top_kv.png'}]
-        self.download_image_objects(image_objs, folder)
 
 
 # Shikkakumon no Saikyou Kenja

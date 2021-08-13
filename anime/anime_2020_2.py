@@ -825,9 +825,9 @@ class PriconneDownload(Spring2020AnimeDownload):
     keywords = [title, "Priconne"]
     folder_name = 'priconne'
     
-    PAGE_PREFIX = "https://anime.priconne-redive.jp"
-    STORY_PREFIX = "https://anime.priconne-redive.jp/story/"
-    STORY_TEMPLATE = "https://anime.priconne-redive.jp/story/?id=%s"
+    PAGE_PREFIX = "https://anime.priconne-redive.jp/archive/1st"
+    STORY_PREFIX = "https://anime.priconne-redive.jp/archive/1st/story/"
+    STORY_TEMPLATE = "https://anime.priconne-redive.jp/archive/1st/story/id_%s.html"
     
     def __init__(self):
         super().__init__()
@@ -855,7 +855,7 @@ class PriconneDownload(Spring2020AnimeDownload):
                     img_list = story_soup.find('ul', class_='img-list')
                     images = img_list.find_all('img')
                     for j in range(len(images)):
-                        image_url = self.PAGE_PREFIX + images[j]['src'].replace('-840x472', '')
+                        image_url = self.PAGE_PREFIX + images[j]['src'].replace('../', '/')
                         file_path_without_extension = self.base_folder + '/' + episode + '_' + str(j + 1).zfill(2)
                         self.download_image(image_url, file_path_without_extension)
                 except:
@@ -875,21 +875,21 @@ class PriconneDownload(Spring2020AnimeDownload):
     def download_bluray(self):
         bluray_filepath = self.create_bluray_directory()
         image_objs = [
-            {'name': 'bd_1_1', 'url': 'https://anime.priconne-redive.jp/assets/data/82a6345d72fd68036496915319c326f0.png'},
+            {'name': 'bd_1_1', 'url': self.PAGE_PREFIX + '/assets/data/82a6345d72fd68036496915319c326f0.png'},
             {'name': 'bd_1_1s', 'url': 'https://pbs.twimg.com/media/EYTkbHcXQAQsR0A?format=jpg&name=900x900'},
-            {'name': 'bd_1_2', 'url': 'https://anime.priconne-redive.jp/assets/data/11323f9ee9ffc83c3151a0e18cb9b07b.png'},
+            {'name': 'bd_1_2', 'url': self.PAGE_PREFIX + '/assets/data/11323f9ee9ffc83c3151a0e18cb9b07b.png'},
             {'name': 'bd_1_2s', 'url': 'https://pbs.twimg.com/media/EYTkbHeXQAMc7YR?format=jpg&name=900x900'},
-            {'name': 'bd_2_1', 'url': 'https://anime.priconne-redive.jp/assets/data/e7ea4524bba61f75f2dcb6a256a8b83b.png'},
+            {'name': 'bd_2_1', 'url': self.PAGE_PREFIX + '/assets/data/e7ea4524bba61f75f2dcb6a256a8b83b.png'},
             {'name': 'bd_2_1s', 'url': 'https://pbs.twimg.com/media/Ebrro9AUYAIUDHy?format=png&name=900x900'},
-            {'name': 'bd_2_2', 'url': 'https://anime.priconne-redive.jp/assets/data/aaa7409d1f2c64ff3025e61576115a9a.png'},
+            {'name': 'bd_2_2', 'url': self.PAGE_PREFIX + '/assets/data/aaa7409d1f2c64ff3025e61576115a9a.png'},
             {'name': 'bd_2_2s', 'url': 'https://pbs.twimg.com/media/Ebr7kB6U0AEMNBK?format=png&name=900x900'},
-            {'name': 'bd_3_1', 'url': 'https://anime.priconne-redive.jp/assets/data/c9224cfde16f25a941a6cc46e3779f93.jpg'},
+            {'name': 'bd_3_1', 'url': self.PAGE_PREFIX + '/assets/data/c9224cfde16f25a941a6cc46e3779f93.jpg'},
             {'name': 'bd_3_1s', 'url': 'https://pbs.twimg.com/media/EfTYv2aUYAABOhK?format=png&name=900x900'},
-            {'name': 'bd_3_2', 'url': 'https://anime.priconne-redive.jp/assets/data/2b6a06cdd66432d9e2541fbad3c97b97.jpg'},
+            {'name': 'bd_3_2', 'url': self.PAGE_PREFIX + '/assets/data/2b6a06cdd66432d9e2541fbad3c97b97.jpg'},
             {'name': 'bd_3_2s', 'url': 'https://pbs.twimg.com/media/EfTYzgSUEAIZOK_?format=png&name=900x900'},
-            {'name': 'bd_4_1', 'url': 'https://anime.priconne-redive.jp/assets/data/28431f86423342f51c2b2fc0fdf810f3.jpg'},
+            {'name': 'bd_4_1', 'url': self.PAGE_PREFIX + '/assets/data/28431f86423342f51c2b2fc0fdf810f3.jpg'},
             {'name': 'bd_4_1s', 'url': 'https://pbs.twimg.com/media/EjiJrg1VcAAc5fX?format=png&name=900x900'},
-            {'name': 'bd_4_2', 'url': 'https://anime.priconne-redive.jp/assets/data/9ad0b1ee801f23d0abdcdcea33a7d45a.png'},
+            {'name': 'bd_4_2', 'url': self.PAGE_PREFIX + '/assets/data/9ad0b1ee801f23d0abdcdcea33a7d45a.png'},
             {'name': 'bd_4_2s', 'url': 'https://pbs.twimg.com/media/EjiJrrMU0AEvHIX?format=png&name=900x900'},
         ]
         self.download_image_objects(image_objs, bluray_filepath)

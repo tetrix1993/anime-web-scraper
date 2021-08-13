@@ -7,6 +7,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 
 # Arifureta Shokugyou de Sekai Saikyou 2nd Season https://arifureta.com/ #ありふれた #ARIFURETA @ARIFURETA_info
 # Leadale no Daichi nite https://leadale.net/ #leadale #リアデイル @leadale_anime
+# Princess Connect! Re:Dive S2 https://anime.priconne-redive.jp/ #アニメプリコネ #プリコネR #プリコネ #アニメプリコネR @priconne_anime
 # Slow Loop https://slowlooptv.com/ #slowloop @slowloop_tv
 # Tensai Ouji no Akaji Kokka Saisei Jutsu: Souda, Baikoku shiyou https://tensaiouji-anime.com/ #天才王子 #天才王子の赤字国家再生術 @tensaiouji_PR
 
@@ -140,6 +141,44 @@ class LeadaleDownload(Winter2022AnimeDownload, NewsTemplate3):
         template2 = self.PAGE_PREFIX + 'assets/special/vis/%s.jpg'
         self.download_by_template(folder, template, 1, 1)
         self.download_by_template(folder, template2, 1, 1, prefix='kv_s')
+
+
+# Princess Connect! Re:Dive Season 2
+class Priconne2Download(Winter2022AnimeDownload, NewsTemplate):
+    title = "Princess Connect! Re:Dive Season 2"
+    keywords = [title, "Priconne"]
+    website = "https://anime.priconne-redive.jp/"
+    twitter = 'priconne_anime'
+    hashtags = ['プリコネ', 'プリコネR', 'アニメプリコネ', 'アニメプリコネR']
+    folder_name = 'priconne2'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='ul.newsList li',
+                                    date_select='time', title_select='div.desc', id_select='a')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('teaser', self.PAGE_PREFIX + 'assets/images/top_kv.png')
+        self.add_to_image_list('kv_bg_pc', self.PAGE_PREFIX + 'assets/images/top/kv_bg_pc.png')
+        self.add_to_image_list('kv1', self.PAGE_PREFIX + 'app/wp-content/uploads/2021/08/b34c29383da0e37a1104e94492001b1a.png')
+        self.download_image_list(folder)
+
+        template = self.PAGE_PREFIX + 'assets/images/top/kv_chara%s_pc.png'
+        self.download_by_template(folder, template, 2, 1, 4)
 
 
 # Slow Loop
