@@ -1157,7 +1157,14 @@ class MushokuTenseiDownload(Winter2021AnimeDownload):
         self.add_to_image_list('bs11_poster', 'https://pbs.twimg.com/media/Ep9v3c4U8AISWC6?format=jpg&name=medium')
         self.add_to_image_list('kv3', self.PAGE_PREFIX + '/wp-content/themes/mushoku_re/img/index/img_hero03.jpg')
         self.add_to_image_list('kv3_tw', 'https://pbs.twimg.com/media/E1vURM6VUAA24JR?format=jpg&name=900x900')
+
+        # 2nd cour
+        self.add_to_image_list('kv4_tw', 'https://pbs.twimg.com/media/E85p5ymUcAEolHS?format=jpg&name=medium')
+        
         self.download_image_list(folder)
+
+        template = self.PAGE_PREFIX + '/wp-content/themes/mushoku_re/img/index/img_hero%s.jpg'
+        self.download_by_template(folder, template, 2, 4)
 
     def download_character(self):
         folder = self.create_character_directory()
