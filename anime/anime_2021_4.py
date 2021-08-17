@@ -145,6 +145,7 @@ class KomisanDownload(Fall2021AnimeDownload, NewsTemplate):
         folder = self.create_key_visual_directory()
         self.image_list = []
         self.add_to_image_list('teaser_tw', 'https://pbs.twimg.com/media/E1GGa52UYAU7AJu?format=jpg&name=large')
+        self.add_to_image_list('kv1', self.PAGE_PREFIX + 'news/wp/wp-content/uploads/2021/08/44a6f1c5db0201b8fa7afd6a5902c770.jpg')
         self.download_image_list(folder)
         self.download_by_template(folder, self.PAGE_PREFIX + 'img/teaser/visual_%s_pc.jpg', 2, 1)
 
