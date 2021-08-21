@@ -103,6 +103,9 @@ class KaizokuOujoDownload(Fall2021AnimeDownload, NewsTemplate):
         self.download_image_list(folder)
 
     def download_character(self):
+        if self.has_content(constants.FOLDER_CHARACTER):
+            return
+
         folder = self.create_character_directory()
         template1 = self.PAGE_PREFIX + 'wp/wp-content/themes/fena-pirate-princess/_assets/images/char/detail/char_%s_pc.png'
         template2 = self.PAGE_PREFIX + 'wp/wp-content/themes/fena-pirate-princess/_assets/images/char/ss/char%s.jpg'

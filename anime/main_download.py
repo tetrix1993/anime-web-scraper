@@ -707,6 +707,10 @@ class MainDownload:
         else:
             return name
 
+    def has_content(self, folder):
+        filepath = self.base_folder + '/' + folder
+        return os.path.exists(filepath) and len(os.listdir(filepath)) > 0
+
     def create_bluray_directory(self):
         filepath = self.base_folder + '/' + constants.FOLDER_BLURAY
         if not os.path.exists(filepath):
