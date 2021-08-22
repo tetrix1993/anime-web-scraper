@@ -92,7 +92,6 @@ The premiere date for the anime listed here has not been announced.
 * [Maou Gakuin no Futekigousha: Shijou Saikyou no Maou no Shiso, Tensei shite Shison-tachi no Gakkou e 2nd Season](https://maohgakuin.com/)
 * [Shikkakumon no Saikyou Kenja](https://shikkakumon.com/)
 * [Shokei Shoujo no Virgin Road](http://virgin-road.com/)
-* [Shuumatsu no Harem](https://end-harem-anime.com/)
 * [Summertime Render](https://summertime-anime.com/)
 * [Yama no Susume: Next Summit](https://yamanosusume-ns.com/)
 
@@ -122,6 +121,7 @@ The premiere date for the anime listed here has not been announced.
 * [Senpai ga Uzai Kouhai no Hanashi](https://senpaiga-uzai-anime.com/)
 * [Shin no Nakama ja Nai to Yuusha no Party wo Oidasareta node, Henkyou de Slow Life suru Koto ni Shimashita](https://shinnonakama.com/)
 * [Shinka no Mi: Shiranai Uchi ni Kachigumi Jinsei](https://www.shinkanomi-anime.com/)
+* [Shuumatsu no Harem](https://end-harem-anime.com/)
 * [Taishou Otome Otogibanashi](http://taisho-otome.com/)
 * [Tsuki to Laika to Nosferatu](https://tsuki-laika-nosferatu.com/)
 * [Yuuki Yuuna wa Yuusha de Aru: Dai Mankai no Shou](https://yuyuyu.tv/season2/)

@@ -16,7 +16,6 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Maou Gakuin no Futekigousha 2nd Season https://maohgakuin.com/ #魔王学院 @maohgakuin
 # Shikkakumon no Saikyou Kenja https://shikkakumon.com/ #失格紋 @shikkakumon_PR
 # Shokei Shoujo no Virgin Road http://virgin-road.com/ #処刑少女 #shokei_anime @VirginroadAnime
-# Shuumatsu no Harem https://end-harem-anime.com/ #終末のハーレム @harem_official_
 # Summertime Render https://summertime-anime.com/ #サマータイムレンダ #サマレン @summertime_PR
 # Vlad Love https://www.vladlove.com/index.html #ぶらどらぶ #vladlove @VLADLOVE_ANIME
 # Yama no Susume: Next Summit https://yamanosusume-ns.com/ #ヤマノススメ @yamanosusume
@@ -788,91 +787,6 @@ class ShokeiShoujoDownload(UnconfirmedDownload):
         template1 = self.PAGE_PREFIX + 'core_sys/images/main/tz/char_%s.png'
         template2 = self.PAGE_PREFIX + 'core_sys/images/main/tz/char_%sface.png'
         self.download_by_template(folder, [template1, template2], 1, 1, prefix='tz_')
-
-
-# Shuumatsu no Harem
-class ShuumatsuNoHaremDownload(UnconfirmedDownload, NewsTemplate2):
-    title = 'Shuumatsu no Harem'
-    keywords = [title, "World's End Harem"]
-    website = 'https://end-harem-anime.com/'
-    twitter = 'harem_official_'
-    hashtags = '終末のハーレム'
-    folder_name = 'shuumatsu-no-harem'
-
-    PAGE_PREFIX = website
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_news()
-        self.download_key_visual()
-        self.download_character()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_news(self):
-        self.download_template_news(self.PAGE_PREFIX, 'news/list00010000.html')
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('announce', 'https://pbs.twimg.com/media/EXzkif6VAAAxqJI?format=png&name=900x900')
-        self.add_to_image_list('teaser', self.PAGE_PREFIX + 'core_sys/images/news/00000002/block/00000005/00000001.jpg')
-        #self.add_to_image_list('teaser', 'https://pbs.twimg.com/media/EoYL6tMVgAADou1?format=jpg&name=large')
-        self.add_to_image_list('teaser_char', self.PAGE_PREFIX + 'core_sys/images/main/top/kv_char.png')
-        self.download_image_list(folder)
-
-    def download_character(self):
-        folder = self.create_character_directory()
-        cache_filepath = folder + '/cache'
-        processed = []
-        num_processed = 0
-        if os.path.exists(cache_filepath):
-            with open(cache_filepath, 'r', encoding='utf-8') as f:
-                inputs = f.read()
-            processed = inputs.split(';')
-            num_processed = len(processed)
-
-        try:
-            soup = self.get_soup(self.PAGE_PREFIX + 'character/reito.html')
-            chara_list = soup.find('div', id='ContentsListUnit01')
-            if chara_list:
-                a_tags = chara_list.find_all('a')
-                for a_tag in a_tags:
-                    if a_tag.has_attr('href') and '/' in a_tag['href']:
-                        chara_name = a_tag['href'].split('/')[-1].split('.html')[0]
-                        if chara_name in processed:
-                            continue
-                        if chara_name == 'reito':  # First character
-                            chara_soup = soup
-                        else:
-                            chara_soup = self.get_soup(self.PAGE_PREFIX + a_tag['href'].replace('../', ''))
-                        self.image_list = []
-                        divs = ['standWrap', 'faceWrap']
-                        for div in divs:
-                            wraps = chara_soup.find_all('div', class_=div)
-                            for wrap in wraps:
-                                if wrap:
-                                    image = wrap.find('img')
-                                    if image and image.has_attr('src'):
-                                        image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
-                                        image_name = self.extract_image_name_from_url(image_url, with_extension=False)
-                                        self.add_to_image_list(image_name, image_url)
-                        self.download_image_list(folder)
-                        processed.append(chara_name)
-        except Exception as e:
-            print("Error in running " + self.__class__.__name__ + " - Character")
-            print(e)
-
-        if len(processed) > num_processed:
-            with open(cache_filepath, 'w+', encoding='utf-8') as f:
-                for i in range(len(processed)):
-                    if i > 0:
-                        f.write(';')
-                    f.write(processed[i])
 
 
 # Summertime Render

@@ -1,6 +1,6 @@
 import os
 import anime.constants as constants
-from anime.main_download import MainDownload, NewsTemplate, NewsTemplate3
+from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsTemplate3
 from datetime import datetime
 from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 
@@ -15,6 +15,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 # Senpai ga Uzai Kouhai no Hanashi https://senpaiga-uzai-anime.com/ #先輩がうざい後輩の話 @uzai_anime
 # Shin no Nakama ja Nai to Yuusha no Party wo Oidasareta node, Henkyou de Slow Life suru Koto ni Shimashita https://shinnonakama.com/ #真の仲間 @shinnonakama_tv
 # Shinka no Mi: Shiranai Uchi ni Kachigumi Jinsei https://www.shinkanomi-anime.com/ #進化の実 #勝ち組人生 #ゴリラ系女子 @shinkanomianime
+# Shuumatsu no Harem https://end-harem-anime.com/ #終末のハーレム @harem_official_
 # Taishou Otome Otogibanashi http://taisho-otome.com/ #大正オトメ #昭和オトメ @otome_otogi
 # Tsuki to Laika to Nosferatu https://tsuki-laika-nosferatu.com/ #月とライカ @LAIKA_anime
 # Yuuki Yuuna wa Yuusha de Aru: Dai Mankai no Shou https://yuyuyu.tv/season2/ #yuyuyu @anime_yukiyuna
@@ -544,6 +545,93 @@ class ShinkanomiDownload(Fall2021AnimeDownload, NewsTemplate):
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + ' - Character')
             print(e)
+
+
+# Shuumatsu no Harem
+class ShuumatsuNoHaremDownload(Fall2021AnimeDownload, NewsTemplate2):
+    title = 'Shuumatsu no Harem'
+    keywords = [title, "World's End Harem"]
+    website = 'https://end-harem-anime.com/'
+    twitter = 'harem_official_'
+    hashtags = '終末のハーレム'
+    folder_name = 'shuumatsu-no-harem'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(self.PAGE_PREFIX, 'news/list00010000.html')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('announce', 'https://pbs.twimg.com/media/EXzkif6VAAAxqJI?format=png&name=900x900')
+        self.add_to_image_list('teaser', self.PAGE_PREFIX + 'core_sys/images/news/00000002/block/00000005/00000001.jpg')
+        # self.add_to_image_list('teaser', 'https://pbs.twimg.com/media/EoYL6tMVgAADou1?format=jpg&name=large')
+        # self.add_to_image_list('teaser_char', self.PAGE_PREFIX + 'core_sys/images/main/top/kv_char.png')
+        self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/E9Ma_mBVUAQoM9t?format=jpg&name=4096x4096')
+        self.add_to_image_list('kv1_char', self.PAGE_PREFIX + 'core_sys/images/main/top/kv_char.png')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        cache_filepath = folder + '/cache'
+        processed = []
+        num_processed = 0
+        if os.path.exists(cache_filepath):
+            with open(cache_filepath, 'r', encoding='utf-8') as f:
+                inputs = f.read()
+            processed = inputs.split(';')
+            num_processed = len(processed)
+
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/reito.html')
+            chara_list = soup.find('div', id='ContentsListUnit01')
+            if chara_list:
+                a_tags = chara_list.find_all('a')
+                for a_tag in a_tags:
+                    if a_tag.has_attr('href') and '/' in a_tag['href']:
+                        chara_name = a_tag['href'].split('/')[-1].split('.html')[0]
+                        if chara_name in processed:
+                            continue
+                        if chara_name == 'reito':  # First character
+                            chara_soup = soup
+                        else:
+                            chara_soup = self.get_soup(self.PAGE_PREFIX + a_tag['href'].replace('../', ''))
+                        self.image_list = []
+                        divs = ['standWrap', 'faceWrap']
+                        for div in divs:
+                            wraps = chara_soup.find_all('div', class_=div)
+                            for wrap in wraps:
+                                if wrap:
+                                    image = wrap.find('img')
+                                    if image and image.has_attr('src'):
+                                        image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                                        image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                                        self.add_to_image_list(image_name, image_url)
+                        self.download_image_list(folder)
+                        processed.append(chara_name)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Character")
+            print(e)
+
+        if len(processed) > num_processed:
+            with open(cache_filepath, 'w+', encoding='utf-8') as f:
+                for i in range(len(processed)):
+                    if i > 0:
+                        f.write(';')
+                    f.write(processed[i])
 
 
 # Taishou Otome Otogibanashi
