@@ -182,7 +182,7 @@ class Priconne2Download(Winter2022AnimeDownload, NewsTemplate):
 
 
 # Slow Loop
-class SlowLoopDownload(Winter2022AnimeDownload):
+class SlowLoopDownload(Winter2022AnimeDownload, NewsTemplate):
     title = 'Slow Loop'
     keywords = [title]
     website = 'https://slowlooptv.com/'
@@ -199,40 +199,15 @@ class SlowLoopDownload(Winter2022AnimeDownload):
         self.download_episode_preview()
         self.download_news()
         self.download_key_visual()
+        self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
 
     def download_news(self):
-        news_url = self.PAGE_PREFIX + 'news.html'
-        try:
-            soup = self.get_soup(news_url, decode=True)
-            articles = soup.select('article')
-            news_obj = self.get_last_news_log_object()
-            results = []
-            for article in articles:
-                tag_title = article.find('div', class_='news_list_title')
-                tag_date = article.find('div', class_='news_list_day')
-                a_tag = article.find('a')
-                if tag_title and tag_date and a_tag and a_tag.has_attr('href'):
-                    article_id = self.PAGE_PREFIX + a_tag['href']
-                    title = self.format_news_title(tag_title.text)
-                    date = self.format_news_date(tag_date.text.strip().replace('/', '.'))
-                    if len(date) == 0:
-                        continue
-                    if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
-                        break
-                    results.append(self.create_news_log_object(date, title, article_id))
-            success_count = 0
-            for result in reversed(results):
-                process_result = self.create_news_log_from_news_log_object(result)
-                if process_result == 0:
-                    success_count += 1
-            if len(results) > 0:
-                self.create_news_log_cache(success_count, results[0])
-        except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - News')
-            print(e)
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, news_prefix='news.html', article_select='article',
+                                    date_select='div.news_list_day', title_select='div.news_list_title',
+                                    id_select='a', a_tag_prefix=self.PAGE_PREFIX, date_separator='/')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -241,7 +216,14 @@ class SlowLoopDownload(Winter2022AnimeDownload):
         self.add_to_image_list('announce_2', self.PAGE_PREFIX + 'images/top/v_001.jpg')
         self.add_to_image_list('teaser', self.PAGE_PREFIX + 'images/top/v_002_02.jpg')
         self.add_to_image_list('teaser_tw', 'https://pbs.twimg.com/media/E15YSghVgAIdgJf?format=jpg&name=medium')
+        self.add_to_image_list('kv1', self.PAGE_PREFIX + 'images/top/v_003.jpg')
+        self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/E9eeba0VIAYQ3-l?format=jpg&name=medium')
         self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'images/chara/p_%s.png'
+        self.download_by_template(folder, template, 3, 1)
 
 
 # Tensai Ouji no Akaji Kokka Saisei Jutsu: Souda, Baikoku shiyou
