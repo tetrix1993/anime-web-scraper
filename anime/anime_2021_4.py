@@ -217,7 +217,7 @@ class MierukochanDownload(Fall2021AnimeDownload, NewsTemplate3):
 
 
 # Muv-Luv Alternative
-class MuvLuvAlternativeDownload(Fall2021AnimeDownload):
+class MuvLuvAlternativeDownload(Fall2021AnimeDownload, NewsTemplate):
     title = 'Muv-Luv Alternative'
     keywords = [title]
     website = 'https://muv-luv-alternative-anime.com/'
@@ -234,59 +234,50 @@ class MuvLuvAlternativeDownload(Fall2021AnimeDownload):
         self.download_episode_preview()
         self.download_news()
         self.download_key_visual()
+        self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index', diff=2)
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + 'news/'
-        stop = False
-        try:
-            results = []
-            news_obj = self.get_last_news_log_object()
-            for page in range(1, 2, 1):
-                page_url = news_url
-                if page > 1:
-                    page_url = news_url + 'page/' + str(page) + '/'
-                soup = self.get_soup(page_url, decode=True)
-                articles = soup.select('section.u-mg_b_l5 a')
-                for article in articles:
-                    tag_date = article.find('span', class_='c-thumb-list__date')
-                    tag_title = article.find('span', class_='c-thumb-list__title')
-                    if tag_date and tag_title and article.has_attr('href'):
-                        article_id = news_url + article['href'].replace('./', '')
-                        date = self.format_news_date(tag_date.text.strip())
-                        if len(date) == 0:
-                            continue
-                        title = tag_title.text.strip()
-                        if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
-                            stop = True
-                            break
-                        results.append(self.create_news_log_object(date, title, article_id))
-                if stop:
-                    break
-                # pagination = soup.select('ul.c-pagenation li.c-pagenation__item')
-                # if len(pagination) == 0:
-                #     break
-                # if pagination[-1].has_attr('class') and 'is__current' in pagination[-1]['class']:
-                #     break
-            success_count = 0
-            for result in reversed(results):
-                process_result = self.create_news_log_from_news_log_object(result)
-                if process_result == 0:
-                    success_count += 1
-            if len(results) > 0:
-                self.create_news_log_cache(success_count, results[0])
-        except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - News')
-            print(e)
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='section.u-mg_b_l5 a',
+                                    date_select='span.c-thumb-list__date', title_select='span.c-thumb-list__title',
+                                    id_select=None, news_prefix='news/index.php?page=',
+                                    paging_type=2, a_tag_prefix=news_url, a_tag_start_text_to_remove='./',
+                                    next_page_select='i.i-arrows-angle-4-r')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         self.image_list = []
-        self.add_to_image_list('visual_1b', self.PAGE_PREFIX + 'img/teaser/visual_1b.jpg')
+        self.add_to_image_list('visual_1b', self.PAGE_PREFIX + 'img/home/visual_1b.jpg')
         self.download_image_list(folder)
-        self.download_by_template(folder, self.PAGE_PREFIX + 'img/teaser/visual_%s.jpg', 1, 2)
+        self.download_by_template(folder, self.PAGE_PREFIX + 'img/home/visual_%s.jpg', 1, 2)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        self.image_list = []
+        character_url = self.PAGE_PREFIX + 'character/'
+        try:
+            json_obj = self.get_json(character_url + 'chara_data.php')
+            if 'charas' in json_obj and isinstance(json_obj['charas'], list):
+                for chara in json_obj['charas']:
+                    if 'images' in chara:
+                        images = chara['images']
+                        image_urls = []
+                        if 'face' in images and isinstance(images['face'], str):
+                            image_urls.append(character_url + images['face'])
+                        if 'visuals' in images and isinstance(images['visuals'], list):
+                            for visual in images['visuals']:
+                                if 'image' in visual:
+                                    image_urls.append(character_url + visual['image'])
+                        for image_url in image_urls:
+                            image_name = self.extract_image_name_from_url(image_url)
+                            self.add_to_image_list(image_name, image_url)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Character')
+            print(e)
+        self.download_image_list(folder)
 
 
 # Saihate no Paladin
