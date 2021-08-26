@@ -60,9 +60,24 @@ class IsekaiShokudou2Download(Fall2021AnimeDownload, NewsTemplate3):
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         self.image_list = []
-        self.add_to_image_list('kv1', self.PAGE_PREFIX + 'assets/top/main-t1/vis.jpg')
-        self.add_to_image_list('vis-kv1', self.PAGE_PREFIX + 'assets/top/vis-kv1/vis.jpg')
+        # self.add_to_image_list('kv1', self.PAGE_PREFIX + 'assets/top/main-t1/vis.jpg')
+        self.add_to_image_list('vis-t1', self.PAGE_PREFIX + 'assets/top/vis-t1/vis.jpg')
         self.download_image_list(folder)
+
+        top_url = self.PAGE_PREFIX + 'assets/top/'
+        try:
+            for i in ['vis-kv%s', 'vis-ep%s']:
+                for j in range(1, 100, 1):
+                    image_name = i % str(j)
+                    image_url = top_url + image_name + '/vis.jpg'
+                    image_save_path = folder + '/' + image_name
+                    if self.is_image_exists(image_name, folder):
+                        continue
+                    result = self.download_image(image_url, image_save_path)
+                    if result == -1:
+                        break
+        except:
+            pass
 
     def download_character(self):
         folder = self.create_character_directory()
