@@ -87,7 +87,6 @@ The premiere date for the anime listed here has not been announced.
 * [Isekai Yakkyoku](https://isekai-yakkyoku.jp/)
 * [Itai no wa Iya nano de Bougyoryoku ni Kyokufuri Shitai to Omoimasu. 2nd Season](https://bofuri.jp/)
 * [Kakkou no Iinazuke](https://cuckoos-anime.com/)
-* [Kenja no Deshi wo Nanoru Kenja](https://kendeshi-anime.com/)
 * [Kono Healer, Mendokusai](https://kono-healer-anime.com/)
 * [Maou Gakuin no Futekigousha: Shijou Saikyou no Maou no Shiso, Tensei shite Shison-tachi no Gakkou e 2nd Season](https://maohgakuin.com/)
 * [Shikkakumon no Saikyou Kenja](https://shikkakumon.com/)
@@ -105,6 +104,7 @@ The premiere date for the anime listed here has not been announced.
 
 ### Winter 2022 Anime
 * [Arifureta Shokugyou de Sekai Saikyou 2nd Season](https://arifureta.com/)
+* [Kenja no Deshi wo Nanoru Kenja](https://kendeshi-anime.com/)
 * [Leadale no Daichi nite](https://leadale.net/)
 * [Princess Connect! Re:Dive Season 2](https://anime.priconne-redive.jp)
 * [Slow Loop](https://slowlooptv.com/)

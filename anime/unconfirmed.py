@@ -11,7 +11,6 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Isekai Yakkyoku https://isekai-yakkyoku.jp/ #異世界薬局 @isekai_yakkyoku
 # Itai no wa https://bofuri.jp/story/ #防振り #bofuri @bofuri_anime
 # Kakkou no Iinazuke https://cuckoos-anime.com/ #カッコウの許嫁 @cuckoo_anime
-# Kenja no Deshi wo Nanoru Kenja https://kendeshi-anime.com/ #賢でし @kendeshi_anime
 # Kono Healer, Mendokusai https://kono-healer-anime.com/ #このヒーラー @kono_healer
 # Maou Gakuin no Futekigousha 2nd Season https://maohgakuin.com/ #魔王学院 @maohgakuin
 # Shikkakumon no Saikyou Kenja https://shikkakumon.com/ #失格紋 @shikkakumon_PR
@@ -508,79 +507,6 @@ class KakkounoIinazukeDownload(UnconfirmedDownload, NewsTemplate3):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'assets/top/character/c%s.png'
         self.download_by_template(folder, template, 1)
-
-
-# Kenja no Deshi wo Nanoru Kenja
-class KendeshiDownload(UnconfirmedDownload):
-    title = 'Kenja no Deshi wo Nanoru Kenja'
-    keywords = [title, 'Kendeshi', 'She Professed Herself Pupil of the Wise Man']
-    website = 'https://kendeshi-anime.com/'
-    twitter = 'kendeshi_anime'
-    hashtags = '賢でし'
-    folder_name = 'kendeshi'
-
-    PAGE_PREFIX = website
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_news()
-        self.download_key_visual()
-        self.download_character()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_news(self):
-        news_url = self.PAGE_PREFIX
-        try:
-            soup = self.get_soup(news_url, decode=True)
-            articles = soup.select('div.news_content p')
-            news_obj = self.get_last_news_log_object()
-            results = []
-            for article in articles:
-                article_id = ''
-                split1 = article.text.split('│')
-                if len(split1) != 2:
-                    continue
-                date_str = split1[0].strip()
-                date_split = date_str.split('/')
-                if len(date_split) != 2:
-                    continue
-                try:
-                    month = str(int(date_split[0])).zfill(2)
-                    day = str(int(date_split[1])).zfill(2)
-                except:
-                    continue
-                date = '2021.%s.%s' % (month, day)
-                title = split1[1]
-                if news_obj and ((news_obj['date'] == date and news_obj['title'] == title) or date < news_obj['date']):
-                    break
-                results.append(self.create_news_log_object(date, title, article_id))
-            success_count = 0
-            for result in reversed(results):
-                process_result = self.create_news_log_from_news_log_object(result)
-                if process_result == 0:
-                    success_count += 1
-            if len(results) > 0:
-                self.create_news_log_cache(success_count, results[0])
-        except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - News')
-            print(e)
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('kv1', 'https://pbs.twimg.com/media/ExX8OtZVcAs2aEk?format=jpg&name=4096x4096')
-        self.add_to_image_list('main_pc', self.PAGE_PREFIX + '_img/main_pc.jpg')
-        self.download_image_list(folder)
-
-    def download_character(self):
-        folder = self.create_character_directory()
-        template = self.PAGE_PREFIX + '_img/cha%s.png'
-        self.download_by_template(folder, template)
 
 
 # Kono Healer, Mendokusai
