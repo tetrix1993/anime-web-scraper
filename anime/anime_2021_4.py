@@ -296,7 +296,7 @@ class MuvLuvAlternativeDownload(Fall2021AnimeDownload, NewsTemplate):
 
 
 # Saihate no Paladin
-class SaihatenoPaladinDownload(Fall2021AnimeDownload):
+class SaihatenoPaladinDownload(Fall2021AnimeDownload, NewsTemplate):
     title = 'Saihate no Paladin'
     keywords = [title, 'The Faraway Paladin']
     website = 'https://farawaypaladin.com/'
@@ -311,11 +311,17 @@ class SaihatenoPaladinDownload(Fall2021AnimeDownload):
 
     def run(self):
         self.download_episode_preview()
+        self.download_news()
         self.download_key_visual()
         self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='#news dd', date_select='i',
+                                    title_select='span', id_select='a', a_tag_prefix=news_url)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -328,6 +334,8 @@ class SaihatenoPaladinDownload(Fall2021AnimeDownload):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'img/cara%s.png'
         self.download_by_template(folder, template, 1)
+        template2 = self.PAGE_PREFIX + 'img/main_c%s.png'
+        self.download_by_template(folder, template2, 1)
 
 
 # Sekai Saikou no Ansatsusha, Isekai Kizoku ni Tensei suru
