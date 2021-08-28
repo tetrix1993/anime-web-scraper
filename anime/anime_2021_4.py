@@ -572,6 +572,7 @@ class ShuumatsuNoHaremDownload(Fall2021AnimeDownload, NewsTemplate2):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
@@ -638,6 +639,12 @@ class ShuumatsuNoHaremDownload(Fall2021AnimeDownload, NewsTemplate2):
                     if i > 0:
                         f.write(';')
                     f.write(processed[i])
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        self.image_list = []
+        self.add_to_image_list('music_op', 'https://pbs.twimg.com/media/E9yvFCOUUAc43_i?format=jpg&name=large')
+        self.download_image_list(folder)
 
 
 # Taishou Otome Otogibanashi
