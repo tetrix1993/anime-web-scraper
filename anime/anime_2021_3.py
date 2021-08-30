@@ -518,6 +518,8 @@ class Dea5Download(Summer2021AnimeDownload, NewsTemplate):
         self.image_list = []
         self.add_to_image_list('teaser', 'https://pbs.twimg.com/media/EmjTjFDVcAAZT6L?format=jpg&name=900x900')
         self.add_to_image_list('kv1', self.PAGE_PREFIX + 'wp-content/themes/design/img/index/kv.jpg')
+        self.add_to_image_list('kv2', self.PAGE_PREFIX + 'wp-content/uploads/2021/08/KV2_着彩_ロゴ無_0813.jpg')
+        self.add_to_image_list('kv2_tw', 'https://pbs.twimg.com/media/E-AIH4gUcAQeORn?format=jpg&name=4096x4096')
         self.download_image_list(folder)
 
 
