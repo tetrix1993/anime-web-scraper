@@ -1649,6 +1649,7 @@ class PeachBoyRiversideDownload(Summer2021AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -1708,6 +1709,26 @@ class PeachBoyRiversideDownload(Summer2021AnimeDownload, NewsTemplate):
                     break
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + " - Character")
+            print(e)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'bd/')
+            elems = soup.select('div.bd--main__detail__cont--main img') + \
+                soup.select('div.bd--main__detail__cont--sub img') + \
+                soup.select('div.bd--main__tokuten--list img')
+            self.image_list = []
+            for elem in elems:
+                if elem.has_attr('src'):
+                    image_url = elem['src']
+                    if image_url.endswith('-scaled.jpg'):
+                        image_url = image_url[0:len(image_url)-11] + '.jpg'
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Media")
             print(e)
 
 
