@@ -104,6 +104,7 @@ The premiere date for the anime listed here has not been announced.
 
 ### Winter 2022 Anime
 * [Arifureta Shokugyou de Sekai Saikyou 2nd Season](https://arifureta.com/)
+* [Karakai Jouzu no Takagi-san 3](https://takagi3.me/)
 * [Kenja no Deshi wo Nanoru Kenja](https://kendeshi-anime.com/)
 * [Leadale no Daichi nite](https://leadale.net/)
 * [Princess Connect! Re:Dive Season 2](https://anime.priconne-redive.jp)

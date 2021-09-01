@@ -6,6 +6,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 
 
 # Arifureta Shokugyou de Sekai Saikyou 2nd Season https://arifureta.com/ #ありふれた #ARIFURETA @ARIFURETA_info
+# Karakai Jouzu no Takagi-san 3 https://takagi3.me/ #高木さんめ @takagi3_anime
 # Kenja no Deshi wo Nanoru Kenja https://kendeshi-anime.com/ #賢でし @kendeshi_anime
 # Leadale no Daichi nite https://leadale.net/ #leadale #リアデイル @leadale_anime
 # Princess Connect! Re:Dive S2 https://anime.priconne-redive.jp/ #アニメプリコネ #プリコネR #プリコネ #アニメプリコネR @priconne_anime
@@ -97,6 +98,66 @@ class Arifureta2Download(Winter2022AnimeDownload):
         self.add_to_image_list('kv1', self.PAGE_PREFIX + 'wp-content/uploads/2021/04/02.jpg')
         self.add_to_image_list('kv1_art', self.PAGE_PREFIX + 'wp-content/uploads/2021/04/03.jpg')
         self.download_image_list(folder)
+
+
+# Karakai Jouzu no Takagi-san
+class Takagisan3Download(Winter2022AnimeDownload, NewsTemplate):
+    title = 'Karakai Jouzu no Takagi-san 3'
+    keywords = [title, 'Takagisan', 'Teasing Master Takagi-san']
+    website = 'https://takagi3.me/'
+    twitter = 'takagi3_anime'
+    hashtags = '高木さんめ'
+    folder_name = 'takagisan3'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.newsList', date_select='time',
+                                    title_select='span.newsList__name', id_select='a', a_tag_prefix=news_url,
+                                    a_tag_start_text_to_remove='./')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/E-MCnEaUYAc-D9X?format=jpg&name=900x900')
+        self.add_to_image_list('top_story__pcvs', self.PAGE_PREFIX + 'assets/img/top/top_story__pcvs.jpg')
+        self.download_image_list(folder)
+
+        prefix = self.PAGE_PREFIX + 'assets/img/top/'
+        templates = [prefix + 'fv_mv%s.jpg', prefix + 'footer_mv%s.jpg']
+        self.download_by_template(folder, templates, 1, 1)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            a_tags = soup.select('li.charaList a')
+            self.image_list = []
+            template = self.PAGE_PREFIX + 'assets/img/top/character/character-main%s.jpg'
+            for a_tag in a_tags:
+                if a_tag.has_attr('href') and a_tag['href'].startswith("javascript:chara('") and \
+                        a_tag['href'].endswith("');"):
+                    href = a_tag['href']
+                    image_url = template % href[18:len(href) - 3]
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Character')
+            print(e)
 
 
 # Kenja no Deshi wo Nanoru Kenja
