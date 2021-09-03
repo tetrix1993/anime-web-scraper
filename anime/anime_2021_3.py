@@ -586,6 +586,9 @@ class GenkokuDownload(Summer2021AnimeDownload, NewsTemplate):
                                url='https://moca-news.net/article/20201104/2020110410000a_/image/001-i2casw.jpg',
                                is_mocanews=True)
         self.add_to_image_list('kv1', self.PAGE_PREFIX + 'images/top/mainimg.jpg')
+        self.add_to_image_list('mainimg_summer.jpg', self.PAGE_PREFIX + 'images/top/mainimg_summer.jpg')
+        self.add_to_image_list('mainimg_autumn.jpg', self.PAGE_PREFIX + 'images/top/mainimg_autumn.jpg')
+        self.add_to_image_list('mainimg_autumn_tw', 'https://pbs.twimg.com/media/E-SLdbeVEAcNpu8?format=jpg&name=large')
         self.download_image_list(folder)
 
     def download_character(self):
