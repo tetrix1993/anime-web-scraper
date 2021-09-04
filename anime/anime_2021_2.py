@@ -135,10 +135,16 @@ class EightySixDownload(Spring2021AnimeDownload, NewsTemplate):
         self.add_to_image_list('86_valentine_icon_ex', valentine_prefix + 'icon_ex.jpg')
         self.add_to_image_list('86_valentine_wp_01', valentine_prefix + 'wp_01.jpg')
         self.add_to_image_list('86_valentine_wp_ex', valentine_prefix + 'wp_ex.jpg')
+
+        # 2nd Cour
+        self.add_to_image_list('c2_kv1_tw', 'https://pbs.twimg.com/media/EvxfN86U8AAoYZx?format=jpg&name=4096x4096')
+        self.add_to_image_list('c2_kv1', self.PAGE_PREFIX + 'assets/img/top/img_kv-second.jpg')
+
         self.download_image_list(folder)
 
     def download_character(self):
         folder = self.create_character_directory()
+        self.download_character2(folder)
         self.image_list = []
         #try:
         #    soup = self.get_soup(self.PAGE_PREFIX + 'character/')
@@ -177,6 +183,26 @@ class EightySixDownload(Spring2021AnimeDownload, NewsTemplate):
                 break
         self.download_image_list(folder)
 
+    def download_character2(self, base_folder):
+        folder = base_folder + '/c2'
+        if not os.path.exists(folder):
+            os.makedirs(folder)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/second-half/')
+            figures = soup.select('div.m-chara__body figure, div.m-chara__face figure')
+            self.image_list = []
+            for figure in figures:
+                if figure.has_attr('style'):
+                    style = figure['style']
+                    if style.startswith('background-image: url(../../') and style.endswith(');'):
+                        image_url = self.PAGE_PREFIX + style[28:len(style) - 2]
+                        image_name = self.extract_image_name_from_url(image_url)
+                        self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Character 2nd Cour")
+            print(e)
+
     def download_media(self):
         # API Link:
         # https://edge.api.brightcove.com/playback/v1/accounts/4929511769001/videos/6230722910001
@@ -192,6 +218,8 @@ class EightySixDownload(Spring2021AnimeDownload, NewsTemplate):
         self.add_to_image_list('spearhead', 'https://pbs.twimg.com/media/EzLrAlAVkAMLVso?format=jpg&name=large')
         self.add_to_image_list('bd_bonus_1', 'https://pbs.twimg.com/media/Ezlb2fZXIAASwMM?format=jpg&name=4096x4096')
         self.add_to_image_list('bd_bonus_2', 'https://pbs.twimg.com/media/EzvwlyUWQAQIa0X?format=jpg&name=4096x4096')
+        self.add_to_image_list('bd_bonus_all_1', 'https://pbs.twimg.com/media/E-brhvJUYAIdmkm?format=jpg&name=4096x4096')
+        self.add_to_image_list('bd_bonus_all_2', 'https://pbs.twimg.com/media/E-brhvGVkAA6Jo3?format=jpg&name=4096x4096')
         self.download_image_list(folder)
 
         # Blu-ray
