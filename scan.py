@@ -1,8 +1,8 @@
 import os
 import re
 import requests
-from anime.external_download import AniverseMagazineDownload, WebNewtypeDownload, MocaNewsDownload, NatalieDownload
-from anime.constants import EXTERNAL_FOLDER_ANIVERSE, EXTERNAL_FOLDER_MOCANEWS, EXTERNAL_FOLDER_NATALIE, EXTERNAL_FOLDER_WEBNEWTYPE
+from anime.external_download import AnimeRecorderDownload, AniverseMagazineDownload, WebNewtypeDownload, MocaNewsDownload, NatalieDownload
+from anime.constants import EXTERNAL_FOLDER_ANIME_RECORDER, EXTERNAL_FOLDER_ANIVERSE, EXTERNAL_FOLDER_MOCANEWS, EXTERNAL_FOLDER_NATALIE, EXTERNAL_FOLDER_WEBNEWTYPE
 from bs4 import BeautifulSoup as bs
 from datetime import datetime
 from datetime import timedelta
@@ -92,6 +92,113 @@ class MainScanner:
         elif len(eval) == 3 and eval[1] == 0 and eval[0] > 1:
             return eval[0] * 10 + eval[2]
         return None
+
+
+class AnimeRecorderScanner(MainScanner):
+    SEARCH_URL_TEMPLATE = "https://www.anime-recorder.com/page/%s/?s=%s"
+
+    def __init__(self, keyword, base_folder, last_episode=None, suffix=None, skip_article_ids=[], download_id=None):
+        super().__init__(download_id)
+        self.keyword = keyword
+        self.base_folder = base_folder.replace("download/", "") + "/" + EXTERNAL_FOLDER_ANIME_RECORDER
+        self.last_episode = last_episode
+        self.suffix = suffix
+        self.skip_article_ids = skip_article_ids
+
+    @staticmethod
+    def has_results(soup):
+        if soup is None:
+            return False
+        article = soup.select('#post-not-found')
+        return len(article) == 0
+
+    @staticmethod
+    def has_next_page(soup):
+        if soup is None:
+            return False
+        next_page = soup.select('li a.next.page-numbers')
+        return len(next_page) > 0
+
+    @staticmethod
+    def get_episode_num(result, suffix):
+        split1 = result[0].split(suffix)[0].split('第')
+        if len(split1) < 2:
+            return -1
+        try:
+            return int(split1[1])
+        except:
+            result = MainScanner.convert_kanji_to_number(split1[1])
+            if result is not None:
+                return result
+            return -1
+
+    @staticmethod
+    def get_article_id(url):
+        eval = url
+        if url.endswith('/'):
+            eval = eval[0:len(eval)-1]
+        if len(eval) < 1:
+            return ""
+        return eval.split('/')[-1]
+
+    def process_page(self, soup):
+        a_tags = soup.select('#inner-content article a')
+        for a_tag in a_tags:
+            if a_tag.has_attr('href') and a_tag.has_attr('title'):
+                article_id = self.get_article_id(a_tag['href'])
+                if article_id in self.skip_article_ids:
+                    continue
+                news_title = a_tag['title'].strip()
+                suffix = self.suffix
+                if suffix is None:
+                    suffix = '話'
+
+                regex = '第[０|１|２|３|４|５|６|７|８|９|十|一|二|三|四|五|六|七|八|九|0-9]+' + suffix
+                prog = re.compile(regex)
+                result = prog.findall(news_title)
+                if self.keyword in news_title and ('最終' + suffix) in news_title and len(result) == 0:
+                    episode = 'last'
+                elif self.keyword in news_title and len(result) > 0:
+                    episode_num = self.get_episode_num(result, suffix)
+                    if episode_num < 1:
+                        continue
+                    episode = str(episode_num).zfill(2)
+                else:
+                    continue
+                filepath = self.base_folder + "/" + episode + "_01.jpg"
+                if not filepath.startswith("download/"):
+                    filepath = "download/" + filepath
+                if os.path.isfile(filepath):
+                    return 1
+                AnimeRecorderDownload(article_id, self.base_folder, episode, download_id=self.download_id).run()
+        return 0
+
+    def run(self):
+        if self.last_episode:
+            if self.is_image_exists(str(self.last_episode).zfill(2) + '_01', self.base_folder) or \
+                    self.is_image_exists('last_01', self.base_folder):
+                return
+
+        first_page_url = self.SEARCH_URL_TEMPLATE % ('1', self.keyword)
+        try:
+            soup = self.get_soup(first_page_url)
+            if self.has_results(soup):
+                result = self.process_page(soup)
+                if result == 1:
+                    return
+                page = 2
+                while page <= self.MAXIMUM_PAGES:
+                    if not self.has_next_page(soup):
+                        break
+                    next_url = self.SEARCH_URL_TEMPLATE % (self.keyword, str(page))
+                    soup = self.get_soup(next_url)
+                    result = self.process_page(soup)
+                    if result == 1:
+                        return
+                    page += 1
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
 
 class AniverseMagazineScanner(MainScanner):

@@ -12,6 +12,47 @@ class ExternalDownload(MainDownload):
         self.download_id = download_id
 
 
+class AnimeRecorderDownload(ExternalDownload):
+    folder_name = None
+    PAGE_PREFIX = 'https://www.anime-recorder.com/tvanime/'
+
+    def __init__(self, article_id, save_folder, episode, download_id=None):
+        super().__init__(download_id)
+        self.base_folder = self.base_folder + "/" + save_folder
+        if not os.path.exists(self.base_folder):
+            os.makedirs(self.base_folder)
+        self.article_id = str(article_id)
+        if episode:
+            self.episode = str(episode).zfill(2)
+        else:
+            self.episode = None
+
+    def process_article(self):
+        try:
+            article_url = self.PAGE_PREFIX + self.article_id
+            soup = self.get_soup(article_url)
+            images = soup.select('section.entry-content img, header figure.eyecatch img')
+            self.image_list = []
+            for i in range(len(images)):
+                if images[i].has_attr('src'):
+                    image_url = images[i]['src']
+                    if self.episode is None:
+                        image_name = str(i + 1).zfill(2)
+                    else:
+                        image_name = self.episode + '_' + str(i + 1).zfill(2)
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
+
+    def run(self):
+        self.process_article()
+        if len(os.listdir(self.base_folder)) == 0:
+            print('No content is downloaded for article ID: %s' % self.article_id)
+            os.removedirs(self.base_folder)
+
+
 class AniverseMagazineDownload(ExternalDownload):
     folder_name = None
     PAGE_PREFIX = "https://aniverse-mag.com/archives/"

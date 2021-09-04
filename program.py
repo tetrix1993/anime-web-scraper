@@ -305,23 +305,25 @@ def download_from_news_website():
             print("Invalid input. Please enter an integer.")
             continue
 
-        if 0 < choice < 5:
+        if 0 < choice < 6:
             id = input('Enter article ID: ').strip()
             if len(id) == 0:
                 print('Invalid article ID')
                 continue
             base_folder = 'news/%s/%s'
             if choice == 1:
-                AniverseMagazineDownload(str(id), base_folder % (constants.EXTERNAL_FOLDER_ANIVERSE, str(id)), None).run()
+                AnimeRecorderDownload(str(id), base_folder % (constants.EXTERNAL_FOLDER_ANIME_RECORDER, str(id)), None).run()
             if choice == 2:
+                AniverseMagazineDownload(str(id), base_folder % (constants.EXTERNAL_FOLDER_ANIVERSE, str(id)), None).run()
+            if choice == 3:
                 if len(id) != 15:
                     print('Invalid article ID')
                     continue
                 article_id = id[0:8] + '/' + id
                 MocaNewsDownload(article_id, base_folder % (constants.EXTERNAL_FOLDER_MOCANEWS, str(id)), None).run()
-            elif choice == 3:
-                NatalieDownload(str(id), base_folder % (constants.EXTERNAL_FOLDER_NATALIE, str(id)), None).run()
             elif choice == 4:
+                NatalieDownload(str(id), base_folder % (constants.EXTERNAL_FOLDER_NATALIE, str(id)), None).run()
+            elif choice == 5:
                 WebNewtypeDownload(str(id), base_folder % (constants.EXTERNAL_FOLDER_WEBNEWTYPE, str(id)), None).run()
         elif choice == 0:
             break
@@ -331,10 +333,11 @@ def download_from_news_website():
 
 
 def print_news_website_choice():
-    print('1 - Aniverse')
-    print('2 - Moca News')
-    print('3 - Natalie')
-    print('4 - WebNewtype')
+    print('1 - Anime Recorder')
+    print('2 - Aniverse')
+    print('3 - Moca News')
+    print('4 - Natalie')
+    print('5 - WebNewtype')
     print("0 - Return")
 
 

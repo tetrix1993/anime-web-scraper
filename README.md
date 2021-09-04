@@ -55,12 +55,14 @@ pip install -r requirements.txt
     * Select the news website (Aniverse, MocaNews, Natalie, WebNewtype) to download from.
     * Upon selecting, enter the Article ID to download the images in the article.
     * Examples:
+        * Anime Recorder: Article ID is `12345` from `https://anime-recorder.com/tvanime/12345`
         * Aniverse: Article ID is `12345` from `https://aniverse-mag.com/archives/12345`
         * MocaNews: Article ID is `2021010101000a_` from `https://moca-news.net/article/20210101/2021010101000a_/01/`
         * Natalie: Article ID is `12345` from `https://natalie.mu/comic/news/414049`
         * WebNewtype: Article ID is `12345` from `https://webnewtype.com/news/article/12345/`
     * The images will be saved at the folder `download\news\{website}\{article_id}`, where
         * `{website}` is
+            * `animerecorder` for Anime Recorder;
             * `aniverse` for Aniverse;
             * `moca` for MocaNews;
             * `natalie` for Natalie; and
@@ -72,6 +74,7 @@ pip install -r requirements.txt
 <summary>Here are the some of the websites that are scraped (click to expand):</summary>
 
 ### News Website
+* [Anime Recorder](https://anime-recorder.com/)
 * [Aniverse Magazine](https://aniverse-mag.com/)
 * [Moca News](https://moca-news.net/)
 * [Natalie](https://natalie.mu/)
