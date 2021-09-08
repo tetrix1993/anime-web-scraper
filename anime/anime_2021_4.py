@@ -531,11 +531,10 @@ class ShinkanomiDownload(Fall2021AnimeDownload, NewsTemplate):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
 
     def download_news(self):
-        # Paging logic may be wrong
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='ul.news-list li.news-list__item',
                                     date_select='span.news-list__date', title_select='h2.news-list__title',
-                                    id_select='a', next_page_select='div.pagination div.next',
-                                    next_page_eval_index_class='off', next_page_eval_index=0)
+                                    id_select='a', next_page_select='div.pagination .page-numbers',
+                                    next_page_eval_index_class='current', next_page_eval_index=-1)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -543,6 +542,8 @@ class ShinkanomiDownload(Fall2021AnimeDownload, NewsTemplate):
         self.add_to_image_list('teaser', 'https://pbs.twimg.com/media/E52FLnzUcAEMg80?format=jpg&name=medium')
         self.add_to_image_list('kv1_1', self.PAGE_PREFIX + '/cms/wp-content/uploads/2021/08/2.jpg')
         self.add_to_image_list('kv1_2', self.PAGE_PREFIX + '/cms/wp-content/uploads/2021/08/3.jpg')
+        self.add_to_image_list('kv2_1', self.PAGE_PREFIX + '/img/top/kv-ver2.jpg')
+        self.add_to_image_list('kv2_2', self.PAGE_PREFIX + '/cms/wp-content/uploads/2021/09/KV2_.jpg')
         self.download_image_list(folder)
 
     def download_character(self):
