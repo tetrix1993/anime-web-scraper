@@ -395,6 +395,9 @@ class AnsatsuKizokuDownload(Fall2021AnimeDownload):
         self.add_to_image_list('teaser', 'https://pbs.twimg.com/media/Ev27c7bUUAIM_47?format=jpg&name=medium')
         self.download_image_list(folder)
 
+        template = self.PAGE_PREFIX + 'wp-content/themes/ansatsu-kizoku/assets/images/common/index/img_keyvisual_%s.jpg'
+        self.download_by_template(folder, template, 1, 1)
+
     def download_character(self):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'wp-content/themes/ansatsu-kizoku_teaser/assets/images/common/img_character_%s.png'
