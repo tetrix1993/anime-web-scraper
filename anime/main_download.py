@@ -991,7 +991,7 @@ class NewsTemplate:
     def download_template_news(self, page_prefix, article_select, date_select, title_select, id_select,
                                paging_type=0, decode_response=True, response_headers=None, id_has_id=False,
                                news_prefix=None, a_tag_prefix=None, stop_date=None, date_separator=None, date_attr=None,
-                               date_prefix=None, a_tag_replace_from=None, a_tag_replace_to='',
+                               date_prefix=None, date_func=None, a_tag_replace_from=None, a_tag_replace_to='',
                                a_tag_start_text_to_remove=None, next_page_select=None, next_page_eval_index_class=None,
                                next_page_eval_index=0, next_page_eval_index_compare_page=False):
         """
@@ -1010,6 +1010,7 @@ class NewsTemplate:
         :param date_separator: Specify separator to be replace to '.'
         :param date_attr: The attribute of the element where the date is stored
         :param date_prefix: Text to be appended before the date (e.g. append 20 to 21 = 2021)
+        :param date_func: A function that takes in a date string, processes and returns a new string before further processing
         :param a_tag_replace_from: Text to be replaced in the 'href' attribute
         :param a_tag_replace_to: Text to replace to in the 'href' attribute
         :param a_tag_start_text_to_remove: Text to be removed at the beginning of a tag 'href' attribute
@@ -1085,6 +1086,8 @@ class NewsTemplate:
                                 unformatted_date = ' '.join(tag_dates[0][date_attr].strip().split())
                             else:
                                 continue
+                        if date_func is not None:
+                            unformatted_date = date_func(unformatted_date)
                         if date_separator is not None:
                             unformatted_date = unformatted_date.replace(date_separator, '.')
                         if date_prefix is not None:
