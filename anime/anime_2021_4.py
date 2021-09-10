@@ -154,11 +154,10 @@ class KomisanDownload(Fall2021AnimeDownload, NewsTemplate):
         self.has_website_updated(self.PAGE_PREFIX, 'index', diff=2)
 
     def download_news(self):
-        # Paging logic may be wrong
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article.news-item',
                                     date_select='span.news-item__date', title_select='span.news-item__title',
                                     id_select='a.news-item__link', a_tag_prefix=self.PAGE_PREFIX,
-                                    a_tag_start_text_to_remove='/', next_page_select='i.i-dot-arrow-r-12')
+                                    a_tag_start_text_to_remove='/', next_page_select='a.next.page-numbers')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
