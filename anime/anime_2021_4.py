@@ -736,10 +736,10 @@ class TsukiLaikaNosferatuDownload(Fall2021AnimeDownload, NewsTemplate):
 
 
 # Yuuki Yuuna wa Yuusha de Aru: Dai Mankai no Shou
-class Yuyuyu3Download(Fall2021AnimeDownload):
+class Yuyuyu3Download(Fall2021AnimeDownload, NewsTemplate):
     title = "Yuuki Yuuna wa Yuusha de Aru: Dai Mankai no Shou"
     keywords = [title, "Yuyuyu", "Yuki Yuna is a Hero"]
-    website = 'https://yuyuyu.tv/season2/'
+    website = 'https://yuyuyu.tv/daimankai/'
     twitter = 'anime_yukiyuna'
     hashtags = 'yuyuyu'
     folder_name = 'yuyuyu3'
@@ -753,52 +753,17 @@ class Yuyuyu3Download(Fall2021AnimeDownload):
         self.download_episode_preview()
         self.download_news()
         self.download_key_visual()
+        self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
 
     def download_news(self):
         prefix = 'https://yuyuyu.tv'
-        news_url = prefix + '/news/'
-        stop = False
-        try:
-            results = []
-            news_obj = self.get_last_news_log_object()
-            for page in range(1, 100, 1):
-                page_url = news_url
-                if page > 1:
-                    page_url = news_url + 'page/' + str(page)
-                soup = self.get_soup(page_url, decode=True)
-                articles = soup.find_all('article', class_='c-entry-item')
-                for article in articles:
-                    tag_date = article.find('span', class_='c-entry-date')
-                    tag_title = article.find('h1', class_='c-entry-item__title')
-                    a_tag = article.find('a', class_='c-entry-item__link')
-                    if tag_date and tag_title and a_tag and a_tag.has_attr('href'):
-                        article_id = prefix + a_tag['href']
-                        date = self.format_news_date(tag_date.text)
-                        if len(date) == 0:
-                            continue
-                        title = tag_title.text.strip()
-                        if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
-                            stop = True
-                            break
-                        results.append(self.create_news_log_object(date, title, article_id))
-                        if article_id == (news_url + 'archives/1770'):
-                            stop = True
-                            break
-                if stop or soup.find('i', class_='i-arrows-angle-2-r') is None:
-                    break
-            success_count = 0
-            for result in reversed(results):
-                process_result = self.create_news_log_from_news_log_object(result)
-                if process_result == 0:
-                    success_count += 1
-            if len(results) > 0:
-                self.create_news_log_cache(success_count, results[0])
-        except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - News')
-            print(e)
+        self.download_template_news(page_prefix=prefix, article_select='article.c-entry-item',
+                                    date_select='span.c-entry-date', title_select='h1.c-entry-item__title',
+                                    id_select='a', stop_date='2021.01.29', a_tag_prefix=prefix,
+                                    next_page_select='a.next.page-numbers')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -806,4 +771,25 @@ class Yuyuyu3Download(Fall2021AnimeDownload):
         self.add_to_image_list('tw_visual1', 'https://pbs.twimg.com/media/EeUu6NHVAAAqYgu?format=jpg&name=large')
         self.add_to_image_list('tw_visual2', 'https://pbs.twimg.com/media/E0L1PAhVEAICS7o?format=jpg&name=4096x4096')
         self.download_image_list(folder)
-        self.download_by_template(folder, self.PAGE_PREFIX + 'img/home/visual_%s.jpg', 2, 10)
+        self.download_by_template(folder, 'https://yuyuyu.tv/season2/img/home/visual_%s.jpg', 2, 10)
+        self.download_by_template(folder, self.PAGE_PREFIX + 'img/home/visual_%s.jpg', 2, 1)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        chara_url = self.PAGE_PREFIX + 'character/'
+        self.image_list = []
+        try:
+            json_obj = self.get_json(chara_url + 'chara_data.php')
+            if 'charas' in json_obj and isinstance(json_obj['charas'], list):
+                for chara in json_obj['charas']:
+                    if 'images' in chara and 'visuals' in chara['images'] and \
+                            isinstance(chara['images']['visuals'], list):
+                        for visual in chara['images']['visuals']:
+                            if 'image' in visual:
+                                image_url = chara_url + visual['image']
+                                image_name = self.extract_image_name_from_url(image_url)
+                                self.add_to_image_list(image_name, image_url)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Character')
+            print(e)
+        self.download_image_list(folder)
