@@ -482,6 +482,7 @@ class Dea5Download(Summer2021AnimeDownload, NewsTemplate):
         self.download_episode_preview()
         self.download_news()
         self.download_key_visual()
+        self.download_character()
 
     def download_episode_preview(self):
         try:
@@ -503,7 +504,7 @@ class Dea5Download(Summer2021AnimeDownload, NewsTemplate):
                             if images[i].has_attr('src'):
                                 image_url = images[i]['src']
                                 image_name = episode + '_' + str(i + 1)
-                            self.add_to_image_list(image_name, image_url)
+                                self.add_to_image_list(image_name, image_url)
                         self.download_image_list(self.base_folder)
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
@@ -521,6 +522,11 @@ class Dea5Download(Summer2021AnimeDownload, NewsTemplate):
         self.add_to_image_list('kv2', self.PAGE_PREFIX + 'wp-content/uploads/2021/08/KV2_着彩_ロゴ無_0813.jpg')
         self.add_to_image_list('kv2_tw', 'https://pbs.twimg.com/media/E-AIH4gUcAQeORn?format=jpg&name=4096x4096')
         self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'wp-content/themes/design/img/page/img_character_figure-person_%s.png'
+        self.download_by_template(folder, template, 2, 1)
 
 
 # Genjitsu Shugi Yuusha no Oukoku Saikenki
