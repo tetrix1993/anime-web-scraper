@@ -921,6 +921,18 @@ class MainDownload:
         else:
             raise Exception('Unexpected type for template')
 
+        if isinstance(prefix, str):
+            prefixes = [prefix]
+        elif isinstance(prefix, list):
+            prefixes = prefix
+        else:
+            raise Exception('Unexpected type for prefix')
+
+        # Number of templates must be equal to number of prefixes if there is more than one prefixes
+        if len(prefixes) > 1 and len(prefixes) != len(templates):
+            raise Exception('Number of templates must be equal to the number of prefixes ' +
+                            'if there is more than one prefixes')
+
         if save_zfill is None:
             save_zfill = zfill
 
@@ -930,10 +942,16 @@ class MainDownload:
         while i < end:
             success_count = 0
             i += 1
+            template_index = -1
             for template_ in templates:
+                template_index += 1
+                if len(prefixes) <= template_index:
+                    prefix_index = len(prefixes) - 1
+                else:
+                    prefix_index = template_index
                 image_url = template_ % str(i).zfill(zfill)
                 saved_url = template_ % str(i).zfill(save_zfill)  # For the purpose of saved image name
-                image_name = prefix + self.extract_image_name_from_url(saved_url, with_extension=False)
+                image_name = prefixes[prefix_index] + self.extract_image_name_from_url(saved_url, with_extension=False)
                 if self.is_image_exists(image_name, folder):
                     success_count += 1
                     skip_remaining = max_skip

@@ -82,8 +82,10 @@ class IsekaiShokudou2Download(Fall2021AnimeDownload, NewsTemplate3):
 
     def download_character(self):
         folder = self.create_character_directory()
-        template = self.PAGE_PREFIX + 'assets/top/character/c%s.png'
-        self.download_by_template(folder, template, 1)
+        # template = self.PAGE_PREFIX + 'assets/top/character/c%s.png'
+        templates = [self.PAGE_PREFIX + 'assets/character/c/%s.png', self.PAGE_PREFIX + 'assets/character/f/%s.png']
+        prefixes = ['chara', 'face']
+        self.download_by_template(folder, templates, 1, 1, prefix=prefixes, save_zfill=2)
 
     def download_media(self):
         folder = self.create_media_directory()
