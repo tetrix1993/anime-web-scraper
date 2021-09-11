@@ -260,6 +260,9 @@ class BokuremaDownload(Summer2021AnimeDownload, NewsTemplate):
         folder = self.create_media_directory()
         self.image_list = []
         self.add_to_image_list('music_op', self.PAGE_PREFIX + '/assets/images/uploads/2021/06/1469a0880be391b2ea29cc539c8b74b2.png')
+        self.add_to_image_list('collab_aki', self.PAGE_PREFIX + '/assets/images/uploads/2021/07/0f2070d6b36e6c2380a732b01ab735ab.jpg')
+        self.add_to_image_list('collab_nanako', self.PAGE_PREFIX + '/assets/images/uploads/2021/08/4b8dac976c6ded61e93fecc91661e653.jpg')
+        self.add_to_image_list('collab_eiko', self.PAGE_PREFIX + '/assets/images/uploads/2021/09/98688b3740687d796fb2696e29fecb9d.jpg')
         self.download_image_list(folder)
 
         # Blu-ray
