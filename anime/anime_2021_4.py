@@ -50,6 +50,7 @@ class IsekaiShokudou2Download(Fall2021AnimeDownload, NewsTemplate3):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX)
@@ -83,6 +84,22 @@ class IsekaiShokudou2Download(Fall2021AnimeDownload, NewsTemplate3):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'assets/top/character/c%s.png'
         self.download_by_template(folder, template, 1)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        self.image_list = []
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'bluray.html')
+            images = soup.select('div.bdbox-data img')
+            for image in images:
+                if image.has_attr('src') and not image['src'].endswith('np.png'):
+                    image_url = self.PAGE_PREFIX + image['src'].replace('./', '')
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Blu-ray')
+            print(e)
+        self.download_image_list(folder)
 
 
 # Kaizoku Oujo
