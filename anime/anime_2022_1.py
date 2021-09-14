@@ -391,6 +391,8 @@ class TensaiOujiDownload(Winter2022AnimeDownload, NewsTemplate2):
         folder = self.create_key_visual_directory()
         self.image_list = []
         self.add_to_image_list('kv', self.PAGE_PREFIX + 'core_sys/images/main/home/kv.jpg')
+        self.add_to_image_list('kv1_5', self.PAGE_PREFIX + 'core_sys/images/main/home/kv_1_5.jpg')
+        self.add_to_image_list('kv1_5_tw', 'https://pbs.twimg.com/media/E_PAfkYVgAc6n2Q?format=jpg&name=large')
         self.download_image_list(folder)
 
     def download_character(self):
