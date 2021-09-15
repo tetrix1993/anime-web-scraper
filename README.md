@@ -82,6 +82,7 @@ pip install -r requirements.txt
 
 ### New Anime
 The premiere date for the anime listed here has not been announced.
+* [Deaimon](https://deaimon.jp/)
 * [Do It Yourself!!](https://diy-anime.com/)
 * [Gaikotsu Kishi-sama, Tadaima Isekai e Odekakechuu](https://skeleton-knight.com/)
 * [Goblin Slayer 2nd Season](http://www.goblinslayer.jp/)

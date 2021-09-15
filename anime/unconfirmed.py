@@ -3,6 +3,7 @@ import anime.constants as constants
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsTemplate3
 
 # Anohana S2 https://10th.anohana.jp/ #あの花 #anohana @anohana_project
+# Deaimon https://deaimon.jp/ #であいもん #deaimon @deaimon_anime
 # Do It Yourself!! https://diy-anime.com/ #diyアニメ @diy_anime
 # Gaikotsu Kishi-sama, Tadaima Isekai e Odekakechuu https://skeleton-knight.com/ #骸骨騎士様 @gaikotsukishi
 # Goblin Slayer S2 http://www.goblinslayer.jp/ #ゴブスレ @GoblinSlayer_GA
@@ -108,6 +109,57 @@ class Anohana2Download(UnconfirmedDownload):
         self.add_to_image_list('teaser', 'https://pbs.twimg.com/media/ExRRykWU4AEZ6Cy?format=jpg&name=large')
         self.add_to_image_list('teaser_tw', self.PAGE_PREFIX + 'assets/images/pc/teaser/img_kv.png')
         self.download_image_list(folder)
+
+
+# Deaimon
+class DeaimonDownload(UnconfirmedDownload, NewsTemplate2):
+    title = 'Deaimon'
+    keywords = [title]
+    website = 'https://deaimon.jp/'
+    twitter = 'deaimon_anime'
+    hashtags = ['であいもん', 'deaimon']
+    folder_name = 'deaimon'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.add_to_image_list('kv_tw', 'https://pbs.twimg.com/media/E_T2HaPUUAIwv3-?format=jpg&name=4096x4096')
+        self.add_to_image_list('kv_wide', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv.webp')
+        # self.add_to_image_list('kv', self.PAGE_PREFIX + 'core_sys/images/news/00000002/block/00000009/00000003.jpg')
+        self.add_to_image_list('kv_sp', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv_sp.png')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('div.charWrap img')
+            self.image_list = []
+            for image in images:
+                if image.has_attr('src'):
+                    image_url = self.PAGE_PREFIX + image['src']
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Character')
+            print(e)
 
 
 # Do It Yourself!!
