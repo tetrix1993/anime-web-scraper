@@ -499,10 +499,14 @@ class KakkounoIinazukeDownload(UnconfirmedDownload, NewsTemplate3):
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('kv1', self.PAGE_PREFIX + 'assets/news/kv1.jpg')
-        self.add_to_image_list('vis1', self.PAGE_PREFIX + 'assets/top/main-t1/vis.jpg')
-        self.download_image_list(folder)
+        template = self.PAGE_PREFIX + 'assets/news/kv%s.jpg'
+        self.download_by_template(folder, template, 1, 1)
+
+        for i in range(20):
+            image_url = self.PAGE_PREFIX + f'assets/top/main-t{i + 1}/vis.jpg'
+            result = self.download_image(image_url, f'{folder}/vis{i + 1}')
+            if result == -1:
+                break
 
     def download_character(self):
         folder = self.create_character_directory()
