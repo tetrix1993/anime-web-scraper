@@ -1,7 +1,7 @@
 import os
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 from datetime import datetime, timedelta
-from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
+from scan import AnimeRecorderScanner, AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 
 
 # 100-man no Inochi no Ue ni Ore wa Tatteiru S2 http://1000000-lives.com/ #俺100 @1000000_lives
@@ -773,6 +773,7 @@ class JahysamaDownload(Summer2021AnimeDownload, NewsTemplate):
         self.download_episode_preview()
         self.download_episode_preview_guess()
         self.download_news()
+        self.download_episode_preview_external()
         self.download_key_visual()
         self.download_character()
         self.download_media()
@@ -827,6 +828,10 @@ class JahysamaDownload(Summer2021AnimeDownload, NewsTemplate):
         if len(os.listdir(folder)) == 0:
             os.rmdir(folder)
         return is_successful
+
+    def download_episode_preview_external(self):
+        jp_title = 'ジャヒー様はくじけない'
+        AnimeRecorderScanner(jp_title, self.base_folder, self.FINAL_EPISODE, download_id=self.download_id).run()
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.news_list_item',
