@@ -5,6 +5,7 @@ from datetime import datetime
 from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 
 
+# Gyakuten Sekai no Denchi Shoujo https://denchi-project.com/ #電池少女 @denchi_project
 # Isekai Shokudou 2 https://isekai-shokudo2.com/ #異世界食堂 @nekoya_PR
 # Kaizoku Oujo http://fena-pirate-princess.com/ #海賊王女 @fena_pirate
 # Komi-san wa, Comyushou desu. https://komisan-official.com/ #古見さん #komisan @comisanvote
@@ -29,6 +30,53 @@ class Fall2021AnimeDownload(MainDownload):
 
     def __init__(self):
         super().__init__()
+
+
+# Gyakuten Sekai no Denchi Shoujo
+class DenchiShoujoDownload(Fall2021AnimeDownload, NewsTemplate):
+    title = 'Gyakuten Sekai no Denchi Shoujo'
+    keywords = [title, 'Rumble Garanndoll']
+    website = 'https://denchi-project.com/'
+    twitter = 'denchi_project'
+    hashtags = '電池少女'
+    folder_name = 'denchi-shoujo'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article.content-entry',
+                                    title_select='h2.entry-title span', date_select='div.entry-date span',
+                                    id_select=None, id_has_id=True, news_prefix='news.html')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('vis-all', self.PAGE_PREFIX + 'assets/top/t1/vis-all.jpg')
+        self.add_to_image_list('vis-t1', self.PAGE_PREFIX + 'assets/news/vis-t1.jpg')
+        self.download_image_list(folder)
+
+        template1 = self.PAGE_PREFIX + 'assets/top/t1/vis-all%s.jpg'
+        self.download_by_template(folder, template1, 1, 2)
+
+        template2 = self.PAGE_PREFIX + 'assets/news/vis-k%s.jpg'
+        self.download_by_template(folder, template2, 1, 1)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'assets/character/c/%s.png'
+        self.download_by_template(folder, template, 1, 1, prefix='chara', save_zfill=2)
 
 
 # Isekai Shokudou 2

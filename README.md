@@ -117,6 +117,7 @@ The premiere date for the anime listed here has not been announced.
 * [Tensai Ouji no Akaji Kokka Saisei Jutsu: Souda, Baikoku shiyou](https://tensaiouji-anime.com/)
 
 ### Fall 2021 Anime
+* [Gyakuten Sekai no Denchi Shoujo](https://denchi-project.com/)
 * [Isekai Shokudou 2](https://isekai-shokudo2.com/)
 * [Kaizoku Oujo](http://fena-pirate-princess.com/)
 * [Komi-san wa, Comyushou desu.](https://komisan-official.com/)
