@@ -117,6 +117,7 @@ The premiere date for the anime listed here has not been announced.
 * [Tensai Ouji no Akaji Kokka Saisei Jutsu: Souda, Baikoku shiyou](https://tensaiouji-anime.com/)
 
 ### Fall 2021 Anime
+* [Deep Insanity: The Lost Child](https://www.jp.square-enix.com/deepinsanity/anime/)
 * [Gyakuten Sekai no Denchi Shoujo](https://denchi-project.com/)
 * [Isekai Shokudou 2](https://isekai-shokudo2.com/)
 * [Kaizoku Oujo](http://fena-pirate-princess.com/)

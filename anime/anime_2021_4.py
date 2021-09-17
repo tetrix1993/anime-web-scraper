@@ -5,6 +5,7 @@ from datetime import datetime
 from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 
 
+# Deep Insanity: The Lost Child https://www.jp.square-enix.com/deepinsanity/anime/ #DI #ディープインサニティ @deepinsanity_pj
 # Gyakuten Sekai no Denchi Shoujo https://denchi-project.com/ #電池少女 @denchi_project
 # Isekai Shokudou 2 https://isekai-shokudo2.com/ #異世界食堂 @nekoya_PR
 # Kaizoku Oujo http://fena-pirate-princess.com/ #海賊王女 @fena_pirate
@@ -32,6 +33,35 @@ class Fall2021AnimeDownload(MainDownload):
         super().__init__()
 
 
+# Deep Insanity: The Lost Child
+class DeepInsanityDownload(Fall2021AnimeDownload):
+    title = 'Deep Insanity: The Lost Child'
+    keywords = [title]
+    website = 'https://www.jp.square-enix.com/deepinsanity/anime/'
+    twitter = 'deepinsanity_pj'
+    hashtags = ['DI', 'ディープインサニティ']
+    folder_name = 'deep-insanity'
+
+    PAGE_PREFIX = 'https://www.jp.square-enix.com/deepinsanity/'
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('kv_tw', 'https://pbs.twimg.com/media/E_eipEAVUAQwHQh?format=jpg&name=4096x4096')
+        self.add_to_image_list('anime_kv', self.PAGE_PREFIX + 'assets/images/anime/anime_kv.png')
+        self.download_image_list(folder)
+
+
 # Gyakuten Sekai no Denchi Shoujo
 class DenchiShoujoDownload(Fall2021AnimeDownload, NewsTemplate):
     title = 'Gyakuten Sekai no Denchi Shoujo'
@@ -50,7 +80,6 @@ class DenchiShoujoDownload(Fall2021AnimeDownload, NewsTemplate):
         self.download_episode_preview()
         self.download_news()
         self.download_key_visual()
-        self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX)
