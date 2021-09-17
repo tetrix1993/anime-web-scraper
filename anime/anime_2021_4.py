@@ -697,7 +697,29 @@ class TsukiLaikaNosferatuDownload(Fall2021AnimeDownload, NewsTemplate):
         self.download_media()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story')
+            nav_btns = soup.select('a.story-nav-btn')
+            for btn in nav_btns:
+                if btn.has_attr('href'):
+                    try:
+                        episode = str(int(btn['href'].split('/')[-1])).zfill(2)
+                    except:
+                        continue
+                    if self.is_image_exists(episode + '_1'):
+                        continue
+                    ep_soup = self.get_soup(btn['href'])
+                    images = ep_soup.select('li.story-detail-thumb-box img')
+                    self.image_list = []
+                    for i in range(len(images)):
+                        if images[i].has_attr('src'):
+                            image_url = images[i]['src']
+                            image_name = f'{episode}_{(i + 1)}'
+                            self.add_to_image_list(image_name, image_url)
+                    self.download_image_list(self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article.news-box',
