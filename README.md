@@ -126,6 +126,7 @@ The premiere date for the anime listed here has not been announced.
 * [Mieruko-chan](https://mierukochan.jp/)
 * [Muv-Luv Alternative](https://muv-luv-alternative-anime.com/)
 * [Saihate no Paladin](https://farawaypaladin.com/)
+* [Sakugan](http://sakugan-anime.com/)
 * [Sekai Saikou no Ansatsusha, Isekai Kizoku ni Tensei suru](https://ansatsu-kizoku.jp/)
 * [Senpai ga Uzai Kouhai no Hanashi](https://senpaiga-uzai-anime.com/)
 * [Shin no Nakama ja Nai to Yuusha no Party wo Oidasareta node, Henkyou de Slow Life suru Koto ni Shimashita](https://shinnonakama.com/)

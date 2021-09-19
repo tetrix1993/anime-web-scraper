@@ -14,6 +14,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 # Mieruko-chan https://mierukochan.jp/ #見える子ちゃん @mierukochan_PR
 # Muv-Luv Alternative https://muv-luv-alternative-anime.com/ #マブラヴ #マブラヴアニメ #muvluv @Muv_Luv_A_anime
 # Saihate no Paladin https://farawaypaladin.com/ #最果てのパラディン #faraway_paladin @faraway_paladin
+# Sakugan http://sakugan-anime.com/ #サクガン @ANIMA_info
 # Sekai Saikou no Ansatsusha, Isekai Kizoku ni Tensei suru https://ansatsu-kizoku.jp/ #暗殺貴族 @ansatsu_kizoku
 # Senpai ga Uzai Kouhai no Hanashi https://senpaiga-uzai-anime.com/ #先輩がうざい後輩の話 @uzai_anime
 # Shin no Nakama ja Nai to Yuusha no Party wo Oidasareta node, Henkyou de Slow Life suru Koto ni Shimashita https://shinnonakama.com/ #真の仲間 @shinnonakama_tv
@@ -475,6 +476,85 @@ class SaihatenoPaladinDownload(Fall2021AnimeDownload, NewsTemplate):
         self.download_by_template(folder, template, 1)
         template2 = self.PAGE_PREFIX + 'img/main_c%s.png'
         self.download_by_template(folder, template2, 1)
+
+
+# Sakugan
+class SakuganDownload(Fall2021AnimeDownload, NewsTemplate):
+    title = 'Sakugan'
+    keywords = [title]
+    website = 'http://sakugan-anime.com/'
+    twitter = 'ANIMA_info'
+    hashtags = 'サクガン'
+    folder_name = 'sakugan'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        first_episode_url = self.PAGE_PREFIX + 'story/story01.html'
+        try:
+            soup = self.get_soup(first_episode_url)
+            a_tags = soup.select('ul.num li a')
+            for a_tag in a_tags:
+                if not a_tag.has_attr('href'):
+                    continue
+                try:
+                    episode = str(int(a_tag.text.strip())).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                if a_tag['href'] != first_episode_url:
+                    ep_soup = self.get_soup(a_tag['href'])
+                else:
+                    ep_soup = soup
+                images = ep_soup.select('ul.story_slider img')
+                self.image_list = []
+                for i in range(len(images)):
+                    if images[i].has_attr('src'):
+                        src = images[i]['src']
+                        image_url = self.PAGE_PREFIX + (src[1:] if src.startswith('/') else src)
+                        image_name = episode + '_' + str(i + 1)
+                        self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='ul.tile li',
+                                    date_select='time', title_select='p.txt a', id_select='a',
+                                    news_prefix='topics/', next_page_select='a.nextpostslink')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('mv', self.PAGE_PREFIX + 'wp-content/themes/sakugan_theme/img/top/mv.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character')
+            images = soup.select('ul.character_slider img')
+            self.image_list = []
+            for image in images:
+                if image.has_attr('src'):
+                    image_url = self.PAGE_PREFIX + (image['src'][1:] if image['src'].startswith('/') else image['src'])
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Character')
+            print(e)
 
 
 # Sekai Saikou no Ansatsusha, Isekai Kizoku ni Tensei suru
