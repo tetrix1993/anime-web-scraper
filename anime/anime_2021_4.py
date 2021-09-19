@@ -5,6 +5,7 @@ from datetime import datetime
 from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 
 
+# Blue Period https://blue-period.jp/ #ブルーピリオド @blueperiod_PR
 # Deep Insanity: The Lost Child https://www.jp.square-enix.com/deepinsanity/anime/ #DI #ディープインサニティ @deepinsanity_pj
 # Gyakuten Sekai no Denchi Shoujo https://denchi-project.com/ #電池少女 @denchi_project
 # Isekai Shokudou 2 https://isekai-shokudo2.com/ #異世界食堂 @nekoya_PR
@@ -31,6 +32,49 @@ class Fall2021AnimeDownload(MainDownload):
 
     def __init__(self):
         super().__init__()
+
+
+# Blue Period
+class BluePeriodDownload(Fall2021AnimeDownload, NewsTemplate):
+    title = 'Blue Period'
+    keywords = [title]
+    website = 'https://blue-period.jp/'
+    twitter = 'blueperiod_PR'
+    hashtags = 'ブルーピリオド'
+    folder_name = 'blue-period'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='ul.news-list li.news-item',
+                                    date_select='p.news-date', title_select='p.news-title', id_select='a',
+                                    next_page_select='div.pagination a.next',
+                                    next_page_eval_index_class='off', next_page_eval_index=0)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('teaser-kv', self.PAGE_PREFIX + 'wp/wp-content/themes/blueperiod_honban_theme/assets/img/page/teaser-kv.jpg')
+        self.add_to_image_list('1stkv', self.PAGE_PREFIX + 'wp/wp-content/themes/blueperiod_honban_theme/assets/img/page/1stkv.jpg')
+        self.add_to_image_list('2ndkv', self.PAGE_PREFIX + 'wp/wp-content/themes/blueperiod_honban_theme/assets/img/page/2ndkv.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'wp/wp-content/themes/blueperiod_honban_theme/assets/img/page/chara-pic%s.png'
+        self.download_by_template(folder, template, 2, 1)
 
 
 # Deep Insanity: The Lost Child
