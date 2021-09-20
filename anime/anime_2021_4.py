@@ -13,6 +13,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 # Komi-san wa, Comyushou desu. https://komisan-official.com/ #古見さん #komisan @comisanvote
 # Mieruko-chan https://mierukochan.jp/ #見える子ちゃん @mierukochan_PR
 # Muv-Luv Alternative https://muv-luv-alternative-anime.com/ #マブラヴ #マブラヴアニメ #muvluv @Muv_Luv_A_anime
+# Ousama Ranking https://osama-ranking.com/ #王様ランキング @osama_ranking
 # Saihate no Paladin https://farawaypaladin.com/ #最果てのパラディン #faraway_paladin @faraway_paladin
 # Sakugan http://sakugan-anime.com/ #サクガン @ANIMA_info
 # Sekai Saikou no Ansatsusha, Isekai Kizoku ni Tensei suru https://ansatsu-kizoku.jp/ #暗殺貴族 @ansatsu_kizoku
@@ -433,6 +434,74 @@ class MuvLuvAlternativeDownload(Fall2021AnimeDownload, NewsTemplate):
             print("Error in running " + self.__class__.__name__ + ' - Character')
             print(e)
         self.download_image_list(folder)
+
+
+# Ousama Ranking
+class OsamaRankingDownload(Fall2021AnimeDownload, NewsTemplate):
+    title = 'Ousama Ranking'
+    keywords = [title, 'Ranking of Kings', 'Osama']
+    website = 'https://osama-ranking.com/'
+    twitter = 'osama_ranking'
+    hashtags = '王様ランキング'
+    folder_name = 'osama-ranking'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.news_list__item',
+                                    date_select='p.news_date', title_select='p.news_title', id_select='a',
+                                    a_tag_prefix=news_url, a_tag_start_text_to_remove='./', paging_type=1,
+                                    next_page_select='p.page_next', next_page_eval_index=0,
+                                    next_page_eval_index_class='none')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('img_kv', self.PAGE_PREFIX + 'assets/img/top/img_kv.jpg')
+        self.add_to_image_list('img_kv_2', self.PAGE_PREFIX + 'assets/img/top/img_kv_2.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            last_id_elem = soup.select('li.chara_list__item:last-child a')
+            if len(last_id_elem) > 0:
+                try:
+                    last_id = int(last_id_elem[len(last_id_elem) - 1]['href'].split('=')[1])
+                except:
+                    return
+                prefix = f'{self.PAGE_PREFIX}assets/img/character/detail/'
+                for i in range(last_id):
+                    num = i + 1
+                    filename1 = f'img_chara{str(num).zfill(2)}.png'
+                    filename2 = f'cha_sub{str(num).zfill(2)}.png'
+                    filename3 = f'img_scene_{num}.jpg'
+                    if self.is_image_exists(filename3[0:len(filename3) - 4], folder)\
+                            or self.is_image_exists(filename2[0:len(filename2) - 4], folder)\
+                            or self.is_image_exists(filename1[0:len(filename1) - 4], folder):
+                        continue
+                    self.download_image(prefix + filename1, folder + '/' + filename1[0:len(filename1) - 4])
+                    self.download_image(prefix + filename2, folder + '/' + filename2[0:len(filename2) - 4])
+                    template = f'{prefix}cha_sub{str(num).zfill(2)}_%s.png'
+                    self.download_by_template(folder, template, 1, 1)
+                    self.download_image(prefix + filename3, folder + '/' + filename3[0:len(filename3) - 4])
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Character')
+            print(e)
 
 
 # Saihate no Paladin
