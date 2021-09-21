@@ -126,6 +126,7 @@ The premiere date for the anime listed here has not been announced.
 * [Mieruko-chan](https://mierukochan.jp/)
 * [Muv-Luv Alternative](https://muv-luv-alternative-anime.com/)
 * [Ousama Ranking](https://osama-ranking.com/)
+* [Platinum End](https://anime-platinumend.com/)
 * [Saihate no Paladin](https://farawaypaladin.com/)
 * [Sakugan](http://sakugan-anime.com/)
 * [Sekai Saikou no Ansatsusha, Isekai Kizoku ni Tensei suru](https://ansatsu-kizoku.jp/)

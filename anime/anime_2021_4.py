@@ -14,6 +14,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 # Mieruko-chan https://mierukochan.jp/ #見える子ちゃん @mierukochan_PR
 # Muv-Luv Alternative https://muv-luv-alternative-anime.com/ #マブラヴ #マブラヴアニメ #muvluv @Muv_Luv_A_anime
 # Ousama Ranking https://osama-ranking.com/ #王様ランキング @osama_ranking
+# Platinum End https://anime-platinumend.com/ #プラチナエンド #PlatinumEnd @ani_platinumend
 # Saihate no Paladin https://farawaypaladin.com/ #最果てのパラディン #faraway_paladin @faraway_paladin
 # Sakugan http://sakugan-anime.com/ #サクガン @ANIMA_info
 # Sekai Saikou no Ansatsusha, Isekai Kizoku ni Tensei suru https://ansatsu-kizoku.jp/ #暗殺貴族 @ansatsu_kizoku
@@ -500,6 +501,67 @@ class OsamaRankingDownload(Fall2021AnimeDownload, NewsTemplate):
                     template = f'{prefix}cha_sub{str(num).zfill(2)}_%s.png'
                     self.download_by_template(folder, template, 1, 1)
                     self.download_image(prefix + filename3, folder + '/' + filename3[0:len(filename3) - 4])
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Character')
+            print(e)
+
+
+# Platinum End
+class PlatinumEndDownload(Fall2021AnimeDownload, NewsTemplate):
+    title = 'Platinum End'
+    keywords = [title]
+    website = 'https://anime-platinumend.com/'
+    twitter = 'ani_platinumend'
+    hashtags = ['プラチナエンド', 'PlatinumEnd']
+    folder_name = 'platinum-end'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.sw-News_List_Item',
+                                    date_select='p.date', title_select='p.ttl-txt', id_select='a',
+                                    next_page_select='a.nextpostslink')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('kv2', self.PAGE_PREFIX + 'wp/wp-content/uploads/2021/06/Platinum_End_KV02_WEB.jpg')
+        self.add_to_image_list('kv3', self.PAGE_PREFIX + 'wp/wp-content/uploads/2021/08/Platinum_End_KV3_b.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            a_tags = soup.select('li.character_List_Item a')
+            prefix = self.PAGE_PREFIX + 'wp/wp-content/themes/platinumend_v0/assets/images/common/character/'
+            template1 = prefix + 'body_%s.png'
+            template2 = prefix + 'face_%s.png'
+            for a_tag in a_tags:
+                if a_tag.has_attr('href'):
+                    if 'character/' in a_tag['href']:
+                        name = a_tag['href'].split('character/')[1]
+                        if name.endswith('/'):
+                            name = name[0:len(name) - 1]
+                        if self.is_image_exists(f'body_{name}'):
+                            continue
+                        result = self.download_image(template1 % name, f'{folder}/body_{name}')
+                        if result != -1:
+                            template_url = template1 % (name + '%s')
+                            self.download_by_template(folder, template_url, 1, 2)
+                        self.download_image(template2 % name, f'{folder}/face_{name}')
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + ' - Character')
             print(e)
