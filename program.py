@@ -235,7 +235,7 @@ def get_all_anime_classes(s_filter):
                     if subsubclass.enabled and subsubclass.match(subsubclass, s_filter):
                         anime_classes.append(subsubclass)
 
-    anime_classes.sort(key=lambda x: x.title)
+    anime_classes.sort(key=lambda x: x.title.lower())
     return anime_classes
 
 
@@ -250,7 +250,7 @@ def get_season_classes():
                     if subsubclass.enabled:
                         season_classes.append(subclass)
                         break
-    season_classes.sort(key=lambda x: x.season, reverse=True)
+    season_classes.sort(key=lambda x: x.season.lower(), reverse=True)
     return season_classes
 
 
