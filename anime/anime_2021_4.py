@@ -22,6 +22,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 # Shinka no Mi: Shiranai Uchi ni Kachigumi Jinsei https://www.shinkanomi-anime.com/ #進化の実 #勝ち組人生 #ゴリラ系女子 @shinkanomianime
 # Shuumatsu no Harem https://end-harem-anime.com/ #終末のハーレム @harem_official_
 # Taishou Otome Otogibanashi http://taisho-otome.com/ #大正オトメ #昭和オトメ @otome_otogi
+# takt op.Destiny https://anime.takt-op.jp/ #takt_op_Destiny #タクトオーパス @takt_op_destiny
 # Tsuki to Laika to Nosferatu https://tsuki-laika-nosferatu.com/ #月とライカ @LAIKA_anime
 # Yuuki Yuuna wa Yuusha de Aru: Dai Mankai no Shou https://yuyuyu.tv/season2/ #yuyuyu @anime_yukiyuna
 
@@ -955,6 +956,65 @@ class TaishoOtomeDownload(Fall2021AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'wp/wp-content/themes/taisho-otome/img/character/img_chara%s.png'
         self.download_by_template(folder, template, 2)
+
+
+# takt op.Destiny
+class TaktOpDestinyDownload(Fall2021AnimeDownload, NewsTemplate):
+    title = 'takt op.Destiny'
+    keywords = [title]
+    website = 'https://anime.takt-op.jp/'
+    twitter = 'takt_op_destiny'
+    hashtags = ['takt_op_Destiny', 'タクトオーパス']
+    folder_name = 'takt-op'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='div.sw-NewsArchive li',
+                                    date_select='div.date', title_select='div.title p', id_select='a',
+                                    date_func=lambda x: x[0:4] + '.' + x[4:],
+                                    next_page_select='a.nextpostslink')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.add_to_image_list('teaser_tw', 'https://pbs.twimg.com/media/E44RbYeVIAIlAFB?format=jpg&name=4096x4096')
+        self.add_to_image_list('main_visual', 'https://pbs.twimg.com/media/E-hPi0mVkAY0K_g?format=jpg&name=4096x4096')
+        self.add_to_image_list('img_kv_2', self.PAGE_PREFIX + 'wp-content/themes/takt-op/assets/images/common/index/img_kv_2.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            a_tags = soup.select('div.character-Index a')
+            prefix = self.PAGE_PREFIX + 'wp-content/themes/takt-op/assets/images/common/character/'
+            template1 = prefix + '%s/img.png'
+            template2 = prefix + '%s/img_close-up.png'
+            for a_tag in a_tags:
+                if a_tag.has_attr('href'):
+                    if 'character/' in a_tag['href']:
+                        name = a_tag['href'].split('character/')[1]
+                        if name.endswith('/'):
+                            name = name[0:len(name) - 1]
+                        if self.is_image_exists(f'img_{name}'):
+                            continue
+                        self.download_image(template1 % name, f'{folder}/img_{name}')
+                        self.download_image(template2 % name, f'{folder}/img_close-up_-{name}')
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Character')
+            print(e)
 
 
 # Tsuki to Laika to Nosferatu

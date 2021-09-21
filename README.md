@@ -134,6 +134,7 @@ The premiere date for the anime listed here has not been announced.
 * [Shinka no Mi: Shiranai Uchi ni Kachigumi Jinsei](https://www.shinkanomi-anime.com/)
 * [Shuumatsu no Harem](https://end-harem-anime.com/)
 * [Taishou Otome Otogibanashi](http://taisho-otome.com/)
+* [takt op.Destiny](https://anime.takt-op.jp/)
 * [Tsuki to Laika to Nosferatu](https://tsuki-laika-nosferatu.com/)
 * [Yuuki Yuuna wa Yuusha de Aru: Dai Mankai no Shou](https://yuyuyu.tv/season2/)
 
