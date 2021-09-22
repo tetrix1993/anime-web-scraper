@@ -747,6 +747,8 @@ class MainDownload:
         for image_obj in image_objs:
             if not isinstance(image_obj, dict) or 'name' not in image_obj.keys() or 'url' not in image_obj.keys():
                 continue
+            if len(image_obj['url']) == 0 or len(image_obj['name']) == 0:
+                continue
             filename = filepath + '/' + image_obj['name']
             if os.path.exists(filename + '.jpg') or os.path.exists(filename + '.png') or \
                     os.path.exists(filename + '.gif') or os.path.exists(filename + '.webp'):
@@ -897,6 +899,8 @@ class MainDownload:
         return None
 
     def add_to_image_list(self, name, url, to_jpg=False, is_mocanews=False):
+        if len(name) == 0 or len(url) == 0:
+            return
         image_obj = {'name': name, 'url': url}
         if to_jpg:
             image_obj['to_jpg'] = True

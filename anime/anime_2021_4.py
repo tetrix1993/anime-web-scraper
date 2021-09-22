@@ -1188,6 +1188,8 @@ class TsukiLaikaNosferatuDownload(Fall2021AnimeDownload, NewsTemplate):
 
     def download_media(self):
         folder = self.create_media_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
         try:
             soup = self.get_soup(self.PAGE_PREFIX + 'products/cd')
             a_tags = soup.select('a.products-box-link')
@@ -1195,19 +1197,29 @@ class TsukiLaikaNosferatuDownload(Fall2021AnimeDownload, NewsTemplate):
                 if a_tag.has_attr('href'):
                     cover_image = a_tag.find('img')
                     if cover_image and cover_image.has_attr('src') and 'nowprinting' not in cover_image['src']:
+                        try:
+                            page_id = a_tag['href'].split('?p=')[1]
+                        except:
+                            continue
+                        if page_id in processed:
+                            continue
                         cd_soup = self.get_soup(a_tag['href'])
                         if cd_soup:
                             images = cd_soup.select('#contents-main img')
                             self.image_list = []
                             for image in images:
-                                if image.has_attr('src') and 'nowprinting' not in image['src']:
+                                if image.has_attr('src') and len(image['src']) > 0\
+                                        and 'nowprinting' not in image['src']:
                                     image_url = image['src']
                                     image_name = self.extract_image_name_from_url(image_url)
                                     self.add_to_image_list(image_name, image_url)
+                            if len(self.image_list) > 0:
+                                processed.append(page_id)
                             self.download_image_list(folder)
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + ' - Music')
             print(e)
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Yuuki Yuuna wa Yuusha de Aru: Dai Mankai no Shou
