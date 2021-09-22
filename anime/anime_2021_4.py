@@ -1041,7 +1041,30 @@ class TaktOpDestinyDownload(Fall2021AnimeDownload, NewsTemplate):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            a_tags = soup.select('div.archive li a')
+            for a_tag in a_tags:
+                if a_tag.has_attr('href'):
+                    try:
+                        episode = str(int(a_tag['href'].split('-')[-1])).zfill(2)
+                    except:
+                        continue
+                    if self.is_image_exists(f'{episode}_1'):
+                        continue
+                    ep_soup = self.get_soup(a_tag['href'])
+                    if ep_soup:
+                        images = ep_soup.select('div.swiper li.swiper-slide img')
+                        self.image_list = []
+                        for i in range(len(images)):
+                            if images[i].has_attr('src'):
+                                image_url = self.clear_resize_in_url(images[i]['src'])
+                                image_name = f'{episode}_{i + 1}'
+                                self.add_to_image_list(image_name, image_url)
+                        self.download_image_list(self.base_folder)
+        except Exception as e:
+            print(f"Error in running {self.__class__.__name__}")
+            print(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='div.sw-NewsArchive li',
@@ -1075,7 +1098,7 @@ class TaktOpDestinyDownload(Fall2021AnimeDownload, NewsTemplate):
                         self.download_image(template1 % name, f'{folder}/img_{name}')
                         self.download_image(template2 % name, f'{folder}/img_close-up_-{name}')
         except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - Character')
+            print(f"Error in running {self.__class__.__name__} - Character")
             print(e)
 
 
