@@ -1230,7 +1230,7 @@ class TsukiLaikaNosferatuDownload(Fall2021AnimeDownload, NewsTemplate):
                             continue
                         cd_soup = self.get_soup(a_tag['href'])
                         if cd_soup:
-                            images = cd_soup.select('#contents-main img')
+                            images = cd_soup.select('li.products-detail-thumb-nav-box img')
                             self.image_list = []
                             for image in images:
                                 if image.has_attr('src') and len(image['src']) > 0\
