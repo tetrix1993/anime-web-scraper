@@ -1,7 +1,7 @@
 import os
 import anime.constants as constants
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsTemplate3
-from datetime import datetime
+from datetime import datetime, timedelta
 from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 
 
@@ -516,12 +516,15 @@ class PlatinumEndDownload(Fall2021AnimeDownload, NewsTemplate):
     folder_name = 'platinum-end'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 8
 
     def __init__(self):
         super().__init__()
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_guess()
         self.download_news()
         self.download_key_visual()
         self.download_character()
@@ -553,6 +556,35 @@ class PlatinumEndDownload(Fall2021AnimeDownload, NewsTemplate):
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
+
+    def download_episode_preview_guess(self):
+        folder = self.create_custom_directory('guess')
+        template = self.PAGE_PREFIX + 'wp/wp-content/uploads/%s/%s/%s.png'
+        current_date = datetime.now() + timedelta(hours=1)
+        year = current_date.strftime('%Y')
+        month = current_date.strftime('%m')
+        is_successful = False
+        for i in range(self.FINAL_EPISODE):
+            if self.is_image_exists(f'{year}{month}_{i}_1', folder):
+                continue
+            stop = False
+            for j in range(self.IMAGES_PER_EPISODE):
+                img_name = str(j + 1).zfill(2)
+                if i == 0:
+                    image_url = template % (year, month, img_name)
+                else:
+                    image_url = template % (year, month, img_name + '-' + str(i))
+                image_name = f'{year}{month}_{i}_{j + 1}'
+                result = self.download_image(image_url, folder + '/' + image_name)
+                if result == -1:
+                    stop = True
+                    break
+                is_successful = True
+            if stop:
+                break
+        if is_successful:
+            print(self.__class__.__name__ + ' - Guessed correctly!')
+        return is_successful
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.sw-News_List_Item',
