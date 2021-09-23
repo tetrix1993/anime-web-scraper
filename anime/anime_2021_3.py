@@ -2128,6 +2128,8 @@ class AquatopeDownload(Summer2021AnimeDownload, NewsTemplate):
         self.add_to_image_list('kv1', 'https://pbs.twimg.com/media/EyR238pVgAQLNej?format=jpg&name=large')
         self.add_to_image_list('kv2', self.PAGE_PREFIX + 'wp/wp-content/themes/aquatope-main/_assets/images/top/fv/fv_003@2x.jpg')
         self.add_to_image_list('kv2_big', self.PAGE_PREFIX + 'wp/wp-content/uploads/2021/05/【白い砂のアクアトープ】第2弾キービジュアル.jpg')
+        self.add_to_image_list('kv3', self.PAGE_PREFIX + 'wp/wp-content/themes/aquatope-main/_assets/images/top/fv/fv_004@2x.jpg')
+        self.add_to_image_list('kv3_tw', 'https://pbs.twimg.com/media/E_82nmKVgAESpPY?format=jpg&name=4096x4096')
         self.download_image_list(folder)
 
     def download_character(self):
