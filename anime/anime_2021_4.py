@@ -1030,6 +1030,43 @@ class ShuumatsuNoHaremDownload(Fall2021AnimeDownload, NewsTemplate2):
         self.add_to_image_list('music_op', 'https://pbs.twimg.com/media/E9yvFCOUUAc43_i?format=jpg&name=large')
         self.download_image_list(folder)
 
+        # Blu-ray Bonus
+        try:
+            soup = self.get_soup(f'{self.PAGE_PREFIX}bd/tokuten.html')
+            images = soup.select('div.earlyBooking img, div.shopDet img')
+            self.image_list = []
+            for image in images:
+                if image.has_attr('src') and not image['src'].endswith('nowpri.jpg'):
+                    image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Blu-ray Bonus")
+            print(e)
+
+        # Blu-ray
+        url_template = self.PAGE_PREFIX + 'core_sys/images/contents/%s/block/%s/%s.jpg'
+        first = 33
+        second = 106
+        third = 85
+        try:
+            for i in range(4):
+                image_name = str(third + i).zfill(8)
+                if self.is_image_exists(image_name, folder):
+                    continue
+                num1 = str(first + i).zfill(8)
+                num2 = str(second + i * 5).zfill(8)
+                image_url = url_template % (num1, num2, image_name)
+                if self.is_matching_content_length(image_url, 5630):
+                    break
+                result = self.download_image_list(folder + '/' + image_name, image_url)
+                if result == -1:
+                    break
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Blu-ray")
+            print(e)
+
 
 # Taishou Otome Otogibanashi
 class TaishoOtomeDownload(Fall2021AnimeDownload, NewsTemplate):
