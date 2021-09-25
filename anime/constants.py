@@ -15,6 +15,7 @@ HTTP_HEADER_USER_AGENT = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 
 
 MAX_PROCESSES = 30
 FOLDER_OUTPUT = 'out'
+FOLDER_IMAGE_LOGS = 'image_logs'
 FOLDER_PROCESS = 'process'
 GLOBAL_TEMP_FOLDER = FOLDER_OUTPUT + '/temp'
 GLOBAL_DOWNLOAD_LOG_FILE = FOLDER_OUTPUT + '/download_log.tsv'

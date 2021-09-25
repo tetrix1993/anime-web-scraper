@@ -1,6 +1,6 @@
 import xlsxwriter
 from anime import *
-from anime.constants import EXTERNAL_FOLDERS, FOLDER_OUTPUT
+from anime.constants import EXTERNAL_FOLDERS, FOLDER_OUTPUT, FOLDER_IMAGE_LOGS
 
 # This script generates a tab-separated value (TSV) file containing the image URL of the episode previews from a list
 # of anime by extracting details from the download.log file in the log folder stored in each of the anime folder.
@@ -151,6 +151,44 @@ def news_log_to_excel(filename, anime_classes):
                         worksheet.write(row, 3, date, data_format)
                         worksheet.write(row, 4, news_title, data_format)
                         worksheet.write(row, 5, id_, data_format)
+
+
+def download_log_to_md_file(filename, title, anime_classes):
+    if not os.path.exists(FOLDER_IMAGE_LOGS):
+        os.makedirs(FOLDER_IMAGE_LOGS)
+    output_file = FOLDER_IMAGE_LOGS + '/' + filename
+    if os.path.exists(output_file):
+        os.remove(output_file)
+
+    with open(output_file, 'w+', encoding='utf-8') as f:
+        f.write(f'# {title}\n\n')
+        for i in anime_classes:
+            f.write(f'## {i.title}\n<details>\n<summary>Click to expand...</summary>\n\n')
+            fullpath = i.get_full_path()
+            logpath = fullpath + '/log/download.log'
+            if os.path.exists(logpath):
+                with open(logpath, 'r', encoding='utf-8') as f2:
+                    lines = f2.readlines()
+                f.write(f'Name | URL\n--- | ---\n')
+                filenames = set()
+                for line in lines:
+                    split1 = line.split('\t')
+                    if len(split1) != 3:
+                        continue
+                    filename = split1[1][1:] if split1[1].startswith('/') else split1[1]
+                    if '/' in filename:
+                        continue
+                    filenumber = filename.split('_')[0].split('.')[0]
+                    try:
+                        int(filenumber)
+                        if filename in filenames:
+                            continue
+                        filenames.add(filename)
+                    except:
+                        continue
+                    url = split1[2].replace('\n', '')
+                    f.write(f'{filename} | {url}\n')
+            f.write(f'\n</details>\n\n')
 
 
 if __name__ == '__main__':
