@@ -21,7 +21,7 @@ from PIL import Image
 # Kimi to Boku no Saigo no Senjou, Aruiwa Sekai ga Hajimaru Seisen https://kimisentv.com/ #キミ戦 #kimisen @kimisen_project [THU]
 # Kuma Kuma Kuma Bear https://kumakumakumabear.com/ #くまクマ熊ベアー #kumabear @kumabear_anime [TUE]
 # Maesetsu https://maesetsu.jp/ #まえせつ @maesetsu_anime [WED]
-# Mahouka Koukou no Rettousei: Raihousha-hen https://mahouka.jp/ #mahouka @mahouka_anime [FRI]
+# Mahouka Koukou no Rettousei: Raihousha-hen https://mahouka.jp/2nd/ #mahouka @mahouka_anime [FRI]
 # Majo no Tabitabi https://majotabi.jp/ #魔女の旅々 #魔女の旅々はいいぞ #majotabi @majotabi_PR [MON]
 # Maoujou de Oyasumi https://maoujo-anime.com/ #魔王城でおやすみ @maoujo_anime [FRI]
 # Munou na Nana https://munounanana.com/ #無能なナナ @munounanana [WED]
@@ -2039,11 +2039,11 @@ class MaesetsuDownload(Fall2020AnimeDownload):
 # Mahouka Koukou no Rettousei: Raihousha-hen
 class Mahouka2Download(Fall2020AnimeDownload):
     title = "Mahouka Koukou no Rettousei: Raihousha-hen"
-    keywords = [title, "The Irregular at Magic High School", "2nd"]
+    keywords = [title, "The Irregular at Magic High School: Visitor Arc", "2nd"]
     folder_name = 'mahouka2'
 
-    PAGE_PREFIX = 'https://mahouka.jp/'
-    STORY_PAGE = 'https://mahouka.jp/story/'
+    PAGE_PREFIX = 'https://mahouka.jp/2nd/'
+    STORY_PAGE = PAGE_PREFIX + 'story/'
 
     def __init__(self):
         super().__init__()
@@ -2062,17 +2062,15 @@ class Mahouka2Download(Fall2020AnimeDownload):
             if nav:
                 a_tags = nav.find_all('a')
                 for a_tag in a_tags:
-                    if a_tag.has_attr('href') and 'story' in a_tag['href']:
+                    if a_tag.has_attr('href'):
                         try:
                             episode = str(int(a_tag.text)).zfill(2)
                         except:
                             continue
                         if self.is_image_exists(episode + '_1'):
-                            continue
-                        episode_url = a_tag['href']
-                        if len(episode_url) > 1 and episode_url[0] == '/':
-                            episode_url = episode_url[1:]
-                        episode_soup = self.get_soup(self.PAGE_PREFIX + episode_url)
+                             continue
+                        episode_url = a_tag['href'][2:]
+                        episode_soup = self.get_soup(self.STORY_PAGE + episode_url)
                         div_image = episode_soup.find('div', class_='img_list')
                         if div_image:
                             images = div_image.find_all('img')
@@ -2090,8 +2088,8 @@ class Mahouka2Download(Fall2020AnimeDownload):
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         image_objs = [
-            {'name': 'teaser', 'url': 'https://mahouka.jp/news/SYS/CONTENTS/2019100420534812757301'},
-            {'name': 'kv', 'url': 'https://mahouka.jp/assets/img/top/main/kv/kv.jpg'}
+            {'name': 'teaser', 'url': self.PAGE_PREFIX + 'news/SYS/CONTENTS/2019100420534812757301'},
+            {'name': 'kv', 'url': self.PAGE_PREFIX + 'assets/img/top/main/kv/kv.jpg'}
         ]
         self.download_image_objects(image_objs, folder)
 
@@ -2141,9 +2139,9 @@ class Mahouka2Download(Fall2020AnimeDownload):
             num_processed = len(processed)
 
         try:
-            package_template = 'https://mahouka.jp/package/%s.html'
+            package_template = self.PAGE_PREFIX + 'package/%s.html'
             package_id = ['index'] + [str(i).zfill(2) for i in range(2, 6)] + ['ost']
-            bd_urls = [package_template % id for id in package_id]
+            bd_urls = [package_template % id_ for id_ in package_id]
             to_process = True
             for i in range(len(bd_urls)):
                 if package_id[i] in processed:

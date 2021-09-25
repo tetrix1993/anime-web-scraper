@@ -9,6 +9,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 # Karakai Jouzu no Takagi-san 3 https://takagi3.me/ #高木さんめ @takagi3_anime
 # Kenja no Deshi wo Nanoru Kenja https://kendeshi-anime.com/ #賢でし @kendeshi_anime
 # Leadale no Daichi nite https://leadale.net/ #leadale #リアデイル @leadale_anime
+# Mahouka Koukou no Rettousei: Tsuioku-hen https://mahouka.jp/ #mahouka @mahouka_anime
 # Princess Connect! Re:Dive S2 https://anime.priconne-redive.jp/ #アニメプリコネ #プリコネR #プリコネ #アニメプリコネR @priconne_anime
 # Slow Loop https://slowlooptv.com/ #slowloop @slowloop_tv
 # Tensai Ouji no Akaji Kokka Saisei Jutsu: Souda, Baikoku shiyou https://tensaiouji-anime.com/ #天才王子 #天才王子の赤字国家再生術 @tensaiouji_PR
@@ -276,6 +277,63 @@ class LeadaleDownload(Winter2022AnimeDownload, NewsTemplate3):
         template2 = self.PAGE_PREFIX + 'assets/special/vis/%s.jpg'
         self.download_by_template(folder, template, 1, 1)
         self.download_by_template(folder, template2, 1, 1, prefix='kv_s')
+
+
+# Mahouka Koukou no Rettousei: Tsuioku-hen
+class Mahouka3Download(Winter2022AnimeDownload, NewsTemplate):
+    title = "Mahouka Koukou no Rettousei: Tsuioku-hen"
+    keywords = [title, "The Irregular at Magic High School: Reminiscence Arc", "3rd"]
+    website = 'https://mahouka.jp/'
+    twitter = 'mahouka_anime'
+    hashtags = 'mahouka'
+    folder_name = 'mahouka3'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        # Next page logic may need updates
+        news_url = self.PAGE_PREFIX + 'news/'
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, paging_type=1, article_select='li.c-list__item',
+                                    date_select='div.c-list__item-date', title_select='div.c-list__item-title',
+                                    id_select='a', a_tag_prefix=news_url, a_tag_replace_from='./',
+                                    date_func=lambda x: x[0:4] + '.' + x[5:].replace('/', '.'),
+                                    next_page_select='div.c-pagination__arrow.-next',
+                                    next_page_eval_index_class='is-disable')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('kv1', self.PAGE_PREFIX + 'assets/img/top/img_main.jpg')
+        # self.add_to_image_list('kv1', self.PAGE_PREFIX + 'news/SYS/CONTENTS/5618109f-c116-4a2a-96d1-43644cce1fa3/w850')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            images = soup.select('div.p-in-main img')
+            self.image_list = []
+            for image in images:
+                if image.has_attr('src'):
+                    image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Character')
+            print(e)
 
 
 # Princess Connect! Re:Dive Season 2
