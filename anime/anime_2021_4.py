@@ -894,18 +894,71 @@ class ShinkanomiDownload(Fall2021AnimeDownload, NewsTemplate):
     folder_name = 'shinkanomi'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 5
 
     def __init__(self):
         super().__init__()
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_guess()
         self.download_news()
         self.download_key_visual()
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + '/story/')
+            ep_nums = soup.select('.js_episode-num .episode-num__item')
+            ep_list = soup.select('.js_episode-list .episode-list__item')
+            if len(ep_nums) == len(ep_list):
+                for index in range(len(ep_nums)):
+                    try:
+                        episode = str(int(ep_nums[index].text.replace('#', '').strip())).zfill(2)
+                    except:
+                        continue
+                    if self.is_image_exists(episode + '_1'):
+                        continue
+                    images = ep_list[index].select('img')
+                    self.image_list = []
+                    for i in range(len(images)):
+                        if images[i].has_attr('src'):
+                            image_url = images[i]['src']
+                            image_name = f'{episode}_{i + 1}'
+                            self.add_to_image_list(image_name, image_url)
+                    self.download_image_list(self.base_folder)
+            else:
+                raise Exception("Expected ep_num == ep_list")
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
+
+    def download_episode_preview_guess(self):
+        folder = self.create_custom_directory('guess')
+        template = self.PAGE_PREFIX + '/cms/wp-content/uploads/%s/%s/%s_%s.jpg'
+        current_date = datetime.now() + timedelta(hours=1)
+        year = current_date.strftime('%Y')
+        month = current_date.strftime('%m')
+        is_successful = False
+        for i in range(self.FINAL_EPISODE):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_1'):
+                continue
+            stop = False
+            for j in range(self.IMAGES_PER_EPISODE):
+                image_url = template % (year, month, episode, str(j + 1).zfill(3))
+                image_name = f'{episode}_{j + 1}'
+                result = self.download_image(image_url, folder + '/' + image_name)
+                if result == -1:
+                    stop = True
+                    break
+                is_successful = True
+            if stop:
+                break
+        if is_successful:
+            print(self.__class__.__name__ + ' - Guessed correctly!')
+        return is_successful
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='ul.news-list li.news-list__item',
