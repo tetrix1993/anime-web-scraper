@@ -195,4 +195,13 @@ def download_log_to_md_file(filename, title, anime_classes):
 
 
 if __name__ == '__main__':
-    pass
+    download_log_to_md_file('2021-1.md', 'Winter 2021 Anime Logs', Winter2021AnimeDownload.__subclasses__())
+    download_log_to_md_file('2021-2.md', 'Spring 2021 Anime Logs', Spring2021AnimeDownload.__subclasses__())
+    download_log_to_md_file('2021-3.md', 'Summer 2021 Anime Logs', Summer2021AnimeDownload.__subclasses__())
+    #generate_excel('2021-1_Final.xlsx', Winter2021AnimeDownload.__subclasses__())
+    #generate_excel('2021-2_Log.xlsx', Spring2021AnimeDownload.__subclasses__())
+    #news_log_to_excel('Anime_News.xlsx', Winter2021AnimeDownload.__subclasses__()
+    #                  + Spring2021AnimeDownload.__subclasses__()
+    #                  + Summer2021AnimeDownload.__subclasses__()
+    #                  + Fall2021AnimeDownload.__subclasses__()
+    #                  + UnconfirmedDownload.__subclasses__())

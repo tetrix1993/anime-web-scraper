@@ -657,6 +657,8 @@ class SaihatenoPaladinDownload(Fall2021AnimeDownload, NewsTemplate):
         self.image_list = []
         self.add_to_image_list('kv1', 'https://pbs.twimg.com/media/EzKrTkqVkAMxXZW?format=jpg&name=large')
         self.add_to_image_list('main_visual-min', self.PAGE_PREFIX + 'img/main_visual-min.png')
+        self.add_to_image_list('kv2', 'https://aniverse-mag.com/wp-content/uploads/2021/09/KV2_anime.jpg')
+        self.add_to_image_list('kv2_tw', 'https://pbs.twimg.com/media/FAMziUqVgAk-p8A?format=jpg&name=large')
         self.download_image_list(folder)
 
     def download_character(self):
