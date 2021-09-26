@@ -1028,6 +1028,7 @@ class ShuumatsuNoHaremDownload(Fall2021AnimeDownload, NewsTemplate2):
         folder = self.create_media_directory()
         self.image_list = []
         self.add_to_image_list('music_op', 'https://pbs.twimg.com/media/E9yvFCOUUAc43_i?format=jpg&name=large')
+        self.add_to_image_list('music_ed', 'https://pbs.twimg.com/media/FAMztXhVUAADMY7?format=jpg&name=large')
         self.download_image_list(folder)
 
         # Blu-ray Bonus
