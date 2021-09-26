@@ -166,11 +166,10 @@ def download_log_to_md_file(filename, title, anime_classes):
             f.write(f'## {i.title}\n<details>\n<summary>Click to expand...</summary>\n\n')
             fullpath = i.get_full_path()
             logpath = fullpath + '/log/download.log'
+            links = {}
             if os.path.exists(logpath):
                 with open(logpath, 'r', encoding='utf-8') as f2:
                     lines = f2.readlines()
-                f.write(f'Name | URL\n--- | ---\n')
-                filenames = set()
                 for line in lines:
                     split1 = line.split('\t')
                     if len(split1) != 3:
@@ -181,13 +180,17 @@ def download_log_to_md_file(filename, title, anime_classes):
                     filenumber = filename.split('_')[0].split('.')[0]
                     try:
                         int(filenumber)
-                        if filename in filenames:
+                        if filename in links:
                             continue
-                        filenames.add(filename)
+                        url = split1[2].replace('\n', '')
+                        links[filename.split('.')[0]] = (filename, url)
                     except:
                         continue
-                    url = split1[2].replace('\n', '')
-                    f.write(f'{filename} | {url}\n')
+            keys = links.keys()
+            if len(keys) > 0:
+                f.write(f'Name | URL\n--- | ---\n')
+                for key in sorted(links.keys()):
+                    f.write(f'{links[key][0]} | {links[key][1]}\n')
             f.write(f'\n</details>\n\n')
 
 
