@@ -769,7 +769,29 @@ class AnsatsuKizokuDownload(Fall2021AnimeDownload, NewsTemplate):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            divs = soup.select('div.episode')
+            for div in divs:
+                span_tag = div.select('span.number')
+                try:
+                    episode = str(int(span_tag[0].text.strip().replace('#', ''))).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                images = div.select('li.swiper-slide img')
+                self.image_list = []
+                for i in range(len(images)):
+                    if images[i].has_attr('src'):
+                        image_src = images[i]['src']
+                        image_url = self.PAGE_PREFIX + (image_src[1:] if image_src.startswith('/') else image_src)
+                        image_name = f'{episode}_{i + 1}'
+                        self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='div.news-Index li a',
