@@ -1478,6 +1478,7 @@ class MeikyuBCDownload(Summer2021AnimeDownload):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         image_url_template = self.PAGE_PREFIX + '_image/story/story%s_%s.jpg'
@@ -1545,6 +1546,24 @@ class MeikyuBCDownload(Summer2021AnimeDownload):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + '_image/charaPop_%s.png'
         self.download_by_template(folder, template, 2)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'blurayDVD.html')
+            images = soup.select('span.imgBoxL img, span.imgBox img')
+            self.image_list = []
+            for image in images:
+                if image.has_attr('src'):
+                    image_url = self.PAGE_PREFIX + image['src']
+                    if self.is_matching_content_length(image_url, 7184):
+                        continue
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Blu-ray')
+            print(e)
 
 
 # Otome Game no Hametsu Flag shika Nai Akuyaku Reijou ni Tensei shiteshimatta... X
