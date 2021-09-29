@@ -48,6 +48,7 @@ class BluePeriodDownload(Fall2021AnimeDownload, NewsTemplate):
     folder_name = 'blue-period'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 24
 
     def __init__(self):
         super().__init__()
@@ -55,17 +56,41 @@ class BluePeriodDownload(Fall2021AnimeDownload, NewsTemplate):
     def run(self):
         self.download_episode_preview()
         self.download_news()
+        self.download_episode_preview_external()
         self.download_key_visual()
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            containers = soup.select('div.ep-container')
+            for container in containers:
+                try:
+                    episode = str(int(container.select('p.ep-num-text span')[0].text.strip())).zfill(2)
+                except:
+                    continue
+                images = container.select('div.ep-ss-main img')
+                self.image_list = []
+                for i in range(len(images)):
+                    if images[i].has_attr('src'):
+                        image_url = images[i]['src']
+                        image_name = f'{episode}_{i + 1}'
+                        self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='ul.news-list li.news-item',
                                     date_select='p.news-date', title_select='p.news-title', id_select='a',
                                     next_page_select='div.pagination a.next',
                                     next_page_eval_index_class='off', next_page_eval_index=0)
+
+    def download_episode_preview_external(self):
+        jp_title = 'ブルーピリオド'
+        AniverseMagazineScanner(jp_title, self.base_folder, last_episode=self.FINAL_EPISODE, min_width=750,
+                                end_date='20210929', download_id=self.download_id).run()
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
