@@ -105,6 +105,7 @@ The premiere date for the anime listed here has not been announced.
 ### Spring 2022 Anime
 * [Aharen-san wa Hakarenai](https://aharen-pr.com/)
 * [Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan wo Erandeiraremasen 3rd Season](http://booklove-anime.jp/)
+* [Kawaii dake ja Nai Shikimori-san](https://shikimori-anime.com/)
 * [Tate no Yuusha no Nariagari 2nd Season](http://shieldhero-anime.jp)
 
 ### Winter 2022 Anime
