@@ -397,7 +397,28 @@ class MierukochanDownload(Fall2021AnimeDownload, NewsTemplate3):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story.html')
+            episode_tags = soup.select('div.story-data')
+            for episode_tag in episode_tags:
+                if episode_tag.has_attr('id'):
+                    try:
+                        episode = str(int(episode_tag['id'].strip().replace('S', ''))).zfill(2)
+                    except:
+                        continue
+                    if self.is_image_exists(episode + '_1'):
+                        continue
+                    images = episode_tag.select('div.ep-slider-sceneImage img')
+                    self.image_list = []
+                    for i in range(len(images)):
+                        if images[i].has_attr('src'):
+                            image_url = self.PAGE_PREFIX + images[i]['src'].strip().replace('./', '')
+                            image_name = f'{episode}_{i + 1}'
+                            self.add_to_image_list(image_name, image_url)
+                    self.download_image_list(self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
     def download_news(self):
         self.download_template_news(self.PAGE_PREFIX)
