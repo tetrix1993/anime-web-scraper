@@ -1452,6 +1452,7 @@ class Yuyuyu3Download(Fall2021AnimeDownload, NewsTemplate):
     folder_name = 'yuyuyu3'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
 
     def __init__(self):
         super().__init__()
@@ -1459,11 +1460,29 @@ class Yuyuyu3Download(Fall2021AnimeDownload, NewsTemplate):
     def run(self):
         self.download_episode_preview()
         self.download_news()
+        self.download_episode_preview_external()
         self.download_key_visual()
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        story_url = self.PAGE_PREFIX + 'story/'
+        try:
+            stories = self.get_json(self.PAGE_PREFIX + 'story/episode_data.php')
+            for story in stories:
+                try:
+                    episode = str(int(story['id'])).zfill(2)
+                except Exception:
+                    continue
+                stories = story['images']
+                self.image_list = []
+                for i in range(len(stories)):
+                    image_url = story_url + stories[i].split('?')[0]
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
     def download_news(self):
         prefix = 'https://yuyuyu.tv'
@@ -1471,6 +1490,11 @@ class Yuyuyu3Download(Fall2021AnimeDownload, NewsTemplate):
                                     date_select='span.c-entry-date', title_select='h1.c-entry-item__title',
                                     id_select='a', stop_date='2021.01.29', a_tag_prefix=prefix,
                                     next_page_select='a.next.page-numbers')
+
+    def download_episode_preview_external(self):
+        jp_title = '結城友奈は勇者である'
+        AniverseMagazineScanner(jp_title, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                end_date='20210930', download_id=self.download_id).run()
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
