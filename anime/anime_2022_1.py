@@ -5,6 +5,7 @@ from datetime import datetime
 from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 
 
+# Akebi-chan no Sailor-fuku https://akebi-chan.jp/ #明日ちゃんのセーラー服 #明日ちゃん @AKEBI_chan
 # Arifureta Shokugyou de Sekai Saikyou 2nd Season https://arifureta.com/ #ありふれた #ARIFURETA @ARIFURETA_info
 # Karakai Jouzu no Takagi-san 3 https://takagi3.me/ #高木さんめ @takagi3_anime
 # Kenja no Deshi wo Nanoru Kenja https://kendeshi-anime.com/ #賢でし @kendeshi_anime
@@ -23,6 +24,39 @@ class Winter2022AnimeDownload(MainDownload):
 
     def __init__(self):
         super().__init__()
+
+
+# Akebi-chan no Sailor-fuku
+class AkebichanDownload(Winter2022AnimeDownload):
+    title = 'Akebi-chan no Sailor-fuku'
+    keywords = [title, "Akebi's Sailor Uniform"]
+    website = 'https://akebi-chan.jp/'
+    twitter = 'AKEBI_chan'
+    hashtags = ['明日ちゃんのセーラー服', '明日ちゃん']
+    folder_name = 'akebichan'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        pass
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.add_to_image_list('tz_img_kv', f'{self.PAGE_PREFIX}assets_teaser/img/img_kv.jpg')
+        self.add_to_image_list('tz_main', f'{self.PAGE_PREFIX}assets_teaser/img/main.jpg')
+        self.add_to_image_list('tz_main_tw', 'https://pbs.twimg.com/media/FAmRYw-UcAkGiCO?format=jpg&name=large')
+        self.download_image_list(folder)
 
 
 # Arifureta Shokugyou de Sekai Saikyou 2nd Season
