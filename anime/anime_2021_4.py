@@ -428,11 +428,15 @@ class MierukochanDownload(Fall2021AnimeDownload, NewsTemplate3):
         self.image_list = []
         self.add_to_image_list('tz2_tw_1', 'https://pbs.twimg.com/media/E6aARStVcAMhcZB?format=jpg&name=medium')
         self.add_to_image_list('tz2_tw_2', 'https://pbs.twimg.com/media/E6aARTMVEAMu5YQ?format=jpg&name=medium')
+        self.add_to_image_list('tz2_tw_3', 'https://pbs.twimg.com/media/FAg3dhRVgAI30y-?format=jpg&name=medium')
         self.download_image_list(folder)
 
         top_template1 = self.PAGE_PREFIX + 'assets/top/t%s/vis-on.png'
         top_template2 = self.PAGE_PREFIX + 'assets/top/t%s/vis-off.png'
         self.download_by_template(folder, [top_template1, top_template2], 1, 1)
+
+        template = self.PAGE_PREFIX + 'assets/top/k%s/vis-on.png'
+        self.download_by_template(folder, template, 1, 1, prefix='k_')
 
         news_template = self.PAGE_PREFIX + 'assets/news/vis-t%s.jpg'
         self.download_by_template(folder, news_template, 1, 1)
