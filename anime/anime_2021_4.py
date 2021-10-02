@@ -1505,6 +1505,36 @@ class TsukiLaikaNosferatuDownload(Fall2021AnimeDownload, NewsTemplate):
             print(e)
         self.create_cache_file(cache_filepath, processed, num_processed)
 
+        # Blu-ray
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'products/bd')
+            a_tags = soup.select('a.products-box-link')
+            count = 0
+            for a_tag in a_tags:
+                count += 1
+                if a_tag.has_attr('href'):
+                    cover_image = a_tag.find('img')
+                    if cover_image and cover_image.has_attr('src') and 'nowprinting' not in cover_image['src'].lower():
+                        cover_image_url = cover_image['src']
+                        cover_image_name = self.extract_image_name_from_url(cover_image_url)
+                        if count > 1 and self.is_image_exists(cover_image_name, folder):  # Always evaluate first one
+                            continue
+                        bd_soup = self.get_soup(a_tag['href'])
+                        if bd_soup:
+                            selector = 'li.products-detail-thumb-nav-box img, .products-detail-tokuten-container img'
+                            images = bd_soup.select(selector)
+                            self.image_list = []
+                            for image in images:
+                                if image.has_attr('src') and len(image['src']) > 0\
+                                        and 'nowprinting' not in image['src']:
+                                    image_url = image['src']
+                                    image_name = self.extract_image_name_from_url(image_url)
+                                    self.add_to_image_list(image_name, image_url)
+                            self.download_image_list(folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Blu-ray')
+            print(e)
+
 
 # Yuuki Yuuna wa Yuusha de Aru: Dai Mankai no Shou
 class Yuyuyu3Download(Fall2021AnimeDownload, NewsTemplate):
