@@ -521,6 +521,7 @@ class OsamaRankingDownload(Fall2021AnimeDownload, NewsTemplate):
     folder_name = 'osama-ranking'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 24
 
     def __init__(self):
         super().__init__()
@@ -528,11 +529,44 @@ class OsamaRankingDownload(Fall2021AnimeDownload, NewsTemplate):
     def run(self):
         self.download_episode_preview()
         self.download_news()
+        self.download_episode_preview_external()
         self.download_key_visual()
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            story_url = self.PAGE_PREFIX + 'story/'
+            soup = self.get_soup(story_url)
+            page_lists = soup.select('ul.page_list li')
+            for page_list in page_lists:
+                a_tag = page_list.find('a')
+                if a_tag and a_tag.has_attr('href'):
+                    try:
+                        episode = str(int(a_tag.text.strip())).zfill(2)
+                    except:
+                        continue
+                    if self.is_image_exists(episode + '_1'):
+                        continue
+                    if page_list.has_attr('class') and 'current' in page_list['class']:
+                        ep_soup = soup
+                    else:
+                        try:
+                            a_tag_url = '?' + a_tag['href'].split('?')[1]
+                        except:
+                            continue
+                        ep_soup = self.get_soup(story_url + a_tag_url)
+                    if ep_soup:
+                        images = ep_soup.select('div.slider_images img')
+                        self.image_list = []
+                        for i in range(len(images)):
+                            if images[i].has_attr('src'):
+                                image_url = story_url + images[i]['src']
+                                image_name = episode + '_' + str(i + 1)
+                                self.add_to_image_list(image_name, image_url)
+                        self.download_image_list(self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + 'news/'
@@ -541,6 +575,11 @@ class OsamaRankingDownload(Fall2021AnimeDownload, NewsTemplate):
                                     a_tag_prefix=news_url, a_tag_start_text_to_remove='./', paging_type=1,
                                     next_page_select='p.page_next', next_page_eval_index=0,
                                     next_page_eval_index_class='none')
+
+    def download_episode_preview_external(self):
+        jp_title = '王様ランキング'
+        AniverseMagazineScanner(jp_title, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                end_date='20211001', download_id=self.download_id).run()
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
