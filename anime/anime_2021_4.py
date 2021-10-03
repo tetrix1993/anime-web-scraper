@@ -988,21 +988,71 @@ class ShinnoNakamaDownload(Fall2021AnimeDownload, NewsTemplate):
     folder_name = 'shinnonakama'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 6
 
     def run(self):
         self.download_episode_preview()
         self.download_news()
+        self.download_episode_preview_external()
+        self.download_episode_preview_guess()
         self.download_key_visual()
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + '/story/')
+            a_tags = soup.select('li.story_tabList a')
+            for index in range(len(a_tags)):
+                try:
+                    episode = str(int(a_tags[index].text.replace('第', '').replace('話', '').strip())).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                if a_tags[index].has_attr('data-tab'):
+                    images = soup.select(f'li.story_tabDetail.{a_tags[index]["data-tab"]} img')
+                    self.image_list = []
+                    for i in range(len(images)):
+                        if images[i].has_attr('src'):
+                            image_url = self.PAGE_PREFIX + images[i]['src'].replace('../', '')
+                            image_name = f'{episode}_{i + 1}'
+                            self.add_to_image_list(image_name, image_url)
+                    self.download_image_list(self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + 'news/'
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='ul.newsListsWrap li',
                                     date_select='p.update_time', title_select='p.update_ttl',
                                     id_select='a', a_tag_prefix=news_url, a_tag_start_text_to_remove='./')
+
+    def download_episode_preview_external(self):
+        jp_title = '真の仲間じゃないと勇者のパーティーを追い出されたので、辺境でスローライフすることにしました'
+        AniverseMagazineScanner(jp_title, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                end_date='20210922', download_id=self.download_id).run()
+
+    def download_episode_preview_guess(self):
+        folder = self.create_custom_directory('guess')
+        is_successful = False
+        for i in range(self.FINAL_EPISODE):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_1'):
+                continue
+            template = f'{self.PAGE_PREFIX}assets/img/story/story{episode}_%s.jpg'
+            for j in range(self.IMAGES_PER_EPISODE):
+                image_url = template % str(j + 1).zfill(2)
+                image_name = episode + '_' + str(j + 1)
+                result = self.download_image(image_url, f'{folder}/{image_name}')
+                if result == -1:
+                    return
+                elif result == 0:
+                    is_successful = True
+        if is_successful:
+            print(self.__class__.__name__ + ' - Guessed successfully!')
+        return is_successful
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
