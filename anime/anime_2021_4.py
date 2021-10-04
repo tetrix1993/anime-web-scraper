@@ -1329,7 +1329,37 @@ class TaishoOtomeDownload(Fall2021AnimeDownload, NewsTemplate):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            first_episode_url = self.PAGE_PREFIX + 'story/01'
+            soup = self.get_soup(first_episode_url)
+            a_tags = soup.select('ul.l_storynav a')
+            for a_tag in a_tags:
+                if a_tag.has_attr('href'):
+                    episode_url = a_tag['href']
+                    try:
+                        temp = episode_url.split('/')[-2] if episode_url.endswith('/') else episode_url.split('/')[-1]
+                        episode = str(int(temp)).zfill(2)
+                    except:
+                        continue
+                    if self.is_image_exists(episode + '_1'):
+                        continue
+                    if episode_url == first_episode_url:
+                        ep_soup = soup
+                    else:
+                        ep_soup = self.get_soup(episode_url)
+                    if ep_soup:
+                        images = ep_soup.select('ul.js_previewslider img')
+                        self.image_list = []
+                        for i in range(len(images)):
+                            if images[i].has_attr('src'):
+                                src = images[i]['src']
+                                image_url = self.PAGE_PREFIX + (src[1:] if src.startswith('/') else src)
+                                image_name = episode + '_' + str(i + 1)
+                                self.add_to_image_list(image_name, image_url)
+                        self.download_image_list(self.base_folder)
+        except Exception as e:
+            print(f"Error in running {self.__class__.__name__}")
+            print(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='ul.newslist li',
