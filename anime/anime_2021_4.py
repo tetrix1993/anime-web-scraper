@@ -335,10 +335,12 @@ class KomisanDownload(Fall2021AnimeDownload, NewsTemplate):
     folder_name = 'komisan'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
 
     def run(self):
         self.download_episode_preview()
         self.download_news()
+        self.download_episode_preview_external()
         self.download_key_visual()
         self.download_character()
 
@@ -350,6 +352,11 @@ class KomisanDownload(Fall2021AnimeDownload, NewsTemplate):
                                     date_select='span.news-item__date', title_select='span.news-item__title',
                                     id_select='a.news-item__link', a_tag_prefix=self.PAGE_PREFIX,
                                     a_tag_start_text_to_remove='/', next_page_select='a.next.page-numbers')
+
+    def download_episode_preview_external(self):
+        jp_title = '古見さんは、コミュ症です'
+        AniverseMagazineScanner(jp_title, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                end_date='20211004', download_id=self.download_id).run()
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
