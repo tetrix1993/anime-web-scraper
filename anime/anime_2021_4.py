@@ -1503,7 +1503,7 @@ class TsukiLaikaNosferatuDownload(Fall2021AnimeDownload, NewsTemplate):
             for btn in nav_btns:
                 if btn.has_attr('href'):
                     try:
-                        episode = str(int(btn['href'].split('/')[-1])).zfill(2)
+                        episode = str(int(btn.text.strip().replace('第', '').replace('話', ''))).zfill(2)
                     except:
                         continue
                     if self.is_image_exists(episode + '_1'):
