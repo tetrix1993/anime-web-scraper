@@ -1325,6 +1325,7 @@ class TaishoOtomeDownload(Fall2021AnimeDownload, NewsTemplate):
     folder_name = 'taisho-otome'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
 
     def __init__(self):
         super().__init__()
@@ -1332,6 +1333,7 @@ class TaishoOtomeDownload(Fall2021AnimeDownload, NewsTemplate):
     def run(self):
         self.download_episode_preview()
         self.download_news()
+        self.download_episode_preview_external()
         self.download_key_visual()
         self.download_character()
 
@@ -1373,6 +1375,11 @@ class TaishoOtomeDownload(Fall2021AnimeDownload, NewsTemplate):
                                     date_select='div.newslist_date', title_select='h2.newslist_ttl', id_select='a',
                                     date_func=lambda x: x.replace('年', '.').replace('月', '.').replace('日', ''),
                                     next_page_select='li.pagination_list_item__next')
+
+    def download_episode_preview_external(self):
+        jp_title = '大正オトメ御伽話'
+        AniverseMagazineScanner(jp_title, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                end_date='20211005', download_id=self.download_id).run()
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
