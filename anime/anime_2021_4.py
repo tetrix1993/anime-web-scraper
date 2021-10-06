@@ -1005,6 +1005,7 @@ class ShinnoNakamaDownload(Fall2021AnimeDownload, NewsTemplate):
         self.download_episode_preview_guess()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -1073,6 +1074,23 @@ class ShinnoNakamaDownload(Fall2021AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'assets/img/top/character/chara_%s.png'
         self.download_by_template(folder, template, 1, 1)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        # Blu-ray
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'bddvd/')
+            images = soup.select('.inPageContent img')
+            self.image_list = []
+            for image in images:
+                if image.has_attr('src') and not image['src'].endswith('/now.jpg'):
+                    image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Blu-ray')
+            print(e)
 
 
 # Shinka no Mi: Shiranai Uchi ni Kachigumi Jinsei
