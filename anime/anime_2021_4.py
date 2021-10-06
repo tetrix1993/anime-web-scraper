@@ -886,6 +886,7 @@ class AnsatsuKizokuDownload(Fall2021AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -928,6 +929,38 @@ class AnsatsuKizokuDownload(Fall2021AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'wp-content/themes/ansatsu-kizoku_teaser/assets/images/common/img_character_%s.png'
         self.download_by_template(folder, template, 1)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+
+        # Blu-ray Bonus
+        try:
+            for page in ['shopbonus', 'vol1', 'vol2', 'vol3']:
+                if page[-1].isnumeric() and int(page[-1]) > 1 and page in processed:
+                    continue
+                soup = self.get_soup(f'{self.PAGE_PREFIX}goods/bd-dvd/{page}')
+                if soup:
+                    images = soup.select('.subpage-Body img')
+                    self.image_list = []
+                    for image in images:
+                        if image.has_attr('src'):
+                            image_url = image['src']
+                            image_name = self.extract_image_name_from_url(image_url)
+                            if self.is_image_exists(image_name, folder):
+                                if not self.is_content_length_same_as_existing(
+                                        image_url, image_name, folder):
+                                    print(f'{self.__class__.__name__} - {image_name} has different size')
+                                continue
+                            self.add_to_image_list(image_name, image_url)
+                    if page[-1].isnumeric() and int(page[-1]) > 1 and len(self.image_list) > 0:
+                        processed.append(page)
+                    self.download_image_list(folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Blu-ray Bonus')
+            print(e)
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Senpai ga Uzai Kouhai no Hanashi
