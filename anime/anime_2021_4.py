@@ -147,6 +147,7 @@ class DenchiShoujoDownload(Fall2021AnimeDownload, NewsTemplate):
     folder_name = 'denchi-shoujo'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
 
     def __init__(self):
         super().__init__()
@@ -157,7 +158,26 @@ class DenchiShoujoDownload(Fall2021AnimeDownload, NewsTemplate):
         self.download_key_visual()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        for i in range(self.FINAL_EPISODE):
+            ep_num = i + 1
+            episode = str(ep_num).zfill(2)
+            if self.is_image_exists(episode + '_1'):
+                continue
+            template1 = self.PAGE_PREFIX + f'assets/story/{i + 1}_%s.jpg'
+            template2 = self.PAGE_PREFIX + f'assets/story/{i + 1}_%s.png'
+            success = False
+            for j in range(6):
+                image_name = f'{episode}_{j + 1}'
+                for template in [template1, template2]:
+                    image_url = template % str(j + 1)
+                    result = self.download_image(image_url, f'{self.base_folder}/{image_name}')
+                    if result != -1:
+                        success = True
+                        break
+                if not success:
+                    break
+            if not success:
+                break
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article.content-entry',
