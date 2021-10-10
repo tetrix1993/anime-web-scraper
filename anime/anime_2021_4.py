@@ -1004,6 +1004,7 @@ class SenpaigaUzaiDownload(Fall2021AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         for i in range(self.FINAL_EPISODE):
@@ -1036,6 +1037,46 @@ class SenpaigaUzaiDownload(Fall2021AnimeDownload, NewsTemplate):
         template1 = self.PAGE_PREFIX + 'images/character/img_chara_%s.png'
         template2 = self.PAGE_PREFIX + 'images/character/img_face_%s.png'
         self.download_by_template(folder, [template1, template2], 2, 1)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        self.image_list = []
+        self.add_to_image_list('img_jacket_op', self.PAGE_PREFIX + 'images/music/img_jacket_op.jpg')
+        self.add_to_image_list('img_photo_op', self.PAGE_PREFIX + 'images/music/img_photo_op.jpg')
+        self.download_image_list(folder)
+
+        # Blu-ray
+        bd_prefix = self.PAGE_PREFIX + 'blu-ray/'
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        try:
+            for i in range(5):
+                if i > 1:
+                    page_name = str(i).zfill(2) + '.html'
+                    if page_name in processed:
+                        continue
+                elif i == 0:
+                    page_name = 'tokuten.html'
+                else:
+                    page_name = ''
+                bd_url = bd_prefix + page_name
+                bd_soup = self.get_soup(bd_url)
+                if bd_soup:
+                    images = bd_soup.select('section.blu-ray img')
+                    self.image_list = []
+                    for image in images:
+                        if image.has_attr('src') and 'nowprinting' not in image['src']:
+                            image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                            image_name = self.extract_image_name_from_url(image_url)
+                            self.add_to_image_list(image_name, image_url)
+                    if i > 1 and len(self.image_list) > 0:
+                        processed.append(page_name)
+                    if i > 0 and len(self.image_list) == 0:
+                        break
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Blu-ray')
+            print(e)
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Shin no Nakama ja Nai to Yuusha no Party wo Oidasareta node, Henkyou de Slow Life suru Koto ni Shimashita
