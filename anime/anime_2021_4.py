@@ -1285,7 +1285,7 @@ class ShinkanomiDownload(Fall2021AnimeDownload, NewsTemplate):
             if len(ep_nums) == len(ep_list):
                 for index in range(len(ep_nums)):
                     try:
-                        episode = str(int(ep_nums[index].text.replace('#', '').strip())).zfill(2)
+                        episode = str(int(ep_nums[index].text.strip()[1:3])).zfill(2)
                     except:
                         continue
                     if self.is_image_exists(episode + '_1'):
