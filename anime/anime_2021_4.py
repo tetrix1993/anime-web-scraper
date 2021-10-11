@@ -117,7 +117,7 @@ class DeepInsanityDownload(Fall2021AnimeDownload):
     hashtags = ['DI', 'ディープインサニティ']
     folder_name = 'deep-insanity'
 
-    PAGE_PREFIX = 'https://www.jp.square-enix.com/deepinsanity/'
+    PAGE_PREFIX = 'https://www.jp.square-enix.com/'
 
     def __init__(self):
         super().__init__()
@@ -127,13 +127,42 @@ class DeepInsanityDownload(Fall2021AnimeDownload):
         self.download_key_visual()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        first_page_url = self.PAGE_PREFIX + 'deepinsanity/anime/story/1'
+        try:
+            soup = self.get_soup(first_page_url)
+            items = soup.select('li.story-list__item')
+            for item in items:
+                a_tag = item.find('a')
+                if a_tag and a_tag.has_attr('href'):
+                    try:
+                        episode = str(int(a_tag.text.strip().replace('#', ''))).zfill(2)
+                    except:
+                        continue
+                    if self.is_image_exists(episode + '_1'):
+                        continue
+                    page_url = self.PAGE_PREFIX + a_tag['href'][1:]
+                    if page_url == first_page_url:
+                        ep_soup = soup
+                    else:
+                        ep_soup = self.get_soup(page_url)
+                    if ep_soup:
+                        images = ep_soup.select('li.splide__slide img')
+                        self.image_list = []
+                        for i in range(len(images)):
+                            if images[i].has_attr('src'):
+                                image_url = self.PAGE_PREFIX + images[i]['src'][1:].split('?')[0]
+                                image_name = episode + '_' + str(i + 1)
+                                self.add_to_image_list(image_name, image_url)
+                        self.download_image_list(self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         self.image_list = []
         self.add_to_image_list('kv_tw', 'https://pbs.twimg.com/media/E_eipEAVUAQwHQh?format=jpg&name=4096x4096')
-        self.add_to_image_list('anime_kv', self.PAGE_PREFIX + 'assets/images/anime/anime_kv.png')
+        self.add_to_image_list('anime_kv', self.PAGE_PREFIX + 'deepinsanity/assets/images/anime/anime_kv.png')
         self.download_image_list(folder)
 
 
@@ -205,7 +234,7 @@ class DenchiShoujoDownload(Fall2021AnimeDownload, NewsTemplate):
 
     def download_media(self):
         folder = self.create_media_directory()
-        
+
         # Blu-ray
         try:
             soup = self.get_soup(self.PAGE_PREFIX + 'bluray.html')
