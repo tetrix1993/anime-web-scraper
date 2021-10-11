@@ -156,6 +156,7 @@ class DenchiShoujoDownload(Fall2021AnimeDownload, NewsTemplate):
         self.download_episode_preview()
         self.download_news()
         self.download_key_visual()
+        self.download_media()
 
     def download_episode_preview(self):
         for i in range(self.FINAL_EPISODE):
@@ -201,6 +202,24 @@ class DenchiShoujoDownload(Fall2021AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'assets/character/c/%s.png'
         self.download_by_template(folder, template, 1, 1, prefix='chara', save_zfill=2)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        
+        # Blu-ray
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'bluray.html')
+            images = soup.select('article img:not(h2 img, .sub-logo img)')
+            self.image_list = []
+            for image in images:
+                if image.has_attr('src') and not image['src'].endswith('np.png'):
+                    image_url = self.PAGE_PREFIX + image['src'].replace('./', '')
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Blu-ray')
+            print(e)
 
 
 # Isekai Shokudou 2
