@@ -217,14 +217,11 @@ class MainDownload:
 
     @staticmethod
     def get_json(url, headers=None):
-        response = ""
         if headers is None:
             headers = constants.HTTP_HEADER_USER_AGENT
-        try:
-            response = requests.get(url, headers=headers).json()
-        except Exception as e:
-            print(e)
-        return response
+        r = requests.get(url, headers=headers)
+        r.raise_for_status()
+        return r.json()
 
     @staticmethod
     def post_response(url, headers=None, data=None):

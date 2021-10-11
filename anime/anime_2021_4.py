@@ -413,7 +413,26 @@ class KomisanDownload(Fall2021AnimeDownload, NewsTemplate):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index', diff=2)
+        try:
+            # Requires VPN to Japan Server
+            json_obj = self.get_json(self.PAGE_PREFIX + 'news/wp-json/wp/v2/pages')
+            for item in json_obj:
+                try:
+                    episode = str(int(item['acf']['number'])).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                num = 0
+                self.image_list = []
+                for image in item['acf']['images']:
+                    num += 1
+                    image_url = image['url']
+                    image_name = episode + '_' + str(num)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + f": {e}")
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article.news-item',
