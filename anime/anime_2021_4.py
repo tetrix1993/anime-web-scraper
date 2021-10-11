@@ -1527,12 +1527,12 @@ class TaishoOtomeDownload(Fall2021AnimeDownload, NewsTemplate):
             a_tags = soup.select('ul.l_storynav a')
             for a_tag in a_tags:
                 if a_tag.has_attr('href'):
-                    episode_url = a_tag['href']
                     try:
-                        temp = episode_url.split('/')[-2] if episode_url.endswith('/') else episode_url.split('/')[-1]
-                        episode = str(int(temp)).zfill(2)
+                        ep_num = self.convert_kanji_to_number(a_tag.text.strip().replace('第', '').replace('話', ''))
+                        episode = str(ep_num).zfill(2)
                     except:
                         continue
+                    episode_url = a_tag['href']
                     if self.is_image_exists(episode + '_1'):
                         continue
                     if episode_url == first_episode_url:
