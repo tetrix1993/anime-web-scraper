@@ -2393,14 +2393,14 @@ class TanmoshiDownload(Summer2021AnimeDownload, NewsTemplate2):
                     if 'nowprinting' in image_url:
                         continue
                     image_name = self.extract_image_name_from_url(image_url)
-                    if self.is_image_exists(image_name, folder):
-                        continue
+                    # if self.is_image_exists(image_name, folder):
+                    #     continue
                     if self.is_matching_content_length(image_url, 23929):
                         continue
                     self.add_to_image_list(image_name, image_url)
-                self.download_image_list(folder)
                 if i > 2 and len(self.image_list) == 0:
                     break
+                self.download_image_list(folder)
             except Exception as e:
                 print("Error in running " + self.__class__.__name__ + " - Blu-Ray %s" % url)
                 print(e)
