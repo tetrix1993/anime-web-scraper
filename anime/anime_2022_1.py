@@ -7,6 +7,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 
 # Akebi-chan no Sailor-fuku https://akebi-chan.jp/ #明日ちゃんのセーラー服 #明日ちゃん @AKEBI_chan
 # Arifureta Shokugyou de Sekai Saikyou 2nd Season https://arifureta.com/ #ありふれた #ARIFURETA @ARIFURETA_info
+# Fantasy Bishoujo Juniku Ojisan to https://fabiniku.com/ #ファ美肉おじさん @fabiniku
 # Karakai Jouzu no Takagi-san 3 https://takagi3.me/ #高木さんめ @takagi3_anime
 # Kenja no Deshi wo Nanoru Kenja https://kendeshi-anime.com/ #賢でし @kendeshi_anime
 # Leadale no Daichi nite https://leadale.net/ #leadale #リアデイル @leadale_anime
@@ -135,7 +136,49 @@ class Arifureta2Download(Winter2022AnimeDownload):
         self.download_image_list(folder)
 
 
-# Karakai Jouzu no Takagi-san
+# Fantasy Bishoujo Juniku Ojisan to
+class FabinikuDownload(Winter2022AnimeDownload, NewsTemplate):
+    title = 'Fantasy Bishoujo Juniku Ojisan to'
+    keywords = [title, 'fabiniku']
+    website = 'https://fabiniku.com/'
+    twitter = 'fabiniku'
+    hashtags = 'ファ美肉おじさん'
+    folder_name = 'fabiniku'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='ul.news_lists li',
+                                    date_select='p.news_info_date', title_select='h3.news_title', id_select='a',
+                                    date_func=lambda x: x.replace('年', '.').replace('月', '.').replace('日', ''),
+                                    next_page_select='li.pager_lists_item',
+                                    next_page_eval_index_class='current', next_page_eval_index=-1)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz', self.PAGE_PREFIX + 'wordpress/wp-content/uploads/2021/10/18201715/【PR】1018_fabiniku_ファ美肉おじさん完成ティザー-scaled-1.jpeg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'wordpress/wp-content/themes/fabiniku/assets/img/character/img%s.png'
+        self.download_by_template(folder, template, 1, 1)
+
+
+# Karakai Jouzu no Takagi-san 3
 class Takagisan3Download(Winter2022AnimeDownload, NewsTemplate):
     title = 'Karakai Jouzu no Takagi-san 3'
     keywords = [title, 'Takagisan', 'Teasing Master Takagi-san']

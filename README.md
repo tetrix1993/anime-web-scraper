@@ -111,6 +111,7 @@ The premiere date for the anime listed here has not been announced.
 ### Winter 2022 Anime
 * [Akebi-chan no Sailor-fuku](https://akebi-chan.jp/)
 * [Arifureta Shokugyou de Sekai Saikyou 2nd Season](https://arifureta.com/)
+* [Fantasy Bishoujo Juniku Ojisan to](https://fabiniku.com/)
 * [Karakai Jouzu no Takagi-san 3](https://takagi3.me/)
 * [Kenja no Deshi wo Nanoru Kenja](https://kendeshi-anime.com/)
 * [Leadale no Daichi nite](https://leadale.net/)
