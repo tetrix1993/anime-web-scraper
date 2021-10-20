@@ -151,9 +151,12 @@ class Honzuki3Download(Spring2022AnimeDownload, NewsTemplate):
 class Kaguyasama3Download(Spring2022AnimeDownload, NewsTemplate):
     title = "Kaguya-sama wa Kokurasetai: Ultra Romantic"
     keywords = [title, "Kaguya", "Kaguyasama", "Kaguya-sama: Love is War 3rd Season"]
+    website = 'https://kaguya.love/'
+    twitter = 'anime_kaguya'
+    hashtags = 'かぐや様'
     folder_name = 'kaguya-sama3'
 
-    PAGE_PREFIX = 'https://kaguya.love/'
+    PAGE_PREFIX = website
 
     def __init__(self):
         super().__init__()
