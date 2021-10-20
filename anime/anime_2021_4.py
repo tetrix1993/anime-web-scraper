@@ -851,53 +851,27 @@ class SaihatenoPaladinDownload(Fall2021AnimeDownload, NewsTemplate):
         self.download_character()
 
     def download_episode_preview(self):
-        news_url = self.PAGE_PREFIX + 'news/'
-
-        # Get smallest episode downloaded
-        min_episode = 0
-        files = os.listdir(self.base_folder)
-        for file in files:  # Assume arrange in order
-            if len(file) > 2 and file[0:2].isnumeric() and int(file[0:2]) > min_episode:
-                min_episode = int(file[0:2])
         try:
-            stop = False
-            for i in range(20):
-                if i == 0:
-                    soup = self.get_soup(news_url)
-                else:
-                    soup = self.get_soup(f'{news_url}page/{i + 1}')
-                if soup:
-                    articles = soup.select('#news dd')
-                    for article in articles:
-                        try:
-                            title = article.select('span')[0].text.strip()
-                            if 'あらすじ' in title and '第' in title and '話' in title:
-                                ep_num = int(title.split('第')[1].split('話')[0])
-                                episode = str(ep_num).zfill(2)
-                                if self.is_image_exists(episode + '_1'):
-                                    if ep_num == 1 or ep_num == min_episode:
-                                        stop = True
-                                        break
-                                    continue
-                                try:
-                                    page_url = article.select('a')[0]['href']
-                                    page_soup = self.get_soup(page_url)
-                                    images = page_soup.select('div.post img:not(div.post-thumbnail img, img.emoji)')
-                                    self.image_list = []
-                                    for j in range(len(images)):
-                                        image_url = self.clear_resize_in_url(images[j]['src'])
-                                        image_name = episode + '_' + str(j + 1)
-                                        self.add_to_image_list(image_name, image_url)
-                                    self.download_image_list(self.base_folder)
-                                except:
-                                    continue
-                                if ep_num == 1:
-                                    stop = True
-                                    break
-                        except:
-                            continue
-                if stop:
-                    break
+            soup = self.get_soup(self.PAGE_PREFIX + 'story')
+            posts = soup.select('div.post')
+            for post in posts:
+                h1_tag = post.find('h1')
+                try:
+                    episode = str(int(h1_tag.text.strip().split('第')[1].split('話')[0])).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                ul = post.find('ul')  # Get first ul tag
+                if ul:
+                    images = ul.select('img')
+                    self.image_list = []
+                    for i in range(len(images)):
+                        if images[i].has_attr('src'):
+                            image_url = self.clear_resize_in_url(images[i]['src'])
+                            image_name = episode + '_' + str(i + 1)
+                            self.add_to_image_list(image_name, image_url)
+                    self.download_image_list(self.base_folder)
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + f': {e}')
 
