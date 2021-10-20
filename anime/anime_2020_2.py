@@ -521,8 +521,8 @@ class Kaguyasama2Download(Spring2020AnimeDownload):
     keywords = [title, "Kaguya", "Kaguyasama", "Kaguya-sama: Love is War 2nd Season"]
     folder_name = 'kaguya-sama2'
 
-    STORY_PAGE = "https://kaguya.love/story/"
-    PAGE_PREFIX = 'https://kaguya.love'
+    STORY_PAGE = "https://kaguya.love/2nd/story/"
+    PAGE_PREFIX = 'https://kaguya.love/2nd/'
     
     def __init__(self):
         super().__init__()
@@ -539,7 +539,7 @@ class Kaguyasama2Download(Spring2020AnimeDownload):
             story_nav = soup.find('div', class_='p-story_nav').find_all('a')
             for story_tag in story_nav:
                 try:
-                    page_url = self.PAGE_PREFIX + story_tag['href']
+                    page_url = self.PAGE_PREFIX + story_tag['href'].replace('../', '')
                     episode = str(int(story_tag.text)).zfill(2)
                     if self.is_file_exists(self.base_folder + "/" + episode + "_1.jpg") or self.is_file_exists(
                             self.base_folder + "/" + episode + "_1.png"):
@@ -559,7 +559,7 @@ class Kaguyasama2Download(Spring2020AnimeDownload):
 
     def download_key_visual(self):
         filepath = self.create_key_visual_directory()
-        template = 'https://kaguya.love/assets/img/top/img_main%s.jpg'
+        template = self.PAGE_PREFIX + 'assets/img/top/img_main%s.jpg'
         image_objs = []
         for i in range(1, 4, 1):
             image_url = template % str(i).zfill(2)
@@ -567,7 +567,7 @@ class Kaguyasama2Download(Spring2020AnimeDownload):
         self.download_image_objects(image_objs, filepath)
 
     def download_bluray(self):
-        self.has_website_updated('https://kaguya.love/bddvd/', 'bd_bonus')
+        self.has_website_updated(self.PAGE_PREFIX + 'bddvd/', 'bd_bonus')
         try:
             image_urls = []
             other_filepath = self.base_folder + '/' + constants.FOLDER_BLURAY
@@ -581,9 +581,9 @@ class Kaguyasama2Download(Spring2020AnimeDownload):
                 {'name': 'bd_5', 'url': 'https://pbs.twimg.com/media/EjG8xLHU4AAW_DY?format=jpg&name=900x900'},
             ]
             self.download_image_objects(image_objs, other_filepath)
-            url_list = ["https://kaguya.love/bddvd/"]
+            url_list = [self.PAGE_PREFIX + 'bddvd/']
             for i in range(2, 7, 1):
-                url_list.append('https://kaguya.love/bddvd/%s.html' % str(i).zfill(2))
+                url_list.append(self.PAGE_PREFIX + 'bddvd/%s.html' % str(i).zfill(2))
             for url in url_list:
                 bd_soup = self.get_soup(url)
                 try:
@@ -603,9 +603,9 @@ class Kaguyasama2Download(Spring2020AnimeDownload):
                 except:
                     pass
 
-            url_list = ["https://kaguya.love/music/opening/",
-                        "https://kaguya.love/music/ending/",
-                        "https://kaguya.love/music/charasong/"]
+            url_list = [self.PAGE_PREFIX + "music/opening/",
+                        self.PAGE_PREFIX + "music/ending/",
+                        self.PAGE_PREFIX + "music/charasong/"]
             for url in url_list:
                 music_soup = self.get_soup(url)
                 try:
@@ -637,9 +637,9 @@ class Kaguyasama2Download(Spring2020AnimeDownload):
             chara_filepath = self.base_folder + '/' + constants.FOLDER_CHARACTER
             if not os.path.exists(chara_filepath):
                 os.makedirs(chara_filepath)
-            chara_image_templates = [self.PAGE_PREFIX + '/assets/img/chara/img_chara%s.png',
-                                     self.PAGE_PREFIX + '/assets/img/chara/img_face%s-1.png',
-                                     self.PAGE_PREFIX + '/assets/img/chara/img_face%s-2.png']
+            chara_image_templates = [self.PAGE_PREFIX + 'assets/img/chara/img_chara%s.png',
+                                     self.PAGE_PREFIX + 'assets/img/chara/img_face%s-1.png',
+                                     self.PAGE_PREFIX + 'assets/img/chara/img_face%s-2.png']
             num_of_characters = 10
             for i in range(len(chara_image_templates)):
                 for j in range(num_of_characters):

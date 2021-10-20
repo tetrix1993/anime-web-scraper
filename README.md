@@ -105,6 +105,7 @@ The premiere date for the anime listed here has not been announced.
 ### Spring 2022 Anime
 * [Aharen-san wa Hakarenai](https://aharen-pr.com/)
 * [Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan wo Erandeiraremasen 3rd Season](http://booklove-anime.jp/)
+* [Kaguya-sama wa Kokurasetai: Ultra Romantic](https://kaguya.love/)
 * [Kawaii dake ja Nai Shikimori-san](https://shikimori-anime.com/)
 * [Tate no Yuusha no Nariagari 2nd Season](http://shieldhero-anime.jp)
 * [Yuusha, Yamemasu](https://yuuyame.com/)
@@ -250,7 +251,7 @@ The premiere date for the anime listed here has not been announced.
 * [Hachi-nan tte, Sore wa Nai deshou!](http://hachinan-anime.com/)
 * [Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan wo Erandeiraremasen 2nd Season](http://booklove-anime.jp/)
 * [Houkago Teibou Nisshi](https://teibotv.com/)
-* [Kaguya-sama wa Kokurasetai? Tensai-tachi no Renai Zunousen](https://kaguya.love/)
+* [Kaguya-sama wa Kokurasetai? Tensai-tachi no Renai Zunousen](https://kaguya.love/2nd/)
 * [Kakushigoto](https://kakushigoto-anime.com/)
 * [Kingdom 3rd Season](https://kingdom-anime.com/)
 * [Otome Game no Hametsu Flag shika Nai Akuyaku Reijou ni Tensei shiteshimatta...](https://hamehura-anime.com/1st/)

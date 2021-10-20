@@ -147,6 +147,42 @@ class Honzuki3Download(Spring2022AnimeDownload, NewsTemplate):
         self.download_image_list(folder)
 
 
+# Kaguya-sama wa Kokurasetai: Ultra Romantic
+class Kaguyasama3Download(Spring2022AnimeDownload, NewsTemplate):
+    title = "Kaguya-sama wa Kokurasetai: Ultra Romantic"
+    keywords = [title, "Kaguya", "Kaguyasama", "Kaguya-sama: Love is War 3rd Season"]
+    folder_name = 'kaguya-sama3'
+
+    PAGE_PREFIX = 'https://kaguya.love/'
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.c-news_list__item',
+                                    title_select='div.c-news_list__ttl', date_select='div.c-news_list__date',
+                                    id_select='a', a_tag_prefix=news_url, paging_type=1, stop_date='2021.10.16',
+                                    date_func=lambda x: x[0:4] + '.' + x[5:].replace('/', '.'),
+                                    next_page_select='div.c-pagination__nav-button.-next',
+                                    next_page_eval_index_class='is-disabled', next_page_eval_index=-1)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz', self.PAGE_PREFIX + 'assets/3rd/t/img/top/main/img_main.jpg')
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FCKDRzxVkAAIwMv?format=jpg&name=4096x4096')
+        self.download_image_list(folder)
+
+
 # Kawaii dake ja Nai Shikimori-san
 class ShikimorisanDownload(Spring2022AnimeDownload, NewsTemplate2):
     title = 'Kawaii dake ja Nai Shikimori-san'
