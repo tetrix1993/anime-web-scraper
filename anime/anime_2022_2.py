@@ -6,6 +6,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Honzuki S3 http://booklove-anime.jp/story/ #本好きの下剋上 @anime_booklove
 # Kawaii dake ja Nai Shikimori-san https://shikimori-anime.com/ #式守さん @anime_shikimori
 # Tate no Yuusha S2 http://shieldhero-anime.jp/ #shieldhero #盾の勇者の成り上がり @shieldheroanime
+# Yuusha, Yamemasu https://yuuyame.com/ #yuuyame #勇やめ @yuuyame_anime
 
 
 # Summer 2022 Anime
@@ -247,3 +248,48 @@ class TateNoYuusha2Download(Spring2022AnimeDownload):
         self.add_to_image_list('kv1', 'https://pbs.twimg.com/media/EhHFvyVU4AA7cUw?format=jpg&name=large')
         self.add_to_image_list('mv_lg', self.PAGE_PREFIX + '/assets/img/2nd/mv_lg.jpg')
         self.download_image_list(folder)
+
+
+# Yuusha, Yamemasu
+class YuuyameDownload(Spring2022AnimeDownload, NewsTemplate):
+    title = 'Yuusha, Yamemasu'
+    keywords = [title, "I'm Quitting Heroing", 'yuuyame']
+    website = 'https://yuuyame.com/'
+    twitter = 'yuuyame_anime'
+    hashtags = ['yuuyame', '勇やめ']
+    folder_name = 'yuuyame'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        # Need update for paging
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='div.newsPaging article',
+                                    title_select='div.news_list_title', date_select='div.news_list_day',
+                                    id_select='a', a_tag_prefix=self.PAGE_PREFIX, date_separator='/',
+                                    news_prefix='news.html')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/FCEakgUXMAYyVuC?format=jpg&name=large')
+        self.add_to_image_list('kv1_1', self.PAGE_PREFIX + 'images/news/p_001.jpg')
+        self.add_to_image_list('kv1_2', self.PAGE_PREFIX + 'images/top/v_001.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        prefix = self.PAGE_PREFIX + 'images/chara/'
+        templates = [prefix + 'p_%s.png', prefix + 'f_%s_01.png', prefix + 'f_%s_02.png']
+        self.download_by_template(folder, templates, 3, 1)
