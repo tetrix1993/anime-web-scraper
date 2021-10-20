@@ -621,7 +621,7 @@ class KoisekaDownload(UnconfirmedDownload, NewsTemplate):
 
 
 # Kono Healer, Mendokusai
-class KonoHealerDownload(UnconfirmedDownload):
+class KonoHealerDownload(UnconfirmedDownload, NewsTemplate2):
     title = 'Kono Healer, Mendokusai'
     keywords = [title, "This Healer's a Handful"]
     website = 'https://kono-healer-anime.com/'
@@ -638,50 +638,37 @@ class KonoHealerDownload(UnconfirmedDownload):
         self.download_episode_preview()
         self.download_news()
         self.download_key_visual()
+        self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX)
 
     def download_news(self):
-        news_url = self.PAGE_PREFIX
-        try:
-            soup = self.get_soup(news_url, decode=True)
-            articles = soup.select('#nwu_001_t tr')
-            news_obj = self.get_last_news_log_object()
-            results = []
-            for article in articles:
-                tag_date = article.find('td', class_='day')
-                tag_title = article.find('div', class_='title')
-                a_tag = article.find('a')
-                if tag_date and tag_title:
-                    article_id = ''
-                    if a_tag and a_tag.has_attr('href'):
-                        article_id = self.PAGE_PREFIX + a_tag['href']
-                    date = self.format_news_date(tag_date.text.strip().replace('/', '.'))
-                    if len(date) == 0:
-                        continue
-                    title = tag_title.text.strip()
-                    if news_obj and ((news_obj['id'] == article_id and news_obj['title'] == title)
-                                     or date < news_obj['date']):
-                        break
-                    results.append(self.create_news_log_object(date, title, article_id))
-            success_count = 0
-            for result in reversed(results):
-                process_result = self.create_news_log_from_news_log_object(result)
-                if process_result == 0:
-                    success_count += 1
-            if len(results) > 0:
-                self.create_news_log_cache(success_count, results[0])
-        except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - News')
-            print(e)
+        self.download_template_news(self.PAGE_PREFIX)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         self.image_list = []
         self.add_to_image_list('teaser', 'https://pbs.twimg.com/media/Ey5yDx_VgAUuHlX?format=jpg&name=large')
         self.add_to_image_list('tz_visual', self.PAGE_PREFIX + 'core_sys/images/main/tz/tz_visual.png')
+        self.add_to_image_list('tz2_tw', 'https://pbs.twimg.com/media/FCG8xMCUcAEjhO3?format=jpg&name=4096x4096')
         self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'chara')
+            images = soup.select('div.read img')
+            self.image_list = []
+            for image in images:
+                if image.has_attr('src'):
+                    image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Character')
+            print(e)
 
 
 # Maou Gakuin no Futekigousha: Shijou Saikyou no Maou no Shiso, Tensei shite Shison-tachi no Gakkou e
