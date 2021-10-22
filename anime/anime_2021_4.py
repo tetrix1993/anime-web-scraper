@@ -1915,7 +1915,21 @@ class Yuyuyu3Download(Fall2021AnimeDownload, NewsTemplate):
         self.add_to_image_list('tw_visual2', 'https://pbs.twimg.com/media/E0L1PAhVEAICS7o?format=jpg&name=4096x4096')
         self.download_image_list(folder)
         self.download_by_template(folder, 'https://yuyuyu.tv/season2/img/home/visual_%s.jpg', 2, 10)
-        self.download_by_template(folder, self.PAGE_PREFIX + 'img/home/visual_%s.jpg', 2, 1)
+        # self.download_by_template(folder, self.PAGE_PREFIX + 'img/home/visual_%s.jpg', 2, 1)
+
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('visual-image')
+            self.image_list = []
+            for image in images:
+                if image.has_attr('image'):
+                    image_url = self.PAGE_PREFIX + image['image']
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Key Visual')
+            print(e)
 
     def download_character(self):
         folder = self.create_character_directory()
