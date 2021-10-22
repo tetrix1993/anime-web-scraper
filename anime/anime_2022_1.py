@@ -495,6 +495,9 @@ class SlowLoopDownload(Winter2022AnimeDownload, NewsTemplate):
         template = self.PAGE_PREFIX + 'images/chara/p_%s.png'
         self.download_by_template(folder, template, 3, 1)
 
+        template2 = self.PAGE_PREFIX + 'images/news/p_%s.jpg'
+        self.download_by_template(folder, template2, 3, 8, 10, prefix='news_')
+
 
 # Tensai Ouji no Akaji Kokka Saisei Jutsu: Souda, Baikoku shiyou
 class TensaiOujiDownload(Winter2022AnimeDownload, NewsTemplate2):
