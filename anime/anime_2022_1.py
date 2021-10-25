@@ -29,7 +29,7 @@ class Winter2022AnimeDownload(MainDownload):
 
 
 # Akebi-chan no Sailor-fuku
-class AkebichanDownload(Winter2022AnimeDownload):
+class AkebichanDownload(Winter2022AnimeDownload, NewsTemplate):
     title = 'Akebi-chan no Sailor-fuku'
     keywords = [title, "Akebi's Sailor Uniform"]
     website = 'https://akebi-chan.jp/'
@@ -51,7 +51,10 @@ class AkebichanDownload(Winter2022AnimeDownload):
         self.has_website_updated(self.PAGE_PREFIX)
 
     def download_news(self):
-        pass
+        prefix = self.PAGE_PREFIX + '?scroll='
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.p-news-in__item',
+                                    date_select='p.date', title_select='h3.title', id_select=None,
+                                    id_has_id=True, a_tag_prefix=prefix)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
