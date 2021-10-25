@@ -14,6 +14,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 # Mahouka Koukou no Rettousei: Tsuioku-hen https://mahouka.jp/ #mahouka @mahouka_anime
 # Princess Connect! Re:Dive S2 https://anime.priconne-redive.jp/ #アニメプリコネ #プリコネR #プリコネ #アニメプリコネR @priconne_anime
 # Slow Loop https://slowlooptv.com/ #slowloop @slowloop_tv
+# Sono Bisque Doll wa Koi wo Suru https://bisquedoll-anime.com/ #着せ恋 @kisekoi_anime
 # Tensai Ouji no Akaji Kokka Saisei Jutsu: Souda, Baikoku shiyou https://tensaiouji-anime.com/ #天才王子 #天才王子の赤字国家再生術 @tensaiouji_PR
 
 
@@ -497,6 +498,49 @@ class SlowLoopDownload(Winter2022AnimeDownload, NewsTemplate):
 
         template2 = self.PAGE_PREFIX + 'images/news/p_%s.jpg'
         self.download_by_template(folder, template2, 3, 8, 10, prefix='news_')
+
+
+# Sono Bisque Doll wa Koi wo Suru
+class KisekoiDownload(Winter2022AnimeDownload, NewsTemplate):
+    title = 'Sono Bisque Doll wa Koi wo Suru'
+    keywords = [title, 'kisekoi', 'My Dress-Up Darling']
+    website = 'https://bisquedoll-anime.com/'
+    twitter = 'kisekoi'
+    hashtags = '着せ恋'
+    folder_name = 'kisekoi'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        # Paging logic not known
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.p-news__list-item',
+                                    date_select='div.p-in-data', title_select='div.p-in-title',
+                                    id_select=None, id_has_id=True, id_attr='data-news-id', news_prefix='',
+                                    a_tag_prefix=self.PAGE_PREFIX + '?news=')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/FBs3mm8VUAAoYEo?format=jpg&name=4096x4096')
+        self.add_to_image_list('kv1', self.PAGE_PREFIX + 'assets/teaser/img/kv_image.png')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'assets/teaser/img/chara_%s.png'
+        self.download_by_template(folder, template, 1, 1, prefix='tz_')
 
 
 # Tensai Ouji no Akaji Kokka Saisei Jutsu: Souda, Baikoku shiyou

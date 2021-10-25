@@ -120,6 +120,7 @@ The premiere date for the anime listed here has not been announced.
 * [Mahouka Koukou no Rettousei: Tsuioku-hen](https://mahouka.jp/)
 * [Princess Connect! Re:Dive Season 2](https://anime.priconne-redive.jp)
 * [Slow Loop](https://slowlooptv.com/)
+* [Sono Bisque Doll wa Koi wo Suru](https://bisquedoll-anime.com/)
 * [Tensai Ouji no Akaji Kokka Saisei Jutsu: Souda, Baikoku shiyou](https://tensaiouji-anime.com/)
 
 ### Fall 2021 Anime

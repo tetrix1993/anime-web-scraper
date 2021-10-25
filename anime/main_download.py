@@ -1009,10 +1009,11 @@ class MainDownload:
 class NewsTemplate:
     def download_template_news(self, page_prefix, article_select, date_select, title_select, id_select,
                                paging_type=0, decode_response=True, response_headers=None, id_has_id=False,
-                               news_prefix=None, a_tag_prefix=None, stop_date=None, date_separator=None, date_attr=None,
-                               date_prefix=None, date_func=None, a_tag_replace_from=None, a_tag_replace_to='',
-                               a_tag_start_text_to_remove=None, next_page_select=None, next_page_eval_index_class=None,
-                               next_page_eval_index=0, next_page_eval_index_compare_page=False):
+                               id_attr='id', news_prefix=None, a_tag_prefix=None, stop_date=None, date_separator=None,
+                               date_attr=None, date_prefix=None, date_func=None, a_tag_replace_from=None,
+                               a_tag_replace_to='', a_tag_start_text_to_remove=None, next_page_select=None,
+                               next_page_eval_index_class=None, next_page_eval_index=0,
+                               next_page_eval_index_compare_page=False):
         """
         :param page_prefix: Start of the page URL to evaluate
         :param article_select: Selects article item elements
@@ -1023,6 +1024,7 @@ class NewsTemplate:
         :param decode_response: Decode HTTP Response
         :param response_headers: Headers to be included in HTTP Request
         :param id_has_id: The element has 'id' attribute
+        :param id_attr: Specify the attribute of the selected tag
         :param news_prefix: The prefix of the news page excluding page prefix
         :param a_tag_prefix: The prefix of news page that is missing from the a tag.
         :param stop_date: Stops evaluating item if date starts with stop_date
@@ -1037,6 +1039,7 @@ class NewsTemplate:
         :param next_page_eval_index_class: Terminates if next_page_select contains the class
         :param next_page_eval_index: Index number of the elements selected in next_page_select
         :param next_page_eval_index_compare_page: Terminates if the next_page_select's text = current page number
+        :param has_news_prefix:
         """
 
         if not issubclass(self.__class__, MainDownload):
@@ -1046,7 +1049,7 @@ class NewsTemplate:
             news_url = page_prefix
         else:
             news_url = page_prefix + '/'
-        if news_prefix:
+        if news_prefix is not None:
             news_url += news_prefix
         else:
             news_url += 'news/'
@@ -1080,10 +1083,12 @@ class NewsTemplate:
                         has_tag_ids = len(tag_ids) > 0
                         if has_tag_ids:
                             if id_has_id:
-                                if tag_ids[0].has_attr('id'):
-                                    article_id = tag_ids[0]['id']
+                                if tag_ids[0].has_attr(id_attr):
+                                    article_id = tag_ids[0][id_attr]
                                 else:
                                     continue
+                                if a_tag_prefix:
+                                    article_id = a_tag_prefix + article_id
                             elif tag_ids[0].has_attr('href'):
                                 article_id_suffix = tag_ids[0]['href']
                                 if a_tag_replace_from:
