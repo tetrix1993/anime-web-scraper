@@ -8,6 +8,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 # Akebi-chan no Sailor-fuku https://akebi-chan.jp/ #明日ちゃんのセーラー服 #明日ちゃん @AKEBI_chan
 # Arifureta Shokugyou de Sekai Saikyou 2nd Season https://arifureta.com/ #ありふれた #ARIFURETA @ARIFURETA_info
 # Fantasy Bishoujo Juniku Ojisan to https://fabiniku.com/ #ファ美肉おじさん @fabiniku
+# Hakozume: Kouban Joshi no Gyakushuu https://hakozume-anime.com/ #ハコヅメ @hakozume_anime
 # Karakai Jouzu no Takagi-san 3 https://takagi3.me/ #高木さんめ @takagi3_anime
 # Kenja no Deshi wo Nanoru Kenja https://kendeshi-anime.com/ #賢でし @kendeshi_anime
 # Leadale no Daichi nite https://leadale.net/ #leadale #リアデイル @leadale_anime
@@ -180,6 +181,46 @@ class FabinikuDownload(Winter2022AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'wordpress/wp-content/themes/fabiniku/assets/img/character/img%s.png'
         self.download_by_template(folder, template, 1, 1)
+
+
+# Hakozume: Kouban Joshi no Gyakushuu
+class HakozumeDownload(Winter2022AnimeDownload, NewsTemplate3):
+    title = 'Hakozume: Kouban Joshi no Gyakushuu'
+    keywords = [title, 'Police in a Pod']
+    website = 'https://hakozume-anime.com/'
+    twitter = 'hakozume_anime'
+    hashtags = 'ハコヅメ'
+    folder_name = 'hakozume'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/E7tsWw7VUAIhRav?format=jpg&name=medium')
+        self.add_to_image_list('kv1', self.PAGE_PREFIX + 'assets/top/t1/vis.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        prefix = self.PAGE_PREFIX + 'assets/character/'
+        templates = [prefix + 'c/%s.png', prefix + 'f/%s.png']
+        self.download_by_template(folder, templates, 1, 1, prefix=['c_', 'f_'])
 
 
 # Karakai Jouzu no Takagi-san 3
