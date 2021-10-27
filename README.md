@@ -90,6 +90,7 @@ The premiere date for the anime listed here has not been announced.
 * [Isekai Ojisan](https://isekaiojisan.com/)
 * [Isekai Yakkyoku](https://isekai-yakkyoku.jp/)
 * [Itai no wa Iya nano de Bougyoryoku ni Kyokufuri Shitai to Omoimasu. 2nd Season](https://bofuri.jp/)
+* [Kage no Jitsuryokusha ni Naritakute!](https://shadow-garden.jp/)
 * [Kakkou no Iinazuke](https://cuckoos-anime.com/)
 * [Koi wa Sekai Seifuku no Ato de](https://koiseka-anime.com/)
 * [Kono Healer, Mendokusai](https://kono-healer-anime.com/)
