@@ -16,6 +16,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Koi wa Sekai Seifuku no Ato de https://koiseka-anime.com/ #恋せか @koiseka_anime
 # Kono Healer, Mendokusai https://kono-healer-anime.com/ #このヒーラー @kono_healer
 # Maou Gakuin no Futekigousha 2nd Season https://maohgakuin.com/ #魔王学院 @maohgakuin
+# RPG Fudousan https://rpg-rs.jp/ #RPG不動産 @rpgrs_anime
 # Shikkakumon no Saikyou Kenja https://shikkakumon.com/ #失格紋 @shikkakumon_PR
 # Shokei Shoujo no Virgin Road http://virgin-road.com/ #処刑少女 #shokei_anime @VirginroadAnime
 # Summertime Render https://summertime-anime.com/ #サマータイムレンダ #サマレン @summertime_PR
@@ -774,6 +775,45 @@ class Maohgakuin2Download(UnconfirmedDownload):
         self.add_to_image_list('teaser', self.PAGE_PREFIX + 'assets/img/img_main.jpg')
         # self.add_to_image_list('teaser_tw', 'https://pbs.twimg.com/media/EvylQFOVkAID_0B?format=jpg&name=medium')
         self.download_image_list(folder)
+
+
+# RPG Fudousan
+class RPGFudousanDownload(UnconfirmedDownload, NewsTemplate3):
+    title = 'RPG Fudousan'
+    keywords = [title, 'RPG Real Estate']
+    website = 'https://rpg-rs.jp/'
+    twitter = 'rpgrs_anime'
+    hashtags = 'RPG不動産'
+    folder_name = 'rpg-fudousan'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz1_1', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv.png')
+        self.add_to_image_list('tz1_2', self.PAGE_PREFIX + 'assets/news/vis-t1.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'assets/character/c/%s.png'
+        self.download_by_template(folder, template, 1, 1, prefix='c')
 
 
 # Shikkakumon no Saikyou Kenja

@@ -1240,13 +1240,13 @@ class NewsTemplate3:
                 if not article.has_attr('id'):
                     continue
                 tag_date = article.find('div', class_='entry-date')
-                tag_title = article.find('h2', class_='entry-title')
-                if tag_date and tag_title:
+                tag_title = article.select('.entry-title')
+                if tag_date and len(tag_title) > 0:
                     article_id = article['id']
                     date = self.format_news_date(tag_date.text.replace('/', '.'))
                     if len(date) == 0:
                         continue
-                    title = ' '.join(tag_title.text.strip().split())
+                    title = ' '.join(tag_title[0].text.strip().split())
                     if (stop_date is not None and date.startswith(stop_date)) or\
                             (news_obj and (news_obj['id'] == article_id or date < news_obj['date'])):
                         break

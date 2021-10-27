@@ -95,6 +95,7 @@ The premiere date for the anime listed here has not been announced.
 * [Koi wa Sekai Seifuku no Ato de](https://koiseka-anime.com/)
 * [Kono Healer, Mendokusai](https://kono-healer-anime.com/)
 * [Maou Gakuin no Futekigousha: Shijou Saikyou no Maou no Shiso, Tensei shite Shison-tachi no Gakkou e 2nd Season](https://maohgakuin.com/)
+* [RPG Fudousan](https://rpg-rs.jp/)
 * [Shikkakumon no Saikyou Kenja](https://shikkakumon.com/)
 * [Shokei Shoujo no Virgin Road](http://virgin-road.com/)
 * [Summertime Render](https://summertime-anime.com/)
