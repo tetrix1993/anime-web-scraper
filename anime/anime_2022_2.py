@@ -5,6 +5,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Aharen-san wa Hakarenai https://aharen-pr.com/ #阿波連さん @aharen_pr
 # Honzuki S3 http://booklove-anime.jp/story/ #本好きの下剋上 @anime_booklove
 # Kawaii dake ja Nai Shikimori-san https://shikimori-anime.com/ #式守さん @anime_shikimori
+# Mahoutsukai Reimeiki https://www.tbs.co.jp/anime/reimeiki/ #魔法使い黎明期 @reimeiki_pr
 # Tate no Yuusha S2 http://shieldhero-anime.jp/ #shieldhero #盾の勇者の成り上がり @shieldheroanime
 # Yuusha, Yamemasu https://yuuyame.com/ #yuuyame #勇やめ @yuuyame_anime
 
@@ -225,6 +226,48 @@ class ShikimorisanDownload(Spring2022AnimeDownload, NewsTemplate2):
         self.add_to_image_list('shikimori', self.PAGE_PREFIX + 'core_sys/images/main/cont/chara/shikimori.jpg')
         self.add_to_image_list('izumi', self.PAGE_PREFIX + 'core_sys/images/main/cont/chara/izumi.jpg')
         self.download_image_list(folder)
+
+
+# Mahoutsukai Reimeiki
+class ReimeikiDownload(Spring2022AnimeDownload, NewsTemplate):
+    title = 'Mahoutsukai Reimeiki'
+    keywords = [title, 'The Dawn of the Witch']
+    website = 'https://www.tbs.co.jp/anime/reimeiki/'
+    twitter = 'reimeiki_pr'
+    hashtags = '魔法使い黎明期'
+    folder_name = 'reimeiki'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='dl.update-box',
+                                    date_select='.update-date', title_select='a', id_select='a',
+                                    a_tag_prefix=self.PAGE_PREFIX + 'news/')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.add_to_image_list('tz', 'https://pbs.twimg.com/media/FCy4SbFVgBETtHo?format=jpg&name=large')
+        self.add_to_image_list('teaser_visual_chara', self.PAGE_PREFIX + 'img/teaser_visual_chara.png')
+        self.add_to_image_list('teaser_visual_chara_bg', self.PAGE_PREFIX + 'img/teaser_visual_chara.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        prefix = self.PAGE_PREFIX + 'img/chara'
+        templates = [prefix + '_%s_on.png', prefix + 'img_%s.jpg']
+        self.download_by_template(folder, templates, 2, 1)
 
 
 # Tate no Yuusha no Nariagari S2

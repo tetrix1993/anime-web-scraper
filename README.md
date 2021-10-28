@@ -109,6 +109,7 @@ The premiere date for the anime listed here has not been announced.
 * [Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan wo Erandeiraremasen 3rd Season](http://booklove-anime.jp/)
 * [Kaguya-sama wa Kokurasetai: Ultra Romantic](https://kaguya.love/)
 * [Kawaii dake ja Nai Shikimori-san](https://shikimori-anime.com/)
+* [Mahoutsukai Reimeiki](https://www.tbs.co.jp/anime/reimeiki/)
 * [Tate no Yuusha no Nariagari 2nd Season](http://shieldhero-anime.jp)
 * [Yuusha, Yamemasu](https://yuuyame.com/)
 
