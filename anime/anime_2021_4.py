@@ -1560,6 +1560,7 @@ class TaishoOtomeDownload(Fall2021AnimeDownload, NewsTemplate):
         self.download_episode_preview_external()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -1620,6 +1621,26 @@ class TaishoOtomeDownload(Fall2021AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'wp/wp-content/themes/taisho-otome/img/character/img_chara%s.png'
         self.download_by_template(folder, template, 2)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        for page in ['bluray/store-benefits', 'bluray/vol1', 'bluray/vol2',
+                     'music/1st-op1', 'music/1st-ed1', 'music/soundtrack']:
+            page_url = f'{self.PAGE_PREFIX}{page}/'
+            try:
+                soup = self.get_soup(page_url)
+                images = soup.select('.productinfo .js_imgload')
+                self.image_list = []
+                for image in images:
+                    if image.has_attr('data-imgload') and 'comingsoon' not in image['data-imgload']:
+                        image_url = image['data-imgload']
+                        if image_url.startswith('/'):
+                            image_url = self.PAGE_PREFIX + image_url[1:]
+                        image_name = self.extract_image_name_from_url(image_url)
+                        self.add_to_image_list(image_name, image_url)
+                self.download_image_list(folder)
+            except Exception as e:
+                print(f"Error in running {self.__class__.__name__} - Media {page_url}: {e}")
 
 
 # takt op.Destiny
