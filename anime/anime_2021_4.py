@@ -523,6 +523,9 @@ class MierukochanDownload(Fall2021AnimeDownload, NewsTemplate3):
         self.add_to_image_list('tz2_tw_1', 'https://pbs.twimg.com/media/E6aARStVcAMhcZB?format=jpg&name=medium')
         self.add_to_image_list('tz2_tw_2', 'https://pbs.twimg.com/media/E6aARTMVEAMu5YQ?format=jpg&name=medium')
         self.add_to_image_list('tz2_tw_3', 'https://pbs.twimg.com/media/FAg3dhRVgAI30y-?format=jpg&name=medium')
+        self.add_to_image_list('halloween', self.PAGE_PREFIX + 'assets/top/hlwn/vis-on.png')
+        self.add_to_image_list('halloween_tw', 'https://pbs.twimg.com/media/FC9KtmfagAAKVAc?format=jpg&name=large')
+        self.add_to_image_list('halloween_tw2', 'https://pbs.twimg.com/media/FC9LAJcaQAAxjm_?format=jpg&name=large')
         self.download_image_list(folder)
 
         top_template1 = self.PAGE_PREFIX + 'assets/top/t%s/vis-on.png'
