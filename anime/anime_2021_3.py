@@ -1445,6 +1445,8 @@ class MegamiryouDownload(Summer2021AnimeDownload, NewsTemplate2):
                         if 'np_bd' in image_url:
                             continue
                         image_name = self.extract_image_name_from_url(image_url)
+                        if not image_name.isnumeric() and page == '02':
+                            image_name = 'bd2_' + image_name
                         if self.is_image_exists(image_name):
                             has_image = True
                             continue
