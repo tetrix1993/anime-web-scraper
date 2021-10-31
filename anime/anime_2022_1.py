@@ -14,6 +14,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 # Leadale no Daichi nite https://leadale.net/ #leadale #リアデイル @leadale_anime
 # Mahouka Koukou no Rettousei: Tsuioku-hen https://mahouka.jp/ #mahouka @mahouka_anime
 # Princess Connect! Re:Dive S2 https://anime.priconne-redive.jp/ #アニメプリコネ #プリコネR #プリコネ #アニメプリコネR @priconne_anime
+# Shikkakumon no Saikyou Kenja https://shikkakumon.com/ #失格紋 @shikkakumon_PR
 # Slow Loop https://slowlooptv.com/ #slowloop @slowloop_tv
 # Sono Bisque Doll wa Koi wo Suru https://bisquedoll-anime.com/ #着せ恋 @kisekoi_anime
 # Tensai Ouji no Akaji Kokka Saisei Jutsu: Souda, Baikoku shiyou https://tensaiouji-anime.com/ #天才王子 #天才王子の赤字国家再生術 @tensaiouji_PR
@@ -494,6 +495,46 @@ class Priconne2Download(Winter2022AnimeDownload, NewsTemplate):
 
         template = self.PAGE_PREFIX + 'assets/images/top/kv_chara%s_pc.png'
         self.download_by_template(folder, template, 2, 1, 4)
+
+
+# Shikkakumon no Saikyou Kenja
+class ShikkakumonDownload(Winter2022AnimeDownload, NewsTemplate2):
+    title = 'Shikkakumon no Saikyou Kenja'
+    keywords = [title, 'The Strongest Sage of Disqualified Crest']
+    website = 'https://shikkakumon.com/'
+    twitter = 'shikkakumon_PR'
+    hashtags = '失格紋'
+    folder_name = 'shikkakumon'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('teaser', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv.png')
+        self.add_to_image_list('teaser_tw', 'https://pbs.twimg.com/media/EtDguMkU0AQjk4b?format=jpg&name=4096x4096')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        prefix = self.PAGE_PREFIX + 'core_sys/images/main/tz/char'
+        templates = [prefix + '%s_stand.png', prefix + '%s_face.png']
+        self.download_by_template(folder, templates, 2, 1, prefix='tz_')
 
 
 # Slow Loop

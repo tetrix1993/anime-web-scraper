@@ -17,7 +17,6 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Kono Healer, Mendokusai https://kono-healer-anime.com/ #このヒーラー @kono_healer
 # Maou Gakuin no Futekigousha 2nd Season https://maohgakuin.com/ #魔王学院 @maohgakuin
 # RPG Fudousan https://rpg-rs.jp/ #RPG不動産 @rpgrs_anime
-# Shikkakumon no Saikyou Kenja https://shikkakumon.com/ #失格紋 @shikkakumon_PR
 # Shokei Shoujo no Virgin Road http://virgin-road.com/ #処刑少女 #shokei_anime @VirginroadAnime
 # Summertime Render https://summertime-anime.com/ #サマータイムレンダ #サマレン @summertime_PR
 # Vlad Love https://www.vladlove.com/index.html #ぶらどらぶ #vladlove @VLADLOVE_ANIME
@@ -814,39 +813,6 @@ class RPGFudousanDownload(UnconfirmedDownload, NewsTemplate3):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'assets/character/c/%s.png'
         self.download_by_template(folder, template, 1, 1, prefix='c')
-
-
-# Shikkakumon no Saikyou Kenja
-class ShikkakumonDownload(UnconfirmedDownload, NewsTemplate2):
-    title = 'Shikkakumon no Saikyou Kenja'
-    keywords = [title]
-    website = 'https://shikkakumon.com/'
-    twitter = 'shikkakumon_PR'
-    hashtags = '失格紋'
-    folder_name = 'shikkakumon'
-
-    PAGE_PREFIX = website
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_news()
-        self.download_key_visual()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_news(self):
-        self.download_template_news(self.PAGE_PREFIX)
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('teaser', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv.png')
-        self.add_to_image_list('teaser_tw', 'https://pbs.twimg.com/media/EtDguMkU0AQjk4b?format=jpg&name=4096x4096')
-        self.download_image_list(folder)
 
 
 # Shokei Shoujo no Virgin Road
