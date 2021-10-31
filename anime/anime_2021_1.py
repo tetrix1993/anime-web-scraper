@@ -1189,6 +1189,9 @@ class MushokuTenseiDownload(Winter2021AnimeDownload):
             print("Error in running " + self.__class__.__name__ + " - Character")
             print(e)
         self.download_image_objects(image_objs, folder)
+        prefix = self.PAGE_PREFIX + '/wp-content/themes/mushoku_re/img/character/img_chara'
+        templates = [prefix + 'cter%s.png', prefix + 'sub%s.png']
+        self.download_by_template(folder, templates, 2, 1)
 
     def download_media(self):
         folder = self.create_media_directory()
