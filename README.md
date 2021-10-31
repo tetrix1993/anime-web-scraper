@@ -97,6 +97,7 @@ The premiere date for the anime listed here has not been announced.
 * [Maou Gakuin no Futekigousha: Shijou Saikyou no Maou no Shiso, Tensei shite Shison-tachi no Gakkou e 2nd Season](https://maohgakuin.com/)
 * [RPG Fudousan](https://rpg-rs.jp/)
 * [Shokei Shoujo no Virgin Road](http://virgin-road.com/)
+* [Spy x Family](https://spy-family.net/)
 * [Summertime Render](https://summertime-anime.com/)
 * [Yama no Susume: Next Summit](https://yamanosusume-ns.com/)
 

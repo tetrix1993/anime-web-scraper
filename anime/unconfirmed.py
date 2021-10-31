@@ -18,6 +18,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Maou Gakuin no Futekigousha 2nd Season https://maohgakuin.com/ #魔王学院 @maohgakuin
 # RPG Fudousan https://rpg-rs.jp/ #RPG不動産 @rpgrs_anime
 # Shokei Shoujo no Virgin Road http://virgin-road.com/ #処刑少女 #shokei_anime @VirginroadAnime
+# Spy x Family https://spy-family.net/ #SPY_FAMILY #スパイファミリー @spyfamily_anime
 # Summertime Render https://summertime-anime.com/ #サマータイムレンダ #サマレン @summertime_PR
 # Vlad Love https://www.vladlove.com/index.html #ぶらどらぶ #vladlove @VLADLOVE_ANIME
 # Yama no Susume: Next Summit https://yamanosusume-ns.com/ #ヤマノススメ @yamanosusume
@@ -852,6 +853,55 @@ class ShokeiShoujoDownload(UnconfirmedDownload):
         template1 = self.PAGE_PREFIX + 'core_sys/images/main/tz/char_%s.png'
         template2 = self.PAGE_PREFIX + 'core_sys/images/main/tz/char_%sface.png'
         self.download_by_template(folder, [template1, template2], 1, 1, prefix='tz_')
+
+
+# Spy x Family https://spy-family.net/
+class SpyFamilyDownload(UnconfirmedDownload, NewsTemplate):
+    title = 'Spy x Family'
+    keywords = [title]
+    website = 'https://spy-family.net/'
+    twitter = 'spyfamily_anime'
+    hashtags = ['SPY_FAMILY', 'スパイファミリー']
+    folder_name = 'spy-family'
+
+    PAGE_PREFIX = website
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        # News page logic may be wrong
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.newsLists__item',
+                                    date_select='time', title_select='.newsLists--title', id_select='a')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz1', 'https://pbs.twimg.com/media/FDCUAXsagAArKcA?format=jpg&name=4096x4096')
+        self.add_to_image_list('tz2', 'https://pbs.twimg.com/media/FDCUBF7akAEMcUM?format=jpg&name=4096x4096')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.charaImgLists__imgWrap img')
+            self.image_list = []
+            for image in images:
+                if image.has_attr('src'):
+                    image_url = self.PAGE_PREFIX + image['src'].replace('./', '')
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Character')
+            print(e)
 
 
 # Summertime Render
