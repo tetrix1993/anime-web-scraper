@@ -1739,6 +1739,7 @@ class TsukiLaikaNosferatuDownload(Fall2021AnimeDownload, NewsTemplate):
 
     PAGE_PREFIX = website
     FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 8
 
     def __init__(self):
         super().__init__()
@@ -1746,6 +1747,7 @@ class TsukiLaikaNosferatuDownload(Fall2021AnimeDownload, NewsTemplate):
     def run(self):
         self.download_episode_preview()
         self.download_news()
+        self.download_episode_preview_guess()
         self.download_episode_preview_external()
         self.download_key_visual()
         self.download_character()
@@ -1775,6 +1777,38 @@ class TsukiLaikaNosferatuDownload(Fall2021AnimeDownload, NewsTemplate):
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
+
+    def download_episode_preview_guess(self):
+        # Can only run this in year 2021
+        folder = self.create_custom_directory('guess')
+        template = self.PAGE_PREFIX + 'Nr7R6svx/wp-content/uploads/2021/%s/%s.jpg'
+        is_successful = False
+        curr_month = (datetime.now() + timedelta(hours=1)).strftime('%m')
+        for k in range(9, 13, 1):
+            month = str(k).zfill(2)
+            if curr_month > month and self.is_image_exists(f'{k + 1}_0_1', folder):
+                continue
+            for i in range(self.FINAL_EPISODE):
+                if self.is_image_exists(f'{month}_{i}_1', folder):
+                    continue
+                stop = False
+                for j in range(self.IMAGES_PER_EPISODE):
+                    img_name = 'main' if j == 0 else f'sub{j}'
+                    if i == 0:
+                        image_url = template % (month, img_name)
+                    else:
+                        image_url = template % (month, f'{img_name}-{i}')
+                    image_name = f'{month}_{i}_{j + 1}'
+                    result = self.download_image(image_url, folder + '/' + image_name)
+                    if j == 0 and result == -1:
+                        stop = True
+                        break
+                    is_successful = True
+                if stop:
+                    break
+        if is_successful:
+            print(self.__class__.__name__ + ' - Guessed correctly!')
+        return is_successful
 
     def download_episode_preview_external(self):
         jp_title = '月とライカと吸血姫'
