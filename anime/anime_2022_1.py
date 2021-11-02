@@ -9,6 +9,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 # Arifureta Shokugyou de Sekai Saikyou 2nd Season https://arifureta.com/ #ありふれた #ARIFURETA @ARIFURETA_info
 # Fantasy Bishoujo Juniku Ojisan to https://fabiniku.com/ #ファ美肉おじさん @fabiniku
 # Hakozume: Kouban Joshi no Gyakushuu https://hakozume-anime.com/ #ハコヅメ @hakozume_anime
+# Kaijin Kaihatsubu no Kuroitsu-san https://kuroitsusan-anime.com/ #黒井津さん @kuroitsusan
 # Karakai Jouzu no Takagi-san 3 https://takagi3.me/ #高木さんめ @takagi3_anime
 # Kenja no Deshi wo Nanoru Kenja https://kendeshi-anime.com/ #賢でし @kendeshi_anime
 # Leadale no Daichi nite https://leadale.net/ #leadale #リアデイル @leadale_anime
@@ -222,6 +223,48 @@ class HakozumeDownload(Winter2022AnimeDownload, NewsTemplate3):
         prefix = self.PAGE_PREFIX + 'assets/character/'
         templates = [prefix + 'c/%s.png', prefix + 'f/%s.png']
         self.download_by_template(folder, templates, 1, 1, prefix=['c_', 'f_'])
+
+
+# Kaijin Kaihatsubu no Kuroitsu-san
+class KuroitsusanDownload(Winter2022AnimeDownload, NewsTemplate):
+    title = 'Kaijin Kaihatsubu no Kuroitsu-san'
+    keywords = [title]
+    website = 'https://kuroitsusan-anime.com/'
+    twitter = 'kuroitsusan'
+    hashtags = '黒井津さん'
+    folder_name = 'kuroitsusan'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.list-item',
+                                    date_select='.item-date', title_select='.text-row', id_select='a',
+                                    date_separator='_')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FA_AHLfVEAMNrqD?format=jpg&name=4096x4096')
+        self.add_to_image_list('top_pc_img_01', self.PAGE_PREFIX + 'img/top/top_pc_img_01.png')
+        self.add_to_image_list('top_pc_img_02', self.PAGE_PREFIX + 'img/top/top_pc_img_02.png')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'img/character/detail/pc/pc_img_%s.png'
+        self.download_by_template(folder, template, 2, 1)
 
 
 # Karakai Jouzu no Takagi-san 3
