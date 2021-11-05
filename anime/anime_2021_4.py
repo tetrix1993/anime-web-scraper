@@ -1017,7 +1017,8 @@ class AnsatsuKizokuDownload(Fall2021AnimeDownload, NewsTemplate):
                 for i in range(len(images)):
                     if images[i].has_attr('src'):
                         image_src = images[i]['src']
-                        image_url = self.PAGE_PREFIX + (image_src[1:] if image_src.startswith('/') else image_src)
+                        image_url = self.PAGE_PREFIX + \
+                            self.clear_resize_in_url(image_src[1:] if image_src.startswith('/') else image_src)
                         image_name = f'{episode}_{i + 1}'
                         self.add_to_image_list(image_name, image_url)
                 self.download_image_list(self.base_folder)
