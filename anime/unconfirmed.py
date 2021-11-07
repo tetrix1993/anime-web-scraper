@@ -15,6 +15,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Kakkou no Iinazuke https://cuckoos-anime.com/ #カッコウの許嫁 @cuckoo_anime
 # Koi wa Sekai Seifuku no Ato de https://koiseka-anime.com/ #恋せか @koiseka_anime
 # Kono Healer, Mendokusai https://kono-healer-anime.com/ #このヒーラー @kono_healer
+# Kyokou Suiri S2 https://kyokousuiri.jp/ #虚構推理 @kyokou_suiri
 # Maou Gakuin no Futekigousha 2nd Season https://maohgakuin.com/ #魔王学院 @maohgakuin
 # RPG Fudousan https://rpg-rs.jp/ #RPG不動産 @rpgrs_anime
 # Shokei Shoujo no Virgin Road http://virgin-road.com/ #処刑少女 #shokei_anime @VirginroadAnime
@@ -706,6 +707,42 @@ class KonoHealerDownload(UnconfirmedDownload, NewsTemplate2):
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + ' - Character')
             print(e)
+
+
+# Kyokou Suiri S2
+class KyokouSuiri2Download(UnconfirmedDownload, NewsTemplate):
+    title = 'Kyokou Suiri Season 2'
+    keywords = ['Kyokou Suiri', 'In/Spectre', '2nd']
+    website = 'https://kyokousuiri.jp/'
+    twitter = 'kyokou_suiri'
+    hashtags = '虚構推理'
+    folder_name = 'kyokou-suiri2'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='ul.p-news__list li.p-news__list-item',
+                                    date_select='div.p-article__header', title_select='div.p-article__text',
+                                    id_select='a', date_separator=' ', stop_date='2021.03.17',
+                                    next_page_select='div.c-pagination__nav.-next', next_page_eval_index=-1,
+                                    next_page_eval_index_class='is-disable')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz', self.PAGE_PREFIX + 'wp/wp-content/uploads/2021/11/6271138d893814b7a21c84b078fca0b9.jpg')
+        self.download_image_list(folder)
 
 
 # Maou Gakuin no Futekigousha: Shijou Saikyou no Maou no Shiso, Tensei shite Shison-tachi no Gakkou e
