@@ -99,6 +99,7 @@ The premiere date for the anime listed here has not been announced.
 * [Shokei Shoujo no Virgin Road](http://virgin-road.com/)
 * [Spy x Family](https://spy-family.net/)
 * [Summertime Render](https://summertime-anime.com/)
+* [Tonikaku Kawaii 2nd Season](http://tonikawa.com/)
 * [Yama no Susume: Next Summit](https://yamanosusume-ns.com/)
 
 ### Summer 2022 Anime

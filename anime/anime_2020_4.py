@@ -3084,7 +3084,7 @@ class StrikeWitches3Download(Fall2020AnimeDownload):
 # Tonikaku Kawaii
 class TonikawaDownload(Fall2020AnimeDownload):
     title = "Tonikaku Kawaii"
-    keywords = [title, "Tonikawa", "Cawaii", "Fly Me to the Moon"]
+    keywords = [title, "Tonikawa", "Cawaii", "Fly Me to the Moon", "Over the Moon for You"]
     folder_name = 'tonikawa'
 
     PAGE_PREFIX = 'http://tonikawa.com/'
