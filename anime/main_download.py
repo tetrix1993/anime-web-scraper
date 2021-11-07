@@ -1073,8 +1073,11 @@ class NewsTemplate:
                     soup = self.get_soup(page_url, decode=decode_response)
                 articles = soup.select(article_select)
                 for article in articles:
-                    tag_dates = article.select(date_select)
                     tag_titles = article.select(title_select)
+                    if date_select is None:
+                        tag_dates = [article]
+                    else:
+                        tag_dates = article.select(date_select)
                     if id_select is None:
                         tag_ids = [article]
                     else:

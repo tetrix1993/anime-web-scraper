@@ -328,7 +328,7 @@ class Takagisan3Download(Winter2022AnimeDownload, NewsTemplate):
 
 
 # Kenja no Deshi wo Nanoru Kenja
-class KendeshiDownload(Winter2022AnimeDownload):
+class KendeshiDownload(Winter2022AnimeDownload, NewsTemplate):
     title = 'Kenja no Deshi wo Nanoru Kenja'
     keywords = [title, 'Kendeshi', 'She Professed Herself Pupil of the Wise Man']
     website = 'https://kendeshi-anime.com/'
@@ -351,48 +351,21 @@ class KendeshiDownload(Winter2022AnimeDownload):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
 
     def download_news(self):
-        news_url = self.PAGE_PREFIX
-        try:
-            soup = self.get_soup(news_url, decode=True)
-            articles = soup.select('div.news_content p')
-            news_obj = self.get_last_news_log_object()
-            results = []
-            for article in articles:
-                article_id = ''
-                split1 = article.text.split('│')
-                if len(split1) != 2:
-                    continue
-                date_str = split1[0].strip()
-                date_split = date_str.split('/')
-                if len(date_split) != 2:
-                    continue
-                try:
-                    month = str(int(date_split[0])).zfill(2)
-                    day = str(int(date_split[1])).zfill(2)
-                except:
-                    continue
-                date = '2021.%s.%s' % (month, day)
-                title = split1[1]
-                if news_obj and ((news_obj['date'] == date and news_obj['title'] == title) or date < news_obj['date']):
-                    break
-                results.append(self.create_news_log_object(date, title, article_id))
-            success_count = 0
-            for result in reversed(results):
-                process_result = self.create_news_log_from_news_log_object(result)
-                if process_result == 0:
-                    success_count += 1
-            if len(results) > 0:
-                self.create_news_log_cache(success_count, results[0])
-        except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - News')
-            print(e)
+        news_url = self.PAGE_PREFIX + 'news/'
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='#news li', date_select=None,
+                                    title_select='span', id_select='a', a_tag_prefix=news_url,
+                                    date_func=lambda x: x[0:10])
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         self.image_list = []
         self.add_to_image_list('kv1', 'https://pbs.twimg.com/media/ExX8OtZVcAs2aEk?format=jpg&name=4096x4096')
         self.add_to_image_list('main_pc', self.PAGE_PREFIX + '_img/main_pc.jpg')
+        self.add_to_image_list('kv2_tw', 'https://pbs.twimg.com/media/E5Cte8ZVIAY8TJg?format=jpg&name=4096x4096')
         self.download_image_list(folder)
+
+        template = self.PAGE_PREFIX + 'news/_image/keyvisual%s.png'
+        self.download_by_template(folder, template, 2, 2)
 
     def download_character(self):
         folder = self.create_character_directory()
