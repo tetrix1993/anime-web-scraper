@@ -15,6 +15,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Kakkou no Iinazuke https://cuckoos-anime.com/ #カッコウの許嫁 @cuckoo_anime
 # Koi wa Sekai Seifuku no Ato de https://koiseka-anime.com/ #恋せか @koiseka_anime
 # Kono Healer, Mendokusai https://kono-healer-anime.com/ #このヒーラー @kono_healer
+# Kunoichi Tsubaki no Mune no Uchi https://kunoichi-tsubaki.com/ #くノ一ツバキ @tsubaki_anime
 # Kyokou Suiri S2 https://kyokousuiri.jp/ #虚構推理 @kyokou_suiri
 # Maou Gakuin no Futekigousha 2nd Season https://maohgakuin.com/ #魔王学院 @maohgakuin
 # RPG Fudousan https://rpg-rs.jp/ #RPG不動産 @rpgrs_anime
@@ -707,6 +708,43 @@ class KonoHealerDownload(UnconfirmedDownload, NewsTemplate2):
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + ' - Character')
             print(e)
+
+
+# Kunoichi Tsubaki no Mune no Uchi
+class KunoichiTsubakiDownload(UnconfirmedDownload, NewsTemplate):
+    title = 'Kunoichi Tsubaki no Mune no Uchi'
+    keywords = [title, 'In the Heart of Kunoichi Tsubaki']
+    website = 'https://kunoichi-tsubaki.com/'
+    hashtags = 'くノ一ツバキ'
+    twitter = 'tsubaki_anime'
+    folder_name = 'kunoichi-tsubaki'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.c-news__item',
+                                    date_select='.c-news__item-date', title_select='.c-news__item-txt',
+                                    id_select='.c-news__item-link', a_tag_prefix=news_url, paging_type=1,
+                                    next_page_select='.c-pagination__count-item',
+                                    next_page_eval_index_class='is-current', next_page_eval_index=-1)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_main', self.PAGE_PREFIX + 'teaser/img/top/main.jpg')
+        self.download_image_list(folder)
 
 
 # Kyokou Suiri S2
