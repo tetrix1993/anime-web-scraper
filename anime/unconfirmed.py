@@ -998,6 +998,7 @@ class SummertimeRenderDownload(UnconfirmedDownload, NewsTemplate):
         self.download_episode_preview()
         self.download_news()
         self.download_key_visual()
+        self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
@@ -1014,6 +1015,21 @@ class SummertimeRenderDownload(UnconfirmedDownload, NewsTemplate):
         self.add_to_image_list('tz', self.PAGE_PREFIX + 'wp/wp-content/themes/summertime-teaser/_assets/images/kv/kv_pc.jpg')
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/E63h3z-VEAMtJYy?format=jpg&name=medium')
         self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.chardata--v--img img')
+            self.image_list = []
+            for image in images:
+                if image.has_attr('src'):
+                    image_url = image['src']
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            print(f"Error in running {self.__class__.__name__} - Character: {e}")
 
 
 # Tonikaku Kawaii S2
