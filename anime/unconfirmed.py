@@ -949,7 +949,7 @@ class SpyFamilyDownload(UnconfirmedDownload, NewsTemplate):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        self.has_website_updated(self.PAGE_PREFIX, 'index', diff=2)
 
     def download_news(self):
         # News page logic may be wrong
