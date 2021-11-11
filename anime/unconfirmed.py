@@ -19,6 +19,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Kyokou Suiri S2 https://kyokousuiri.jp/ #虚構推理 @kyokou_suiri
 # Maou Gakuin no Futekigousha 2nd Season https://maohgakuin.com/ #魔王学院 @maohgakuin
 # RPG Fudousan https://rpg-rs.jp/ #RPG不動産 @rpgrs_anime
+# Shachiku-san wa Youjo Yuurei ni Iyasaretai. https://shachikusan.com/ #しゃちされたい @shachisaretai
 # Shokei Shoujo no Virgin Road http://virgin-road.com/ #処刑少女 #shokei_anime @VirginroadAnime
 # Spy x Family https://spy-family.net/ #SPY_FAMILY #スパイファミリー @spyfamily_anime
 # Summertime Render https://summertime-anime.com/ #サマータイムレンダ #サマレン @summertime_PR
@@ -890,6 +891,55 @@ class RPGFudousanDownload(UnconfirmedDownload, NewsTemplate3):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'assets/character/c/%s.png'
         self.download_by_template(folder, template, 1, 1, prefix='c')
+
+
+# Shachiku-san wa Youjo Yuurei ni Iyasaretai. https://shachikusan.com/ #しゃちされたい @shachisaretai
+class ShachisaretaiDownload(UnconfirmedDownload, NewsTemplate):
+    title = 'Shachiku-san wa Youjo Yuurei ni Iyasaretai.'
+    keywords = [title, 'Shachisaretai', 'Shachikusan']
+    website = 'https://shachikusan.com/'
+    twitter = 'shachisaretai'
+    hashtags = 'しゃちされたい'
+    folder_name = 'shachisaretai'
+
+    PAGE_PREFIX = website
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.news_list_item',
+                                    date_select='time', title_select='p.article_ttl', id_select='a')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('kv1', self.PAGE_PREFIX + 'img/top/kv.jpg')
+        self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/FDzAecoagAEj3PI?format=jpg&name=4096x4096')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            images = soup.select('div.chara_media img')
+            self.image_list = []
+            for image in images:
+                if image.has_attr('class') and 'front' in image['class']:
+                    continue
+                if image.has_attr('src'):
+                    image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            print(f"Error in running {self.__class__.__name__} - Character: {e}")
 
 
 # Shokei Shoujo no Virgin Road
