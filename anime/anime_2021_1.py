@@ -1160,6 +1160,7 @@ class MushokuTenseiDownload(Winter2021AnimeDownload):
 
         # 2nd cour
         self.add_to_image_list('kv4_tw', 'https://pbs.twimg.com/media/E85p5ymUcAEolHS?format=jpg&name=medium')
+        self.add_to_image_list('kv5_tw', 'https://pbs.twimg.com/media/FD_AKXRaUAAVoVQ?format=jpg&name=large')
         
         self.download_image_list(folder)
 
