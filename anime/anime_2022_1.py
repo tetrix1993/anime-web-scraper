@@ -221,7 +221,7 @@ class HakozumeDownload(Winter2022AnimeDownload, NewsTemplate3):
 
         template = self.PAGE_PREFIX + 'assets/top/k%s/vis.jpg'
         for i in range(1, 11, 1):
-            image_name = f'kv{i}.jpg'
+            image_name = f'kv{i}'
             if self.is_image_exists(image_name, folder):
                 continue
             image_url = template % str(i)
