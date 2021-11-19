@@ -855,7 +855,7 @@ class Maohgakuin2Download(UnconfirmedDownload):
         self.download_image_list(folder)
 
 
-# Mato Seihei no Slave https://mabotai.jp/
+# Mato Seihei no Slave
 class MatoSlaveDownload(UnconfirmedDownload, NewsTemplate):
     title = 'Mato Seihei no Slave'
     keywords = [title]
