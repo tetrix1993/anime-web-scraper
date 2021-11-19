@@ -9,7 +9,7 @@ MAX_LIMIT = 50
 MAX_LIMIT_J = 100
 
 
-def run(_year, _month):
+def run_old(_year, _month):
     try:
         folder = BASE_FOLDER + '/' + _year + '/' + _month
         for i in range(MAX_LIMIT):
@@ -21,6 +21,32 @@ def run(_year, _month):
                 else:
                     image_name = first + '-' + str(i)
                 image_url = TEMPLATE % (_year, _month, image_name)
+                result = download_image(image_url, folder, image_name + '.jpg')
+                if result == -1:
+                    break
+                success_count += 1
+            if success_count == 0:
+                break
+    except Exception as e:
+        print(e)
+
+
+def run(_year, _month):
+    try:
+        folder = BASE_FOLDER + '/' + _year + '/' + _month
+        for i in range(MAX_LIMIT):
+            success_count = 0
+            for j in range(MAX_LIMIT_J):
+                first = str(i + 1).zfill(2)
+                if j == 0:
+                    image_name = first
+                else:
+                    image_name = f'{first}-{j}'
+                image_url = TEMPLATE % (_year, _month, image_name)
+                filename = image_name + '.jpg'
+                if os.path.exists(f'{folder}/{filename}'):
+                    success_count += 1
+                    continue
                 result = download_image(image_url, folder, image_name + '.jpg')
                 if result == -1:
                     break
