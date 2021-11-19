@@ -214,9 +214,20 @@ class HakozumeDownload(Winter2022AnimeDownload, NewsTemplate3):
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         self.image_list = []
-        self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/E7tsWw7VUAIhRav?format=jpg&name=medium')
-        self.add_to_image_list('kv1', self.PAGE_PREFIX + 'assets/top/t1/vis.jpg')
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/E7tsWw7VUAIhRav?format=jpg&name=medium')
+        self.add_to_image_list('tz', self.PAGE_PREFIX + 'assets/top/t1/vis.jpg')
+        self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/FEi5uNYaUAIOmIY?format=jpg&name=medium')
         self.download_image_list(folder)
+
+        template = self.PAGE_PREFIX + 'assets/top/k%s/vis.jpg'
+        for i in range(1, 11, 1):
+            image_name = f'kv{i}.jpg'
+            if self.is_image_exists(image_name, folder):
+                continue
+            image_url = template % str(i)
+            result = self.download_image(image_url, f'{folder}/{image_name}')
+            if result == -1:
+                break
 
     def download_character(self):
         folder = self.create_character_directory()
