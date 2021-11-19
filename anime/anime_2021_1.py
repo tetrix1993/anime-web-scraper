@@ -2,7 +2,7 @@ import os
 import anime.constants as constants
 from anime.main_download import MainDownload, NewsTemplate2, NewsTemplate3
 from anime.external_download import MocaNewsDownload
-from datetime import datetime
+from datetime import datetime, timedelta
 from scan import MocaNewsScanner, NatalieScanner, AniverseMagazineScanner, WebNewtypeScanner
 
 
@@ -1023,7 +1023,7 @@ class MushokuTenseiDownload(Winter2021AnimeDownload):
 
     def run(self):
         self.download_episode_preview()
-        # self.download_episode_preview_guess()
+        self.download_episode_preview_guess()
         self.download_news()
         self.download_key_visual()
         self.download_character()
@@ -1093,6 +1093,26 @@ class MushokuTenseiDownload(Winter2021AnimeDownload):
             print(e)
 
     def download_episode_preview_guess(self):
+        folder = self.create_custom_directory('guess')
+        dt_year = (datetime.now() + timedelta(hours=1)).strftime('%Y')
+        dt_month = (datetime.now() + timedelta(hours=1)).strftime('%m')
+        template = self.PAGE_PREFIX + f'/wp-content/uploads/{dt_year}/{dt_month}/%s.jpg'
+        names = ['メイン', 'メイン1', '1メイン', '1', '2', '3', '4', '5']
+        for name in names:
+            for i in range(20):
+                if i == 0:
+                    web_image_name = name
+                else:
+                    web_image_name = f'{name}-{i}'
+                image_name = f'{dt_year}_{dt_month}_{web_image_name}'
+                if self.is_image_exists(image_name, folder):
+                    continue
+                image_url = template % web_image_name
+                result = self.download_image(image_url, f'{folder}/{image_name}')
+                if result == -1:
+                    break
+
+    def download_episode_preview_guess_old(self):
         folder = self.create_custom_directory('guess')
         template_base = self.PAGE_PREFIX + '/wp-content/uploads/2021/%s/'
         template_first = template_base + 'img_story%s.jpg'
