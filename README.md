@@ -97,6 +97,7 @@ The premiere date for the anime listed here has not been announced.
 * [Kunoichi Tsubaki no Mune no Uchi](https://kunoichi-tsubaki.com/)
 * [Kyokou Suiri Season 2](https://kyokousuiri.jp/)
 * [Maou Gakuin no Futekigousha: Shijou Saikyou no Maou no Shiso, Tensei shite Shison-tachi no Gakkou e 2nd Season](https://maohgakuin.com/)
+* [Mato Seihei no Slave](https://mabotai.jp/)
 * [RPG Fudousan](https://rpg-rs.jp/)
 * [Shachiku-san wa Youjo Yuurei ni Iyasaretai.](https://shachikusan.com/)
 * [Shokei Shoujo no Virgin Road](http://virgin-road.com/)

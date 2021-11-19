@@ -18,6 +18,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Kunoichi Tsubaki no Mune no Uchi https://kunoichi-tsubaki.com/ #くノ一ツバキ @tsubaki_anime
 # Kyokou Suiri S2 https://kyokousuiri.jp/ #虚構推理 @kyokou_suiri
 # Maou Gakuin no Futekigousha 2nd Season https://maohgakuin.com/ #魔王学院 @maohgakuin
+# Mato Seihei no Slave https://mabotai.jp/ #魔都精兵のスレイブ #まとスレ @mabotai_kohobu
 # RPG Fudousan https://rpg-rs.jp/ #RPG不動産 @rpgrs_anime
 # Shachiku-san wa Youjo Yuurei ni Iyasaretai. https://shachikusan.com/ #しゃちされたい @shachisaretai
 # Shokei Shoujo no Virgin Road http://virgin-road.com/ #処刑少女 #shokei_anime @VirginroadAnime
@@ -853,6 +854,47 @@ class Maohgakuin2Download(UnconfirmedDownload):
         # self.add_to_image_list('teaser_tw', 'https://pbs.twimg.com/media/EvylQFOVkAID_0B?format=jpg&name=medium')
         self.download_image_list(folder)
 
+
+# Mato Seihei no Slave https://mabotai.jp/
+class MatoSlaveDownload(UnconfirmedDownload, NewsTemplate):
+    title = 'Mato Seihei no Slave'
+    keywords = [title]
+    website = 'https://mabotai.jp/'
+    twitter = 'mabotai_kohobu'
+    hashtags = ['魔都精兵のスレイブ', 'まとスレ']
+    folder_name = 'matoslave'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        # self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    # def download_news(self):
+    #    self.download_template_news(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        # self.image_list = []
+        # self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FEiqZdFaUAQyOy4?format=jpg&name=900x900')
+        # self.download_image_list(folder)
+
+        teaser_template = self.PAGE_PREFIX + 'img/teaser/visual_%s.jpg'
+        for i in range(1, 11, 1):
+            image_name = f'tz{i}'
+            if self.is_image_exists(image_name, folder):
+                continue
+            image_url = teaser_template % str(i).zfill(2)
+            result = self.download_image(image_url, f'{folder}/{image_name}')
+            if result == -1:
+                break
 
 # RPG Fudousan
 class RPGFudousanDownload(UnconfirmedDownload, NewsTemplate3):
