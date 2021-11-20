@@ -1934,6 +1934,7 @@ class Yuyuyu3Download(Fall2021AnimeDownload, NewsTemplate):
         self.download_episode_preview_external()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         story_url = self.PAGE_PREFIX + 'story/'
@@ -2009,3 +2010,52 @@ class Yuyuyu3Download(Fall2021AnimeDownload, NewsTemplate):
             print("Error in running " + self.__class__.__name__ + ' - Character')
             print(e)
         self.download_image_list(folder)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        product_url = self.PAGE_PREFIX + 'product/'
+        try:
+            soup = self.get_soup(product_url)
+            cards = soup.select('article.c-card')
+            for card in cards:
+                a_tag = card.find('a')
+                image_tag = card.find('img')
+                has_valid_image = False
+                head_image_url = head_image_name = ''
+                if image_tag is not None and image_tag.has_attr('data-src') and len(image_tag['data-src']) > 0:
+                    data_src = image_tag['data-src']
+                    if data_src.startswith('./'):
+                        head_image_url = product_url + data_src[2:]
+                    elif data_src.startswith('../'):
+                        head_image_url = self.PAGE_PREFIX + data_src[3:]
+                    else:
+                        head_image_url = data_src
+                    head_image_name = self.extract_image_name_from_url(head_image_url)
+                    if 'np_bd' not in head_image_name:
+                        has_valid_image = True
+
+                # Blu-ray Page
+                if a_tag is not None and a_tag.has_attr('href') and a_tag['href'].startswith('bd/') and has_valid_image:
+                    bd_url = product_url + a_tag['href']
+                    bd_soup = self.get_soup(bd_url)
+                    if bd_soup is not None:
+                        self.image_list = []
+                        images = bd_soup.select('article img')
+                        for image in images:
+                            if image.has_attr('data-src'):
+                                image_url = bd_url + image['data-src']
+                                image_name = self.extract_image_name_from_url(image_url)
+                                self.add_to_image_list(image_name, image_url)
+                        spans = bd_soup.select('span.c-bgimg')
+                        for span in spans:
+                            if span.has_attr('data-bg') and span['data-bg'].startswith('../../../'):
+                                image_url = self.PAGE_PREFIX + span['data-bg'][9:]
+                                image_name = self.extract_image_name_from_url(image_url)
+                                if 'np_cd' not in image_name:
+                                    self.add_to_image_list(image_name, image_url)
+                        self.download_image_list(folder)
+                elif has_valid_image and len(head_image_url) > 0 and len(head_image_name) > 0\
+                        and not self.is_image_exists(head_image_name, folder):
+                    self.download_image(head_image_url, f'{folder}/{head_image_name}')
+        except Exception as e:
+            print(f'Error in running {self.__class__.__name__} - Media: {e}')
