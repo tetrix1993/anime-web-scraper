@@ -421,6 +421,7 @@ class LeadaleDownload(Winter2022AnimeDownload, NewsTemplate3):
         self.add_to_image_list('kv1', self.PAGE_PREFIX + 'assets/top/main-t1/vis.jpg')
         self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/Ezi8NqIVkAMv0Yv?format=jpg&name=medium')
         self.add_to_image_list('kv2_tw', 'https://pbs.twimg.com/media/E8Ouua3UUAIFSvH?format=jpg&name=medium')
+        self.add_to_image_list('kv3_tw', 'https://pbs.twimg.com/media/FEmTgkJUcAUk9kQ?format=jpg&name=4096x4096')
         self.download_image_list(folder)
 
         template = self.PAGE_PREFIX + 'assets/news/kv-t%s.jpg'
