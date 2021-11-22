@@ -602,7 +602,11 @@ class SlowLoopDownload(Winter2022AnimeDownload, NewsTemplate):
         self.add_to_image_list('teaser_tw', 'https://pbs.twimg.com/media/E15YSghVgAIdgJf?format=jpg&name=medium')
         self.add_to_image_list('kv1', self.PAGE_PREFIX + 'images/top/v_003.jpg')
         self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/E9eeba0VIAYQ3-l?format=jpg&name=medium')
+        self.add_to_image_list('kv2_tw', 'https://pbs.twimg.com/media/FEyFu9eaIAE9mfc?format=jpg&name=large')
         self.download_image_list(folder)
+
+        template = self.PAGE_PREFIX + 'images/top/v_%s.jpg'
+        self.download_by_template(folder, template, 3, 4)
 
     def download_character(self):
         folder = self.create_character_directory()
