@@ -1,5 +1,6 @@
 import os
 import math
+import json
 from anime.constants import HTTP_HEADER_USER_AGENT
 from anime.main_download import MainDownload
 
@@ -88,9 +89,25 @@ class AniverseMagazineDownload(ExternalDownload):
                     self.download_image(imageUrl, filepathWithoutExtension, min_width=self.min_width)
             else:
                 soup = self.get_soup(article_url)
-                items = soup.find_all('dl', class_='gallery-item')
                 image_objs = []
                 i = 0
+                windows = soup.select('div.slideshow-window')
+                if len(windows) > 0 and windows[0].has_attr('data-gallery'):
+                    try:
+                        json_objs = json.loads(windows[0]['data-gallery'])
+                        for json_obj in json_objs:
+                            if 'src' in json_obj:
+                                image_url = self.clear_resize_in_url(json_obj['src'])
+                                i += 1
+                                if self.episode is None:
+                                    image_name = str(i).zfill(2)
+                                else:
+                                    image_name = self.episode + '_' + str(i).zfill(2)
+                                image_objs.append({'name': image_name, 'url': image_url})
+                    except:
+                        print(f'Error processing gallery {article_url}')
+
+                items = soup.find_all('dl', class_='gallery-item')
                 for item in items:
                     image_url = 'https://' + item.find('img')['data-lazy-src'].split('https://')[-1]
                     if '300' in image_url[-12:]: # Skip unwanted images that are resized to 300px
