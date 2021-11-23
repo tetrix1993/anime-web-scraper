@@ -415,6 +415,9 @@ class LeadaleDownload(Winter2022AnimeDownload, NewsTemplate3):
         template = self.PAGE_PREFIX + 'assets/character/c/%s.png'
         self.download_by_template(folder, template, 1, 1, prefix='c', save_zfill=2)
 
+        template2 = self.PAGE_PREFIX + 'assets/character/%sc.png'
+        self.download_by_template(folder, template2, 1, 1, prefix='chara_', save_zfill=2)
+
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         self.image_list = []
