@@ -108,6 +108,7 @@ The premiere date for the anime listed here has not been announced.
 
 ### Summer 2022 Anime
 * [Soredemo Ayumu wa Yosetekuru](https://soreayu.com/)
+* [Utawarerumono: Futari no Hakuoro](https://utawarerumono.jp/)
 
 ### Spring 2022 Anime
 * [Aharen-san wa Hakarenai](https://aharen-pr.com/)

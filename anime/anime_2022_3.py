@@ -3,6 +3,7 @@ from anime.main_download import MainDownload, NewsTemplate
 
 
 # Soredemo Ayumu wa Yosetekuru https://soreayu.com/ #それあゆ @soreayu_staff
+# Utawarerumono: Futari no Hakuoro https://utawarerumono.jp/ #うたわれ @UtawareAnime
 
 
 # Summer 2022 Anime
@@ -74,3 +75,31 @@ class SoreayuDownload(Summer2022AnimeDownload, NewsTemplate):
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + ' - Character')
             print(e)
+
+
+# Utawarerumono: Futari no Hakuoro
+class Utawarerumono3Download(Summer2022AnimeDownload, NewsTemplate):
+    title = 'Utawarerumono: Futari no Hakuoro'
+    keywords = [title, 'Utawarerumono: Mask of Truth', '3rd']
+    website = 'https://utawarerumono.jp/'
+    twitter = 'UtawareAnime'
+    hashtags = 'うたわれ'
+    folder_name = 'utawarerumono3'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        # self.download_episode_preview()
+        # self.download_news()
+        self.download_key_visual()
+        # self.download_character()
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FE9Ma5NaAAABavo?format=jpg&name=4096x4096')
+        self.download_image_list(folder)
+

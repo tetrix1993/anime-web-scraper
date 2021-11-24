@@ -896,6 +896,7 @@ class MatoSlaveDownload(UnconfirmedDownload, NewsTemplate):
             if result == -1:
                 break
 
+
 # RPG Fudousan
 class RPGFudousanDownload(UnconfirmedDownload, NewsTemplate3):
     title = 'RPG Fudousan'
