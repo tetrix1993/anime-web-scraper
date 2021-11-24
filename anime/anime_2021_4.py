@@ -56,7 +56,7 @@ class BluePeriodDownload(Fall2021AnimeDownload, NewsTemplate):
     def run(self):
         self.download_episode_preview()
         self.download_news()
-        self.download_episode_preview_external()
+        # self.download_episode_preview_external()
         self.download_key_visual()
         self.download_character()
 
@@ -626,7 +626,7 @@ class OsamaRankingDownload(Fall2021AnimeDownload, NewsTemplate):
     def run(self):
         self.download_episode_preview()
         self.download_news()
-        self.download_episode_preview_external()
+        # self.download_episode_preview_external()
         self.download_key_visual()
         self.download_character()
 
@@ -1561,7 +1561,7 @@ class TaishoOtomeDownload(Fall2021AnimeDownload, NewsTemplate):
     def run(self):
         self.download_episode_preview()
         self.download_news()
-        self.download_episode_preview_external()
+        # self.download_episode_preview_external()
         self.download_key_visual()
         self.download_character()
         self.download_media()
