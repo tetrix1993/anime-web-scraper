@@ -92,14 +92,26 @@ class Utawarerumono3Download(Summer2022AnimeDownload, NewsTemplate):
         super().__init__()
 
     def run(self):
-        # self.download_episode_preview()
-        # self.download_news()
+        self.download_episode_preview()
+        self.download_news()
         self.download_key_visual()
-        # self.download_character()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.md-list__article--li',
+                                    title_select='h4', date_select='dt', id_select='a', news_prefix='topics/',)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         self.image_list = []
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FE9Ma5NaAAABavo?format=jpg&name=4096x4096')
+        self.add_to_image_list('fv@2x', self.PAGE_PREFIX + 'manage/wp-content/themes/hakuoro/_assets/images/fv/fv@2x.png')
         self.download_image_list(folder)
 
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'manage/wp-content/themes/hakuoro/_assets/images/char/detail/char%s_pc.png'
+        self.download_by_template(folder, template, 2, 1)
