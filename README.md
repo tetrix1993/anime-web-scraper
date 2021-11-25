@@ -116,6 +116,7 @@ The premiere date for the anime listed here has not been announced.
 * [Kaguya-sama wa Kokurasetai: Ultra Romantic](https://kaguya.love/)
 * [Kawaii dake ja Nai Shikimori-san](https://shikimori-anime.com/)
 * [Mahoutsukai Reimeiki](https://www.tbs.co.jp/anime/reimeiki/)
+* [Otome Game Sekai wa Mob ni Kibishii Sekai desu](https://mobseka.com/)
 * [Tate no Yuusha no Nariagari 2nd Season](http://shieldhero-anime.jp)
 * [Yuusha, Yamemasu](https://yuuyame.com/)
 

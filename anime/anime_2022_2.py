@@ -6,6 +6,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Honzuki S3 http://booklove-anime.jp/story/ #本好きの下剋上 @anime_booklove
 # Kawaii dake ja Nai Shikimori-san https://shikimori-anime.com/ #式守さん @anime_shikimori
 # Mahoutsukai Reimeiki https://www.tbs.co.jp/anime/reimeiki/ #魔法使い黎明期 @reimeiki_pr
+# Otome Game Sekai wa Mob ni Kibishii Sekai desu https://mobseka.com/ #モブせか #mobseka @mobseka_anime
 # Tate no Yuusha S2 http://shieldhero-anime.jp/ #shieldhero #盾の勇者の成り上がり @shieldheroanime
 # Yuusha, Yamemasu https://yuuyame.com/ #yuuyame #勇やめ @yuuyame_anime
 
@@ -268,6 +269,48 @@ class ReimeikiDownload(Spring2022AnimeDownload, NewsTemplate):
         prefix = self.PAGE_PREFIX + 'img/chara'
         templates = [prefix + '_%s_on.png', prefix + 'img_%s.jpg']
         self.download_by_template(folder, templates, 2, 1)
+
+
+# Otome Game Sekai wa Mob ni Kibishii Sekai desu
+class MobsekaDownload(Spring2022AnimeDownload, NewsTemplate):
+    title = 'Otome Game Sekai wa Mob ni Kibishii Sekai desu'
+    keywords = [title, 'Trapped in a Dating Sim: The World of Otome Games is Tough for Mobs', 'Mobseka', 'Mobuseka']
+    website = 'https://mobseka.com/'
+    twitter = 'mobseka_anime'
+    hashtags = ['モブせか', 'mobseka']
+    folder_name = 'mobseka'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, news_prefix='news.html', article_select='#news dl',
+                                    title_select='a', date_select='dt', id_select='a', a_tag_prefix=self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FFBOuWKaMAQzQbY?format=jpg&name=large')
+        self.download_image_list(folder)
+
+        template = self.PAGE_PREFIX + 'img/top_mv_%s.jpg'
+        self.download_by_template(folder, template, 2, 1)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        body_template = self.PAGE_PREFIX + 'img/chara/illust_%s.png'
+        face_template = self.PAGE_PREFIX + 'img/chara/face_%s.png'
+        self.download_by_template(folder, [body_template, face_template], 2, 1)
 
 
 # Tate no Yuusha no Nariagari S2
