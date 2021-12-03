@@ -24,6 +24,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Shokei Shoujo no Virgin Road http://virgin-road.com/ #処刑少女 #shokei_anime @VirginroadAnime
 # Spy x Family https://spy-family.net/ #SPY_FAMILY #スパイファミリー @spyfamily_anime
 # Summertime Render https://summertime-anime.com/ #サマータイムレンダ #サマレン @summertime_PR
+# Tensei Kenja no Isekai Life: Dai-2 no Shokugyou wo Ete, Sekai Saikyou ni Narimashita https://tenseikenja.com #転生賢者 @tenseikenja_PR
 # Tonikaku Kawaii S2 http://tonikawa.com/ #トニカクカワイイ #tonikawa @tonikawa_anime
 # Vlad Love https://www.vladlove.com/index.html #ぶらどらぶ #vladlove @VLADLOVE_ANIME
 # Yama no Susume: Next Summit https://yamanosusume-ns.com/ #ヤマノススメ @yamanosusume
@@ -1120,6 +1121,55 @@ class SummertimeRenderDownload(UnconfirmedDownload, NewsTemplate):
                     image_url = image['src']
                     image_name = self.extract_image_name_from_url(image_url)
                     self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            print(f"Error in running {self.__class__.__name__} - Character: {e}")
+
+
+# Tensei Kenja no Isekai Life: Dai-2 no Shokugyou wo Ete, Sekai Saikyou ni Narimashita
+class TenseiKenjaDownload(UnconfirmedDownload, NewsTemplate):
+    title = 'Tensei Kenja no Isekai Life: Dai-2 no Shokugyou wo Ete, Sekai Saikyou ni Narimashita'
+    keywords = [title, 'tenseikenja']
+    website = 'https://tenseikenja.com/'
+    twitter = 'tenseikenja_PR'
+    hashtags = '転生賢者'
+    folder_name = 'tenseikenja'
+
+    PAGE_PREFIX = website
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_news(self):
+        # May need change paging logic
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='div.sw-News_Archive li',
+                                    date_select='.date', title_select='.title p', id_select='a')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/E_cSGeTVQAIKvu2?format=jpg&name=medium')
+        self.add_to_image_list('img_kv_teaser', self.PAGE_PREFIX + 'wp/wp-content/themes/tenseikenja/assets/images/common/index/img_kv_teaser.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            chara_list = soup.select('div.character-Index li a')
+            self.image_list = []
+            template = self.PAGE_PREFIX + 'wp/wp-content/themes/tenseikenja/assets/images/common/character/%s/img.png'
+            for chara in chara_list:
+                if chara.has_attr('href'):
+                    href = chara['href']
+                    if href.endswith('/'):
+                        href = href[0:len(href)-1]
+                    chara_name = href.split('/')[-1]
+                    if len(chara_name) > 1:
+                        self.add_to_image_list(f'img_{chara_name}', template % chara_name)
             self.download_image_list(folder)
         except Exception as e:
             print(f"Error in running {self.__class__.__name__} - Character: {e}")
