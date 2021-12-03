@@ -49,6 +49,7 @@ class AkebichanDownload(Winter2022AnimeDownload, NewsTemplate):
         self.download_episode_preview()
         self.download_news()
         self.download_key_visual()
+        self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX)
@@ -62,9 +63,33 @@ class AkebichanDownload(Winter2022AnimeDownload, NewsTemplate):
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         self.add_to_image_list('tz_img_kv', f'{self.PAGE_PREFIX}assets_teaser/img/img_kv.jpg')
-        self.add_to_image_list('tz_main', f'{self.PAGE_PREFIX}assets_teaser/img/main.jpg')
+        # self.add_to_image_list('tz_main', f'{self.PAGE_PREFIX}assets_teaser/img/main.jpg')
         self.add_to_image_list('tz_main_tw', 'https://pbs.twimg.com/media/FAmRYw-UcAkGiCO?format=jpg&name=large')
+        self.add_to_image_list('kv_02_2', self.PAGE_PREFIX + 'news/SYS/CONTENTS/d9a2e879-d013-4ce6-9600-c04a78dc0135')
         self.download_image_list(folder)
+
+        template = self.PAGE_PREFIX + 'assets/img/top/kv_%s.jpg'
+        self.download_by_template(folder, template, 2, 1)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            chara_list = soup.select('li.p-chara__list-item a')
+            self.image_list = []
+            template1 = self.PAGE_PREFIX + 'assets/img/character/chara_%s.png'
+            template2 = self.PAGE_PREFIX + 'assets/img/character/face_%s-01.png'
+            template3 = self.PAGE_PREFIX + 'assets/img/character/face_%s-02.png'
+            for chara in chara_list:
+                if chara.has_attr('href') and '?chara=' in chara['href']:
+                    chara_name = chara['href'].split('?chara=')[1]
+                    if len(chara_name) > 1:
+                        self.add_to_image_list(f'chara_{chara_name}', template1 % chara_name)
+                        self.add_to_image_list(f'face_{chara_name}-01', template2 % chara_name)
+                        self.add_to_image_list(f'face_{chara_name}-02', template3 % chara_name)
+            self.download_image_list(folder)
+        except Exception as e:
+            print(f"Error in running {self.__class__.__name__} - Character: {e}")
 
 
 # Arifureta Shokugyou de Sekai Saikyou 2nd Season
