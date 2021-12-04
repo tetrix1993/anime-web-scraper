@@ -703,23 +703,30 @@ class KisekoiDownload(Winter2022AnimeDownload, NewsTemplate):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
 
     def download_news(self):
-        # Paging logic not known
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.p-news__list-item',
-                                    date_select='div.p-in-data', title_select='div.p-in-title',
-                                    id_select=None, id_has_id=True, id_attr='data-news-id', news_prefix='',
-                                    a_tag_prefix=self.PAGE_PREFIX + '?news=')
+                                    date_select='div.p-in-date', title_select='div.p-in-title',
+                                    id_select='a', a_tag_start_text_to_remove='./',
+                                    a_tag_prefix=self.PAGE_PREFIX + 'news/', date_func=lambda x: x[0:4] + '.' + x[4:],
+                                    next_page_select='div.c-pagination__link.-next',
+                                    next_page_eval_index_class='is-disable', next_page_eval_index=-1)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         self.image_list = []
         self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/FBs3mm8VUAAoYEo?format=jpg&name=4096x4096')
         self.add_to_image_list('kv1', self.PAGE_PREFIX + 'assets/teaser/img/kv_image.png')
+        self.add_to_image_list('kv2', self.PAGE_PREFIX + 'assets/img/top/kv.jpg')
+        # self.add_to_image_list('kv2', 'https://pbs.twimg.com/media/FFw753magAU4-YH?format=jpg&name=4096x4096')
+        # self.add_to_image_list('kv2_tw', 'https://pbs.twimg.com/media/FFw21hLUcAIcKmK?format=jpg&name=large')
         self.download_image_list(folder)
 
     def download_character(self):
         folder = self.create_character_directory()
-        template = self.PAGE_PREFIX + 'assets/teaser/img/chara_%s.png'
-        self.download_by_template(folder, template, 1, 1, prefix='tz_')
+        # template = self.PAGE_PREFIX + 'assets/teaser/img/chara_%s.png'
+        # self.download_by_template(folder, template, 1, 1, prefix='tz_')
+
+        template = self.PAGE_PREFIX + 'assets/img/character/chara_%s.png'
+        self.download_by_template(folder, template, 1, 1)
 
 
 # Tensai Ouji no Akaji Kokka Saisei Jutsu: Souda, Baikoku shiyou
