@@ -15,6 +15,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 # Leadale no Daichi nite https://leadale.net/ #leadale #リアデイル @leadale_anime
 # Mahouka Koukou no Rettousei: Tsuioku-hen https://mahouka.jp/ #mahouka @mahouka_anime
 # Princess Connect! Re:Dive S2 https://anime.priconne-redive.jp/ #アニメプリコネ #プリコネR #プリコネ #アニメプリコネR @priconne_anime
+# Sabikui Bisco https://sabikuibisco.jp/ https://sabikuibisco.jp/ #錆喰いビスコ @SABIKUI_BISCO
 # Shikkakumon no Saikyou Kenja https://shikkakumon.com/ #失格紋 @shikkakumon_PR
 # Slow Loop https://slowlooptv.com/ #slowloop @slowloop_tv
 # Sono Bisque Doll wa Koi wo Suru https://bisquedoll-anime.com/ #着せ恋 @kisekoi_anime
@@ -515,6 +516,75 @@ class Priconne2Download(Winter2022AnimeDownload, NewsTemplate):
 
         template = self.PAGE_PREFIX + 'assets/images/top/kv_chara%s_pc.png'
         self.download_by_template(folder, template, 2, 1, 4)
+
+
+# Sabikui Bisco
+class SabikuiBiscoDownload(Winter2022AnimeDownload, NewsTemplate):
+    title = 'Sabikui Bisco'
+    keywords = [title]
+    website = 'https://sabikuibisco.jp/'
+    twitter = 'SABIKUI_BISCO'
+    hashtags = '錆喰いビスコ'
+    folder_name = 'sabikuibisco'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='#news li',
+                                    date_select='dt', title_select='dd', id_select='a',
+                                    date_func=lambda x: x[0:4] + '.' + x[4:])
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('key-vs', self.PAGE_PREFIX + 'wp/wp-content/themes/sabikuibisco/images/top/key-vs.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            chara_list = soup.select('#character li a')
+            for chara in chara_list:
+                if chara.has_attr('href'):
+                    href = chara['href']
+                    if href.endswith('/'):
+                        href = href[0:len(href)-1]
+                    chara_name = href.split('/')[-1]
+                    if len(chara_name) > 1 and chara_name not in processed:
+                        chara_soup = self.get_soup(href)
+                        if chara_soup is not None:
+                            images = chara_soup.select('.characterMainContents img')
+                            self.image_list = []
+                            for image in images:
+                                if image.has_attr('src'):
+                                    if image['src'].startswith('/'):
+                                        image_url = self.PAGE_PREFIX + image['src'][1:]
+                                    else:
+                                        image_url = self.PAGE_PREFIX + image['src']
+                                    image_name = self.extract_image_name_from_url(image_url)
+                                    self.add_to_image_list(image_name, image_url)
+                            if len(self.image_list) > 0:
+                                processed.append(chara_name)
+                            self.download_image_list(folder)
+            self.download_image_list(folder)
+        except Exception as e:
+            print(f"Error in running {self.__class__.__name__} - Character: {e}")
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Shikkakumon no Saikyou Kenja

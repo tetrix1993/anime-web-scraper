@@ -132,6 +132,7 @@ The premiere date for the anime listed here has not been announced.
 * [Leadale no Daichi nite](https://leadale.net/)
 * [Mahouka Koukou no Rettousei: Tsuioku-hen](https://mahouka.jp/)
 * [Princess Connect! Re:Dive Season 2](https://anime.priconne-redive.jp)
+* [Sabikui Bisco](https://sabikuibisco.jp/)
 * [Shikkakumon no Saikyou Kenja](https://shikkakumon.com/)
 * [Slow Loop](https://slowlooptv.com/)
 * [Sono Bisque Doll wa Koi wo Suru](https://bisquedoll-anime.com/)
