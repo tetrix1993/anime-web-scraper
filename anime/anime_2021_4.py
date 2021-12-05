@@ -489,6 +489,7 @@ class MierukochanDownload(Fall2021AnimeDownload, NewsTemplate3):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -542,6 +543,25 @@ class MierukochanDownload(Fall2021AnimeDownload, NewsTemplate3):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'assets/character/c/%s.png'
         self.download_by_template(folder, template, 1, 1, prefix='char_')
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'bddvd.html')
+            images = soup.select('div.cont-singles img')
+            self.image_list = []
+            for image in images:
+                if image.has_attr('src') and not image['src'].endswith('np.png'):
+                    if image['src'].startswith('./'):
+                        image_url = self.PAGE_PREFIX + image['src'][2:]
+                    else:
+                        image_url = self.PAGE_PREFIX
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Blu-ray')
+            print(e)
 
 
 # Muv-Luv Alternative
