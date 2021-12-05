@@ -219,6 +219,9 @@ class HakozumeDownload(Winter2022AnimeDownload, NewsTemplate3):
             if result == -1:
                 break
 
+        template2 = self.PAGE_PREFIX + 'assets/news/vis-k%s.jpg'
+        self.download_by_template(folder, template2, 1, 1)
+
     def download_character(self):
         folder = self.create_character_directory()
         prefix = self.PAGE_PREFIX + 'assets/character/'
