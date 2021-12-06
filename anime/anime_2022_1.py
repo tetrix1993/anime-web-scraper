@@ -366,6 +366,7 @@ class KendeshiDownload(Winter2022AnimeDownload, NewsTemplate):
         self.add_to_image_list('kv1', 'https://pbs.twimg.com/media/ExX8OtZVcAs2aEk?format=jpg&name=4096x4096')
         self.add_to_image_list('main_pc', self.PAGE_PREFIX + '_img/main_pc.jpg')
         self.add_to_image_list('kv2_tw', 'https://pbs.twimg.com/media/E5Cte8ZVIAY8TJg?format=jpg&name=4096x4096')
+        self.add_to_image_list('kv4_tw', 'https://pbs.twimg.com/media/FFrgHL8agAEv0Lj?format=jpg&name=4096x4096')
         self.download_image_list(folder)
 
         template = self.PAGE_PREFIX + 'news/_image/keyvisual%s.png'
@@ -373,8 +374,23 @@ class KendeshiDownload(Winter2022AnimeDownload, NewsTemplate):
 
     def download_character(self):
         folder = self.create_character_directory()
-        template = self.PAGE_PREFIX + '_img/cha%s.png'
-        self.download_by_template(folder, template)
+        # template = self.PAGE_PREFIX + '_img/cha%s.png'
+        # self.download_by_template(folder, template)
+
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('div.pop.mfp-hide img')
+            self.image_list = []
+            for image in images:
+                if image.has_attr('srcset'):
+                    image_url = self.PAGE_PREFIX + image['srcset']
+                    if image_url.endswith(' 2x'):
+                        image_url = image_url[0:-3]
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            print(f"Error in running {self.__class__.__name__} - Character: {e}")
 
 
 # Leadale no Daichi nite
