@@ -987,6 +987,12 @@ class MainDownload:
                         f.write(';')
                     f.write(processed_items[i])
 
+    def print_exception(self, message, ex):
+        output = f"Error in running {self.__class__.__name__}"
+        if message is not None and len(message) > 0:
+            output += f' - {message}'
+        print(f'{output}: {ex}')
+
     # Match filter
     def match(self, s_filter):
         if not isinstance(s_filter, SearchFilter):

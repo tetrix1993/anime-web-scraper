@@ -94,6 +94,7 @@ The premiere date for the anime listed here has not been announced.
 * [Kakkou no Iinazuke](https://cuckoos-anime.com/)
 * [Koi wa Sekai Seifuku no Ato de](https://koiseka-anime.com/)
 * [Kono Healer, Mendokusai](https://kono-healer-anime.com/)
+* [Kumichou Musume to Sewagakari](https://kumichomusume.com/)
 * [Kunoichi Tsubaki no Mune no Uchi](https://kunoichi-tsubaki.com/)
 * [Kyokou Suiri Season 2](https://kyokousuiri.jp/)
 * [Maou Gakuin no Futekigousha: Shijou Saikyou no Maou no Shiso, Tensei shite Shison-tachi no Gakkou e 2nd Season](https://maohgakuin.com/)

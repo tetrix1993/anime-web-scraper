@@ -15,6 +15,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Kakkou no Iinazuke https://cuckoos-anime.com/ #カッコウの許嫁 @cuckoo_anime
 # Koi wa Sekai Seifuku no Ato de https://koiseka-anime.com/ #恋せか @koiseka_anime
 # Kono Healer, Mendokusai https://kono-healer-anime.com/ #このヒーラー @kono_healer
+# Kumichou Musume to Sewagakari https://kumichomusume.com/ #組長娘と世話係 @kumichomusume
 # Kunoichi Tsubaki no Mune no Uchi https://kunoichi-tsubaki.com/ #くノ一ツバキ @tsubaki_anime
 # Kyokou Suiri S2 https://kyokousuiri.jp/ #虚構推理 @kyokou_suiri
 # Maou Gakuin no Futekigousha 2nd Season https://maohgakuin.com/ #魔王学院 @maohgakuin
@@ -711,6 +712,65 @@ class KonoHealerDownload(UnconfirmedDownload, NewsTemplate2):
         except Exception as e:
             print("Error in running " + self.__class__.__name__ + ' - Character')
             print(e)
+
+
+# Kumichou Musume to Sewagakari
+class KumichoMusumeDownload(UnconfirmedDownload, NewsTemplate):
+    title = 'Kumichou Musume to Sewagakari'
+    keywords = [title, 'kumichomusume']
+    website = 'https://kumichomusume.com/'
+    hashtags = '組長娘と世話係'
+    twitter = 'kumichomusume'
+    folder_name = 'kumichomusume'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        # self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_main', self.PAGE_PREFIX + 'assets/images/pc/img_keyvisual.jpg')
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FF95CKrVUAAvycn?format=jpg&name=large')
+        self.add_to_image_list('tz_aniverse', 'https://aniverse-mag.com/wp-content/uploads/2021/12/KtoS_KV_1_TATE_WH_re_72dpi-e1638846766594.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            wrappers = soup.select('div.chara-Wrapper')
+            for wrapper in wrappers:
+                if wrapper.has_attr('class'):
+                    chara_name = None
+                    for _class in wrapper['class']:
+                        if _class == 'chara-Wrapper':
+                            continue
+                        chara_name = _class
+                        break
+                    if chara_name is None or len(chara_name) == 0:
+                        continue
+                    images = wrapper.select('.image img, .close-up img')
+                    self.image_list = []
+                    for image in images:
+                        if image.has_attr('src') and len(image['src']) > 0:
+                            image_url = self.PAGE_PREFIX + (image['src'][1:] if image['src'].startswith('/') else image['src'])
+                            image_name = self.extract_image_name_from_url(image_url).replace('img', '')
+                            image_name = 'tz_' + (chara_name if len(image_name) == 0 else f'{chara_name}_{image_name}')
+                            self.add_to_image_list(image_name, image_url)
+                    self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception('Character', e)
 
 
 # Kunoichi Tsubaki no Mune no Uchi
