@@ -80,8 +80,7 @@ class BluePeriodDownload(Fall2021AnimeDownload, NewsTemplate):
                         self.add_to_image_list(image_name, image_url)
                 self.download_image_list(self.base_folder)
         except Exception as e:
-            print("Error in running " + self.__class__.__name__)
-            print(e)
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='ul.news-list li.news-item',
@@ -155,8 +154,7 @@ class DeepInsanityDownload(Fall2021AnimeDownload):
                                 self.add_to_image_list(image_name, image_url)
                         self.download_image_list(self.base_folder)
         except Exception as e:
-            print("Error in running " + self.__class__.__name__)
-            print(e)
+            self.print_exception(e)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -247,8 +245,7 @@ class DenchiShoujoDownload(Fall2021AnimeDownload, NewsTemplate):
                     self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)
         except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - Blu-ray')
-            print(e)
+            self.print_exception(e, 'Blu-ray')
 
 
 # Isekai Shokudou 2
@@ -293,8 +290,7 @@ class IsekaiShokudou2Download(Fall2021AnimeDownload, NewsTemplate3):
                             self.add_to_image_list(image_name, image_url)
                     self.download_image_list(self.base_folder)
         except Exception as e:
-            print("Error in running " + self.__class__.__name__)
-            print(e)
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(self.PAGE_PREFIX)
@@ -340,8 +336,7 @@ class IsekaiShokudou2Download(Fall2021AnimeDownload, NewsTemplate3):
                     image_name = self.extract_image_name_from_url(image_url)
                     self.add_to_image_list(image_name, image_url)
         except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - Blu-ray')
-            print(e)
+            self.print_exception(e, 'Blu-ray')
         self.download_image_list(folder)
 
 
@@ -432,7 +427,7 @@ class KomisanDownload(Fall2021AnimeDownload, NewsTemplate):
                     self.add_to_image_list(image_name, image_url)
                 self.download_image_list(self.base_folder)
         except Exception as e:
-            print("Error in running " + self.__class__.__name__ + f": {e}")
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article.news-item',
@@ -465,8 +460,7 @@ class KomisanDownload(Fall2021AnimeDownload, NewsTemplate):
                         image_name = self.extract_image_name_from_url(image_url)
                         self.add_to_image_list(image_name, image_url)
         except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - Character')
-            print(e)
+            self.print_exception(e, 'Character')
         self.download_image_list(folder)
 
 
@@ -512,8 +506,7 @@ class MierukochanDownload(Fall2021AnimeDownload, NewsTemplate3):
                             self.add_to_image_list(image_name, image_url)
                     self.download_image_list(self.base_folder)
         except Exception as e:
-            print("Error in running " + self.__class__.__name__)
-            print(e)
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(self.PAGE_PREFIX)
@@ -560,8 +553,7 @@ class MierukochanDownload(Fall2021AnimeDownload, NewsTemplate3):
                     self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)
         except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - Blu-ray')
-            print(e)
+            self.print_exception(e, 'Blu-ray')
 
 
 # Muv-Luv Alternative
@@ -623,8 +615,7 @@ class MuvLuvAlternativeDownload(Fall2021AnimeDownload, NewsTemplate):
                             image_name = self.extract_image_name_from_url(image_url)
                             self.add_to_image_list(image_name, image_url)
         except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - Character')
-            print(e)
+            self.print_exception(e, 'Character')
         self.download_image_list(folder)
 
 
@@ -682,8 +673,7 @@ class OsamaRankingDownload(Fall2021AnimeDownload, NewsTemplate):
                                 self.add_to_image_list(image_name, image_url)
                         self.download_image_list(self.base_folder)
         except Exception as e:
-            print("Error in running " + self.__class__.__name__)
-            print(e)
+            self.print_exception(e)
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + 'news/'
@@ -731,8 +721,7 @@ class OsamaRankingDownload(Fall2021AnimeDownload, NewsTemplate):
                     self.download_by_template(folder, template, 1, 1)
                     self.download_image(prefix + filename3, folder + '/' + filename3[0:len(filename3) - 4])
         except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - Character')
-            print(e)
+            self.print_exception(e, 'Character')
 
 
 # Platinum End
@@ -783,8 +772,7 @@ class PlatinumEndDownload(Fall2021AnimeDownload, NewsTemplate):
                             self.add_to_image_list(image_name, image_url)
                     self.download_image_list(self.base_folder)
         except Exception as e:
-            print("Error in running " + self.__class__.__name__)
-            print(e)
+            self.print_exception(e)
 
     def download_episode_preview_guess(self):
         folder = self.create_custom_directory('guess')
@@ -849,8 +837,7 @@ class PlatinumEndDownload(Fall2021AnimeDownload, NewsTemplate):
                             self.download_by_template(folder, template_url, 1, 2)
                         self.download_image(template2 % name, f'{folder}/face_{name}')
         except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - Character')
-            print(e)
+            self.print_exception(e, 'Character')
 
 
 # Saihate no Paladin
@@ -896,7 +883,7 @@ class SaihatenoPaladinDownload(Fall2021AnimeDownload, NewsTemplate):
                             self.add_to_image_list(image_name, image_url)
                     self.download_image_list(self.base_folder)
         except Exception as e:
-            print("Error in running " + self.__class__.__name__ + f': {e}')
+            self.print_exception(e)
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + 'news/'
@@ -968,8 +955,7 @@ class SakuganDownload(Fall2021AnimeDownload, NewsTemplate):
                         self.add_to_image_list(image_name, image_url)
                 self.download_image_list(self.base_folder)
         except Exception as e:
-            print("Error in running " + self.__class__.__name__)
-            print(e)
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='ul.tile li',
@@ -995,8 +981,7 @@ class SakuganDownload(Fall2021AnimeDownload, NewsTemplate):
                     self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)
         except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - Character')
-            print(e)
+            self.print_exception(e, 'Character')
 
 
 # Sekai Saikou no Ansatsusha, Isekai Kizoku ni Tensei suru
@@ -1043,8 +1028,7 @@ class AnsatsuKizokuDownload(Fall2021AnimeDownload, NewsTemplate):
                         self.add_to_image_list(image_name, image_url)
                 self.download_image_list(self.base_folder)
         except Exception as e:
-            print("Error in running " + self.__class__.__name__)
-            print(e)
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='div.news-Index li a',
@@ -1091,8 +1075,7 @@ class AnsatsuKizokuDownload(Fall2021AnimeDownload, NewsTemplate):
                         processed.append(page)
                     self.download_image_list(folder)
         except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - Blu-ray Bonus')
-            print(e)
+            self.print_exception(e, 'Blu-ray Bonus')
         self.create_cache_file(cache_filepath, processed, num_processed)
 
 
@@ -1187,8 +1170,7 @@ class SenpaigaUzaiDownload(Fall2021AnimeDownload, NewsTemplate):
                     if i > 0 and len(self.image_list) == 0:
                         break
         except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - Blu-ray')
-            print(e)
+            self.print_exception(e, 'Blu-ray')
         self.create_cache_file(cache_filepath, processed, num_processed)
 
 
@@ -1235,8 +1217,7 @@ class ShinnoNakamaDownload(Fall2021AnimeDownload, NewsTemplate):
                             self.add_to_image_list(image_name, image_url)
                     self.download_image_list(self.base_folder)
         except Exception as e:
-            print("Error in running " + self.__class__.__name__)
-            print(e)
+            self.print_exception(e)
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + 'news/'
@@ -1296,8 +1277,7 @@ class ShinnoNakamaDownload(Fall2021AnimeDownload, NewsTemplate):
                     self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)
         except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - Blu-ray')
-            print(e)
+            self.print_exception(e, 'Blu-ray')
 
 
 # Shinka no Mi: Shiranai Uchi ni Kachigumi Jinsei
@@ -1347,8 +1327,7 @@ class ShinkanomiDownload(Fall2021AnimeDownload, NewsTemplate):
             else:
                 raise Exception("Expected ep_num == ep_list")
         except Exception as e:
-            print("Error in running " + self.__class__.__name__)
-            print(e)
+            self.print_exception(e)
 
     def download_episode_preview_guess(self):
         folder = self.create_custom_directory('guess')
@@ -1404,8 +1383,7 @@ class ShinkanomiDownload(Fall2021AnimeDownload, NewsTemplate):
                 self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)
         except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - Character')
-            print(e)
+            self.print_exception(e, 'Character')
 
 
 # Shuumatsu no Harem
@@ -1452,8 +1430,7 @@ class ShuumatsuNoHaremDownload(Fall2021AnimeDownload, NewsTemplate2):
                             self.add_to_image_list(image_name, image_url)
                         self.download_image_list(self.base_folder)
         except Exception as e:
-            print("Error in running " + self.__class__.__name__)
-            print(e)
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(self.PAGE_PREFIX, 'news/list00010000.html')
@@ -1508,8 +1485,7 @@ class ShuumatsuNoHaremDownload(Fall2021AnimeDownload, NewsTemplate2):
                         self.download_image_list(folder)
                         processed.append(chara_name)
         except Exception as e:
-            print("Error in running " + self.__class__.__name__ + " - Character")
-            print(e)
+            self.print_exception(e, 'Character')
 
         if len(processed) > num_processed:
             with open(cache_filepath, 'w+', encoding='utf-8') as f:
@@ -1537,8 +1513,7 @@ class ShuumatsuNoHaremDownload(Fall2021AnimeDownload, NewsTemplate2):
                     self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)
         except Exception as e:
-            print("Error in running " + self.__class__.__name__ + " - Blu-ray Bonus")
-            print(e)
+            self.print_exception(e, 'Blu-ray Bonus')
 
         # Blu-ray
         url_template = self.PAGE_PREFIX + 'core_sys/images/contents/%s/block/%s/%s.jpg'
@@ -1559,8 +1534,7 @@ class ShuumatsuNoHaremDownload(Fall2021AnimeDownload, NewsTemplate2):
                 if result == -1:
                     break
         except Exception as e:
-            print("Error in running " + self.__class__.__name__ + " - Blu-ray")
-            print(e)
+            self.print_exception(e, 'Blu-ray')
 
 
 # Taishou Otome Otogibanashi
@@ -1616,8 +1590,7 @@ class TaishoOtomeDownload(Fall2021AnimeDownload, NewsTemplate):
                                 self.add_to_image_list(image_name, image_url)
                         self.download_image_list(self.base_folder)
         except Exception as e:
-            print(f"Error in running {self.__class__.__name__}")
-            print(e)
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='ul.newslist li',
@@ -1664,7 +1637,7 @@ class TaishoOtomeDownload(Fall2021AnimeDownload, NewsTemplate):
                         self.add_to_image_list(image_name, image_url)
                 self.download_image_list(folder)
             except Exception as e:
-                print(f"Error in running {self.__class__.__name__} - Media {page_url}: {e}")
+                self.print_exception(e, f'Media {page_url}')
 
 
 # takt op.Destiny
@@ -1710,8 +1683,7 @@ class TaktOpDestinyDownload(Fall2021AnimeDownload, NewsTemplate):
                                 self.add_to_image_list(image_name, image_url)
                         self.download_image_list(self.base_folder)
         except Exception as e:
-            print(f"Error in running {self.__class__.__name__}")
-            print(e)
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='div.sw-NewsArchive li',
@@ -1745,8 +1717,7 @@ class TaktOpDestinyDownload(Fall2021AnimeDownload, NewsTemplate):
                         self.download_image(template1 % name, f'{folder}/img_{name}')
                         self.download_image(template2 % name, f'{folder}/img_close-up_-{name}')
         except Exception as e:
-            print(f"Error in running {self.__class__.__name__} - Character")
-            print(e)
+            self.print_exception(e, 'Character')
 
 
 # Tsuki to Laika to Nosferatu
@@ -1796,8 +1767,7 @@ class TsukiLaikaNosferatuDownload(Fall2021AnimeDownload, NewsTemplate):
                             self.add_to_image_list(image_name, image_url)
                     self.download_image_list(self.base_folder)
         except Exception as e:
-            print("Error in running " + self.__class__.__name__)
-            print(e)
+            self.print_exception(e)
 
     def download_episode_preview_guess(self):
         # Can only run this in year 2021
@@ -1859,8 +1829,7 @@ class TsukiLaikaNosferatuDownload(Fall2021AnimeDownload, NewsTemplate):
                 if result == -1:
                     break
         except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - Key Visual')
-            print(e)
+            self.print_exception(e, 'Key Visual')
 
     def download_character(self):
         folder = self.create_character_directory()
@@ -1898,8 +1867,7 @@ class TsukiLaikaNosferatuDownload(Fall2021AnimeDownload, NewsTemplate):
                                 processed.append(page_id)
                             self.download_image_list(folder)
         except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - Music')
-            print(e)
+            self.print_exception(e, 'Music')
         self.create_cache_file(cache_filepath, processed, num_processed)
 
         # Blu-ray
@@ -1929,8 +1897,7 @@ class TsukiLaikaNosferatuDownload(Fall2021AnimeDownload, NewsTemplate):
                                     self.add_to_image_list(image_name, image_url)
                             self.download_image_list(folder)
         except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - Blu-ray')
-            print(e)
+            self.print_exception(e, 'Blu-ray')
 
 
 # Yuuki Yuuna wa Yuusha de Aru: Dai Mankai no Shou
@@ -1973,8 +1940,7 @@ class Yuyuyu3Download(Fall2021AnimeDownload, NewsTemplate):
                     self.add_to_image_list(image_name, image_url)
                 self.download_image_list(self.base_folder)
         except Exception as e:
-            print("Error in running " + self.__class__.__name__)
-            print(e)
+            self.print_exception(e)
 
     def download_news(self):
         prefix = 'https://yuyuyu.tv'
@@ -2008,8 +1974,7 @@ class Yuyuyu3Download(Fall2021AnimeDownload, NewsTemplate):
                     self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)
         except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - Key Visual')
-            print(e)
+            self.print_exception(e, 'Key Visual')
 
     def download_character(self):
         folder = self.create_character_directory()
@@ -2027,8 +1992,7 @@ class Yuyuyu3Download(Fall2021AnimeDownload, NewsTemplate):
                                 image_name = self.extract_image_name_from_url(image_url)
                                 self.add_to_image_list(image_name, image_url)
         except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - Character')
-            print(e)
+            self.print_exception(e, 'Character')
         self.download_image_list(folder)
 
     def download_media(self):
@@ -2078,4 +2042,4 @@ class Yuyuyu3Download(Fall2021AnimeDownload, NewsTemplate):
                         and not self.is_image_exists(head_image_name, folder):
                     self.download_image(head_image_url, f'{folder}/{head_image_name}')
         except Exception as e:
-            print(f'Error in running {self.__class__.__name__} - Media: {e}')
+            self.print_exception(e, 'Media')

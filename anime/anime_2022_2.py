@@ -77,8 +77,7 @@ class AharensanDownload(Spring2022AnimeDownload, NewsTemplate):
                     image_name = self.extract_image_name_from_url(image_url)
                     self.add_to_image_list(image_name, image_url)
         except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - Character')
-            print(e)
+            self.print_exception(e, 'Character')
         self.download_image_list(folder)
 
 
@@ -126,8 +125,7 @@ class Honzuki3Download(Spring2022AnimeDownload, NewsTemplate):
                             self.add_to_image_list(image_name, image_url)
                     self.download_image_list(self.base_folder)
         except Exception as e:
-            print("Error in running " + self.__class__.__name__)
-            print(e)
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='ol.list_news li',
@@ -145,8 +143,7 @@ class Honzuki3Download(Spring2022AnimeDownload, NewsTemplate):
                 if not self.download_by_template(folder, img_template, 2, 1, end=6, prefix=episode + '_'):
                     break
         except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - Guess')
-            print(e)
+            self.print_exception(e, 'Guess')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -369,8 +366,7 @@ class TateNoYuusha2Download(Spring2022AnimeDownload):
             if len(results) > 0:
                 self.create_news_log_cache(success_count, results[0])
         except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - News')
-            print(e)
+            self.print_exception(e, 'News')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()

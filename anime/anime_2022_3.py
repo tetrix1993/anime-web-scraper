@@ -73,8 +73,7 @@ class SoreayuDownload(Summer2022AnimeDownload, NewsTemplate):
                     self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)
         except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - Character')
-            print(e)
+            self.print_exception(e, 'Character')
 
 
 # Utawarerumono: Futari no Hakuoro

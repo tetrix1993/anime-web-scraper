@@ -1057,8 +1057,7 @@ class MushokuTenseiDownload(Winter2021AnimeDownload):
                         self.add_to_image_list(image_name, image_url)
                 self.download_image_list(self.base_folder)
         except Exception as e:
-            print("Error in running " + self.__class__.__name__)
-            print(e)
+            self.print_exception(e)
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + '/news/'
@@ -1089,8 +1088,7 @@ class MushokuTenseiDownload(Winter2021AnimeDownload):
             if len(results) > 0:
                 self.create_news_log_cache(success_count, results[0])
         except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - News')
-            print(e)
+            self.print_exception(e, 'News')
 
     def download_episode_preview_guess(self):
         folder = self.create_custom_directory('guess')
@@ -1261,8 +1259,7 @@ class MushokuTenseiDownload(Winter2021AnimeDownload):
                     if i > 0:
                         processed.append(str(i + 1))
         except Exception as e:
-            print("Error in running " + self.__class__.__name__ + " - Blu-Ray")
-            print(e)
+            self.print_exception(e, 'Blu-ray')
 
         if len(processed) > num_processed:
             with open(cache_filepath, 'w+') as f:

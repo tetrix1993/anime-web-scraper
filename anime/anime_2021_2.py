@@ -92,8 +92,7 @@ class EightySixDownload(Spring2021AnimeDownload, NewsTemplate):
                             self.add_to_image_list(image_name, image_url)
                     self.download_image_list(self.base_folder)
         except Exception as e:
-            print("Error in running " + self.__class__.__name__)
-            print(e)
+            self.print_exception(e)
 
     def download_episode_preview_guess(self):
         folder = self.create_custom_directory('guess')
@@ -200,8 +199,7 @@ class EightySixDownload(Spring2021AnimeDownload, NewsTemplate):
                         self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)
         except Exception as e:
-            print("Error in running " + self.__class__.__name__ + " - Character 2nd Cour")
-            print(e)
+            self.print_exception(e, 'Character 2nd Cour')
 
     def download_media(self):
         # API Link:
@@ -258,8 +256,7 @@ class EightySixDownload(Spring2021AnimeDownload, NewsTemplate):
                         break
                 self.download_image_list(folder)
             except Exception as e:
-                print("Error in running " + self.__class__.__name__ + ' - Blu-ray %s' % bd_url)
-                print(e)
+                self.print_exception(e, f'Blu-ray {bd_url}')
             if stop:
                 break
 

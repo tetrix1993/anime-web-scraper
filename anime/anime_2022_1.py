@@ -90,7 +90,7 @@ class AkebichanDownload(Winter2022AnimeDownload, NewsTemplate):
                         self.add_to_image_list(f'face_{chara_name}-02', template3 % chara_name)
             self.download_image_list(folder)
         except Exception as e:
-            print(f"Error in running {self.__class__.__name__} - Character: {e}")
+            self.print_exception(e, 'Character')
 
 
 # Arifureta Shokugyou de Sekai Saikyou 2nd Season
@@ -327,8 +327,7 @@ class Takagisan3Download(Winter2022AnimeDownload, NewsTemplate):
                     self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)
         except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - Character')
-            print(e)
+            self.print_exception(e, 'Character')
 
 
 # Kenja no Deshi wo Nanoru Kenja
@@ -390,7 +389,7 @@ class KendeshiDownload(Winter2022AnimeDownload, NewsTemplate):
                     self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)
         except Exception as e:
-            print(f"Error in running {self.__class__.__name__} - Character: {e}")
+            self.print_exception(e, 'Character')
 
 
 # Leadale no Daichi nite
@@ -495,8 +494,7 @@ class Mahouka3Download(Winter2022AnimeDownload, NewsTemplate):
                     self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)
         except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - Character')
-            print(e)
+            self.print_exception(e, 'Character')
 
 
 # Princess Connect! Re:Dive Season 2
@@ -602,7 +600,7 @@ class SabikuiBiscoDownload(Winter2022AnimeDownload, NewsTemplate):
                             self.download_image_list(folder)
             self.download_image_list(folder)
         except Exception as e:
-            print(f"Error in running {self.__class__.__name__} - Character: {e}")
+            self.print_exception(e, 'Character')
         self.create_cache_file(cache_filepath, processed, num_processed)
 
 

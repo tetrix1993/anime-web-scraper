@@ -109,8 +109,7 @@ class Anohana2Download(UnconfirmedDownload):
             if len(results) > 0:
                 self.create_news_log_cache(success_count, results[0])
         except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - News')
-            print(e)
+            self.print_exception(e, 'News')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -167,8 +166,7 @@ class DeaimonDownload(UnconfirmedDownload, NewsTemplate2):
                     self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)
         except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - Character')
-            print(e)
+            self.print_exception(e, 'Character')
 
 
 # Do It Yourself!!
@@ -244,8 +242,7 @@ class DoItYourselfDownload(UnconfirmedDownload):
             if len(results) > 0:
                 self.create_news_log_cache(success_count, results[0])
         except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - News')
-            print(e)
+            self.print_exception(e, 'News')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -305,8 +302,7 @@ class GaikotsuKishiDownload(UnconfirmedDownload):
                     self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)
         except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - Character')
-            print(e)
+            self.print_exception(e, 'Character')
 
     def download_media(self):
         folder = self.create_media_directory()
@@ -363,8 +359,7 @@ class GoblinSlayer2Download(UnconfirmedDownload):
             if len(results) > 0:
                 self.create_news_log_cache(success_count, results[0])
         except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - News')
-            print(e)
+            self.print_exception(e, 'News')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -521,8 +516,7 @@ class Bofuri2Download(UnconfirmedDownload):
             if len(results) > 0:
                 self.create_news_log_cache(success_count, results[0])
         except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - News')
-            print(e)
+            self.print_exception(e, 'News')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -659,8 +653,7 @@ class KoisekaDownload(UnconfirmedDownload, NewsTemplate):
                     self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)
         except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - Character')
-            print(e)
+            self.print_exception(e, 'Character')
 
 
 # Kono Healer, Mendokusai
@@ -710,8 +703,7 @@ class KonoHealerDownload(UnconfirmedDownload, NewsTemplate2):
                     self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)
         except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - Character')
-            print(e)
+            self.print_exception(e, 'Character')
 
 
 # Kumichou Musume to Sewagakari
@@ -770,7 +762,7 @@ class KumichoMusumeDownload(UnconfirmedDownload, NewsTemplate):
                             self.add_to_image_list(image_name, image_url)
                     self.download_image_list(folder)
         except Exception as e:
-            self.print_exception('Character', e)
+            self.print_exception(e, 'Character')
 
 
 # Kunoichi Tsubaki no Mune no Uchi
@@ -905,8 +897,7 @@ class Maohgakuin2Download(UnconfirmedDownload):
             if len(results) > 0:
                 self.create_news_log_cache(success_count, results[0])
         except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - News')
-            print(e)
+            self.print_exception(e, 'News')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -1043,7 +1034,7 @@ class ShachisaretaiDownload(UnconfirmedDownload, NewsTemplate):
                     self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)
         except Exception as e:
-            print(f"Error in running {self.__class__.__name__} - Character: {e}")
+            self.print_exception(e, 'Character')
 
 
 # Shokei Shoujo no Virgin Road
@@ -1130,8 +1121,7 @@ class SpyFamilyDownload(UnconfirmedDownload, NewsTemplate):
                     self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)
         except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - Character')
-            print(e)
+            self.print_exception(e, 'Character')
 
 
 # Summertime Render
@@ -1183,7 +1173,7 @@ class SummertimeRenderDownload(UnconfirmedDownload, NewsTemplate):
                     self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)
         except Exception as e:
-            print(f"Error in running {self.__class__.__name__} - Character: {e}")
+            self.print_exception(e, 'Character')
 
 
 # Tensei Kenja no Isekai Life: Dai-2 no Shokugyou wo Ete, Sekai Saikyou ni Narimashita
@@ -1232,7 +1222,7 @@ class TenseiKenjaDownload(UnconfirmedDownload, NewsTemplate):
                         self.add_to_image_list(f'img_{chara_name}', template % chara_name)
             self.download_image_list(folder)
         except Exception as e:
-            print(f"Error in running {self.__class__.__name__} - Character: {e}")
+            self.print_exception(e, 'Character')
 
 
 # Tonikaku Kawaii S2
@@ -1317,8 +1307,7 @@ class VladLoveDownload(UnconfirmedDownload):
                         self.add_to_image_list(image_name, image_url)
                 self.download_image_list(folder)
         except Exception as e:
-            print("Error in running " + self.__class__.__name__ + " - Character")
-            print(e)
+            self.print_exception(e, 'Character')
 
 
 # Yama no Susume: Next Summit
@@ -1374,8 +1363,7 @@ class YamaNoSusume4Download(UnconfirmedDownload):
             if len(results) > 0:
                 self.create_news_log_cache(success_count, results[0])
         except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - News')
-            print(e)
+            self.print_exception(e, 'News')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()

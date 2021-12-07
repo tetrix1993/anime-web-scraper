@@ -987,7 +987,7 @@ class MainDownload:
                         f.write(';')
                     f.write(processed_items[i])
 
-    def print_exception(self, message, ex):
+    def print_exception(self, ex, message=None):
         output = f"Error in running {self.__class__.__name__}"
         if message is not None and len(message) > 0:
             output += f' - {message}'
@@ -1157,8 +1157,7 @@ class NewsTemplate:
             if len(results) > 0:
                 self.create_news_log_cache(success_count, results[0])
         except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - News')
-            print(e)
+            self.print_exception(e, 'News')
 
 
 # News template
@@ -1221,8 +1220,7 @@ class NewsTemplate2:
             if len(results) > 0:
                 self.create_news_log_cache(success_count, results[0])
         except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - News')
-            print(e)
+            self.print_exception(e, 'News')
 
 
 # News template which contain article.content-entry, div.entry-date, div.entry-title
@@ -1268,8 +1266,7 @@ class NewsTemplate3:
             if len(results) > 0:
                 self.create_news_log_cache(success_count, results[0])
         except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - News')
-            print(e)
+            self.print_exception(e, 'News')
 
 
 class InvalidImageSizeError(Exception):
