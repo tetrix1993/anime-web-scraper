@@ -517,7 +517,30 @@ class Priconne2Download(Winter2022AnimeDownload, NewsTemplate):
         self.download_key_visual()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        # Handles only the first story page, need update logic in the future
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            article = soup.select('article.mainContents__inner')
+            if len(article) == 0:
+                return
+            span = article[0].select('div.storyNumber span')
+            try:
+                episode = str(int(span[0].text)).zfill(2)
+            except:
+                return
+            if not os.path.exists(episode + '_01'):
+                images = article[0].select('div.mainSlider li.swiper-slide img')
+                self.image_list = []
+                i = 0
+                for image in images:
+                    if image.has_attr('src'):
+                        i += 1
+                        image_url = self.PAGE_PREFIX + (image['src'][1:] if image['src'].startswith('/') else image['src'])
+                        image_name = episode + '_' + str(i).zfill(2)
+                        self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='ul.newsList li',
