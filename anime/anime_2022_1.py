@@ -659,6 +659,7 @@ class ShikkakumonDownload(Winter2022AnimeDownload, NewsTemplate2):
         self.image_list = []
         self.add_to_image_list('teaser', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv.png')
         self.add_to_image_list('teaser_tw', 'https://pbs.twimg.com/media/EtDguMkU0AQjk4b?format=jpg&name=4096x4096')
+        self.add_to_image_list('kv1', self.PAGE_PREFIX + 'core_sys/images/main/top/kv.jpg')
         self.download_image_list(folder)
 
     def download_character(self):
@@ -666,6 +667,35 @@ class ShikkakumonDownload(Winter2022AnimeDownload, NewsTemplate2):
         prefix = self.PAGE_PREFIX + 'core_sys/images/main/tz/char'
         templates = [prefix + '%s_stand.png', prefix + '%s_face.png']
         self.download_by_template(folder, templates, 2, 1, prefix='tz_')
+
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'chara/')
+            chara_links = soup.select('div.list_type06 a')
+            for link in chara_links:
+                if link.has_attr('href') and link['href'].endswith('.html'):
+                    chara_name = link['href'].split('/')[-1].split('.html')[0]
+                    if chara_name in processed:
+                        continue
+                    if chara_name == 'index':
+                        chara_soup = soup
+                    else:
+                        chara_soup = self.get_soup(self.PAGE_PREFIX + link['href'].replace('../', ''))
+                    if chara_soup is not None:
+                        images = chara_soup.select('div.charaImg img')
+                        self.image_list = []
+                        for image in images:
+                            if image.has_attr('src'):
+                                image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                                image_name = 'chara_' + self.extract_image_name_from_url(image_url)
+                                self.add_to_image_list(image_name, image_url)
+                        if len(self.image_list) > 0:
+                            processed.append(chara_name)
+                        self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Slow Loop
