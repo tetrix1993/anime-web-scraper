@@ -305,6 +305,7 @@ class Takagisan3Download(Winter2022AnimeDownload, NewsTemplate):
         self.image_list = []
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/E-MCnEaUYAc-D9X?format=jpg&name=900x900')
         self.add_to_image_list('top_story__pcvs', self.PAGE_PREFIX + 'assets/img/top/top_story__pcvs.jpg')
+        self.add_to_image_list('mainvisual_tw', 'https://pbs.twimg.com/media/FGJ5bxYVgAAs0k8?format=jpg&name=large')
         self.download_image_list(folder)
 
         prefix = self.PAGE_PREFIX + 'assets/img/top/'
