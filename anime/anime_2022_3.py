@@ -2,6 +2,7 @@ import requests
 from anime.main_download import MainDownload, NewsTemplate
 
 
+# Hataraku Maou-sama!! https://maousama.jp/ #maousama @anime_maousama
 # Soredemo Ayumu wa Yosetekuru https://soreayu.com/ #それあゆ @soreayu_staff
 # Utawarerumono: Futari no Hakuoro https://utawarerumono.jp/ #うたわれ @UtawareAnime
 
@@ -14,6 +15,49 @@ class Summer2022AnimeDownload(MainDownload):
 
     def __init__(self):
         super().__init__()
+
+
+# Hataraku Maou-sama!!
+class HatarakuMaousama2Download(Summer2022AnimeDownload, NewsTemplate):
+    title = 'Hataraku Maou-sama!!'
+    keywords = [title, 'Maousama', 'The Devil is a Part-Timer!', '2nd']
+    website = 'https://maousama.jp/'
+    twitter = 'anime_maousama'
+    hashtags = 'maousama'
+    folder_name = 'hataraku-maousama2'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('teaser_tw', 'https://pbs.twimg.com/media/EvyqsA_UcAcPT9B?format=jpg&name=large')
+        self.add_to_image_list('teaser', self.PAGE_PREFIX + 'assets/img/top/visual.jpg')
+        self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/FGaCXWqVUAA4-Iz?format=jpg&name=large')
+        self.add_to_image_list('kv1_moca', 'https://moca-news.net/article/20211212/2021121221300a_/image/001-aiic5e.jpg', is_mocanews=True)
+        self.download_image_list(folder)
+
+        template = self.PAGE_PREFIX + 'assets/img/top/visual%s.jpg'
+        self.download_by_template(folder, template, 2, 1)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        character_prefix = self.PAGE_PREFIX + 'assets/img/character/'
+        template1 = character_prefix + 'character%s_main.png'
+        template2 = character_prefix + 'character%s_face1.png'
+        template3 = character_prefix + 'character%s_face2.png'
+        self.download_by_template(folder, [template1, template2, template3], 2, 1)
 
 
 # Soredemo Ayumu wa Yosetekuru

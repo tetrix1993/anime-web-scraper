@@ -7,7 +7,6 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Do It Yourself!! https://diy-anime.com/ #diyアニメ @diy_anime
 # Gaikotsu Kishi-sama, Tadaima Isekai e Odekakechuu https://skeleton-knight.com/ #骸骨騎士様 @gaikotsukishi
 # Goblin Slayer S2 http://www.goblinslayer.jp/ #ゴブスレ @GoblinSlayer_GA
-# Hataraku Maou-sama! https://maousama.jp/ #maousama @anime_maousama
 # Isekai Ojisan #いせおじ #異世界おじさん @Isekai_Ojisan
 # Isekai Yakkyoku https://isekai-yakkyoku.jp/ #異世界薬局 @isekai_yakkyoku
 # Itai no wa https://bofuri.jp/story/ #防振り #bofuri @bofuri_anime
@@ -365,35 +364,6 @@ class GoblinSlayer2Download(UnconfirmedDownload):
         folder = self.create_key_visual_directory()
         self.image_list = []
         self.add_to_image_list('teaser', 'https://pbs.twimg.com/media/EtDYBThUYAEBIWI?format=jpg&name=4096x4096')
-        self.download_image_list(folder)
-
-
-# Hataraku Maou-sama!
-class HatarakuMaousama2Download(UnconfirmedDownload):
-    title = 'Hataraku Maou-sama! 2nd Season'
-    keywords = [title, 'Maousama', 'The Devil is a Part-Timer!']
-    website = 'https://maousama.jp/'
-    twitter = 'anime_maousama'
-    hashtags = 'maousama'
-    folder_name = 'hataraku-maousama2'
-
-    PAGE_PREFIX = website
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_key_visual()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('teaser_tw', 'https://pbs.twimg.com/media/EvyqsA_UcAcPT9B?format=jpg&name=large')
-        self.add_to_image_list('teaser', self.PAGE_PREFIX + 'assets/img/top/visual.jpg')
         self.download_image_list(folder)
 
 

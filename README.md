@@ -86,7 +86,6 @@ The premiere date for the anime listed here has not been announced.
 * [Do It Yourself!!](https://diy-anime.com/)
 * [Gaikotsu Kishi-sama, Tadaima Isekai e Odekakechuu](https://skeleton-knight.com/)
 * [Goblin Slayer 2nd Season](http://www.goblinslayer.jp/)
-* [Hataraku Maou-sama! 2nd Season](https://maousama.jp/)
 * [Isekai Ojisan](https://isekaiojisan.com/)
 * [Isekai Yakkyoku](https://isekai-yakkyoku.jp/)
 * [Itai no wa Iya nano de Bougyoryoku ni Kyokufuri Shitai to Omoimasu. 2nd Season](https://bofuri.jp/)
@@ -109,6 +108,7 @@ The premiere date for the anime listed here has not been announced.
 * [Yama no Susume: Next Summit](https://yamanosusume-ns.com/)
 
 ### Summer 2022 Anime
+* [Hataraku Maou-sama! 2nd Season](https://maousama.jp/)
 * [Soredemo Ayumu wa Yosetekuru](https://soreayu.com/)
 * [Utawarerumono: Futari no Hakuoro](https://utawarerumono.jp/)
 
