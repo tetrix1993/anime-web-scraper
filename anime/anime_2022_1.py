@@ -167,6 +167,8 @@ class FabinikuDownload(Winter2022AnimeDownload, NewsTemplate):
         folder = self.create_key_visual_directory()
         self.image_list = []
         self.add_to_image_list('tz', self.PAGE_PREFIX + 'wordpress/wp-content/uploads/2021/10/18201715/【PR】1018_fabiniku_ファ美肉おじさん完成ティザー-scaled-1.jpeg')
+        self.add_to_image_list('kv1', 'https://pbs.twimg.com/media/FGeBtTLUUAAPcMG?format=jpg&name=4096x4096')
+        # self.add_to_image_list('kv1', self.PAGE_PREFIX + 'wordpress/wp-content/uploads/2021/12/13162750/fabiniku_KV_1210.jpg')
         self.download_image_list(folder)
 
     def download_character(self):
