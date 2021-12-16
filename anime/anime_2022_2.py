@@ -7,6 +7,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Kawaii dake ja Nai Shikimori-san https://shikimori-anime.com/ #式守さん @anime_shikimori
 # Mahoutsukai Reimeiki https://www.tbs.co.jp/anime/reimeiki/ #魔法使い黎明期 @reimeiki_pr
 # Otome Game Sekai wa Mob ni Kibishii Sekai desu https://mobseka.com/ #モブせか #mobseka @mobseka_anime
+# Shijou Saikyou no Daimaou, Murabito A ni Tensei suru https://murabito-a-anime.com/ #村人Aに転生 @murabitoA_anime
 # Tate no Yuusha S2 http://shieldhero-anime.jp/ #shieldhero #盾の勇者の成り上がり @shieldheroanime
 # Yuusha, Yamemasu https://yuuyame.com/ #yuuyame #勇やめ @yuuyame_anime
 
@@ -314,6 +315,47 @@ class MobsekaDownload(Spring2022AnimeDownload, NewsTemplate):
         body_template = self.PAGE_PREFIX + 'img/chara/illust_%s.png'
         face_template = self.PAGE_PREFIX + 'img/chara/face_%s.png'
         self.download_by_template(folder, [body_template, face_template], 2, 1)
+
+
+# Shijou Saikyou no Daimaou, Murabito A ni Tensei suru
+class MurabitoADownload(Spring2022AnimeDownload, NewsTemplate):
+    title = 'Shijou Saikyou no Daimaou, Murabito A ni Tensei suru'
+    keywords = [title, 'The Greatest Demon Lord Is Reborn as a Typical Nobody']
+    website = 'https://murabito-a-anime.com/'
+    twitter = 'murabitoA_anime'
+    hashtags = '村人Aに転生'
+    folder_name = 'murabito-a'
+
+    PAGE_PREFIX = website
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        # Need update page logic
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='ul.newsLists__list li',
+                                    title_select='.newsLists__list--title', date_select='.f_roc', id_select='a')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        template = self.PAGE_PREFIX + 'assets/img/top/fv_visual%s.jpg'
+        self.download_by_template(folder, template, 1, 1)
+
+        self.image_list = []
+        self.add_to_image_list('kv1_news', self.PAGE_PREFIX + 'news/wp-content/uploads/2021/12/211216_01.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        prefix = self.PAGE_PREFIX + 'assets/img/character/character%s_'
+        templates = [prefix + 'main.png', prefix + 'face1.jpg', prefix + 'face2.jpg', prefix + 'thumb.jpg']
+        self.download_by_template(folder, templates, 1, 1)
 
 
 # Tate no Yuusha no Nariagari S2
