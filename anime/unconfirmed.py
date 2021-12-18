@@ -144,7 +144,8 @@ class AyakashiTriangleDownload(UnconfirmedDownload):
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
-        self.add_to_image_list('announce_tw', 'https://pbs.twimg.com/media/FG33dXJagAY1HcQ?format=jpg&name=medium')
+        # self.add_to_image_list('announce_tw', 'https://pbs.twimg.com/media/FG33dXJagAY1HcQ?format=jpg&name=medium')
+        self.add_to_image_list('announce_aniverse', 'https://aniverse-mag.com/wp-content/uploads/2021/12/img_kokuchi.jpg')
         self.add_to_image_list('announce', self.PAGE_PREFIX + 'assets/img/img_kv.png')
         self.download_image_list(folder)
 
