@@ -17,6 +17,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 # Princess Connect! Re:Dive S2 https://anime.priconne-redive.jp/ #アニメプリコネ #プリコネR #プリコネ #アニメプリコネR @priconne_anime
 # Sabikui Bisco https://sabikuibisco.jp/ https://sabikuibisco.jp/ #錆喰いビスコ @SABIKUI_BISCO
 # Shikkakumon no Saikyou Kenja https://shikkakumon.com/ #失格紋 @shikkakumon_PR
+# Shuumatsu no Harem https://end-harem-anime.com/ #終末のハーレム @harem_official_
 # Slow Loop https://slowlooptv.com/ #slowloop @slowloop_tv
 # Sono Bisque Doll wa Koi wo Suru https://bisquedoll-anime.com/ #着せ恋 @kisekoi_anime
 # Tensai Ouji no Akaji Kokka Saisei Jutsu: Souda, Baikoku shiyou https://tensaiouji-anime.com/ #天才王子 #天才王子の赤字国家再生術 @tensaiouji_PR
@@ -698,6 +699,157 @@ class ShikkakumonDownload(Winter2022AnimeDownload, NewsTemplate2):
         except Exception as e:
             self.print_exception(e, 'Character')
         self.create_cache_file(cache_filepath, processed, num_processed)
+
+
+# Shuumatsu no Harem
+class ShuumatsuNoHaremDownload(Winter2022AnimeDownload, NewsTemplate2):
+    title = 'Shuumatsu no Harem'
+    keywords = [title, "World's End Harem"]
+    website = 'https://end-harem-anime.com/'
+    twitter = 'harem_official_'
+    hashtags = '終末のハーレム'
+    folder_name = 'shuumatsu-no-harem'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+        self.download_media()
+
+    def download_episode_preview(self):
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/', decode=True)
+            a_tags = soup.select('table a')
+            for a_tag in a_tags:
+                if a_tag.has_attr('href'):
+                    try:
+                        episode = str(int(a_tag.text.strip().replace('第', '').replace('話', ''))).zfill(2)
+                    except Exception as e:
+                        continue
+                    if self.is_image_exists(episode + '_1'):
+                        continue
+                    url = self.PAGE_PREFIX + a_tag['href'].replace('../', '')
+                    ep_soup = self.get_soup(url)
+                    if ep_soup:
+                        images = ep_soup.select('ul.tp5 img')
+                        self.image_list = []
+                        for i in range(len(images)):
+                            image_url = self.PAGE_PREFIX + images[i]['src'].split('?')[0].replace('../', '')
+                            image_name = episode + '_' + str(i + 1)
+                            self.add_to_image_list(image_name, image_url)
+                        self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
+
+    def download_news(self):
+        self.download_template_news(self.PAGE_PREFIX, 'news/list00010000.html')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('announce', 'https://pbs.twimg.com/media/EXzkif6VAAAxqJI?format=png&name=900x900')
+        self.add_to_image_list('teaser', self.PAGE_PREFIX + 'core_sys/images/news/00000002/block/00000005/00000001.jpg')
+        # self.add_to_image_list('teaser', 'https://pbs.twimg.com/media/EoYL6tMVgAADou1?format=jpg&name=large')
+        # self.add_to_image_list('teaser_char', self.PAGE_PREFIX + 'core_sys/images/main/top/kv_char.png')
+        self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/E9Ma_mBVUAQoM9t?format=jpg&name=4096x4096')
+        self.add_to_image_list('kv1_char', self.PAGE_PREFIX + 'core_sys/images/main/top/kv_char.png')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        cache_filepath = folder + '/cache'
+        processed = []
+        num_processed = 0
+        if os.path.exists(cache_filepath):
+            with open(cache_filepath, 'r', encoding='utf-8') as f:
+                inputs = f.read()
+            processed = inputs.split(';')
+            num_processed = len(processed)
+
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/reito.html')
+            chara_list = soup.find('div', id='ContentsListUnit01')
+            if chara_list:
+                a_tags = chara_list.find_all('a')
+                for a_tag in a_tags:
+                    if a_tag.has_attr('href') and '/' in a_tag['href']:
+                        chara_name = a_tag['href'].split('/')[-1].split('.html')[0]
+                        if chara_name in processed:
+                            continue
+                        if chara_name == 'reito':  # First character
+                            chara_soup = soup
+                        else:
+                            chara_soup = self.get_soup(self.PAGE_PREFIX + a_tag['href'].replace('../', ''))
+                        self.image_list = []
+                        divs = ['standWrap', 'faceWrap']
+                        for div in divs:
+                            wraps = chara_soup.find_all('div', class_=div)
+                            for wrap in wraps:
+                                if wrap:
+                                    image = wrap.find('img')
+                                    if image and image.has_attr('src'):
+                                        image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                                        image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                                        self.add_to_image_list(image_name, image_url)
+                        self.download_image_list(folder)
+                        processed.append(chara_name)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+
+        if len(processed) > num_processed:
+            with open(cache_filepath, 'w+', encoding='utf-8') as f:
+                for i in range(len(processed)):
+                    if i > 0:
+                        f.write(';')
+                    f.write(processed[i])
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        self.image_list = []
+        self.add_to_image_list('music_op', 'https://pbs.twimg.com/media/E9yvFCOUUAc43_i?format=jpg&name=large')
+        self.add_to_image_list('music_ed', 'https://pbs.twimg.com/media/FAMztXhVUAADMY7?format=jpg&name=large')
+        self.download_image_list(folder)
+
+        # Blu-ray Bonus
+        try:
+            soup = self.get_soup(f'{self.PAGE_PREFIX}bd/tokuten.html')
+            images = soup.select('div.earlyBooking img, div.shopDet img')
+            self.image_list = []
+            for image in images:
+                if image.has_attr('src') and not image['src'].endswith('nowpri.jpg'):
+                    image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray Bonus')
+
+        # Blu-ray
+        url_template = self.PAGE_PREFIX + 'core_sys/images/contents/%s/block/%s/%s.jpg'
+        first = 33
+        second = 106
+        third = 85
+        try:
+            for i in range(4):
+                image_name = str(third + i).zfill(8)
+                if self.is_image_exists(image_name, folder):
+                    continue
+                num1 = str(first + i).zfill(8)
+                num2 = str(second + i * 5).zfill(8)
+                image_url = url_template % (num1, num2, image_name)
+                if self.is_matching_content_length(image_url, 5630):
+                    break
+                result = self.download_image_list(folder + '/' + image_name, image_url)
+                if result == -1:
+                    break
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
 
 # Slow Loop

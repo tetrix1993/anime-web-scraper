@@ -8,6 +8,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Mahoutsukai Reimeiki https://www.tbs.co.jp/anime/reimeiki/ #魔法使い黎明期 @reimeiki_pr
 # Otome Game Sekai wa Mob ni Kibishii Sekai desu https://mobseka.com/ #モブせか #mobseka @mobseka_anime
 # Shijou Saikyou no Daimaou, Murabito A ni Tensei suru https://murabito-a-anime.com/ #村人Aに転生 @murabitoA_anime
+# Spy x Family https://spy-family.net/ #SPY_FAMILY #スパイファミリー @spyfamily_anime
 # Tate no Yuusha S2 http://shieldhero-anime.jp/ #shieldhero #盾の勇者の成り上がり @shieldheroanime
 # Yuusha, Yamemasu https://yuuyame.com/ #yuuyame #勇やめ @yuuyame_anime
 
@@ -356,6 +357,55 @@ class MurabitoADownload(Spring2022AnimeDownload, NewsTemplate):
         prefix = self.PAGE_PREFIX + 'assets/img/character/character%s_'
         templates = [prefix + 'main.png', prefix + 'face1.jpg', prefix + 'face2.jpg', prefix + 'thumb.jpg']
         self.download_by_template(folder, templates, 1, 1)
+
+
+# Spy x Family
+class SpyFamilyDownload(Spring2022AnimeDownload, NewsTemplate):
+    title = 'Spy x Family'
+    keywords = [title]
+    website = 'https://spy-family.net/'
+    twitter = 'spyfamily_anime'
+    hashtags = ['SPY_FAMILY', 'スパイファミリー']
+    folder_name = 'spy-family'
+
+    PAGE_PREFIX = website
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index', diff=2)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.newsLists__item',
+                                    date_select='time', title_select='.newsLists--title', id_select='a',
+                                    paging_type=3, paging_suffix='?paged=%s', next_page_select='.wp-pagenavi *',
+                                    next_page_eval_index_class='current', next_page_eval_index=-1)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz1', 'https://pbs.twimg.com/media/FDCUAXsagAArKcA?format=jpg&name=4096x4096')
+        self.add_to_image_list('tz2', 'https://pbs.twimg.com/media/FDCUBF7akAEMcUM?format=jpg&name=4096x4096')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.charaImgLists__imgWrap img')
+            self.image_list = []
+            for image in images:
+                if image.has_attr('src'):
+                    image_url = self.PAGE_PREFIX + image['src'].replace('./', '')
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
 
 
 # Tate no Yuusha no Nariagari S2
