@@ -4,7 +4,7 @@ import traceback
 from anime import MainDownload, ExternalDownload
 from anime.constants import FOLDER_OUTPUT
 
-VERSION_NUMBER = 40
+VERSION_NUMBER = 41
 DOWNLOAD_DIR = 'download'
 UNCONFIRMED_DIR = DOWNLOAD_DIR + '/unconfirmed'
 MIGRATION_ERROR_LOG = 'migration_error.log'
@@ -79,6 +79,7 @@ def migrate_folders():
     migrate_folder_by_name(UNCONFIRMED_DIR, '2022-3', 'hataraku-maousama2')
     migrate_folder_by_name('2021-4', '2022-1', 'shuumatsu-no-harem')
     migrate_folder_by_name(UNCONFIRMED_DIR, '2022-2', 'spy-family')
+    migrate_folder_by_name(UNCONFIRMED_DIR, '2022-2', 'summertime-render')
     # migrate_external_folder()
 
 

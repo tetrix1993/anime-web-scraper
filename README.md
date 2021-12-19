@@ -102,7 +102,6 @@ The premiere date for the anime listed here has not been announced.
 * [RPG Fudousan](https://rpg-rs.jp/)
 * [Shachiku-san wa Youjo Yuurei ni Iyasaretai.](https://shachikusan.com/)
 * [Shokei Shoujo no Virgin Road](http://virgin-road.com/)
-* [Summertime Render](https://summertime-anime.com/)
 * [Tensei Kenja no Isekai Life: Dai-2 no Shokugyou wo Ete, Sekai Saikyou ni Narimashita](https://tenseikenja.com/)
 * [Tonikaku Kawaii 2nd Season](http://tonikawa.com/)
 * [Yama no Susume: Next Summit](https://yamanosusume-ns.com/)
@@ -121,6 +120,7 @@ The premiere date for the anime listed here has not been announced.
 * [Otome Game Sekai wa Mob ni Kibishii Sekai desu](https://mobseka.com/)
 * [Shijou Saikyou no Daimaou, Murabito A ni Tensei suru](https://murabito-a-anime.com/)
 * [Spy x Family](https://spy-family.net/)
+* [Summertime Render](https://summertime-anime.com/)
 * [Tate no Yuusha no Nariagari 2nd Season](http://shieldhero-anime.jp)
 * [Yuusha, Yamemasu](https://yuuyame.com/)
 

@@ -23,7 +23,6 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # RPG Fudousan https://rpg-rs.jp/ #RPG不動産 @rpgrs_anime
 # Shachiku-san wa Youjo Yuurei ni Iyasaretai. https://shachikusan.com/ #しゃちされたい @shachisaretai
 # Shokei Shoujo no Virgin Road http://virgin-road.com/ #処刑少女 #shokei_anime @VirginroadAnime
-# Summertime Render https://summertime-anime.com/ #サマータイムレンダ #サマレン @summertime_PR
 # Tensei Kenja no Isekai Life: Dai-2 no Shokugyou wo Ete, Sekai Saikyou ni Narimashita https://tenseikenja.com #転生賢者 @tenseikenja_PR
 # Tonikaku Kawaii S2 http://tonikawa.com/ #トニカクカワイイ #tonikawa @tonikawa_anime
 # Vlad Love https://www.vladlove.com/index.html #ぶらどらぶ #vladlove @VLADLOVE_ANIME
@@ -1043,58 +1042,6 @@ class ShokeiShoujoDownload(UnconfirmedDownload):
         template1 = self.PAGE_PREFIX + 'core_sys/images/main/tz/char_%s.png'
         template2 = self.PAGE_PREFIX + 'core_sys/images/main/tz/char_%sface.png'
         self.download_by_template(folder, [template1, template2], 1, 1, prefix='tz_')
-
-
-# Summertime Render
-class SummertimeRenderDownload(UnconfirmedDownload, NewsTemplate):
-    title = 'Summertime Render'
-    keywords = [title]
-    website = 'https://summertime-anime.com/'
-    twitter = 'summertime_PR'
-    hashtags = ['サマータイムレンダ', 'サマレン']
-    folder_name = 'summertime-render'
-
-    PAGE_PREFIX = website
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_news()
-        self.download_key_visual()
-        self.download_character()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_news(self):
-        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article.md-article__li',
-                                    date_select='time', title_select='h5', id_select='a',
-                                    next_page_select='ul.pagenation-list li',
-                                    next_page_eval_index_class='is__current', next_page_eval_index=-1)
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('tz', self.PAGE_PREFIX + 'wp/wp-content/themes/summertime-teaser/_assets/images/kv/kv_pc.jpg')
-        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/E63h3z-VEAMtJYy?format=jpg&name=medium')
-        self.download_image_list(folder)
-
-    def download_character(self):
-        folder = self.create_character_directory()
-        try:
-            soup = self.get_soup(self.PAGE_PREFIX)
-            images = soup.select('.chardata--v--img img')
-            self.image_list = []
-            for image in images:
-                if image.has_attr('src'):
-                    image_url = image['src']
-                    image_name = self.extract_image_name_from_url(image_url)
-                    self.add_to_image_list(image_name, image_url)
-            self.download_image_list(folder)
-        except Exception as e:
-            self.print_exception(e, 'Character')
 
 
 # Tensei Kenja no Isekai Life: Dai-2 no Shokugyou wo Ete, Sekai Saikyou ni Narimashita

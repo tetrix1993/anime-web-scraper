@@ -9,6 +9,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Otome Game Sekai wa Mob ni Kibishii Sekai desu https://mobseka.com/ #モブせか #mobseka @mobseka_anime
 # Shijou Saikyou no Daimaou, Murabito A ni Tensei suru https://murabito-a-anime.com/ #村人Aに転生 @murabitoA_anime
 # Spy x Family https://spy-family.net/ #SPY_FAMILY #スパイファミリー @spyfamily_anime
+# Summertime Render https://summertime-anime.com/ #サマータイムレンダ #サマレン @summertime_PR
 # Tate no Yuusha S2 http://shieldhero-anime.jp/ #shieldhero #盾の勇者の成り上がり @shieldheroanime
 # Yuusha, Yamemasu https://yuuyame.com/ #yuuyame #勇やめ @yuuyame_anime
 
@@ -401,6 +402,63 @@ class SpyFamilyDownload(Spring2022AnimeDownload, NewsTemplate):
             for image in images:
                 if image.has_attr('src'):
                     image_url = self.PAGE_PREFIX + image['src'].replace('./', '')
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+
+
+# Summertime Render
+class SummertimeRenderDownload(Spring2022AnimeDownload, NewsTemplate):
+    title = 'Summertime Render'
+    keywords = [title]
+    website = 'https://summertime-anime.com/'
+    twitter = 'summertime_PR'
+    hashtags = ['サマータイムレンダ', 'サマレン']
+    folder_name = 'summertime-render'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article.md-article__li',
+                                    date_select='time', title_select='h5', id_select='a',
+                                    next_page_select='ul.pagenation-list li',
+                                    next_page_eval_index_class='is__current', next_page_eval_index=-1)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        # self.add_to_image_list('tz', self.PAGE_PREFIX + 'wp/wp-content/themes/summertime-teaser/_assets/images/kv/kv_pc.jpg')
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/E63h3z-VEAMtJYy?format=jpg&name=medium')
+        self.add_to_image_list('kv1', self.PAGE_PREFIX + 'wp/wp-content/uploads/2021/11/サマータイムレンダ_KV1_logomini.jpg')
+        # self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/FG8lGwpaMAc7Aj3?format=jpg&name=large')
+        self.download_image_list(folder)
+
+        template = self.PAGE_PREFIX + 'wp/wp-content/themes/summertime-teaser/_assets/images/kv/kv_%s_pc.png'
+        self.download_by_template(folder, template, 3, 1)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.chardata--v--img img')
+            self.image_list = []
+            for image in images:
+                if image.has_attr('src'):
+                    image_url = image['src']
                     image_name = self.extract_image_name_from_url(image_url)
                     self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)
