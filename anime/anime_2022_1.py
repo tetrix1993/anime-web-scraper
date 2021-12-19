@@ -437,6 +437,8 @@ class LeadaleDownload(Winter2022AnimeDownload, NewsTemplate3):
         self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/Ezi8NqIVkAMv0Yv?format=jpg&name=medium')
         self.add_to_image_list('kv2_tw', 'https://pbs.twimg.com/media/E8Ouua3UUAIFSvH?format=jpg&name=medium')
         self.add_to_image_list('kv3_tw', 'https://pbs.twimg.com/media/FEmTgkJUcAUk9kQ?format=jpg&name=4096x4096')
+        self.add_to_image_list('kv4_tw', 'https://pbs.twimg.com/media/FG9Syr-agAAH7-D?format=jpg&name=4096x4096')
+        self.add_to_image_list('kv4_aniverse', 'https://aniverse-mag.com/wp-content/uploads/2021/12/288f98f39ec491c839eca0d9f9d273d8-e1639894389795.jpg')
         self.download_image_list(folder)
 
         template = self.PAGE_PREFIX + 'assets/news/kv-t%s.jpg'
