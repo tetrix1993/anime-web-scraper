@@ -353,9 +353,35 @@ class KendeshiDownload(Winter2022AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        story_url = self.PAGE_PREFIX + 'story/'
+        try:
+            soup = self.get_soup(story_url)
+            a_tags = soup.select('ul.blurayList li a')
+            for a_tag in a_tags:
+                if a_tag.has_attr('href') and a_tag['href'].endswith('.html') and a_tag['href'].startswith('./'):
+                    i_tag = a_tag.find('i')
+                    if i_tag is not None:
+                        try:
+                            episode = str(int(i_tag.text.strip().replace('第', '').replace('話', ''))).zfill(2)
+                        except:
+                            continue
+                        if self.is_image_exists(f'{episode}_1'):
+                            continue
+                        ep_soup = self.get_soup(story_url + a_tag['href'][2:])
+                        if ep_soup is not None:
+                            images = ep_soup.select('ul.sliderlay img')
+                            self.image_list = []
+                            for i in range(len(images)):
+                                if images[i].has_attr('src'):
+                                    image_url = story_url + images[i]['src']
+                                    image_name = f'{episode}_{i + 1}'
+                                    self.add_to_image_list(image_name, image_url)
+                            self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + 'news/'
@@ -394,6 +420,32 @@ class KendeshiDownload(Winter2022AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+
+        pages = ['bluray_shop', 'bluray_camp', 'bluray', 'bluray01', 'bluray02', 'bluray03']
+        for i in range(len(pages)):
+            if i > 2 and pages[i] in processed:
+                continue
+            page_url = f'{self.PAGE_PREFIX}{pages[i]}.html'
+            try:
+                soup = self.get_soup(page_url)
+                images = soup.select('#bluray img')
+                self.image_list = []
+                for image in images:
+                    if image.has_attr('src') and 'nowprinting' not in image['src']:
+                        image_url = self.PAGE_PREFIX + image['src']
+                        image_name = self.extract_image_name_from_url(image_url)
+                        self.add_to_image_list(image_name, image_url)
+                if i > 2 and len(self.image_list) > 0:
+                    processed.append(pages[i])
+                self.download_image_list(folder)
+            except Exception as e:
+                self.print_exception(e, f'Blu-ray: {page_url}')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Leadale no Daichi nite
