@@ -3,6 +3,7 @@ import anime.constants as constants
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsTemplate3
 from datetime import datetime, timedelta
 from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
+from requests.exceptions import HTTPError
 
 
 # Blue Period https://blue-period.jp/ #ブルーピリオド @blueperiod_PR
@@ -425,6 +426,8 @@ class KomisanDownload(Fall2021AnimeDownload, NewsTemplate):
                     image_name = episode + '_' + str(num)
                     self.add_to_image_list(image_name, image_url)
                 self.download_image_list(self.base_folder)
+        except HTTPError as e:
+            self.print_exception(e, message=None, print_traceback=False)
         except Exception as e:
             self.print_exception(e)
 

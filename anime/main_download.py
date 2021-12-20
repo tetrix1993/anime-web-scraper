@@ -9,6 +9,7 @@ from bs4 import BeautifulSoup as bs
 from search import *
 import shutil
 import time
+import traceback
 import portalocker
 from PIL import Image
 
@@ -987,11 +988,13 @@ class MainDownload:
                         f.write(';')
                     f.write(processed_items[i])
 
-    def print_exception(self, ex, message=None):
+    def print_exception(self, ex, message=None, print_traceback=True):
         output = f"Error in running {self.__class__.__name__}"
         if message is not None and len(message) > 0:
             output += f' - {message}'
         print(f'{output}: {ex}')
+        if print_traceback:
+            traceback.print_exc()
 
     # Match filter
     def match(self, s_filter):
