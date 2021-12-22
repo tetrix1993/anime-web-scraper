@@ -1732,7 +1732,7 @@ class TsukiLaikaNosferatuDownload(Fall2021AnimeDownload, NewsTemplate):
                             for image in images:
                                 if image.has_attr('src') and len(image['src']) > 0\
                                         and 'nowprinting' not in image['src']:
-                                    image_url = image['src']
+                                    image_url = image['src'].replace('-scaled.jpg', '.jpg')
                                     image_name = self.extract_image_name_from_url(image_url)
                                     self.add_to_image_list(image_name, image_url)
                             if len(self.image_list) > 0:
