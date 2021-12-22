@@ -577,9 +577,38 @@ class MuvLuvAlternativeDownload(Fall2021AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index', diff=2)
+        api45_url = self.PAGE_PREFIX + 'php/avex/api.php?mode=45'
+        api46_prefix = self.PAGE_PREFIX + 'php/avex/api.php?mode=46&id='
+        try:
+            json_obj = self.get_json(api45_url)
+            if 'item' in json_obj and isinstance(json_obj['item'], list):
+                for item in reversed(json_obj['item']):
+                    if 'id' in item and 'title' in item:
+                        id_ = item['id']
+                        if len(id_) == 0:
+                            continue
+                        try:
+                            episode = str(int(item['title'])).zfill(2)
+                        except:
+                            continue
+                        if self.is_image_exists(episode + '_1'):
+                            continue
+                        try:
+                            ep_obj = self.get_json(api46_prefix + str(id_))
+                        except:
+                            continue
+                        if 'item' in ep_obj and 'contents' in ep_obj['item']:
+                            contents = ep_obj['item']['contents']
+                            split1 = contents.split('"')
+                            if len(split1) > 2:
+                                image_url = split1[-2]
+                                image_name = episode + '_1'
+                                self.download_image(image_url, self.base_folder + '/' + image_name)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + 'news/'
@@ -619,6 +648,21 @@ class MuvLuvAlternativeDownload(Fall2021AnimeDownload, NewsTemplate):
         except Exception as e:
             self.print_exception(e, 'Character')
         self.download_image_list(folder)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'product/detail.php?id=1018616')
+            images = soup.select('article.c-style_product img')
+            self.image_list = []
+            for image in images:
+                if image.has_attr('src'):
+                    image_url = image['src']
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
 
 # Ousama Ranking
