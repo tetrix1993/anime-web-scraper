@@ -5,6 +5,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Aharen-san wa Hakarenai https://aharen-pr.com/ #阿波連さん @aharen_pr
 # Honzuki S3 http://booklove-anime.jp/story/ #本好きの下剋上 @anime_booklove
 # Kawaii dake ja Nai Shikimori-san https://shikimori-anime.com/ #式守さん @anime_shikimori
+# Machikado Mazoku: 2-choume http://www.tbs.co.jp/anime/machikado/ #まちカドまぞく #MachikadoMazoku @machikado_staff
 # Mahoutsukai Reimeiki https://www.tbs.co.jp/anime/reimeiki/ #魔法使い黎明期 @reimeiki_pr
 # Otome Game Sekai wa Mob ni Kibishii Sekai desu https://mobseka.com/ #モブせか #mobseka @mobseka_anime
 # Shijou Saikyou no Daimaou, Murabito A ni Tensei suru https://murabito-a-anime.com/ #村人Aに転生 @murabitoA_anime
@@ -232,6 +233,37 @@ class ShikimorisanDownload(Spring2022AnimeDownload, NewsTemplate2):
         self.image_list = []
         self.add_to_image_list('shikimori', self.PAGE_PREFIX + 'core_sys/images/main/cont/chara/shikimori.jpg')
         self.add_to_image_list('izumi', self.PAGE_PREFIX + 'core_sys/images/main/cont/chara/izumi.jpg')
+        self.download_image_list(folder)
+
+
+# Machikado Mazoku: 2-choume
+class MachikadoMazoku2Download(Spring2022AnimeDownload, NewsTemplate):
+    title = 'Machikado Mazoku: 2-choume'
+    keywords = ["Machikado Mazoku", "The Demon Girl Next Door", "2nd"]
+    website = 'http://www.tbs.co.jp/anime/machikado/'
+    twitter = 'machikado_staff'
+    hashtags = ['まちカドまぞく', 'MachikadoMazoku']
+    folder_name = 'machikado-mazoku2'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='ul.newslist li',
+                                    date_select='time', title_select='p', id_select='a',
+                                    a_tag_prefix=self.PAGE_PREFIX + 'news/')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/E__DujoVcAktN1i?format=jpg&name=large')
+        self.add_to_image_list('tz', self.PAGE_PREFIX + 'img/machikado_top_pc@2x.jpg')
         self.download_image_list(folder)
 
 

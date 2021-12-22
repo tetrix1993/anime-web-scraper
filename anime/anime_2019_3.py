@@ -441,7 +441,7 @@ class MachikadoMazokuDownload(Summer2019AnimeDownload):
     keywords = ["Machikado Mazoku", "The Demon Girl Next Door"]
     folder_name = 'machikado-mazoku'
 
-    PAGE_PREFIX = "http://www.tbs.co.jp/anime/machikado/story/"
+    PAGE_PREFIX = "http://www.tbs.co.jp/anime/machikado/1st/story/"
     # PAGE_SUFFIX = ".html"
     # IMAGE_PREFIX = "http://www.tbs.co.jp/anime/machikado/story/"
     # FINAL_EPISODE = 13
