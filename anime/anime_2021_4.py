@@ -738,8 +738,10 @@ class OsamaRankingDownload(Fall2021AnimeDownload, NewsTemplate):
         folder = self.create_key_visual_directory()
         self.image_list = []
         self.add_to_image_list('img_kv', self.PAGE_PREFIX + 'assets/img/top/img_kv.jpg')
-        self.add_to_image_list('img_kv_2', self.PAGE_PREFIX + 'assets/img/top/img_kv_2.jpg')
         self.download_image_list(folder)
+
+        template = self.PAGE_PREFIX + 'assets/img/top/img_kv_%s.jpg'
+        self.download_by_template(folder, template, 1, 2)
 
     def download_character(self):
         folder = self.create_character_directory()
