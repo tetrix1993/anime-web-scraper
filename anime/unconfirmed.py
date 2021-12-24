@@ -399,7 +399,7 @@ class GoblinSlayer2Download(UnconfirmedDownload):
 
 
 # Isekai Ojisan
-class IsekaiOjisanDownload(UnconfirmedDownload):
+class IsekaiOjisanDownload(UnconfirmedDownload, NewsTemplate2):
     title = 'Isekai Ojisan'
     keywords = [title, 'Ojisan In Another World']
     website = 'https://isekaiojisan.com/'
@@ -414,10 +414,15 @@ class IsekaiOjisanDownload(UnconfirmedDownload):
 
     def run(self):
         self.download_episode_preview()
+        self.download_news()
         self.download_key_visual()
+        self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(self.PAGE_PREFIX)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -426,6 +431,24 @@ class IsekaiOjisanDownload(UnconfirmedDownload):
         self.add_to_image_list('tz_kv2', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv2.png')
         self.add_to_image_list('tz_kv_', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv.jpg')
         self.download_image_list(folder)
+
+        template = self.PAGE_PREFIX + 'core_sys/images/main/tz/kv%s.jpg'
+        self.download_by_template(folder, template, 1, 4, prefix='tz_')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('ul.charaList div.img img')
+            self.image_list = []
+            for image in images:
+                if image.has_attr('src'):
+                    image_url = self.PAGE_PREFIX + image['src']
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
 
 
 # Isekai Yakkyoku
