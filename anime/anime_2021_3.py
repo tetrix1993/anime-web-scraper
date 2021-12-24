@@ -554,6 +554,7 @@ class GenkokuDownload(Summer2021AnimeDownload, NewsTemplate):
         self.download_media()
 
     def download_episode_preview(self):
+        self.download_episode_preview_first_cour()
         try:
             story_url = self.PAGE_PREFIX + 'story/'
             soup = self.get_soup(story_url)
@@ -579,8 +580,26 @@ class GenkokuDownload(Summer2021AnimeDownload, NewsTemplate):
                             self.add_to_image_list(image_name, image_url)
                         self.download_image_list(self.base_folder)
         except Exception as e:
-            print("Error in running " + self.__class__.__name__)
-            print(e)
+            self.print_exception(e)
+
+    def download_episode_preview_first_cour(self):
+        story_url = self.PAGE_PREFIX + 'story/'
+        for i in range(13):
+            episode = str(i + 1).zfill(2)
+            if not self.is_image_exists(episode + '_1'):
+                episode_url = story_url + episode + '.html'
+                try:
+                    soup = self.get_soup(episode_url)
+                    if soup:
+                        images = soup.select('div.swiper-container.slider img')
+                        self.image_list = []
+                        for i in range(len(images)):
+                            image_url = self.PAGE_PREFIX + images[i]['src'].replace('../', '')
+                            image_name = episode + '_' + str(i + 1)
+                            self.add_to_image_list(image_name, image_url)
+                        self.download_image_list(self.base_folder)
+                except Exception as e:
+                    self.print_exception(e, 'Preview 1st Cour')
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='div.list li.info', date_select='time',
@@ -626,8 +645,7 @@ class GenkokuDownload(Summer2021AnimeDownload, NewsTemplate):
                     self.add_to_image_list(img_face_name, chara_img_face_template % name)
             self.download_image_list(folder)
         except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - Character')
-            print(e)
+            self.print_exception(e, 'Character')
 
     def download_media(self):
         folder = self.create_media_directory()
@@ -646,8 +664,7 @@ class GenkokuDownload(Summer2021AnimeDownload, NewsTemplate):
                 self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)
         except Exception as e:
-            print("Error in running " + self.__class__.__name__ + ' - Character')
-            print(e)
+            self.print_exception(e, 'Blu-ray')
 
 
 # Higurashi no Naku Koro ni Sotsu
