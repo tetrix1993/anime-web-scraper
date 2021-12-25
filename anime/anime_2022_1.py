@@ -977,6 +977,7 @@ class KisekoiDownload(Winter2022AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
@@ -1006,6 +1007,44 @@ class KisekoiDownload(Winter2022AnimeDownload, NewsTemplate):
 
         template = self.PAGE_PREFIX + 'assets/img/character/chara_%s.png'
         self.download_by_template(folder, template, 1, 1)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+
+        # Special Pages
+        special_filepath = folder + '/special'
+        processed, num_processed = self.get_processed_items_from_cache_file(special_filepath)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'special/', decode=True)
+            items = soup.select('li.p-special__list-item')
+            for item in items:
+                title = item.select('div.p-in-title')
+                if len(title) == 0:
+                    continue
+                if '壁紙' in title[0].text:
+                    a_tag = item.find('a')
+                    if a_tag is not None and a_tag.has_attr('href'):
+                        href = a_tag['href']
+                        if len(href) > 2 and href.startswith('/') and href.endswith('/'):
+                            page_name = href[1:-1]
+                            if page_name in processed:
+                                continue
+                            page_url = self.PAGE_PREFIX + page_name
+                            page_soup = self.get_soup(page_url)
+                            if page_soup is not None:
+                                images = page_soup.select('figure img')
+                                self.image_list = []
+                                for image in images:
+                                    if image.has_attr('src'):
+                                        image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                                        image_name = f'{page_name}_' + self.extract_image_name_from_url(image_url)
+                                        self.add_to_image_list(image_name, image_url)
+                                if len(self.image_list) > 0:
+                                    processed.append(page_name)
+                                self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Media')
+        self.create_cache_file(special_filepath, processed, num_processed)
 
 
 # Tensai Ouji no Akaji Kokka Saisei Jutsu: Souda, Baikoku shiyou
