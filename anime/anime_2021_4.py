@@ -241,8 +241,12 @@ class DenchiShoujoDownload(Fall2021AnimeDownload, NewsTemplate):
             for image in images:
                 if image.has_attr('src') and not image['src'].endswith('np.png'):
                     image_url = self.PAGE_PREFIX + image['src'].replace('./', '')
-                    image_name = self.extract_image_name_from_url(image_url)
-                    self.add_to_image_list(image_name, image_url)
+                    # image_name = self.extract_image_name_from_url(image_url)
+                    name_split = image_url.split('/')
+                    if len(name_split) > 2 and '.' in name_split[-1]:
+                        name_prefix = name_split[-2]
+                        image_name = name_prefix + '_' + name_split[-1].split('.')[0]
+                        self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Blu-ray')
