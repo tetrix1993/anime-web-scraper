@@ -232,7 +232,9 @@ class ShikimorisanDownload(Spring2022AnimeDownload, NewsTemplate2):
         folder = self.create_character_directory()
         self.image_list = []
         self.add_to_image_list('shikimori', self.PAGE_PREFIX + 'core_sys/images/main/cont/chara/shikimori.jpg')
+        self.add_to_image_list('shikimori_face', self.PAGE_PREFIX + 'core_sys/images/main/cont/chara/shikimori_face.jpg')
         self.add_to_image_list('izumi', self.PAGE_PREFIX + 'core_sys/images/main/cont/chara/izumi.jpg')
+        self.add_to_image_list('izumi_face', self.PAGE_PREFIX + 'core_sys/images/main/cont/chara/izumi_face.jpg')
         self.download_image_list(folder)
 
 
