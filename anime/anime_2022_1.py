@@ -423,6 +423,11 @@ class KendeshiDownload(Winter2022AnimeDownload, NewsTemplate):
 
     def download_media(self):
         folder = self.create_media_directory()
+        self.image_list = []
+        self.add_to_image_list('music_op', 'https://pbs.twimg.com/media/FGzLrAkagAUwPew?format=jpg&name=4096x4096')
+        self.add_to_image_list('music_ed', self.PAGE_PREFIX + '_image/music_cd05.jpg')
+        self.download_image_list(folder)
+
         cache_filepath = folder + '/cache'
         processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
 
