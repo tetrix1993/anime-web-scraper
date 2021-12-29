@@ -472,9 +472,23 @@ class LeadaleDownload(Winter2022AnimeDownload, NewsTemplate3):
         self.download_news()
         self.download_character()
         self.download_key_visual()
+        self.download_media()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        template = self.PAGE_PREFIX + 'assets/story/%s_%s.jpg'
+        try:
+            for i in range(12):
+                episode = str(i + 1).zfill(2)
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                for j in range(8):
+                    image_url = template % (str(i + 1), str(j + 1))
+                    image_name = episode + '_' + str(j + 1)
+                    result = self.download_image(image_url, self.base_folder + '/' + image_name)
+                    if result == -1:
+                        return
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(self.PAGE_PREFIX)
@@ -502,6 +516,21 @@ class LeadaleDownload(Winter2022AnimeDownload, NewsTemplate3):
         template2 = self.PAGE_PREFIX + 'assets/special/vis/%s.jpg'
         self.download_by_template(folder, template, 1, 1)
         self.download_by_template(folder, template2, 1, 1, prefix='kv_s')
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'bddvd.html')
+            images = soup.select('#BdData img:not(h3 img)')
+            self.image_list = []
+            for image in images:
+                if image.has_attr('src') and not image['src'].endswith('np.png') and image['src'].startswith('./'):
+                    image_url = self.PAGE_PREFIX + image['src'][2:].split('?')[0]
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
 
 # Mahouka Koukou no Rettousei: Tsuioku-hen
