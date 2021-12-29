@@ -228,6 +228,9 @@ class ShikimorisanDownload(Spring2022AnimeDownload, NewsTemplate2):
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FAiftmBVIAASbjk?format=jpg&name=large')
         self.download_image_list(folder)
 
+        template = self.PAGE_PREFIX + 'core_sys/images/main/home/kv%s.jpg'
+        self.download_by_template(folder, template, 1, 2)
+
     def download_character(self):
         folder = self.create_character_directory()
         self.image_list = []
