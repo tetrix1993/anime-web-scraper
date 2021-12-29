@@ -568,6 +568,7 @@ class KagenoJitsuryokushaDownload(UnconfirmedDownload, NewsTemplate):
         self.download_episode_preview()
         self.download_news()
         self.download_key_visual()
+        self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
@@ -582,6 +583,11 @@ class KagenoJitsuryokushaDownload(UnconfirmedDownload, NewsTemplate):
         self.image_list = []
         self.add_to_image_list('tz', self.PAGE_PREFIX + 'news/img/20211027_03_1.jpg')
         self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        prefix = self.PAGE_PREFIX + 'assets/img/top/character/chara'
+        self.download_by_template(folder, [prefix + '%s_main1.png', prefix + '%s_main2.png'], 2, 1)
 
 
 # Kakkou no Iinazuke
