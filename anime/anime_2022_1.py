@@ -479,7 +479,7 @@ class LeadaleDownload(Winter2022AnimeDownload, NewsTemplate3):
         try:
             for i in range(12):
                 episode = str(i + 1).zfill(2)
-                if self.is_image_exists(episode + '_1'):
+                if self.is_image_exists(episode + '_8'):
                     continue
                 for j in range(8):
                     image_url = template % (str(i + 1), str(j + 1))
@@ -1101,6 +1101,14 @@ class KisekoiDownload(Winter2022AnimeDownload, NewsTemplate):
         except Exception as e:
             self.print_exception(e, 'Media')
         self.create_cache_file(special_filepath, processed, num_processed)
+
+        # Audio
+        audio_template = 'https://bisquedoll-self-restraint-check.com/assets/audio/voice_%s.wav'
+        for i in range(6):
+            num = str(i).zfill(2)
+            audio_url = audio_template % num
+            audio_name = 'voice_' + num
+            self.download_content(audio_url, f'{folder}/{audio_name}.wav')
 
 
 # Tensai Ouji no Akaji Kokka Saisei Jutsu: Souda, Baikoku shiyou
