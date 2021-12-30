@@ -9,12 +9,10 @@ def run():
     if not os.path.exists(constants.FOLDER_OUTPUT):
         os.makedirs(constants.FOLDER_OUTPUT)
 
-    downloads = [EightySixDownload(), MushokuTenseiDownload(), AquatopeDownload(), GenkokuDownload(),
-                 HigurashiSotsuDownload(), JahysamaDownload(), MahoukaYuutouseiDownload(),
-                 KobayashiMaidDragon2Download(), MegamiryouDownload(), MeikyuBCDownload(), ShinigamiBocchanDownload(),
-                 TsukimichiDownload()]
-    subclasses = Fall2021AnimeDownload.__subclasses__() \
-        + Winter2022AnimeDownload.__subclasses__() \
+    downloads = [EightySixDownload(), GenkokuDownload(), HigurashiSotsuDownload(), JahysamaDownload(),
+                 MahoukaYuutouseiDownload(), AnsatsuKizokuDownload(), MierukochanDownload(), OsamaRankingDownload(),
+                 PlatinumEndDownload(), ShinnoNakamaDownload(), TaktOpDestinyDownload()]
+    subclasses = Winter2022AnimeDownload.__subclasses__() \
         + Spring2022AnimeDownload.__subclasses__() \
         + Summer2022AnimeDownload.__subclasses__() \
         + UnconfirmedDownload.__subclasses__()
