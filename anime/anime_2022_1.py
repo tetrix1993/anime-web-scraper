@@ -188,6 +188,7 @@ class HakozumeDownload(Winter2022AnimeDownload, NewsTemplate3):
     folder_name = 'hakozume'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
 
     def __init__(self):
         super().__init__()
@@ -195,11 +196,30 @@ class HakozumeDownload(Winter2022AnimeDownload, NewsTemplate3):
     def run(self):
         self.download_episode_preview()
         self.download_news()
+        self.download_episode_preview_external()
         self.download_key_visual()
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        template = self.PAGE_PREFIX + 'assets/story/%s_%s.jpg'
+        try:
+            for i in range(self.FINAL_EPISODE):
+                episode = str(i + 1).zfill(2)
+                if self.is_image_exists(episode + '_6'):
+                    continue
+                for j in range(8):
+                    image_url = template % (str(i + 1), str(j + 1))
+                    image_name = episode + '_' + str(j + 1)
+                    result = self.download_image(image_url, self.base_folder + '/' + image_name)
+                    if result == -1:
+                        return
+        except Exception as e:
+            self.print_exception(e)
+
+    def download_episode_preview_external(self):
+        jp_title = 'ハコヅメ～交番女子の逆襲～'
+        AniverseMagazineScanner(jp_title, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                end_date='20211231', download_id=self.download_id).run()
 
     def download_news(self):
         self.download_template_news(self.PAGE_PREFIX)
@@ -463,6 +483,7 @@ class LeadaleDownload(Winter2022AnimeDownload, NewsTemplate3):
     folder_name = 'leadale'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
 
     def __init__(self):
         super().__init__()
@@ -477,7 +498,7 @@ class LeadaleDownload(Winter2022AnimeDownload, NewsTemplate3):
     def download_episode_preview(self):
         template = self.PAGE_PREFIX + 'assets/story/%s_%s.jpg'
         try:
-            for i in range(12):
+            for i in range(self.FINAL_EPISODE):
                 episode = str(i + 1).zfill(2)
                 if self.is_image_exists(episode + '_8'):
                     continue
