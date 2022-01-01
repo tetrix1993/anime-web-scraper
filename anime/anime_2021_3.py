@@ -618,6 +618,8 @@ class GenkokuDownload(Summer2021AnimeDownload, NewsTemplate):
         self.add_to_image_list('mainimg_autumn', self.PAGE_PREFIX + 'images/top/mainimg_autumn.jpg')
         self.add_to_image_list('mainimg_autumn_tw', 'https://pbs.twimg.com/media/E-SLdbeVEAcNpu8?format=jpg&name=large')
         self.add_to_image_list('part2_tz', 'https://pbs.twimg.com/media/FAJVqp2VUAMbWrC?format=jpg&name=large')
+        self.add_to_image_list('mainimg_winter', self.PAGE_PREFIX + 'images/top/mainimg_winter.jpg')
+        self.add_to_image_list('mainimg_winter_tw', 'https://pbs.twimg.com/media/FH02eCnaAAEAvks?format=jpg&name=4096x4096')
         self.download_image_list(folder)
 
         template = self.PAGE_PREFIX + 'images/top/mainimg%s.jpg'

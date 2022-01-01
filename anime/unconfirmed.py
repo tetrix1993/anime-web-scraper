@@ -627,6 +627,11 @@ class KakkounoIinazukeDownload(UnconfirmedDownload, NewsTemplate3):
             if result == -1:
                 break
 
+        self.image_list = []
+        # self.add_to_image_list('2022-nenga', self.PAGE_PREFIX + 'assets/top/2022-nenga.jpg')
+        self.add_to_image_list('2022-nenga_tw', 'https://pbs.twimg.com/media/FH4LR7HaAAAg0u2?format=jpg&name=4096x4096')
+        self.download_image_list(folder)
+
     def download_character(self):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'assets/top/character/c%s.png'
