@@ -1844,6 +1844,8 @@ class Slime300Download(Spring2021AnimeDownload):
             for node in nodes:
                 try:
                     date = node['date']
+                    if date >= '2022.01.04':
+                        continue
                     title = node['title']
                     article_id = self.PAGE_PREFIX + '/news/' + node['slug']
                     if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):

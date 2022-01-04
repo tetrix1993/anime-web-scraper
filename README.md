@@ -103,6 +103,7 @@ The premiere date for the anime listed here has not been announced.
 * [RPG Fudousan](https://rpg-rs.jp/)
 * [Shachiku-san wa Youjo Yuurei ni Iyasaretai.](https://shachikusan.com/)
 * [Shokei Shoujo no Virgin Road](http://virgin-road.com/)
+* [Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita 2nd Season](https://slime300-anime.com/)
 * [Tensei Kenja no Isekai Life: Dai-2 no Shokugyou wo Ete, Sekai Saikyou ni Narimashita](https://tenseikenja.com/)
 * [Tonikaku Kawaii 2nd Season](http://tonikawa.com/)
 * [Yama no Susume: Next Summit](https://yamanosusume-ns.com/)

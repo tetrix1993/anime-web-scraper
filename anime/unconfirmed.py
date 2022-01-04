@@ -24,6 +24,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # RPG Fudousan https://rpg-rs.jp/ #RPG不動産 @rpgrs_anime
 # Shachiku-san wa Youjo Yuurei ni Iyasaretai. https://shachikusan.com/ #しゃちされたい @shachisaretai
 # Shokei Shoujo no Virgin Road http://virgin-road.com/ #処刑少女 #shokei_anime @VirginroadAnime
+# Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita 2nd Season https://slime300-anime.com/ #スライム倒して300年 @slime300_PR
 # Tensei Kenja no Isekai Life: Dai-2 no Shokugyou wo Ete, Sekai Saikyou ni Narimashita https://tenseikenja.com #転生賢者 @tenseikenja_PR
 # Tonikaku Kawaii S2 http://tonikawa.com/ #トニカクカワイイ #tonikawa @tonikawa_anime
 # Vlad Love https://www.vladlove.com/index.html #ぶらどらぶ #vladlove @VLADLOVE_ANIME
@@ -1112,6 +1113,65 @@ class ShokeiShoujoDownload(UnconfirmedDownload):
         template1 = self.PAGE_PREFIX + 'core_sys/images/main/tz/char_%s.png'
         template2 = self.PAGE_PREFIX + 'core_sys/images/main/tz/char_%sface.png'
         self.download_by_template(folder, [template1, template2], 1, 1, prefix='tz_')
+
+
+# Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita 2nd Season
+class Slime3002Download(UnconfirmedDownload, NewsTemplate):
+    title = "Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita 2nd Season"
+    keywords = [title, "I've Been Killing Slimes for 300 Years and Maxed Out My Level", "Slime 300", "slime300", '2nd']
+    website = 'https://slime300-anime.com'
+    twitter = 'slime300_PR'
+    hashtags = 'スライム倒して300年'
+    folder_name = 'slime300-2'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        pass
+
+    def download_news(self):
+        json_url = self.PAGE_PREFIX + '/page-data/news/page-data.json'
+        news_obj = self.get_last_news_log_object()
+        try:
+            json_obj = self.get_json(json_url)
+            results = []
+            nodes = json_obj['result']['data']['allContentfulNews']['nodes']
+            for node in nodes:
+                try:
+                    date = node['date']
+                    if date < '2022.01.04':
+                        continue
+                    title = node['title']
+                    article_id = self.PAGE_PREFIX + '/news/' + node['slug']
+                    if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
+                        break
+                    results.append(self.create_news_log_object(date, title, article_id))
+                except:
+                    continue
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log_from_news_log_object(result)
+                if process_result == 0:
+                    success_count += 1
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - News")
+            print(e)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('announce', self.PAGE_PREFIX + '/static/944a17585cc6d3dccaf125c0201aab71/99383/promo.png')
+        self.download_image_list(folder)
 
 
 # Tensei Kenja no Isekai Life: Dai-2 no Shokugyou wo Ete, Sekai Saikyou ni Narimashita
