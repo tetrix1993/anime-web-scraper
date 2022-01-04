@@ -20,6 +20,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Kyokou Suiri S2 https://kyokousuiri.jp/ #虚構推理 @kyokou_suiri
 # Maou Gakuin no Futekigousha 2nd Season https://maohgakuin.com/ #魔王学院 @maohgakuin
 # Mato Seihei no Slave https://mabotai.jp/ #魔都精兵のスレイブ #まとスレ @mabotai_kohobu
+# Otonari no Tenshi-sama ni Itsunomanika Dame Ningen ni Sareteita Ken https://otonarino-tenshisama.jp/ #お隣の天使様 @tenshisama_PR
 # RPG Fudousan https://rpg-rs.jp/ #RPG不動産 @rpgrs_anime
 # Shachiku-san wa Youjo Yuurei ni Iyasaretai. https://shachikusan.com/ #しゃちされたい @shachisaretai
 # Shokei Shoujo no Virgin Road http://virgin-road.com/ #処刑少女 #shokei_anime @VirginroadAnime
@@ -949,6 +950,41 @@ class MatoSlaveDownload(UnconfirmedDownload, NewsTemplate):
             result = self.download_image(image_url, f'{folder}/{image_name}')
             if result == -1:
                 break
+
+
+# Otonari no Tenshi-sama ni Itsunomanika Dame Ningen ni Sareteita Ken
+class OtonarinoTenshisamaDownload(UnconfirmedDownload, NewsTemplate):
+    title = 'Otonari no Tenshi-sama ni Itsunomanika Dame Ningen ni Sareteita Ken'
+    keywords = [title, 'The Angel Next Door Spoils Me Rotten']
+    website = 'https://otonarino-tenshisama.jp/'
+    twitter = 'tenshisama_PR'
+    hashtags = 'お隣の天使様'
+    folder_name = 'otonarino-tenshisama'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        # self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.allNews__item',
+                                    title_select='.allNews__title', date_select='allNews__date',
+                                    id_select='a')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FIQhzRlagAAxK-X?format=jpg&name=large')
+        self.add_to_image_list('tz', self.PAGE_PREFIX + 'wordpress/wp-content/themes/otonari/images/mainvisual.jpg')
+        self.download_image_list(folder)
 
 
 # RPG Fudousan
