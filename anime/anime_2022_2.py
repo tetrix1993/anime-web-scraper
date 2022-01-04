@@ -9,6 +9,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Mahoutsukai Reimeiki https://www.tbs.co.jp/anime/reimeiki/ #魔法使い黎明期 @reimeiki_pr
 # Otome Game Sekai wa Mob ni Kibishii Sekai desu https://mobseka.com/ #モブせか #mobseka @mobseka_anime
 # Shijou Saikyou no Daimaou, Murabito A ni Tensei suru https://murabito-a-anime.com/ #村人Aに転生 @murabitoA_anime
+# Shokei Shoujo no Virgin Road http://virgin-road.com/ #処刑少女 #shokei_anime @VirginroadAnime
 # Spy x Family https://spy-family.net/ #SPY_FAMILY #スパイファミリー @spyfamily_anime
 # Summertime Render https://summertime-anime.com/ #サマータイムレンダ #サマレン @summertime_PR
 # Tate no Yuusha S2 http://shieldhero-anime.jp/ #shieldhero #盾の勇者の成り上がり @shieldheroanime
@@ -395,6 +396,87 @@ class MurabitoADownload(Spring2022AnimeDownload, NewsTemplate):
         prefix = self.PAGE_PREFIX + 'assets/img/character/character%s_'
         templates = [prefix + 'main.png', prefix + 'face1.jpg', prefix + 'face2.jpg', prefix + 'thumb.jpg']
         self.download_by_template(folder, templates, 1, 1)
+
+
+# Shokei Shoujo no Virgin Road
+class ShokeiShoujoDownload(Spring2022AnimeDownload, NewsTemplate):
+    title = 'Shokei Shoujo no Virgin Road'
+    keywords = [title, 'The Executioner and Her Way of Life']
+    website = 'http://virgin-road.com/'
+    twitter = 'VirginroadAnime'
+    hashtags = ['shokei_anime', '処刑少女']
+    folder_name = 'shokeishoujo'
+
+    PAGE_PREFIX = website
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        # Paging logic need update
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='#list_07 dd',
+                                    title_select='.title', date_select='.day', id_select='a', date_separator='/',
+                                    a_tag_replace_from='../', a_tag_replace_to=self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('teaser', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv.png')
+        self.add_to_image_list('teaser_tw', 'https://pbs.twimg.com/media/EtDn9lYU0AAKje-?format=jpg&name=4096x4096')
+        self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/E6Ur9dWVIAEE3Ee?format=jpg&name=4096x4096')
+        self.add_to_image_list('main_kv', 'https://pbs.twimg.com/media/FIP1l-HaMEAKxOE?format=jpg&name=4096x4096')
+        self.download_image_list(folder)
+
+        kv_template = self.PAGE_PREFIX + 'core_sys/images/main/tz/kv%s'
+        kv_template1 = kv_template + '.jpg'
+        kv_template2 = kv_template + '.png'
+        self.download_by_template(folder, [kv_template1, kv_template2], 1, 1)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template1 = self.PAGE_PREFIX + 'core_sys/images/main/tz/char_%s.png'
+        template2 = self.PAGE_PREFIX + 'core_sys/images/main/tz/char_%sface.png'
+        self.download_by_template(folder, [template1, template2], 1, 1, prefix='tz_')
+
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'chara/')
+            a_tags = soup.select('#ContentsListUnit01 a')
+            for a_tag in a_tags:
+                if a_tag.has_attr('href'):
+                    get_chara_soup = False
+                    if a_tag['href'].endswith('.html'):
+                        chara_name = a_tag['href'].split('/')[-1][:-5]
+                        get_chara_soup = True
+                    else:
+                        chara_name = 'menou'
+                    if chara_name in processed:
+                        continue
+                    if get_chara_soup:
+                        chara_soup = self.get_soup(self.PAGE_PREFIX + a_tag['href'].replace('../', ''))
+                    else:
+                        chara_soup = soup
+                    if chara_soup is not None:
+                        images = chara_soup.select('.charWrap img')
+                        self.image_list = []
+                        for image in images:
+                            if image.has_attr('src'):
+                                image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                                image_name = self.extract_image_name_from_url(image_url)
+                                self.add_to_image_list(image_name, image_url)
+                        if len(self.image_list) > 0:
+                            processed.append(chara_name)
+                        self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Spy x Family

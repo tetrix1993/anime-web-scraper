@@ -23,7 +23,6 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Otonari no Tenshi-sama ni Itsunomanika Dame Ningen ni Sareteita Ken https://otonarino-tenshisama.jp/ #お隣の天使様 @tenshisama_PR
 # RPG Fudousan https://rpg-rs.jp/ #RPG不動産 @rpgrs_anime
 # Shachiku-san wa Youjo Yuurei ni Iyasaretai. https://shachikusan.com/ #しゃちされたい @shachisaretai
-# Shokei Shoujo no Virgin Road http://virgin-road.com/ #処刑少女 #shokei_anime @VirginroadAnime
 # Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita 2nd Season https://slime300-anime.com/ #スライム倒して300年 @slime300_PR
 # Tensei Kenja no Isekai Life: Dai-2 no Shokugyou wo Ete, Sekai Saikyou ni Narimashita https://tenseikenja.com #転生賢者 @tenseikenja_PR
 # Tonikaku Kawaii S2 http://tonikawa.com/ #トニカクカワイイ #tonikawa @tonikawa_anime
@@ -1074,45 +1073,6 @@ class ShachisaretaiDownload(UnconfirmedDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
-
-
-# Shokei Shoujo no Virgin Road
-class ShokeiShoujoDownload(UnconfirmedDownload):
-    title = 'Shokei Shoujo no Virgin Road'
-    keywords = [title]
-    website = 'http://virgin-road.com/'
-    twitter = 'VirginroadAnime'
-    hashtags = ['shokei_anime', '処刑少女']
-    folder_name = 'shokeishoujo'
-
-    PAGE_PREFIX = website
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_key_visual()
-        self.download_character()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('teaser', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv.png')
-        self.add_to_image_list('teaser_tw', 'https://pbs.twimg.com/media/EtDn9lYU0AAKje-?format=jpg&name=4096x4096')
-        self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/E6Ur9dWVIAEE3Ee?format=jpg&name=4096x4096')
-        self.download_image_list(folder)
-
-        kv_template = self.PAGE_PREFIX + 'core_sys/images/main/tz/kv%s'
-        kv_template1 = kv_template + '.jpg'
-        kv_template2 = kv_template + '.png'
-        self.download_by_template(folder, [kv_template1, kv_template2], 1, 1)
-
-    def download_character(self):
-        folder = self.create_character_directory()
-        template1 = self.PAGE_PREFIX + 'core_sys/images/main/tz/char_%s.png'
-        template2 = self.PAGE_PREFIX + 'core_sys/images/main/tz/char_%sface.png'
-        self.download_by_template(folder, [template1, template2], 1, 1, prefix='tz_')
 
 
 # Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita 2nd Season
