@@ -454,9 +454,10 @@ class ShokeiShoujoDownload(Spring2022AnimeDownload, NewsTemplate):
                     get_chara_soup = False
                     if a_tag['href'].endswith('.html'):
                         chara_name = a_tag['href'].split('/')[-1][:-5]
-                        get_chara_soup = True
+                        if chara_name != 'index':
+                            get_chara_soup = True
                     else:
-                        chara_name = 'menou'
+                        chara_name = 'index'
                     if chara_name in processed:
                         continue
                     if get_chara_soup:
