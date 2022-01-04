@@ -1081,7 +1081,7 @@ class ShokeiShoujoDownload(UnconfirmedDownload):
 # Tensei Kenja no Isekai Life: Dai-2 no Shokugyou wo Ete, Sekai Saikyou ni Narimashita
 class TenseiKenjaDownload(UnconfirmedDownload, NewsTemplate):
     title = 'Tensei Kenja no Isekai Life: Dai-2 no Shokugyou wo Ete, Sekai Saikyou ni Narimashita'
-    keywords = [title, 'tenseikenja']
+    keywords = [title, 'tenseikenja', 'My Isekai Life']
     website = 'https://tenseikenja.com/'
     twitter = 'tenseikenja_PR'
     hashtags = '転生賢者'
@@ -1104,8 +1104,22 @@ class TenseiKenjaDownload(UnconfirmedDownload, NewsTemplate):
         folder = self.create_key_visual_directory()
         self.image_list = []
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/E_cSGeTVQAIKvu2?format=jpg&name=medium')
-        self.add_to_image_list('img_kv_teaser', self.PAGE_PREFIX + 'wp/wp-content/themes/tenseikenja/assets/images/common/index/img_kv_teaser.jpg')
+        self.add_to_image_list('kv1_aniverse', 'https://aniverse-mag.com/wp-content/uploads/2022/01/396ee90ad1118539e82a6b4caab11c11.jpg')
+        # self.add_to_image_list('img_kv_teaser', self.PAGE_PREFIX + 'wp/wp-content/themes/tenseikenja/assets/images/common/index/img_kv_teaser.jpg')
         self.download_image_list(folder)
+
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('div.visual-Content img')
+            self.image_list = []
+            for image in images:
+                if image.has_attr('src'):
+                    image_url = image['src'].split('?')[0]
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
 
     def download_character(self):
         folder = self.create_character_directory()
