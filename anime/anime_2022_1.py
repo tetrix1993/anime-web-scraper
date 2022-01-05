@@ -199,6 +199,7 @@ class HakozumeDownload(Winter2022AnimeDownload, NewsTemplate3):
         self.download_episode_preview_external()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         template = self.PAGE_PREFIX + 'assets/story/%s_%s.jpg'
@@ -250,6 +251,25 @@ class HakozumeDownload(Winter2022AnimeDownload, NewsTemplate3):
         prefix = self.PAGE_PREFIX + 'assets/character/'
         templates = [prefix + 'c/%s.png', prefix + 'f/%s.png']
         self.download_by_template(folder, templates, 1, 1, prefix=['c_', 'f_'])
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'bddvd.html')
+            bd_data = soup.select('div.bd-data')
+            for data in bd_data:
+                if data.has_attr('id') and len(data['id']) > 0:
+                    prefix = data['id']
+                    images = data.select('img')
+                    self.image_list = []
+                    for image in images:
+                        if image.has_attr('src') and not image['src'].endswith('np.png'):
+                            image_url = self.PAGE_PREFIX + image['src'][2:]
+                            image_name = prefix + '_' + self.extract_image_name_from_url(image_url)
+                            self.add_to_image_list(image_name, image_url)
+                    self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
 
 # Kaijin Kaihatsubu no Kuroitsu-san
