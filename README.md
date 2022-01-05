@@ -109,6 +109,7 @@ The premiere date for the anime listed here has not been announced.
 
 ### Summer 2022 Anime
 * [Hataraku Maou-sama! 2nd Season](https://maousama.jp/)
+* [Shadows House](https://shadowshouse-anime.com/)
 * [Soredemo Ayumu wa Yosetekuru](https://soreayu.com/)
 * [Utawarerumono: Futari no Hakuoro](https://utawarerumono.jp/)
 
@@ -202,7 +203,7 @@ The premiere date for the anime listed here has not been announced.
 * [Sayonara Watashi no Cramer](https://sayonara-cramer.com/tv/)
 * [Seijo no Maryoku wa Bannou Desu](https://seijyonomaryoku.jp/)
 * [Sentouin, Hakenshimasu!](https://kisaragi-co.jp/)
-* [Shadows House](https://shadowshouse-anime.com/)
+* [Shadows House](https://shadowshouse-anime.com/1st/)
 * [Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita](https://slime300-anime.com/)
 * [SSSS.Dynazenon](https://dynazenon.net/)
 * [Super Cub](https://supercub-anime.com/)

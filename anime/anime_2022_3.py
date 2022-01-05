@@ -3,6 +3,7 @@ from anime.main_download import MainDownload, NewsTemplate
 
 
 # Hataraku Maou-sama!! https://maousama.jp/ #maousama @anime_maousama
+# Shadows House 2nd Season https://shadowshouse-anime.com/
 # Soredemo Ayumu wa Yosetekuru https://soreayu.com/ #それあゆ @soreayu_staff
 # Utawarerumono: Futari no Hakuoro https://utawarerumono.jp/ #うたわれ @UtawareAnime
 
@@ -58,6 +59,36 @@ class HatarakuMaousama2Download(Summer2022AnimeDownload, NewsTemplate):
         template2 = character_prefix + 'character%s_face1.png'
         template3 = character_prefix + 'character%s_face2.png'
         self.download_by_template(folder, [template1, template2, template3], 2, 1)
+
+
+# Shadows House 2nd Season
+class ShadowsHouse2Download(Summer2022AnimeDownload):
+    title = "Shadows House 2nd Season"
+    keywords = [title]
+    website = 'https://shadowshouse-anime.com/'
+    twitter = 'shadowshouse_yj'
+    hashtags = 'シャドーハウス'
+    folder_name = 'shadows-house2'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        # self.add_to_image_list('tz_modal', self.PAGE_PREFIX + 'assets/img/kv_modal.png')
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FIT7cvQaUAUw-RP?format=jpg&name=large')
+        self.add_to_image_list('tz', self.PAGE_PREFIX + 'assets/img/main_00.jpg')
+        self.download_image_list(folder)
 
 
 # Soredemo Ayumu wa Yosetekuru

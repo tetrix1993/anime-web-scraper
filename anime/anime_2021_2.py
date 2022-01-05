@@ -18,7 +18,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner, Na
 # Sayonara Watashi no Cramer https://sayonara-cramer.com/tv/ #さよなら私のクラマー @cramer_pr [FRI]
 # Seijo no Maryoku wa Bannou Desu https://seijyonomaryoku.jp/ #seijyonoanime @seijyonoanime [FRI]
 # Sentouin, Hakenshimasu! https://kisaragi-co.jp/ #sentoin @sentoin_anime [THU]
-# Shadows House https://shadowshouse-anime.com/ #シャドーハウス @shadowshouse_yj [SAT]
+# Shadows House https://shadowshouse-anime.com/1st/ #シャドーハウス @shadowshouse_yj [SAT]
 # Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita https://slime300-anime.com/ #スライム倒して300年 @slime300_PR [THU]
 # SSSS.Dynazenon https://dynazenon.net/ #SSSS_DYNAZENON @SSSS_PROJECT [SUN]
 # Super Cub https://supercub-anime.com/ #スーパーカブ @supercub_anime [FRI]
@@ -1609,7 +1609,7 @@ class SentoinDownload(Spring2021AnimeDownload, NewsTemplate3):
 class ShadowsHouseDownload(Spring2021AnimeDownload, NewsTemplate):
     title = "Shadows House"
     keywords = [title]
-    website = 'https://shadowshouse-anime.com/'
+    website = 'https://shadowshouse-anime.com/1st/'
     twitter = 'shadowshouse_yj'
     hashtags = 'シャドーハウス'
     folder_name = 'shadows-house'
