@@ -234,12 +234,38 @@ class ShikimorisanDownload(Spring2022AnimeDownload, NewsTemplate2):
 
     def download_character(self):
         folder = self.create_character_directory()
-        self.image_list = []
-        self.add_to_image_list('shikimori', self.PAGE_PREFIX + 'core_sys/images/main/cont/chara/shikimori.jpg')
-        self.add_to_image_list('shikimori_face', self.PAGE_PREFIX + 'core_sys/images/main/cont/chara/shikimori_face.jpg')
-        self.add_to_image_list('izumi', self.PAGE_PREFIX + 'core_sys/images/main/cont/chara/izumi.jpg')
-        self.add_to_image_list('izumi_face', self.PAGE_PREFIX + 'core_sys/images/main/cont/chara/izumi_face.jpg')
-        self.download_image_list(folder)
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        template = self.PAGE_PREFIX + 'character/%s.html'
+        try:
+            if len(processed) == 0:
+                chara_name = 'shikimori'
+            else:
+                chara_name = processed[-1]
+            while True:
+                soup = self.get_soup(template % chara_name)
+                if soup is None or soup == "":
+                    break
+                if chara_name not in processed:
+                    images = soup.select('.charPh img, .charFace img')
+                    self.image_list = []
+                    for image in images:
+                        if image.has_attr('src'):
+                            image_url = self.PAGE_PREFIX + self.remove_string(image['src'], ['../', '\t', '\r', '\n'])
+                            image_name = self.extract_image_name_from_url(image_url)
+                            self.add_to_image_list(image_name, image_url)
+                    self.download_image_list(folder)
+                    processed.append(chara_name)
+                a_tags = soup.select('.charNavi a')
+                if len(a_tags) == 2 and a_tags[1].has_attr('href') and a_tags[1]['href'].endswith('.html'):
+                    chara_name = a_tags[1]['href'].split('/')[-1][:-5]
+                    if chara_name in processed:
+                        break
+                else:
+                    break
+        except Exception as e:
+            self.print_exception(e, 'Character')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Machikado Mazoku: 2-choume

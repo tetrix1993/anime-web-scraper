@@ -834,6 +834,20 @@ class MainDownload:
             return url
 
     @staticmethod
+    def remove_string(text, str_list):
+        if isinstance(str_list, list):
+            string_list = str_list
+        elif isinstance(str_list, str):
+            string_list = [str_list]
+        else:
+            return text
+
+        result = text
+        for str_ in string_list:
+            result = result.replace(str_, '')
+        return result
+
+    @staticmethod
     def unix_timestamp_to_text(timestamp):
         '''
         Convert Unit Timestamp in nanoseconds to readable text
