@@ -1092,6 +1092,7 @@ class SlowLoopDownload(Winter2022AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         template = self.PAGE_PREFIX + 'images/story/%s/p_%s.jpg'
@@ -1139,6 +1140,23 @@ class SlowLoopDownload(Winter2022AnimeDownload, NewsTemplate):
 
         template2 = self.PAGE_PREFIX + 'images/news/p_%s.jpg'
         self.download_by_template(folder, template2, 3, 8, 10, prefix='news_')
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'package.html')
+            images = soup.select('article img')
+            self.image_list = []
+            for image in images:
+                if image.has_attr('src') and not image['src'].endswith('nowpri.jpg'):
+                    image_url = self.PAGE_PREFIX + image['src']
+                    split1 = image['src'].split('/')
+                    if len(split1) > 1:
+                        image_name = split1[-2] + '_' + self.extract_image_name_from_url(image_url)
+                        self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
 
 # Sono Bisque Doll wa Koi wo Suru
