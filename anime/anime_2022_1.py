@@ -43,6 +43,7 @@ class AkebichanDownload(Winter2022AnimeDownload, NewsTemplate):
     folder_name = 'akebichan'
 
     PAGE_PREFIX = website
+    IMAGES_PER_EPISODE = 5
 
     def __init__(self):
         super().__init__()
@@ -54,7 +55,51 @@ class AkebichanDownload(Winter2022AnimeDownload, NewsTemplate):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        story_url = self.PAGE_PREFIX + 'story/'
+        yt_folder = self.create_custom_directory('yt')  # YouTube thumbnails
+        try:
+            soup = self.get_soup(story_url, decode=True)
+            lis = soup.select('.page_tab li')
+            for li in lis:
+                a_tag = li.find('a')
+                if a_tag:
+                    try:
+                        text = self.remove_string(a_tag.text.strip(), ['第', '話'])
+                        number = self.convert_kanji_to_number(text)
+                        if number is not None:
+                            episode = str(int(number)).zfill(2)
+                        else:
+                            continue
+                    except:
+                        continue
+                    if self.is_image_exists(episode + '_' + str(self.IMAGES_PER_EPISODE)):
+                        continue
+                    ep_soup = soup
+                    if 'current' not in li['class']:
+                        if not a_tag.has_attr('href'):
+                            continue
+                        ep_url = story_url + a_tag['href'][2:]
+                        ep_soup = self.get_soup(ep_url)
+                    if ep_soup is not None:
+                        images = ep_soup.select('li.swiper-slide img')
+                        self.image_list = []
+                        for i in range(len(images)):
+                            if images[i].has_attr('src'):
+                                image_url = story_url + images[i]['src']
+                                image_name = episode + '_' + str(i + 1)
+                                self.add_to_image_list(image_name, image_url)
+                        self.download_image_list(self.base_folder)
+                        yt_thumb = ep_soup.select('.p-movie_data__thumb-img')
+                        if len(yt_thumb) > 0 and yt_thumb[0].has_attr('data-bg'):
+                            yt_image_url = yt_thumb[0]['data-bg']
+                            split1 = yt_image_url.split('/')
+                            if len(split1) > 1:
+                                yt_image_name = episode + '_' + split1[-2]  # YouTube URL
+                            else:
+                                yt_image_name = episode
+                            self.download_image(yt_image_url, yt_folder + '/' + yt_image_name)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         prefix = self.PAGE_PREFIX + '?scroll='
