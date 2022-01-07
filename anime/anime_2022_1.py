@@ -1171,6 +1171,10 @@ class SlowLoopDownload(Winter2022AnimeDownload, NewsTemplate):
 
     def download_media(self):
         folder = self.create_media_directory()
+        self.image_list = []
+        self.add_to_image_list('music_op', 'https://pbs.twimg.com/media/FIfL6neaIAMeg6L?format=jpg&name=medium')
+        self.download_image_list(folder)
+
         try:
             soup = self.get_soup(self.PAGE_PREFIX + 'package.html')
             images = soup.select('article img')
