@@ -846,6 +846,7 @@ class ShikkakumonDownload(Winter2022AnimeDownload, NewsTemplate2):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -917,6 +918,33 @@ class ShikkakumonDownload(Winter2022AnimeDownload, NewsTemplate2):
         except Exception as e:
             self.print_exception(e, 'Character')
         self.create_cache_file(cache_filepath, processed, num_processed)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'bd/')
+            bd_imgs = soup.select('div.img_l_tp3 img')
+            self.image_list = []
+            for bd_img in bd_imgs:
+                if bd_img.has_attr('src'):
+                    image_url = self.PAGE_PREFIX + bd_img['src'].replace('../', '').split('?')[0]
+                    image_name = self.extract_image_name_from_url(image_url)
+                    if self.is_image_exists(image_name, folder):
+                        continue
+                    if self.is_matching_content_length(image_url, 106077):
+                        continue
+                    self.add_to_image_list(image_name, image_url)
+            tokuten_imgs = soup.select('ul.tokutenWrap img')
+            for tokuten_img in tokuten_imgs:
+                if tokuten_img.has_attr('src') and not tokuten_img['src'].endswith('noprinting.jpg'):
+                    image_url = self.PAGE_PREFIX + tokuten_img['src'].replace('../', '').split('?')[0]
+                    image_name = self.extract_image_name_from_url(image_url)
+                    if self.is_image_exists(image_name, folder):
+                        continue
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
 
 # Shuumatsu no Harem
