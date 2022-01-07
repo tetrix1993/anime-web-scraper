@@ -1060,6 +1060,17 @@ class ShuumatsuNoHaremDownload(Winter2022AnimeDownload, NewsTemplate2):
         self.image_list = []
         self.add_to_image_list('music_op', 'https://pbs.twimg.com/media/E9yvFCOUUAc43_i?format=jpg&name=large')
         self.add_to_image_list('music_ed', 'https://pbs.twimg.com/media/FAMztXhVUAADMY7?format=jpg&name=large')
+        bd_bonus_urls = ['https://pbs.twimg.com/media/FIg8u23VQAEWHQo?format=jpg&name=medium',
+                         'https://pbs.twimg.com/media/FIg8wjrVQAUDsng?format=jpg&name=medium',
+                         'https://pbs.twimg.com/media/FIg8yXaUYAEXOtI?format=jpg&name=medium',
+                         'https://pbs.twimg.com/media/FIg80yKUUAAipX6?format=jpg&name=medium',
+                         'https://pbs.twimg.com/media/FIg9ItqUUAAeUWh?format=jpg&name=4096x4096',
+                         'https://pbs.twimg.com/media/FIg9bgfUcAAX7RF?format=jpg&name=4096x4096',
+                         'https://pbs.twimg.com/media/FIg9nCTVkA4icRz?format=jpg&name=medium',
+                         'https://pbs.twimg.com/media/FIg9y5hVQAI9MMv?format=jpg&name=4096x4096',
+                         'https://pbs.twimg.com/media/FIg98yxVUAAgEYF?format=jpg&name=large']
+        for i in range(len(bd_bonus_urls)):
+            self.add_to_image_list('bd_bonus_' + str(i + 1).zfill(2), bd_bonus_urls[i])
         self.download_image_list(folder)
 
         # Blu-ray Bonus
