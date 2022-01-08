@@ -388,7 +388,8 @@ class KuroitsusanDownload(Winter2022AnimeDownload, NewsTemplate):
                 if result == -1:
                     stop = True
                     break
-                is_success = True
+                elif result == 0:
+                    is_success = True
             if is_success:
                 print(self.__class__.__name__ + ' - Episode %s guessed correctly!' % episode)
             if stop:
