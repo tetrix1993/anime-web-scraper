@@ -1366,6 +1366,37 @@ class KisekoiDownload(Winter2022AnimeDownload, NewsTemplate):
     def download_media(self):
         folder = self.create_media_directory()
 
+        # Blu-ray
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        bd_urls = ['special.html', '', '02.html', '03.html', '04.html', '05.html', '06.html']
+        try:
+            for i in range(len(bd_urls)):
+                bd_url = self.PAGE_PREFIX + 'bddvd/' + bd_urls[i]
+                if i > 0:
+                    if str(i) in processed:
+                        continue
+                soup = self.get_soup(bd_url)
+                if soup is not None:
+                    images = soup.select('.p-bddvd__content img')
+                    self.image_list = []
+                    for image in images:
+                        if image.has_attr('src') and not image['src'].endswith('np_shop.png')\
+                                and not image['src'].endswith('np_jk.png')\
+                                and not image['src'].endswith('logo_anx.png'):
+                            image_url = self.PAGE_PREFIX + image['src'][1:]
+                            image_name = self.extract_image_name_from_url(image_url)
+                            self.add_to_image_list(image_name, image_url)
+                    if i > 0:
+                        if len(self.image_list) > 0:
+                            processed.append(str(i))
+                        else:
+                            break
+                    self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
+        self.create_cache_file(cache_filepath, processed, num_processed)
+
         # Special Pages
         special_filepath = folder + '/special'
         processed, num_processed = self.get_processed_items_from_cache_file(special_filepath)
