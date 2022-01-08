@@ -656,17 +656,18 @@ class GenkokuDownload(Summer2021AnimeDownload, NewsTemplate):
         self.add_to_image_list('bd_early_bonus', 'https://pbs.twimg.com/media/E5NWAxbVoAIQtnT?format=jpg&name=medium')
         self.download_image_list(folder)
 
-        try:
-            soup = self.get_soup(self.PAGE_PREFIX + 'blu-ray/')
-            images = soup.select('#blu-ray img')
-            self.image_list = []
-            for image in images:
-                image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
-                image_name = self.extract_image_name_from_url(image_url)
-                self.add_to_image_list(image_name, image_url)
-            self.download_image_list(folder)
-        except Exception as e:
-            self.print_exception(e, 'Blu-ray')
+        for url in ['', '1st.html']:
+            try:
+                soup = self.get_soup(self.PAGE_PREFIX + 'blu-ray/' + url)
+                images = soup.select('#blu-ray img')
+                self.image_list = []
+                for image in images:
+                    image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(folder)
+            except Exception as e:
+                self.print_exception(e, 'Blu-ray %s' % url)
 
 
 # Higurashi no Naku Koro ni Sotsu
