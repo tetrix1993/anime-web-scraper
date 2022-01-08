@@ -2,7 +2,7 @@ import os
 import anime.constants as constants
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsTemplate3
 from datetime import datetime
-from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
+from scan import AniverseMagazineScanner, NatalieScanner
 
 
 # Akebi-chan no Sailor-fuku https://akebi-chan.jp/ #明日ちゃんのセーラー服 #明日ちゃん @AKEBI_chan
@@ -327,18 +327,73 @@ class KuroitsusanDownload(Winter2022AnimeDownload, NewsTemplate):
     folder_name = 'kuroitsusan'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 4
 
     def __init__(self):
         super().__init__()
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_external()
         self.download_news()
+        self.download_episode_preview_guess()
         self.download_key_visual()
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            stories = soup.select('div.story_cont')
+            for story in stories:
+                story_num = story.select('p.story_num')
+                if len(story_num) > 0:
+                    try:
+                        episode = str(int(story_num[0].text.replace('#', ''))).zfill(2)
+                    except:
+                        continue
+                    if self.is_image_exists(episode + '_1'):
+                        continue
+                    images = story.select('div.myThum img')
+                    self.image_list = []
+                    for i in range(len(images)):
+                        if images[i].has_attr('src'):
+                            image_url = self.PAGE_PREFIX + images[i]['src'].replace('../', '')
+                            image_name = episode + '_' + str(i + 1)
+                            self.add_to_image_list(image_name, image_url)
+                    self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
+
+    def download_episode_preview_external(self):
+        jp_title = '怪人開発部の黒井津さん'
+        NatalieScanner(jp_title, self.base_folder, last_episode=self.FINAL_EPISODE, download_id=self.download_id).run()
+
+    def download_episode_preview_guess(self):
+        folder = self.create_custom_directory('guess')
+        template = self.PAGE_PREFIX + 'img/story/ep%s/img%s.jpg'
+        is_success = False
+        for i in range(self.FINAL_EPISODE):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_1'):
+                continue
+            stop = False
+            for j in range(self.IMAGES_PER_EPISODE):
+                image_url = template % (episode, str(j + 1).zfill(2))
+                if self.is_matching_content_length(image_url, 9033):  # Matching size of placeholder image
+                    stop = True
+                    break
+                image_name = episode + '_' + str(j + 1)
+                result = self.download_image(image_url, folder + '/' + image_name)
+                if result == -1:
+                    stop = True
+                    break
+                is_success = True
+            if is_success:
+                print(self.__class__.__name__ + ' - Episode %s guessed correctly!' % episode)
+            if stop:
+                break
+        return is_success
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.list-item',
