@@ -268,6 +268,60 @@ class ShikimorisanDownload(Spring2022AnimeDownload, NewsTemplate2):
         self.create_cache_file(cache_filepath, processed, num_processed)
 
 
+# Kunoichi Tsubaki no Mune no Uchi
+class KunoichiTsubakiDownload(Spring2022AnimeDownload, NewsTemplate):
+    title = 'Kunoichi Tsubaki no Mune no Uchi'
+    keywords = [title, 'In the Heart of Kunoichi Tsubaki']
+    website = 'https://kunoichi-tsubaki.com/'
+    hashtags = 'くノ一ツバキ'
+    twitter = 'tsubaki_anime'
+    folder_name = 'kunoichi-tsubaki'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.c-news__item',
+                                    date_select='.c-news__item-date', title_select='.c-news__item-txt',
+                                    id_select='.c-news__item-link', a_tag_prefix=news_url, paging_type=1,
+                                    next_page_select='.c-pagination__count-item',
+                                    next_page_eval_index_class='is-current', next_page_eval_index=-1)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_main', self.PAGE_PREFIX + 'teaser/img/top/main.jpg')
+        self.add_to_image_list('kv1', self.PAGE_PREFIX + 'teaser/img/top/main_2nd.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('div.p-cast__item-img.-after img')
+            self.image_list = []
+            for image in images:
+                if image.has_attr('src'):
+                    image_url = self.PAGE_PREFIX + image['src'][1:]
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+
+
 # Machikado Mazoku: 2-choume
 class MachikadoMazoku2Download(Spring2022AnimeDownload, NewsTemplate):
     title = 'Machikado Mazoku: 2-choume'

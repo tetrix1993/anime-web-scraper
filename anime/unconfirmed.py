@@ -801,43 +801,6 @@ class KumichoMusumeDownload(UnconfirmedDownload, NewsTemplate):
             self.print_exception(e, 'Character')
 
 
-# Kunoichi Tsubaki no Mune no Uchi
-class KunoichiTsubakiDownload(UnconfirmedDownload, NewsTemplate):
-    title = 'Kunoichi Tsubaki no Mune no Uchi'
-    keywords = [title, 'In the Heart of Kunoichi Tsubaki']
-    website = 'https://kunoichi-tsubaki.com/'
-    hashtags = 'くノ一ツバキ'
-    twitter = 'tsubaki_anime'
-    folder_name = 'kunoichi-tsubaki'
-
-    PAGE_PREFIX = website
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_news()
-        self.download_key_visual()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
-
-    def download_news(self):
-        news_url = self.PAGE_PREFIX + 'news/'
-        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.c-news__item',
-                                    date_select='.c-news__item-date', title_select='.c-news__item-txt',
-                                    id_select='.c-news__item-link', a_tag_prefix=news_url, paging_type=1,
-                                    next_page_select='.c-pagination__count-item',
-                                    next_page_eval_index_class='is-current', next_page_eval_index=-1)
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('tz_main', self.PAGE_PREFIX + 'teaser/img/top/main.jpg')
-        self.download_image_list(folder)
-
-
 # Kyokou Suiri S2
 class KyokouSuiri2Download(UnconfirmedDownload, NewsTemplate):
     title = 'Kyokou Suiri Season 2'
