@@ -784,6 +784,7 @@ class Priconne2Download(Winter2022AnimeDownload, NewsTemplate):
         self.download_episode_preview()
         self.download_news()
         self.download_key_visual()
+        self.download_media()
 
     def download_episode_preview(self):
         # Handles only the first story page, need update logic in the future
@@ -825,6 +826,33 @@ class Priconne2Download(Winter2022AnimeDownload, NewsTemplate):
 
         template = self.PAGE_PREFIX + 'assets/images/top/kv_chara%s_pc.png'
         self.download_by_template(folder, template, 2, 1, 4)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        try:
+            for i in range(1, 4, 1):
+                if i == 1:
+                    soup = self.get_soup(f'{self.PAGE_PREFIX}bd/')
+                else:
+                    if str(i) in processed:
+                        continue
+                    soup = self.get_soup(f'{self.PAGE_PREFIX}bd/?id={str(i)}')
+                if soup is not None:
+                    images = soup.select('.bdInfo__detail img, .bdInfo__special_offers img')
+                    self.image_list = []
+                    for image in images:
+                        if image.has_attr('src'):
+                            image_url = self.PAGE_PREFIX + image['src'][1:]
+                            image_name = self.extract_image_name_from_url(image_url)
+                            self.add_to_image_list(image_name, image_url)
+                    if len(self.image_list) > 0 and i > 1:
+                        processed.append(str(i))
+                    self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Sabikui Bisco
