@@ -194,7 +194,36 @@ class Arifureta2Download(Winter2022AnimeDownload, NewsTemplate):
         self.download_key_visual()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, diff=67)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'storys/season/2nd/')
+            a_tags = soup.select('#anchor_menu a')
+            for a_tag in a_tags:
+                if a_tag.has_attr('href'):
+                    try:
+                        number = self.convert_kanji_to_number(self.remove_string(a_tag.text.strip(), ['第', '話']))
+                        if number is None:
+                            continue
+                        episode = str(number).zfill(2)
+                    except:
+                        continue
+                    if self.is_image_exists(episode + '_1'):
+                        continue
+                    ep_soup = self.get_soup(a_tag['href'])
+                    if ep_soup is not None:
+                        images = ep_soup.select('ul.slider-for img')
+                        self.image_list = []
+                        for i in range(len(images)):
+                            if images[i].has_attr('src'):
+                                src = images[i]['src']
+                                first_pos = src.rfind('-')
+                                second_pos = src.rfind('.')
+                                if 0 < first_pos < second_pos < len(src) - 1:
+                                    image_url = src[0:first_pos] + src[second_pos:]
+                                    image_name = episode + '_' + str(i + 1)
+                                    self.add_to_image_list(image_name, image_url)
+                        self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='ul.news_list li',
