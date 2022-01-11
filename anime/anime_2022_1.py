@@ -1593,6 +1593,7 @@ class TensaiOujiDownload(Winter2022AnimeDownload, NewsTemplate2):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -1640,3 +1641,40 @@ class TensaiOujiDownload(Winter2022AnimeDownload, NewsTemplate2):
         template = self.PAGE_PREFIX + 'core_sys/images/main/cont/char/c%s_%s.png'
         templates = [template % ('%s', '01'), template % ('%s', '02')]
         self.download_by_template(folder, templates, 2, 1)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        bd_urls = ['tokuten', '01', '02', '03', '04']
+        try:
+            for i in range(len(bd_urls)):
+                bd_url = self.PAGE_PREFIX + 'bd/' + bd_urls[i] + '.html'
+                if i > 0 and str(i) in processed:
+                    continue
+                soup = self.get_soup(bd_url)
+                if soup is not None:
+                    images = soup.select('#cms_block img')
+                    self.image_list = []
+                    for image in images:
+                        if image.has_attr('src') and '/shopbanner/' not in image['src']:
+                            image_url = self.PAGE_PREFIX + image['src'].split('?')[0].replace('../', '')
+                            url_split = image_url.split('/')
+                            if len(url_split) > 1 and url_split[-1].startswith('sn_'):
+                                pos = image_url.rfind('sn_')
+                                image_url = image_url[0:pos] + image_url[pos + 3:]
+                            image_name = self.extract_image_name_from_url(image_url)
+                            if self.is_image_exists(image_name, folder):
+                                continue
+                            if self.is_matching_content_length(image_url, [7779, 4197]):
+                                continue
+                            self.add_to_image_list(image_name, image_url)
+                    if i > 0:
+                        if len(self.image_list) > 0:
+                            processed.append(str(i))
+                        else:
+                            break
+                    self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
+        self.create_cache_file(cache_filepath, processed, num_processed)
