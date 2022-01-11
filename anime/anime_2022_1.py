@@ -235,7 +235,49 @@ class FabinikuDownload(Winter2022AnimeDownload, NewsTemplate):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            a_tags = soup.select('ul.story_lists a')
+            for a_tag in a_tags:
+                title_tag = a_tag.select('.story_title')
+                if len(title_tag) > 0 and a_tag.has_attr('href'):
+                    title = title_tag[0].text.strip()
+                    first_index = title.find('第')
+                    last_index = title.find('話')
+                    if first_index == -1 or last_index == -1:
+                        continue
+                    try:
+                        episode = str(int(title[first_index + 1:last_index])).zfill(2)
+                    except:
+                        continue
+                    if self.is_image_exists(episode + '_1'):
+                        continue
+                    ep_soup = self.get_soup(a_tag['href'])
+                    if ep_soup is not None:
+                        images = ep_soup.select('.story_single_main img')
+                        self.image_list = []
+                        for i in range(len(images)):
+                            if images[i].has_attr('srcset'):
+                                srcset = images[i]['srcset']
+                                biggest_size = None
+                                image_url = None
+                                sources = srcset.split(',')
+                                for source in sources:
+                                    split1 = source.strip().split(' ')
+                                    if len(split1) == 2 and split1[1].endswith('w'):
+                                        try:
+                                            size = int(split1[1][:-1])
+                                            if biggest_size is None or size > biggest_size:
+                                                biggest_size = size
+                                                image_url = split1[0]
+                                        except:
+                                            continue
+                                if image_url is not None:
+                                    image_name = episode + '_' + str(i + 1)
+                                    self.add_to_image_list(image_name, image_url)
+                        self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='ul.news_lists li',
