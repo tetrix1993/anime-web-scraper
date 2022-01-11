@@ -143,7 +143,7 @@ The premiere date for the anime listed here has not been announced.
 * [Shuumatsu no Harem](https://end-harem-anime.com/)
 * [Slow Loop](https://slowlooptv.com/)
 * [Sono Bisque Doll wa Koi wo Suru](https://bisquedoll-anime.com/)
-* [Tensai Ouji no Akaji Kokka Saisei Jutsu: Souda, Baikoku shiyou](https://tensaiouji-anime.com/)
+* [Tensai Ouji no Akaji Kokka Saisei Jutsu](https://tensaiouji-anime.com/)
 
 ### Fall 2021 Anime
 * [Blue Period](https://blue-period.jp/)

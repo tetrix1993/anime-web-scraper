@@ -20,7 +20,7 @@ from scan import AniverseMagazineScanner, NatalieScanner
 # Shuumatsu no Harem https://end-harem-anime.com/ #終末のハーレム @harem_official_
 # Slow Loop https://slowlooptv.com/ #slowloop @slowloop_tv
 # Sono Bisque Doll wa Koi wo Suru https://bisquedoll-anime.com/ #着せ恋 @kisekoi_anime
-# Tensai Ouji no Akaji Kokka Saisei Jutsu: Souda, Baikoku shiyou https://tensaiouji-anime.com/ #天才王子 #天才王子の赤字国家再生術 @tensaiouji_PR
+# Tensai Ouji no Akaji Kokka Saisei Jutsu https://tensaiouji-anime.com/ #天才王子 @tensaiouji_PR
 
 
 # Winter 2022 Anime
@@ -1503,13 +1503,13 @@ class KisekoiDownload(Winter2022AnimeDownload, NewsTemplate):
             self.download_content(audio_url, f'{folder}/{audio_name}.wav')
 
 
-# Tensai Ouji no Akaji Kokka Saisei Jutsu: Souda, Baikoku shiyou
+# Tensai Ouji no Akaji Kokka Saisei Jutsu
 class TensaiOujiDownload(Winter2022AnimeDownload, NewsTemplate2):
-    title = 'Tensai Ouji no Akaji Kokka Saisei Jutsu: Souda, Baikoku shiyou'
+    title = 'Tensai Ouji no Akaji Kokka Saisei Jutsu'
     keywords = [title, 'tensaiouji']
     website = 'https://tensaiouji-anime.com/'
     twitter = 'tensaiouji_PR'
-    hashtags = ['天才王子', '天才王子の赤字国家再生術']
+    hashtags = ['天才王子']
     folder_name = 'tensaiouji'
 
     PAGE_PREFIX = website
@@ -1524,7 +1524,30 @@ class TensaiOujiDownload(Winter2022AnimeDownload, NewsTemplate2):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/introduction.html', decode=True)
+            a_tags = soup.select('div.title a')
+            for a_tag in a_tags:
+                try:
+                    episode = str(int(self.remove_string(a_tag.text.strip(), ['第', '話']))).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                if a_tag.has_attr('href'):
+                    page_url = self.PAGE_PREFIX + a_tag['href'].replace('../', '')
+                    ep_soup = self.get_soup(page_url)
+                    if ep_soup is not None:
+                        images = ep_soup.select('div.ph a')
+                        self.image_list = []
+                        for i in range(len(images)):
+                            if images[i].has_attr('href'):
+                                image_url = self.PAGE_PREFIX + images[i]['href'].replace('../', '').split('?')[0]
+                                image_name = episode + '_' + str(i + 1)
+                                self.add_to_image_list(image_name, image_url)
+                        self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(self.PAGE_PREFIX, 'news/list00010000.html')
