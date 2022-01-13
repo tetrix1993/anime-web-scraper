@@ -192,6 +192,7 @@ class Arifureta2Download(Winter2022AnimeDownload, NewsTemplate):
         self.download_episode_preview()
         self.download_news()
         self.download_key_visual()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -214,13 +215,9 @@ class Arifureta2Download(Winter2022AnimeDownload, NewsTemplate):
                         self.image_list = []
                         for i in range(len(images)):
                             if images[i].has_attr('src'):
-                                src = images[i]['src']
-                                first_pos = src.rfind('-')
-                                second_pos = src.rfind('.')
-                                if 0 < first_pos < second_pos < len(src) - 1:
-                                    image_url = src[0:first_pos] + src[second_pos:]
-                                    image_name = episode + '_' + str(i + 1)
-                                    self.add_to_image_list(image_name, image_url)
+                                image_url = self.clear_resize_in_url2(images[i]['src'])
+                                image_name = episode + '_' + str(i + 1)
+                                self.add_to_image_list(image_name, image_url)
                         self.download_image_list(self.base_folder)
         except Exception as e:
             self.print_exception(e)
@@ -241,6 +238,35 @@ class Arifureta2Download(Winter2022AnimeDownload, NewsTemplate):
         self.add_to_image_list('kv2', self.PAGE_PREFIX + 'wp-content/uploads/2021/11/ARIFURE_Keyart-FIN.jpg')
         self.add_to_image_list('kv2_tw', 'https://pbs.twimg.com/media/FFA8J-haQAI5NvZ?format=jpg&name=4096x4096')
         self.download_image_list(folder)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            # Volume 1 and Bonuses
+            soup = self.get_soup(self.PAGE_PREFIX + 'blu-ray/blu-ray-2324/')
+            if soup is not None:
+                images = soup.select('div.detail img')
+                self.image_list = []
+                for image in images:
+                    if image.has_attr('src') and not image['src'].startswith('https://test.flab.site/')\
+                            and 'nowprinting' not in image['src']:
+                        image_url = self.clear_resize_in_url2(image['src'].split('?')[0])
+                        image_name = self.extract_image_name_from_url(image_url)
+                        self.add_to_image_list(image_name, image_url)
+                self.download_image_list(folder)
+
+            bd_soup = self.get_soup(self.PAGE_PREFIX + 'blu-ray/season/2nd/')
+            if bd_soup is not None:
+                images = soup.select('ul.blu-ray_list img')
+                self.image_list = []
+                for image in images:
+                    if image.has_attr('src') and 'nowprinting' not in image['src']:
+                        image_url = self.clear_resize_in_url2(image['src'].split('?')[0])
+                        image_name = self.extract_image_name_from_url(image_url)
+                        self.add_to_image_list(image_name, image_url)
+                self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
 
 # Fantasy Bishoujo Juniku Ojisan to

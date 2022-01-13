@@ -834,6 +834,14 @@ class MainDownload:
             return url
 
     @staticmethod
+    def clear_resize_in_url2(url):
+        first_pos = url.rfind('-')
+        second_pos = url.rfind('.')
+        if 0 < first_pos < second_pos < len(url) - 1:
+            return url[0:first_pos] + url[second_pos:]
+        return url
+
+    @staticmethod
     def remove_string(text, str_list):
         if isinstance(str_list, list):
             string_list = str_list
