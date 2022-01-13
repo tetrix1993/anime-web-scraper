@@ -1111,6 +1111,11 @@ class ShikkakumonDownload(Winter2022AnimeDownload, NewsTemplate2):
 
     def download_media(self):
         folder = self.create_media_directory()
+        self.image_list = []
+        self.add_to_image_list('bd_bonus1', 'https://pbs.twimg.com/media/FI4MKJ1aMAUkC6W?format=jpg&name=4096x4096')
+        self.add_to_image_list('bd_bonus2', 'https://pbs.twimg.com/media/FI4MK91aMAEDHrE?format=jpg&name=4096x4096')
+        self.download_image_list(folder)
+
         try:
             soup = self.get_soup(self.PAGE_PREFIX + 'bd/')
             bd_imgs = soup.select('div.img_l_tp3 img')
