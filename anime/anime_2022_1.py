@@ -157,7 +157,8 @@ class AkebichanDownload(Winter2022AnimeDownload, NewsTemplate):
                     self.image_list = []
                     for image in images:
                         if image.has_attr('src') and not image['src'].endswith('special_np.jpg') \
-                                and not image['src'].endswith('jk_np.jpg'):
+                                and not image['src'].endswith('jk_np.jpg')\
+                                and '/logo' not in image['src']:
                             image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
                             image_name = self.extract_image_name_from_url(image_url)
                             self.add_to_image_list(image_name, image_url)
@@ -1585,7 +1586,7 @@ class KisekoiDownload(Winter2022AnimeDownload, NewsTemplate):
                                 images = page_soup.select('figure img')
                                 self.image_list = []
                                 for image in images:
-                                    if image.has_attr('src'):
+                                    if image.has_attr('src') and '/logo/' not in image['src']:
                                         image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
                                         image_name = f'{page_name}_' + self.extract_image_name_from_url(image_url)
                                         self.add_to_image_list(image_name, image_url)
