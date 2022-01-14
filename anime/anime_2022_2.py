@@ -5,6 +5,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Aharen-san wa Hakarenai https://aharen-pr.com/ #阿波連さん @aharen_pr
 # Honzuki S3 http://booklove-anime.jp/story/ #本好きの下剋上 @anime_booklove
 # Kawaii dake ja Nai Shikimori-san https://shikimori-anime.com/ #式守さん @anime_shikimori
+# Koi wa Sekai Seifuku no Ato de https://koiseka-anime.com/ #恋せか @koiseka_anime
 # Machikado Mazoku: 2-choume http://www.tbs.co.jp/anime/machikado/ #まちカドまぞく #MachikadoMazoku @machikado_staff
 # Mahoutsukai Reimeiki https://www.tbs.co.jp/anime/reimeiki/ #魔法使い黎明期 @reimeiki_pr
 # Otome Game Sekai wa Mob ni Kibishii Sekai desu https://mobseka.com/ #モブせか #mobseka @mobseka_anime
@@ -315,6 +316,61 @@ class KunoichiTsubakiDownload(Spring2022AnimeDownload, NewsTemplate):
             for image in images:
                 if image.has_attr('src'):
                     image_url = self.PAGE_PREFIX + image['src'][1:]
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+
+
+# Koi wa Sekai Seifuku no Ato de
+class KoisekaDownload(Spring2022AnimeDownload, NewsTemplate):
+    title = 'Koi wa Sekai Seifuku no Ato de'
+    keywords = [title, 'Koiseka', 'Love After World Domination']
+    website = 'https://koiseka-anime.com/'
+    twitter = 'koiseka_anime'
+    hashtags = ['恋せか', 'koiseka']
+    folder_name = 'koiseka'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.news_list_item',
+                                    date_select='time', title_select='p.article_ttl', id_select='a')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/E-RYA-6VkAUwmYY?format=jpg&name=4096x4096')
+        # self.add_to_image_list('kv1_tw', self.PAGE_PREFIX + 'news/wp-content/uploads/2021/08/キービジュアル第1弾.jpg')
+        self.download_image_list(folder)
+
+        template = self.PAGE_PREFIX + 'img/top/kv_img%s.jpg'
+        self.download_by_template(folder, template, 2, 1)
+
+        self.download_youtube_thumbnails(self.PAGE_PREFIX, folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            self.image_list = []
+            images = soup.select('div.chara_media img')
+            for image in images:
+                if image.has_attr('src') and '/character/' in image['src']:
+                    image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
                     image_name = self.extract_image_name_from_url(image_url)
                     self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)

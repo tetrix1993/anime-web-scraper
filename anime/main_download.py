@@ -1018,6 +1018,32 @@ class MainDownload:
         if print_traceback:
             traceback.print_exc()
 
+    @staticmethod
+    def get_youtube_thumbnails(soup):
+        # Returns a list of tuples (YouTube ID, Thumbnail URL)
+        results = []
+        if soup is not None:
+            contents = str(soup)
+            arr = re.findall("((https://img\\.youtube\\.com/vi/)[a-zA-Z0-9|\\-|_]{11}(/maxresdefault\\.jpg))", contents)
+            if len(arr) > 0:
+                tup = arr[0]
+                for item in tup:
+                    if len(item) == 56:
+                        youtube_id = item.split('/')[-2]
+                        results.append((youtube_id, item))
+        return results
+
+    def download_youtube_thumbnails(self, url, folder):
+        try:
+            soup = self.get_soup(url)
+            yt_tuples = self.get_youtube_thumbnails(soup)
+            self.image_list = []
+            for yt_tuple in yt_tuples:
+                self.add_to_image_list('yt_' + yt_tuple[0], yt_tuple[1])
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'YouTube')
+
     # Match filter
     def match(self, s_filter):
         if not isinstance(s_filter, SearchFilter):
