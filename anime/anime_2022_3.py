@@ -3,6 +3,7 @@ from anime.main_download import MainDownload, NewsTemplate
 
 
 # Hataraku Maou-sama!! https://maousama.jp/ #maousama @anime_maousama
+# Kanojo, Okarishimasu 2nd Season https://kanokari-official.com/ #かのかり #kanokari @kanokari_anime
 # Shadows House 2nd Season https://shadowshouse-anime.com/
 # Soredemo Ayumu wa Yosetekuru https://soreayu.com/ #それあゆ @soreayu_staff
 # Utawarerumono: Futari no Hakuoro https://utawarerumono.jp/ #うたわれ @UtawareAnime
@@ -59,6 +60,49 @@ class HatarakuMaousama2Download(Summer2022AnimeDownload, NewsTemplate):
         template2 = character_prefix + 'character%s_face1.png'
         template3 = character_prefix + 'character%s_face2.png'
         self.download_by_template(folder, [template1, template2, template3], 2, 1)
+
+
+# Kanojo, Okarishimasu 2nd Season
+class Kanokari2Download(Summer2022AnimeDownload, NewsTemplate):
+    title = "Kanojo, Okarishimasu 2nd Season"
+    keywords = [title, "Kanokari", "Rent-a-Girlfriend"]
+    website = 'https://kanokari-official.com/'
+    twitter = 'kanokari_anime'
+    hashtags = ['彼女お借りします', 'かのかり', 'kanokari']
+    folder_name = 'kanokari2'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.md-li__news--block',
+                                    title_select='h3', date_select='time', id_select='a', stop_date='2021.02.26',
+                                    paging_type=0, next_page_select='ul.pagenation-list li', next_page_eval_index=-1,
+                                    next_page_eval_index_class='is__current')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz', self.PAGE_PREFIX + '2nd/wp-content/themes/kanokari-2nd/_assets/images/fv/fv_pc.jpg')
+
+        characters = ['chizuru', 'mami', 'ruka', 'sumi']
+        for chara in characters:
+            image_url = f'{self.PAGE_PREFIX}2nd/wp-content/themes/kanokari-2nd/_assets/images/loader/{chara}_pc.png'
+            image_name = f'loader_{chara}'
+            self.add_to_image_list(image_name, image_url)
+        self.download_image_list(folder)
+
+        self.download_youtube_thumbnails(self.PAGE_PREFIX, folder)
 
 
 # Shadows House 2nd Season

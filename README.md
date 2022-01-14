@@ -106,6 +106,7 @@ The premiere date for the anime listed here has not been announced.
 
 ### Summer 2022 Anime
 * [Hataraku Maou-sama! 2nd Season](https://maousama.jp/)
+* [Kanojo, Okarishimasu 2nd Season](https://kanokari-official.com/)
 * [Shadows House](https://shadowshouse-anime.com/)
 * [Soredemo Ayumu wa Yosetekuru](https://soreayu.com/)
 * [Utawarerumono: Futari no Hakuoro](https://utawarerumono.jp/)
@@ -257,7 +258,7 @@ The premiere date for the anime listed here has not been announced.
 ### Summer 2020 Anime
 * [Deca-Dence](http://decadence-anime.com/)
 * [Dokyuu Hentai HxEros](https://hxeros.com/)
-* [Kanojo, Okarishimasu](https://kanokari-official.com/)
+* [Kanojo, Okarishimasu](https://kanokari-official.com/1st/)
 * [Maou Gakuin no Futekigousha: Shijou Saikyou no Maou no Shiso, Tensei shite Shison-tachi no Gakkou e](https://maohgakuin.com/1st/)
 * [Monster Musume no Oishasan](https://mon-isha-anime.com/)
 * [Peter Grill to Kenja no Jikan](http://petergrill-anime.jp/)

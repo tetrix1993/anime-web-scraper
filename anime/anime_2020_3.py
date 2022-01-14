@@ -7,7 +7,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner
 
 # Deca-Dence http://decadence-anime.com/ #デカダンス #DECA_DENCE @decadence_anime
 # Dokyuu Hentai HxEros https://hxeros.com/ #エグゼロス #hxeros @hxeros_anime [WED]
-# Kanojo, Okarishimasu https://kanokari-official.com/ #かのかり #kanokari @kanokari_anime [WED]
+# Kanojo, Okarishimasu https://kanokari-official.com/1st/ #かのかり #kanokari @kanokari_anime [WED]
 # Maou Gakuin no Futekigousha https://maohgakuin.com/ #魔王学院 @maohgakuin [MON]
 # Monster Musume no Oishasan https://mon-isha-anime.com/character/ #モン医者 #m_doctor @mon_isha_anime [FRI]
 # Peter Grill to Kenja no Jikan http://petergrill-anime.jp/ #賢者タイムアニメ #petergrill @petergrillanime [FRI]
@@ -213,7 +213,7 @@ class KanokariDownload(Summer2020AnimeDownload):
     keywords = [title, "Kanokari", "Rent-a-Girlfriend"]
     folder_name = 'kanokari'
 
-    STORY_PAGE = 'https://kanokari-official.com/story/'
+    STORY_PAGE = 'https://kanokari-official.com/1st/story/'
 
     def __init__(self):
         super().__init__()
@@ -246,7 +246,7 @@ class KanokariDownload(Summer2020AnimeDownload):
                     for i in range(len(slides)):
                         image = slides[i].find('img')
                         if image is not None:
-                            image_url = image['src']
+                            image_url = self.clear_resize_in_url2(image['src'])
                             image_name = episode + '_' + str(i + 1)
                             image_objs.append({'name': image_name, 'url': image_url})
                     self.download_image_objects(image_objs, self.base_folder)
