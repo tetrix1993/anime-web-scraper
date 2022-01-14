@@ -208,6 +208,7 @@ class DoItYourselfDownload(UnconfirmedDownload):
     twitter = 'diy_anime'
     hashtags = 'diyアニメ'
     folder_name = 'diy'
+    enabled = False
 
     PAGE_PREFIX = website
 

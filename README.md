@@ -84,7 +84,6 @@ pip install -r requirements.txt
 The premiere date for the anime listed here has not been announced.
 * [Ayakashi Triangle](https://ayakashitriangle-anime.com/)
 * [Deaimon](https://deaimon.jp/)
-* [Do It Yourself!!](https://diy-anime.com/)
 * [Gaikotsu Kishi-sama, Tadaima Isekai e Odekakechuu](https://skeleton-knight.com/)
 * [Goblin Slayer 2nd Season](http://www.goblinslayer.jp/)
 * [Isekai Ojisan](https://isekaiojisan.com/)
@@ -136,7 +135,6 @@ The premiere date for the anime listed here has not been announced.
 * [Karakai Jouzu no Takagi-san 3](https://takagi3.me/)
 * [Kenja no Deshi wo Nanoru Kenja](https://kendeshi-anime.com/)
 * [Leadale no Daichi nite](https://leadale.net/)
-* [Mahouka Koukou no Rettousei: Tsuioku-hen](https://mahouka.jp/)
 * [Princess Connect! Re:Dive Season 2](https://anime.priconne-redive.jp)
 * [Sabikui Bisco](https://sabikuibisco.jp/)
 * [Shikkakumon no Saikyou Kenja](https://shikkakumon.com/)

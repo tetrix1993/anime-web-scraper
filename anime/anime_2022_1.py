@@ -816,6 +816,7 @@ class Mahouka3Download(Winter2022AnimeDownload, NewsTemplate):
     twitter = 'mahouka_anime'
     hashtags = 'mahouka'
     folder_name = 'mahouka3'
+    enabled = False
 
     PAGE_PREFIX = website
 
