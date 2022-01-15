@@ -6,6 +6,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Honzuki S3 http://booklove-anime.jp/story/ #本好きの下剋上 @anime_booklove
 # Kawaii dake ja Nai Shikimori-san https://shikimori-anime.com/ #式守さん @anime_shikimori
 # Koi wa Sekai Seifuku no Ato de https://koiseka-anime.com/ #恋せか @koiseka_anime
+# Kono Healer, Mendokusai https://kono-healer-anime.com/ #このヒーラー @kono_healer
 # Machikado Mazoku: 2-choume http://www.tbs.co.jp/anime/machikado/ #まちカドまぞく #MachikadoMazoku @machikado_staff
 # Mahoutsukai Reimeiki https://www.tbs.co.jp/anime/reimeiki/ #魔法使い黎明期 @reimeiki_pr
 # Otome Game Sekai wa Mob ni Kibishii Sekai desu https://mobseka.com/ #モブせか #mobseka @mobseka_anime
@@ -370,6 +371,56 @@ class KoisekaDownload(Spring2022AnimeDownload, NewsTemplate):
             images = soup.select('div.chara_media img')
             for image in images:
                 if image.has_attr('src') and '/character/' in image['src']:
+                    image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+
+
+# Kono Healer, Mendokusai
+class KonoHealerDownload(Spring2022AnimeDownload, NewsTemplate2):
+    title = 'Kono Healer, Mendokusai'
+    keywords = [title, "This Healer's a Handful"]
+    website = 'https://kono-healer-anime.com/'
+    twitter = 'kono_healer'
+    hashtags = 'このヒーラー'
+    folder_name = 'kono-healer'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('teaser', 'https://pbs.twimg.com/media/Ey5yDx_VgAUuHlX?format=jpg&name=large')
+        self.add_to_image_list('tz_visual', self.PAGE_PREFIX + 'core_sys/images/main/tz/tz_visual.png')
+        self.add_to_image_list('tz2_tw', 'https://pbs.twimg.com/media/FCG8xMCUcAEjhO3?format=jpg&name=4096x4096')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'chara')
+            images = soup.select('div.read img')
+            self.image_list = []
+            for image in images:
+                if image.has_attr('src'):
                     image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
                     image_name = self.extract_image_name_from_url(image_url)
                     self.add_to_image_list(image_name, image_url)

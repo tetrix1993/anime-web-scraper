@@ -13,7 +13,6 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Itai no wa https://bofuri.jp/story/ #防振り #bofuri @bofuri_anime
 # Kage no Jitsuryokusha ni Naritakute! https://shadow-garden.jp/ #陰の実力者 @Shadowgarden_PR
 # Kakkou no Iinazuke https://cuckoos-anime.com/ #カッコウの許嫁 @cuckoo_anime
-# Kono Healer, Mendokusai https://kono-healer-anime.com/ #このヒーラー @kono_healer
 # Kumichou Musume to Sewagakari https://kumichomusume.com/ #組長娘と世話係 @kumichomusume
 # Kunoichi Tsubaki no Mune no Uchi https://kunoichi-tsubaki.com/ #くノ一ツバキ @tsubaki_anime
 # Kyokou Suiri S2 https://kyokousuiri.jp/ #虚構推理 @kyokou_suiri
@@ -637,56 +636,6 @@ class KakkounoIinazukeDownload(UnconfirmedDownload, NewsTemplate3):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'assets/top/character/c%s.png'
         self.download_by_template(folder, template, 1)
-
-
-# Kono Healer, Mendokusai
-class KonoHealerDownload(UnconfirmedDownload, NewsTemplate2):
-    title = 'Kono Healer, Mendokusai'
-    keywords = [title, "This Healer's a Handful"]
-    website = 'https://kono-healer-anime.com/'
-    twitter = 'kono_healer'
-    hashtags = 'このヒーラー'
-    folder_name = 'kono-healer'
-
-    PAGE_PREFIX = website
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_news()
-        self.download_key_visual()
-        self.download_character()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
-
-    def download_news(self):
-        self.download_template_news(self.PAGE_PREFIX)
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('teaser', 'https://pbs.twimg.com/media/Ey5yDx_VgAUuHlX?format=jpg&name=large')
-        self.add_to_image_list('tz_visual', self.PAGE_PREFIX + 'core_sys/images/main/tz/tz_visual.png')
-        self.add_to_image_list('tz2_tw', 'https://pbs.twimg.com/media/FCG8xMCUcAEjhO3?format=jpg&name=4096x4096')
-        self.download_image_list(folder)
-
-    def download_character(self):
-        folder = self.create_character_directory()
-        try:
-            soup = self.get_soup(self.PAGE_PREFIX + 'chara')
-            images = soup.select('div.read img')
-            self.image_list = []
-            for image in images:
-                if image.has_attr('src'):
-                    image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
-                    image_name = self.extract_image_name_from_url(image_url)
-                    self.add_to_image_list(image_name, image_url)
-            self.download_image_list(folder)
-        except Exception as e:
-            self.print_exception(e, 'Character')
 
 
 # Kumichou Musume to Sewagakari
