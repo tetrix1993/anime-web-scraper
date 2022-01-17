@@ -1,9 +1,11 @@
 import requests
-from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
+from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsTemplate3
 
 
 # Aharen-san wa Hakarenai https://aharen-pr.com/ #阿波連さん @aharen_pr
 # Honzuki S3 http://booklove-anime.jp/story/ #本好きの下剋上 @anime_booklove
+# Kaguya-sama wa Kokurasetai: Ultra Romantic https://kaguya.love/ #かぐや様 @anime_kaguya
+# Kakkou no Iinazuke https://cuckoos-anime.com/ #カッコウの許嫁 @cuckoo_anime
 # Kawaii dake ja Nai Shikimori-san https://shikimori-anime.com/ #式守さん @anime_shikimori
 # Koi wa Sekai Seifuku no Ato de https://koiseka-anime.com/ #恋せか @koiseka_anime
 # Kono Healer, Mendokusai https://kono-healer-anime.com/ #このヒーラー @kono_healer
@@ -196,6 +198,54 @@ class Kaguyasama3Download(Spring2022AnimeDownload, NewsTemplate):
         self.add_to_image_list('tz', self.PAGE_PREFIX + 'assets/3rd/t/img/top/main/img_main.jpg')
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FCKDRzxVkAAIwMv?format=jpg&name=4096x4096')
         self.download_image_list(folder)
+
+
+# Kakkou no Iinazuke
+class KakkounoIinazukeDownload(Spring2022AnimeDownload, NewsTemplate3):
+    title = 'Kakkou no Iinazuke'
+    keywords = [title, 'A Couple of Cuckoos']
+    website = 'https://cuckoos-anime.com/'
+    twitter = 'cuckoo_anime'
+    hashtags = 'カッコウの許嫁'
+    folder_name = 'kakkou-no-iinazuke'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        template = self.PAGE_PREFIX + 'assets/news/kv%s.jpg'
+        self.download_by_template(folder, template, 1, 1)
+
+        for i in range(20):
+            image_url = self.PAGE_PREFIX + f'assets/top/main-t{i + 1}/vis.jpg'
+            result = self.download_image(image_url, f'{folder}/vis{i + 1}')
+            if result == -1:
+                break
+
+        self.image_list = []
+        # self.add_to_image_list('2022-nenga', self.PAGE_PREFIX + 'assets/top/2022-nenga.jpg')
+        self.add_to_image_list('2022-nenga_tw', 'https://pbs.twimg.com/media/FH4LR7HaAAAg0u2?format=jpg&name=4096x4096')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'assets/top/character/c%s.png'
+        self.download_by_template(folder, template, 1)
 
 
 # Kawaii dake ja Nai Shikimori-san
