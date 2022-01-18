@@ -547,7 +547,7 @@ class MierukochanDownload(Fall2021AnimeDownload, NewsTemplate3):
         folder = self.create_media_directory()
         try:
             soup = self.get_soup(self.PAGE_PREFIX + 'bddvd.html')
-            images = soup.select('div.cont-singles img')
+            images = soup.select('div.cont-singles img:not(.bnf-list img)')
             self.image_list = []
             for image in images:
                 if image.has_attr('src') and not image['src'].endswith('np.png'):
@@ -557,6 +557,21 @@ class MierukochanDownload(Fall2021AnimeDownload, NewsTemplate3):
                         image_url = self.PAGE_PREFIX
                     image_name = self.extract_image_name_from_url(image_url)
                     self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+
+            a_tags = soup.select('.bnf-list .inner a')
+            self.image_list = []
+            for a_tag in a_tags:
+                if a_tag.has_attr('href'):
+                    if a_tag['href'].startswith('./'):
+                        image_url = self.PAGE_PREFIX + a_tag['href'][2:]
+                    else:
+                        image_url = self.PAGE_PREFIX
+                    image_name = self.extract_image_name_from_url(image_url)
+                    split1 = image_url.split('/')
+                    if len(split1) > 1:
+                        image_name = split1[-2] + '_' + image_name
+                        self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Blu-ray')
