@@ -216,7 +216,10 @@ class Arifureta2Download(Winter2022AnimeDownload, NewsTemplate):
                         self.image_list = []
                         for i in range(len(images)):
                             if images[i].has_attr('src'):
-                                image_url = self.clear_resize_in_url2(images[i]['src'])
+                                if episode == '01':
+                                    image_url = self.clear_resize_in_url2(images[i]['src'])
+                                else:
+                                    image_url = images[i]['src']
                                 image_name = episode + '_' + str(i + 1)
                                 self.add_to_image_list(image_name, image_url)
                         self.download_image_list(self.base_folder)
