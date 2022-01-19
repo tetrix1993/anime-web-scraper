@@ -58,6 +58,13 @@ class AkebichanDownload(Winter2022AnimeDownload, NewsTemplate):
     def download_episode_preview(self):
         story_url = self.PAGE_PREFIX + 'story/'
         yt_folder = self.create_custom_directory('yt')  # YouTube thumbnails
+        yt_images = os.listdir(yt_folder)
+        yt_episodes = []
+        for yt_image in yt_images:
+            if os.path.isfile(yt_folder + '/' + yt_image) and yt_image.endswith('.jpg') \
+                    and yt_image[0:2].isnumeric() and yt_image[2] == '_':
+                yt_episodes.append(yt_image[0:2])
+
         try:
             soup = self.get_soup(story_url, decode=True)
             lis = soup.select('.page_tab li')
@@ -73,7 +80,7 @@ class AkebichanDownload(Winter2022AnimeDownload, NewsTemplate):
                             continue
                     except:
                         continue
-                    if self.is_image_exists(episode + '_' + str(self.IMAGES_PER_EPISODE)):
+                    if self.is_image_exists(episode + '_' + str(self.IMAGES_PER_EPISODE)) and episode in yt_episodes:
                         continue
                     ep_soup = soup
                     if 'current' not in li['class']:
@@ -635,6 +642,13 @@ class KendeshiDownload(Winter2022AnimeDownload, NewsTemplate):
     def download_episode_preview(self):
         story_url = self.PAGE_PREFIX + 'story/'
         yt_folder = self.create_custom_directory('yt')  # YouTube thumbnails
+        yt_images = os.listdir(yt_folder)
+        yt_episodes = ['01']
+        for yt_image in yt_images:
+            if os.path.isfile(yt_folder + '/' + yt_image) and yt_image.endswith('.jpg') \
+                    and yt_image[0:2].isnumeric() and yt_image[2] == '_':
+                yt_episodes.append(yt_image[0:2])
+
         try:
             soup = self.get_soup(story_url)
             a_tags = soup.select('ul.blurayList li a')
@@ -646,7 +660,7 @@ class KendeshiDownload(Winter2022AnimeDownload, NewsTemplate):
                             episode = str(int(i_tag.text.strip().replace('第', '').replace('話', ''))).zfill(2)
                         except:
                             continue
-                        if self.is_image_exists(f'{episode}_1'):
+                        if self.is_image_exists(f'{episode}_1') and episode in yt_episodes:
                             continue
                         ep_soup = self.get_soup(story_url + a_tag['href'][2:])
                         if ep_soup is not None:
