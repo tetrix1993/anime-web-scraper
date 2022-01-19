@@ -1044,6 +1044,10 @@ class MainDownload:
         except Exception as e:
             self.print_exception(e, 'YouTube')
 
+    @staticmethod
+    def get_youtube_thumbnail_url(youtube_id):
+        return f"https://i.ytimg.com/vi/{youtube_id}/hq720.jpg"
+
     # Match filter
     def match(self, s_filter):
         if not isinstance(s_filter, SearchFilter):

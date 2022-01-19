@@ -634,6 +634,7 @@ class KendeshiDownload(Winter2022AnimeDownload, NewsTemplate):
 
     def download_episode_preview(self):
         story_url = self.PAGE_PREFIX + 'story/'
+        yt_folder = self.create_custom_directory('yt')  # YouTube thumbnails
         try:
             soup = self.get_soup(story_url)
             a_tags = soup.select('ul.blurayList li a')
@@ -657,6 +658,13 @@ class KendeshiDownload(Winter2022AnimeDownload, NewsTemplate):
                                     image_name = f'{episode}_{i + 1}'
                                     self.add_to_image_list(image_name, image_url)
                             self.download_image_list(self.base_folder)
+
+                            yt_thumb = ep_soup.select('div.youtube iframe')
+                            if len(yt_thumb) > 0 and yt_thumb[0].has_attr('src'):
+                                yt_id = yt_thumb[0]['src'].split('/')[-1]
+                                yt_image_url = self.get_youtube_thumbnail_url(yt_id)
+                                yt_image_name = episode + '_' + yt_id
+                                self.download_image(yt_image_url, yt_folder + '/' + yt_image_name)
         except Exception as e:
             self.print_exception(e)
 
