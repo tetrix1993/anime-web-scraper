@@ -918,9 +918,8 @@ class JahysamaDownload(Summer2021AnimeDownload, NewsTemplate):
                                             continue
                                         image_name = self.extract_image_name_from_url(image_url)
                                         if self.is_image_exists(image_name, folder):
-                                            if not self.is_content_length_same_as_existing(
-                                                    image_url, image_name, folder):
-                                                print(f'{self.__class__.__name__} - {image_name} has different size')
+                                            self.download_image_with_different_length(image_url, image_name, 'old',
+                                                                                      folder)
                                             continue
                                         self.add_to_image_list(image_name, image_url)
                             else:
@@ -930,9 +929,9 @@ class JahysamaDownload(Summer2021AnimeDownload, NewsTemplate):
                                         image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
                                         image_name = self.extract_image_name_from_url(image_url)
                                         if self.is_image_exists(image_name, folder):
-                                            if 'bd-' in page_name[-5:] and not self.is_content_length_same_as_existing(
-                                                    image_url, image_name, folder):
-                                                print(f'{self.__class__.__name__} - {image_name} has different size')
+                                            if 'bd-' in page_name[-5:]:
+                                                self.download_image_with_different_length(
+                                                    image_url, image_name, 'old', folder)
                                             continue
                                         self.add_to_image_list(image_name, image_url)
                         if len(self.image_list) > 1:
