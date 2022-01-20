@@ -634,18 +634,17 @@ class MurabitoADownload(Spring2022AnimeDownload, NewsTemplate):
         templates = [prefix + 'main.png', prefix + 'face1.jpg', prefix + 'face2.jpg', prefix + 'thumb.jpg']
         self.download_by_template(folder, templates, 1, 1)
 
+        old_dir = 'old'
         for i in range(20):
             image_name = f'character{str(i + 1)}_main'
             if self.is_image_exists(image_name, folder):
                 image_url = (prefix % str(i + 1)) + 'main.png'
-                if not self.is_content_length_same_as_existing(image_url, image_name, folder):
-                    print(f'{self.__class__.__name__} - {image_name} has different size')
+                if self.download_image_with_different_length(image_url, image_name, old_dir, folder):
                     for p in ['face1', 'face2', 'thumb']:
                         img_name = f'character{str(i + 1)}_{p}'
                         if self.is_image_exists(img_name, folder):
                             img_url = (prefix % str(i + 1)) + p + '.jpg'
-                            if not self.is_content_length_same_as_existing(img_url, img_name, folder):
-                                print(f'{self.__class__.__name__} - {img_name} has different size')
+                            self.download_image_with_different_length(img_url, img_name, old_dir, folder)
             else:
                 break
 

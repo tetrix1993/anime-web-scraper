@@ -823,6 +823,35 @@ class MainDownload:
             return False
         return existing_length == content_length
 
+    def download_image_with_different_length(self, url, name, new_dir, filepath=None):
+        if filepath is None:
+            filepath = self.base_folder
+        new_file_dir = filepath + '/' + new_dir
+        if not os.path.exists(new_file_dir):
+            os.makedirs(new_file_dir)
+        filename = filepath + '/' + name
+        if not self.is_content_length_same_as_existing(url, name, filepath):
+            ext = self.get_image_extension(filename)
+            new_file_name = name
+            i = 0
+            while True:
+                if self.is_image_exists(new_file_name, new_file_dir):
+                    i += 1
+                    new_file_name = name + ' (' + str(i) + ')'
+                else:
+                    break
+            os.rename(f'{filename}.{ext}', f'{new_file_dir}/{new_file_name}.{ext}')
+            result = self.download_image(url, filepath + '/' + name)
+            return result == 0
+        return False
+
+    @staticmethod
+    def get_image_extension(name_without_extension):
+        for ext in ['jpg', 'png', 'gif', 'webp']:
+            if os.path.exists(name_without_extension + '.' + ext):
+                return ext
+        return ''
+
     @staticmethod
     def clear_resize_in_url(url):
         # Change url in the form http://abc.com/image_name-800x600.jpg to http://abc.com/image-name.jpg
