@@ -3,6 +3,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 
 
 # Aharen-san wa Hakarenai https://aharen-pr.com/ #阿波連さん @aharen_pr
+# Gaikotsu Kishi-sama, Tadaima Isekai e Odekakechuu https://skeleton-knight.com/ #骸骨騎士様 @gaikotsukishi
 # Honzuki S3 http://booklove-anime.jp/story/ #本好きの下剋上 @anime_booklove
 # Kaguya-sama wa Kokurasetai: Ultra Romantic https://kaguya.love/ #かぐや様 @anime_kaguya
 # Kakkou no Iinazuke https://cuckoos-anime.com/ #カッコウの許嫁 @cuckoo_anime
@@ -88,6 +89,86 @@ class AharensanDownload(Spring2022AnimeDownload, NewsTemplate):
         except Exception as e:
             self.print_exception(e, 'Character')
         self.download_image_list(folder)
+
+
+# Gaikotsu Kishi-sama, Tadaima Isekai e Odekakechuu
+class GaikotsuKishiDownload(Spring2022AnimeDownload, NewsTemplate):
+    title = 'Gaikotsu Kishi-sama, Tadaima Isekai e Odekakechuu'
+    keywords = [title, 'Skeleton Knight in Another World', 'Gaikotsukishi']
+    website = 'https://skeleton-knight.com/'
+    twitter = 'gaikotsukishi'
+    hashtags = '骸骨騎士様'
+    folder_name = 'gaikotsukishi'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+        self.download_media()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        news_prefix = self.PAGE_PREFIX + 'news/'
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='ol.frames_inner li',
+                                    date_select='span', title_select='span:nth-child(2)', id_select='a',
+                                    a_tag_prefix=news_prefix)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('kv', 'https://aniverse-mag.com/wp-content/uploads/2021/04/key_visual.jpg')
+        self.add_to_image_list('kv02b', self.PAGE_PREFIX + 'img/kv02b.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        self.image_list = []
+        self.add_to_image_list('arc', self.PAGE_PREFIX + 'img/arc.png')
+        self.add_to_image_list('arian', self.PAGE_PREFIX + 'img/arian.jpg')
+        self.download_image_list(folder)
+
+        chara_prefix = self.PAGE_PREFIX + 'character/'
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        try:
+            soup = self.get_soup(chara_prefix)
+            a_tags = soup.select('li.anim a')
+            for a_tag in a_tags:
+                if a_tag.has_attr('href') and len(a_tag['href']) > 0:
+                    href = a_tag['href']
+                    page_name = href.replace('.php', '')
+                    if page_name in processed:
+                        continue
+                    chara_soup = self.get_soup(chara_prefix + href)
+                    if chara_soup:
+                        self.image_list = []
+                        main_img = chara_soup.select('div.continner figure img')
+                        if len(main_img) > 0 and main_img[0].has_attr('src'):
+                            self.add_to_image_list(page_name, self.PAGE_PREFIX + main_img[0]['src'].replace('../', ''))
+                        images = chara_soup.select('div.continner ol img')
+                        for image in images:
+                            if image.has_attr('src'):
+                                image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                                image_name = page_name + '_' + self.extract_image_name_from_url(image_url)
+                                self.add_to_image_list(image_name, image_url)
+                        if len(self.image_list) > 0:
+                            processed.append(page_name)
+                        self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+        self.create_cache_file(cache_filepath, processed, num_processed)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        self.download_by_template(folder, self.PAGE_PREFIX + 'img/snap%s.jpg', 1, 1, 4)
 
 
 # Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan wo Erandeiraremasen 3rd Season

@@ -84,7 +84,6 @@ pip install -r requirements.txt
 The premiere date for the anime listed here has not been announced.
 * [Ayakashi Triangle](https://ayakashitriangle-anime.com/)
 * [Deaimon](https://deaimon.jp/)
-* [Gaikotsu Kishi-sama, Tadaima Isekai e Odekakechuu](https://skeleton-knight.com/)
 * [Goblin Slayer 2nd Season](http://www.goblinslayer.jp/)
 * [Isekai Ojisan](https://isekaiojisan.com/)
 * [Isekai Yakkyoku](https://isekai-yakkyoku.jp/)
@@ -111,6 +110,7 @@ The premiere date for the anime listed here has not been announced.
 
 ### Spring 2022 Anime
 * [Aharen-san wa Hakarenai](https://aharen-pr.com/)
+* [Gaikotsu Kishi-sama, Tadaima Isekai e Odekakechuu](https://skeleton-knight.com/)
 * [Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan wo Erandeiraremasen 3rd Season](http://booklove-anime.jp/)
 * [Kaguya-sama wa Kokurasetai: Ultra Romantic](https://kaguya.love/)
 * [Kakkou no Iinazuke](https://cuckoos-anime.com/)

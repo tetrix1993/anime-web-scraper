@@ -6,7 +6,6 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Ayakashi Triangle https://ayakashitriangle-anime.com/ #あやかしトライアングル #あやトラ @ayakashi_anime
 # Deaimon https://deaimon.jp/ #であいもん #deaimon @deaimon_anime
 # Do It Yourself!! https://diy-anime.com/ #diyアニメ @diy_anime
-# Gaikotsu Kishi-sama, Tadaima Isekai e Odekakechuu https://skeleton-knight.com/ #骸骨騎士様 @gaikotsukishi
 # Goblin Slayer S2 http://www.goblinslayer.jp/ #ゴブスレ @GoblinSlayer_GA
 # Isekai Ojisan #いせおじ #異世界おじさん @Isekai_Ojisan
 # Isekai Yakkyoku https://isekai-yakkyoku.jp/ #異世界薬局 @isekai_yakkyoku
@@ -287,55 +286,6 @@ class DoItYourselfDownload(UnconfirmedDownload):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'assets/images/pc/teaser/img_chara-%s.png'
         self.download_by_template(folder, template, 1, 0)
-
-
-# Gaikotsu Kishi-sama, Tadaima Isekai e Odekakechuu
-class GaikotsuKishiDownload(UnconfirmedDownload):
-    title = 'Gaikotsu Kishi-sama, Tadaima Isekai e Odekakechuu'
-    keywords = [title, 'Skeleton Knight in Another World', 'Gaikotsukishi']
-    website = 'https://skeleton-knight.com/'
-    twitter = 'gaikotsukishi'
-    hashtags = '骸骨騎士様'
-    folder_name = 'gaikotsukishi'
-
-    PAGE_PREFIX = website
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_key_visual()
-        self.download_character()
-        self.download_media()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('kv', 'https://aniverse-mag.com/wp-content/uploads/2021/04/key_visual.jpg')
-        self.download_image_list(folder)
-
-    def download_character(self):
-        folder = self.create_character_directory()
-        try:
-            soup = self.get_soup(self.PAGE_PREFIX)
-            images = soup.select('#character img')
-            self.image_list = []
-            for image in images:
-                if image.has_attr('src'):
-                    image_url = self.PAGE_PREFIX + image['src']
-                    image_name = self.extract_image_name_from_url(image_url)
-                    self.add_to_image_list(image_name, image_url)
-            self.download_image_list(folder)
-        except Exception as e:
-            self.print_exception(e, 'Character')
-
-    def download_media(self):
-        folder = self.create_media_directory()
-        self.download_by_template(folder, self.PAGE_PREFIX + 'img/snap%s.jpg', 1, 1, 4)
 
 
 # Goblin Slayer 2nd Season
