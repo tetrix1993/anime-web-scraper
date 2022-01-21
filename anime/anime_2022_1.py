@@ -261,7 +261,7 @@ class Arifureta2Download(Winter2022AnimeDownload, NewsTemplate):
                 for image in images:
                     if image.has_attr('src') and not image['src'].startswith('https://test.flab.site/')\
                             and 'nowprinting' not in image['src']:
-                        image_url = self.clear_resize_in_url2(image['src'].split('?')[0])
+                        image_url = self.clear_resize_in_url(image['src'].split('?')[0])
                         image_name = self.extract_image_name_from_url(image_url)
                         self.add_to_image_list(image_name, image_url)
                 self.download_image_list(folder)
@@ -272,7 +272,7 @@ class Arifureta2Download(Winter2022AnimeDownload, NewsTemplate):
                 self.image_list = []
                 for image in images:
                     if image.has_attr('src') and 'nowprinting' not in image['src']:
-                        image_url = self.clear_resize_in_url2(image['src'].split('?')[0])
+                        image_url = self.clear_resize_in_url(image['src'].split('?')[0])
                         image_name = self.extract_image_name_from_url(image_url)
                         self.add_to_image_list(image_name, image_url)
                 self.download_image_list(folder)
