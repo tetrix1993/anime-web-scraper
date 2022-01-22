@@ -56,8 +56,8 @@ class AharensanDownload(Spring2022AnimeDownload, NewsTemplate):
 
     def download_news(self):
         # Paging logic might be wrong
-        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article.md-news__li',
-                                    date_select='time', title_select='h3', id_select='a', date_separator='.&nbsp;',
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.md-li__news li',
+                                    date_select='time', title_select='.ttl', id_select='a', date_separator='.&nbsp;',
                                     next_page_select='ul.pagenation-list li',
                                     next_page_eval_index_class='is__current', next_page_eval_index=-1)
 
@@ -69,18 +69,26 @@ class AharensanDownload(Spring2022AnimeDownload, NewsTemplate):
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/E7ohr6yVIAEQI6z?format=jpg&name=large')
         self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/FFqAiWPaAAA-7gz?format=jpg&name=large')
         # self.add_to_image_list('kv1', self.PAGE_PREFIX + 'wp/wp-content/uploads/2021/12/阿波連さん_第1弾KV.jpg')
+        self.add_to_image_list('kv2_pc', self.PAGE_PREFIX + 'wp/wp-content/themes/aharen-teaser/_assets/images/kv/kv2_pc.jpg')
+        self.add_to_image_list('kv2', self.PAGE_PREFIX + 'wp/wp-content/uploads/2022/01/阿波連さん第2弾KV_220117.jpg')
         self.download_image_list(folder)
 
-        template = self.PAGE_PREFIX + 'wp/wp-content/themes/aharen-teaser/_assets/images/kv/kv%s_pc.jpg'
-        self.download_by_template(folder, template, 1, 2)
-
+        template = self.PAGE_PREFIX + 'wp/wp-content/themes/aharen-main/_assets/images/top/fv_%s_pc.png'
+        self.download_by_template(folder, template, 3, 1)
 
     def download_character(self):
         folder = self.create_character_directory()
         self.image_list = []
+        template = self.PAGE_PREFIX + 'wp/wp-content/themes/aharen-teaser/_assets/images/char/main/%s_pc.png'
+        for chara in ['aharen', 'raido', 'oshiro', 'tobaru']:
+            image_url = template % chara
+            image_name = 'tz_' + chara
+            self.add_to_image_list(image_name, image_url)
+        self.download_image_list(folder)
+
         try:
-            soup = self.get_soup(self.PAGE_PREFIX)
-            images = soup.select('picture.chardetail--img img')
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            images = soup.select('div.chardata img')
             for image in images:
                 if image.has_attr('src'):
                     image_url = image['src']
