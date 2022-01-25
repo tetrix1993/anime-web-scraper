@@ -1248,7 +1248,7 @@ class ShuumatsuNoHaremDownload(Winter2022AnimeDownload, NewsTemplate2):
     def run(self):
         self.download_episode_preview()
         self.download_news()
-        self.download_episode_preview_guess()
+        # self.download_episode_preview_guess()
         self.download_key_visual()
         self.download_character()
         self.download_media()
@@ -1271,7 +1271,8 @@ class ShuumatsuNoHaremDownload(Winter2022AnimeDownload, NewsTemplate2):
                         images = ep_soup.select('ul.tp5 img')
                         self.image_list = []
                         for i in range(len(images)):
-                            image_url = self.PAGE_PREFIX + images[i]['src'].split('?')[0].replace('../', '')
+                            image_url = self.PAGE_PREFIX + images[i]['src'].split('?')[0].replace('../', '')\
+                                .replace('/sn_', '/')
                             image_name = episode + '_' + str(i + 1)
                             self.add_to_image_list(image_name, image_url)
                         self.download_image_list(self.base_folder)
