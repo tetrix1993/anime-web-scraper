@@ -91,6 +91,7 @@ The premiere date for the anime listed here has not been announced.
 * [Kage no Jitsuryokusha ni Naritakute!](https://shadow-garden.jp/)
 * [Kumichou Musume to Sewagakari](https://kumichomusume.com/)
 * [Kyokou Suiri Season 2](https://kyokousuiri.jp/)
+* [Mamahaha no Tsurego ga Motokano datta](https://tsurekano-anime.com/)
 * [Maou Gakuin no Futekigousha: Shijou Saikyou no Maou no Shiso, Tensei shite Shison-tachi no Gakkou e 2nd Season](https://maohgakuin.com/)
 * [Mato Seihei no Slave](https://mabotai.jp/)
 * [Otonari no Tenshi-sama ni Itsunomanika Dame Ningen ni Sareteita Ken](https://otonarino-tenshisama.jp/)

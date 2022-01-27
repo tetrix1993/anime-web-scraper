@@ -14,6 +14,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Kumichou Musume to Sewagakari https://kumichomusume.com/ #組長娘と世話係 @kumichomusume
 # Kunoichi Tsubaki no Mune no Uchi https://kunoichi-tsubaki.com/ #くノ一ツバキ @tsubaki_anime
 # Kyokou Suiri S2 https://kyokousuiri.jp/ #虚構推理 @kyokou_suiri
+# Mamahaha no Tsurego ga Motokano datta https://tsurekano-anime.com/ #連れカノ #tsurekano @tsurekano
 # Maou Gakuin no Futekigousha 2nd Season https://maohgakuin.com/ #魔王学院 @maohgakuin
 # Mato Seihei no Slave https://mabotai.jp/ #魔都精兵のスレイブ #まとスレ @mabotai_kohobu
 # Otonari no Tenshi-sama ni Itsunomanika Dame Ningen ni Sareteita Ken https://otonarino-tenshisama.jp/ #お隣の天使様 @tenshisama_PR
@@ -632,6 +633,39 @@ class KyokouSuiri2Download(UnconfirmedDownload, NewsTemplate):
         self.image_list = []
         self.add_to_image_list('tz', self.PAGE_PREFIX + 'wp/wp-content/uploads/2021/11/6271138d893814b7a21c84b078fca0b9.jpg')
         self.download_image_list(folder)
+
+
+# Mamahaha no Tsurego ga Motokano datta
+class TsurekanoDownload(UnconfirmedDownload):
+    title = 'Mamahaha no Tsurego ga Motokano datta'
+    keywords = [title, "My Stepmom's Daughter Is My Ex", 'tsurekano']
+    website = 'https://tsurekano-anime.com/'
+    twitter = 'tsurekano'
+    hashtags = ['連れカノ', 'tsurekano']
+    folder_name = 'tsurekano'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FKA8xQ1aAAEmNl3?format=jpg&name=4096x4096')
+        self.download_image_list(folder)
+
+        template = self.PAGE_PREFIX + 'img/top/kv_%s.png'
+        self.download_by_template(folder, template, 1, 1, prefix='top_')
+
+        self.download_youtube_thumbnails(self.PAGE_PREFIX, folder)
 
 
 # Maou Gakuin no Futekigousha: Shijou Saikyou no Maou no Shiso, Tensei shite Shison-tachi no Gakkou e
