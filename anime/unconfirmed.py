@@ -4,7 +4,6 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 
 # Anohana S2 https://10th.anohana.jp/ #あの花 #anohana @anohana_project
 # Ayakashi Triangle https://ayakashitriangle-anime.com/ #あやかしトライアングル #あやトラ @ayakashi_anime
-# Deaimon https://deaimon.jp/ #であいもん #deaimon @deaimon_anime
 # Do It Yourself!! https://diy-anime.com/ #diyアニメ @diy_anime
 # Goblin Slayer S2 http://www.goblinslayer.jp/ #ゴブスレ @GoblinSlayer_GA
 # Isekai Ojisan #いせおじ #異世界おじさん @Isekai_Ojisan
@@ -18,7 +17,6 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Maou Gakuin no Futekigousha 2nd Season https://maohgakuin.com/ #魔王学院 @maohgakuin
 # Mato Seihei no Slave https://mabotai.jp/ #魔都精兵のスレイブ #まとスレ @mabotai_kohobu
 # Otonari no Tenshi-sama ni Itsunomanika Dame Ningen ni Sareteita Ken https://otonarino-tenshisama.jp/ #お隣の天使様 @tenshisama_PR
-# RPG Fudousan https://rpg-rs.jp/ #RPG不動産 @rpgrs_anime
 # Shachiku-san wa Youjo Yuurei ni Iyasaretai. https://shachikusan.com/ #しゃちされたい @shachisaretai
 # Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita 2nd Season https://slime300-anime.com/ #スライム倒して300年 @slime300_PR
 # Tensei Kenja no Isekai Life: Dai-2 no Shokugyou wo Ete, Sekai Saikyou ni Narimashita https://tenseikenja.com #転生賢者 @tenseikenja_PR
@@ -145,56 +143,6 @@ class AyakashiTriangleDownload(UnconfirmedDownload):
         self.add_to_image_list('announce_aniverse', 'https://aniverse-mag.com/wp-content/uploads/2021/12/img_kokuchi.jpg')
         self.add_to_image_list('announce', self.PAGE_PREFIX + 'assets/img/img_kv.png')
         self.download_image_list(folder)
-
-
-# Deaimon
-class DeaimonDownload(UnconfirmedDownload, NewsTemplate2):
-    title = 'Deaimon'
-    keywords = [title]
-    website = 'https://deaimon.jp/'
-    twitter = 'deaimon_anime'
-    hashtags = ['であいもん', 'deaimon']
-    folder_name = 'deaimon'
-
-    PAGE_PREFIX = website
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_news()
-        self.download_key_visual()
-        self.download_character()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_news(self):
-        self.download_template_news(self.PAGE_PREFIX)
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.add_to_image_list('kv_tw', 'https://pbs.twimg.com/media/E_T2HaPUUAIwv3-?format=jpg&name=4096x4096')
-        self.add_to_image_list('kv_wide', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv.webp')
-        # self.add_to_image_list('kv', self.PAGE_PREFIX + 'core_sys/images/news/00000002/block/00000009/00000003.jpg')
-        self.add_to_image_list('kv_sp', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv_sp.png')
-        self.download_image_list(folder)
-
-    def download_character(self):
-        folder = self.create_character_directory()
-        try:
-            soup = self.get_soup(self.PAGE_PREFIX)
-            images = soup.select('div.charWrap img')
-            self.image_list = []
-            for image in images:
-                if image.has_attr('src'):
-                    image_url = self.PAGE_PREFIX + image['src']
-                    image_name = self.extract_image_name_from_url(image_url)
-                    self.add_to_image_list(image_name, image_url)
-            self.download_image_list(folder)
-        except Exception as e:
-            self.print_exception(e, 'Character')
 
 
 # Do It Yourself!!
@@ -779,45 +727,6 @@ class OtonarinoTenshisamaDownload(UnconfirmedDownload, NewsTemplate):
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FIQhzRlagAAxK-X?format=jpg&name=large')
         self.add_to_image_list('tz', self.PAGE_PREFIX + 'wordpress/wp-content/themes/otonari/images/mainvisual.jpg')
         self.download_image_list(folder)
-
-
-# RPG Fudousan
-class RPGFudousanDownload(UnconfirmedDownload, NewsTemplate3):
-    title = 'RPG Fudousan'
-    keywords = [title, 'RPG Real Estate']
-    website = 'https://rpg-rs.jp/'
-    twitter = 'rpgrs_anime'
-    hashtags = 'RPG不動産'
-    folder_name = 'rpg-fudousan'
-
-    PAGE_PREFIX = website
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_news()
-        self.download_key_visual()
-        self.download_character()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_news(self):
-        self.download_template_news(self.PAGE_PREFIX)
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('tz1_1', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv.png')
-        self.add_to_image_list('tz1_2', self.PAGE_PREFIX + 'assets/news/vis-t1.jpg')
-        self.download_image_list(folder)
-
-    def download_character(self):
-        folder = self.create_character_directory()
-        template = self.PAGE_PREFIX + 'assets/character/c/%s.png'
-        self.download_by_template(folder, template, 1, 1, prefix='c')
 
 
 # Shachiku-san wa Youjo Yuurei ni Iyasaretai. https://shachikusan.com/ #しゃちされたい @shachisaretai

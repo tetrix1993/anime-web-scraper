@@ -3,6 +3,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 
 
 # Aharen-san wa Hakarenai https://aharen-pr.com/ #阿波連さん @aharen_pr
+# Deaimon https://deaimon.jp/ #であいもん #deaimon @deaimon_anime
 # Gaikotsu Kishi-sama, Tadaima Isekai e Odekakechuu https://skeleton-knight.com/ #骸骨騎士様 @gaikotsukishi
 # Honzuki S3 http://booklove-anime.jp/story/ #本好きの下剋上 @anime_booklove
 # Kaguya-sama wa Kokurasetai: Ultra Romantic https://kaguya.love/ #かぐや様 @anime_kaguya
@@ -13,6 +14,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Machikado Mazoku: 2-choume http://www.tbs.co.jp/anime/machikado/ #まちカドまぞく #MachikadoMazoku @machikado_staff
 # Mahoutsukai Reimeiki https://www.tbs.co.jp/anime/reimeiki/ #魔法使い黎明期 @reimeiki_pr
 # Otome Game Sekai wa Mob ni Kibishii Sekai desu https://mobseka.com/ #モブせか #mobseka @mobseka_anime
+# RPG Fudousan https://rpg-rs.jp/ #RPG不動産 @rpgrs_anime
 # Shijou Saikyou no Daimaou, Murabito A ni Tensei suru https://murabito-a-anime.com/ #村人Aに転生 @murabitoA_anime
 # Shokei Shoujo no Virgin Road http://virgin-road.com/ #処刑少女 #shokei_anime @VirginroadAnime
 # Spy x Family https://spy-family.net/ #SPY_FAMILY #スパイファミリー @spyfamily_anime
@@ -97,6 +99,56 @@ class AharensanDownload(Spring2022AnimeDownload, NewsTemplate):
         except Exception as e:
             self.print_exception(e, 'Character')
         self.download_image_list(folder)
+
+
+# Deaimon
+class DeaimonDownload(Spring2022AnimeDownload, NewsTemplate2):
+    title = 'Deaimon'
+    keywords = [title]
+    website = 'https://deaimon.jp/'
+    twitter = 'deaimon_anime'
+    hashtags = ['であいもん', 'deaimon']
+    folder_name = 'deaimon'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.add_to_image_list('kv_tw', 'https://pbs.twimg.com/media/E_T2HaPUUAIwv3-?format=jpg&name=4096x4096')
+        self.add_to_image_list('kv_wide', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv.webp')
+        # self.add_to_image_list('kv', self.PAGE_PREFIX + 'core_sys/images/news/00000002/block/00000009/00000003.jpg')
+        self.add_to_image_list('kv_sp', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv_sp.png')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('div.charWrap img')
+            self.image_list = []
+            for image in images:
+                if image.has_attr('src'):
+                    image_url = self.PAGE_PREFIX + image['src']
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
 
 
 # Gaikotsu Kishi-sama, Tadaima Isekai e Odekakechuu
@@ -681,6 +733,45 @@ class MobsekaDownload(Spring2022AnimeDownload, NewsTemplate):
         body_template = self.PAGE_PREFIX + 'img/chara/illust_%s.png'
         face_template = self.PAGE_PREFIX + 'img/chara/face_%s.png'
         self.download_by_template(folder, [body_template, face_template], 2, 1)
+
+
+# RPG Fudousan
+class RPGFudousanDownload(Spring2022AnimeDownload, NewsTemplate3):
+    title = 'RPG Fudousan'
+    keywords = [title, 'RPG Real Estate']
+    website = 'https://rpg-rs.jp/'
+    twitter = 'rpgrs_anime'
+    hashtags = 'RPG不動産'
+    folder_name = 'rpg-fudousan'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz1_1', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv.png')
+        self.add_to_image_list('tz1_2', self.PAGE_PREFIX + 'assets/news/vis-t1.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'assets/character/c/%s.png'
+        self.download_by_template(folder, template, 1, 1, prefix='c')
 
 
 # Shijou Saikyou no Daimaou, Murabito A ni Tensei suru

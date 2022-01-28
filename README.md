@@ -83,7 +83,6 @@ pip install -r requirements.txt
 ### New Anime
 The premiere date for the anime listed here has not been announced.
 * [Ayakashi Triangle](https://ayakashitriangle-anime.com/)
-* [Deaimon](https://deaimon.jp/)
 * [Goblin Slayer 2nd Season](http://www.goblinslayer.jp/)
 * [Isekai Ojisan](https://isekaiojisan.com/)
 * [Isekai Yakkyoku](https://isekai-yakkyoku.jp/)
@@ -95,7 +94,6 @@ The premiere date for the anime listed here has not been announced.
 * [Maou Gakuin no Futekigousha: Shijou Saikyou no Maou no Shiso, Tensei shite Shison-tachi no Gakkou e 2nd Season](https://maohgakuin.com/)
 * [Mato Seihei no Slave](https://mabotai.jp/)
 * [Otonari no Tenshi-sama ni Itsunomanika Dame Ningen ni Sareteita Ken](https://otonarino-tenshisama.jp/)
-* [RPG Fudousan](https://rpg-rs.jp/)
 * [Shachiku-san wa Youjo Yuurei ni Iyasaretai.](https://shachikusan.com/)
 * [Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita 2nd Season](https://slime300-anime.com/)
 * [Tensei Kenja no Isekai Life: Dai-2 no Shokugyou wo Ete, Sekai Saikyou ni Narimashita](https://tenseikenja.com/)
@@ -111,6 +109,7 @@ The premiere date for the anime listed here has not been announced.
 
 ### Spring 2022 Anime
 * [Aharen-san wa Hakarenai](https://aharen-pr.com/)
+* [Deaimon](https://deaimon.jp/)
 * [Gaikotsu Kishi-sama, Tadaima Isekai e Odekakechuu](https://skeleton-knight.com/)
 * [Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan wo Erandeiraremasen 3rd Season](http://booklove-anime.jp/)
 * [Kaguya-sama wa Kokurasetai: Ultra Romantic](https://kaguya.love/)
@@ -121,6 +120,7 @@ The premiere date for the anime listed here has not been announced.
 * [Kunoichi Tsubaki no Mune no Uchi](https://kunoichi-tsubaki.com/)
 * [Mahoutsukai Reimeiki](https://www.tbs.co.jp/anime/reimeiki/)
 * [Otome Game Sekai wa Mob ni Kibishii Sekai desu](https://mobseka.com/)
+* [RPG Fudousan](https://rpg-rs.jp/)
 * [Shijou Saikyou no Daimaou, Murabito A ni Tensei suru](https://murabito-a-anime.com/)
 * [Shokei Shoujo no Virgin Road](http://virgin-road.com/)
 * [Spy x Family](https://spy-family.net/)
