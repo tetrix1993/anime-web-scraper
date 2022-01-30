@@ -783,6 +783,13 @@ class MainDownload:
         return False
 
     @staticmethod
+    def get_content_length(url):
+        try:
+            return int(requests.head(url).headers['Content-Length'])
+        except:
+            return -1
+
+    @staticmethod
     def is_matching_content_length(url, lengths):
         content_lengths = []
         if isinstance(lengths, int):

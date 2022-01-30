@@ -1248,7 +1248,7 @@ class ShuumatsuNoHaremDownload(Winter2022AnimeDownload, NewsTemplate2):
     def run(self):
         self.download_episode_preview()
         self.download_news()
-        # self.download_episode_preview_guess()
+        self.download_episode_preview_guess()
         self.download_key_visual()
         self.download_character()
         self.download_media()
@@ -1283,16 +1283,18 @@ class ShuumatsuNoHaremDownload(Winter2022AnimeDownload, NewsTemplate2):
         folder = self.create_custom_directory('guess')
         template = self.PAGE_PREFIX + 'core_sys/images/contents/%s/block/%s/%s.jpg'
         is_successful = False
-        for i in range(self.FINAL_EPISODE):
+        for i in range(4, self.FINAL_EPISODE + 1, 1):
             episode = str(i + 1).zfill(2)
             is_success = False
             if self.is_image_exists(episode + '_1'):
                 continue
             first = 38 + i
-            second = 149 + 6 * i
-            third = 108 + 6 * i
+            second = 158 + 5 * i
+            third = 116 + 6 * i
             for j in range(self.IMAGES_PER_EPISODE):
                 image_url = template % (str(first).zfill(8), str(second).zfill(8), str(third + j).zfill(8))
+                if self.get_content_length(image_url) < 5000:
+                    break
                 image_name = episode + '_' + str(j + 1)
                 result = self.download_image(image_url, folder + '/' + image_name)
                 if result == 0:
