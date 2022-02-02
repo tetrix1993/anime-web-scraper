@@ -827,6 +827,9 @@ class LeadaleDownload(Winter2022AnimeDownload, NewsTemplate3):
                 if image.has_attr('src') and not image['src'].endswith('np.png') and image['src'].startswith('./'):
                     image_url = self.PAGE_PREFIX + image['src'][2:].split('?')[0]
                     image_name = self.extract_image_name_from_url(image_url)
+                    split1 = image_url.split('/')
+                    if len(split1) > 1 and split1[-2] != 'bddvd':
+                        image_name = split1[-2] + "_" + image_name
                     self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)
         except Exception as e:
