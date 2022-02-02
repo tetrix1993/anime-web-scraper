@@ -821,11 +821,14 @@ class LeadaleDownload(Winter2022AnimeDownload, NewsTemplate3):
         folder = self.create_media_directory()
         try:
             soup = self.get_soup(self.PAGE_PREFIX + 'bddvd.html')
-            images = soup.select('#BdData img:not(h3 img)')
+            images = soup.select('img')
             self.image_list = []
             for image in images:
-                if image.has_attr('src') and not image['src'].endswith('np.png') and image['src'].startswith('./'):
-                    image_url = self.PAGE_PREFIX + image['src'][2:].split('?')[0]
+                if image.has_attr('src') and image['src'].startswith('./'):
+                    src = image['src']
+                    if '/bddvd/' not in src or src.endswith('np.png'):
+                        continue
+                    image_url = self.PAGE_PREFIX + src[2:].split('?')[0]
                     image_name = self.extract_image_name_from_url(image_url)
                     split1 = image_url.split('/')
                     if len(split1) > 1 and split1[-2] != 'bddvd':
