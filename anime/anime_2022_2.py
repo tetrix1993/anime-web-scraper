@@ -1017,7 +1017,7 @@ class SpyFamilyDownload(Spring2022AnimeDownload, NewsTemplate):
 # Summertime Render
 class SummertimeRenderDownload(Spring2022AnimeDownload, NewsTemplate):
     title = 'Summertime Render'
-    keywords = [title]
+    keywords = [title, 'Summer Time Rendering']
     website = 'https://summertime-anime.com/'
     twitter = 'summertime_PR'
     hashtags = ['サマータイムレンダ', 'サマレン']
@@ -1038,8 +1038,8 @@ class SummertimeRenderDownload(Spring2022AnimeDownload, NewsTemplate):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
 
     def download_news(self):
-        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article.md-article__li',
-                                    date_select='time', title_select='h5', id_select='a',
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.md-news__li',
+                                    date_select='.date', title_select='.ttl', id_select='a',
                                     next_page_select='ul.pagenation-list li',
                                     next_page_eval_index_class='is__current', next_page_eval_index=-1)
 
@@ -1049,16 +1049,17 @@ class SummertimeRenderDownload(Spring2022AnimeDownload, NewsTemplate):
         # self.add_to_image_list('tz', self.PAGE_PREFIX + 'wp/wp-content/themes/summertime-teaser/_assets/images/kv/kv_pc.jpg')
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/E63h3z-VEAMtJYy?format=jpg&name=medium')
         self.add_to_image_list('kv1', self.PAGE_PREFIX + 'wp/wp-content/uploads/2021/11/サマータイムレンダ_KV1_logomini.jpg')
+        self.add_to_image_list('kv2', self.PAGE_PREFIX + 'wp/wp-content/uploads/2022/02/STR_KV2_logomini.jpg')
         # self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/FG8lGwpaMAc7Aj3?format=jpg&name=large')
         self.download_image_list(folder)
 
-        template = self.PAGE_PREFIX + 'wp/wp-content/themes/summertime-teaser/_assets/images/kv/kv_%s_pc.png'
+        template = self.PAGE_PREFIX + 'wp/wp-content/themes/summertime-main/_assets/images/top/kv/kv_%s_pc.png'
         self.download_by_template(folder, template, 3, 1)
 
     def download_character(self):
         folder = self.create_character_directory()
         try:
-            soup = self.get_soup(self.PAGE_PREFIX)
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
             images = soup.select('.chardata--v--img img')
             self.image_list = []
             for image in images:
