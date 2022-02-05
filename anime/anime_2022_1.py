@@ -1653,6 +1653,10 @@ class KisekoiDownload(Winter2022AnimeDownload, NewsTemplate):
         folder = self.create_media_directory()
 
         # Blu-ray
+        self.image_list = []
+        self.add_to_image_list('bd1', 'https://pbs.twimg.com/media/FK1EyhUaQAECeYu?format=jpg&name=large')
+        self.download_image_list(folder)
+
         cache_filepath = folder + '/cache'
         processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
         bd_urls = ['special.html', '', '02.html', '03.html', '04.html', '05.html', '06.html']
@@ -1668,8 +1672,19 @@ class KisekoiDownload(Winter2022AnimeDownload, NewsTemplate):
                     for image in images:
                         if image.has_attr('src') and not image['src'].endswith('np_shop.png')\
                                 and not image['src'].endswith('np_jk.png')\
-                                and not image['src'].endswith('logo_anx.png'):
-                            image_url = self.PAGE_PREFIX + image['src'][1:]
+                                and not image['src'].endswith('logo_anx.png')\
+                                and '/btn_' not in image['src']\
+                                and '/bddvd/' in image['src']:
+                            if image['src'].startswith('../'):
+                                image_url = self.PAGE_PREFIX + image['src'][3:]
+                            elif image['src'].startswith('./'):
+                                image_url = self.PAGE_PREFIX + image['src'][2:]
+                            elif image['src'].startswith('/'):
+                                image_url = self.PAGE_PREFIX + image['src'][1:]
+                            elif image['src'].startswith('http'):
+                                image_url = image['src']
+                            else:
+                                image_url = self.PAGE_PREFIX + image['src']
                             image_name = self.extract_image_name_from_url(image_url)
                             self.add_to_image_list(image_name, image_url)
                     if i > 0:
