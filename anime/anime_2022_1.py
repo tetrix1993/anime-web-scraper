@@ -1811,6 +1811,10 @@ class TensaiOujiDownload(Winter2022AnimeDownload, NewsTemplate2):
 
     def download_media(self):
         folder = self.create_media_directory()
+        self.image_list = []
+        self.add_to_image_list('bd1', 'https://pbs.twimg.com/media/FLEur-dUUAIX7_m?format=jpg&name=medium')
+        self.download_image_list(folder)
+
         cache_filepath = folder + '/cache'
         processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
         bd_urls = ['tokuten', '01', '02', '03', '04']
@@ -1833,7 +1837,9 @@ class TensaiOujiDownload(Winter2022AnimeDownload, NewsTemplate2):
                             image_name = self.extract_image_name_from_url(image_url)
                             if self.is_image_exists(image_name, folder):
                                 continue
-                            if self.is_matching_content_length(image_url, [7779, 4197]):
+
+                            # if self.is_matching_content_length(image_url, [7779, 4197, 8808, 5040]):
+                            if self.get_content_length(image_url) < 10000:
                                 continue
                             self.add_to_image_list(image_name, image_url)
                     if i > 0:
