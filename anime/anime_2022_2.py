@@ -1130,6 +1130,7 @@ class TateNoYuusha2Download(Spring2022AnimeDownload):
         self.add_to_image_list('announce', 'https://pbs.twimg.com/media/EDag4MkUwAAQnf0?format=jpg&name=medium')
         self.add_to_image_list('kv1', 'https://pbs.twimg.com/media/EhHFvyVU4AA7cUw?format=jpg&name=large')
         self.add_to_image_list('mv_lg', self.PAGE_PREFIX + '/assets/img/2nd/mv_lg.jpg')
+        self.add_to_image_list('kv2', 'https://pbs.twimg.com/media/FLKADbeaMAMa18f?format=jpg&name=4096x4096')
         self.download_image_list(folder)
 
 
