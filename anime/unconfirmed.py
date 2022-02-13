@@ -709,22 +709,31 @@ class OtonarinoTenshisamaDownload(UnconfirmedDownload, NewsTemplate):
 
     def run(self):
         self.download_episode_preview()
-        # self.download_news()
+        self.download_news()
         self.download_key_visual()
+        self.download_media()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
 
     def download_news(self):
-        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.allNews__item',
-                                    title_select='.allNews__title', date_select='allNews__date',
-                                    id_select='a')
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.allNews__item',
+                                    title_select='.allNews__title', date_select='.allNews__date',
+                                    id_select='a', next_page_select='a.next.page-numbers')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         self.image_list = []
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FIQhzRlagAAxK-X?format=jpg&name=large')
         self.add_to_image_list('tz', self.PAGE_PREFIX + 'wordpress/wp-content/themes/otonari/images/mainvisual.jpg')
+        self.download_image_list(folder)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        # self.add_to_image_list('valentine_tw', 'https://pbs.twimg.com/media/FLfDFR8aQAIWt1u?format=jpg&name=large')
+        self.add_to_image_list('valentine_chara', 'https://pbs.twimg.com/media/FLfDE5XagAg42bM?format=jpg&name=medium')
+        self.add_to_image_list('valentine_pos', self.PAGE_PREFIX + 'wordpress/wp-content/uploads/2022/02/valentine_pos.jpg')
+        self.add_to_image_list('valentine', self.PAGE_PREFIX + 'wordpress/wp-content/uploads/2022/02/valentine_sp-kabegami.jpg')
         self.download_image_list(folder)
 
 
