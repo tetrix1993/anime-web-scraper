@@ -1,5 +1,6 @@
 import requests
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsTemplate3
+from anime.external_download import MocaNewsDownload
 
 
 # Aharen-san wa Hakarenai https://aharen-pr.com/ #阿波連さん @aharen_pr
@@ -361,6 +362,7 @@ class KakkounoIinazukeDownload(Spring2022AnimeDownload, NewsTemplate3):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
@@ -382,12 +384,24 @@ class KakkounoIinazukeDownload(Spring2022AnimeDownload, NewsTemplate3):
         self.image_list = []
         # self.add_to_image_list('2022-nenga', self.PAGE_PREFIX + 'assets/top/2022-nenga.jpg')
         self.add_to_image_list('2022-nenga_tw', 'https://pbs.twimg.com/media/FH4LR7HaAAAg0u2?format=jpg&name=4096x4096')
+        self.add_to_image_list('2022-stvd', self.PAGE_PREFIX + 'assets/top/2022-stvd.jpg')
         self.download_image_list(folder)
 
     def download_character(self):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'assets/top/character/c%s.png'
         self.download_by_template(folder, template, 1)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        self.image_list = []
+        for i in range(1, 4, 1):
+            image_name = 'valentine' + str(i)
+            if self.is_image_exists(image_name, folder):
+                continue
+            image_url = MocaNewsDownload.generate_image_url('2022021400300a_', i)
+            self.add_to_image_list(image_name, image_url, is_mocanews=True)
+        self.download_image_list(folder)
 
 
 # Kawaii dake ja Nai Shikimori-san
