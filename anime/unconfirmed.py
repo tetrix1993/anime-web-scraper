@@ -731,7 +731,7 @@ class OtonarinoTenshisamaDownload(UnconfirmedDownload, NewsTemplate):
     def download_media(self):
         folder = self.create_media_directory()
         # self.add_to_image_list('valentine_tw', 'https://pbs.twimg.com/media/FLfDFR8aQAIWt1u?format=jpg&name=large')
-        self.add_to_image_list('valentine_chara', 'https://pbs.twimg.com/media/FLfDE5XagAg42bM?format=jpg&name=medium')
+        self.add_to_image_list('valentine_chara', 'https://aniverse-mag.com/wp-content/uploads/2022/02/8e5cda5d29024d4bf78d1e9452225fb6-e1644755501739.png')
         self.add_to_image_list('valentine_pos', self.PAGE_PREFIX + 'wordpress/wp-content/uploads/2022/02/valentine_pos.jpg')
         self.add_to_image_list('valentine', self.PAGE_PREFIX + 'wordpress/wp-content/uploads/2022/02/valentine_sp-kabegami.jpg')
         self.download_image_list(folder)

@@ -395,12 +395,10 @@ class KakkounoIinazukeDownload(Spring2022AnimeDownload, NewsTemplate3):
     def download_media(self):
         folder = self.create_media_directory()
         self.image_list = []
-        for i in range(1, 4, 1):
-            image_name = 'valentine' + str(i)
-            if self.is_image_exists(image_name, folder):
-                continue
-            image_url = MocaNewsDownload.generate_image_url('2022021400300a_', i)
-            self.add_to_image_list(image_name, image_url, is_mocanews=True)
+        valentine_template = 'https://aniverse-mag.com/wp-content/uploads/2022/02/%s.jpg'
+        self.add_to_image_list('valentine1', valentine_template % 'A_2-e1644765742792')
+        self.add_to_image_list('valentine2', valentine_template % 'C_2-e1644765764457')
+        self.add_to_image_list('valentine3', valentine_template % 'B_2-e1644765752743')
         self.download_image_list(folder)
 
 
