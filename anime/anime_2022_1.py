@@ -1740,6 +1740,22 @@ class KisekoiDownload(Winter2022AnimeDownload, NewsTemplate):
             audio_name = 'voice_' + num
             self.download_content(audio_url, f'{folder}/{audio_name}.wav')
 
+        # Valentine 2022
+        vd2022_prefix = self.PAGE_PREFIX + 'special/vd2022/assets/'
+
+        vd2022_img1 = vd2022_prefix + 'img/digicon/sp_wp_%s.jpg'
+        vd2022_img2 = vd2022_prefix + 'img/digicon/icon_%s.jpg'
+        self.download_by_template(folder, [vd2022_img1, vd2022_img2], 2, 1, 4, prefix='vd2022_')
+
+        vd2022_audio_template = vd2022_prefix + 'audio/%s.wav'
+        vd2022_audios = ['01marin_gi_6czbeb', '01marin_ho_swjly6',
+                         '02wakana_gi_bjk1q7', '02wakana_ho_ivukse',
+                         '03sajyuna_gi_ptel7m', '03sajyuna_ho_fn9geg',
+                         '04sinju_gi_v2652w', '04sinju_ho_jccvn5']
+        for vd2022_audio in vd2022_audios:
+            audio_url = vd2022_audio_template % vd2022_audio
+            self.download_content(audio_url, f'{folder}/vd2022_{vd2022_audio}.wav')
+
 
 # Tensai Ouji no Akaji Kokka Saisei Jutsu
 class TensaiOujiDownload(Winter2022AnimeDownload, NewsTemplate2):
