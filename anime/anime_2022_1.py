@@ -341,6 +341,10 @@ class FabinikuDownload(Winter2022AnimeDownload, NewsTemplate):
                                 if image_url is not None:
                                     image_name = episode + '_' + str(i + 1)
                                     self.add_to_image_list(image_name, image_url)
+                            elif images[i].has_attr('src'):
+                                image_url = self.clear_resize_in_url(images[i]['src'])
+                                image_name = episode + '_' + str(i + 1)
+                                self.add_to_image_list(image_name, image_url)
                         self.download_image_list(self.base_folder)
         except Exception as e:
             self.print_exception(e)
