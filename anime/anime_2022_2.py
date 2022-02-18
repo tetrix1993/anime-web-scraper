@@ -131,26 +131,48 @@ class DeaimonDownload(Spring2022AnimeDownload, NewsTemplate2):
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
+        image_prefix = self.PAGE_PREFIX + 'core_sys/images/'
         self.add_to_image_list('kv_tw', 'https://pbs.twimg.com/media/E_T2HaPUUAIwv3-?format=jpg&name=4096x4096')
-        self.add_to_image_list('kv_wide', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv.webp')
-        # self.add_to_image_list('kv', self.PAGE_PREFIX + 'core_sys/images/news/00000002/block/00000009/00000003.jpg')
-        self.add_to_image_list('kv_sp', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv_sp.png')
+        self.add_to_image_list('kv_wide', image_prefix + 'main/tz/kv.webp')
+        # self.add_to_image_list('kv', image_prefix + 'news/00000002/block/00000009/00000003.jpg')
+        self.add_to_image_list('kv_sp', image_prefix + 'main/tz/kv_sp.png')
+        self.add_to_image_list('kv2', image_prefix + 'main/top/kv2.webp')
+        self.add_to_image_list('kv2_1', image_prefix + 'news/00000016/block/00000035/00000021.jpg')
         self.download_image_list(folder)
 
     def download_character(self):
         folder = self.create_character_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
         try:
-            soup = self.get_soup(self.PAGE_PREFIX)
-            images = soup.select('div.charWrap img')
-            self.image_list = []
-            for image in images:
-                if image.has_attr('src'):
-                    image_url = self.PAGE_PREFIX + image['src']
-                    image_name = self.extract_image_name_from_url(image_url)
-                    self.add_to_image_list(image_name, image_url)
-            self.download_image_list(folder)
+            soup = self.get_soup(self.PAGE_PREFIX + 'chara/')
+            chara_links = soup.select('#ContentsListUnit01 a')
+            for link in chara_links:
+                if link.has_attr('href') and link['href'].startswith('../') and '/chara/' in link['href']:
+                    if link['href'].endswith('.html'):
+                        chara_name = link['href'].split('/')[-1].split('.html')[0]
+                    else:
+                        continue
+                    if chara_name in processed:
+                        continue
+                    if chara_name == 'index':
+                        chara_soup = soup
+                    else:
+                        chara_soup = self.get_soup(self.PAGE_PREFIX + link['href'].replace('../', ''))
+                    if chara_soup is not None:
+                        images = chara_soup.select('.charaStand img, .charaFace img')
+                        self.image_list = []
+                        for image in images:
+                            if image.has_attr('src'):
+                                image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                                image_name = self.extract_image_name_from_url(image_url)
+                                self.add_to_image_list(image_name, image_url)
+                        if len(self.image_list) > 0:
+                            processed.append(chara_name)
+                        self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Gaikotsu Kishi-sama, Tadaima Isekai e Odekakechuu
