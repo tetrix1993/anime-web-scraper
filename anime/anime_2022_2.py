@@ -1204,6 +1204,9 @@ class YuuyameDownload(Spring2022AnimeDownload, NewsTemplate):
         self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/FCEakgUXMAYyVuC?format=jpg&name=large')
         self.add_to_image_list('kv1_1', self.PAGE_PREFIX + 'images/news/p_001.jpg')
         self.add_to_image_list('kv1_2', self.PAGE_PREFIX + 'images/top/v_001.jpg')
+        self.add_to_image_list('kv2_tw', 'https://pbs.twimg.com/media/FL3ta3HUUAQm59j?format=jpg&name=medium')
+        self.add_to_image_list('kv2_2', self.PAGE_PREFIX + 'images/top/v_002_02.jpg')
+        self.add_to_image_list('kv2_2', self.PAGE_PREFIX + 'images/top/v_002_tab.jpg')
         self.download_image_list(folder)
 
     def download_character(self):
