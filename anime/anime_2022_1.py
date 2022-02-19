@@ -2,7 +2,7 @@ import os
 import anime.constants as constants
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsTemplate3
 from datetime import datetime
-from scan import AniverseMagazineScanner, NatalieScanner
+from scan import AniverseMagazineScanner, AnimeRecorderScanner
 
 
 # Akebi-chan no Sailor-fuku https://akebi-chan.jp/ #明日ちゃんのセーラー服 #明日ちゃん @AKEBI_chan
@@ -514,7 +514,8 @@ class KuroitsusanDownload(Winter2022AnimeDownload, NewsTemplate):
 
     def download_episode_preview_external(self):
         jp_title = '怪人開発部の黒井津さん'
-        NatalieScanner(jp_title, self.base_folder, last_episode=self.FINAL_EPISODE, download_id=self.download_id).run()
+        AnimeRecorderScanner(jp_title, self.base_folder, self.FINAL_EPISODE,
+                             skip_article_ids=['229293', '229084'], download_id=self.download_id).run()
 
     def download_episode_preview_guess(self):
         folder = self.create_custom_directory('guess')
