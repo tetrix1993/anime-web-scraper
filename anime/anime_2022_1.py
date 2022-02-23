@@ -320,7 +320,7 @@ class FabinikuDownload(Winter2022AnimeDownload, NewsTemplate):
                         continue
                     ep_soup = self.get_soup(a_tag['href'])
                     if ep_soup is not None:
-                        images = ep_soup.select('.story_single_main img')
+                        images = ep_soup.select('.story_single_main img.alignleft')
                         self.image_list = []
                         for i in range(len(images)):
                             if images[i].has_attr('srcset'):
