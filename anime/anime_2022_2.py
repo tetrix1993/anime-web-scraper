@@ -719,13 +719,32 @@ class ReimeikiDownload(Spring2022AnimeDownload, NewsTemplate):
         self.add_to_image_list('tz', 'https://pbs.twimg.com/media/FCy4SbFVgBETtHo?format=jpg&name=large')
         self.add_to_image_list('teaser_visual_chara', self.PAGE_PREFIX + 'img/teaser_visual_chara.png')
         self.add_to_image_list('teaser_visual_chara_bg', self.PAGE_PREFIX + 'img/teaser_visual_chara.jpg')
+        self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/FMbjID_VEAUuCcr?format=jpg&name=large')
+        # self.add_to_image_list('keyvisual', self.PAGE_PREFIX + 'img/keyvisual.jpg')
         self.download_image_list(folder)
+
+        try:
+            css_text = self.get_response(self.PAGE_PREFIX + 'css/common.css')
+            split1 = css_text.split('.top-main-visual')
+            for i in range(len(split1)):
+                split2 = split1[i].split('}')[0].split('")')[0].split('url("../')
+                if len(split2) > 1:
+                    image_url = self.PAGE_PREFIX + split2[1].strip()
+                    image_name = self.extract_image_name_from_url(image_url)
+                    if self.is_image_exists(image_name, folder):
+                        self.download_image_with_different_length(image_url, image_name, 'old', folder)
+                        continue
+                    self.download_image(image_url, folder + '/' + image_name)
+                    break
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
 
     def download_character(self):
         folder = self.create_character_directory()
-        prefix = self.PAGE_PREFIX + 'img/chara'
-        templates = [prefix + '_%s_on.png', prefix + 'img_%s.jpg']
-        self.download_by_template(folder, templates, 2, 1)
+        # prefix = self.PAGE_PREFIX + 'img/chara'
+        # templates = [prefix + '_%s_on.png', prefix + 'img_%s.jpg']
+        template = self.PAGE_PREFIX + 'character/img/chara_img_%s@2x.png'
+        self.download_by_template(folder, template, 2, 1)
 
 
 # Otome Game Sekai wa Mob ni Kibishii Sekai desu

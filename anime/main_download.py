@@ -837,6 +837,7 @@ class MainDownload:
         if not os.path.exists(new_file_dir):
             os.makedirs(new_file_dir)
         filename = filepath + '/' + name
+        return_value = False
         if not self.is_content_length_same_as_existing(url, name, filepath):
             ext = self.get_image_extension(filename)
             new_file_name = name
@@ -849,8 +850,10 @@ class MainDownload:
                     break
             os.rename(f'{filename}.{ext}', f'{new_file_dir}/{new_file_name}.{ext}')
             result = self.download_image(url, filepath + '/' + name)
-            return result == 0
-        return False
+            return_value = result == 0
+        if len(os.listdir(new_file_dir)) == 0:
+            os.rmdir(new_file_dir)
+        return return_value
 
     @staticmethod
     def get_image_extension(name_without_extension):
