@@ -815,14 +815,30 @@ class RPGFudousanDownload(Spring2022AnimeDownload, NewsTemplate3):
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         self.image_list = []
-        self.add_to_image_list('tz1_1', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv.png')
+        # self.add_to_image_list('tz1_1', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv.png')
         self.add_to_image_list('tz1_2', self.PAGE_PREFIX + 'assets/news/vis-t1.jpg')
+        self.add_to_image_list('vis-k1', self.PAGE_PREFIX + 'assets/news/vis-k1.jpg')
         self.download_image_list(folder)
+
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            visual = soup.select('.vis img')
+            if len(visual) > 0 and visual[0].has_attr('src'):
+                image_url = self.PAGE_PREFIX + visual[0]['src'].replace('./', '')
+                image_name = self.extract_image_name_from_url(image_url)
+                if self.is_image_exists(image_name, folder):
+                    self.download_image_with_different_length(image_url, image_name, 'old', folder)
+                else:
+                    self.download_image(image_url, folder + '/' + image_name)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
 
     def download_character(self):
         folder = self.create_character_directory()
-        template = self.PAGE_PREFIX + 'assets/character/c/%s.png'
-        self.download_by_template(folder, template, 1, 1, prefix='c')
+        # template = self.PAGE_PREFIX + 'assets/character/c/%s.png'
+        # self.download_by_template(folder, template, 1, 1, prefix='c')
+        template = self.PAGE_PREFIX + 'assets/character/%sc.png'
+        self.download_by_template(folder, template, 1, 1, prefix='chara')
 
 
 # Shachiku-san wa Youjo Yuurei ni Iyasaretai. https://shachikusan.com/ #しゃちされたい @shachisaretai
