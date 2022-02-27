@@ -670,6 +670,7 @@ class MachikadoMazoku2Download(Spring2022AnimeDownload, NewsTemplate):
         self.download_episode_preview()
         self.download_news()
         self.download_key_visual()
+        self.download_character()
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='ul.newslist li',
@@ -680,7 +681,37 @@ class MachikadoMazoku2Download(Spring2022AnimeDownload, NewsTemplate):
         folder = self.create_key_visual_directory()
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/E__DujoVcAktN1i?format=jpg&name=large')
         self.add_to_image_list('tz', self.PAGE_PREFIX + 'img/machikado_top_pc@2x.jpg')
+        self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/FMnJhjJacAIwzef?format=jpg&name=large')
         self.download_image_list(folder)
+
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('#top-visual img')
+            for image in images:
+                if image.has_attr('src'):
+                    image_url = self.PAGE_PREFIX + image['src']
+                    image_name = self.extract_image_name_from_url(image_url)
+                    if self.is_image_exists(image_name, folder):
+                        self.download_image_with_different_length(image_url, image_name, 'old', folder)
+                    else:
+                        self.download_image(image_url, folder + '/' + image_name)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        chara_prefix = self.PAGE_PREFIX + 'character/img/'
+        template = [chara_prefix + 'chara_nav_%s@2x.png']
+        self.download_by_template(folder, template, 2, 1)
+
+        template2 = chara_prefix + 'charaimg_%s@2x.png'
+        for i in range(1, 30, 1):
+            image_url = template2 % str(i).zfill(2)
+            image_name = 'charaimg_%s@2x' % str(i).zfill(2)
+            if self.is_image_exists(image_name, folder):
+                self.download_image_with_different_length(image_url, image_name, 'old', folder)
+            else:
+                self.download_image(image_url, folder + '/' + image_name)
 
 
 # Mahoutsukai Reimeiki
