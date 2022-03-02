@@ -1,3 +1,4 @@
+import os
 import requests
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsTemplate3
 from anime.external_download import MocaNewsDownload
@@ -512,6 +513,7 @@ class KunoichiTsubakiDownload(Spring2022AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX)
@@ -545,6 +547,44 @@ class KunoichiTsubakiDownload(Spring2022AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+    def download_media(self):
+        folder = self.create_media_directory()
+
+        # Digicon
+        digicon_folder = folder + '/digicon'
+        if not os.path.exists(digicon_folder):
+            os.makedirs(digicon_folder)
+
+        self.image_list = []
+        try:
+            digicon_soup = self.get_soup(self.PAGE_PREFIX + 'special/digicon/')
+            digicon_imgs = digicon_soup.select('.digicon_img img')
+            for digicon_img in digicon_imgs:
+                if digicon_img.has_attr('src'):
+                    if digicon_img['src'].startswith('../../'):
+                        digicon_image_url = self.PAGE_PREFIX + digicon_img['src'][6:]
+                    elif digicon_img['src'].startswith('/'):
+                        digicon_image_url = self.PAGE_PREFIX + digicon_img['src'][1:]
+                    else:
+                        continue
+                    digicon_image_name = self.extract_image_name_from_url(digicon_image_url)
+                    self.add_to_image_list(digicon_image_name, digicon_image_url)
+            self.download_image_list(digicon_folder)
+
+            voices = digicon_soup.select('.voice audio')
+            for voice in voices:
+                if voice.has_attr('src'):
+                    if voice['src'].startswith('../../'):
+                        audio_url = self.PAGE_PREFIX + voice['src'][6:]
+                    elif voice['src'].startswith('/'):
+                        audio_url = self.PAGE_PREFIX + voice['src'][1:]
+                    else:
+                        continue
+                    audio_name = audio_url.split('/')[-1]
+                    self.download_content(audio_url, digicon_folder + '/' + audio_name)
+        except Exception as e:
+            self.print_exception(e, 'Media - Digicon')
 
 
 # Koi wa Sekai Seifuku no Ato de
