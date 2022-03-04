@@ -674,6 +674,7 @@ class KonoHealerDownload(Spring2022AnimeDownload, NewsTemplate2):
         self.add_to_image_list('teaser', 'https://pbs.twimg.com/media/Ey5yDx_VgAUuHlX?format=jpg&name=large')
         self.add_to_image_list('tz_visual', self.PAGE_PREFIX + 'core_sys/images/main/tz/tz_visual.png')
         self.add_to_image_list('tz2_tw', 'https://pbs.twimg.com/media/FCG8xMCUcAEjhO3?format=jpg&name=4096x4096')
+        self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/FM7Jj7rUcAANg3L?format=jpg&name=large')
         self.download_image_list(folder)
 
     def download_character(self):
