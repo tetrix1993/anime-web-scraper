@@ -89,7 +89,6 @@ The premiere date for the anime listed here has not been announced.
 * [Itai no wa Iya nano de Bougyoryoku ni Kyokufuri Shitai to Omoimasu. 2nd Season](https://bofuri.jp/)
 * [Kage no Jitsuryokusha ni Naritakute!](https://shadow-garden.jp/)
 * [Kumichou Musume to Sewagakari](https://kumichomusume.com/)
-* [Kyokou Suiri Season 2](https://kyokousuiri.jp/)
 * [Mamahaha no Tsurego ga Motokano datta](https://tsurekano-anime.com/)
 * [Maou Gakuin no Futekigousha: Shijou Saikyou no Maou no Shiso, Tensei shite Shison-tachi no Gakkou e 2nd Season](https://maohgakuin.com/)
 * [Mato Seihei no Slave](https://mabotai.jp/)
@@ -99,6 +98,9 @@ The premiere date for the anime listed here has not been announced.
 * [Tensei Kenja no Isekai Life: Dai-2 no Shokugyou wo Ete, Sekai Saikyou ni Narimashita](https://tenseikenja.com/)
 * [Tonikaku Kawaii 2nd Season](http://tonikawa.com/)
 * [Yama no Susume: Next Summit](https://yamanosusume-ns.com/)
+
+### Fall 2020 Anime
+* [Kyokou Suiri Season 2](https://kyokousuiri.jp/)
 
 ### Summer 2022 Anime
 * [Hataraku Maou-sama! 2nd Season](https://maousama.jp/)
@@ -297,7 +299,7 @@ The premiere date for the anime listed here has not been announced.
 * [Itai no wa Iya nano de Bougyoryoku ni Kyokufuri Shitai to Omoimasu.](https://bofuri.jp/)
 * [Jibaku Shounen Hanako-kun](https://www.tbs.co.jp/anime/hanakokun/)
 * [Koisuru Asteroid](http://koiastv.com/)
-* [Kyokou Suiri](https://kyokousuiri.jp/)
+* [Kyokou Suiri](https://kyokousuiri.jp/season1/)
 * [Murenase! Seton Gakuen](https://anime-seton.jp/)
 * [Nekopara](https://nekopara-anime.com/ja/)
 * [Oshi ga Budoukan Ittekuretara Shinu](https://oshibudo.com/)

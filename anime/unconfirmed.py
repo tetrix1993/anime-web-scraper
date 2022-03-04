@@ -13,7 +13,6 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Kage no Jitsuryokusha ni Naritakute! https://shadow-garden.jp/ #陰の実力者 @Shadowgarden_PR
 # Kumichou Musume to Sewagakari https://kumichomusume.com/ #組長娘と世話係 @kumichomusume
 # Kunoichi Tsubaki no Mune no Uchi https://kunoichi-tsubaki.com/ #くノ一ツバキ @tsubaki_anime
-# Kyokou Suiri S2 https://kyokousuiri.jp/ #虚構推理 @kyokou_suiri
 # Mamahaha no Tsurego ga Motokano datta https://tsurekano-anime.com/ #連れカノ #tsurekano @tsurekano
 # Maou Gakuin no Futekigousha 2nd Season https://maohgakuin.com/ #魔王学院 @maohgakuin
 # Mato Seihei no Slave https://mabotai.jp/ #魔都精兵のスレイブ #まとスレ @mabotai_kohobu
@@ -546,42 +545,6 @@ class KumichoMusumeDownload(UnconfirmedDownload, NewsTemplate):
                     self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
-
-
-# Kyokou Suiri S2
-class KyokouSuiri2Download(UnconfirmedDownload, NewsTemplate):
-    title = 'Kyokou Suiri Season 2'
-    keywords = ['Kyokou Suiri', 'In/Spectre', '2nd']
-    website = 'https://kyokousuiri.jp/'
-    twitter = 'kyokou_suiri'
-    hashtags = '虚構推理'
-    folder_name = 'kyokou-suiri2'
-
-    PAGE_PREFIX = website
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_news()
-        self.download_key_visual()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
-
-    def download_news(self):
-        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='ul.p-news__list li.p-news__list-item',
-                                    date_select='div.p-article__header', title_select='div.p-article__text',
-                                    id_select='a', date_separator=' ', stop_date='2021.03.17',
-                                    next_page_select='div.c-pagination__nav.-next', next_page_eval_index=-1,
-                                    next_page_eval_index_class='is-disable')
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('tz', self.PAGE_PREFIX + 'wp/wp-content/uploads/2021/11/6271138d893814b7a21c84b078fca0b9.jpg')
-        self.download_image_list(folder)
 
 
 # Mamahaha no Tsurego ga Motokano datta

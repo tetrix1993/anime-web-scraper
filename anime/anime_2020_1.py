@@ -652,10 +652,13 @@ class KoisuruAsteroidDownload(Winter2020AnimeDownload):
 class KyokouSuiriDownload(Winter2020AnimeDownload):
     title = "Kyokou Suiri"
     keywords = ["Kyokou Suiri", "In/Spectre"]
+    website = 'https://kyokousuiri.jp/season1/'
+    twitter = 'kyokou_suiri'
+    hashtags = '虚構推理'
     folder_name = 'kyokou-suiri'
 
     PAGE_PREFIX = "https://kyokousuiri.jp/"
-    STORY_PAGE = "https://kyokousuiri.jp/story/"
+    STORY_PAGE = "https://kyokousuiri.jp/season1/story/"
     
     CHAR_DAI = "\\xe7\\xac\\xac" #第
     CHAR_WA = "\\xe8\\xa9\\xb1" #話
