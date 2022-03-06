@@ -160,7 +160,7 @@ class YouzitsuDownload(Summer2017AnimeDownload):
                 "Classroom of the Elite"]
     folder_name = 'youzitsu'
 
-    IMAGE_URL = 'http://you-zitsu.com/assets/story/%s_%s.jpg'
+    IMAGE_URL = 'http://you-zitsu.com/1st/assets/story/%s_%s.jpg'
     FINAL_EPISODE = 12
     NUM_OF_PICTURES_PER_PAGE = 6
 

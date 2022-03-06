@@ -7,6 +7,7 @@ from anime.main_download import MainDownload, NewsTemplate
 # Shadows House 2nd Season https://shadowshouse-anime.com/
 # Soredemo Ayumu wa Yosetekuru https://soreayu.com/ #それあゆ @soreayu_staff
 # Utawarerumono: Futari no Hakuoro https://utawarerumono.jp/ #うたわれ @UtawareAnime
+# Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e S2 http://you-zitsu.com/ #you_zitsu #よう実 @youkosozitsu
 
 
 # Summer 2022 Anime
@@ -233,3 +234,58 @@ class Utawarerumono3Download(Summer2022AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'manage/wp-content/themes/hakuoro/_assets/images/char/detail/char%s_pc.png'
         self.download_by_template(folder, template, 2, 1)
+
+
+# Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e S2
+class Youzitsu2Download(Summer2022AnimeDownload, NewsTemplate):
+    title = "Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e 2nd Season"
+    keywords = ["Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e", "Youzitsu", "Youjitsu",
+                "Classroom of the Elite"]
+    website = 'http://you-zitsu.com/'
+    twitter = 'youkosozitsu'
+    hashtags = ['you_zitsu', 'よう実', 'ClassroomOfTheElite']
+    folder_name = 'youzitsu2'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article.content-entry',
+                                    title_select='h2.entry-title span', date_select='div.entry-date span',
+                                    id_select=None, id_has_id=True, news_prefix='news.html')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        top_template_prefix = self.PAGE_PREFIX + 'assets/top/t%s/vis.'
+        news_template_prefix = self.PAGE_PREFIX + 'assets/news/vis-t%s.'
+
+        top_templates = [top_template_prefix + 'jpg', top_template_prefix + 'png']
+        news_templates = [news_template_prefix + 'jpg', news_template_prefix + 'png']
+
+        self.download_by_template(folder, news_templates, 1, 1, prefix='news_')
+
+        try:
+            for i in range(1, 11, 1):
+                is_success = False
+                for top_template in top_templates:
+                    image_url = top_template % str(i)
+                    image_name = 'top_vis-t' + str(i)
+                    result = self.download_image(image_url, folder + '/' + image_name)
+                    if result != -1:
+                        is_success = True
+                        break
+                if not is_success:
+                    break
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+

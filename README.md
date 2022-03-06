@@ -108,6 +108,7 @@ The premiere date for the anime listed here has not been announced.
 * [Shadows House](https://shadowshouse-anime.com/)
 * [Soredemo Ayumu wa Yosetekuru](https://soreayu.com/)
 * [Utawarerumono: Futari no Hakuoro](https://utawarerumono.jp/)
+* [Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e 2nd Season](http://you-zitsu.com/)
 
 ### Spring 2022 Anime
 * [Aharen-san wa Hakarenai](https://aharen-pr.com/)
@@ -457,7 +458,7 @@ The premiere date for the anime listed here has not been announced.
 * [New Game!!](http://newgame-anime.com/)
 * [Tenshi no 3P!](http://www.tenshi-no-3p.com/)
 * [Tsurezure Children](http://tsuredure-project.jp/)
-* [Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e](http://you-zitsu.com/)
+* [Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e](http://you-zitsu.com/1st/)
 
 ### Spring 2017 Anime
 * [Alice to Zouroku](https://www.alicetozouroku.com)
