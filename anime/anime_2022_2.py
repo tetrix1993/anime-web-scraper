@@ -531,17 +531,19 @@ class KunoichiTsubakiDownload(Spring2022AnimeDownload, NewsTemplate):
         self.image_list = []
         self.add_to_image_list('tz_main', self.PAGE_PREFIX + 'teaser/img/top/main.jpg')
         self.add_to_image_list('kv1', self.PAGE_PREFIX + 'teaser/img/top/main_2nd.jpg')
+        # self.add_to_image_list('kv1', self.PAGE_PREFIX + 'assets/img/top/main.jpg')
+        self.add_to_image_list('kv2', self.PAGE_PREFIX + 'assets/img/top/main-2nd.jpg')
         self.download_image_list(folder)
 
     def download_character(self):
         folder = self.create_character_directory()
         try:
-            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
-            images = soup.select('.c-chara_item img:not(.is-sp img)')
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/detail.html')
+            images = soup.select('.p-inChara__whole-img img, .p-inChara__face-item img')
             self.image_list = []
             for image in images:
-                if image.has_attr('src'):
-                    image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                if image.has_attr('data-src'):
+                    image_url = self.PAGE_PREFIX + image['data-src'][1:]
                     image_name = self.extract_image_name_from_url(image_url)
                     self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)
