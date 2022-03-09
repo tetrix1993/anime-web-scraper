@@ -99,7 +99,10 @@ The premiere date for the anime listed here has not been announced.
 * [Tonikaku Kawaii 2nd Season](http://tonikawa.com/)
 * [Yama no Susume: Next Summit](https://yamanosusume-ns.com/)
 
-### Fall 2020 Anime
+### Winter 2023 Anime
+* [Eiyuuou, Bu wo Kiwameru Tame Tenseisu: Soshite, Sekai Saikyou no Minarai Kishi](https://auo-anime.com/)
+
+### Fall 2022 Anime
 * [Kyokou Suiri Season 2](https://kyokousuiri.jp/)
 
 ### Summer 2022 Anime
