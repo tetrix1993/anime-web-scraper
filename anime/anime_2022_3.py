@@ -4,6 +4,7 @@ from anime.main_download import MainDownload, NewsTemplate
 
 # Hataraku Maou-sama!! https://maousama.jp/ #maousama @anime_maousama
 # Kanojo, Okarishimasu 2nd Season https://kanokari-official.com/ #かのかり #kanokari @kanokari_anime
+# Kinsou no Vermeil: Gakeppuchi Majutsushi wa Saikyou no Yakusai to Mahou Sekai wo Tsukisusumu #ヴェルメイユ #vermeil @vermeil_animePR
 # Shadows House 2nd Season https://shadowshouse-anime.com/
 # Soredemo Ayumu wa Yosetekuru https://soreayu.com/ #それあゆ @soreayu_staff
 # Utawarerumono: Futari no Hakuoro https://utawarerumono.jp/ #うたわれ @UtawareAnime
@@ -104,6 +105,42 @@ class Kanokari2Download(Summer2022AnimeDownload, NewsTemplate):
         self.download_image_list(folder)
 
         self.download_youtube_thumbnails(self.PAGE_PREFIX, folder)
+
+
+# Kinsou no Vermeil: Gakeppuchi Majutsushi wa Saikyou no Yakusai to Mahou Sekai wo Tsukisusumu
+class VermeilDownload(Summer2022AnimeDownload):
+    title = 'Kinsou no Vermeil: Gakeppuchi Majutsushi wa Saikyou no Yakusai to Mahou Sekai wo Tsukisusumu'
+    keywords = [title, 'Vermeil in Gold']
+    website = 'https://vermeilingold.jp/'
+    twitter = 'vermeil_animePR'
+    hashtags = ['ヴェルメイユ', 'vermeil']
+    folder_name = 'vermeil'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FNdPFJ6VgAA2C0l?format=jpg&name=4096x4096')
+        self.add_to_image_list('tz_tmp_img_off', self.PAGE_PREFIX + 'images/tmp_img_off.png')
+        self.add_to_image_list('tz_tmp_img_on', self.PAGE_PREFIX + 'images/tmp_img_on.png')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'images/pre_h%s.png'
+        self.download_by_template(folder, template, 2, 1)
 
 
 # Shadows House 2nd Season
