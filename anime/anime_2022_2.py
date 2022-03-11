@@ -573,8 +573,17 @@ class KunoichiTsubakiDownload(Spring2022AnimeDownload, NewsTemplate):
                     digicon_image_name = self.extract_image_name_from_url(digicon_image_url)
                     self.add_to_image_list(digicon_image_name, digicon_image_url)
             self.download_image_list(digicon_folder)
+        except Exception as e:
+            self.print_exception(e, 'Media - Digicon')
 
-            voices = digicon_soup.select('.voice audio')
+        # Countdown Voice
+        countdown_voice_folder = folder + '/countdown-voice'
+        if not os.path.exists(countdown_voice_folder):
+            os.makedirs(countdown_voice_folder)
+        
+        try:
+            voice_soup = self.get_soup(self.PAGE_PREFIX + 'special/countdown-voice/')
+            voices = voice_soup.select('.voice audio')
             for voice in voices:
                 if voice.has_attr('src'):
                     if voice['src'].startswith('../../'):
@@ -584,9 +593,9 @@ class KunoichiTsubakiDownload(Spring2022AnimeDownload, NewsTemplate):
                     else:
                         continue
                     audio_name = audio_url.split('/')[-1]
-                    self.download_content(audio_url, digicon_folder + '/' + audio_name)
+                    self.download_content(audio_url, countdown_voice_folder + '/' + audio_name)
         except Exception as e:
-            self.print_exception(e, 'Media - Digicon')
+            self.print_exception(e, 'Media - Countdown Voice')
 
 
 # Koi wa Sekai Seifuku no Ato de

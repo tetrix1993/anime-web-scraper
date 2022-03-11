@@ -4,7 +4,7 @@ import traceback
 from anime import MainDownload, ExternalDownload
 from anime.constants import FOLDER_OUTPUT
 
-VERSION_NUMBER = 50
+VERSION_NUMBER = 51
 DOWNLOAD_DIR = 'download'
 UNCONFIRMED_DIR = DOWNLOAD_DIR + '/unconfirmed'
 MIGRATION_ERROR_LOG = 'migration_error.log'
@@ -115,6 +115,10 @@ def rename_folders():
     rename_folder('download/2021-4/senpaiga-uzai', 'download/2021-4/senpaigauzai')
 
 
+def do_other_tasks():
+    move_kunoichi_tsubaki_audio_files()
+
+
 def run():
     try:
         if is_latest_version():
@@ -127,6 +131,7 @@ def run():
         migrate_to_output_folder()
         migrate_folders()
         rename_folders()
+        do_other_tasks()
         delete_empty_folders()
         update_version()
         print('Migration completed.')
@@ -230,6 +235,22 @@ def migrate_to_output_folder():
             os.rename(old_dir, new_dir)
             message = MOVING_FILE_TEMPLATE % (old_dir, new_dir)
             print(message)
+
+
+def move_kunoichi_tsubaki_audio_files():
+    digicon_folder = 'download/2022-2/kunoichi-tsubaki/media/digicon'
+    if os.path.exists(digicon_folder):
+        countdown_voice_folder = 'download/2022-2/kunoichi-tsubaki/media/countdown-voice'
+        if not os.path.exists(countdown_voice_folder):
+            os.makedirs(countdown_voice_folder)
+        files = os.listdir(digicon_folder)
+        for file in files:
+            if os.path.isfile(digicon_folder + '/' + file) and file.endswith('.wav'):
+                old_filepath = digicon_folder + '/' + file
+                new_filepath = countdown_voice_folder + '/' + file
+                os.rename(old_filepath, new_filepath)
+                message = MOVING_FILE_TEMPLATE % (old_filepath, new_filepath)
+                print(message)
 
 
 if __name__ == '__main__':
