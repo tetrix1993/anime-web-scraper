@@ -128,6 +128,7 @@ The premiere date for the anime listed here has not been announced.
 * [Kunoichi Tsubaki no Mune no Uchi](https://kunoichi-tsubaki.com/)
 * [Mahoutsukai Reimeiki](https://www.tbs.co.jp/anime/reimeiki/)
 * [Otome Game Sekai wa Mob ni Kibishii Sekai desu](https://mobseka.com/)
+* [Rikei ga Koi ni Ochita no de Shoumei shitemita. Heart](https://rikekoi.com/)
 * [RPG Fudousan](https://rpg-rs.jp/)
 * [Shachiku-san wa Youjo Yuurei ni Iyasaretai.](https://shachikusan.com/)
 * [Shijou Saikyou no Daimaou, Murabito A ni Tensei suru](https://murabito-a-anime.com/)

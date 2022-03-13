@@ -16,6 +16,7 @@ from anime.external_download import MocaNewsDownload
 # Machikado Mazoku: 2-choume http://www.tbs.co.jp/anime/machikado/ #まちカドまぞく #MachikadoMazoku @machikado_staff
 # Mahoutsukai Reimeiki https://www.tbs.co.jp/anime/reimeiki/ #魔法使い黎明期 @reimeiki_pr
 # Otome Game Sekai wa Mob ni Kibishii Sekai desu https://mobseka.com/ #モブせか #mobseka @mobseka_anime
+# Rikei ga Koi ni Ochita no de Shoumei shitemita. Heart #リケ恋 #りけこい #rikekoi @rikeigakoini
 # RPG Fudousan https://rpg-rs.jp/ #RPG不動産 @rpgrs_anime
 # Shachiku-san wa Youjo Yuurei ni Iyasaretai. https://shachikusan.com/ #しゃちされたい @shachisaretai
 # Shijou Saikyou no Daimaou, Murabito A ni Tensei suru https://murabito-a-anime.com/ #村人Aに転生 @murabitoA_anime
@@ -867,6 +868,40 @@ class MobsekaDownload(Spring2022AnimeDownload, NewsTemplate):
         body_template = self.PAGE_PREFIX + 'img/chara/illust_%s.png'
         face_template = self.PAGE_PREFIX + 'img/chara/face_%s.png'
         self.download_by_template(folder, [body_template, face_template], 2, 1)
+
+
+# Rikei ga Koi ni Ochita no de Shoumei shitemita. Heart
+class Rikekoi2Download(Spring2022AnimeDownload, NewsTemplate):
+    title = "Rikei ga Koi ni Ochita no de Shoumei shitemita. Heart"
+    keywords = [title, "Rikekoi", "Science Fell in Love, So I Tried to Prove It", "2nd"]
+    website = 'https://rikekoi.com/'
+    twitter = 'rikeigakoini'
+    hashtags = ['リケ恋', 'Rikekoi']
+    folder_name = 'rikekoi2'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.post',
+                                    title_select='a', date_select='.date', id_select='a',
+                                    date_func=lambda x: x.replace('提出日：', '').replace('年', '.').replace('月', '.')
+                                    .replace('日', ''), stop_date='2020.10.02')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.add_to_image_list('key_pc', self.PAGE_PREFIX + 'wp-content/themes/rikekoi/assets/images/season2/key_pc.png')
+        self.download_image_list(folder)
 
 
 # RPG Fudousan
