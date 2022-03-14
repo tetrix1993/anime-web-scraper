@@ -8,6 +8,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Do It Yourself!! https://diy-anime.com/ #diyアニメ @diy_anime
 # Futoku no Guild https://futoku-no-anime.com/ #futoku_anime #不徳のギルド @futoku_anime
 # Goblin Slayer S2 http://www.goblinslayer.jp/ #ゴブスレ @GoblinSlayer_GA
+# Inu ni Nattara Suki na Hito ni Hirowareta. https://inuhiro-anime.com/ #犬ひろ @inuninattara
 # Isekai Ojisan #いせおじ #異世界おじさん @Isekai_Ojisan
 # Isekai Yakkyoku https://isekai-yakkyoku.jp/ #異世界薬局 @isekai_yakkyoku
 # Itai no wa https://bofuri.jp/story/ #防振り #bofuri @bofuri_anime
@@ -329,6 +330,41 @@ class GoblinSlayer2Download(UnconfirmedDownload):
         folder = self.create_key_visual_directory()
         self.image_list = []
         self.add_to_image_list('teaser', 'https://pbs.twimg.com/media/EtDYBThUYAEBIWI?format=jpg&name=4096x4096')
+        self.download_image_list(folder)
+
+
+# Inu ni Nattara Suki na Hito ni Hirowareta.
+class InuhiroDownload(UnconfirmedDownload, NewsTemplate):
+    title = "Inu ni Nattara Suki na Hito ni Hirowareta."
+    keywords = [title, 'Inuhiro']
+    website = 'https://inuhiro-anime.com/'
+    twitter = 'inuninattara'
+    hashtags = '犬ひろ'
+    folder_name = 'inuhiro'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='#news article',
+                                    date_select='time', title_select='h3', id_select=None,
+                                    id_has_id=True, news_prefix='')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FNybC1EaAAEoRmq?format=jpg&name=large')
+        self.add_to_image_list('tz_mainimg_pc', self.PAGE_PREFIX + 'teaser/images/mainimg_pc.png')
         self.download_image_list(folder)
 
 

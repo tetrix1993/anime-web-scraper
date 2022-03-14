@@ -85,6 +85,7 @@ The premiere date for the anime listed here has not been announced.
 * [Ayakashi Triangle](https://ayakashitriangle-anime.com/)
 * [Futoku no Guild](https://futoku-no-anime.com/)
 * [Goblin Slayer 2nd Season](http://www.goblinslayer.jp/)
+* [Inu ni Nattara Suki na Hito ni Hirowareta.](https://inuhiro-anime.com/)
 * [Isekai Ojisan](https://isekaiojisan.com/)
 * [Isekai Yakkyoku](https://isekai-yakkyoku.jp/)
 * [Itai no wa Iya nano de Bougyoryoku ni Kyokufuri Shitai to Omoimasu. 2nd Season](https://bofuri.jp/)
