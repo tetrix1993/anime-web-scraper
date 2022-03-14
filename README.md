@@ -97,7 +97,6 @@ The premiere date for the anime listed here has not been announced.
 * [Prima Doll](https://primadoll.jp/)
 * [Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita 2nd Season](https://slime300-anime.com/)
 * [Spy Kyoushitsu](https://spyroom-anime.com/)
-* [Tensei Kenja no Isekai Life: Dai-2 no Shokugyou wo Ete, Sekai Saikyou ni Narimashita](https://tenseikenja.com/)
 * [Tonikaku Kawaii 2nd Season](http://tonikawa.com/)
 * [Yama no Susume: Next Summit](https://yamanosusume-ns.com/)
 
@@ -113,6 +112,7 @@ The premiere date for the anime listed here has not been announced.
 * [Kinsou no Vermeil: Gakeppuchi Majutsushi wa Saikyou no Yakusai to Mahou Sekai wo Tsukisusumu](https://vermeilingold.jp/)
 * [Shadows House](https://shadowshouse-anime.com/)
 * [Soredemo Ayumu wa Yosetekuru](https://soreayu.com/)
+* [Tensei Kenja no Isekai Life: Dai-2 no Shokugyou wo Ete, Sekai Saikyou ni Narimashita](https://tenseikenja.com/)
 * [Utawarerumono: Futari no Hakuoro](https://utawarerumono.jp/)
 * [Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e 2nd Season](http://you-zitsu.com/)
 

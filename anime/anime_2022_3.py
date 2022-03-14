@@ -7,6 +7,7 @@ from anime.main_download import MainDownload, NewsTemplate
 # Kinsou no Vermeil: Gakeppuchi Majutsushi wa Saikyou no Yakusai to Mahou Sekai wo Tsukisusumu #ヴェルメイユ #vermeil @vermeil_animePR
 # Shadows House 2nd Season https://shadowshouse-anime.com/
 # Soredemo Ayumu wa Yosetekuru https://soreayu.com/ #それあゆ @soreayu_staff
+# Tensei Kenja no Isekai Life: Dai-2 no Shokugyou wo Ete, Sekai Saikyou ni Narimashita https://tenseikenja.com #転生賢者 @tenseikenja_PR
 # Utawarerumono: Futari no Hakuoro https://utawarerumono.jp/ #うたわれ @UtawareAnime
 # Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e S2 http://you-zitsu.com/ #you_zitsu #よう実 @youkosozitsu
 
@@ -228,6 +229,69 @@ class SoreayuDownload(Summer2022AnimeDownload, NewsTemplate):
                     image_url = self.PAGE_PREFIX + '_nuxt/img/' + image_name_with_extension
                     image_name = self.extract_image_name_from_url(image_name_with_extension)
                     self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+
+
+# Tensei Kenja no Isekai Life: Dai-2 no Shokugyou wo Ete, Sekai Saikyou ni Narimashita
+class TenseiKenjaDownload(Summer2022AnimeDownload, NewsTemplate):
+    title = 'Tensei Kenja no Isekai Life: Dai-2 no Shokugyou wo Ete, Sekai Saikyou ni Narimashita'
+    keywords = [title, 'tenseikenja', 'My Isekai Life']
+    website = 'https://tenseikenja.com/'
+    twitter = 'tenseikenja_PR'
+    hashtags = '転生賢者'
+    folder_name = 'tenseikenja'
+
+    PAGE_PREFIX = website
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_news(self):
+        # May need change paging logic
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='div.sw-News_Archive li',
+                                    date_select='.date', title_select='.title p', id_select='a')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/E_cSGeTVQAIKvu2?format=jpg&name=medium')
+        self.add_to_image_list('kv1_aniverse', 'https://aniverse-mag.com/wp-content/uploads/2022/01/396ee90ad1118539e82a6b4caab11c11.jpg')
+        # self.add_to_image_list('img_kv_teaser', self.PAGE_PREFIX + 'wp/wp-content/themes/tenseikenja/assets/images/common/index/img_kv_teaser.jpg')
+        self.download_image_list(folder)
+
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('div.visual-Content img')
+            self.image_list = []
+            for image in images:
+                if image.has_attr('src'):
+                    image_url = image['src'].split('?')[0]
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            chara_list = soup.select('div.character-Index li a')
+            self.image_list = []
+            template = self.PAGE_PREFIX + 'wp/wp-content/themes/tenseikenja/assets/images/common/character/%s/img.png'
+            for chara in chara_list:
+                if chara.has_attr('href'):
+                    href = chara['href']
+                    if href.endswith('/'):
+                        href = href[0:len(href)-1]
+                    chara_name = href.split('/')[-1]
+                    if len(chara_name) > 1:
+                        self.add_to_image_list(f'img_{chara_name}', template % chara_name)
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
