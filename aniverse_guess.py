@@ -31,13 +31,18 @@ def run_old(_year, _month):
         print(e)
 
 
-def run(_year, _month):
+def run(_year, _month, has_zfill=True):
     try:
         folder = BASE_FOLDER + '/' + _year + '/' + _month
         for i in range(MAX_LIMIT):
             success_count = 0
-            for j in range(MAX_LIMIT_J):
+            if has_zfill:
                 first = str(i + 1).zfill(2)
+            elif i < 9:
+                first = str(i + 1)
+            else:
+                return
+            for j in range(MAX_LIMIT_J):
                 if j == 0:
                     image_name = first
                 else:
@@ -89,4 +94,5 @@ if __name__ == '__main__':
         if len(year) == 0:
             break
         month = input('Enter month: ').zfill(2)
-        run(year, month)
+        run(year, month, True)
+        run(year, month, False)
