@@ -362,9 +362,38 @@ class Kaguyasama3Download(Spring2022AnimeDownload, NewsTemplate):
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         self.image_list = []
-        self.add_to_image_list('tz', self.PAGE_PREFIX + 'assets/3rd/t/img/top/main/img_main.jpg')
+        # self.add_to_image_list('tz', self.PAGE_PREFIX + 'assets/3rd/t/img/top/main/img_main.jpg')
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FCKDRzxVkAAIwMv?format=jpg&name=4096x4096')
         self.download_image_list(folder)
+
+        for i in range(10):
+            image_url = self.PAGE_PREFIX + 'assets/3rd/t/img/top/main/img_main'
+            image_name = 'img_main'
+            if i > 0:
+                image_url += f'_{str(i + 1).zfill(2)}'
+                image_name += f'_{str(i + 1).zfill(2)}'
+            image_url += '.jpg'
+            if self.is_image_exists(image_name, folder):
+                self.download_image_with_different_length(image_url, image_name, 'old', folder)
+            else:
+                result = self.download_image(image_url, folder + '/' + image_name)
+                if result == -1:
+                    break
+
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.p-hero__visual img[src]')
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'].replace('./', '')
+                image_name = self.extract_image_name_from_url(image_url)
+                if self.is_image_exists(image_name, folder):
+                    self.download_image_with_different_length(image_url, image_name, 'old', folder)
+                else:
+                    result = self.download_image(image_url, folder + '/' + image_name)
+                    if result == -1:
+                        break
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
 
 
 # Kakkou no Iinazuke
