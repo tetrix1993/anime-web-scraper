@@ -1114,7 +1114,28 @@ class ShokeiShoujoDownload(Spring2022AnimeDownload, NewsTemplate):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            a_tags = soup.select('#ContentsListUnit02 a[href]')
+            for a_tag in a_tags:
+                if 'index' not in a_tag['href'] and a_tag['href'].endswith('.html') and '/' in a_tag['href']:
+                    try:
+                        episode = str(int(a_tag['href'].split('/')[-1].split('.html')[0])).zfill(2)
+                    except Exception:
+                        continue
+                    if self.is_image_exists(episode + '_1'):
+                        continue
+                    ep_soup = self.get_soup(self.PAGE_PREFIX + a_tag['href'].replace('../', ''))
+                    if ep_soup:
+                        images = ep_soup.select('ul.tp5 img')
+                        self.image_list = []
+                        for i in range(len(images)):
+                            image_url = self.PAGE_PREFIX + images[i]['src'].replace('../', '').split('?')[0]
+                            image_name = episode + '_' + str(i + 1)
+                            self.add_to_image_list(image_name, image_url)
+                        self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         # Paging logic need update
