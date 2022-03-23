@@ -105,6 +105,7 @@ The premiere date for the anime listed here has not been announced.
 * [Eiyuuou, Bu wo Kiwameru Tame Tenseisu: Soshite, Sekai Saikyou no Minarai Kishi](https://auo-anime.com/)
 
 ### Fall 2022 Anime
+* [Akuyaku Reijou nanode Last Boss wo Kattemimashita](https://akulas-pr.com/)
 * [Kyokou Suiri Season 2](https://kyokousuiri.jp/)
 
 ### Summer 2022 Anime
