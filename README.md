@@ -96,6 +96,7 @@ The premiere date for the anime listed here has not been announced.
 * [Mato Seihei no Slave](https://mabotai.jp/)
 * [Otonari no Tenshi-sama ni Itsunomanika Dame Ningen ni Sareteita Ken](https://otonarino-tenshisama.jp/)
 * [Prima Doll](https://primadoll.jp/)
+* [Renai Flops](https://loveflops.com/)
 * [Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita 2nd Season](https://slime300-anime.com/)
 * [Spy Kyoushitsu](https://spyroom-anime.com/)
 * [Tonikaku Kawaii 2nd Season](http://tonikawa.com/)
