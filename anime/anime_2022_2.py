@@ -937,8 +937,8 @@ class Rikekoi2Download(Spring2022AnimeDownload, NewsTemplate):
                         episode = str(int(link_item.text)).zfill(2)
                     except:
                         continue
-                    #if self.is_image_exists(episode + '_1'):
-                    #    continue
+                    if self.is_image_exists(episode + '_1'):
+                        continue
                     story_soup = None
                     if link_item.has_attr('class'):
                         if 'disabled' in link_item['class']:
