@@ -398,7 +398,7 @@ class HakozumeDownload(Winter2022AnimeDownload, NewsTemplate3):
     folder_name = 'hakozume'
 
     PAGE_PREFIX = website
-    FINAL_EPISODE = 12
+    FINAL_EPISODE = 13
 
     def __init__(self):
         super().__init__()
