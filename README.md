@@ -114,6 +114,7 @@ The premiere date for the anime listed here has not been announced.
 * [Isekai Meikyuu de Harem wo](https://isekai-harem.com/)
 * [Kanojo, Okarishimasu 2nd Season](https://kanokari-official.com/)
 * [Kinsou no Vermeil: Gakeppuchi Majutsushi wa Saikyou no Yakusai to Mahou Sekai wo Tsukisusumu](https://vermeilingold.jp/)
+* [Lycoris Recoil](https://lycoris-recoil.com/)
 * [Shadows House](https://shadowshouse-anime.com/)
 * [Soredemo Ayumu wa Yosetekuru](https://soreayu.com/)
 * [Tensei Kenja no Isekai Life: Dai-2 no Shokugyou wo Ete, Sekai Saikyou ni Narimashita](https://tenseikenja.com/)

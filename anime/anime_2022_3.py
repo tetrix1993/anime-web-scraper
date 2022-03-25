@@ -6,6 +6,7 @@ from anime.main_download import MainDownload, NewsTemplate
 # Isekai Meikyuu de Harem wo https://isekai-harem.com/ #異世界迷宮でハーレムを #異世界迷宮 @isekaiharem_ani
 # Kanojo, Okarishimasu 2nd Season https://kanokari-official.com/ #かのかり #kanokari @kanokari_anime
 # Kinsou no Vermeil: Gakeppuchi Majutsushi wa Saikyou no Yakusai to Mahou Sekai wo Tsukisusumu #ヴェルメイユ #vermeil @vermeil_animePR
+# Lycoris Recoil https://lycoris-recoil.com/ #リコリコ #LycorisRecoil @lycoris_recoil
 # Shadows House 2nd Season https://shadowshouse-anime.com/
 # Soredemo Ayumu wa Yosetekuru https://soreayu.com/ #それあゆ @soreayu_staff
 # Tensei Kenja no Isekai Life: Dai-2 no Shokugyou wo Ete, Sekai Saikyou ni Narimashita https://tenseikenja.com #転生賢者 @tenseikenja_PR
@@ -213,6 +214,62 @@ class VermeilDownload(Summer2022AnimeDownload):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'images/pre_h%s.png'
         self.download_by_template(folder, template, 2, 1)
+
+
+# Lycoris Recoil
+class LycorisRecoilDownload(Summer2022AnimeDownload, NewsTemplate):
+    title = 'Lycoris Recoil'
+    keywords = [title]
+    website = 'https://lycoris-recoil.com/'
+    twitter = 'lycoris_recoil'
+    hashtags = ['リコリコ', 'LycorisRecoil']
+    folder_name = 'lycoris-recoil'
+
+    PAGE_PREFIX = website
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.p-news__list-item',
+                                    date_select='.p-news_data__date', title_select='.p-news_data__title',
+                                    id_select='a', a_tag_start_text_to_remove='/', paging_type=1,
+                                    a_tag_prefix=self.PAGE_PREFIX,
+                                    next_page_select='div.c-pagination__link.-next',
+                                    next_page_eval_index_class='is-disable', next_page_eval_index=-1)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        template = self.PAGE_PREFIX + 'assets/img/top/img_main-%s.jpg'
+        self.download_by_template(folder, template, 2, 0)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            a_tags = soup.select('.p-chara_nav__list-item a[href]')
+            chara_names = []
+            for a_tag in a_tags:
+                index = a_tag['href'].rfind('?chara=')
+                if index > 0 and len(a_tag['href'][index + 7:]) > 0:
+                    chara_names.append(a_tag['href'][index + 7:])
+            chara_prefix = self.PAGE_PREFIX + 'assets/img/character/'
+            suffixes = ['chara_%s.png', 'face_%s.png']
+            self.image_list = []
+            for chara_name in chara_names:
+                for suffix in suffixes:
+                    image_url = chara_prefix + suffix % chara_name
+                    image_name = (suffix % chara_name).split('.')[0]
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
 
 
 # Shadows House 2nd Season
