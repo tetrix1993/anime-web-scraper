@@ -226,25 +226,32 @@ class GaikotsuKishiDownload(Spring2022AnimeDownload, NewsTemplate):
         processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
         try:
             soup = self.get_soup(chara_prefix)
-            a_tags = soup.select('li.anim a')
+            a_tags = soup.select('li.anim a[href]')
             for a_tag in a_tags:
-                if a_tag.has_attr('href') and len(a_tag['href']) > 0:
+                if len(a_tag['href']) > 0:
                     href = a_tag['href']
+                    if href.startswith('cc.php'):
+                        images = a_tag.select('img[src]')
+                        for image in images:
+                            image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                            image_name = self.extract_image_name_from_url(image_url)
+                            self.add_to_image_list(image_name, image_url)
+                        self.download_image_list(folder)
+                        continue
                     page_name = href.replace('.php', '')
                     if page_name in processed:
                         continue
                     chara_soup = self.get_soup(chara_prefix + href)
                     if chara_soup:
                         self.image_list = []
-                        main_img = chara_soup.select('div.continner figure img')
-                        if len(main_img) > 0 and main_img[0].has_attr('src'):
+                        main_img = chara_soup.select('div.continner figure img[src]')
+                        if len(main_img) > 0:
                             self.add_to_image_list(page_name, self.PAGE_PREFIX + main_img[0]['src'].replace('../', ''))
-                        images = chara_soup.select('div.continner ol img')
+                        images = chara_soup.select('div.continner ol img[src]')
                         for image in images:
-                            if image.has_attr('src'):
-                                image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
-                                image_name = page_name + '_' + self.extract_image_name_from_url(image_url)
-                                self.add_to_image_list(image_name, image_url)
+                            image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                            image_name = page_name + '_' + self.extract_image_name_from_url(image_url)
+                            self.add_to_image_list(image_name, image_url)
                         if len(self.image_list) > 0:
                             processed.append(page_name)
                         self.download_image_list(folder)
