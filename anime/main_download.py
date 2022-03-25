@@ -854,6 +854,41 @@ class MainDownload:
         return return_value
 
     @staticmethod
+    def get_image_url_from_srcset(img_elem, modify_url_func=None):
+        '''
+        Get biggest image url from img element with srcset
+        :param img_elem: img_elem e.g. <img src="" srcset="" />
+        :param modify_url_func: A function to modify url if required
+        :return: image_url
+        '''
+
+        if img_elem is None:
+            return None
+
+        image_url = None
+        if img_elem.has_attr('srcset'):
+            srcset = img_elem['srcset']
+            biggest_size = None
+            sources = srcset.split(',')
+            for source in sources:
+                split1 = source.strip().split(' ')
+                if len(split1) == 2 and split1[1].endswith('w'):
+                    try:
+                        size = int(split1[1][:-1])
+                        if biggest_size is None or size > biggest_size:
+                            biggest_size = size
+                            image_url = split1[0]
+                    except:
+                        continue
+        elif img_elem.has_attr('src'):
+            image_url = MainDownload.clear_resize_in_url(img_elem['src'])
+
+        if modify_url_func is not None:
+            image_url = modify_url_func(image_url)
+
+        return image_url
+
+    @staticmethod
     def get_image_extension(name_without_extension):
         for ext in ['jpg', 'png', 'gif', 'webp']:
             if os.path.exists(name_without_extension + '.' + ext):

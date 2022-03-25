@@ -926,7 +926,37 @@ class Rikekoi2Download(Spring2022AnimeDownload, NewsTemplate):
         self.download_key_visual()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        story_url = self.PAGE_PREFIX + 'story/season2-1'
+        try:
+            soup = self.get_soup(story_url)
+            story_links = soup.select('div.story-link')
+            if len(story_links) > 0:
+                story_link_items = story_links[-1].select('a.story-link-item[href][class]')
+                for link_item in story_link_items:
+                    try:
+                        episode = str(int(link_item.text)).zfill(2)
+                    except:
+                        continue
+                    #if self.is_image_exists(episode + '_1'):
+                    #    continue
+                    story_soup = None
+                    if link_item.has_attr('class'):
+                        if 'disabled' in link_item['class']:
+                            continue
+                        elif 'this-page' in link_item['class']:
+                            story_soup = soup
+                    if story_soup is None:
+                        story_soup = self.get_soup(self.PAGE_PREFIX + link_item['href'][1:])
+                    if story_soup is not None:
+                        images = story_soup.select('figure.wp-block-image img')
+                        for i in range(len(images)):
+                            image_url = self.get_image_url_from_srcset(images[i])
+                            if image_url is not None:
+                                image_name = episode + '_' + str(i + 1)
+                                self.add_to_image_list(image_name, image_url)
+                        self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.post',
