@@ -1649,7 +1649,7 @@ class KisekoiDownload(Winter2022AnimeDownload, NewsTemplate):
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.p-news__list-item',
                                     date_select='div.p-in-date', title_select='div.p-in-title',
-                                    id_select='a', a_tag_start_text_to_remove='./',
+                                    id_select='a', a_tag_start_text_to_remove='./', paging_type=1,
                                     a_tag_prefix=self.PAGE_PREFIX + 'news/', date_func=lambda x: x[0:4] + '.' + x[4:],
                                     next_page_select='div.c-pagination__link.-next',
                                     next_page_eval_index_class='is-disable', next_page_eval_index=-1)
