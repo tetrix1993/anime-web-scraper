@@ -1,7 +1,7 @@
 from anime.main_download import MainDownload, NewsTemplate
 
 
-# Akuyaku Reijou nanode Last Boss wo Kattemimashita https://akulas-pr.com/ @akulas_pr
+# Akuyaku Reijou nanode Last Boss wo Kattemimashita https://akulas-pr.com/ #悪ラス @akulas_pr
 # Kyokou Suiri S2 https://kyokousuiri.jp/ #虚構推理 @kyokou_suiri
 
 

@@ -3,6 +3,7 @@ from anime.main_download import MainDownload, NewsTemplate
 
 
 # Hataraku Maou-sama!! https://maousama.jp/ #maousama @anime_maousama
+# Isekai Meikyuu de Harem wo https://isekai-harem.com/ #異世界迷宮でハーレムを #異世界迷宮 @isekaiharem_ani
 # Kanojo, Okarishimasu 2nd Season https://kanokari-official.com/ #かのかり #kanokari @kanokari_anime
 # Kinsou no Vermeil: Gakeppuchi Majutsushi wa Saikyou no Yakusai to Mahou Sekai wo Tsukisusumu #ヴェルメイユ #vermeil @vermeil_animePR
 # Shadows House 2nd Season https://shadowshouse-anime.com/
@@ -63,6 +64,46 @@ class HatarakuMaousama2Download(Summer2022AnimeDownload, NewsTemplate):
         template2 = character_prefix + 'character%s_face1.png'
         template3 = character_prefix + 'character%s_face2.png'
         self.download_by_template(folder, [template1, template2, template3], 2, 1)
+
+
+# Isekai Meikyuu de Harem wo
+class IsekaiMeikyuuHaremDownload(Summer2022AnimeDownload, NewsTemplate):
+    title = "Isekai Meikyuu de Harem wo"
+    keywords = [title]
+    website = 'https://isekai-harem.com/'
+    twitter = 'isekaiharem_ani'
+    hashtags = ['異世界迷宮', '異世界迷宮でハーレムを']
+    folder_name = 'isekai-harem'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        pass
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FOqDU-7acAIc7XG?format=jpg&name=medium')
+        self.add_to_image_list('tz_aniverse', 'https://aniverse-mag.com/wp-content/uploads/2022/03/5ccd88c2e4c32c6ce3ad9c226feaadaa-e1648178675368.jpg')
+        self.add_to_image_list('teaser_mv_img', self.PAGE_PREFIX + 'img/teaser_mv_img.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'img/teaser_chara_contents%s.png'
+        self.download_by_template(folder, template, 2, 1)
 
 
 # Kanojo, Okarishimasu 2nd Season

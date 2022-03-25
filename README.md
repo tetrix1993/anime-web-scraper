@@ -110,6 +110,7 @@ The premiere date for the anime listed here has not been announced.
 
 ### Summer 2022 Anime
 * [Hataraku Maou-sama! 2nd Season](https://maousama.jp/)
+* [Isekai Meikyuu de Harem wo](https://isekai-harem.com/)
 * [Kanojo, Okarishimasu 2nd Season](https://kanokari-official.com/)
 * [Kinsou no Vermeil: Gakeppuchi Majutsushi wa Saikyou no Yakusai to Mahou Sekai wo Tsukisusumu](https://vermeilingold.jp/)
 * [Shadows House](https://shadowshouse-anime.com/)
