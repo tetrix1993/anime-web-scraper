@@ -142,7 +142,7 @@ The premiere date for the anime listed here has not been announced.
 * [Shokei Shoujo no Virgin Road](http://virgin-road.com/)
 * [Spy x Family](https://spy-family.net/)
 * [Summertime Render](https://summertime-anime.com/)
-* [Tate no Yuusha no Nariagari 2nd Season](http://shieldhero-anime.jp)
+* [Tate no Yuusha no Nariagari Season 2](http://shieldhero-anime.jp)
 * [Yuusha, Yamemasu](https://yuuyame.com/)
 
 ### Winter 2022 Anime
