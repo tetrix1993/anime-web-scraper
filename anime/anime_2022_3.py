@@ -2,6 +2,7 @@ import requests
 from anime.main_download import MainDownload, NewsTemplate
 
 
+# Engage Kiss https://engage-kiss.com/ #エンゲージキス #EngageKiss @engage_kiss
 # Hataraku Maou-sama!! https://maousama.jp/ #maousama @anime_maousama
 # Isekai Meikyuu de Harem wo https://isekai-harem.com/ #異世界迷宮でハーレムを #異世界迷宮 @isekaiharem_ani
 # Kanojo, Okarishimasu 2nd Season https://kanokari-official.com/ #かのかり #kanokari @kanokari_anime
@@ -22,6 +23,66 @@ class Summer2022AnimeDownload(MainDownload):
 
     def __init__(self):
         super().__init__()
+
+
+# Engage Kiss
+class EngageKissDownload(Summer2022AnimeDownload, NewsTemplate):
+    title = 'Engage Kiss'
+    keywords = [title]
+    website = 'https://engage-kiss.com/'
+    twitter = 'engage_kiss'
+    hashtags = ['エンゲージキス', 'EngageKiss']
+    folder_name = 'engage-kiss'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.news_list__item',
+                                    title_select='.news_title', date_select='.news_date', id_select='a',
+                                    a_tag_start_text_to_remove='./', a_tag_prefix=news_url, paging_type=1,
+                                    date_func=lambda x: x[0:4] + '.' + x[5:],
+                                    next_page_select='div.pagination__nav-button.-next',
+                                    next_page_eval_index_class='is-disabled', next_page_eval_index=-1)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FOvCuo3VQAUdR2A?format=jpg&name=large')
+        self.add_to_image_list('tz_img_main_2x_pc', self.PAGE_PREFIX + 'assets/img/top/img_main_2x_pc.png')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            a_tags = soup.select('.chara_navi__item a[href]')
+            chara_names = []
+            for a_tag in a_tags:
+                index = a_tag['href'].rfind('?chara=')
+                if index > 0 and len(a_tag['href'][index + 7:]) > 0:
+                    chara_names.append(a_tag['href'][index + 7:])
+            chara_prefix = self.PAGE_PREFIX + 'assets/img/character/'
+            self.image_list = []
+            for chara_name in chara_names:
+                image_name = 'img_' + chara_name
+                image_url = chara_prefix + image_name + '.png'
+                self.add_to_image_list('tz_' + image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
 
 
 # Hataraku Maou-sama!!
