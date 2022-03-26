@@ -12,7 +12,6 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Isekai Ojisan #いせおじ #異世界おじさん @Isekai_Ojisan
 # Isekai Yakkyoku https://isekai-yakkyoku.jp/ #異世界薬局 @isekai_yakkyoku
 # Itai no wa https://bofuri.jp/story/ #防振り #bofuri @bofuri_anime
-# Kage no Jitsuryokusha ni Naritakute! https://shadow-garden.jp/ #陰の実力者 @Shadowgarden_PR
 # Kumichou Musume to Sewagakari https://kumichomusume.com/ #組長娘と世話係 @kumichomusume
 # Kunoichi Tsubaki no Mune no Uchi https://kunoichi-tsubaki.com/ #くノ一ツバキ @tsubaki_anime
 # Mamahaha no Tsurego ga Motokano datta https://tsurekano-anime.com/ #連れカノ #tsurekano @tsurekano
@@ -526,46 +525,6 @@ class Bofuri2Download(UnconfirmedDownload):
         self.add_to_image_list('animation_works', 'https://pbs.twimg.com/media/ErSRQUmVoAAkgt7?format=jpg&name=large')
         self.add_to_image_list('teaser', 'https://pbs.twimg.com/media/ErSKnRwW8AAjOyU?format=jpg&name=4096x4096')
         self.download_image_list(folder)
-
-
-# Kage no Jitsuryokusha ni Naritakute!
-class KagenoJitsuryokushaDownload(UnconfirmedDownload, NewsTemplate):
-    title = 'Kage no Jitsuryokusha ni Naritakute!'
-    keywords = [title, 'The Eminence in Shadow']
-    website = 'https://shadow-garden.jp/'
-    twitter = 'Shadowgarden_PR'
-    hashtags = '陰の実力者'
-    folder_name = 'kagenojitsuryoku'
-
-    PAGE_PREFIX = website
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_news()
-        self.download_key_visual()
-        self.download_character()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_news(self):
-        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.newsList',
-                                    date_select='time', title_select='p.newsList--ttl', id_select='a',
-                                    a_tag_prefix=self.PAGE_PREFIX + 'news', a_tag_start_text_to_remove='./')
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('tz', self.PAGE_PREFIX + 'news/img/20211027_03_1.jpg')
-        self.download_image_list(folder)
-
-    def download_character(self):
-        folder = self.create_character_directory()
-        prefix = self.PAGE_PREFIX + 'assets/img/top/character/chara'
-        self.download_by_template(folder, [prefix + '%s_main1.png', prefix + '%s_main2.png'], 2, 1)
 
 
 # Kumichou Musume to Sewagakari

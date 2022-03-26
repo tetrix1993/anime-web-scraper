@@ -2,6 +2,7 @@ from anime.main_download import MainDownload, NewsTemplate
 
 
 # Akuyaku Reijou nanode Last Boss wo Kattemimashita https://akulas-pr.com/ #悪ラス @akulas_pr
+# Kage no Jitsuryokusha ni Naritakute! https://shadow-garden.jp/ #陰の実力者 @Shadowgarden_PR
 # Kyokou Suiri S2 https://kyokousuiri.jp/ #虚構推理 @kyokou_suiri
 
 
@@ -57,6 +58,46 @@ class AkulasDownload(Fall2022AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'wp/wp-content/themes/akulas-teaser/_assets/images/char/detail/char_%s_pc.png'
         self.download_by_template(folder, template, 3, 1, prefix='tz_')
+
+
+# Kage no Jitsuryokusha ni Naritakute!
+class KagenoJitsuryokushaDownload(Fall2022AnimeDownload, NewsTemplate):
+    title = 'Kage no Jitsuryokusha ni Naritakute!'
+    keywords = [title, 'The Eminence in Shadow']
+    website = 'https://shadow-garden.jp/'
+    twitter = 'Shadowgarden_PR'
+    hashtags = '陰の実力者'
+    folder_name = 'kagenojitsuryoku'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.newsList',
+                                    date_select='time', title_select='p.newsList--ttl', id_select='a',
+                                    a_tag_prefix=self.PAGE_PREFIX + 'news', a_tag_start_text_to_remove='./')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz', self.PAGE_PREFIX + 'news/img/20211027_03_1.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        prefix = self.PAGE_PREFIX + 'assets/img/top/character/chara'
+        self.download_by_template(folder, [prefix + '%s_main1.png', prefix + '%s_main2.png'], 2, 1)
 
 
 # Kyokou Suiri S2

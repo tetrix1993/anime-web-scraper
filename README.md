@@ -89,7 +89,6 @@ The premiere date for the anime listed here has not been announced.
 * [Isekai Ojisan](https://isekaiojisan.com/)
 * [Isekai Yakkyoku](https://isekai-yakkyoku.jp/)
 * [Itai no wa Iya nano de Bougyoryoku ni Kyokufuri Shitai to Omoimasu. 2nd Season](https://bofuri.jp/)
-* [Kage no Jitsuryokusha ni Naritakute!](https://shadow-garden.jp/)
 * [Kumichou Musume to Sewagakari](https://kumichomusume.com/)
 * [Mamahaha no Tsurego ga Motokano datta](https://tsurekano-anime.com/)
 * [Maou Gakuin no Futekigousha: Shijou Saikyou no Maou no Shiso, Tensei shite Shison-tachi no Gakkou e 2nd Season](https://maohgakuin.com/)
@@ -107,6 +106,7 @@ The premiere date for the anime listed here has not been announced.
 
 ### Fall 2022 Anime
 * [Akuyaku Reijou nanode Last Boss wo Kattemimashita](https://akulas-pr.com/)
+* [Kage no Jitsuryokusha ni Naritakute!](https://shadow-garden.jp/)
 * [Kyokou Suiri Season 2](https://kyokousuiri.jp/)
 
 ### Summer 2022 Anime
