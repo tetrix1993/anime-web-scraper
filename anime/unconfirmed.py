@@ -756,6 +756,7 @@ class OtonarinoTenshisamaDownload(UnconfirmedDownload, NewsTemplate):
         self.download_episode_preview()
         self.download_news()
         self.download_key_visual()
+        self.download_character()
         self.download_media()
 
     def download_episode_preview(self):
@@ -771,7 +772,13 @@ class OtonarinoTenshisamaDownload(UnconfirmedDownload, NewsTemplate):
         self.image_list = []
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FIQhzRlagAAxK-X?format=jpg&name=large')
         self.add_to_image_list('tz', self.PAGE_PREFIX + 'wordpress/wp-content/themes/otonari/images/mainvisual.jpg')
+        self.add_to_image_list('tz2_tw', 'https://pbs.twimg.com/media/FOtPcAMVkAcoYzY?format=jpg&name=4096x4096')
         self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'wordpress/wp-content/themes/otonari/images/character-%s.png'
+        self.download_by_template(folder, template, 1, prefix='tz_')
 
     def download_media(self):
         folder = self.create_media_directory()
