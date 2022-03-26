@@ -1345,8 +1345,8 @@ class SummertimeRenderDownload(Spring2022AnimeDownload, NewsTemplate):
 
 # Tate no Yuusha no Nariagari S2
 class TateNoYuusha2Download(Spring2022AnimeDownload):
-    title = "Tate no Yuusha no Nariagari 2nd Season"
-    keywords = [title, "The Rising of the Shield Hero"]
+    title = "Tate no Yuusha no Nariagari Season 2"
+    keywords = [title, "The Rising of the Shield Hero", "2nd"]
     website = "http://shieldhero-anime.jp"
     twitter = 'shieldheroanime'
     hashtags = ['shieldhero', '盾の勇者の成り上がり']
@@ -1361,9 +1361,26 @@ class TateNoYuusha2Download(Spring2022AnimeDownload):
         self.download_episode_preview()
         self.download_news()
         self.download_key_visual()
+        self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            stories = soup.select('.p-story_contents')
+            for story in stories:
+                try:
+                    episode = str(int(story.select('p.no')[0].text)).zfill(2)
+                except:
+                    continue
+                images = story.select('div.images.is-lg div.main img[src]')
+                self.image_list = []
+                for i in range(len(images)):
+                    image_url = self.PAGE_PREFIX + images[i]['src'].split('?')[0]
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + '/news/'
@@ -1402,7 +1419,14 @@ class TateNoYuusha2Download(Spring2022AnimeDownload):
         self.add_to_image_list('kv1', 'https://pbs.twimg.com/media/EhHFvyVU4AA7cUw?format=jpg&name=large')
         self.add_to_image_list('mv_lg', self.PAGE_PREFIX + '/assets/img/2nd/mv_lg.jpg')
         self.add_to_image_list('kv2', 'https://pbs.twimg.com/media/FLKADbeaMAMa18f?format=jpg&name=4096x4096')
+        self.add_to_image_list('mv_lg_3', self.PAGE_PREFIX + '/assets/img/2nd/mv_lg_3.jpg')
+        self.add_to_image_list('kv3_tw', 'https://pbs.twimg.com/media/FOwQJqBaAAIvrpw?format=jpg&name=large')
         self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + '/assets/img/2nd/chara/char_%s.png'
+        self.download_by_template(folder, template, 3, 0)
 
 
 # Yuusha, Yamemasu
