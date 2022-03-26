@@ -4,6 +4,7 @@ from anime.main_download import MainDownload, NewsTemplate
 # Akuyaku Reijou nanode Last Boss wo Kattemimashita https://akulas-pr.com/ #悪ラス @akulas_pr
 # Kage no Jitsuryokusha ni Naritakute! https://shadow-garden.jp/ #陰の実力者 @Shadowgarden_PR
 # Kyokou Suiri S2 https://kyokousuiri.jp/ #虚構推理 @kyokou_suiri
+# Uchi no Shishou wa Shippo ga Nai https://shippona-anime.com/ #しっぽな @shippona_anime
 
 
 # Fall 2022 Anime
@@ -153,3 +154,63 @@ class KyokouSuiri2Download(Fall2022AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+
+# Uchi no Shishou wa Shippo ga Nai
+class ShipponaDownload(Fall2022AnimeDownload, NewsTemplate):
+    title = 'Uchi no Shishou wa Shippo ga Nai'
+    keywords = [title, 'My Master Has No Tail', 'Shippona']
+    website = 'https://shippona-anime.com/'
+    twitter = 'shippona_anime'
+    hashtags = 'しっぽな'
+    folder_name = 'shippona'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='a.news-list-item',
+                                    date_select='.news-list-item__date', title_select='.news-list-item__title',
+                                    id_select=None, a_tag_start_text_to_remove='/', a_tag_prefix=self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_natalie', 'https://ogre.natalie.mu/media/news/comic/2022/0106/shippona_teaser.jpg')
+        self.download_image_list(folder)
+
+        template_prefix = self.PAGE_PREFIX + 'img/home/visual_%s.'
+        templates = [template_prefix + 'jpg', template_prefix + 'png']
+        self.download_by_template(folder, templates, 2, 1)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        char_url = self.PAGE_PREFIX + 'character'
+        json_url = char_url + '/chara_data.php'
+        self.image_list = []
+        try:
+            json_obj = self.get_json(json_url)
+            if 'charas' in json_obj and isinstance(json_obj['charas'], list):
+                for chara in json_obj['charas']:
+                    if 'images' in chara and 'visuals' in chara['images']\
+                            and isinstance(chara['images']['visuals'], list):
+                        for visual in chara['images']['visuals']:
+                            if 'image' in visual:
+                                image_url = char_url + visual['image'][1:].split('?')[0]
+                                image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                                self.add_to_image_list(image_name, image_url)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + " - Character")
+            print(e)
+        self.download_image_list(folder)
