@@ -1353,12 +1353,15 @@ class TateNoYuusha2Download(Spring2022AnimeDownload):
     folder_name = 'tate-no-yuusha2'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 13
+    IMAGES_PER_EPISODE = 6
 
     def __init__(self):
         super().__init__()
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_guess()
         self.download_news()
         self.download_key_visual()
         self.download_character()
@@ -1381,6 +1384,30 @@ class TateNoYuusha2Download(Spring2022AnimeDownload):
                 self.download_image_list(self.base_folder)
         except Exception as e:
             self.print_exception(e)
+
+    def download_episode_preview_guess(self):
+        folder = self.create_custom_directory('guess')
+        template = self.PAGE_PREFIX + '/assets/img/2nd/story/%s/img_%s.jpg'
+        is_success = False
+        for i in range(self.FINAL_EPISODE):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_1'):
+                continue
+            stop = False
+            for j in range(self.IMAGES_PER_EPISODE):
+                image_url = template % (str(i + 1), str(j))
+                image_name = episode + '_' + str(j + 1)
+                result = self.download_image(image_url, folder + '/' + image_name)
+                if result == -1:
+                    stop = True
+                    break
+                elif result == 0:
+                    is_success = True
+            if is_success:
+                print(self.__class__.__name__ + ' - Episode %s guessed correctly!' % episode)
+            if stop:
+                break
+        return is_success
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + '/news/'
