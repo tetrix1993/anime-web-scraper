@@ -4,6 +4,7 @@ from anime.main_download import MainDownload, NewsTemplate
 # Akuyaku Reijou nanode Last Boss wo Kattemimashita https://akulas-pr.com/ #悪ラス @akulas_pr
 # Kage no Jitsuryokusha ni Naritakute! https://shadow-garden.jp/ #陰の実力者 @Shadowgarden_PR
 # Kyokou Suiri S2 https://kyokousuiri.jp/ #虚構推理 @kyokou_suiri
+# Tensei shitara Ken Deshita https://tenken-anime.com/ #転生したら剣でした #転剣 @tenken_official
 # Uchi no Shishou wa Shippo ga Nai https://shippona-anime.com/ #しっぽな @shippona_anime
 
 
@@ -154,6 +155,50 @@ class KyokouSuiri2Download(Fall2022AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+
+# Tensei shitara Ken Deshita
+class TenkenDownload(Fall2022AnimeDownload, NewsTemplate):
+    title = 'Tensei shitara Ken Deshita'
+    keywords = [title, 'Reincarnated as a Sword', 'tenken']
+    website = 'https://tenken-anime.com/'
+    twitter = 'tenken_official'
+    hashtags = ['転生したら剣でした', '転剣']
+    folder_name = 'tenken'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article.content-entry',
+                                    title_select='h2.entry-title span', date_select='div.entry-date',
+                                    id_select=None, id_has_id=True, news_prefix='news.html',
+                                    date_func=lambda x: x[0:4] + '.' + x[4:])
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/FOcR3ESaMAIIZAo?format=jpg&name=4096x4096')
+        self.add_to_image_list('kv1_vis', self.PAGE_PREFIX + 'assets/top/vis.png')
+        self.add_to_image_list('kv1_vis-t1', self.PAGE_PREFIX + 'assets/news/vis-t1.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template_prefix = self.PAGE_PREFIX + 'assets/character/'
+        templates = [template_prefix + 'c%s.png', template_prefix + 'f%s.png']
+        self.download_by_template(folder, templates, 1, 1, prefix='tz_')
 
 
 # Uchi no Shishou wa Shippo ga Nai

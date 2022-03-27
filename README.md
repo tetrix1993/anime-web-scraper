@@ -107,6 +107,7 @@ The premiere date for the anime listed here has not been announced.
 * [Akuyaku Reijou nanode Last Boss wo Kattemimashita](https://akulas-pr.com/)
 * [Kage no Jitsuryokusha ni Naritakute!](https://shadow-garden.jp/)
 * [Kyokou Suiri Season 2](https://kyokousuiri.jp/)
+* [Tensei shitara Ken Deshita](https://tenken-anime.com/)
 * [Uchi no Shishou wa Shippo ga Nai](https://shippona-anime.com/)
 
 ### Summer 2022 Anime
