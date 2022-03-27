@@ -12,7 +12,7 @@ from anime.external_download import MocaNewsDownload
 # Kakkou no Iinazuke https://cuckoos-anime.com/ #カッコウの許嫁 @cuckoo_anime
 # Kawaii dake ja Nai Shikimori-san https://shikimori-anime.com/ #式守さん @anime_shikimori
 # Koi wa Sekai Seifuku no Ato de https://koiseka-anime.com/ #恋せか @koiseka_anime
-# Kono Healer, Mendokusai https://kono-healer-anime.com/ #このヒーラー @kono_healer
+# Kono Healer, Mendokusai https://kono-healer-anime.com/ #このヒーラー #kono_healer @kono_healer
 # Machikado Mazoku: 2-choume http://www.tbs.co.jp/anime/machikado/ #まちカドまぞく #MachikadoMazoku @machikado_staff
 # Mahoutsukai Reimeiki https://www.tbs.co.jp/anime/reimeiki/ #魔法使い黎明期 @reimeiki_pr
 # Otome Game Sekai wa Mob ni Kibishii Sekai desu https://mobseka.com/ #モブせか #mobseka @mobseka_anime
@@ -696,7 +696,7 @@ class KonoHealerDownload(Spring2022AnimeDownload, NewsTemplate2):
     keywords = [title, "This Healer's a Handful"]
     website = 'https://kono-healer-anime.com/'
     twitter = 'kono_healer'
-    hashtags = 'このヒーラー'
+    hashtags = ['このヒーラー', 'kono_healer']
     folder_name = 'kono-healer'
 
     PAGE_PREFIX = website
@@ -1153,6 +1153,7 @@ class MurabitoADownload(Spring2022AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
@@ -1190,6 +1191,12 @@ class MurabitoADownload(Spring2022AnimeDownload, NewsTemplate):
                             self.download_image_with_different_length(img_url, img_name, old_dir, folder)
             else:
                 break
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        self.image_list = []
+        self.add_to_image_list('music_op', 'https://pbs.twimg.com/media/FO2xv2WVkAQDdkF?format=jpg&name=large')
+        self.download_image_list(folder)
 
 
 # Shokei Shoujo no Virgin Road
