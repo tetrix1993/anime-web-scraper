@@ -17,7 +17,6 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Maou Gakuin no Futekigousha 2nd Season https://maohgakuin.com/ #魔王学院 @maohgakuin
 # Mato Seihei no Slave https://mabotai.jp/ #魔都精兵のスレイブ #まとスレ @mabotai_kohobu
 # Otonari no Tenshi-sama ni Itsunomanika Dame Ningen ni Sareteita Ken https://otonarino-tenshisama.jp/ #お隣の天使様 @tenshisama_PR
-# Prima Doll https://primadoll.jp/ #プリマドール #PrimaDoll @primadoll_pr
 # Renai Flops https://loveflops.com/ #恋愛フロップス @loveflops_pr
 # Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita 2nd Season https://slime300-anime.com/ #スライム倒して300年 @slime300_PR
 # Spy Kyoushitsu https://spyroom-anime.com/ #スパイ教室 #spyroom #SpyClassroom @spyroom_anime
@@ -691,68 +690,6 @@ class OtonarinoTenshisamaDownload(UnconfirmedDownload, NewsTemplate):
         self.add_to_image_list('valentine_chara', 'https://aniverse-mag.com/wp-content/uploads/2022/02/8e5cda5d29024d4bf78d1e9452225fb6-e1644755501739.png')
         self.add_to_image_list('valentine_pos', self.PAGE_PREFIX + 'wordpress/wp-content/uploads/2022/02/valentine_pos.jpg')
         self.add_to_image_list('valentine', self.PAGE_PREFIX + 'wordpress/wp-content/uploads/2022/02/valentine_sp-kabegami.jpg')
-        self.download_image_list(folder)
-
-
-# Prima Doll
-class PrimaDollDownload(UnconfirmedDownload, NewsTemplate):
-    title = 'Prima Doll'
-    keywords = [title]
-    website = 'https://primadoll.jp/'
-    twitter = 'primadoll_pr'
-    hashtags = ['プリマドール', 'PrimaDoll']
-    folder_name = 'primadoll'
-
-    PAGE_PREFIX = website
-    ASSETS_URL = 'https://storage.googleapis.com/primadoll-official/assets/'
-    ASSETS_IMAGE_URL = ASSETS_URL + 'image/'
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_news()
-        self.download_key_visual()
-        self.download_character()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_news(self):
-        news_prefix = self.PAGE_PREFIX + 'news/'
-        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.top_news_item_style1',
-                                    date_select='.top_news_text_style1', title_select='.top_news_text_style2',
-                                    id_select='a', news_prefix='news/news.html', a_tag_prefix=news_prefix)
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FKHiPhoagAEoQXI?format=jpg&name=4096x4096')
-        tz_template = self.ASSETS_IMAGE_URL + '%s_img_pc.jpg'
-        for time in ['night', 'morning', 'noon', 'evening']:
-            self.add_to_image_list('tz_' + time, tz_template % time)
-        self.download_image_list(folder)
-
-    def download_character(self):
-        folder = self.create_character_directory()
-        self.image_list = []
-        js_file = self.PAGE_PREFIX + 'common/js/character.js'
-        try:
-            r = requests.get(js_file)
-            r.raise_for_status()
-            split1 = str(r.content).split("imgs = ['")
-            for i in range(1, len(split1), 1):
-                split2 = split1[i].split("'];")
-                if len(split2) > 0:
-                    split3 = split2[0].replace("'", '').replace(' ', '').split(',')
-                    for j in range(len(split3)):
-                        image_url = self.ASSETS_IMAGE_URL + split3[j]
-                        dot_index = split3[j].rfind('.')
-                        image_name = split3[j][0:dot_index] if dot_index > 0 else split3[j]
-                        self.add_to_image_list(image_name, image_url)
-        except Exception as e:
-            self.print_exception(e, 'Character')
         self.download_image_list(folder)
 
 
