@@ -9,7 +9,6 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Futoku no Guild https://futoku-no-anime.com/ #futoku_anime #不徳のギルド @futoku_anime
 # Goblin Slayer S2 http://www.goblinslayer.jp/ #ゴブスレ @GoblinSlayer_GA
 # Inu ni Nattara Suki na Hito ni Hirowareta. https://inuhiro-anime.com/ #犬ひろ @inuninattara
-# Isekai Ojisan #いせおじ #異世界おじさん @Isekai_Ojisan
 # Isekai Yakkyoku https://isekai-yakkyoku.jp/ #異世界薬局 @isekai_yakkyoku
 # Itai no wa https://bofuri.jp/story/ #防振り #bofuri @bofuri_anime
 # Kumichou Musume to Sewagakari https://kumichomusume.com/ #組長娘と世話係 @kumichomusume
@@ -366,59 +365,6 @@ class InuhiroDownload(UnconfirmedDownload, NewsTemplate):
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FNybC1EaAAEoRmq?format=jpg&name=large')
         self.add_to_image_list('tz_mainimg_pc', self.PAGE_PREFIX + 'teaser/images/mainimg_pc.png')
         self.download_image_list(folder)
-
-
-# Isekai Ojisan
-class IsekaiOjisanDownload(UnconfirmedDownload, NewsTemplate2):
-    title = 'Isekai Ojisan'
-    keywords = [title, 'Ojisan In Another World']
-    website = 'https://isekaiojisan.com/'
-    twitter = 'Isekai_Ojisan'
-    hashtags = ['いせおじ', '異世界おじさん']
-    folder_name = 'isekaiojisan'
-
-    PAGE_PREFIX = website
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_news()
-        self.download_key_visual()
-        self.download_character()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
-
-    def download_news(self):
-        self.download_template_news(self.PAGE_PREFIX)
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('tz_kv', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv.png')
-        self.add_to_image_list('tz_kv2', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv2.png')
-        self.add_to_image_list('tz_kv_', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv.jpg')
-        self.download_image_list(folder)
-
-        template = self.PAGE_PREFIX + 'core_sys/images/main/tz/kv%s.jpg'
-        self.download_by_template(folder, template, 1, 4, prefix='tz_')
-
-    def download_character(self):
-        folder = self.create_character_directory()
-        try:
-            soup = self.get_soup(self.PAGE_PREFIX)
-            images = soup.select('ul.charaList div.img img')
-            self.image_list = []
-            for image in images:
-                if image.has_attr('src'):
-                    image_url = self.PAGE_PREFIX + image['src']
-                    image_name = self.extract_image_name_from_url(image_url)
-                    self.add_to_image_list(image_name, image_url)
-            self.download_image_list(folder)
-        except Exception as e:
-            self.print_exception(e, 'Character')
 
 
 # Isekai Yakkyoku

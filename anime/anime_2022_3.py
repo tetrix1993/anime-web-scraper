@@ -1,10 +1,11 @@
 import requests
-from anime.main_download import MainDownload, NewsTemplate
+from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 
 
 # Engage Kiss https://engage-kiss.com/ #エンゲージキス #EngageKiss @engage_kiss
 # Hataraku Maou-sama!! https://maousama.jp/ #maousama @anime_maousama
 # Isekai Meikyuu de Harem wo https://isekai-harem.com/ #異世界迷宮でハーレムを #異世界迷宮 @isekaiharem_ani
+# Isekai Ojisan #いせおじ #異世界おじさん @Isekai_Ojisan
 # Kanojo, Okarishimasu 2nd Season https://kanokari-official.com/ #かのかり #kanokari @kanokari_anime
 # Kinsou no Vermeil: Gakeppuchi Majutsushi wa Saikyou no Yakusai to Mahou Sekai wo Tsukisusumu #ヴェルメイユ #vermeil @vermeil_animePR
 # Lycoris Recoil https://lycoris-recoil.com/ #リコリコ #LycorisRecoil @lycoris_recoil
@@ -166,6 +167,62 @@ class IsekaiMeikyuuHaremDownload(Summer2022AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'img/teaser_chara_contents%s.png'
         self.download_by_template(folder, template, 2, 1)
+
+
+# Isekai Ojisan
+class IsekaiOjisanDownload(Summer2022AnimeDownload, NewsTemplate2):
+    title = 'Isekai Ojisan'
+    keywords = [title, 'Uncle from Another World']
+    website = 'https://isekaiojisan.com/'
+    twitter = 'Isekai_Ojisan'
+    hashtags = ['いせおじ', '異世界おじさん']
+    folder_name = 'isekaiojisan'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_kv', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv.png')
+        self.add_to_image_list('tz_kv2', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv2.png')
+        self.add_to_image_list('tz_kv_', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv.jpg')
+        self.download_image_list(folder)
+
+        template = self.PAGE_PREFIX + 'core_sys/images/main/tz/kv%s.jpg'
+        self.download_by_template(folder, template, 1, 4, prefix='tz_')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('ul.charaList div.img img')
+            self.image_list = []
+            for image in images:
+                if image.has_attr('src'):
+                    image_url = self.PAGE_PREFIX + image['src']
+                    image_name = self.extract_image_name_from_url(image_url)
+                    if self.is_image_exists(image_name, folder):
+                        self.download_image_with_different_length(image_url, image_name, 'old', folder)
+                    else:
+                        self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
 
 
 # Kanojo, Okarishimasu 2nd Season
