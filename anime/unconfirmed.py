@@ -488,12 +488,16 @@ class KumichoMusumeDownload(UnconfirmedDownload, NewsTemplate):
 
     def run(self):
         self.download_episode_preview()
-        # self.download_news()
+        self.download_news()
         self.download_key_visual()
         self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='div.archive li', date_select='.date',
+                                    title_select='.title', id_select='a')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -505,28 +509,26 @@ class KumichoMusumeDownload(UnconfirmedDownload, NewsTemplate):
 
     def download_character(self):
         folder = self.create_character_directory()
+        main_template = self.PAGE_PREFIX + 'wordpress/wp-content/themes/kumichomusume/assets/images/common/character/%s/img.png'
+        closeup_template = self.PAGE_PREFIX + 'wordpress/wp-content/themes/kumichomusume/assets/images/common/character/%s/img_close-up_%s.png'
         try:
-            soup = self.get_soup(self.PAGE_PREFIX)
-            wrappers = soup.select('div.chara-Wrapper')
-            for wrapper in wrappers:
-                if wrapper.has_attr('class'):
-                    chara_name = None
-                    for _class in wrapper['class']:
-                        if _class == 'chara-Wrapper':
-                            continue
-                        chara_name = _class
-                        break
-                    if chara_name is None or len(chara_name) == 0:
-                        continue
-                    images = wrapper.select('.image img, .close-up img')
-                    self.image_list = []
-                    for image in images:
-                        if image.has_attr('src') and len(image['src']) > 0:
-                            image_url = self.PAGE_PREFIX + (image['src'][1:] if image['src'].startswith('/') else image['src'])
-                            image_name = self.extract_image_name_from_url(image_url).replace('img', '')
-                            image_name = 'tz_' + (chara_name if len(image_name) == 0 else f'{chara_name}_{image_name}')
-                            self.add_to_image_list(image_name, image_url)
-                    self.download_image_list(folder)
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            a_tags = soup.select('.list a[href]')
+            self.image_list = []
+            for a_tag in a_tags:
+                href = a_tag['href']
+                if href.endswith('/'):
+                    href = href[:-1]
+                chara_name = href.split('/')[-1]
+                if len(chara_name) > 0:
+                    main_image_name = chara_name + '_' + 'img'
+                    main_image_url = main_template % chara_name
+                    self.add_to_image_list(main_image_name, main_image_url)
+                    for i in range(3):
+                        closeup_image_name = chara_name + '_img_close-up_' + str(i + 1)
+                        closeup_image_url = closeup_template % (chara_name, str(i + 1))
+                        self.add_to_image_list(closeup_image_name, closeup_image_url)
+            self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
 
