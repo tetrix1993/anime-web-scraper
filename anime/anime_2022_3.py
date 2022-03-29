@@ -8,6 +8,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Isekai Ojisan #いせおじ #異世界おじさん @Isekai_Ojisan
 # Kanojo, Okarishimasu 2nd Season https://kanokari-official.com/ #かのかり #kanokari @kanokari_anime
 # Kinsou no Vermeil: Gakeppuchi Majutsushi wa Saikyou no Yakusai to Mahou Sekai wo Tsukisusumu #ヴェルメイユ #vermeil @vermeil_animePR
+# Kumichou Musume to Sewagakari https://kumichomusume.com/ #組長娘と世話係 @kumichomusume
 # Lycoris Recoil https://lycoris-recoil.com/ #リコリコ #LycorisRecoil @lycoris_recoil
 # Prima Doll https://primadoll.jp/ #プリマドール #PrimaDoll @primadoll_pr
 # Shadows House 2nd Season https://shadowshouse-anime.com/
@@ -333,6 +334,70 @@ class VermeilDownload(Summer2022AnimeDownload):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'images/pre_h%s.png'
         self.download_by_template(folder, template, 2, 1)
+
+
+# Kumichou Musume to Sewagakari
+class KumichoMusumeDownload(Summer2022AnimeDownload, NewsTemplate):
+    title = 'Kumichou Musume to Sewagakari'
+    keywords = [title, 'kumichomusume']
+    website = 'https://kumichomusume.com/'
+    hashtags = '組長娘と世話係'
+    twitter = 'kumichomusume'
+    folder_name = 'kumichomusume'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='div.archive li', date_select='.date',
+                                    title_select='.title', id_select='a')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_main', self.PAGE_PREFIX + 'assets/images/pc/img_keyvisual.jpg')
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FF95CKrVUAAvycn?format=jpg&name=large')
+        self.add_to_image_list('tz_aniverse', 'https://aniverse-mag.com/wp-content/uploads/2021/12/KtoS_KV_1_TATE_WH_re_72dpi-e1638846766594.jpg')
+        self.download_image_list(folder)
+
+        template = self.PAGE_PREFIX + 'wordpress/wp-content/themes/kumichomusume/assets/images/pc/index/img_kv_%s.jpg'
+        self.download_by_template(folder, template, 1, 1)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        main_template = self.PAGE_PREFIX + 'wordpress/wp-content/themes/kumichomusume/assets/images/common/character/%s/img.png'
+        closeup_template = self.PAGE_PREFIX + 'wordpress/wp-content/themes/kumichomusume/assets/images/common/character/%s/img_close-up_%s.png'
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            a_tags = soup.select('.list a[href]')
+            self.image_list = []
+            for a_tag in a_tags:
+                href = a_tag['href']
+                if href.endswith('/'):
+                    href = href[:-1]
+                chara_name = href.split('/')[-1]
+                if len(chara_name) > 0:
+                    main_image_name = chara_name + '_' + 'img'
+                    main_image_url = main_template % chara_name
+                    self.add_to_image_list(main_image_name, main_image_url)
+                    for i in range(3):
+                        closeup_image_name = chara_name + '_img_close-up_' + str(i + 1)
+                        closeup_image_url = closeup_template % (chara_name, str(i + 1))
+                        self.add_to_image_list(closeup_image_name, closeup_image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
 
 
 # Lycoris Recoil
