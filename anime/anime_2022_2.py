@@ -58,10 +58,31 @@ class AharensanDownload(Spring2022AnimeDownload, NewsTemplate):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            a_tags = soup.select('nav.story--nav li a[href]')
+            for a_tag in a_tags:
+                try:
+                    if len(a_tag.text.strip()) == 0:
+                        continue
+                    episode = str(int(a_tag.text.strip())).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                ep_soup = self.get_soup(a_tag['href'])
+                if ep_soup is not None:
+                    images = ep_soup.select('.story--ss__slider img[src]')
+                    self.image_list = []
+                    for i in range(len(images)):
+                        image_url = images[i]['src']
+                        image_name = episode + '_' + str(i + 1)
+                        self.add_to_image_list(image_name, image_url)
+                    self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
-        # Paging logic might be wrong
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.md-li__news li',
                                     date_select='time', title_select='.ttl', id_select='a', date_separator='.&nbsp;',
                                     next_page_select='ul.pagenation-list li',
