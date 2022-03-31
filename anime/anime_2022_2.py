@@ -2,6 +2,7 @@ import os
 import requests
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsTemplate3
 from anime.external_download import MocaNewsDownload
+from scan import AniverseMagazineScanner
 
 
 # Aharen-san wa Hakarenai https://aharen-pr.com/ #阿波連さん @aharen_pr
@@ -136,6 +137,7 @@ class DeaimonDownload(Spring2022AnimeDownload, NewsTemplate2):
     folder_name = 'deaimon'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
 
     def __init__(self):
         super().__init__()
@@ -143,11 +145,37 @@ class DeaimonDownload(Spring2022AnimeDownload, NewsTemplate2):
     def run(self):
         self.download_episode_preview()
         self.download_news()
+        self.download_episode_preview_external()
         self.download_key_visual()
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            stories = soup.select('#ContentsListUnit02 a[href]')
+            for story in stories:
+                try:
+                    episode = str(int(story['href'].split('/')[-1].split('.html')[0])).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                ep_soup = self.get_soup(self.PAGE_PREFIX + story['href'].replace('../', ''))
+                if ep_soup is not None:
+                    images = ep_soup.select('.img_link img[src]')
+                    self.image_list = []
+                    for i in range(len(images)):
+                        image_url = self.PAGE_PREFIX + images[i]['src'].replace('../', '').split('?')[0]
+                        image_name = episode + '_' + str(i + 1)
+                        self.add_to_image_list(image_name, image_url)
+                    self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
+
+    def download_episode_preview_external(self):
+        jp_title = 'であいもん'
+        AniverseMagazineScanner(jp_title, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                end_date='20220331', download_id=self.download_id).run()
 
     def download_news(self):
         self.download_template_news(self.PAGE_PREFIX)
