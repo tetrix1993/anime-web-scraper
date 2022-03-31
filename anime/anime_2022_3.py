@@ -491,6 +491,7 @@ class PrimaDollDownload(Summer2022AnimeDownload, NewsTemplate):
         folder = self.create_key_visual_directory()
         self.image_list = []
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FKHiPhoagAEoQXI?format=jpg&name=4096x4096')
+        self.add_to_image_list('prima_eats_main_img', 'https://storage.googleapis.com/primadoll-official/assets/uber_eats/image/prima_eats_main_img.jpg')
         tz_template = self.ASSETS_IMAGE_URL + '%s_img_pc.jpg'
         for time in ['night', 'morning', 'noon', 'evening']:
             self.add_to_image_list('tz_' + time, tz_template % time)
@@ -636,6 +637,7 @@ class TenseiKenjaDownload(Summer2022AnimeDownload, NewsTemplate):
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/E_cSGeTVQAIKvu2?format=jpg&name=medium')
         self.add_to_image_list('kv1_aniverse', 'https://aniverse-mag.com/wp-content/uploads/2022/01/396ee90ad1118539e82a6b4caab11c11.jpg')
         # self.add_to_image_list('img_kv_teaser', self.PAGE_PREFIX + 'wp/wp-content/themes/tenseikenja/assets/images/common/index/img_kv_teaser.jpg')
+        self.add_to_image_list('img_kv_yuji', self.PAGE_PREFIX + 'wp/wp-content/themes/tenseikenja_april/assets/images/pc/index/img_kv_yuji.jpg')
         self.download_image_list(folder)
 
         try:

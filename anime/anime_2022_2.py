@@ -420,6 +420,7 @@ class Kaguyasama3Download(Spring2022AnimeDownload, NewsTemplate):
         self.image_list = []
         # self.add_to_image_list('tz', self.PAGE_PREFIX + 'assets/3rd/t/img/top/main/img_main.jpg')
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FCKDRzxVkAAIwMv?format=jpg&name=4096x4096')
+        self.add_to_image_list('aprilfools', 'https://aniverse-mag.com/wp-content/uploads/2022/03/7502043a5b64c558b0144f7dfdeb289f.jpg')
         self.download_image_list(folder)
 
         for i in range(10):
@@ -1152,6 +1153,7 @@ class RPGFudousanDownload(Spring2022AnimeDownload, NewsTemplate3):
         # self.add_to_image_list('tz1_1', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv.png')
         self.add_to_image_list('tz1_2', self.PAGE_PREFIX + 'assets/news/vis-t1.jpg')
         self.add_to_image_list('vis-k1', self.PAGE_PREFIX + 'assets/news/vis-k1.jpg')
+        self.add_to_image_list('2022apr_vis', self.PAGE_PREFIX + 'assets/top/2022apr/vis.jpg')
         self.download_image_list(folder)
 
         try:
