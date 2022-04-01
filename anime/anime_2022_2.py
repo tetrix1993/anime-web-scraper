@@ -1187,19 +1187,35 @@ class ShachisaretaiDownload(Spring2022AnimeDownload, NewsTemplate):
     folder_name = 'shachisaretai'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 5
 
     def run(self):
         self.download_episode_preview()
         self.download_news()
+        self.download_episode_preview_external()
         self.download_key_visual()
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        image_url_template = self.PAGE_PREFIX + 'img/story/ep%s/img%s.jpg'
+        for i in range(self.FINAL_EPISODE):
+            for j in range(self.IMAGES_PER_EPISODE):
+                image_name = str(i + 1).zfill(2) + '_' + str(j + 1)
+                if not self.is_image_exists(image_name):
+                    image_url = image_url_template % (str(i + 1).zfill(2), str(j + 1).zfill(2))
+                    result = self.download_image(image_url, self.base_folder + '/' + image_name)
+                    if result == -1:
+                        return
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.news_list_item',
                                     date_select='time', title_select='p.article_ttl', id_select='a')
+
+    def download_episode_preview_external(self):
+        jp_title = '社畜さんは幼女幽霊に癒されたい'
+        AniverseMagazineScanner(jp_title, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                end_date='20220401', download_id=self.download_id).run()
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
