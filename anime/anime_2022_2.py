@@ -1005,7 +1005,7 @@ class MobsekaDownload(Spring2022AnimeDownload, NewsTemplate):
     keywords = [title, 'Trapped in a Dating Sim: The World of Otome Games is Tough for Mobs', 'Mobseka', 'Mobuseka']
     website = 'https://mobseka.com/'
     twitter = 'mobseka_anime'
-    hashtags = ['モブせか', 'mobseka']
+    hashtags = ['モブせか', 'mobseka', 'mobuseka']
     folder_name = 'mobseka'
 
     PAGE_PREFIX = website
@@ -1021,6 +1021,7 @@ class MobsekaDownload(Spring2022AnimeDownload, NewsTemplate):
         self.download_episode_preview_external()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         image_url_template = self.PAGE_PREFIX + 'img/story/ep%s_img%s.jpg'
@@ -1055,6 +1056,22 @@ class MobsekaDownload(Spring2022AnimeDownload, NewsTemplate):
         body_template = self.PAGE_PREFIX + 'img/chara/illust_%s.png'
         face_template = self.PAGE_PREFIX + 'img/chara/face_%s.png'
         self.download_by_template(folder, [body_template, face_template], 2, 1)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'bluray.html')
+            images = soup.select('.news_contents img[src]')
+            self.image_list = []
+            for image in images:
+                if image['src'].endswith('20210000_00_01cs.jpg') or image['src'].endswith('20210000_00_02cs.jpg'):
+                    continue
+                image_url = self.PAGE_PREFIX + image['src']
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception('e', 'Blu-ray')
 
 
 # Rikei ga Koi ni Ochita no de Shoumei shitemita. Heart
