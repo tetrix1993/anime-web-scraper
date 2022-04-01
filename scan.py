@@ -207,7 +207,7 @@ class AniverseMagazineScanner(MainScanner):
     SEARCH_URL = "https://aniverse-mag.com/page/%s?s=%s"
     
     def __init__(self, keyword, base_folder, last_episode=None, suffix=None,
-                 min_width=None, end_date='00000000', download_id=None):
+                 min_width=None, end_date='00000000', download_id=None, prefix=None):
         super().__init__(download_id)
         self.keyword = keyword
         self.base_folder = base_folder.replace("download/","") + "/" + EXTERNAL_FOLDER_ANIVERSE
@@ -215,6 +215,7 @@ class AniverseMagazineScanner(MainScanner):
         self.suffix = suffix
         self.min_width = min_width
         self.end_date = end_date
+        self.prefix = prefix
 
     @staticmethod
     def has_results(text):
@@ -225,14 +226,21 @@ class AniverseMagazineScanner(MainScanner):
         return len(text) > 0 and '<i class="fa fa-long-arrow-right">' in text
 
     @staticmethod
-    def get_episode_num(result, suffix):
-        split1 = result[0].split(suffix)[0].split('第')
-        if len(split1) < 2:
+    def get_episode_num(result, prefix, suffix):
+        if len(prefix) > 0:
+            split1 = result[0].split(suffix)[0].split(prefix)
+            if len(split1) < 2:
+                return -1
+            episode = split1[1]
+        else:
+            episode = result[0].split(suffix)[0]
+        if len(episode) == 0:
             return -1
+        
         try:
-            return int(split1[1])
+            return int(episode)
         except:
-            result = MainScanner.convert_kanji_to_number(split1[1])
+            result = MainScanner.convert_kanji_to_number(episode)
             if result is not None:
                 return result
             return -1
@@ -262,13 +270,17 @@ class AniverseMagazineScanner(MainScanner):
             if suffix is None:
                 suffix = '話'
 
-            regex = '第[０|１|２|３|４|５|６|７|８|９|十|一|二|三|四|五|六|七|八|九|0-9]+' + suffix
+            prefix = self.prefix
+            if prefix is None:
+                prefix = '第'
+
+            regex = prefix + '[０|１|２|３|４|５|６|７|８|９|十|一|二|三|四|五|六|七|八|九|0-9]+' + suffix
             prog = re.compile(regex)
             result = prog.findall(news_title)
             if self.keyword in news_title and ('最終' + suffix) in news_title and len(result) == 0:
                 episode = 'last'
             elif self.keyword in news_title and len(result) > 0:
-                episode_num = self.get_episode_num(result, suffix)
+                episode_num = self.get_episode_num(result, prefix, suffix)
                 if episode_num < 1:
                     continue
                 episode = str(episode_num).zfill(2)

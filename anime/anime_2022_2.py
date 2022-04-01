@@ -1335,10 +1335,12 @@ class ShokeiShoujoDownload(Spring2022AnimeDownload, NewsTemplate):
     folder_name = 'shokeishoujo'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
 
     def run(self):
         self.download_episode_preview()
         self.download_news()
+        self.download_episode_preview_external()
         self.download_key_visual()
         self.download_character()
 
@@ -1365,6 +1367,11 @@ class ShokeiShoujoDownload(Spring2022AnimeDownload, NewsTemplate):
                         self.download_image_list(self.base_folder)
         except Exception as e:
             self.print_exception(e)
+
+    def download_episode_preview_external(self):
+        jp_title = '処刑少女の生きる道'
+        AniverseMagazineScanner(jp_title, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                end_date='20220402', download_id=self.download_id, prefix='').run()
 
     def download_news(self):
         # Paging logic need update
