@@ -1062,6 +1062,7 @@ class SabikuiBiscoDownload(Winter2022AnimeDownload, NewsTemplate):
         folder = self.create_key_visual_directory()
         self.image_list = []
         self.add_to_image_list('key-vs', self.PAGE_PREFIX + 'wp/wp-content/themes/sabikuibisco/images/top/key-vs.jpg')
+        self.add_to_image_list('aprilfools_key-vs', self.PAGE_PREFIX + 'wp/wp-content/themes/sabikuibisco/images/aprilfools/key-vs.jpg')
         self.download_image_list(folder)
 
     def download_character(self):
