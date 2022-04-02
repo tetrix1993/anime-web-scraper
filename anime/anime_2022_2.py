@@ -332,6 +332,7 @@ class Honzuki3Download(Spring2022AnimeDownload, NewsTemplate):
     def run(self):
         self.download_episode_preview()
         self.download_news()
+        self.download_episode_preview_external()
         self.download_episode_preview_guess()
         self.download_key_visual()
 
@@ -346,7 +347,7 @@ class Honzuki3Download(Spring2022AnimeDownload, NewsTemplate):
                         episode = str(int(box_story['class'][0][7:].strip())).zfill(2)
                     except:
                         continue
-                    if self.is_image_exists(episode + '_1'):
+                    if int(episode) < self.FIRST_EPISODE or self.is_image_exists(episode + '_1'):
                         continue
                     images = box_story.select('ul.img_thum img')
                     self.image_list = []
@@ -376,6 +377,11 @@ class Honzuki3Download(Spring2022AnimeDownload, NewsTemplate):
                     break
         except Exception as e:
             self.print_exception(e, 'Guess')
+
+    def download_episode_preview_external(self):
+        jp_title = '本好きの下剋上'
+        AniverseMagazineScanner(jp_title, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                end_date='20220402', download_id=self.download_id).run()
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
