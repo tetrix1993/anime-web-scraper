@@ -1217,19 +1217,53 @@ class ShachisaretaiDownload(Spring2022AnimeDownload, NewsTemplate):
         self.download_episode_preview()
         self.download_news()
         self.download_episode_preview_external()
+        self.download_episode_preview_guess()
         self.download_key_visual()
         self.download_character()
 
     def download_episode_preview(self):
-        image_url_template = self.PAGE_PREFIX + 'img/story/ep%s/img%s.jpg'
-        for i in range(self.FINAL_EPISODE):
-            for j in range(self.IMAGES_PER_EPISODE):
-                image_name = str(i + 1).zfill(2) + '_' + str(j + 1)
-                if not self.is_image_exists(image_name):
-                    image_url = image_url_template % (str(i + 1).zfill(2), str(j + 1).zfill(2))
-                    result = self.download_image(image_url, self.base_folder + '/' + image_name)
-                    if result == -1:
-                        return
+        yt_folder = self.create_custom_directory('yt')  # YouTube thumbnails
+        yt_images = os.listdir(yt_folder)
+        yt_episodes = []
+        for yt_image in yt_images:
+            if os.path.isfile(yt_folder + '/' + yt_image) and yt_image.endswith('.jpg') \
+                    and yt_image[0:2].isnumeric() and yt_image[2] == '_':
+                yt_episodes.append(yt_image[0:2])
+
+        story_url = self.PAGE_PREFIX + 'story/'
+        try:
+            soup = self.get_soup(story_url)
+            stories = soup.select('.story_list li')
+            for story in stories:
+                ttl = story.select('.ttl')
+                if len(ttl) > 0:
+                    try:
+                        episode = str(int(ttl[0].text.replace('第', '').replace('話', ''))).zfill(2)
+                    except:
+                        continue
+                    if self.is_image_exists(episode + '_5') and episode in yt_episodes:
+                        continue
+                    page = story.select('a[href]')
+                    if len(page) > 0:
+                        page_url = story_url + page[0]['href'][2:]
+                        ep_soup = self.get_soup(page_url)
+                        if ep_soup is not None:
+                            images = ep_soup.select('ul.img_thum img[src]')
+                            self.image_list = []
+                            for i in range(len(images)):
+                                image_url = self.PAGE_PREFIX + images[i]['src'].replace('../../', '')
+                                image_name = episode + '_' + str(i + 1)
+                                self.add_to_image_list(image_name, image_url)
+                            self.download_image_list(self.base_folder)
+
+                            yt_tag = ep_soup.select('.movie_wp iframe')
+                            if len(yt_tag) > 0 and yt_tag[0]['src'].lower().startswith('https://www.youtube.com/embed/'):
+                                yt_id = yt_tag[0]['src'][30:].split('?')[0]
+                                yt_image_url = f'https://img.youtube.com/vi/{yt_id}/maxresdefault.jpg'
+                                yt_image_name = f'{episode}_{yt_id}'
+                                self.download_image(yt_image_url, f'{yt_folder}/{yt_image_name}')
+        except Exception as e:
+            print(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.news_list_item',
@@ -1239,6 +1273,28 @@ class ShachisaretaiDownload(Spring2022AnimeDownload, NewsTemplate):
         jp_title = '社畜さんは幼女幽霊に癒されたい'
         AniverseMagazineScanner(jp_title, self.base_folder, last_episode=self.FINAL_EPISODE,
                                 end_date='20220401', download_id=self.download_id).run()
+
+    def download_episode_preview_guess(self):
+        folder = self.create_custom_directory('guess')
+        is_success = False
+        end_num = self.IMAGES_PER_EPISODE
+        for i in range(self.FINAL_EPISODE):
+            episode = str(i + 1).zfill(2)
+            start_num = None
+            for j in range(end_num):
+                if self.is_image_exists(episode + '_' + str(j + 1)):
+                    start_num = j + 2
+                else:
+                    break
+            if not start_num or start_num > end_num:
+                continue
+            template1 = self.PAGE_PREFIX + 'img/story/ep%s/img%s.jpg' % (episode, '%s')
+            template2 = self.PAGE_PREFIX + 'img/story/ep%s/img%s.png' % (episode, '%s')
+            if not self.download_by_template(folder, [template1, template2], 2, start=start_num, end=end_num):
+                break
+            print(self.__class__.__name__ + ' - Episode %s guessed correctly!' % episode)
+            is_success = True
+        return is_success
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -1381,8 +1437,8 @@ class ShokeiShoujoDownload(Spring2022AnimeDownload, NewsTemplate):
                         self.download_image_list(self.base_folder)
 
                         yt_tag = ep_soup.select('#cms_block iframe[src]')
-                        if len(yt_tag) > 0 and yt_tag[0]['src'].startswith('https://www.youtube.com/embed/'):
-                            yt_id = yt_tag[0]['src'][30:]
+                        if len(yt_tag) > 0 and yt_tag[0]['src'].lower().startswith('https://www.youtube.com/embed/'):
+                            yt_id = yt_tag[0]['src'][30:].split('?')[0]
                             yt_image_url = f'https://img.youtube.com/vi/{yt_id}/maxresdefault.jpg'
                             yt_image_name = f'{episode}_{yt_id}'
                             self.download_image(yt_image_url, f'{yt_folder}/{yt_image_name}')
