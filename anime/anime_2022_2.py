@@ -828,6 +828,34 @@ class KoisekaDownload(Spring2022AnimeDownload, NewsTemplate):
             self.print_exception(e, 'Character')
 
 
+# Komi-san wa, Comyushou desu.
+class Komisan2Download(Spring2022AnimeDownload, NewsTemplate):
+    title = 'Komi-san wa, Comyushou desu. 2nd Season'
+    keywords = [title, 'Comyushou', "Komi Can't Communicate", 'komisan']
+    website = 'https://komisan-official.com/'
+    twitter = 'comisanvote'
+    hashtags = ['komisan', '古見さん']
+    folder_name = 'komisan2'
+
+    PAGE_PREFIX = website
+    FINAL_EPISODE = 24
+
+    def run(self):
+        self.download_episode_preview_external()
+        self.download_key_visual()
+
+    def download_episode_preview_external(self):
+        jp_title = '古見さんは、コミュ症です'
+        AniverseMagazineScanner(jp_title, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                end_date='20220404', download_id=self.download_id).run()
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/FMu8zsMVEAIE1VX?format=jpg&name=4096x4096')
+        self.download_image_list(folder)
+
+
 # Kono Healer, Mendokusai
 class KonoHealerDownload(Spring2022AnimeDownload, NewsTemplate2):
     title = 'Kono Healer, Mendokusai'
