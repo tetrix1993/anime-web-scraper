@@ -1428,7 +1428,26 @@ class MurabitoADownload(Spring2022AnimeDownload, NewsTemplate):
         self.download_media()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        story_url = self.PAGE_PREFIX + 'story/'
+        try:
+            soup = self.get_soup(story_url)
+            stories = soup.select('.oneStory')
+            for story in stories:
+                try:
+                    episode = str(int(story.select('.oneStory__title--num')[0].text.replace('#', ''))).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                images = story.select('.swiper-slide img[src]')
+                self.image_list = []
+                for i in range(len(images)):
+                    image_url = story_url + images[i]['src'][2:]
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         # Need update page logic
