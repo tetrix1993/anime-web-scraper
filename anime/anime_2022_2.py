@@ -1934,6 +1934,7 @@ class YuuyameDownload(Spring2022AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         template = self.PAGE_PREFIX + 'images/story/%s/p_%s.jpg'
@@ -1972,3 +1973,21 @@ class YuuyameDownload(Spring2022AnimeDownload, NewsTemplate):
         prefix = self.PAGE_PREFIX + 'images/chara/'
         templates = [prefix + 'p_%s.png', prefix + 'f_%s_01.png', prefix + 'f_%s_02.png']
         self.download_by_template(folder, templates, 3, 1)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'package.html')
+            images = soup.select('div.element img[src]')
+            self.image_list = []
+            for image in images:
+                split1 = image['src'].split('/')
+                if len(split1) > 1:
+                    if 'nowpri' in split1[-1]:
+                        continue
+                    image_url = self.PAGE_PREFIX + image['src']
+                    image_name = split1[-2] + '_' + split1[-1].split('.')[0]
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e)
