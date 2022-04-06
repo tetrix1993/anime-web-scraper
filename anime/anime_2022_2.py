@@ -1299,6 +1299,7 @@ class RPGFudousanDownload(Spring2022AnimeDownload, NewsTemplate3):
         self.download_episode_preview_external()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -1360,6 +1361,27 @@ class RPGFudousanDownload(Spring2022AnimeDownload, NewsTemplate3):
         # self.download_by_template(folder, template, 1, 1, prefix='c')
         template = self.PAGE_PREFIX + 'assets/character/%sc.png'
         self.download_by_template(folder, template, 1, 1, prefix='chara')
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'bddvd.html')
+            images = soup.select('#BdData img[src]')
+            self.image_list = []
+            for image in images:
+                if 'bddvd' in image['src']:
+                    split1 = image['src'].split('/')
+                    if len(split1) > 1:
+                        image_name = split1[-1].split('.')[0]
+                        if image_name == 'np' or image_name == 'cp1-np':
+                            continue
+                        if split1[-2] != 'bddvd':
+                            image_name = split1[-2] + '_' + image_name
+                        image_url = self.PAGE_PREFIX + image['src'][2:]
+                        self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
 
 # Shachiku-san wa Youjo Yuurei ni Iyasaretai. https://shachikusan.com/ #しゃちされたい @shachisaretai
