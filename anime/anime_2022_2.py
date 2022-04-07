@@ -1609,6 +1609,23 @@ class MurabitoADownload(Spring2022AnimeDownload, NewsTemplate):
         self.add_to_image_list('music_op', 'https://pbs.twimg.com/media/FO2xv2WVkAQDdkF?format=jpg&name=large')
         self.download_image_list(folder)
 
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'bddvd/')
+            images = soup.select('.bddvdWrap img[src]')
+            self.image_list = []
+            for image in images:
+                if 'bddvd' in image['src']:
+                    split1 = image['src'].split('/')
+                    if len(split1) > 1:
+                        image_name = split1[-1].split('.')[0]
+                        if split1[-2] != 'bddvd':
+                            image_name = split1[-2] + '_' + image_name
+                        image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                        self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
+
 
 # Shokei Shoujo no Virgin Road
 class ShokeiShoujoDownload(Spring2022AnimeDownload, NewsTemplate):
