@@ -1974,6 +1974,7 @@ class YuuyameDownload(Spring2022AnimeDownload, NewsTemplate):
     def run(self):
         self.download_episode_preview()
         self.download_news()
+        self.download_episode_preview_external()
         self.download_key_visual()
         self.download_character()
         self.download_media()
@@ -1998,6 +1999,11 @@ class YuuyameDownload(Spring2022AnimeDownload, NewsTemplate):
                                     title_select='div.news_list_title', date_select='div.news_list_day',
                                     id_select='a', a_tag_prefix=self.PAGE_PREFIX, date_separator='/',
                                     news_prefix='news.html')
+
+    def download_episode_preview_external(self):
+        jp_title = '勇者、辞めます'
+        AniverseMagazineScanner(jp_title, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                end_date='20220407', download_id=self.download_id).run()
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
