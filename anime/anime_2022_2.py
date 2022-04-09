@@ -268,7 +268,25 @@ class GaikotsuKishiDownload(Spring2022AnimeDownload, NewsTemplate):
         self.download_media()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story')
+            a_tags = soup.select('ol.switch a[href]')
+            for a_tag in reversed(a_tags):
+                try:
+                    episode = str(int(a_tag.text.strip().replace('第', '').replace('話', ''))).zfill(2)
+                except:
+                    continue
+                ep_soup = self.get_soup(a_tag['href'])
+                if ep_soup is not None:
+                    images = ep_soup.select('#story_cont img[src]')
+                    self.image_list = []
+                    for i in range(len(images)):
+                        image_url = self.clear_resize_in_url(images[i]['src'])
+                        image_name = episode + '_' + str(i + 1)
+                        self.add_to_image_list(image_name, image_url)
+                    self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         news_prefix = self.PAGE_PREFIX + 'news/'
