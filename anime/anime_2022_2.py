@@ -1057,6 +1057,7 @@ class MachikadoMazoku2Download(Spring2022AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='ul.newslist li',
@@ -1098,6 +1099,48 @@ class MachikadoMazoku2Download(Spring2022AnimeDownload, NewsTemplate):
                 self.download_image_with_different_length(image_url, image_name, 'old', folder)
             else:
                 self.download_image(image_url, folder + '/' + image_name)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        goods_prefix = self.PAGE_PREFIX + 'goods/'
+
+        self.image_list = []
+        self.add_to_image_list('cdimg_op', goods_prefix + 'img/cdimg_op.jpg')
+        self.add_to_image_list('cdimg_ed', goods_prefix + 'img/cdimg_ed.jpg')
+        self.download_image_list(folder)
+
+        # Blu-ray
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        try:
+            bd_template = goods_prefix + 'disc%s.html'
+            bd_pages = ['05', '01', '02', '03', '04']
+            for bd_page in bd_pages:
+                if bd_page != '05' and bd_page in processed:
+                    continue
+                if bd_page == '01':
+                    bd_url = bd_template % ''
+                else:
+                    bd_url = bd_template % bd_page
+                soup = self.get_soup(bd_url)
+                if soup is not None:
+                    images = soup.select('.disc-content-block img[src]')
+                    self.image_list = []
+                    for image in images:
+                        image_url = goods_prefix + image['src']
+                        image_name = self.extract_image_name_from_url(image_url)
+                        if 'noimage' in image_name:
+                            continue
+                        self.add_to_image_list(image_name, image_url)
+                    if bd_page != '05':
+                        if len(self.image_list) > 0:
+                            processed.append(bd_page)
+                        else:
+                            break
+                    self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Mahoutsukai Reimeiki
