@@ -428,6 +428,7 @@ class Kaguyasama3Download(Spring2022AnimeDownload, NewsTemplate):
         self.download_episode_preview()
         self.download_news()
         self.download_key_visual()
+        self.download_media()
 
     def download_episode_preview(self):
         story_url = self.PAGE_PREFIX + 'story/'
@@ -510,6 +511,42 @@ class Kaguyasama3Download(Spring2022AnimeDownload, NewsTemplate):
                         break
         except Exception as e:
             self.print_exception(e, 'Key Visual')
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        try:
+            bd_prefix = self.PAGE_PREFIX + 'bddvd/'
+            for i in range(1, 7, 1):
+                if i > 1:
+                    if str(i) in processed:
+                        continue
+                    bd_url = bd_prefix + str(i).zfill(2) + '.html'
+                else:
+                    bd_url = bd_prefix
+                soup = self.get_soup(bd_url)
+                if soup is not None:
+                    if i == 1:
+                        images = soup.select('.p-bddvd img[src]')
+                    else:
+                        images = soup.select('.p-bddvd__info img[src]')
+                    self.image_list = []
+                    for image in images:
+                        image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                        image_name = self.extract_image_name_from_url(image_url)
+                        if image_name == 'img_np' or image_name == 'img_jk':
+                            continue
+                        self.add_to_image_list(image_name, image_url)
+                    if i > 1:
+                        if len(self.image_list) > 0:
+                            processed.append(str(i))
+                        else:
+                            break
+                    self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Kakkou no Iinazuke
