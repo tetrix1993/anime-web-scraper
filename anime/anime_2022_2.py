@@ -885,11 +885,16 @@ class Kingdom4Download(Spring2022AnimeDownload):
     folder_name = 'kingdom4'
 
     STORY_PAGE = "https://kingdom-anime.com/story/"
+    FINAL_EPISODE = 13
 
     def __init__(self):
         super().__init__()
 
     def run(self):
+        self.download_episode_preview()
+        self.download_episode_preview_external()
+
+    def download_episode_preview(self):
         try:
             soup = self.get_soup(self.STORY_PAGE)
             ep_list = soup.find('ul', id='ep_list').find_all('li')
@@ -917,8 +922,12 @@ class Kingdom4Download(Spring2022AnimeDownload):
                 except:
                     continue
         except Exception as e:
-            print("Error in running " + self.__class__.__name__)
-            print(e)
+            self.print_exception(e)
+
+    def download_episode_preview_external(self):
+        jp_title = 'キングダム'
+        AniverseMagazineScanner(jp_title, self.base_folder, last_episode=self.FINAL_EPISODE, prefix='',
+                                end_date='20220406', download_id=self.download_id).run()
 
 
 # Koi wa Sekai Seifuku no Ato de
