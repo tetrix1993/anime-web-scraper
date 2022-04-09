@@ -1,8 +1,8 @@
 import os
 import requests
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsTemplate3
-from anime.external_download import MocaNewsDownload
-from scan import AniverseMagazineScanner
+from scan import AniverseMagazineScanner, MocaNewsScanner
+from datetime import datetime
 
 
 # Aharen-san wa Hakarenai https://aharen-pr.com/ #阿波連さん @aharen_pr
@@ -663,14 +663,46 @@ class ShikimorisanDownload(Spring2022AnimeDownload, NewsTemplate2):
     def run(self):
         self.download_episode_preview()
         self.download_news()
+        self.download_episode_preview_external()
         self.download_key_visual()
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/introduction.html', decode=True)
+            a_tags = soup.select('#ContentsListUnit02 a[href]')
+            for a_tag in a_tags:
+                try:
+                    episode = str(int(a_tag.text.replace('第', '').replace('話', ''))).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                ep_soup = self.get_soup(self.PAGE_PREFIX + a_tag['href'].replace('../', ''))
+                if ep_soup is not None:
+                    images = ep_soup.select('ul.tp5 img[src]')
+                    self.image_list = []
+                    for i in range(len(images)):
+                        image_url = self.PAGE_PREFIX + images[i]['src'].split('?')[0].replace('../', '')
+                        image_name = episode + '_' + str(i + 1)
+                        self.add_to_image_list(image_name, image_url)
+                    self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(self.PAGE_PREFIX, 'news/list00010000.html')
+
+    def download_episode_preview_external(self):
+        jp_title = '可愛いだけじゃない式守さん'
+        last_date = datetime.strptime('20220801', '%Y%m%d')
+        today = datetime.today()
+        if today < last_date:
+            end_date = today
+        else:
+            end_date = last_date
+        MocaNewsScanner(jp_title, self.base_folder, '20220409', end_date.strftime('%Y%m%d'),
+                        download_id=self.download_id).run()
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
