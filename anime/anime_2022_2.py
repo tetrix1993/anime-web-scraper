@@ -840,6 +840,7 @@ class KoisekaDownload(Spring2022AnimeDownload, NewsTemplate):
         self.download_episode_preview_external()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -898,6 +899,33 @@ class KoisekaDownload(Spring2022AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        prefix = 'https://www.toei-video.co.jp'
+        try:
+            soup = self.get_soup('https://www.toei-video.co.jp/special/koiseka-anime/')
+            self.image_list = []
+            packages = soup.select('div.package')
+            for i in range(len(packages)):
+                bd_images = packages[i].select('img[src]')
+                for bd_image in bd_images:
+                    if 'btn-buy' in bd_image['src'] or self.is_matching_content_length(bd_image['src'], [21667, 21607]):
+                        continue
+                    bd_image_url = bd_image['src'].split('?')[0]
+                    if bd_image_url.startswith('/'):
+                        bd_image_url = prefix + bd_image_url
+                    bd_image_name = self.extract_image_name_from_url(bd_image_url)
+                    self.add_to_image_list(bd_image_name, bd_image_url)
+
+            images = soup.select('div.shoplist img[src]')
+            for image in images:
+                image_url = prefix + image['src'].split('?')[0]
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
 
 # Komi-san wa, Comyushou desu.
