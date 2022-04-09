@@ -720,7 +720,7 @@ class Kingdom3Download(Spring2020AnimeDownload):
     hashtags = 'キングダム'
     folder_name = 'kingdom3'
 
-    STORY_PAGE = "https://kingdom-anime.com/story/"
+    STORY_PAGE = "https://kingdom-anime.com/story/?season=3"
     
     def __init__(self):
         super().__init__()

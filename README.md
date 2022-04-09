@@ -132,6 +132,7 @@ The premiere date for the anime listed here has not been announced.
 * [Kaguya-sama wa Kokurasetai: Ultra Romantic](https://kaguya.love/)
 * [Kakkou no Iinazuke](https://cuckoos-anime.com/)
 * [Kawaii dake ja Nai Shikimori-san](https://shikimori-anime.com/)
+* [Kingdom 4th Season](https://kingdom-anime.com/)
 * [Koi wa Sekai Seifuku no Ato de](https://koiseka-anime.com/)
 * [Komi-san wa, Comyushou desu. 2nd Season](https://komisan-official.com/)
 * [Kono Healer, Mendokusai](https://kono-healer-anime.com/)

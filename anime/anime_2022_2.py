@@ -12,6 +12,7 @@ from scan import AniverseMagazineScanner
 # Kaguya-sama wa Kokurasetai: Ultra Romantic https://kaguya.love/ #かぐや様 @anime_kaguya
 # Kakkou no Iinazuke https://cuckoos-anime.com/ #カッコウの許嫁 @cuckoo_anime
 # Kawaii dake ja Nai Shikimori-san https://shikimori-anime.com/ #式守さん @anime_shikimori
+# Kingdom 4th Season https://kingdom-anime.com/story/ #キングダム @kingdom_animePR
 # Koi wa Sekai Seifuku no Ato de https://koiseka-anime.com/ #恋せか @koiseka_anime
 # Kono Healer, Mendokusai https://kono-healer-anime.com/ #このヒーラー #kono_healer @kono_healer
 # Machikado Mazoku: 2-choume http://www.tbs.co.jp/anime/machikado/ #まちカドまぞく #MachikadoMazoku @machikado_staff
@@ -872,6 +873,52 @@ class KunoichiTsubakiDownload(Spring2022AnimeDownload, NewsTemplate):
                     self.download_content(audio_url, countdown_voice_folder + '/' + audio_name)
         except Exception as e:
             self.print_exception(e, 'Media - Countdown Voice')
+
+
+# Kingdom 4th Season
+class Kingdom4Download(Spring2022AnimeDownload):
+    title = "Kingdom 4th Season"
+    keywords = [title]
+    website = 'https://kingdom-anime.com/'
+    twitter = 'kingdom_animePR'
+    hashtags = 'キングダム'
+    folder_name = 'kingdom4'
+
+    STORY_PAGE = "https://kingdom-anime.com/story/"
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        try:
+            soup = self.get_soup(self.STORY_PAGE)
+            ep_list = soup.find('ul', id='ep_list').find_all('li')
+            for ep in ep_list:
+                try:
+                    episode = self.get_episode_number(ep.find('span', class_='hd').text)
+                    if episode is None:
+                        continue
+                    if self.is_file_exists(self.base_folder + "/" + episode + "_0.jpg") or self.is_file_exists(
+                            self.base_folder + "/" + episode + "_0.png"):
+                        continue
+                    a_tag = ep.find('a')
+                    try:
+                        thumb_image_url = a_tag.find('div', class_='ep_thumb')['style'].split('(')[1].split(')')[0]
+                        self.download_image(thumb_image_url, self.base_folder + '/' + episode + '_0')
+                    except:
+                        continue
+                    ep_url = self.STORY_PAGE + a_tag['href']
+                    ep_soup = self.get_soup(ep_url)
+                    images = ep_soup.find('div', id='episodeCont').find_all('img')
+                    for j in range(len(images)):
+                        image_url = images[j]['src']
+                        file_path_without_extension = self.base_folder + '/' + episode + '_' + str(j + 1)
+                        self.download_image(image_url, file_path_without_extension)
+                except:
+                    continue
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
 
 # Koi wa Sekai Seifuku no Ato de
