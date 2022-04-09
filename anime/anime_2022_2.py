@@ -1122,6 +1122,7 @@ class ReimeikiDownload(Spring2022AnimeDownload, NewsTemplate):
         self.download_episode_preview_external()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         template = self.PAGE_PREFIX + 'story/img/story%s/%s.jpg'
@@ -1176,6 +1177,16 @@ class ReimeikiDownload(Spring2022AnimeDownload, NewsTemplate):
         # templates = [prefix + '_%s_on.png', prefix + 'img_%s.jpg']
         template = self.PAGE_PREFIX + 'character/img/chara_img_%s@2x.png'
         self.download_by_template(folder, template, 2, 1)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        self.image_list = []
+        self.add_to_image_list('bdbox', 'https://moca-news.net/article/20220408/2022040802300a_/image/911-5juy9a.jpg', is_mocanews=True)
+        self.add_to_image_list('bdbonus1', 'https://moca-news.net/article/20220408/2022040802300a_/image/912-5d83ro.jpg', is_mocanews=True)
+        self.add_to_image_list('bdbonus2', 'https://moca-news.net/article/20220408/2022040802300a_/image/913-48m9a2.jpg', is_mocanews=True)
+        self.add_to_image_list('bdbonus3', 'https://moca-news.net/article/20220408/2022040802300a_/image/914-22zesg.jpg', is_mocanews=True)
+        self.add_to_image_list('bdbonus4', 'https://moca-news.net/article/20220408/2022040802300a_/image/915-0wdkbv.jpg', is_mocanews=True)
+        self.download_image_list(folder)
 
 
 # Otome Game Sekai wa Mob ni Kibishii Sekai desu
