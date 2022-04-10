@@ -667,6 +667,7 @@ class ShikimorisanDownload(Spring2022AnimeDownload, NewsTemplate2):
         self.download_episode_preview_external()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -745,6 +746,47 @@ class ShikimorisanDownload(Spring2022AnimeDownload, NewsTemplate2):
                         self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+        self.create_cache_file(cache_filepath, processed, num_processed)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        bd_template = self.PAGE_PREFIX + 'bd/%s.html'
+        for i in range(8):
+            if i == 0:
+                bd_page = 'tokuten'
+            else:
+                bd_page = str(i).zfill(2)
+                if bd_page in processed:
+                    continue
+            bd_url = bd_template % bd_page
+            try:
+                bd_soup = self.get_soup(bd_url)
+                if bd_soup is not None:
+                    if i == 0:
+                        images = bd_soup.select('#cms_block img[src]')
+                    else:
+                        images = bd_soup.select('#cms_block .line_01 img[src]')
+                    self.image_list = []
+                    for image in images:
+                        image_url = self.PAGE_PREFIX + image['src'].replace('../', '').replace('sn_', '').split('?')[0]
+                        image_name = self.extract_image_name_from_url(image_url)
+                        if self.is_image_exists(image_name, folder):
+                            if i == 0:
+                                self.download_image_with_different_length(image_url, image_name, 'old', folder)
+                        elif self.is_matching_content_length(image_url, [3219, 7666]):
+                            continue
+                        else:
+                            self.add_to_image_list(image_name, image_url)
+                    if i > 0:
+                        if len(self.image_list) > 0:
+                            processed.append(bd_page)
+                        else:
+                            break
+                    self.download_image_list(folder)
+            except Exception as e:
+                self.print_exception(e, 'Blu-ray - %s' % bd_page)
         self.create_cache_file(cache_filepath, processed, num_processed)
 
 
