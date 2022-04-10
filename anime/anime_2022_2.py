@@ -2013,7 +2013,9 @@ class SpyFamilyDownload(Spring2022AnimeDownload, NewsTemplate):
         self.download_episode_preview()
         self.download_news()
         self.download_key_visual()
-        self.download_character()
+        soup = self.get_soup(self.PAGE_PREFIX)
+        self.download_character(soup)
+        self.download_media(soup)
 
     def download_episode_preview(self):
         image_url_template = self.PAGE_PREFIX + 'assets/img/episodes/episode%s_%s.jpg'
@@ -2039,20 +2041,59 @@ class SpyFamilyDownload(Spring2022AnimeDownload, NewsTemplate):
         self.add_to_image_list('tz2', 'https://pbs.twimg.com/media/FDCUBF7akAEMcUM?format=jpg&name=4096x4096')
         self.download_image_list(folder)
 
-    def download_character(self):
+    def download_character(self, soup=None):
         folder = self.create_character_directory()
         try:
-            soup = self.get_soup(self.PAGE_PREFIX)
-            images = soup.select('.charaImgLists__imgWrap img')
+            if soup is None:
+                soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.charaImgLists__imgWrap img[src]')
             self.image_list = []
             for image in images:
-                if image.has_attr('src'):
-                    image_url = self.PAGE_PREFIX + image['src'].replace('./', '')
-                    image_name = self.extract_image_name_from_url(image_url)
-                    self.add_to_image_list(image_name, image_url)
+                image_url = self.PAGE_PREFIX + image['src'].replace('./', '')
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+    def download_media(self, soup=None):
+        folder = self.create_media_directory()
+        try:
+            if soup is None:
+                soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.bddvdLists__item img[src]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'].replace('./', '')
+                image_name = self.extract_image_name_from_url(image_url)
+                if 'nowprinting' in image_name:
+                    continue
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
+
+        # Blu-ray Bonus
+        try:
+            if soup is None:
+                soup = self.get_soup(self.PAGE_PREFIX + 'bddvd/bddvd_tokuten.php')
+            images = soup.select('.bddvdDetailWrap img[src]')
+            self.image_list = []
+            for image in images:
+                image_src = image['src']
+                if image_src.startswith('./'):
+                    image_url = self.PAGE_PREFIX + image_src.replace('./', '')
+                elif image_src.startswith('../'):
+                    image_url = self.PAGE_PREFIX + image_src.replace('../', '')
+                else:
+                    image_url = image_src
+                image_name = self.extract_image_name_from_url(image_url)
+                if 'nowprinting' in image_name:
+                    continue
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
 
 # Summertime Render
