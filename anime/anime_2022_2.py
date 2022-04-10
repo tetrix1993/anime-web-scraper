@@ -685,7 +685,8 @@ class ShikimorisanDownload(Spring2022AnimeDownload, NewsTemplate2):
                     images = ep_soup.select('ul.tp5 img[src]')
                     self.image_list = []
                     for i in range(len(images)):
-                        image_url = self.PAGE_PREFIX + images[i]['src'].split('?')[0].replace('../', '')
+                        image_url = self.PAGE_PREFIX + images[i]['src'].split('?')[0]
+                        image_url = self.remove_string(image_url, ['../', 'sn_'])
                         image_name = episode + '_' + str(i + 1)
                         self.add_to_image_list(image_name, image_url)
                     self.download_image_list(self.base_folder)
