@@ -15,6 +15,7 @@ from datetime import datetime
 # Kingdom 4th Season https://kingdom-anime.com/story/ #キングダム @kingdom_animePR
 # Koi wa Sekai Seifuku no Ato de https://koiseka-anime.com/ #恋せか @koiseka_anime
 # Kono Healer, Mendokusai https://kono-healer-anime.com/ #このヒーラー #kono_healer @kono_healer
+# Kunoichi Tsubaki no Mune no Uchi https://kunoichi-tsubaki.com/ #くノ一ツバキ @tsubaki_anime
 # Machikado Mazoku: 2-choume http://www.tbs.co.jp/anime/machikado/ #まちカドまぞく #MachikadoMazoku @machikado_staff
 # Mahoutsukai Reimeiki https://www.tbs.co.jp/anime/reimeiki/ #魔法使い黎明期 @reimeiki_pr
 # Otome Game Sekai wa Mob ni Kibishii Sekai desu https://mobseka.com/ #モブせか #mobseka @mobseka_anime
@@ -747,166 +748,6 @@ class ShikimorisanDownload(Spring2022AnimeDownload, NewsTemplate2):
         self.create_cache_file(cache_filepath, processed, num_processed)
 
 
-# Kunoichi Tsubaki no Mune no Uchi
-class KunoichiTsubakiDownload(Spring2022AnimeDownload, NewsTemplate):
-    title = 'Kunoichi Tsubaki no Mune no Uchi'
-    keywords = [title, 'In the Heart of Kunoichi Tsubaki']
-    website = 'https://kunoichi-tsubaki.com/'
-    hashtags = 'くノ一ツバキ'
-    twitter = 'tsubaki_anime'
-    folder_name = 'kunoichi-tsubaki'
-
-    PAGE_PREFIX = website
-    FINAL_EPISODE = 12
-    IMAGES_PER_EPISODE = 5
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_episode_preview_guess()
-        self.download_news()
-        self.download_key_visual()
-        self.download_character()
-        self.download_media()
-
-    def download_episode_preview(self):
-        try:
-            soup = self.get_soup(self.PAGE_PREFIX + 'story/', decode=True)
-            li_tags = soup.select('.p-story__nav-list li')
-            for li in li_tags:
-                ep_soup = None
-                para = li.find('p')
-                if para is not None:
-                    try:
-                        episode = str(self.convert_kanji_to_number(para.text.replace('の巻', ''))).zfill(2)
-                    except:
-                        continue
-                else:
-                    continue
-                if self.is_image_exists(episode + '_5'):
-                    continue
-                if li.has_attr('class') and 'current' in li['class']:
-                    ep_soup = soup
-                else:
-                    a_tag = li.find('a[href]')
-                    if a_tag is not None:
-                        ep_soup = self.get_soup(self.PAGE_PREFIX + a_tag['href'][1:])
-                if ep_soup is not None and episode is not None:
-                    images = ep_soup.select('li.swiper-slide img[src]')
-                    self.image_list = []
-                    for i in range(len(images)):
-                        image_url = self.PAGE_PREFIX + images[i]['src'][1:]
-                        image_name = episode + '_' + str(i + 1)
-                        self.add_to_image_list(image_name, image_url)
-                    self.download_image_list(self.base_folder)
-        except Exception as e:
-            self.print_exception(e)
-
-    def download_episode_preview_guess(self):
-        folder = self.create_custom_directory('guess')
-        is_success = False
-        end_num = self.IMAGES_PER_EPISODE
-        for i in range(self.FINAL_EPISODE):
-            episode = str(i + 1).zfill(2)
-            start_num = None
-            for j in range(end_num):
-                if self.is_image_exists(episode + '_' + str(j + 1)):
-                    start_num = j + 2
-                else:
-                    start_num = j + 1
-                    break
-            if not start_num or start_num > end_num:
-                continue
-            template1 = self.PAGE_PREFIX + 'assets/img/story/img_ep%s-%s.jpg' % (episode, '%s')
-            template2 = self.PAGE_PREFIX + 'assets/img/story/img_ep%s-%s.png' % (episode, '%s')
-            if not self.download_by_template(folder, [template1, template2], 1, start=start_num, end=end_num):
-                break
-            print(self.__class__.__name__ + ' - Episode %s guessed correctly!' % episode)
-            is_success = True
-        return is_success
-
-    def download_news(self):
-        news_url = self.PAGE_PREFIX + 'news/'
-        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.c-news__item',
-                                    date_select='.c-news__item-date', title_select='.c-news__item-txt',
-                                    id_select='.c-news__item-link', a_tag_prefix=news_url, paging_type=1,
-                                    next_page_select='.c-pagination__count-item',
-                                    next_page_eval_index_class='is-current', next_page_eval_index=-1)
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('tz_main', self.PAGE_PREFIX + 'teaser/img/top/main.jpg')
-        self.add_to_image_list('kv1', self.PAGE_PREFIX + 'teaser/img/top/main_2nd.jpg')
-        # self.add_to_image_list('kv1', self.PAGE_PREFIX + 'assets/img/top/main.jpg')
-        self.add_to_image_list('kv2', self.PAGE_PREFIX + 'assets/img/top/main-2nd.jpg')
-        self.download_image_list(folder)
-
-    def download_character(self):
-        folder = self.create_character_directory()
-        try:
-            soup = self.get_soup(self.PAGE_PREFIX + 'character/detail.html')
-            images = soup.select('.p-inChara__whole-img img, .p-inChara__face-item img')
-            self.image_list = []
-            for image in images:
-                if image.has_attr('data-src'):
-                    image_url = self.PAGE_PREFIX + image['data-src'][1:]
-                    image_name = self.extract_image_name_from_url(image_url)
-                    self.add_to_image_list(image_name, image_url)
-            self.download_image_list(folder)
-        except Exception as e:
-            self.print_exception(e, 'Character')
-
-    def download_media(self):
-        folder = self.create_media_directory()
-
-        # Digicon
-        digicon_folder = folder + '/digicon'
-        if not os.path.exists(digicon_folder):
-            os.makedirs(digicon_folder)
-
-        self.image_list = []
-        try:
-            digicon_soup = self.get_soup(self.PAGE_PREFIX + 'special/digicon/')
-            digicon_imgs = digicon_soup.select('.digicon_img img')
-            for digicon_img in digicon_imgs:
-                if digicon_img.has_attr('src'):
-                    if digicon_img['src'].startswith('../../'):
-                        digicon_image_url = self.PAGE_PREFIX + digicon_img['src'][6:]
-                    elif digicon_img['src'].startswith('/'):
-                        digicon_image_url = self.PAGE_PREFIX + digicon_img['src'][1:]
-                    else:
-                        continue
-                    digicon_image_name = self.extract_image_name_from_url(digicon_image_url)
-                    self.add_to_image_list(digicon_image_name, digicon_image_url)
-            self.download_image_list(digicon_folder)
-        except Exception as e:
-            self.print_exception(e, 'Media - Digicon')
-
-        # Countdown Voice
-        countdown_voice_folder = folder + '/countdown-voice'
-        if not os.path.exists(countdown_voice_folder):
-            os.makedirs(countdown_voice_folder)
-        
-        try:
-            voice_soup = self.get_soup(self.PAGE_PREFIX + 'special/countdown-voice/')
-            voices = voice_soup.select('.voice audio')
-            for voice in voices:
-                if voice.has_attr('src'):
-                    if voice['src'].startswith('../../'):
-                        audio_url = self.PAGE_PREFIX + voice['src'][6:]
-                    elif voice['src'].startswith('/'):
-                        audio_url = self.PAGE_PREFIX + voice['src'][1:]
-                    else:
-                        continue
-                    audio_name = audio_url.split('/')[-1]
-                    self.download_content(audio_url, countdown_voice_folder + '/' + audio_name)
-        except Exception as e:
-            self.print_exception(e, 'Media - Countdown Voice')
-
-
 # Kingdom 4th Season
 class Kingdom4Download(Spring2022AnimeDownload):
     title = "Kingdom 4th Season"
@@ -1207,6 +1048,214 @@ class KonoHealerDownload(Spring2022AnimeDownload, NewsTemplate2):
             except Exception as e:
                 print("Error in running " + self.__class__.__name__ + " - Music/Blu-Ray %s" % url)
                 print(e)
+
+
+# Kunoichi Tsubaki no Mune no Uchi
+class KunoichiTsubakiDownload(Spring2022AnimeDownload, NewsTemplate):
+    title = 'Kunoichi Tsubaki no Mune no Uchi'
+    keywords = [title, 'In the Heart of Kunoichi Tsubaki']
+    website = 'https://kunoichi-tsubaki.com/'
+    hashtags = 'くノ一ツバキ'
+    twitter = 'tsubaki_anime'
+    folder_name = 'kunoichi-tsubaki'
+
+    PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 5
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_episode_preview_guess()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+        self.download_media()
+
+    def download_episode_preview(self):
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/', decode=True)
+            li_tags = soup.select('.p-story__nav-list li')
+            for li in li_tags:
+                ep_soup = None
+                para = li.find('p')
+                if para is not None:
+                    try:
+                        episode = str(self.convert_kanji_to_number(para.text.replace('の巻', ''))).zfill(2)
+                    except:
+                        continue
+                else:
+                    continue
+                if self.is_image_exists(episode + '_5'):
+                    continue
+                if li.has_attr('class') and 'current' in li['class']:
+                    ep_soup = soup
+                else:
+                    a_tag = li.find('a[href]')
+                    if a_tag is not None:
+                        ep_soup = self.get_soup(self.PAGE_PREFIX + a_tag['href'][1:])
+                if ep_soup is not None and episode is not None:
+                    images = ep_soup.select('li.swiper-slide img[src]')
+                    self.image_list = []
+                    for i in range(len(images)):
+                        image_url = self.PAGE_PREFIX + images[i]['src'][1:]
+                        image_name = episode + '_' + str(i + 1)
+                        self.add_to_image_list(image_name, image_url)
+                    self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
+
+    def download_episode_preview_guess(self):
+        folder = self.create_custom_directory('guess')
+        is_success = False
+        end_num = self.IMAGES_PER_EPISODE
+        for i in range(self.FINAL_EPISODE):
+            episode = str(i + 1).zfill(2)
+            start_num = None
+            for j in range(end_num):
+                if self.is_image_exists(episode + '_' + str(j + 1)):
+                    start_num = j + 2
+                else:
+                    start_num = j + 1
+                    break
+            if not start_num or start_num > end_num:
+                continue
+            template1 = self.PAGE_PREFIX + 'assets/img/story/img_ep%s-%s.jpg' % (episode, '%s')
+            template2 = self.PAGE_PREFIX + 'assets/img/story/img_ep%s-%s.png' % (episode, '%s')
+            if not self.download_by_template(folder, [template1, template2], 1, start=start_num, end=end_num):
+                break
+            print(self.__class__.__name__ + ' - Episode %s guessed correctly!' % episode)
+            is_success = True
+        return is_success
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.c-news__item',
+                                    date_select='.c-news__item-date', title_select='.c-news__item-txt',
+                                    id_select='.c-news__item-link', a_tag_prefix=news_url, paging_type=1,
+                                    next_page_select='.c-pagination__count-item',
+                                    next_page_eval_index_class='is-current', next_page_eval_index=-1)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_main', self.PAGE_PREFIX + 'teaser/img/top/main.jpg')
+        self.add_to_image_list('kv1', self.PAGE_PREFIX + 'teaser/img/top/main_2nd.jpg')
+        # self.add_to_image_list('kv1', self.PAGE_PREFIX + 'assets/img/top/main.jpg')
+        self.add_to_image_list('kv2', self.PAGE_PREFIX + 'assets/img/top/main-2nd.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/detail.html')
+            images = soup.select('.p-inChara__whole-img img, .p-inChara__face-item img')
+            self.image_list = []
+            for image in images:
+                if image.has_attr('data-src'):
+                    image_url = self.PAGE_PREFIX + image['data-src'][1:]
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+
+    def download_media(self):
+        folder = self.create_media_directory()
+
+        # Blu-ray
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        bd_template = self.PAGE_PREFIX + 'bddvd/%s.html'
+        for i in range(8):
+            if i == 0:
+                bd_page = 'special'
+            else:
+                bd_page = str(i).zfill(2)
+                if bd_page in processed:
+                    continue
+            bd_url = bd_template % bd_page
+            try:
+                bd_soup = self.get_soup(bd_url)
+                if bd_soup is not None:
+                    images = bd_soup.select('.p-bddvd img[src]')
+                    self.image_list = []
+                    for image in images:
+                        image_url = self.PAGE_PREFIX + image['src'].replace('../', '').split('?')[0]
+                        if '/bddvd/' in image_url:
+                            split1 = image_url.split('/')
+                            if len(split1) == 0 or 'img_np' in split1[-1] or 'jk_np' in split1[-1]:
+                                continue
+                            image_name = ''
+                            for split_ in reversed(split1):
+                                if split_ == 'bddvd':
+                                    break
+                                if len(split_) == 0:
+                                    continue
+                                if len(image_name) == 0:
+                                    image_name = split_.split('.')[0]
+                                else:
+                                    image_name = split_ + "_" + image_name
+                            if self.is_image_exists(image_name, folder):
+                                if i == 0:
+                                    self.download_image_with_different_length(image_url, image_name, 'old', folder)
+                            else:
+                                self.add_to_image_list(image_name, image_url)
+                    if i > 0:
+                        if len(self.image_list) > 0:
+                            processed.append(bd_page)
+                        else:
+                            break
+                    self.download_image_list(folder)
+            except Exception as e:
+                self.print_exception(e, 'Blu-ray - %s' % bd_page)
+        self.create_cache_file(cache_filepath, processed, num_processed)
+
+        # Digicon
+        digicon_folder = folder + '/digicon'
+        if not os.path.exists(digicon_folder):
+            os.makedirs(digicon_folder)
+
+        self.image_list = []
+        try:
+            digicon_soup = self.get_soup(self.PAGE_PREFIX + 'special/digicon/')
+            digicon_imgs = digicon_soup.select('.digicon_img img')
+            for digicon_img in digicon_imgs:
+                if digicon_img.has_attr('src'):
+                    if digicon_img['src'].startswith('../../'):
+                        digicon_image_url = self.PAGE_PREFIX + digicon_img['src'][6:]
+                    elif digicon_img['src'].startswith('/'):
+                        digicon_image_url = self.PAGE_PREFIX + digicon_img['src'][1:]
+                    else:
+                        continue
+                    digicon_image_name = self.extract_image_name_from_url(digicon_image_url)
+                    self.add_to_image_list(digicon_image_name, digicon_image_url)
+            self.download_image_list(digicon_folder)
+        except Exception as e:
+            self.print_exception(e, 'Media - Digicon')
+
+        # Countdown Voice
+        countdown_voice_folder = folder + '/countdown-voice'
+        if not os.path.exists(countdown_voice_folder):
+            os.makedirs(countdown_voice_folder)
+
+        try:
+            voice_soup = self.get_soup(self.PAGE_PREFIX + 'special/countdown-voice/')
+            voices = voice_soup.select('.voice audio')
+            for voice in voices:
+                if voice.has_attr('src'):
+                    if voice['src'].startswith('../../'):
+                        audio_url = self.PAGE_PREFIX + voice['src'][6:]
+                    elif voice['src'].startswith('/'):
+                        audio_url = self.PAGE_PREFIX + voice['src'][1:]
+                    else:
+                        continue
+                    audio_name = audio_url.split('/')[-1]
+                    self.download_content(audio_url, countdown_voice_folder + '/' + audio_name)
+        except Exception as e:
+            self.print_exception(e, 'Media - Countdown Voice')
 
 
 # Machikado Mazoku: 2-choume
