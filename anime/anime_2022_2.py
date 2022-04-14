@@ -579,6 +579,8 @@ class KakkounoIinazukeDownload(Spring2022AnimeDownload, NewsTemplate3):
     folder_name = 'kakkou-no-iinazuke'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 24
+    IMAGES_PER_EPISODE = 6
 
     def __init__(self):
         super().__init__()
@@ -586,15 +588,38 @@ class KakkounoIinazukeDownload(Spring2022AnimeDownload, NewsTemplate3):
     def run(self):
         self.download_episode_preview()
         self.download_news()
+        self.download_episode_preview_external()
         self.download_key_visual()
         self.download_character()
         self.download_media()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        base_template = self.PAGE_PREFIX + 'assets/story/%s/%s.'
+        for i in range(self.FINAL_EPISODE):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_1'):
+                continue
+            template = base_template % (str(i + 1), '%s')
+            templates = [template + 'jpg', template + 'png']
+            for j in range(1, self.IMAGES_PER_EPISODE + 1, 1):
+                is_successful = False
+                for t in templates:
+                    image_url = t % str(j)
+                    image_name = episode + '_' + str(j)
+                    result = self.download_image(image_url, self.base_folder + '/' + image_name)
+                    if result == -1:
+                        continue
+                    is_successful = True
+                if not is_successful:
+                    return
 
     def download_news(self):
         self.download_template_news(self.PAGE_PREFIX)
+
+    def download_episode_preview_external(self):
+        jp_title = 'カッコウの許嫁'
+        AniverseMagazineScanner(jp_title, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                end_date='20220414', prefix='', suffix='羽', download_id=self.download_id).run()
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
