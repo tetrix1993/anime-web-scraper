@@ -1311,6 +1311,8 @@ class MachikadoMazoku2Download(Spring2022AnimeDownload, NewsTemplate):
     folder_name = 'machikado-mazoku2'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 6
 
     def __init__(self):
         super().__init__()
@@ -1321,6 +1323,18 @@ class MachikadoMazoku2Download(Spring2022AnimeDownload, NewsTemplate):
         self.download_key_visual()
         self.download_character()
         self.download_media()
+
+    def download_episode_preview(self):
+        template = self.PAGE_PREFIX + 'story/img/story%s/%s.jpg'
+        for i in range(self.FINAL_EPISODE):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_' + str(self.IMAGES_PER_EPISODE)):
+                continue
+            for j in range(self.IMAGES_PER_EPISODE):
+                image_url = template % (episode, str(j + 1).zfill(2))
+                image_name = episode + '_' + str(j + 1)
+                if self.download_image(image_url, self.base_folder + '/' + image_name) == -1:
+                    return
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='ul.newslist li',
