@@ -9,6 +9,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Kanojo, Okarishimasu 2nd Season https://kanokari-official.com/ #かのかり #kanokari @kanokari_anime
 # Kinsou no Vermeil: Gakeppuchi Majutsushi wa Saikyou no Yakusai to Mahou Sekai wo Tsukisusumu #ヴェルメイユ #vermeil @vermeil_animePR
 # Kumichou Musume to Sewagakari https://kumichomusume.com/ #組長娘と世話係 @kumichomusume
+# Kuro no Shoukanshi https://kuronoshokanshi.com/ #黒の召喚士 @kuronoshokanshi
 # Lycoris Recoil https://lycoris-recoil.com/ #リコリコ #LycorisRecoil @lycoris_recoil
 # Prima Doll https://primadoll.jp/ #プリマドール #PrimaDoll @primadoll_pr
 # Shadows House 2nd Season https://shadowshouse-anime.com/
@@ -398,6 +399,48 @@ class KumichoMusumeDownload(Summer2022AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+
+# Kuro no Shoukanshi
+class KuronoShoukanshiDownload(Summer2022AnimeDownload, NewsTemplate):
+    title = 'Kuro no Shoukanshi'
+    keywords = [title, 'Black Summoner']
+    website = 'https://kuronoshokanshi.com/'
+    twitter = 'kuronoshokanshi'
+    hashtags = '黒の召喚士'
+    folder_name = 'kuronoshokanshi'
+
+    PAGE_PREFIX = website
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-item',
+                                    date_select='.news-date', title_select='.news-title', id_select='a',
+                                    date_func=lambda x: x[0:4] + '.' + x[5:], next_page_select='div.sw-Pagination span',
+                                    next_page_eval_index_class='current', next_page_eval_index=-1)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        template = self.PAGE_PREFIX + 'wordpress/wp-content/themes/kuronoshokanshi/assets/images/pc/index/img_kv_%s.jpg'
+        self.download_by_template(folder, template, 2, 1)
+
+        self.image_list = []
+        self.add_to_image_list('tz_aniverse', 'https://aniverse-mag.com/wp-content/uploads/2022/02/633e750a4b48dc2fd8f0466f51b44078.jpg')
+        self.add_to_image_list('kv1_twitter', 'https://pbs.twimg.com/media/FQiLQU6VQAkgT8i?format=jpg&name=medium')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'wordpress/wp-content/themes/kuronoshokanshi/assets/images/common/character/img_chara_%s.png'
+        self.download_by_template(folder, template, 2, 1)
 
 
 # Lycoris Recoil

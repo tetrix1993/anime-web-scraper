@@ -116,6 +116,7 @@ The premiere date for the anime listed here has not been announced.
 * [Kanojo, Okarishimasu 2nd Season](https://kanokari-official.com/)
 * [Kinsou no Vermeil: Gakeppuchi Majutsushi wa Saikyou no Yakusai to Mahou Sekai wo Tsukisusumu](https://vermeilingold.jp/)
 * [Kumichou Musume to Sewagakari](https://kumichomusume.com/)
+* [Kuro no Shoukanshi](https://kuronoshokanshi.com/)
 * [Lycoris Recoil](https://lycoris-recoil.com/)
 * [Prima Doll](https://primadoll.jp/)
 * [Shadows House](https://shadowshouse-anime.com/)
