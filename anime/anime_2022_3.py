@@ -794,6 +794,9 @@ class Youzitsu2Download(Summer2022AnimeDownload, NewsTemplate):
 
         self.download_by_template(folder, news_templates, 1, 1, prefix='news_')
 
+        t1b_template = self.PAGE_PREFIX + 'assets/top/t1b/c%s.png'
+        self.download_by_template(folder, t1b_template, 1, 1, prefix='t1b_')
+
         try:
             for i in range(1, 11, 1):
                 is_success = False
