@@ -140,6 +140,7 @@ class DeaimonDownload(Spring2022AnimeDownload, NewsTemplate2):
 
     PAGE_PREFIX = website
     FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 8
 
     def __init__(self):
         super().__init__()
@@ -148,6 +149,7 @@ class DeaimonDownload(Spring2022AnimeDownload, NewsTemplate2):
         self.download_episode_preview()
         self.download_news()
         self.download_episode_preview_external()
+        self.download_episode_preview_guess()
         self.download_key_visual()
         self.download_character()
         self.download_media()
@@ -179,6 +181,39 @@ class DeaimonDownload(Spring2022AnimeDownload, NewsTemplate2):
         jp_title = 'であいもん'
         AniverseMagazineScanner(jp_title, self.base_folder, last_episode=self.FINAL_EPISODE,
                                 end_date='20220331', download_id=self.download_id).run()
+
+    def download_episode_preview_guess(self):
+        folder = self.create_custom_directory('guess')
+        template = self.PAGE_PREFIX + 'core_sys/images/contents/%s/block/%s/%s.jpg'
+        is_successful = False
+        for i in range(1, self.FINAL_EPISODE + 1, 1):
+            episode = str(i).zfill(2)
+            is_success = False
+            if self.is_image_exists(episode + '_1'):
+                continue
+            first = 21 + (i - 1)
+            second = 28 + 3 * (i - 1)
+            third = 30 + 6 * (i - 1)
+            third2 = 104 + 2 * (i - 1)
+            for j in range(self.IMAGES_PER_EPISODE):
+                third_ = third + j if j < 6 else third2 + j - 6
+                image_url = template % (str(first).zfill(8), str(second).zfill(8), str(third_).zfill(8))
+                image_name = episode + '_' + str(j + 1)
+                result = self.download_image(image_url, folder + '/' + image_name)
+                if result == 0:
+                    is_success = True
+                    is_successful = True
+                elif result == -1:
+                    break
+            if is_success:
+                print(self.__class__.__name__ + ' - Guessed successfully!')
+            else:
+                if len(os.listdir(folder)) == 0:
+                    os.rmdir(folder)
+                return
+        if len(os.listdir(folder)) == 0:
+            os.rmdir(folder)
+        return is_successful
 
     def download_news(self):
         self.download_template_news(self.PAGE_PREFIX)
@@ -1018,6 +1053,8 @@ class KonoHealerDownload(Spring2022AnimeDownload, NewsTemplate2):
     folder_name = 'kono-healer'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 6
 
     def __init__(self):
         super().__init__()
@@ -1025,6 +1062,7 @@ class KonoHealerDownload(Spring2022AnimeDownload, NewsTemplate2):
     def run(self):
         self.download_episode_preview()
         self.download_news()
+        self.download_episode_preview_guess()
         self.download_key_visual()
         self.download_character()
         self.download_media()
@@ -1055,6 +1093,37 @@ class KonoHealerDownload(Spring2022AnimeDownload, NewsTemplate2):
 
     def download_news(self):
         self.download_template_news(self.PAGE_PREFIX)
+
+    def download_episode_preview_guess(self):
+        folder = self.create_custom_directory('guess')
+        template = self.PAGE_PREFIX + 'core_sys/images/contents/%s/block/%s/%s.jpg'
+        is_successful = False
+        for i in range(1, self.FINAL_EPISODE + 1, 1):
+            episode = str(i).zfill(2)
+            is_success = False
+            if self.is_image_exists(episode + '_1'):
+                continue
+            first = 10 + (i - 1)
+            second = 32 + 5 * (i - 1)
+            third = 38 + self.IMAGES_PER_EPISODE * (i - 1)
+            for j in range(self.IMAGES_PER_EPISODE):
+                image_url = template % (str(first).zfill(8), str(second).zfill(8), str(third + j).zfill(8))
+                image_name = episode + '_' + str(j + 1)
+                result = self.download_image(image_url, folder + '/' + image_name)
+                if result == 0:
+                    is_success = True
+                    is_successful = True
+                elif result == -1:
+                    break
+            if is_success:
+                print(self.__class__.__name__ + ' - Guessed successfully!')
+            else:
+                if len(os.listdir(folder)) == 0:
+                    os.rmdir(folder)
+                return
+        if len(os.listdir(folder)) == 0:
+            os.rmdir(folder)
+        return is_successful
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -2013,11 +2082,13 @@ class ShokeiShoujoDownload(Spring2022AnimeDownload, NewsTemplate):
 
     PAGE_PREFIX = website
     FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 6
 
     def run(self):
         self.download_episode_preview()
         self.download_news()
         self.download_episode_preview_external()
+        self.download_episode_preview_guess()
         self.download_key_visual()
         self.download_character()
 
@@ -2064,6 +2135,37 @@ class ShokeiShoujoDownload(Spring2022AnimeDownload, NewsTemplate):
         jp_title = '処刑少女の生きる道'
         AniverseMagazineScanner(jp_title, self.base_folder, last_episode=self.FINAL_EPISODE,
                                 end_date='20220402', download_id=self.download_id, prefix='').run()
+
+    def download_episode_preview_guess(self):
+        folder = self.create_custom_directory('guess')
+        template = self.PAGE_PREFIX + 'core_sys/images/contents/%s/block/%s/%s.jpg'
+        is_successful = False
+        for i in range(2, self.FINAL_EPISODE + 1, 1):
+            episode = str(i).zfill(2)
+            is_success = False
+            if self.is_image_exists(episode + '_1'):
+                continue
+            first = 16 + (i - 1)
+            second = 42 + 4 * (i - 1)
+            third = 41 + self.IMAGES_PER_EPISODE * (i - 1)
+            for j in range(self.IMAGES_PER_EPISODE):
+                image_url = template % (str(first).zfill(8), str(second).zfill(8), str(third + j).zfill(8))
+                image_name = episode + '_' + str(j + 1)
+                result = self.download_image(image_url, folder + '/' + image_name)
+                if result == 0:
+                    is_success = True
+                    is_successful = True
+                elif result == -1:
+                    break
+            if is_success:
+                print(self.__class__.__name__ + ' - Guessed successfully!')
+            else:
+                if len(os.listdir(folder)) == 0:
+                    os.rmdir(folder)
+                return
+        if len(os.listdir(folder)) == 0:
+            os.rmdir(folder)
+        return is_successful
 
     def download_news(self):
         # Paging logic need update
