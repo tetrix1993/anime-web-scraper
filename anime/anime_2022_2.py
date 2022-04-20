@@ -19,6 +19,7 @@ from datetime import datetime
 # Machikado Mazoku: 2-choume http://www.tbs.co.jp/anime/machikado/ #まちカドまぞく #MachikadoMazoku @machikado_staff
 # Mahoutsukai Reimeiki https://www.tbs.co.jp/anime/reimeiki/ #魔法使い黎明期 @reimeiki_pr
 # Otome Game Sekai wa Mob ni Kibishii Sekai desu https://mobseka.com/ #モブせか #mobseka @mobseka_anime
+# Paripi Koumei https://paripikoumei-anime.com/ #パリピ孔明 @paripikoumei_PR
 # Rikei ga Koi ni Ochita no de Shoumei shitemita. Heart #リケ恋 #りけこい #rikekoi @rikeigakoini
 # RPG Fudousan https://rpg-rs.jp/ #RPG不動産 @rpgrs_anime
 # Shachiku-san wa Youjo Yuurei ni Iyasaretai. https://shachikusan.com/ #しゃちされたい @shachisaretai
@@ -1676,6 +1677,82 @@ class MobsekaDownload(Spring2022AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception('e', 'Blu-ray')
+
+
+# Paripi Koumei
+class ParipiKoumei(Spring2022AnimeDownload, NewsTemplate):
+    title = 'Paripi Koumei'
+    keywords = [title, 'Ya Boy Kongming!']
+    website = 'https://paripikoumei-anime.com/'
+    twitter = 'paripikoumei_PR'
+    hashtags = 'パリピ孔明'
+    folder_name = 'paripikoumei'
+
+    PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_episode_preview_external()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            divs = soup.select('.contents div[id]')
+            for div in divs:
+                if div['id'].isnumeric:
+                    episode = str(int(div['id'])).zfill(2)
+                    if self.is_image_exists(episode + '_01'):
+                        continue
+                    images = div.select('img[src]')
+                    self.image_list = []
+                    for i in range(len(images)):
+                        image_url = images[i]['src']
+                        image_name = episode + '_' + str(i + 1).zfill(2)
+                        self.add_to_image_list(image_name, image_url)
+                    self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
+
+    def download_news(self):
+        news_prefix = self.PAGE_PREFIX + 'news/'
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-list article',
+                                    title_select='h2', date_select='time', id_select='a',
+                                    date_separator='/', a_tag_prefix=news_prefix)
+
+    def download_episode_preview_external(self):
+        jp_title = 'パリピ孔明'
+        AniverseMagazineScanner(jp_title, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                end_date='20220330', download_id=self.download_id).run()
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('top_kv', self.PAGE_PREFIX + 'assets/images/top/kv.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            images = soup.select('.characters img[src]')
+            self.image_list = []
+            for image in images:
+                if '/character/' in image['src']:
+                    image_url = self.PAGE_PREFIX + image['src'].split('?')[0].replace('../', '')
+                    split1 = image_url.split('/')
+                    if len(split1) > 2 and split1[-1].startswith('pic') and split1[-3] == 'character':
+                        image_name = 'chara_' + split1[-2]
+                        self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
 
 
 # Rikei ga Koi ni Ochita no de Shoumei shitemita. Heart
