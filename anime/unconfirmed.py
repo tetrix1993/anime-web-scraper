@@ -21,7 +21,6 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Spy Kyoushitsu https://spyroom-anime.com/ #スパイ教室 #spyroom #SpyClassroom @spyroom_anime
 # Tonikaku Kawaii S2 http://tonikawa.com/ #トニカクカワイイ #tonikawa @tonikawa_anime
 # Vlad Love https://www.vladlove.com/index.html #ぶらどらぶ #vladlove @VLADLOVE_ANIME
-# Yama no Susume: Next Summit https://yamanosusume-ns.com/ #ヤマノススメ @yamanosusume
 
 
 # Unconfirmed Season Anime
@@ -858,65 +857,3 @@ class VladLoveDownload(UnconfirmedDownload):
                 self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
-
-
-# Yama no Susume: Next Summit
-class YamaNoSusume4Download(UnconfirmedDownload):
-    title = 'Yama no Susume: Next Summit'
-    keywords = [title, "Encouragement of Climb"]
-    website = 'https://yamanosusume-ns.com/'
-    twitter = 'yamanosusume'
-    hashtags = 'ヤマノススメ'
-    folder_name = 'yamanosusume4'
-
-    PAGE_PREFIX = website
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_news()
-        self.download_key_visual()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_news(self):
-        news_url = self.PAGE_PREFIX
-        try:
-            soup = self.get_soup(news_url, decode=True)
-            articles = soup.select('#nwu_001_t tr')
-            news_obj = self.get_last_news_log_object()
-            results = []
-            for article in articles:
-                tag_date = article.find('td', class_='day')
-                tag_title = article.find('div', class_='title')
-                a_tag = article.find('a')
-                if tag_date and tag_title:
-                    article_id = ''
-                    if a_tag and a_tag.has_attr('href'):
-                        article_id = self.PAGE_PREFIX + a_tag['href']
-                    date = self.format_news_date(tag_date.text.strip().replace('/', '.'))
-                    if len(date) == 0:
-                        continue
-                    title = tag_title.text.strip()
-                    if news_obj and ((news_obj['id'] == article_id and news_obj['title'] == title)
-                                     or date < news_obj['date']):
-                        break
-                    results.append(self.create_news_log_object(date, title, article_id))
-            success_count = 0
-            for result in reversed(results):
-                process_result = self.create_news_log_from_news_log_object(result)
-                if process_result == 0:
-                    success_count += 1
-            if len(results) > 0:
-                self.create_news_log_cache(success_count, results[0])
-        except Exception as e:
-            self.print_exception(e, 'News')
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('teaser', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv.png')
-        self.download_image_list(folder)

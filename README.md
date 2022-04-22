@@ -97,7 +97,6 @@ The premiere date for the anime listed here has not been announced.
 * [Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita 2nd Season](https://slime300-anime.com/)
 * [Spy Kyoushitsu](https://spyroom-anime.com/)
 * [Tonikaku Kawaii 2nd Season](http://tonikawa.com/)
-* [Yama no Susume: Next Summit](https://yamanosusume-ns.com/)
 
 ### Winter 2023 Anime
 * [Eiyuuou, Bu wo Kiwameru Tame Tenseisu: Soshite, Sekai Saikyou no Minarai Kishi](https://auo-anime.com/)
@@ -108,6 +107,7 @@ The premiere date for the anime listed here has not been announced.
 * [Kyokou Suiri Season 2](https://kyokousuiri.jp/)
 * [Tensei shitara Ken Deshita](https://tenken-anime.com/)
 * [Uchi no Shishou wa Shippo ga Nai](https://shippona-anime.com/)
+* [Yama no Susume: Next Summit](https://yamanosusume-ns.com/)
 
 ### Summer 2022 Anime
 * [Engage Kiss](https://engage-kiss.com/)
