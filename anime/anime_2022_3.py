@@ -66,12 +66,35 @@ class EngageKissDownload(Summer2022AnimeDownload, NewsTemplate):
         self.image_list = []
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FOvCuo3VQAUdR2A?format=jpg&name=large')
         self.add_to_image_list('tz_img_main_2x_pc', self.PAGE_PREFIX + 'assets/img/top/img_main_2x_pc.png')
+        self.add_to_image_list('top_img_main', self.PAGE_PREFIX + 'assets/img/top/img_main.jpg')
+        self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/FRGmZwRVUAE2E5p?format=png&name=900x900')
         self.download_image_list(folder)
 
     def download_character(self):
         folder = self.create_character_directory()
         try:
             soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            thumb_tags = soup.select('.chara_navi__item img[src]')
+            chara_names = []
+            for thumb_tag in thumb_tags:
+                thumb_image_name = thumb_tag['src'].split('/')[-1].split('.')[0]
+                if thumb_image_name.startswith('thumb_') and len(thumb_image_name) > 6:
+                    chara_names.append(thumb_image_name[6:])
+            templates = [self.PAGE_PREFIX + 'assets/img/character/img_%s_anime.png',
+                         self.PAGE_PREFIX + 'assets/img/character/img_%s_original.png']
+            self.image_list = []
+            for chara_name in chara_names:
+                for template in templates:
+                    image_url = template % chara_name
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+                    if chara_name == 'kisara':
+                        image_url = image_url.replace('img_kisara', 'img_kisara-devil')
+                        image_name = self.extract_image_name_from_url(image_url)
+                        self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+
+            '''
             a_tags = soup.select('.chara_navi__item a[href]')
             chara_names = []
             for a_tag in a_tags:
@@ -85,6 +108,7 @@ class EngageKissDownload(Summer2022AnimeDownload, NewsTemplate):
                 image_url = chara_prefix + image_name + '.png'
                 self.add_to_image_list('tz_' + image_name, image_url)
             self.download_image_list(folder)
+            '''
         except Exception as e:
             self.print_exception(e, 'Character')
 
