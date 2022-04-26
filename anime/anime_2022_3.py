@@ -11,6 +11,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Kumichou Musume to Sewagakari https://kumichomusume.com/ #組長娘と世話係 @kumichomusume
 # Kuro no Shoukanshi https://kuronoshokanshi.com/ #黒の召喚士 @kuronoshokanshi
 # Lycoris Recoil https://lycoris-recoil.com/ #リコリコ #LycorisRecoil @lycoris_recoil
+# Mamahaha no Tsurego ga Motokano datta https://tsurekano-anime.com/ #連れカノ #tsurekano @tsurekano
 # Prima Doll https://primadoll.jp/ #プリマドール #PrimaDoll @primadoll_pr
 # Shadows House 2nd Season https://shadowshouse-anime.com/
 # Soredemo Ayumu wa Yosetekuru https://soreayu.com/ #それあゆ @soreayu_staff
@@ -517,6 +518,65 @@ class LycorisRecoilDownload(Summer2022AnimeDownload, NewsTemplate):
                 for suffix in suffixes:
                     image_url = chara_prefix + suffix % chara_name
                     image_name = (suffix % chara_name).split('.')[0]
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+
+
+# Mamahaha no Tsurego ga Motokano datta
+class TsurekanoDownload(Summer2022AnimeDownload, NewsTemplate):
+    title = 'Mamahaha no Tsurego ga Motokano datta'
+    keywords = [title, "My Stepmom's Daughter Is My Ex", 'tsurekano']
+    website = 'https://tsurekano-anime.com/'
+    twitter = 'tsurekano'
+    hashtags = ['連れカノ', 'tsurekano']
+    folder_name = 'tsurekano'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news__list-item',
+                                    date_select='time', title_select='.body__article-title',
+                                    id_select='a', date_separator='/')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FKA8xQ1aAAEmNl3?format=jpg&name=4096x4096')
+        self.add_to_image_list('top_kv_1', self.PAGE_PREFIX + 'img/top/kv_1.png')
+        self.add_to_image_list('kv2', self.PAGE_PREFIX + 'news/wp-content/uploads/2022/04/tsurekano_KV02.jpg')
+        self.add_to_image_list('kv2_tw', 'https://pbs.twimg.com/media/FQ8EIMpacAAaPsz?format=jpg&name=4096x4096')
+        self.download_image_list(folder)
+        self.download_youtube_thumbnails(self.PAGE_PREFIX, folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            self.image_list = []
+            lis = soup.select('.character__list li[data-modal_name]')
+            for li in lis:
+                image_tag = li.select('img[src]')
+                if len(image_tag) > 0:
+                    image_url = self.PAGE_PREFIX + image_tag[0]['src'].replace('../', '')
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+                if len(li['data-modal_name']) > 0:
+                    image_url = self.PAGE_PREFIX + f'dist/img/character/{li["data-modal_name"]}_picture.png'
+                    image_name = f'{li["data-modal_name"]}_picture'
                     self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)
         except Exception as e:
