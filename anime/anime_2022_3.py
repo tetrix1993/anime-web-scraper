@@ -824,15 +824,22 @@ class Utawarerumono3Download(Summer2022AnimeDownload, NewsTemplate):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
 
     def download_news(self):
-        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.md-list__article--li',
-                                    title_select='h4', date_select='dt', id_select='a', news_prefix='topics/',)
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.md-news__article',
+                                    date_select='time', title_select='h3', id_select='a', news_prefix='topics/',
+                                    date_func=lambda x: x.replace(' ', ''), date_separator='/')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         self.image_list = []
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FE9Ma5NaAAABavo?format=jpg&name=4096x4096')
         self.add_to_image_list('fv@2x', self.PAGE_PREFIX + 'manage/wp-content/themes/hakuoro/_assets/images/fv/fv@2x.png')
+        self.add_to_image_list('mainvisual_tw', 'https://pbs.twimg.com/media/FRPB5W0VIAA1nYW?format=jpg&name=4096x4096')
+        self.add_to_image_list('mainvisual', self.PAGE_PREFIX + 'manage/wp-content/uploads/2022/04/うたわれるもの-二人の白皇_メインビジュアル.jpg')
         self.download_image_list(folder)
+
+        template = self.PAGE_PREFIX + 'manage/wp-content/themes/hakuoro-new/_assets/images/fv/visual/visual_%s@2x'
+        templates = [template + '.png', template + '.png']
+        self.download_by_template(folder, templates, 3, 1)
 
     def download_character(self):
         folder = self.create_character_directory()
