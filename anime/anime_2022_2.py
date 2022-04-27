@@ -1685,7 +1685,7 @@ class MobsekaDownload(Spring2022AnimeDownload, NewsTemplate):
 
 
 # Paripi Koumei
-class ParipiKoumei(Spring2022AnimeDownload, NewsTemplate):
+class ParipiKoumeiDownload(Spring2022AnimeDownload, NewsTemplate):
     title = 'Paripi Koumei'
     keywords = [title, 'Ya Boy Kongming!']
     website = 'https://paripikoumei-anime.com/'

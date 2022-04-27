@@ -21,6 +21,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Spy Kyoushitsu https://spyroom-anime.com/ #スパイ教室 #spyroom #SpyClassroom @spyroom_anime
 # Tonikaku Kawaii S2 http://tonikawa.com/ #トニカクカワイイ #tonikawa @tonikawa_anime
 # Vlad Love https://www.vladlove.com/index.html #ぶらどらぶ #vladlove @VLADLOVE_ANIME
+# Yuusha ga Shinda! https://heroisdead.com/ #勇者が死んだ @yuusyagasinda
 
 
 # Unconfirmed Season Anime
@@ -859,3 +860,32 @@ class VladLoveDownload(UnconfirmedDownload):
                 self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+
+# Yuusha ga Shinda!
+class YuushagaShindaDownload(UnconfirmedDownload):
+    title = 'Yuusha ga Shinda!: Murabito no Ore ga Hotta Otoshiana ni Yuusha ga Ochita Kekka.'
+    keywords = [title, 'The Legendary Hero Is Dead!']
+    website = 'https://heroisdead.com/'
+    twitter = 'yuusyagasinda'
+    hashtags = '勇者が死んだ'
+    folder_name = 'yuushagashinda'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_aniverse', 'https://aniverse-mag.com/wp-content/uploads/2022/04/4576fa0e88a0464f6a9b6e8844e05dbd-e1651058246996.jpg')
+        self.add_to_image_list('tz_visual_01_chara', self.PAGE_PREFIX + 'img/teaser/visual_01_chara.png')
+        self.download_image_list(folder)

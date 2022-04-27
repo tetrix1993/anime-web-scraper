@@ -96,6 +96,7 @@ The premiere date for the anime listed here has not been announced.
 * [Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita 2nd Season](https://slime300-anime.com/)
 * [Spy Kyoushitsu](https://spyroom-anime.com/)
 * [Tonikaku Kawaii 2nd Season](http://tonikawa.com/)
+* [Yuusha ga Shinda!: Murabito no Ore ga Hotta Otoshiana ni Yuusha ga Ochita Kekka.](https://heroisdead.com/)
 
 ### Winter 2023 Anime
 * [Eiyuuou, Bu wo Kiwameru Tame Tenseisu: Soshite, Sekai Saikyou no Minarai Kishi](https://auo-anime.com/)
