@@ -14,6 +14,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Kunoichi Tsubaki no Mune no Uchi https://kunoichi-tsubaki.com/ #くノ一ツバキ @tsubaki_anime
 # Maou Gakuin no Futekigousha 2nd Season https://maohgakuin.com/ #魔王学院 @maohgakuin
 # Mato Seihei no Slave https://mabotai.jp/ #魔都精兵のスレイブ #まとスレ @mabotai_kohobu
+# Otonari ni Ginga https://otonari-anime.com/ #おとなりに銀河 @otonariniginga
 # Otonari no Tenshi-sama ni Itsunomanika Dame Ningen ni Sareteita Ken https://otonarino-tenshisama.jp/ #お隣の天使様 @tenshisama_PR
 # Renai Flops https://loveflops.com/ #恋愛フロップス @loveflops_pr
 # Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita 2nd Season https://slime300-anime.com/ #スライム倒して300年 @slime300_PR
@@ -548,6 +549,41 @@ class MatoSlaveDownload(UnconfirmedDownload, NewsTemplate):
             result = self.download_image(image_url, f'{folder}/{image_name}')
             if result == -1:
                 break
+
+
+# Otonari ni Ginga
+class OtonariniGingaDownload(UnconfirmedDownload, NewsTemplate):
+    title = 'Otonari ni Ginga'
+    keywords = [title, 'A Galaxy Next Door']
+    website = 'https://otonari-anime.com/'
+    twitter = 'otonariniginga'
+    hashtags = 'おとなりに銀河'
+    folder_name = 'otonariniginga'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, news_prefix='', article_select='#news article',
+                                    title_select='h3', date_select='time', id_select=None, id_has_id=True,
+                                    date_func=lambda x: x[0:4] + '.' + x[5:7] + '.' + x[8:10])
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FRV6mlUVIAAa9xK?format=jpg&name=medium')
+        self.add_to_image_list('tz_mainimg', self.PAGE_PREFIX + 'teaser/images/mainimg.png')
+        self.download_image_list(folder)
 
 
 # Otonari no Tenshi-sama ni Itsunomanika Dame Ningen ni Sareteita Ken
