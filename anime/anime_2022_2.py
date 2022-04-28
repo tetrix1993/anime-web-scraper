@@ -199,8 +199,10 @@ class DeaimonDownload(Spring2022AnimeDownload, NewsTemplate2):
             for j in range(self.IMAGES_PER_EPISODE):
                 if j < 6:
                     third_ = third + j
-                elif i > 3:
+                elif i == 4:
                     third_ = third2 + j - 4
+                elif i == 5:
+                    third_ = third2 + j - 8
                 else:
                     third_ = third2 + j - 6
                 image_url = template % (str(first).zfill(8), str(second).zfill(8), str(third_).zfill(8))
