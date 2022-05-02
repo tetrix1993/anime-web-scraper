@@ -84,6 +84,7 @@ pip install -r requirements.txt
 The premiere date for the anime listed here has not been announced.
 * [Ayakashi Triangle](https://ayakashitriangle-anime.com/)
 * [Futoku no Guild](https://futoku-no-anime.com/)
+* [Fuufu Ijou, Koibito Miman.](https://fuukoi-anime.com/)
 * [Goblin Slayer 2nd Season](http://www.goblinslayer.jp/)
 * [Inu ni Nattara Suki na Hito ni Hirowareta.](https://inuhiro-anime.com/)
 * [Isekai Yakkyoku](https://isekai-yakkyoku.jp/)
