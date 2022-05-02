@@ -101,11 +101,11 @@ The premiere date for the anime listed here has not been announced.
 
 ### Winter 2023 Anime
 * [Eiyuuou, Bu wo Kiwameru Tame Tenseisu: Soshite, Sekai Saikyou no Minarai Kishi](https://auo-anime.com/)
+* [Kyokou Suiri Season 2](https://kyokousuiri.jp/)
 
 ### Fall 2022 Anime
 * [Akuyaku Reijou nanode Last Boss wo Kattemimashita](https://akulas-pr.com/)
 * [Kage no Jitsuryokusha ni Naritakute!](https://shadow-garden.jp/)
-* [Kyokou Suiri Season 2](https://kyokousuiri.jp/)
 * [Tensei shitara Ken Deshita](https://tenken-anime.com/)
 * [Uchi no Shishou wa Shippo ga Nai](https://shippona-anime.com/)
 * [Yama no Susume: Next Summit](https://yamanosusume-ns.com/)
