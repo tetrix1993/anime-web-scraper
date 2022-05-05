@@ -10,7 +10,6 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Fuufu Ijou, Koibito Miman. https://fuukoi-anime.com/ #ふうこいアニメ @fuukoi_anime
 # Goblin Slayer S2 http://www.goblinslayer.jp/ #ゴブスレ @GoblinSlayer_GA
 # Inu ni Nattara Suki na Hito ni Hirowareta. https://inuhiro-anime.com/ #犬ひろ @inuninattara
-# Isekai Yakkyoku https://isekai-yakkyoku.jp/ #異世界薬局 @isekai_yakkyoku
 # Itai no wa https://bofuri.jp/story/ #防振り #bofuri @bofuri_anime
 # Kunoichi Tsubaki no Mune no Uchi https://kunoichi-tsubaki.com/ #くノ一ツバキ @tsubaki_anime
 # Maou Gakuin no Futekigousha 2nd Season https://maohgakuin.com/ #魔王学院 @maohgakuin
@@ -400,51 +399,6 @@ class InuhiroDownload(UnconfirmedDownload, NewsTemplate):
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FNybC1EaAAEoRmq?format=jpg&name=large')
         self.add_to_image_list('tz_mainimg_pc', self.PAGE_PREFIX + 'teaser/images/mainimg_pc.png')
         self.download_image_list(folder)
-
-
-# Isekai Yakkyoku
-class IsekaiYakkyokuDownload(UnconfirmedDownload, NewsTemplate2):
-    title = 'Isekai Yakkyoku'
-    keywords = [title]
-    website = 'https://isekai-yakkyoku.jp/'
-    twitter = 'isekai_yakkyoku'
-    hashtags = '異世界薬局'
-    folder_name = 'isekai-yakkyoku'
-
-    PAGE_PREFIX = website
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_news()
-        self.download_key_visual()
-        self.download_character()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
-
-    def download_news(self):
-        self.download_template_news(self.PAGE_PREFIX)
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('teaser', 'https://pbs.twimg.com/media/E6Rh8S_VcAQWTLG?format=jpg&name=4096x4096')
-        self.add_to_image_list('tz_kv', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv.jpg')
-        self.download_image_list(folder)
-
-        kv_template = self.PAGE_PREFIX + 'core_sys/images/main/tz/kv%s'
-        kv_template1 = kv_template + '.jpg'
-        kv_template2 = kv_template + '.png'
-        self.download_by_template(folder, [kv_template1, kv_template2], 1, 2, prefix='tz_')
-
-    def download_character(self):
-        folder = self.create_character_directory()
-        tz_prefix = self.PAGE_PREFIX +'core_sys/images/main/tz/chara/'
-        templates = [tz_prefix + '%s_stand.png', tz_prefix + '%s_face.png']
-        self.download_by_template(folder, templates, 2, 1, prefix='tz_')
 
 
 # Itai no wa Iya nano de Bougyoryoku ni Kyokufuri Shitai to Omoimasu. 2nd Season

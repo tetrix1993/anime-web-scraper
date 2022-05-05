@@ -6,6 +6,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Hataraku Maou-sama!! https://maousama.jp/ #maousama @anime_maousama
 # Isekai Meikyuu de Harem wo https://isekai-harem.com/ #異世界迷宮でハーレムを #異世界迷宮 @isekaiharem_ani
 # Isekai Ojisan #いせおじ #異世界おじさん @Isekai_Ojisan
+# Isekai Yakkyoku https://isekai-yakkyoku.jp/ #異世界薬局 @isekai_yakkyoku
 # Kanojo, Okarishimasu 2nd Season https://kanokari-official.com/ #かのかり #kanokari @kanokari_anime
 # Kinsou no Vermeil: Gakeppuchi Majutsushi wa Saikyou no Yakusai to Mahou Sekai wo Tsukisusumu #ヴェルメイユ #vermeil @vermeil_animePR
 # Kumichou Musume to Sewagakari https://kumichomusume.com/ #組長娘と世話係 @kumichomusume
@@ -251,6 +252,58 @@ class IsekaiOjisanDownload(Summer2022AnimeDownload, NewsTemplate2):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+
+# Isekai Yakkyoku
+class IsekaiYakkyokuDownload(Summer2022AnimeDownload, NewsTemplate2):
+    title = 'Isekai Yakkyoku'
+    keywords = [title]
+    website = 'https://isekai-yakkyoku.jp/'
+    twitter = 'isekai_yakkyoku'
+    hashtags = '異世界薬局'
+    folder_name = 'isekai-yakkyoku'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('teaser', 'https://pbs.twimg.com/media/E6Rh8S_VcAQWTLG?format=jpg&name=4096x4096')
+        self.add_to_image_list('tz_kv', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv.jpg')
+        self.add_to_image_list('kv_home', self.PAGE_PREFIX + 'core_sys/images/main/home/kv.jpg')
+        self.add_to_image_list('kv_sp_home', self.PAGE_PREFIX + 'core_sys/images/main/home/kv_sp.jpg')
+        self.add_to_image_list('kv_news', self.PAGE_PREFIX + 'core_sys/images/news/00000007/block/00000011/00000006.jpg')
+        self.add_to_image_list('kv_tw', 'https://pbs.twimg.com/media/FR-4FD6aQAAjOP3?format=jpg&name=large')
+        self.download_image_list(folder)
+
+        kv_template = self.PAGE_PREFIX + 'core_sys/images/main/tz/kv%s'
+        kv_template1 = kv_template + '.jpg'
+        kv_template2 = kv_template + '.png'
+        self.download_by_template(folder, [kv_template1, kv_template2], 1, 2, prefix='tz_')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        prefix = self.PAGE_PREFIX + 'core_sys/images/main/cont/chara/chara'
+        self.download_by_template(folder, prefix + '%s_stand.png', 2, 1)
+
+        tz_prefix = self.PAGE_PREFIX +'core_sys/images/main/tz/chara/'
+        templates = [tz_prefix + '%s_stand.png', tz_prefix + '%s_face.png']
+        self.download_by_template(folder, templates, 2, 1, prefix='tz_')
 
 
 # Kanojo, Okarishimasu 2nd Season
