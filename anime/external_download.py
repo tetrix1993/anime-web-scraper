@@ -58,7 +58,7 @@ class AniverseMagazineDownload(ExternalDownload):
     folder_name = None
     PAGE_PREFIX = "https://aniverse-mag.com/archives/"
     
-    def __init__(self, article_id, save_folder, episode, num_of_pictures=0, min_width=None, download_id=None):
+    def __init__(self, article_id, save_folder, episode, num_of_pictures=0, min_width=None, check_resize=False, download_id=None):
         super().__init__(download_id)
         self.base_folder = self.base_folder + "/" + save_folder
         if not os.path.exists(self.base_folder):
@@ -70,6 +70,7 @@ class AniverseMagazineDownload(ExternalDownload):
             self.episode = None
         self.num_of_pictures = num_of_pictures
         self.min_width = min_width
+        self.check_resize = check_resize
 
     def process_article(self):
         try:
@@ -97,7 +98,12 @@ class AniverseMagazineDownload(ExternalDownload):
                         json_objs = json.loads(windows[0]['data-gallery'])
                         for json_obj in json_objs:
                             if 'src' in json_obj:
-                                image_url = self.clear_resize_in_url(json_obj['src'])
+                                if self.check_resize:
+                                    image_url = self.clear_resize_in_url2(json_obj['src'])
+                                    if not self.is_valid_url(image_url, is_image=True):
+                                        image_url = self.clear_resize_in_url(json_obj['src'])
+                                else:
+                                    image_url = self.clear_resize_in_url(json_obj['src'])
                                 i += 1
                                 if self.episode is None:
                                     image_name = str(i).zfill(2)
@@ -112,7 +118,14 @@ class AniverseMagazineDownload(ExternalDownload):
                     image_url = 'https://' + item.find('img')['data-lazy-src'].split('https://')[-1]
                     if '300' in image_url[-12:]: # Skip unwanted images that are resized to 300px
                         continue
-                    image_url = self.clear_resize_in_url(image_url)
+                    if self.check_resize:
+                        image_url_temp = self.clear_resize_in_url2(image_url)
+                        if not self.is_valid_url(image_url_temp, is_image=True):
+                            image_url = self.clear_resize_in_url(image_url)
+                        else:
+                            image_url = image_url_temp
+                    else:
+                        image_url = self.clear_resize_in_url(image_url)
                     i += 1
                     if self.episode is None:
                         image_name = str(i).zfill(2)

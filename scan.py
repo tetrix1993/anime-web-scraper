@@ -207,7 +207,7 @@ class AniverseMagazineScanner(MainScanner):
     SEARCH_URL = "https://aniverse-mag.com/page/%s?s=%s"
     
     def __init__(self, keyword, base_folder, last_episode=None, suffix=None,
-                 min_width=None, end_date='00000000', download_id=None, prefix=None):
+                 min_width=None, end_date='00000000', check_resize=False, download_id=None, prefix=None):
         super().__init__(download_id)
         self.keyword = keyword
         self.base_folder = base_folder.replace("download/","") + "/" + EXTERNAL_FOLDER_ANIVERSE
@@ -216,6 +216,7 @@ class AniverseMagazineScanner(MainScanner):
         self.min_width = min_width
         self.end_date = end_date
         self.prefix = prefix
+        self.check_resize = check_resize
 
     @staticmethod
     def has_results(text):
@@ -306,7 +307,8 @@ class AniverseMagazineScanner(MainScanner):
             if len(article_id) == 0:
                 continue
             AniverseMagazineDownload(article_id, self.base_folder, episode,
-                                     min_width=self.min_width, download_id=self.download_id).run()
+                                     min_width=self.min_width, check_resize=self.check_resize,
+                                     download_id=self.download_id).run()
         
     def run(self):
         if self.last_episode:
