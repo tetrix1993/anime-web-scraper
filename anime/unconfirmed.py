@@ -615,6 +615,9 @@ class OtonarinoTenshisamaDownload(UnconfirmedDownload, NewsTemplate):
         self.add_to_image_list('tz2_tw', 'https://pbs.twimg.com/media/FOtPcAMVkAcoYzY?format=jpg&name=4096x4096')
         self.add_to_image_list('aprilfool_0331_A', self.PAGE_PREFIX + 'wordpress/wp-content/uploads/2022/03/aprilfool_0331_A.jpg')
         self.add_to_image_list('aprilfool_all', self.PAGE_PREFIX + 'wordpress/wp-content/uploads/2022/03/aprilfool_all.jpg')
+        self.add_to_image_list('tz3', self.PAGE_PREFIX + 'wordpress/wp-content/themes/otonari/images/mainvisual-v2.jpg')
+        self.add_to_image_list('tz3_pc', self.PAGE_PREFIX + 'wordpress/wp-content/themes/otonari/images/mainvisual-v2_pc.jpg')
+        self.add_to_image_list('tz3_news', self.PAGE_PREFIX + 'wordpress/wp-content/uploads/2022/05/tenshisama_teser3_title.jpg')
         self.download_image_list(folder)
 
     def download_character(self):
