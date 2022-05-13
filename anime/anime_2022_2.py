@@ -2175,6 +2175,7 @@ class ShokeiShoujoDownload(Spring2022AnimeDownload, NewsTemplate):
         self.download_episode_preview_guess()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         yt_folder = self.create_custom_directory('yt')  # YouTube thumbnails
@@ -2311,6 +2312,22 @@ class ShokeiShoujoDownload(Spring2022AnimeDownload, NewsTemplate):
         except Exception as e:
             self.print_exception(e, 'Character')
         self.create_cache_file(cache_filepath, processed, num_processed)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'bd/')
+            images = soup.select('#cms_block img[src]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                if 'nowprinting' in image_url.lower():
+                    continue
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
 
 # Spy x Family
