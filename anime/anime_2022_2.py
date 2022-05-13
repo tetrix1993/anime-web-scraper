@@ -346,6 +346,18 @@ class GaikotsuKishiDownload(Spring2022AnimeDownload, NewsTemplate):
         self.add_to_image_list('kv02b', self.PAGE_PREFIX + 'img/kv02b.jpg')
         self.download_image_list(folder)
 
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('ul.slide img[src]')
+            self.image_list = []
+            for image in images:
+                image_url = image['src']
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
     def download_character(self):
         folder = self.create_character_directory()
         self.image_list = []
@@ -1822,7 +1834,8 @@ class Rikekoi2Download(Spring2022AnimeDownload, NewsTemplate):
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
-        self.add_to_image_list('key_pc', self.PAGE_PREFIX + 'wp-content/themes/rikekoi/assets/images/season2/key_pc.png')
+        # self.add_to_image_list('key_pc', self.PAGE_PREFIX + 'wp-content/themes/rikekoi/assets/images/season2/key_pc.png')
+        self.add_to_image_list('kv', self.PAGE_PREFIX + 'wp-content/uploads/2021/12/リケ恋2キービジュアル_A_FIX_logoあり.png')
         self.download_image_list(folder)
 
 
