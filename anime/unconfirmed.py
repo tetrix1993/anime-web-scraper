@@ -21,6 +21,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Spy Kyoushitsu https://spyroom-anime.com/ #スパイ教室 #spyroom #SpyClassroom @spyroom_anime
 # Tonikaku Kawaii S2 http://tonikawa.com/ #トニカクカワイイ #tonikawa @tonikawa_anime
 # Vlad Love https://www.vladlove.com/index.html #ぶらどらぶ #vladlove @VLADLOVE_ANIME
+# Watashi no Yuri wa Oshigoto desu! https://watayuri-anime.com/ #わたゆり #私の百合はお仕事です @watayuri_anime
 # Yuusha ga Shinda! https://heroisdead.com/ #勇者が死んだ @yuusyagasinda
 
 
@@ -854,6 +855,36 @@ class VladLoveDownload(UnconfirmedDownload):
                 self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+
+# Watashi no Yuri wa Oshigoto desu!
+class WatayuriDownload(UnconfirmedDownload):
+    title = 'Watashi no Yuri wa Oshigoto desu!'
+    keywords = [title, 'watayuri', 'Yuri is My Job!']
+    website = 'https://watayuri-anime.com/'
+    twitter = 'watayuri_anime'
+    hashtags = ['わたゆり', '私の百合はお仕事です']
+    folder_name = 'watayuri'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FStxiD1VIAEX1nk?format=jpg&name=4096x4096')
+        self.add_to_image_list('tz_mv1', self.PAGE_PREFIX + 'assets/img/top/mv1.jpg')
+        self.add_to_image_list('tz_mv2', self.PAGE_PREFIX + 'assets/img/top/mv2.jpg')
+        self.download_image_list(folder)
 
 
 # Yuusha ga Shinda!
