@@ -123,6 +123,7 @@ The premiere date for the anime listed here has not been announced.
 * [Lycoris Recoil](https://lycoris-recoil.com/)
 * [Mamahaha no Tsurego ga Motokano datta](https://tsurekano-anime.com/)
 * [Prima Doll](https://primadoll.jp/)
+* [Saikin Yatotta Maid ga Ayashii](https://maid-ga-ayashii.com/)
 * [Shadows House](https://shadowshouse-anime.com/)
 * [Soredemo Ayumu wa Yosetekuru](https://soreayu.com/)
 * [Tensei Kenja no Isekai Life: Dai-2 no Shokugyou wo Ete, Sekai Saikyou ni Narimashita](https://tenseikenja.com/)

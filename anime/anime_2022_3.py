@@ -14,6 +14,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Lycoris Recoil https://lycoris-recoil.com/ #リコリコ #LycorisRecoil @lycoris_recoil
 # Mamahaha no Tsurego ga Motokano datta https://tsurekano-anime.com/ #連れカノ #tsurekano @tsurekano
 # Prima Doll https://primadoll.jp/ #プリマドール #PrimaDoll @primadoll_pr
+# Saikin Yatotta Maid ga Ayashii https://maid-ga-ayashii.com/ #最近雇ったメイドが怪しい @maidga_ayashii
 # Shadows House 2nd Season https://shadowshouse-anime.com/
 # Soredemo Ayumu wa Yosetekuru https://soreayu.com/ #それあゆ @soreayu_staff
 # Tensei Kenja no Isekai Life: Dai-2 no Shokugyou wo Ete, Sekai Saikyou ni Narimashita https://tenseikenja.com #転生賢者 @tenseikenja_PR
@@ -697,6 +698,57 @@ class PrimaDollDownload(Summer2022AnimeDownload, NewsTemplate):
         except Exception as e:
             self.print_exception(e, 'Character')
         self.download_image_list(folder)
+
+
+# Saikin Yatotta Maid ga Ayashii
+class MaidgaAyashiiDownload(Summer2022AnimeDownload, NewsTemplate):
+    title = 'Saikin Yatotta Maid ga Ayashii'
+    keywords = [title, 'The Maid I Hired Recently Is Mysterious']
+    website = 'https://maid-ga-ayashii.com/'
+    twitter = 'maidga_ayashii'
+    hashtags = '最近雇ったメイドが怪しい'
+    folder_name = 'maid-ga-ayashii'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.md-news--li',
+                                    date_select='time', title_select='h4', id_select='a', news_prefix='topics/',
+                                    date_func=lambda x: x.replace(' ', ''))
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FS7YNC_UEAAn92e?format=jpg&name=large')
+        self.add_to_image_list('tz_visual_pc', self.PAGE_PREFIX + '_assets/images/fv/visual/visual_pc.jpg')
+        self.add_to_image_list('tz_visual_sp', self.PAGE_PREFIX + '_assets/images/fv/visual/visual_sp.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.chardata--inner .v picture img[src]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src']
+                image_name = 'tz_' + self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
 
 
 # Shadows House 2nd Season
