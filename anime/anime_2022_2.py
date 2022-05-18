@@ -1826,6 +1826,34 @@ class Rikekoi2Download(Spring2022AnimeDownload, NewsTemplate):
         except Exception as e:
             self.print_exception(e)
 
+    def download_episode_preview_guess(self):
+        template = self.PAGE_PREFIX + 'wp-content/uploads/2022/04/vlcsnap-2022-01-29-%sh%sm%ss%s.jpg'
+        folder = self.create_custom_directory('guess')
+        hours = 18
+        minutes = 0
+        seconds = 0
+        milliseconds = 0
+        image_url = template % (str(hours).zfill(2), str(minutes).zfill(2), str(seconds).zfill(2), str(milliseconds).zfill(3))
+        try:
+            while hours < 24:
+                while minutes < 60:
+                    while seconds < 60:
+                        while milliseconds < 1000:
+                            image_url = template % (str(hours).zfill(2), str(minutes).zfill(2), str(seconds).zfill(2), str(milliseconds).zfill(3))
+                            print(image_url)
+                            if self.is_valid_url(image_url, is_image=True):
+                                image_name = self.extract_image_name_from_url(image_url)
+                                self.download_image(image_url, folder + '/' + image_name + '.jpg')
+                            milliseconds += 1
+                        milliseconds = 0
+                        seconds += 1
+                    seconds = 0
+                    minutes += 1
+                minutes = 0
+                hours += 1
+        except KeyboardInterrupt:
+            print('Interrupted at: ' + image_url)
+
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.post',
                                     title_select='a', date_select='.date', id_select='a',
