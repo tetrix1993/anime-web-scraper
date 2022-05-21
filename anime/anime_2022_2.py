@@ -60,6 +60,7 @@ class AharensanDownload(Spring2022AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -128,6 +129,25 @@ class AharensanDownload(Spring2022AnimeDownload, NewsTemplate):
         except Exception as e:
             self.print_exception(e, 'Character')
         self.download_image_list(folder)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            for i in range(1, 4, 1):
+                url = self.PAGE_PREFIX + 'bd/vol' + str(i) + '/'
+                image_name = 'bdvol' + str(i)
+                if self.is_image_exists(image_name, folder):
+                    continue
+                soup = self.get_soup(url)
+                if soup is not None:
+                    images = soup.select('.bd--main__block img[src]')
+                    if len(images) > 0:
+                        image_url = images[0]['src']
+                        if image_url.endswith('np_bd.png'):
+                            break
+                        self.download_image(image_url, folder + '/' + image_name)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
 
 # Deaimon
