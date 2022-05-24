@@ -814,6 +814,7 @@ class SoreayuDownload(Summer2022AnimeDownload, NewsTemplate):
         self.image_list = []
         self.add_to_image_list('teaser', self.PAGE_PREFIX + '_nuxt/img/key_visual.7d7640c.jpg')
         self.add_to_image_list('teaser_big', 'https://firebasestorage.googleapis.com/v0/b/pj-ayumu.appspot.com/o/articles%2F1625582107153?alt=media&token=2561cd21-5081-471b-9019-11f379fff1f7')
+        self.add_to_image_list('kv1', 'https://storage.googleapis.com/pj-ayumu.appspot.com/articles/1653114275017')
         self.download_image_list(folder)
 
     def download_character(self):
