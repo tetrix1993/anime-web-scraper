@@ -106,6 +106,7 @@ The premiere date for the anime listed here has not been announced.
 ### Fall 2022 Anime
 * [Akuyaku Reijou nanode Last Boss wo Kattemimashita](https://akulas-pr.com/)
 * [Kage no Jitsuryokusha ni Naritakute!](https://shadow-garden.jp/)
+* [Noumin Kanren no Skill bakka Agetetara Nazeka Tsuyoku Natta.](https://nouminkanren.com/)
 * [Tensei shitara Ken Deshita](https://tenken-anime.com/)
 * [Uchi no Shishou wa Shippo ga Nai](https://shippona-anime.com/)
 * [Yama no Susume: Next Summit](https://yamanosusume-ns.com/)

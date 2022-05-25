@@ -3,6 +3,7 @@ from anime.main_download import MainDownload, NewsTemplate
 
 # Akuyaku Reijou nanode Last Boss wo Kattemimashita https://akulas-pr.com/ #悪ラス @akulas_pr
 # Kage no Jitsuryokusha ni Naritakute! https://shadow-garden.jp/ #陰の実力者 @Shadowgarden_PR
+# Noumin Kanren no Skill bakka Agetetara Nazeka Tsuyoku Natta. https://nouminkanren.com/ #農民関連 @nouminkanren
 # Tensei shitara Ken Deshita https://tenken-anime.com/ #転生したら剣でした #転剣 @tenken_official
 # Uchi no Shishou wa Shippo ga Nai https://shippona-anime.com/ #しっぽな @shippona_anime
 # Yama no Susume: Next Summit https://yamanosusume-ns.com/ #ヤマノススメ @yamanosusume
@@ -100,6 +101,65 @@ class KagenoJitsuryokushaDownload(Fall2022AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         prefix = self.PAGE_PREFIX + 'assets/img/top/character/chara'
         self.download_by_template(folder, [prefix + '%s_main1.png', prefix + '%s_main2.png'], 2, 1)
+
+
+# Noumin Kanren no Skill bakka Agetetara Nazeka Tsuyoku Natta.
+class NouminKanrenDownload(Fall2022AnimeDownload, NewsTemplate):
+    title = 'Noumin Kanren no Skill bakka Agetetara Nazeka Tsuyoku Natta.'
+    keywords = [title]
+    website = 'https://nouminkanren.com/'
+    twitter = 'nouminkanren'
+    hashtags = '農民関連'
+    folder_name = 'nouminkanren'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.sw-NewsArchive_Item',
+                                    title_select='.title', date_select='.date', id_select='a')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz', self.PAGE_PREFIX + 'wordpress/wp-content/uploads/2022/05/24112348/Noumin_KV1tate_RGB150.jpg')
+        self.download_image_list(folder)
+
+        template = self.PAGE_PREFIX + 'wordpress/wp-content/themes/nouminkanren/assets/images/pc/index/img_kv_%s.jpg'
+        self.download_by_template(folder, template, 1, 1)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            images = soup.select('.character-Index_List a img[src]')
+            for image in images:
+                image_url = image['src'].replace('thumb.png', 'img.png')
+                index = image_url.rfind('/')
+                back = image_url[index + 1:]
+                front = image_url[0:index]
+                file_name = back
+                while back != 'character':
+                    file_name = back + '_' + file_name
+                    index = front.rfind('/')
+                    back = front[index + 1:]
+                    front = front[0:index]
+                image_name = file_name.split('.')[0]
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
 
 
 # Tensei shitara Ken Deshita
