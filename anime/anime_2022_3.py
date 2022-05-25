@@ -19,6 +19,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Soredemo Ayumu wa Yosetekuru https://soreayu.com/ #それあゆ @soreayu_staff
 # Tensei Kenja no Isekai Life: Dai-2 no Shokugyou wo Ete, Sekai Saikyou ni Narimashita https://tenseikenja.com #転生賢者 @tenseikenja_PR
 # Utawarerumono: Futari no Hakuoro https://utawarerumono.jp/ #うたわれ @UtawareAnime
+# Warau Arsnotoria Sun! https://www.arsnotoria-anime.com/ #アルスノ @arsno_anime
 # Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e S2 http://you-zitsu.com/ #you_zitsu #よう実 @youkosozitsu
 
 
@@ -951,6 +952,69 @@ class Utawarerumono3Download(Summer2022AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'manage/wp-content/themes/hakuoro/_assets/images/char/detail/char%s_pc.png'
         self.download_by_template(folder, template, 2, 1)
+
+
+# Warau Arsnotoria Sun!
+class ArsnotoriaDownload(Summer2022AnimeDownload, NewsTemplate):
+    title = 'Warau Arsnotoria Sun!'
+    keywords = [title, 'Smile of the Arsnotoria the Animation']
+    website = 'https://www.arsnotoria-anime.com/'
+    twitter = 'arsno_anime'
+    hashtags = ['アルスノ', 'すんすん']
+    folder_name = 'arsnotoria'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-list .list-item',
+                                    title_select='.item-ttl', date_select='.item-date', id_select='a')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz', self.PAGE_PREFIX + 'wp-content/uploads/2022/05/img.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            a_tags = soup.select('.character-list .list-item a[href]')
+            for a_tag in a_tags:
+                if a_tag['href'].endswith('/'):
+                    chara_url = a_tag['href'][:-1]
+                else:
+                    chara_url = a_tag['href']
+                chara_name = chara_url.split('/')[-1]
+                if chara_name in processed:
+                    continue
+                chara_soup = self.get_soup(chara_url)
+                if chara_soup is not None:
+                    images = chara_soup.select('.detail-mainv img[src]')
+                    for image in images:
+                        image_url = image['src']
+                        image_name = self.extract_image_name_from_url(image_url)
+                        self.add_to_image_list(image_name, image_url)
+                    if len(self.image_list) > 0:
+                        processed.append(chara_name)
+                    self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e S2
