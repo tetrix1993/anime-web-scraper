@@ -654,6 +654,7 @@ class RenaiFlopsDownload(UnconfirmedDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
@@ -678,6 +679,24 @@ class RenaiFlopsDownload(UnconfirmedDownload, NewsTemplate):
         template_prefix = self.PAGE_PREFIX + 'images/chara/'
         templates = [template_prefix + 'b_%s.png', template_prefix + 'a_%s.png']
         self.download_by_template(folder, templates, 3, 1)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+
+        # Sample Voices
+        voice_folder = folder + '/voice'
+        if not os.path.exists(voice_folder):
+            os.makedirs(voice_folder)
+        for chara in ['asahi', 'aoi', 'amelia', 'ilya', 'mongfa', 'karin', 'yoshio']:
+            name_template = f'{chara}_mix_%s.mp3'
+            template_prefix = self.PAGE_PREFIX + f'chara/mp3/'
+            for i in range(3):
+                audio_name = name_template % str(i + 1).zfill(3)
+                audio_url = template_prefix + audio_name
+                audio_filepath = voice_folder + '/' + audio_name
+                result = self.download_content(audio_url, audio_filepath)
+                if result == -1:
+                    break
 
 
 # Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita 2nd Season
