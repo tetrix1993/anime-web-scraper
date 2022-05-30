@@ -99,7 +99,7 @@ class AniverseMagazineDownload(ExternalDownload):
                         for json_obj in json_objs:
                             if 'src' in json_obj:
                                 if self.check_resize:
-                                    image_url = self.clear_resize_in_url2(json_obj['src'])
+                                    image_url = self.check_resize_in_url_custom(json_obj['src'])
                                     if not self.is_valid_url(image_url, is_image=True):
                                         image_url = self.clear_resize_in_url(json_obj['src'])
                                 else:
@@ -136,6 +136,14 @@ class AniverseMagazineDownload(ExternalDownload):
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
+
+    @staticmethod
+    def check_resize_in_url_custom(url):
+        first_pos = url.rfind('-')
+        second_pos = url.rfind('.')
+        if 0 < first_pos < second_pos < len(url) - 1 and second_pos - first_pos > 3:
+            return url[0:first_pos] + url[second_pos:]
+        return url
         
     def run(self):
         self.process_article()
