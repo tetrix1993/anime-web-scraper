@@ -1047,6 +1047,11 @@ class Youzitsu2Download(Summer2022AnimeDownload, NewsTemplate):
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
+
+        self.image_list = []
+        self.add_to_image_list('vis_aniverse', 'https://aniverse-mag.com/wp-content/uploads/2022/05/38426131b5b83e0bbf81006021fe5d77.jpg')
+        self.download_image_list(folder)
+
         top_template_prefix = self.PAGE_PREFIX + 'assets/top/t%s/vis.'
         news_template_prefix = self.PAGE_PREFIX + 'assets/news/vis-t%s.'
 
