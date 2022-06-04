@@ -753,7 +753,7 @@ class MaidgaAyashiiDownload(Summer2022AnimeDownload, NewsTemplate):
 
 
 # Shadows House 2nd Season
-class ShadowsHouse2Download(Summer2022AnimeDownload):
+class ShadowsHouse2Download(Summer2022AnimeDownload, NewsTemplate):
     title = "Shadows House 2nd Season"
     keywords = [title]
     website = 'https://shadowshouse-anime.com/'
@@ -768,10 +768,19 @@ class ShadowsHouse2Download(Summer2022AnimeDownload):
 
     def run(self):
         self.download_episode_preview()
+        self.download_news()
         self.download_key_visual()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.p-in-news__list-item',
+                                    date_select='.p-in-news_data__date', title_select='.p-in-news_data__title',
+                                    id_select='a', a_tag_prefix=news_url, a_tag_start_text_to_remove='./',
+                                    paging_type = 1, stop_date='2021', next_page_select='.c-pagination_arrow__next',
+                                    next_page_eval_index_class='.is-disable', next_page_eval_index=-1)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -779,6 +788,8 @@ class ShadowsHouse2Download(Summer2022AnimeDownload):
         # self.add_to_image_list('tz_modal', self.PAGE_PREFIX + 'assets/img/kv_modal.png')
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FIT7cvQaUAUw-RP?format=jpg&name=large')
         self.add_to_image_list('tz', self.PAGE_PREFIX + 'assets/img/main_00.jpg')
+        self.add_to_image_list('kv_tw', 'https://pbs.twimg.com/media/FUJUvxmVIAAd734?format=jpg&name=large')
+        self.add_to_image_list('kv1st_00', self.PAGE_PREFIX + 'assets/img/kv1st_00.jpg')
         self.download_image_list(folder)
 
 
