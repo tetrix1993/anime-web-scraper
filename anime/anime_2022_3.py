@@ -72,6 +72,8 @@ class EngageKissDownload(Summer2022AnimeDownload, NewsTemplate):
         self.add_to_image_list('tz_img_main_2x_pc', self.PAGE_PREFIX + 'assets/img/top/img_main_2x_pc.png')
         self.add_to_image_list('top_img_main', self.PAGE_PREFIX + 'assets/img/top/img_main.jpg')
         self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/FRGmZwRVUAE2E5p?format=png&name=900x900')
+        self.add_to_image_list('kv2_tw', 'https://pbs.twimg.com/media/FUZvKpqVUAAJ9fc?format=jpg&name=4096x4096')
+        self.add_to_image_list('top_img_main_pc', self.PAGE_PREFIX + 'assets/img/top/img_main_pc.jpg')
         self.download_image_list(folder)
 
     def download_character(self):
