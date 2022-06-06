@@ -697,6 +697,10 @@ class PrimaDollDownload(Summer2022AnimeDownload, NewsTemplate):
                         image_url = self.ASSETS_IMAGE_URL + split3[j]
                         dot_index = split3[j].rfind('.')
                         image_name = split3[j][0:dot_index] if dot_index > 0 else split3[j]
+                        if self.is_image_exists(image_name, folder):
+                            continue
+                        if self.is_matching_content_length(image_url, 17474):
+                            continue
                         self.add_to_image_list(image_name, image_url)
         except Exception as e:
             self.print_exception(e, 'Character')
