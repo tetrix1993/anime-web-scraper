@@ -119,7 +119,7 @@ class AniverseMagazineDownload(ExternalDownload):
                     if '300' in image_url[-12:]: # Skip unwanted images that are resized to 300px
                         continue
                     if self.check_resize:
-                        image_url_temp = self.clear_resize_in_url2(image_url)
+                        image_url_temp = self.check_resize_in_url_custom(image_url)
                         if not self.is_valid_url(image_url_temp, is_image=True):
                             image_url = self.clear_resize_in_url(image_url)
                         else:
