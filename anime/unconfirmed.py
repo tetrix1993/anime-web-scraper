@@ -6,7 +6,6 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Anohana S2 https://10th.anohana.jp/ #あの花 #anohana @anohana_project
 # Ayakashi Triangle https://ayakashitriangle-anime.com/ #あやかしトライアングル #あやトラ @ayakashi_anime
 # Do It Yourself!! https://diy-anime.com/ #diyアニメ @diy_anime
-# Futoku no Guild https://futoku-no-anime.com/ #futoku_anime #不徳のギルド @futoku_anime
 # Fuufu Ijou, Koibito Miman. https://fuukoi-anime.com/ #ふうこいアニメ @fuukoi_anime
 # Goblin Slayer S2 http://www.goblinslayer.jp/ #ゴブスレ @GoblinSlayer_GA
 # Inu ni Nattara Suki na Hito ni Hirowareta. https://inuhiro-anime.com/ #犬ひろ @inuninattara
@@ -236,41 +235,6 @@ class DoItYourselfDownload(UnconfirmedDownload):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'assets/images/pc/teaser/img_chara-%s.png'
         self.download_by_template(folder, template, 1, 0)
-
-
-# Futoku no Guild
-class FutokunoGuildDownload(UnconfirmedDownload, NewsTemplate):
-    title = 'Futoku no Guild'
-    keywords = [title]
-    website = 'https://futoku-no-anime.com/'
-    twitter = 'futoku_anime'
-    hashtags = ['futoku_anime', '不徳のギルド']
-    folder_name = 'futoku-no-guild'
-
-    PAGE_PREFIX = website
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_news()
-        self.download_key_visual()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_news(self):
-        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='#nwu_001_t tr',
-                                    date_select='.day', title_select='.title', id_select='#nothing',
-                                    date_separator='/', news_prefix='')
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FNfyKsbVcAMufgT?format=jpg&name=medium')
-        self.add_to_image_list('tz_kv', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv.png')
-        self.download_image_list(folder)
 
 
 # Fuufu Ijou, Koibito Miman.
