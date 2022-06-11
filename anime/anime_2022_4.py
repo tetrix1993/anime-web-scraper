@@ -8,6 +8,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Tensei shitara Ken Deshita https://tenken-anime.com/ #転生したら剣でした #転剣 @tenken_official
 # Uchi no Shishou wa Shippo ga Nai https://shippona-anime.com/ #しっぽな @shippona_anime
 # Yama no Susume: Next Summit https://yamanosusume-ns.com/ #ヤマノススメ @yamanosusume
+# Yuusha Party wo Tsuihou sareta Beast Tamer, Saikyoushu no Nekomimi Shoujo to Deau
 
 
 # Fall 2022 Anime
@@ -362,4 +363,56 @@ class YamaNoSusume4Download(Fall2022AnimeDownload):
         self.add_to_image_list('teaser', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv.png')
         self.add_to_image_list('tz_kv2_kv', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv2/kv.jpg')
         self.add_to_image_list('tz_kv2_kv_tw', 'https://pbs.twimg.com/media/FQ6oxppakAEMP4C?format=jpg&name=4096x4096')
+        self.download_image_list(folder)
+
+
+# Yuusha Party wo Tsuihou sareta Beast Tamer, Saikyoushu no Nekomimi Shoujo to Deau
+class BeastTamerDownload(Fall2022AnimeDownload, NewsTemplate):
+    title = 'Yuusha Party wo Tsuihou sareta Beast Tamer, Saikyoushu no Nekomimi Shoujo to Deau'
+    keywords = [title, 'Beast Tamer']
+    website = 'https://beasttamer.jp/'
+    twitter = 'beasttamer_off'
+    hashtags = ['ビステマ']
+    folder_name = 'beast-tamer'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article.news-atl-bg',
+                                    date_select='.entry-date', title_select='.entry-title', id_select=None,
+                                    id_has_id=True, id_attr='id', news_prefix='news.html')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('kv_tw', 'https://pbs.twimg.com/media/FUtiIgLaQAEcqA2?format=jpg&name=4096x4096')
+        self.add_to_image_list('top_t1_vis', self.PAGE_PREFIX + 'assets/top/t1/vis.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        self.image_list = []
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character.html')
+            images = soup.select('.character-data img[data-src]')
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['data-src'].replace('./', '')
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+            print(e)
         self.download_image_list(folder)

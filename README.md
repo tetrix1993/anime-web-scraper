@@ -111,6 +111,7 @@ The premiere date for the anime listed here has not been announced.
 * [Tensei shitara Ken Deshita](https://tenken-anime.com/)
 * [Uchi no Shishou wa Shippo ga Nai](https://shippona-anime.com/)
 * [Yama no Susume: Next Summit](https://yamanosusume-ns.com/)
+* [Yuusha Party wo Tsuihou sareta Beast Tamer, Saikyoushu no Nekomimi Shoujo to Deau](https://beasttamer.jp/)
 
 ### Summer 2022 Anime
 * [Engage Kiss](https://engage-kiss.com/)
