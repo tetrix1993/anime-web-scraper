@@ -148,6 +148,7 @@ class HatarakuMaousama2Download(Summer2022AnimeDownload, NewsTemplate):
         self.add_to_image_list('teaser', self.PAGE_PREFIX + 'assets/img/top/visual.jpg')
         self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/FGaCXWqVUAA4-Iz?format=jpg&name=large')
         self.add_to_image_list('kv1_moca', 'https://moca-news.net/article/20211212/2021121221300a_/image/001-aiic5e.jpg', is_mocanews=True)
+        self.add_to_image_list('kv2_tw', 'https://pbs.twimg.com/media/FU3AmQ3UEAAi_51?format=jpg&name=large')
         self.download_image_list(folder)
 
         template = self.PAGE_PREFIX + 'assets/img/top/visual%s.jpg'
