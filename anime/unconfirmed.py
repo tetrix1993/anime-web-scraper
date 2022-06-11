@@ -14,6 +14,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Kunoichi Tsubaki no Mune no Uchi https://kunoichi-tsubaki.com/ #くノ一ツバキ @tsubaki_anime
 # Maou Gakuin no Futekigousha 2nd Season https://maohgakuin.com/ #魔王学院 @maohgakuin
 # Mato Seihei no Slave https://mabotai.jp/ #魔都精兵のスレイブ #まとスレ @mabotai_kohobu
+# Oshi no Ko https://ichigoproduction.com/ #推しの子 @anime_oshinoko
 # Otonari ni Ginga https://otonari-anime.com/ #おとなりに銀河 @otonariniginga
 # Otonari no Tenshi-sama ni Itsunomanika Dame Ningen ni Sareteita Ken https://otonarino-tenshisama.jp/ #お隣の天使様 @tenshisama_PR
 # Renai Flops https://loveflops.com/ #恋愛フロップス @loveflops_pr
@@ -542,6 +543,36 @@ class MatoSlaveDownload(UnconfirmedDownload, NewsTemplate):
             result = self.download_image(image_url, f'{folder}/{image_name}')
             if result == -1:
                 break
+
+
+# Oshi no Ko
+class OshinokoDownload(UnconfirmedDownload, NewsTemplate2):
+    title = 'Oshi no Ko'
+    keywords = [title, 'oshinoko']
+    website = 'https://ichigoproduction.com/'
+    twitter = 'anime_oshinoko'
+    hashtags = '推しの子'
+    folder_name = 'oshinoko'
+
+    PAGE_PREFIX = website
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FU0bJsjaAAAE7Bf?format=jpg&name=large')
+        self.add_to_image_list('tz_kv', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv.jpg')
+        self.download_image_list(folder)
 
 
 # Otonari ni Ginga

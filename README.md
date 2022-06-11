@@ -90,6 +90,7 @@ The premiere date for the anime listed here has not been announced.
 * [Itai no wa Iya nano de Bougyoryoku ni Kyokufuri Shitai to Omoimasu. 2nd Season](https://bofuri.jp/)
 * [Maou Gakuin no Futekigousha: Shijou Saikyou no Maou no Shiso, Tensei shite Shison-tachi no Gakkou e 2nd Season](https://maohgakuin.com/)
 * [Mato Seihei no Slave](https://mabotai.jp/)
+* [Oshi no Ko](https://ichigoproduction.com/)
 * [Otonari ni Ginga](https://otonari-anime.com/)
 * [Otonari no Tenshi-sama ni Itsunomanika Dame Ningen ni Sareteita Ken](https://otonarino-tenshisama.jp/)
 * [Renai Flops](https://loveflops.com/)
