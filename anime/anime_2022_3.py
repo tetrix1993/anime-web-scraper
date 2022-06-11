@@ -691,10 +691,13 @@ class PrimaDollDownload(Summer2022AnimeDownload, NewsTemplate):
         folder = self.create_key_visual_directory()
         self.image_list = []
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FKHiPhoagAEoQXI?format=jpg&name=4096x4096')
-        self.add_to_image_list('prima_eats_main_img', 'https://storage.googleapis.com/primadoll-official/assets/uber_eats/image/prima_eats_main_img.jpg')
+        self.add_to_image_list('prima_eats_main_img', self.ASSETS_URL + 'uber_eats/image/prima_eats_main_img.jpg')
         tz_template = self.ASSETS_IMAGE_URL + '%s_img_pc.jpg'
         for time in ['night', 'morning', 'noon', 'evening']:
             self.add_to_image_list('tz_' + time, tz_template % time)
+
+        self.add_to_image_list('main_2_img_pc', self.ASSETS_IMAGE_URL + 'main_2_img_pc.jpg')
+        self.add_to_image_list('kv_tw', 'https://pbs.twimg.com/media/FUsbotOagAAXpMu?format=jpg&name=4096x4096')
         self.download_image_list(folder)
 
     def download_character(self):
