@@ -343,33 +343,31 @@ class Kanokari2Download(Summer2022AnimeDownload, NewsTemplate):
         super().__init__()
 
     def run(self):
-        soup = self.get_soup(self.PAGE_PREFIX)
         self.download_episode_preview()
         self.download_news()
-        self.download_key_visual(soup)
-        self.download_character(soup)
+        self.download_key_visual()
+        self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
 
     def download_news(self):
-        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.md-li__news--block',
-                                    title_select='h3', date_select='time', id_select='a', stop_date='2021.02.26',
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.md-news__li',
+                                    title_select='.postttl', date_select='time', id_select='a', stop_date='2021.02.26',
                                     paging_type=0, next_page_select='ul.pagenation-list li', next_page_eval_index=-1,
                                     next_page_eval_index_class='is__current')
 
-    def download_key_visual(self, soup=None):
+    def download_key_visual(self):
         folder = self.create_key_visual_directory()
         # self.image_list = []
         # self.add_to_image_list('tz', self.PAGE_PREFIX + '2nd/wp-content/themes/kanokari-2nd/_assets/images/fv/fv_pc.jpg')
 
         try:
-            if soup is None:
-                soup = self.get_soup(self.PAGE_PREFIX)
-            images = soup.select('.visual img[src]')
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.fv--visual img[src]')
             self.image_list = []
             for image in images:
-                image_url = image['src']
+                image_url = self.PAGE_PREFIX + image['src'][1:].split('?')[0]
                 image_name = self.extract_image_name_from_url(image_url)
                 self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)
@@ -385,16 +383,15 @@ class Kanokari2Download(Summer2022AnimeDownload, NewsTemplate):
 
         self.download_youtube_thumbnails(self.PAGE_PREFIX, folder)
 
-    def download_character(self, soup=None):
+    def download_character(self):
         folder = self.create_character_directory()
         try:
-            if soup is None:
-                soup = self.get_soup(self.PAGE_PREFIX)
-            images = soup.select('.chardata--inner img[src]')
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            images = soup.select('.char .v img[src]')
             self.image_list = []
             for image in images:
-                image_url = image['src']
-                image_name = 'tz_' + self.extract_image_name_from_url(image_url)
+                image_url = self.PAGE_PREFIX + image['src'][1:]
+                image_name = self.extract_image_name_from_url(image_url)
                 self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)
         except Exception as e:
