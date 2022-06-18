@@ -124,6 +124,7 @@ The premiere date for the anime listed here has not been announced.
 * [Kumichou Musume to Sewagakari](https://kumichomusume.com/)
 * [Kuro no Shoukanshi](https://kuronoshokanshi.com/)
 * [Lycoris Recoil](https://lycoris-recoil.com/)
+* [Made in Abyss: Retsujitsu no Ougonkyou](http://miabyss.com/)
 * [Mamahaha no Tsurego ga Motokano datta](https://tsurekano-anime.com/)
 * [Prima Doll](https://primadoll.jp/)
 * [Saikin Yatotta Maid ga Ayashii](https://maid-ga-ayashii.com/)

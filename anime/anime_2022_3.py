@@ -12,6 +12,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Kumichou Musume to Sewagakari https://kumichomusume.com/ #組長娘と世話係 @kumichomusume
 # Kuro no Shoukanshi https://kuronoshokanshi.com/ #黒の召喚士 @kuronoshokanshi
 # Lycoris Recoil https://lycoris-recoil.com/ #リコリコ #LycorisRecoil @lycoris_recoil
+# Made in Abyss: Retsujitsu no Ougonkyou http://miabyss.com/ #miabyss @miabyss_anime
 # Mamahaha no Tsurego ga Motokano datta https://tsurekano-anime.com/ #連れカノ #tsurekano @tsurekano
 # Prima Doll https://primadoll.jp/ #プリマドール #PrimaDoll @primadoll_pr
 # Saikin Yatotta Maid ga Ayashii https://maid-ga-ayashii.com/ #最近雇ったメイドが怪しい @maidga_ayashii
@@ -596,6 +597,62 @@ class LycorisRecoilDownload(Summer2022AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+
+# Made in Abyss: Retsujitsu no Ougonkyou
+class MadeInAbyss2Download(Summer2022AnimeDownload, NewsTemplate):
+    title = 'Made in Abyss: Retsujitsu no Ougonkyou'
+    keywords = [title, 'The Golden City of the Scorching Sun']
+    website = 'http://miabyss.com/'
+    twitter = 'miabyss_anime'
+    hashtags = 'miabyss'
+    folder_name = 'miabyss2'
+
+    PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 6
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        template = self.PAGE_PREFIX + 'images/tv2nd/story/%s/p_%s.jpg'
+        for i in range(self.FINAL_EPISODE):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_1'):
+                continue
+            ep_template = template % (str(i + 1).zfill(3), '%s')
+            for j in range(self.IMAGES_PER_EPISODE):
+                image_url = ep_template % str(j + 1).zfill(3)
+                image_name = episode + '_' + str(j + 1)
+                result = self.download_image(image_url, self.base_folder + '/' + image_name)
+                if result == -1:
+                    return
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.newsPaging article',
+                                    title_select='.news_title', date_select='.news_day',
+                                    id_select='a', a_tag_prefix=self.PAGE_PREFIX, date_separator='/',
+                                    news_prefix='news.html', stop_date='2021.04')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('#visual_core01 img[src]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src']
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
 
 
 # Mamahaha no Tsurego ga Motokano datta
