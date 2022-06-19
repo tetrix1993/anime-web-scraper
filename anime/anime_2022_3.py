@@ -1,3 +1,4 @@
+import os
 import requests
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 
@@ -53,6 +54,7 @@ class EngageKissDownload(Summer2022AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
@@ -118,6 +120,28 @@ class EngageKissDownload(Summer2022AnimeDownload, NewsTemplate):
             '''
         except Exception as e:
             self.print_exception(e, 'Character')
+
+    def download_media(self):
+        folder = self.create_media_directory()
+
+        # Countdown
+        countdown_folder = folder + '/countdown'
+        if not os.path.exists(countdown_folder):
+            os.makedirs(countdown_folder)
+        template = self.PAGE_PREFIX + 'assets/img/special/countdown/%s.jpg'
+        month = 6
+        day = 18
+        for i in range(14):
+            image_name = 'img_' + str(month).zfill(2) + str(day).zfill(2)
+            image_url = template % image_name
+            if not self.is_image_exists(image_name, countdown_folder):
+                result = self.download_image(image_url, countdown_folder + '/' + image_name)
+                if result == -1:
+                    break
+            day += 1
+            if day == 31:
+                month = 7
+                day = 1
 
 
 # Hataraku Maou-sama!!
