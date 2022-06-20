@@ -975,10 +975,36 @@ class TenseiKenjaDownload(Summer2022AnimeDownload, NewsTemplate):
         self.download_key_visual()
         self.download_character()
 
+    def download_episode_preview(self):
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            a_tags = soup.select('.story-Index_Nav li a[href]')
+            for a_tag in a_tags:
+                try:
+                    episode = str(int(a_tag.text.strip().replace('#', ''))).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                if a_tag.has_attr('class') and 'current' in a_tag['class']:
+                    ep_soup = soup
+                else:
+                    ep_soup = self.get_soup(a_tag['href'])
+                if ep_soup is not None:
+                    images = ep_soup.select('.swiper img[src]')
+                    self.image_list = []
+                    for i in range(len(images)):
+                        image_url = self.clear_resize_in_url(images[i]['src'])
+                        image_name = episode + '_' + str(i + 1)
+                        self.add_to_image_list(image_name, image_url)
+                    self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
+
     def download_news(self):
-        # May need change paging logic
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='div.sw-News_Archive li',
-                                    date_select='.date', title_select='.title p', id_select='a')
+                                    date_select='.date', title_select='.title p', id_select='a',
+                                    next_page_select='.nextpostslink')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
