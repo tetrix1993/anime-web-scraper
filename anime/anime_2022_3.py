@@ -1126,6 +1126,8 @@ class ArsnotoriaDownload(Summer2022AnimeDownload, NewsTemplate):
         folder = self.create_key_visual_directory()
         self.image_list = []
         self.add_to_image_list('tz', self.PAGE_PREFIX + 'wp-content/uploads/2022/05/img.jpg')
+        self.add_to_image_list('p_mainv_primary', self.PAGE_PREFIX + 'wcmsp/wp-content/themes/arsnotoria/assets/images/top/p_mainv_primary.png')
+        self.add_to_image_list('arsn_key_illonly_0620.jpg', self.PAGE_PREFIX + 'wcmsp/wp-content/uploads/2022/06/arsn_key_illonly_0620.jpg')
         self.download_image_list(folder)
 
     def download_character(self):
