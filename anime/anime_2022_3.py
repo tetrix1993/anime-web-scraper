@@ -6,6 +6,7 @@ from scan import AniverseMagazineScanner
 
 # Engage Kiss https://engage-kiss.com/ #エンゲージキス #EngageKiss @engage_kiss
 # Hataraku Maou-sama!! https://maousama.jp/ #maousama @anime_maousama
+# Hoshi no Samidare https://hoshinosamidare.jp/ #惑星のさみだれ @AnimeSamidare
 # Isekai Meikyuu de Harem wo https://isekai-harem.com/ #異世界迷宮でハーレムを #異世界迷宮 @isekaiharem_ani
 # Isekai Ojisan #いせおじ #異世界おじさん @Isekai_Ojisan
 # Isekai Yakkyoku https://isekai-yakkyoku.jp/ #異世界薬局 @isekai_yakkyoku
@@ -188,6 +189,65 @@ class HatarakuMaousama2Download(Summer2022AnimeDownload, NewsTemplate):
         template2 = character_prefix + 'character%s_face1.png'
         template3 = character_prefix + 'character%s_face2.png'
         self.download_by_template(folder, [template1, template2, template3], 2, 1)
+
+
+# Hoshi no Samidare
+class HoshinoSamidareDownload(Summer2022AnimeDownload):
+    title = 'Hoshi no Samidare'
+    keywords = [title, 'Lucifer and the Biscuit Hammer']
+    website = 'https://hoshinosamidare.jp/'
+    twitter = 'AnimeSamidare'
+    hashtags = '惑星のさみだれ'
+    folder_name = 'hoshinosamidare'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        api_template = 'https://samidare-api.hoshinosamidare.jp/api/article?page=%s&limit=10'
+        try:
+            results = []
+            news_obj = self.get_last_news_log_object()
+            stop = False
+            for page in range(1, 100, 1):
+                api_url = api_template % str(page)
+                obj = self.get_json(api_url)
+                if 'list' in obj and len(obj['list']) > 0:
+                    for item in obj['list']:
+                        if 'uuid' not in item or 'title' not in item or 'publish_start_at' not in item:
+                            continue
+                        dt = item['publish_start_at']
+                        if len(dt) < 10:
+                            continue
+                        uuid = self.PAGE_PREFIX + 'news/' + item['uuid']
+                        title = ' '.join(item['title'].strip().split())
+                        dt = dt[0:10].replace('-', '.')
+                        if news_obj is not None and ((news_obj and news_obj['id'] == uuid) or dt < news_obj['date']):
+                            stop = True
+                            break
+                        results.append(self.create_news_log_object(dt, title, uuid))
+                    if stop:
+                        break
+                else:
+                    break
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log_from_news_log_object(result)
+                if process_result == 0:
+                    success_count += 1
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
+        except Exception as e:
+            self.print_exception(e, 'News')
 
 
 # Isekai Meikyuu de Harem wo

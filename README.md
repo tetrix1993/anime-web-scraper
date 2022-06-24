@@ -116,6 +116,7 @@ The premiere date for the anime listed here has not been announced.
 ### Summer 2022 Anime
 * [Engage Kiss](https://engage-kiss.com/)
 * [Hataraku Maou-sama! 2nd Season](https://maousama.jp/)
+* [Hoshi no Samidare](https://hoshinosamidare.jp/)
 * [Isekai Meikyuu de Harem wo](https://isekai-harem.com/)
 * [Isekai Ojisan](https://isekaiojisan.com/)
 * [Isekai Yakkyoku](https://isekai-yakkyoku.jp/)
