@@ -3,6 +3,7 @@ import requests
 import anime.constants as constants
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsTemplate3
 
+# Akiba Meido Sensou https://akibamaidwar.com/ #アキバ冥途戦争 @akbmaidwar
 # Anohana S2 https://10th.anohana.jp/ #あの花 #anohana @anohana_project
 # Ayakashi Triangle https://ayakashitriangle-anime.com/ #あやかしトライアングル #あやトラ @ayakashi_anime
 # Do It Yourself!! https://diy-anime.com/ #diyアニメ @diy_anime
@@ -33,6 +34,47 @@ class UnconfirmedDownload(MainDownload):
 
     def __init__(self):
         super().__init__()
+
+
+# Akiba Meido Sensou
+class AkibaMaidWarDownload(UnconfirmedDownload, NewsTemplate):
+    title = 'Akiba Meido Sensou'
+    keywords = [title, 'Akiba Maid War']
+    website = 'https://akibamaidwar.com/'
+    twitter = 'akbmaidwar'
+    hashtags = 'アキバ冥途戦争'
+    folder_name = 'akibamaidwar'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, news_prefix='', article_select='#news-area li',
+                                    title_select='dt span', date_select='dd.new', id_select='a')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FWAaCg-UEAAJ5sw?format=jpg&name=4096x4096')
+        self.add_to_image_list('tz_kv', self.PAGE_PREFIX + 'assets/images/pc/kv.png')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_chara_image', self.PAGE_PREFIX + 'assets/images/pc/chara_image.png')
+        self.download_image_list(folder)
 
 
 # Ano Hi Mita Hana no Namae wo Bokutachi wa Mada Shiranai. 10th Anniversary Project

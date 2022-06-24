@@ -82,6 +82,7 @@ pip install -r requirements.txt
 
 ### New Anime
 The premiere date for the anime listed here has not been announced.
+* [Akiba Meido Sensou](https://akibamaidwar.com/)
 * [Ayakashi Triangle](https://ayakashitriangle-anime.com/)
 * [Fuufu Ijou, Koibito Miman.](https://fuukoi-anime.com/)
 * [Goblin Slayer 2nd Season](http://www.goblinslayer.jp/)
