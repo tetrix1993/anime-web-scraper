@@ -247,6 +247,7 @@ class IsekaiOjisanDownload(Summer2022AnimeDownload, NewsTemplate2):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX)
@@ -298,6 +299,41 @@ class IsekaiOjisanDownload(Summer2022AnimeDownload, NewsTemplate2):
         except Exception as e:
             self.print_exception(e, 'Character')
         self.create_cache_file(cache_filepath, processed, num_processed)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+
+        # Blu-rays
+        first = 40
+        second = 79
+        third = 119
+        bd_template = self.PAGE_PREFIX + 'core_sys/images/contents/%s/block/%s/%s.jpg'
+        try:
+            for i in range(3):
+                image_name = 'bd_vol' + str(i + 1)
+                if self.is_image_exists(image_name, folder):
+                    continue
+                image_url = bd_template % (str(first + i).zfill(8), str(second + i).zfill(8), str(third + i).zfill(8))
+                if not self.is_matching_content_length(image_url, 56755):
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
+
+        # Blu-ray Bonus
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'bd/privilege.html')
+            images = soup.select('.block_inner img[src]')
+            self.image_list = []
+            for image in images:
+                if 'nowprinting' in image['src']:
+                    continue
+                image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray Bonus')
 
 
 # Isekai Yakkyoku
