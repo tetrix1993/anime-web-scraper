@@ -22,6 +22,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Tensei Kenja no Isekai Life: Dai-2 no Shokugyou wo Ete, Sekai Saikyou ni Narimashita https://tenseikenja.com #転生賢者 @tenseikenja_PR
 # Utawarerumono: Futari no Hakuoro https://utawarerumono.jp/ #うたわれ @UtawareAnime
 # Warau Arsnotoria Sun! https://www.arsnotoria-anime.com/ #アルスノ @arsno_anime
+# Yofukashi no Uta https://yofukashi-no-uta.com/ #よふかしのうた @yofukashi_pr
 # Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e S2 http://you-zitsu.com/ #you_zitsu #よう実 @youkosozitsu
 
 
@@ -1194,6 +1195,74 @@ class ArsnotoriaDownload(Summer2022AnimeDownload, NewsTemplate):
         except Exception as e:
             self.print_exception(e, 'Character')
         self.create_cache_file(cache_filepath, processed, num_processed)
+
+
+# Yofukashi no Uta
+class YofukashiDownload(Summer2022AnimeDownload, NewsTemplate):
+    title = 'Yofukashi no Uta'
+    keywords = [title, 'Call of the Night']
+    website = 'https://yofukashi-no-uta.com/'
+    twitter = 'yofukashi_pr'
+    hashtags = 'よふかしのうた'
+    folder_name = 'yofukashi'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.c-news-list__item',
+                                    date_select='.c-news-item__day', title_select='.c-news-item__title',
+                                    id_select='a', a_tag_prefix=self.PAGE_PREFIX,
+                                    next_page_select='.next')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.home-visual img[src]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'].replace('./', '').split('?')[0]
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        prefix = self.PAGE_PREFIX + 'character/'
+        self.image_list = []
+        try:
+            obj = self.get_json(prefix + 'chara_data.php')
+            if 'charas' in obj:
+                for chara in obj['charas']:
+                    if 'images' in chara:
+                        if 'visuals' in chara['images']:
+                            for visual in chara['images']['visuals']:
+                                if 'image' in visual:
+                                    image_url = prefix + visual['image'].replace('./', '').split('?')[0]
+                                    image_name = self.extract_image_name_from_url(image_url)
+                                    self.add_to_image_list(image_name, image_url)
+                        if 'faces' in chara['images']:
+                            for face in chara['images']['faces']:
+                                image_url = prefix + face.replace('./', '').split('?')[0]
+                                image_name = self.extract_image_name_from_url(image_url)
+                                self.add_to_image_list(image_name, image_url)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+        self.download_image_list(folder)
 
 
 # Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e S2

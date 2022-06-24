@@ -133,6 +133,7 @@ The premiere date for the anime listed here has not been announced.
 * [Tensei Kenja no Isekai Life: Dai-2 no Shokugyou wo Ete, Sekai Saikyou ni Narimashita](https://tenseikenja.com/)
 * [Utawarerumono: Futari no Hakuoro](https://utawarerumono.jp/)
 * [Warau Arsnotoria Sun!](https://www.arsnotoria-anime.com/)
+* [Yofukashi no Uta](https://yofukashi-no-uta.com/)
 * [Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e 2nd Season](http://you-zitsu.com/)
 
 ### Spring 2022 Anime
