@@ -546,10 +546,10 @@ class Kaguyasama3Download(Spring2022AnimeDownload, NewsTemplate):
                     if story.has_attr('class') and 'active' in story['class']:
                         ep_soup = soup
                     else:
-                        a_tag = story.select('a[href]')
-                        if len(a_tag) < 1:
+                        a_tags = story.select('a[href]')
+                        if len(a_tags) < 1:
                             continue
-                        ep_soup = self.get_soup(self.PAGE_PREFIX + a_tag['href'][1:])
+                        ep_soup = self.get_soup(self.PAGE_PREFIX + a_tags[0]['href'][1:])
                     if ep_soup is not None:
                         images = ep_soup.select('.p-story__scene-item img[src]')
                         self.image_list = []
