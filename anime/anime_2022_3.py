@@ -1215,6 +1215,7 @@ class Youzitsu2Download(Summer2022AnimeDownload, NewsTemplate):
         self.download_episode_preview()
         self.download_news()
         self.download_key_visual()
+        self.download_media()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
@@ -1257,3 +1258,35 @@ class Youzitsu2Download(Summer2022AnimeDownload, NewsTemplate):
         except Exception as e:
             self.print_exception(e, 'Key Visual')
 
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'bddvd.html')
+            images = soup.select('article.content-entry img[src]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'].replace('./', '')
+                if '/bddvd/' not in image_url and '/music/' not in image_url:
+                    continue
+                image_name = self.extract_image_name_from_url(image_url)
+                if image_name == 'np':
+                    continue
+                period_index = image_url.rfind('.')
+                if period_index == -1:
+                    continue
+                url_split = image_url[0:period_index].split('/')
+                final_image_name = image_name
+                index = len(url_split) - 2
+                while index >= 0:
+                    if url_split[index] == 'bddvd' or url_split[index] == 'music':
+                        break
+                    elif len(url_split[index]) == 0:
+                        continue
+                    else:
+                        final_image_name = '_' + final_image_name
+                    index -= 1
+                if not self.is_image_exists(final_image_name, folder):
+                    self.add_to_image_list(final_image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
