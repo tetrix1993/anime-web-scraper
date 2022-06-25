@@ -669,6 +669,37 @@ class KakkounoIinazukeDownload(Spring2022AnimeDownload, NewsTemplate3):
         self.download_media()
 
     def download_episode_preview(self):
+        # YouTube thumbnails
+        yt_folder = self.create_custom_directory('yt')  # YouTube thumbnails
+        yt_images = os.listdir(yt_folder)
+        yt_episodes = ['01']
+        for yt_image in yt_images:
+            if os.path.isfile(yt_folder + '/' + yt_image) and yt_image.endswith('.jpg') \
+                    and yt_image[0:2].isnumeric() and yt_image[2] == '_':
+                yt_episodes.append(yt_image[0:2])
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            story_divs = soup.select('.story-data')
+            for story_div in story_divs:
+                ep_no_span = story_div.select('h3.ep-no span')
+                if len(ep_no_span) == 0:
+                    continue
+                try:
+                    ep_num = str(int(ep_no_span[0].text.strip())).zfill(2)
+                except:
+                    continue
+                if ep_num in yt_episodes:
+                    continue
+                yt_link = story_div.select('.ep-trailer-btn a[href]')
+                if len(yt_link) == 0 or 'www.youtube.com/embed/' not in yt_link[0]['href']:
+                    continue
+                yt_id = yt_link[0]['href'].split('?')[0].split('/')[-1].strip()
+                if len(yt_id) > 0:
+                    yt_image_url = f'https://img.youtube.com/vi/{yt_id}/maxresdefault.jpg'
+                    self.download_image(yt_image_url, f'{yt_folder}/{ep_num}_{yt_id}')
+        except Exception as e:
+            self.print_exception(e, 'YouTube thumbnails')
+
         base_template = self.PAGE_PREFIX + 'assets/story/%s/%s.'
         for i in range(self.FINAL_EPISODE):
             episode = str(i + 1).zfill(2)
