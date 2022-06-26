@@ -278,7 +278,7 @@ class IsekaiMeikyuuHaremDownload(Summer2022AnimeDownload, NewsTemplate):
         for i in range(self.FINAL_EPISODE):
             no_download_count = 0
             for j in range(self.IMAGES_PER_EPISODE):
-                image_name = str(i + 1).zfill(2) + '_' + str(j + 1)
+                image_name = str(i + 1).zfill(2) + '_' + str(j + 1).zfill(2)
                 if not self.is_image_exists(image_name):
                     image_url = image_url_template % (str(i + 1).zfill(2), str(j + 1).zfill(2))
                     result = self.download_image(image_url, self.base_folder + '/' + image_name)
