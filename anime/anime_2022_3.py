@@ -836,6 +836,7 @@ class TsurekanoDownload(Summer2022AnimeDownload, NewsTemplate):
     folder_name = 'tsurekano'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
 
     def __init__(self):
         super().__init__()
@@ -843,16 +844,43 @@ class TsurekanoDownload(Summer2022AnimeDownload, NewsTemplate):
     def run(self):
         self.download_episode_preview()
         self.download_news()
+        self.download_episode_preview_external()
         self.download_key_visual()
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            items = soup.select('.detail__item')
+            for item in items:
+                num = item.select('.num')
+                if len(num) == 0:
+                    continue
+                try:
+                    episode = str(int(num[0].text.replace('#', ''))).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                images = item.select('.mainSwiper img[src]')
+                self.image_list = []
+                for i in range(len(images)):
+                    image_url = self.PAGE_PREFIX + images[i]['src'].replace('../', '')
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news__list-item',
                                     date_select='time', title_select='.body__article-title',
                                     id_select='a', date_separator='/')
+
+    def download_episode_preview_external(self):
+        keywords = ['継母の連れ子が元カノだった', '先行カット']
+        AniverseMagazineScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                end_date='20220602', download_id=self.download_id).run()
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()

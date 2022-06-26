@@ -206,10 +206,17 @@ class AniverseMagazineScanner(MainScanner):
     # Example prefix: https://aniverse-mag.com/page/2?s=プランダラ
     SEARCH_URL = "https://aniverse-mag.com/page/%s?s=%s"
     
-    def __init__(self, keyword, base_folder, last_episode=None, suffix=None,
+    def __init__(self, keywords, base_folder, last_episode=None, suffix=None,
                  min_width=None, end_date='00000000', check_resize=False, download_id=None, prefix=None):
         super().__init__(download_id)
-        self.keyword = keyword
+
+        if isinstance(keywords, str):
+            self.keywords = [keywords]
+        elif isinstance(keywords, list):
+            self.keywords = keywords
+        else:
+            raise Exception('Unexpected type for keywords')
+
         self.base_folder = base_folder.replace("download/","") + "/" + EXTERNAL_FOLDER_ANIVERSE
         self.last_episode = last_episode
         self.suffix = suffix
@@ -278,14 +285,19 @@ class AniverseMagazineScanner(MainScanner):
             regex = prefix + '[０|１|２|３|４|５|６|７|８|９|十|一|二|三|四|五|六|七|八|九|0-9]+' + suffix
             prog = re.compile(regex)
             result = prog.findall(news_title)
-            if self.keyword in news_title and ('最終' + suffix) in news_title and len(result) == 0:
-                episode = 'last'
-            elif self.keyword in news_title and len(result) > 0:
-                episode_num = self.get_episode_num(result, prefix, suffix)
-                if episode_num < 1:
-                    continue
-                episode = str(episode_num).zfill(2)
-            else:
+
+            episode = None
+            for keyword in self.keywords:
+                if keyword in news_title and ('最終' + suffix) in news_title and len(result) == 0:
+                    episode = 'last'
+                    break
+                elif keyword in news_title and len(result) > 0:
+                    episode_num = self.get_episode_num(result, prefix, suffix)
+                    if episode_num < 1:
+                        break
+                    episode = str(episode_num).zfill(2)
+                    break
+            if episode is None:
                 continue
 
             #if self.keyword not in news_title or '先行' not in news_title or '第' not in news_title or '話' not in news_title:
@@ -317,7 +329,8 @@ class AniverseMagazineScanner(MainScanner):
                     self.is_image_exists('last_01', self.base_folder):
                 return
 
-        first_page_url = self.SEARCH_URL % ("1", self.keyword)
+        keywords_str = '+'.join(self.keywords)
+        first_page_url = self.SEARCH_URL % ("1", keywords_str)
         first_page_response = self.get_response(url=first_page_url,decode=True)
         if self.has_results(first_page_response):
             response = first_page_response
@@ -328,7 +341,7 @@ class AniverseMagazineScanner(MainScanner):
             while page <= self.MAXIMUM_PAGES:
                 if not self.has_next_page(response):
                     break
-                next_url = self.SEARCH_URL % (str(page), self.keyword)
+                next_url = self.SEARCH_URL % (str(page), keywords_str)
                 response = self.get_response(url=next_url, decode=True)
                 result = self.process_page(response)
                 if result == 1:
