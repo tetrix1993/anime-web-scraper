@@ -163,11 +163,16 @@ class HatarakuMaousama2Download(Summer2022AnimeDownload, NewsTemplate):
 
     def run(self):
         self.download_episode_preview()
+        self.download_news()
         self.download_key_visual()
         self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.newsList',
+                                    date_select='.newsDate', title_select='.newsList_title', id_select='a')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
