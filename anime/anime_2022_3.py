@@ -900,6 +900,7 @@ class TsurekanoDownload(Summer2022AnimeDownload, NewsTemplate):
         self.add_to_image_list('top_kv_1', self.PAGE_PREFIX + 'img/top/kv_1.png')
         self.add_to_image_list('kv2', self.PAGE_PREFIX + 'news/wp-content/uploads/2022/04/tsurekano_KV02.jpg')
         self.add_to_image_list('kv2_tw', 'https://pbs.twimg.com/media/FQ8EIMpacAAaPsz?format=jpg&name=4096x4096')
+        self.add_to_image_list('kv_yume_tw', 'https://pbs.twimg.com/media/FWI65uKagAAasvD?format=jpg&name=4096x4096')
         self.download_image_list(folder)
         self.download_youtube_thumbnails(self.PAGE_PREFIX, folder)
 
@@ -1072,7 +1073,7 @@ class ShadowsHouse2Download(Summer2022AnimeDownload, NewsTemplate):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.p-in-news__list-item',
                                     date_select='.p-in-news_data__date', title_select='.p-in-news_data__title',
                                     id_select='a', a_tag_prefix=news_url, a_tag_start_text_to_remove='./',
-                                    paging_type = 1, stop_date='2021', next_page_select='.c-pagination_arrow__next',
+                                    paging_type=1, stop_date='2021', next_page_select='.c-pagination_arrow__next',
                                     next_page_eval_index_class='.is-disable', next_page_eval_index=-1)
 
     def download_key_visual(self):
