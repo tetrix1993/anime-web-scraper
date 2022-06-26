@@ -10,14 +10,11 @@ def run():
         os.makedirs(constants.FOLDER_OUTPUT)
 
     downloads = []
-    for subclass in Spring2022AnimeDownload.__subclasses__():
+    for subclass in Summer2022AnimeDownload.__subclasses__():
         if subclass.enabled:
             downloads.append(subclass())
-    downloads += [TaktOpDestinyDownload(), AkebichanDownload(), Arifureta2Download(), FabinikuDownload(),
-                  KendeshiDownload(), KisekoiDownload(), LeadaleDownload(), ShuumatsuNoHaremDownload(),
-                  SlowLoopDownload(), TensaiOujiDownload()]
-    subclasses = Winter2022AnimeDownload.__subclasses__() \
-        + Summer2022AnimeDownload.__subclasses__() \
+    downloads += [AkebichanDownload(), KisekoiDownload()]
+    subclasses = Spring2022AnimeDownload.__subclasses__() \
         + Fall2022AnimeDownload.__subclasses__() \
         + Winter2023AnimeDownload.__subclasses__() \
         + UnconfirmedDownload.__subclasses__()
