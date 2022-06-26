@@ -573,7 +573,7 @@ class Kanokari2Download(Summer2022AnimeDownload, NewsTemplate):
 
 
 # Kinsou no Vermeil: Gakeppuchi Majutsushi wa Saikyou no Yakusai to Mahou Sekai wo Tsukisusumu
-class VermeilDownload(Summer2022AnimeDownload):
+class VermeilDownload(Summer2022AnimeDownload, NewsTemplate):
     title = 'Kinsou no Vermeil: Gakeppuchi Majutsushi wa Saikyou no Yakusai to Mahou Sekai wo Tsukisusumu'
     keywords = [title, 'Vermeil in Gold']
     website = 'https://vermeilingold.jp/'
@@ -588,11 +588,17 @@ class VermeilDownload(Summer2022AnimeDownload):
 
     def run(self):
         self.download_episode_preview()
+        self.download_news()
         self.download_key_visual()
         self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, paging_type=3, paging_suffix='?pg=%s',
+                                    article_select='ul.newsliste li', title_select='a', date_select='.newstime',
+                                    id_select='a', next_page_select='.bantright')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
