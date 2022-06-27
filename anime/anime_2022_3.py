@@ -1454,8 +1454,18 @@ class Youzitsu2Download(Summer2022AnimeDownload, NewsTemplate):
         self.image_list = []
         #self.add_to_image_list('vis_aniverse', 'https://aniverse-mag.com/wp-content/uploads/2022/05/38426131b5b83e0bbf81006021fe5d77.jpg')
         self.add_to_image_list('t1b_vis-a1ca63', top_prefix + 't1b/vis-a1ca63.jpg')
-        self.add_to_image_list('h1_vis', top_prefix + 'h1/vis.jpg')
         self.download_image_list(folder)
+
+        h_template = top_prefix + 'h%s/vis.jpg'
+        try:
+            for i in range(10):
+                image_url = h_template % str(i + 1)
+                image_name = 'h' + str(i + 1) + '_vis'
+                result = self.download_image(image_url, folder + '/' + image_name)
+                if result == -1:
+                    break
+        except:
+            pass
 
         top_template_prefix = top_prefix + 't%s/vis.'
         news_template_prefix = self.PAGE_PREFIX + 'assets/news/vis-t%s.'
