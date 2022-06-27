@@ -1449,12 +1449,15 @@ class Youzitsu2Download(Summer2022AnimeDownload, NewsTemplate):
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
+        top_prefix = self.PAGE_PREFIX + 'assets/top/'
 
         self.image_list = []
-        self.add_to_image_list('vis_aniverse', 'https://aniverse-mag.com/wp-content/uploads/2022/05/38426131b5b83e0bbf81006021fe5d77.jpg')
+        #self.add_to_image_list('vis_aniverse', 'https://aniverse-mag.com/wp-content/uploads/2022/05/38426131b5b83e0bbf81006021fe5d77.jpg')
+        self.add_to_image_list('t1b_vis-a1ca63', top_prefix + 't1b/vis-a1ca63.jpg')
+        self.add_to_image_list('h1_vis', top_prefix + 'h1/vis.jpg')
         self.download_image_list(folder)
 
-        top_template_prefix = self.PAGE_PREFIX + 'assets/top/t%s/vis.'
+        top_template_prefix = top_prefix + 't%s/vis.'
         news_template_prefix = self.PAGE_PREFIX + 'assets/news/vis-t%s.'
 
         top_templates = [top_template_prefix + 'jpg', top_template_prefix + 'png']
@@ -1462,7 +1465,7 @@ class Youzitsu2Download(Summer2022AnimeDownload, NewsTemplate):
 
         self.download_by_template(folder, news_templates, 1, 1, prefix='news_')
 
-        t1b_template = self.PAGE_PREFIX + 'assets/top/t1b/c%s.png'
+        t1b_template = top_prefix + 't1b/c%s.png'
         self.download_by_template(folder, t1b_template, 1, 1, prefix='t1b_')
 
         try:
