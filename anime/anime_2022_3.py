@@ -611,6 +611,7 @@ class VermeilDownload(Summer2022AnimeDownload, NewsTemplate):
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FNdPFJ6VgAA2C0l?format=jpg&name=4096x4096')
         self.add_to_image_list('tz_tmp_img_off', self.PAGE_PREFIX + 'images/tmp_img_off.png')
         self.add_to_image_list('tz_tmp_img_on', self.PAGE_PREFIX + 'images/tmp_img_on.png')
+        self.add_to_image_list('kv', self.PAGE_PREFIX + 'images/top-img.jpg')
         self.download_image_list(folder)
 
     def download_character(self):
