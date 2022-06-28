@@ -915,7 +915,7 @@ class MainDownload:
                 dash_index = filename_without_extension.rfind('-')
                 name_front = filename_without_extension[0:dash_index]
                 name_back = filename_without_extension[dash_index + 1:]
-                if len(name_back) > 2 and name_back.startswith('e') and len(name_back[1:]) > 10 and name_back[1:].isnumeric():
+                if len(name_back) > 10 and name_back.startswith('e') and name_back[1:].isnumeric():
                     return front + '/' + name_front + '.' + extension
                 else:
                     return url
