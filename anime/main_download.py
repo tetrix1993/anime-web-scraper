@@ -903,7 +903,24 @@ class MainDownload:
         if len(result) > 0 and len(result[0]) == 2:
             return url[0:len(url) - len(result[0][0]) - len(result[0][1])] + '.' + result[0][1]
         else:
-            return url
+            try:
+                last_slash_index = url.rfind('/')
+                filename = url[last_slash_index + 1:]
+                front = url[0:last_slash_index]
+                period_index = filename.rfind('.')
+                filename_without_extension = filename[0:period_index]
+                extension = filename[period_index + 1:]
+                if '-' not in filename_without_extension:
+                    return url
+                dash_index = filename_without_extension.rfind('-')
+                name_front = filename_without_extension[0:dash_index]
+                name_back = filename_without_extension[dash_index + 1:]
+                if len(name_back) > 2 and name_back.startswith('e') and name_back[1:].isnumeric():
+                    return front + '/' + name_front + '.' + extension
+                else:
+                    return url
+            except:
+                return url
 
     @staticmethod
     def clear_resize_in_url2(url):

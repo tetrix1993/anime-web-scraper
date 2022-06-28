@@ -1629,7 +1629,7 @@ class ReimeikiDownload(Spring2022AnimeDownload, NewsTemplate):
     def download_episode_preview_external(self):
         jp_title = '魔法使い黎明期'
         AniverseMagazineScanner(jp_title, self.base_folder, last_episode=self.FINAL_EPISODE,
-                                end_date='20220405', check_resize=True, download_id=self.download_id).run()
+                                end_date='20220405', download_id=self.download_id).run()
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
