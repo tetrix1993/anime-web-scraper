@@ -284,7 +284,7 @@ class HoshinoSamidareDownload(Summer2022AnimeDownload):
 # Isekai Meikyuu de Harem wo
 class IsekaiMeikyuuHaremDownload(Summer2022AnimeDownload, NewsTemplate):
     title = "Isekai Meikyuu de Harem wo"
-    keywords = [title]
+    keywords = [title, 'Harem in the Labyrinth of Another World']
     website = 'https://isekai-harem.com/'
     twitter = 'isekaiharem_ani'
     hashtags = ['異世界迷宮', '異世界迷宮でハーレムを']
@@ -303,6 +303,7 @@ class IsekaiMeikyuuHaremDownload(Summer2022AnimeDownload, NewsTemplate):
         self.download_episode_preview_external()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         image_url_template = self.PAGE_PREFIX + 'img/story/ep%s_img%s.jpg'
@@ -344,6 +345,22 @@ class IsekaiMeikyuuHaremDownload(Summer2022AnimeDownload, NewsTemplate):
 
         tz_template = self.PAGE_PREFIX + 'img/teaser_chara_contents%s.png'
         self.download_by_template(folder, tz_template, 2, 1)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'bluray.html')
+            images = soup.select('div.page_wrapper img[src]')
+            self.image_list = []
+            for image in images:
+                if '/news/' in image['src']:
+                    continue
+                image_url = self.PAGE_PREFIX + image['src'].split('?')[0]
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
 
 # Isekai Ojisan
@@ -560,7 +577,7 @@ class IsekaiYakkyokuDownload(Summer2022AnimeDownload, NewsTemplate2):
             for image in images:
                 if 'nowprinting' in image['src']:
                     continue
-                image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                image_url = self.PAGE_PREFIX + image['src'].replace('../', '').split('?')[0]
                 image_name = self.extract_image_name_from_url(image_url)
                 self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)
