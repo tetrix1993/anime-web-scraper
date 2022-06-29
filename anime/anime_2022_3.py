@@ -110,27 +110,40 @@ class EngageKissDownload(Summer2022AnimeDownload, NewsTemplate):
 
     def download_character(self):
         folder = self.create_character_directory()
+
+        character_url = self.PAGE_PREFIX + 'character/'
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
         try:
             soup = self.get_soup(self.PAGE_PREFIX + 'character/')
-            thumb_tags = soup.select('.chara_navi__item img[src]')
-            chara_names = []
-            for thumb_tag in thumb_tags:
-                thumb_image_name = thumb_tag['src'].split('/')[-1].split('.')[0]
-                if thumb_image_name.startswith('thumb_') and len(thumb_image_name) > 6:
-                    chara_names.append(thumb_image_name[6:])
-            templates = [self.PAGE_PREFIX + 'assets/img/character/img_%s_anime.png',
-                         self.PAGE_PREFIX + 'assets/img/character/img_%s_original.png']
-            self.image_list = []
-            for chara_name in chara_names:
-                for template in templates:
-                    image_url = template % chara_name
+            nav_items = soup.select('.chara_navi__item[data-target]')
+            for item in nav_items:
+                target = item['data-target']
+                if target in processed:
+                    continue
+                if target == 'shuu':
+                    chara_soup = soup
+                else:
+                    a_tag = item.select('a[href]')
+                    if len(a_tag) == 0:
+                        continue
+                    chara_soup = self.get_soup(character_url + a_tag[0]['href'].replace('./', ''))
+                if chara_soup is None:
+                    continue
+                images = chara_soup.select('.chara_img img[src]')
+                self.image_list = []
+                for image in images:
+                    image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
                     image_name = self.extract_image_name_from_url(image_url)
                     self.add_to_image_list(image_name, image_url)
-                    if chara_name == 'kisara':
-                        image_url = image_url.replace('img_kisara', 'img_kisara-devil')
-                        image_name = self.extract_image_name_from_url(image_url)
-                        self.add_to_image_list(image_name, image_url)
-            self.download_image_list(folder)
+                    if target == 'kisara':
+                        devil_image_url = image_url.replace('img_kisara', 'img_kisara-devil')
+                        devil_image_name = self.extract_image_name_from_url(devil_image_url)
+                        if devil_image_name != image_name:
+                            self.add_to_image_list(devil_image_name, devil_image_url)
+                if len(self.image_list) > 0:
+                    processed.append(target)
+                self.download_image_list(folder)
 
             '''
             a_tags = soup.select('.chara_navi__item a[href]')
@@ -149,6 +162,7 @@ class EngageKissDownload(Summer2022AnimeDownload, NewsTemplate):
             '''
         except Exception as e:
             self.print_exception(e, 'Character')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
     def download_media(self):
         folder = self.create_media_directory()
