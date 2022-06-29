@@ -484,7 +484,7 @@ class IsekaiOjisanDownload(Summer2022AnimeDownload, NewsTemplate2):
 # Isekai Yakkyoku
 class IsekaiYakkyokuDownload(Summer2022AnimeDownload, NewsTemplate2):
     title = 'Isekai Yakkyoku'
-    keywords = [title]
+    keywords = [title, 'Parallel World Pharmacy']
     website = 'https://isekai-yakkyoku.jp/'
     twitter = 'isekai_yakkyoku'
     hashtags = '異世界薬局'
@@ -500,6 +500,7 @@ class IsekaiYakkyokuDownload(Summer2022AnimeDownload, NewsTemplate2):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX)
@@ -531,6 +532,40 @@ class IsekaiYakkyokuDownload(Summer2022AnimeDownload, NewsTemplate2):
         tz_prefix = self.PAGE_PREFIX +'core_sys/images/main/tz/chara/'
         templates = [tz_prefix + '%s_stand.png', tz_prefix + '%s_face.png']
         self.download_by_template(folder, templates, 2, 1, prefix='tz_')
+
+    def download_media(self):
+        folder = self.create_media_directory()
+
+        # Blu-rays
+        bd_template = self.PAGE_PREFIX + 'core_sys/images/contents/%s/block/%s/%s.jpg'
+        tuples = [(28, 66, 101), (29, 70, 102), (30, 72, 103)]
+        try:
+            for i in range(len(tuples)):
+                image_name = 'bd_vol' + str(i + 1)
+                if self.is_image_exists(image_name, folder):
+                    continue
+                tp = tuples[i]
+                image_url = bd_template % (str(tp[0]).zfill(8), str(tp[1]).zfill(8), str(tp[2]).zfill(8))
+                if not self.is_matching_content_length(image_url, 30538):
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
+
+        # Blu-ray Bonus
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'bd/privilege.html')
+            images = soup.select('.block_inner img[src]')
+            self.image_list = []
+            for image in images:
+                if 'nowprinting' in image['src']:
+                    continue
+                image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray Bonus')
 
 
 # Kanojo, Okarishimasu 2nd Season
