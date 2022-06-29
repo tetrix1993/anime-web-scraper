@@ -60,7 +60,33 @@ class EngageKissDownload(Summer2022AnimeDownload, NewsTemplate):
         self.download_media()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/', decode=True)
+            li_tags = soup.select('.page_tab li')
+            for li in li_tags:
+                ep_soup = None
+                try:
+                    episode = str(int(li.text)).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_5'):
+                    continue
+                if li.has_attr('class') and 'current' in li['class']:
+                    ep_soup = soup
+                else:
+                    a_tag = li.find('a[href]')
+                    if a_tag is not None:
+                        ep_soup = self.get_soup(self.PAGE_PREFIX + a_tag['href'][1:])
+                if ep_soup is not None and episode is not None:
+                    images = ep_soup.select('.pager_slider img[src]')
+                    self.image_list = []
+                    for i in range(len(images)):
+                        image_url = self.PAGE_PREFIX + images[i]['src'][1:]
+                        image_name = episode + '_' + str(i + 1)
+                        self.add_to_image_list(image_name, image_url)
+                    self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + 'news/'
