@@ -102,6 +102,7 @@ The premiere date for the anime listed here has not been announced.
 
 ### Winter 2023 Anime
 * [Eiyuuou, Bu wo Kiwameru Tame Tenseisu: Soshite, Sekai Saikyou no Minarai Kishi](https://auo-anime.com/)
+* [Ijiranaide, Nagatoro-san 2nd Attack](https://www.nagatorosan.jp/)
 * [Kyokou Suiri Season 2](https://kyokousuiri.jp/)
 
 ### Fall 2022 Anime
@@ -229,7 +230,7 @@ The premiere date for the anime listed here has not been announced.
 * [Dragon, Ie wo Kau](https://doraie.com/)
 * [Fumetsu no Anata e](https://anime-fumetsunoanatae.com/)
 * [Hige wo Soru. Soshite Joshikousei wo Hirou.](http://higehiro-anime.com/)
-* [Ijiranaide, Nagatoro-san](https://www.nagatorosan.jp/)
+* [Ijiranaide, Nagatoro-san](https://www.nagatorosan.jp/1st/)
 * [Isekai Maou to Shoukan Shoujo no Dorei Majutsu Ω](https://isekaimaou-anime.com/)
 * [Kyuukyoku Shinka Shita Full Dive RPG ga Genjitsu Yori mo Kusogee Dattara](https://fulldive-rpg.com/)
 * [Machikado Mazoku: 2-choume](http://www.tbs.co.jp/anime/machikado/)

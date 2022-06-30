@@ -2,6 +2,7 @@ from anime.main_download import MainDownload, NewsTemplate
 
 
 # Eiyuuou, Bu wo Kiwameru Tame Tenseisu: Soshite, Sekai Saikyou no Minarai Kishi https://auo-anime.com/ #英雄王 @auo_anime
+# Ijiranaide, Nagatoro-san 2nd Attack https://www.nagatorosan.jp/ #長瀞さん @nagatoro_tv
 # Kyokou Suiri S2 https://kyokousuiri.jp/ #虚構推理 @kyokou_suiri
 
 
@@ -56,6 +57,36 @@ class EiyuuouDownload(Winter2023AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'wp/wp-content/themes/euo-teaser-theme/img/chara-pic%s.png'
         self.download_by_template(folder, template, 1, 1, prefix='tz_')
+
+
+# Ijiranaide, Nagatoro-san 2nd Attack
+class Nagatorosan2Download(Winter2023AnimeDownload, NewsTemplate):
+    title = 'Ijiranaide, Nagatoro-san 2nd Attack'
+    keywords = [title, 'Nagatorosan', "Don't Toy with Me, Miss Nagatoro"]
+    website = 'https://www.nagatorosan.jp/'
+    twitter = 'nagatoro_tv'
+    hashtags = '長瀞さん'
+    folder_name = 'nagatoro-san'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        # self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('teaser_img_mainimg', self.PAGE_PREFIX + 'teaser/img/mainimg.jpg')
+        self.add_to_image_list('tz', 'https://pbs.twimg.com/media/FWeINYraUAEG6y9?format=jpg&name=medium')
+        self.download_image_list(folder)
 
 
 # Kyokou Suiri S2

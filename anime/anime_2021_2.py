@@ -647,8 +647,8 @@ class HigehiroDownload(Spring2021AnimeDownload):
 # Ijiranaide, Nagatoro-san
 class NagatorosanDownload(Spring2021AnimeDownload, NewsTemplate):
     title = 'Ijiranaide, Nagatoro-san'
-    keywords = [title, 'Nagatorosan']
-    website = 'https://www.nagatorosan.jp/'
+    keywords = [title, 'Nagatorosan', "Don't Toy with Me, Miss Nagatoro"]
+    website = 'https://www.nagatorosan.jp/1st/'
     twitter = 'nagatoro_tv'
     hashtags = '長瀞さん'
     folder_name = 'nagatoro-san'

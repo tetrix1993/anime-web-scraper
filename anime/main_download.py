@@ -692,6 +692,25 @@ class MainDownload:
             return split1
 
     @staticmethod
+    def generate_image_name_from_url(url, stop_text):
+        period_index = url.rfind('.')
+        if period_index >= 0:
+            name = url[0:period_index]
+        else:
+            name = url
+        name_split = name.split('/')
+        image_name = name_split[-1]
+        for i in reversed(range(len(name_split) - 1)):
+            if len(name_split[i]) == 0:
+                continue
+
+            if name_split[i] == stop_text:
+                return image_name
+            else:
+                image_name = name_split[i] + '_' + image_name
+        return image_name
+
+    @staticmethod
     def extract_image_name_from_twitter(text, with_extension=True):
         # Example url: https://pbs.twimg.com/media/ESLTIUOVAAAWQ5L?format=jpg&name=4096x4096
         name = text.split('/')[-1].split('?')[0]
