@@ -1437,8 +1437,13 @@ class Utawarerumono3Download(Summer2022AnimeDownload, NewsTemplate):
 
     def download_character(self):
         folder = self.create_character_directory()
-        template = self.PAGE_PREFIX + 'manage/wp-content/themes/hakuoro/_assets/images/char/detail/char%s_pc.png'
+
+        prefix = self.PAGE_PREFIX + 'manage/wp-content/themes/hakuoro'
+        template = prefix + '/_assets/images/char/detail/char%s_pc.png'
         self.download_by_template(folder, template, 2, 1)
+
+        template2 = prefix + '-new/_assets/images/contents/char/detail/char_%s_pc.png'
+        self.download_by_template(folder, template2, 3, 1)
 
 
 # Warau Arsnotoria Sun!
