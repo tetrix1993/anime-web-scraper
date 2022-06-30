@@ -1385,7 +1385,37 @@ class Utawarerumono3Download(Summer2022AnimeDownload, NewsTemplate):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            lis = soup.select('.story--nav li')
+            curr = soup.select('.story--epttl__num')
+            curr_ep = '00'
+            if len(curr) > 0:
+                curr_ep = curr[0].text.strip().zfill(2)
+            for li in lis:
+                a_tag = li.select('a[href]')
+                if len(a_tag) == 0:
+                    continue
+                try:
+                    episode = str(int(a_tag[0].text)).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                if curr_ep == episode:
+                    ep_soup = soup
+                else:
+                    ep_soup = self.get_soup(a_tag[0]['href'])
+                if ep_soup is not None:
+                    self.image_list = []
+                    images = ep_soup.select('.ss img[src]')
+                    for i in range(len(images)):
+                        image_url = images[i]['src']
+                        image_name = episode + '_' + str(i + 1)
+                        self.add_to_image_list(image_name, image_url)
+                    self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.md-news__article',
