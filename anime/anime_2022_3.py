@@ -17,6 +17,7 @@ from scan import AniverseMagazineScanner
 # Lycoris Recoil https://lycoris-recoil.com/ #リコリコ #LycorisRecoil @lycoris_recoil
 # Made in Abyss: Retsujitsu no Ougonkyou http://miabyss.com/ #miabyss @miabyss_anime
 # Mamahaha no Tsurego ga Motokano datta https://tsurekano-anime.com/ #連れカノ #tsurekano @tsurekano
+# Overlord IV https://overlord-anime.com/ #overlord_anime #オーバーロード @over_lord_anime
 # Prima Doll https://primadoll.jp/ #プリマドール #PrimaDoll @primadoll_pr
 # Saikin Yatotta Maid ga Ayashii https://maid-ga-ayashii.com/ #最近雇ったメイドが怪しい @maidga_ayashii
 # Shadows House 2nd Season https://shadowshouse-anime.com/
@@ -1118,6 +1119,39 @@ class TsurekanoDownload(Summer2022AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+
+# Overlord IV
+class Overlord4Download(Summer2022AnimeDownload):
+    title = 'Overlord IV'
+    keywords = [title, '4th']
+    website = 'https://overlord-anime.com/'
+    twitter = 'over_lord_anime'
+    hashtags = ['overlord_anime', 'オーバーロード']
+    folder_name = 'overlord4'
+
+    PAGE_PREFIX = 'https://overlord-anime.com/'
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 6
+
+    def run(self):
+        self.download_episode_preview()
+
+    def download_episode_preview(self):
+        template = self.PAGE_PREFIX + 'assets/story/%s/%s.jpg'
+        try:
+            for i in range(self.FINAL_EPISODE):
+                episode = str(i + 1).zfill(2)
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                for j in range(self.IMAGES_PER_EPISODE):
+                    image_url = template % (str(i + 1), str(j + 1))
+                    image_name = episode + '_' + str(j + 1)
+                    result = self.download_image(image_url, self.base_folder + '/' + image_name)
+                    if result == -1:
+                        return
+        except Exception as e:
+            self.print_exception(e)
 
 
 # Prima Doll

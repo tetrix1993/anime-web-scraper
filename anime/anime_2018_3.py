@@ -459,7 +459,7 @@ class Overlord3Download(Summer2018AnimeDownload):
     keywords = ["Overlord III", "3", "3rd"]
     folder_name = 'overlord3'
     
-    IMAGE_PREFIX = "http://overlord-anime.com/assets/story/"
+    IMAGE_PREFIX = "http://overlord-anime.com/_season2/assets/story/"
     FINAL_EPISODE = 13
     NUM_OF_PICTURES_PER_PAGE = 6
     
