@@ -618,6 +618,7 @@ class Kanokari2Download(Summer2022AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -700,6 +701,59 @@ class Kanokari2Download(Summer2022AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        bd_prefix = self.PAGE_PREFIX + 'bd/'
+        try:
+            soup = self.get_soup(bd_prefix)
+            lis = soup.select('.bd--lineup li')
+            for li in lis:
+                a_tag = li.select('a[href]')
+                img_tag = li.select('img[src]')
+                if len(a_tag) == 0 or len(img_tag) == 0 or 'nowprinting' in img_tag[0]['src']:
+                    continue
+                bd_url = a_tag['href']
+                bd_page_name = bd_url.replace(bd_prefix, '').replace('/', '')
+                if bd_page_name in processed:
+                    continue
+                bd_soup = soup.select(a_tag['href'])
+                if bd_soup is None:
+                    continue
+                images = bd_soup.select('.bd--main img[src]')
+                self.image_list = []
+                for image in images:
+                    if 'nowprinting' in image['src']:
+                        continue
+                    if image['src'].startswith('/'):
+                        image_url = self.PAGE_PREFIX + image['src'][1:]
+                    else:
+                        image_url = image['src']
+                    image_name = self.generate_image_name_from_url(image_url, 'bd')
+                    self.add_to_image_list(image_name, image_url)
+                if len(self.image_list) > 0:
+                    processed.append(bd_page_name)
+                self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
+        self.create_cache_file(cache_filepath, processed, num_processed)
+
+        # Blu-ray Bonus
+        try:
+            soup = self.get_soup(bd_prefix + 'store/')
+            images = soup.select('.store--lineup img[src]')
+            self.image_list = []
+            for image in images:
+                if 'nowprinting' in image['src']:
+                    continue
+                image_url = image['src']
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray Bonus')
 
 
 # Kinsou no Vermeil: Gakeppuchi Majutsushi wa Saikyou no Yakusai to Mahou Sekai wo Tsukisusumu
