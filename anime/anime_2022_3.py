@@ -1714,6 +1714,8 @@ class Youzitsu2Download(Summer2022AnimeDownload, NewsTemplate):
     folder_name = 'youzitsu2'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 13
+    IMAGES_PER_EPISODE = 6
 
     def __init__(self):
         super().__init__()
@@ -1725,7 +1727,20 @@ class Youzitsu2Download(Summer2022AnimeDownload, NewsTemplate):
         self.download_media()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        template = self.PAGE_PREFIX + 'assets/story/%s/%s.jpg'
+        try:
+            for i in range(self.FINAL_EPISODE):
+                episode = str(i + 1).zfill(2)
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                for j in range(self.IMAGES_PER_EPISODE):
+                    image_url = template % (str(i + 1), str(j + 1))
+                    image_name = episode + '_' + str(j + 1)
+                    result = self.download_image(image_url, self.base_folder + '/' + image_name)
+                    if result == -1:
+                        return
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article.content-entry',
@@ -1786,27 +1801,28 @@ class Youzitsu2Download(Summer2022AnimeDownload, NewsTemplate):
             self.image_list = []
             for image in images:
                 image_url = self.PAGE_PREFIX + image['src'].replace('./', '')
-                if '/bddvd/' not in image_url and '/music/' not in image_url:
+                if '/bddvd/' not in image_url:
                     continue
-                image_name = self.extract_image_name_from_url(image_url)
-                if image_name == 'np':
+                if 'np' in image_url.split('/')[-1].split('.')[0]:
                     continue
-                period_index = image_url.rfind('.')
-                if period_index == -1:
-                    continue
-                url_split = image_url[0:period_index].split('/')
-                final_image_name = image_name
-                index = len(url_split) - 2
-                while index >= 0:
-                    if url_split[index] == 'bddvd' or url_split[index] == 'music':
-                        break
-                    elif len(url_split[index]) == 0:
-                        continue
-                    else:
-                        final_image_name = '_' + final_image_name
-                    index -= 1
-                if not self.is_image_exists(final_image_name, folder):
-                    self.add_to_image_list(final_image_name, image_url)
+                image_name = 'bddvd_' + self.generate_image_name_from_url(image_url, 'bddvd')
+                print(image_name)
+                if not self.is_image_exists(image_name, folder):
+                    self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Blu-ray')
+
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'music.html')
+            images = soup.select('#OP img[src], #ED img[src]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'].replace('./', '')
+                if '/music/' not in image_url:
+                    continue
+                image_name = 'music_' + self.generate_image_name_from_url(image_url, 'music')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Music')
