@@ -1194,6 +1194,7 @@ class PrimaDollDownload(Summer2022AnimeDownload, NewsTemplate):
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_external()
         self.download_news()
         self.download_key_visual()
         self.download_character()
@@ -1219,6 +1220,11 @@ class PrimaDollDownload(Summer2022AnimeDownload, NewsTemplate):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.top_news_item_style1',
                                     date_select='.top_news_text_style1', title_select='.top_news_text_style2',
                                     id_select='a', news_prefix='news/news.html', a_tag_prefix=news_prefix)
+
+    def download_episode_preview_external(self):
+        jp_title = 'プリマドール'
+        AniverseMagazineScanner(jp_title, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                end_date='20220702', download_id=self.download_id).run()
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
