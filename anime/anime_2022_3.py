@@ -1826,7 +1826,6 @@ class Youzitsu2Download(Summer2022AnimeDownload, NewsTemplate):
                 if 'np' in image_url.split('/')[-1].split('.')[0]:
                     continue
                 image_name = 'bddvd_' + self.generate_image_name_from_url(image_url, 'bddvd')
-                print(image_name)
                 if not self.is_image_exists(image_name, folder):
                     self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)
