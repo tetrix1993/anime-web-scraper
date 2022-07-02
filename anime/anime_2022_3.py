@@ -256,7 +256,27 @@ class HoshinoSamidareDownload(Summer2022AnimeDownload):
         self.download_news()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        api_url = 'https://samidare-api.hoshinosamidare.jp/api/story'
+        try:
+            obj = self.get_json(api_url)
+            if 'list' in obj and len(obj['list']) > 0:
+                for item in obj['list']:
+                    if 'episode_num' not in item or 'thumbnail' not in item:
+                        continue
+                    try:
+                        episode = str(int(item['episode_num'])).zfill(2)
+                    except:
+                        continue
+                    if self.is_image_exists(episode + '_1'):
+                        continue
+                    self.image_list = []
+                    for i in range(len(item['thumbnail'])):
+                        image_url = item['thumbnail'][i]
+                        image_name = episode + '_' + str(i + 1)
+                        self.add_to_image_list(image_name, image_url)
+                    self.download_image_list(self.base_folder)
+        except Exception as e:
+            print(e)
 
     def download_news(self):
         api_template = 'https://samidare-api.hoshinosamidare.jp/api/article?page=%s&limit=10'
