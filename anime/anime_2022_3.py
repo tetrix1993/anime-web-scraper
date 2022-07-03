@@ -1309,10 +1309,10 @@ class PrimaDollDownload(Summer2022AnimeDownload, NewsTemplate):
             self.print_exception(e)
 
     def download_news(self):
-        news_prefix = self.PAGE_PREFIX + 'news/'
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.top_news_item_style1',
                                     date_select='.top_news_text_style1', title_select='.top_news_text_style2',
-                                    id_select='a', news_prefix='news/news.html', a_tag_prefix=news_prefix)
+                                    id_select='a', news_prefix='news/news.html', a_tag_prefix=self.PAGE_PREFIX,
+                                    a_tag_start_text_to_remove='../')
 
     def download_episode_preview_external(self):
         jp_title = 'プリマドール'
