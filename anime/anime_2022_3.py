@@ -168,6 +168,38 @@ class EngageKissDownload(Summer2022AnimeDownload, NewsTemplate):
     def download_media(self):
         folder = self.create_media_directory()
 
+        # Blu-ray
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        bd_urls = ['shop', '01', '02', '03', '04', '05', '06']
+        try:
+            for i in range(len(bd_urls)):
+                bd_url = self.PAGE_PREFIX + 'bddvd/?page=' + bd_urls[i]
+                if i > 0 and str(i) in processed:
+                    continue
+                soup = self.get_soup(bd_url)
+                if soup is not None:
+                    images = soup.select('.bddvd_wrap img[src]')
+                    self.image_list = []
+                    for image in images:
+                        if not image['src'].endswith('img_nopri_s.jpg')\
+                                and not image['src'].endswith('img_nowpri.jpg')\
+                                and not image['src'].endswith('arrow.png'):
+                            image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                            image_name = 'bddvd_' + self.generate_image_name_from_url(image_url, 'bddvd')
+                            self.add_to_image_list(image_name, image_url)
+                    if i > 1:
+                        if len(self.image_list) > 0:
+                            processed.append(str(i))
+                        else:
+                            break
+                    elif i == 1 and len(self.image_list) > 1:
+                        processed.append(str(i))
+                    self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
+        self.create_cache_file(cache_filepath, processed, num_processed)
+
         # Countdown
         countdown_folder = folder + '/countdown'
         if not os.path.exists(countdown_folder):
