@@ -1290,6 +1290,7 @@ class PrimaDollDownload(Summer2022AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         template = self.ASSETS_IMAGE_URL + 'story_%s_img%s.jpg'
@@ -1355,6 +1356,39 @@ class PrimaDollDownload(Summer2022AnimeDownload, NewsTemplate):
         except Exception as e:
             self.print_exception(e, 'Character')
         self.download_image_list(folder)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+
+        # Blu-ray
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        bd_urls = ['tokuten', 'campaign', '01', '02', '03', '04', '05', '06']
+        try:
+            for i in range(len(bd_urls)):
+                bd_url = self.PAGE_PREFIX + 'bd/' + bd_urls[i] + '.html'
+                if i > 1 and str(i) in processed:
+                    continue
+                soup = self.get_soup(bd_url)
+                if soup is not None:
+                    images = soup.select('.bd_wrapper img[src]')
+                    self.image_list = []
+                    for image in images:
+                        if not image['src'].endswith('bd_nowprinting_img.jpg'):
+                            image_url = image['src']
+                            image_name = self.extract_image_name_from_url(image_url)
+                            self.add_to_image_list(image_name, image_url)
+                    if i > 2:
+                        if len(self.image_list) > 0:
+                            processed.append(str(i))
+                        else:
+                            break
+                    elif i == 2 and len(self.image_list) > 1:
+                        processed.append(str(i))
+                    self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Saikin Yatotta Maid ga Ayashii
