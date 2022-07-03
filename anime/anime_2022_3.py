@@ -957,9 +957,36 @@ class LycorisRecoilDownload(Summer2022AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        story_url = self.PAGE_PREFIX + 'story/'
+        try:
+            soup = self.get_soup(story_url)
+            lis = soup.select('.page_tab li')
+            for li in lis:
+                a_tag = li.select('a[href]')
+                if len(a_tag) == 0:
+                    continue
+                try:
+                    episode = str(int(a_tag[0].text)).zfill(2)
+                except:
+                    pass
+                if li.has_attr('class') and 'is-current' in li['class']:
+                    ep_soup = soup
+                else:
+                    ep_soup = self.get_soup(story_url + a_tag[0]['href'].replace('./', ''))
+                if ep_soup is None:
+                    continue
+                images = ep_soup.select('li.swiper-slide img[src]')
+                self.image_list = []
+                for i in range(len(images)):
+                    image_url = story_url + images[i]['src']
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.p-news__list-item',
@@ -995,6 +1022,39 @@ class LycorisRecoilDownload(Summer2022AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+    def download_media(self):
+        folder = self.create_media_directory()
+
+        # Blu-ray
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        bd_urls = ['special', '01', '02', '03', '04', '05', '06']
+        try:
+            for i in range(len(bd_urls)):
+                bd_url = self.PAGE_PREFIX + 'bddvd/' + bd_urls[i] + '.html'
+                if i > 0 and str(i) in processed:
+                    continue
+                soup = self.get_soup(bd_url)
+                if soup is not None:
+                    images = soup.select('.p-bddvd img[src]')
+                    self.image_list = []
+                    for image in images:
+                        if not image['src'].endswith('np_tokuten.jpg') and not image['src'].endswith('np_jk.jpg'):
+                            image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                            image_name = 'bddvd_' + self.generate_image_name_from_url(image_url, 'bddvd')
+                            self.add_to_image_list(image_name, image_url)
+                    if i > 1:
+                        if len(self.image_list) > 0:
+                            processed.append(str(i))
+                        else:
+                            break
+                    elif i == 1 and len(self.image_list) > 1:
+                        processed.append(str(i))
+                    self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Made in Abyss: Retsujitsu no Ougonkyou
