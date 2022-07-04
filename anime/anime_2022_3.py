@@ -1812,18 +1812,25 @@ class YofukashiDownload(Summer2022AnimeDownload, NewsTemplate):
     folder_name = 'yofukashi'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 13
 
     def __init__(self):
         super().__init__()
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_external()
         self.download_news()
         self.download_key_visual()
         self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_episode_preview_external(self):
+        jp_title = 'よふかしのうた'
+        AniverseMagazineScanner(jp_title, self.base_folder, last_episode=self.FINAL_EPISODE, suffix='夜',
+                                end_date='20220705', download_id=self.download_id).run()
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.c-news-list__item',
