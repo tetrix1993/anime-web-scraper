@@ -106,7 +106,9 @@ class AniverseMagazineDownload(ExternalDownload):
                                 image_url = image_url_temp
                         else:
                             image_url = self.clear_resize_in_url(img['src'])
-                        image_name = self.episode + '_' + str(i).zfill(2)
+                        image_name = str(i).zfill(2)
+                        if self.episode is not None:
+                            image_name = self.episode + '_' + image_name
                         image_objs.append({'name': image_name, 'url': image_url})
                         i += 1
                 self.download_image_objects(image_objs, self.base_folder, min_width=self.min_width)
