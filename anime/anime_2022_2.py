@@ -2578,6 +2578,7 @@ class SummertimeRenderDownload(Spring2022AnimeDownload, NewsTemplate):
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/E63h3z-VEAMtJYy?format=jpg&name=medium')
         self.add_to_image_list('kv1', self.PAGE_PREFIX + 'wp/wp-content/uploads/2021/11/サマータイムレンダ_KV1_logomini.jpg')
         self.add_to_image_list('kv2', self.PAGE_PREFIX + 'wp/wp-content/uploads/2022/02/STR_KV2_logomini.jpg')
+        self.add_to_image_list('kv_004_pc2', self.PAGE_PREFIX + 'wp/wp-content/themes/summertime-main/_assets/images/top/kv/kv_004_pc2.png')
         # self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/FG8lGwpaMAc7Aj3?format=jpg&name=large')
         self.download_image_list(folder)
 
