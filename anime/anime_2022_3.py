@@ -61,6 +61,14 @@ class EngageKissDownload(Summer2022AnimeDownload, NewsTemplate):
         self.download_media()
 
     def download_episode_preview(self):
+        yt_folder = self.create_custom_directory('yt')  # YouTube thumbnails
+        yt_images = os.listdir(yt_folder)
+        yt_episodes = []
+        for yt_image in yt_images:
+            if os.path.isfile(yt_folder + '/' + yt_image) and yt_image.endswith('.jpg') \
+                    and yt_image[0:2].isnumeric() and yt_image[2] == '_':
+                yt_episodes.append(yt_image[0:2])
+
         try:
             soup = self.get_soup(self.PAGE_PREFIX + 'story/', decode=True)
             li_tags = soup.select('.page_tab li')
@@ -70,7 +78,7 @@ class EngageKissDownload(Summer2022AnimeDownload, NewsTemplate):
                     episode = str(int(li.text)).zfill(2)
                 except:
                     continue
-                if self.is_image_exists(episode + '_5'):
+                if self.is_image_exists(episode + '_5') and (episode == '01' or episode in yt_episodes):
                     continue
                 if li.has_attr('class') and 'current' in li['class']:
                     ep_soup = soup
@@ -86,6 +94,13 @@ class EngageKissDownload(Summer2022AnimeDownload, NewsTemplate):
                         image_name = episode + '_' + str(i + 1)
                         self.add_to_image_list(image_name, image_url)
                     self.download_image_list(self.base_folder)
+
+                    yt_tag = ep_soup.select('.movie_thumb[data-modal]')
+                    if len(yt_tag) > 0 and yt_tag[0]['data-modal'].lower().startswith('youtube:'):
+                        yt_id = yt_tag[0]['data-modal'][8:]
+                        yt_image_url = f'https://img.youtube.com/vi/{yt_id}/maxresdefault.jpg'
+                        yt_image_name = f'{episode}_{yt_id}'
+                        self.download_image(yt_image_url, f'{yt_folder}/{yt_image_name}')
         except Exception as e:
             self.print_exception(e)
 
@@ -1672,6 +1687,14 @@ class Utawarerumono3Download(Summer2022AnimeDownload, NewsTemplate):
         self.download_character()
 
     def download_episode_preview(self):
+        yt_folder = self.create_custom_directory('yt')  # YouTube thumbnails
+        yt_images = os.listdir(yt_folder)
+        yt_episodes = []
+        for yt_image in yt_images:
+            if os.path.isfile(yt_folder + '/' + yt_image) and yt_image.endswith('.jpg') \
+                    and yt_image[0:2].isnumeric() and yt_image[2] == '_':
+                yt_episodes.append(yt_image[0:2])
+
         try:
             soup = self.get_soup(self.PAGE_PREFIX + 'story/')
             lis = soup.select('.story--nav li')
@@ -1687,7 +1710,7 @@ class Utawarerumono3Download(Summer2022AnimeDownload, NewsTemplate):
                     episode = str(int(a_tag[0].text)).zfill(2)
                 except:
                     continue
-                if self.is_image_exists(episode + '_1'):
+                if self.is_image_exists(episode + '_6') and episode in yt_episodes:
                     continue
                 if curr_ep == episode:
                     ep_soup = soup
@@ -1701,6 +1724,13 @@ class Utawarerumono3Download(Summer2022AnimeDownload, NewsTemplate):
                         image_name = episode + '_' + str(i + 1)
                         self.add_to_image_list(image_name, image_url)
                     self.download_image_list(self.base_folder)
+
+                    yt_tag = ep_soup.select('.story--next__btn[data-youtubeid]')
+                    if len(yt_tag) > 0 and len(yt_tag[0]['data-youtubeid']) > 0:
+                        yt_id = yt_tag[0]['data-youtubeid']
+                        yt_image_url = f'https://img.youtube.com/vi/{yt_id}/maxresdefault.jpg'
+                        yt_image_name = f'{episode}_{yt_id}'
+                        self.download_image(yt_image_url, f'{yt_folder}/{yt_image_name}')
         except Exception as e:
             self.print_exception(e)
 
