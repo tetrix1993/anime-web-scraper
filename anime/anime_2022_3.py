@@ -1196,6 +1196,7 @@ class TsurekanoDownload(Summer2022AnimeDownload, NewsTemplate):
         self.download_episode_preview_external()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -1261,6 +1262,22 @@ class TsurekanoDownload(Summer2022AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'bddvd/')
+            self.image_list = []
+            images = soup.select('.bddvd__image img[src],.item__image img[src]')
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                if self.is_matching_content_length(image_url, 234752):
+                    continue
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
 
 # Overlord IV
