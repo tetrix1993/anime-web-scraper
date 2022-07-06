@@ -104,6 +104,7 @@ The premiere date for the anime listed here has not been announced.
 * [Eiyuuou, Bu wo Kiwameru Tame Tenseisu: Soshite, Sekai Saikyou no Minarai Kishi](https://auo-anime.com/)
 * [Ijiranaide, Nagatoro-san 2nd Attack](https://www.nagatorosan.jp/)
 * [Kyokou Suiri Season 2](https://kyokousuiri.jp/)
+* [Tomo-chan wa Onnanoko!](https://tomo-chan.jp/)
 
 ### Fall 2022 Anime
 * [Akuyaku Reijou nanode Last Boss wo Kattemimashita](https://akulas-pr.com/)

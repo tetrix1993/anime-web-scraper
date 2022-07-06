@@ -4,6 +4,7 @@ from anime.main_download import MainDownload, NewsTemplate
 # Eiyuuou, Bu wo Kiwameru Tame Tenseisu: Soshite, Sekai Saikyou no Minarai Kishi https://auo-anime.com/ #英雄王 @auo_anime
 # Ijiranaide, Nagatoro-san 2nd Attack https://www.nagatorosan.jp/ #長瀞さん @nagatoro_tv
 # Kyokou Suiri S2 https://kyokousuiri.jp/ #虚構推理 @kyokou_suiri
+# Tomo-chan wa Onnanoko! https://tomo-chan.jp/ #tomochan @tomo_chan_ani
 
 
 # Winter 2023 Anime
@@ -66,7 +67,7 @@ class Nagatorosan2Download(Winter2023AnimeDownload, NewsTemplate):
     website = 'https://www.nagatorosan.jp/'
     twitter = 'nagatoro_tv'
     hashtags = '長瀞さん'
-    folder_name = 'nagatoro-san'
+    folder_name = 'nagatorosan2'
 
     PAGE_PREFIX = website
 
@@ -142,3 +143,46 @@ class KyokouSuiri2Download(Winter2023AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+
+# Tomo-chan wa Onnanoko!
+class TomochanDownload(Winter2023AnimeDownload, NewsTemplate):
+    title = 'Tomo-chan wa Onnanoko!'
+    keywords = [title, 'tomochan', 'Tomo Is a Girl!']
+    website = 'https://tomo-chan.jp/'
+    twitter = 'tomo_chan_ani'
+    hashtags = 'tomochan'
+    folder_name = 'tomochan'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.p-news__list-item',
+                                    date_select='.p-news__list-date', title_select='.p-news__list-ttl',
+                                    id_select='a', a_tag_start_text_to_remove='./', paging_type=1,
+                                    a_tag_prefix=self.PAGE_PREFIX + 'news/',
+                                    next_page_select='.c-pagination__nav-button.-next')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FWw4blxagAEvI9K?format=jpg&name=medium')
+        self.add_to_image_list('main_img_main-illust', self.PAGE_PREFIX + 'assets/t/img/main/img_main-illust.png')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'assets/t/img/chara/img_chara%s.png'
+        self.download_by_template(folder, template, 2, 1, prefix='tz_')
