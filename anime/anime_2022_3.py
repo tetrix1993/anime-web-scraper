@@ -2,6 +2,7 @@ import os
 import requests
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 from scan import AniverseMagazineScanner
+from bs4.element import Tag
 
 
 # Engage Kiss https://engage-kiss.com/ #エンゲージキス #EngageKiss @engage_kiss
@@ -389,6 +390,7 @@ class IsekaiMeikyuuHaremDownload(Summer2022AnimeDownload, NewsTemplate):
 
     def download_episode_preview(self):
         image_url_template = self.PAGE_PREFIX + 'img/story/ep%s_img%s.jpg'
+        stop = False
         for i in range(self.FINAL_EPISODE):
             no_download_count = 0
             for j in range(self.IMAGES_PER_EPISODE):
@@ -399,7 +401,46 @@ class IsekaiMeikyuuHaremDownload(Summer2022AnimeDownload, NewsTemplate):
                     if result == -1:
                         no_download_count += 1
                     if no_download_count > 2:
-                        return
+                        stop = True
+                        break
+            if stop:
+                break
+
+        yt_folder = self.create_custom_directory('yt')  # YouTube thumbnails
+        yt_images = os.listdir(yt_folder)
+        yt_episodes = ['01']
+        for yt_image in yt_images:
+            if os.path.isfile(yt_folder + '/' + yt_image) and yt_image.endswith('.jpg') \
+                    and yt_image[0:2].isnumeric() and yt_image[2] == '_':
+                yt_episodes.append(yt_image[0:2])
+
+        try:
+            soup = MainDownload.get_soup(self.PAGE_PREFIX + 'story.html')
+            tag = soup.select('#story02')[0]
+            episode = '02'
+            while tag.nextSibling is not None:
+                tag = tag.nextSibling
+                if isinstance(tag, Tag):
+                    if 'class' not in tag.attrs:
+                        continue
+                    if tag.name == 'h3' and 'story_title' in tag.attrs['class']:
+                        try:
+                            episode = str(int(tag.select('.number')[0].text.replace('#', ''))).zfill(2)
+                        except:
+                            continue
+                    elif tag.name == 'div' and 'detail-yt-wrapper' in tag.attrs['class']:
+                        if episode in yt_episodes:
+                            continue
+                        iframe = tag.select('iframe[src]')
+                        if len(iframe) > 0:
+                            yt_id = iframe[0]['src'].split('/')[-1]
+                            yt_image_url = f'https://img.youtube.com/vi/{yt_id}/maxresdefault.jpg'
+                            yt_image_name = f'{episode}_{yt_id}'
+                            self.download_image(yt_image_url, f'{yt_folder}/{yt_image_name}')
+        except Exception as e:
+            self.print_exception(e)
+
+
 
     def download_episode_preview_external(self):
         jp_title = '異世界迷宮でハーレムを'
