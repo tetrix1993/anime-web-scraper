@@ -1840,6 +1840,7 @@ class ArsnotoriaDownload(Summer2022AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -1905,6 +1906,23 @@ class ArsnotoriaDownload(Summer2022AnimeDownload, NewsTemplate):
         except Exception as e:
             self.print_exception(e, 'Character')
         self.create_cache_file(cache_filepath, processed, num_processed)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'goods/cat/bluray/')
+            images = soup.select('#u-goods img[src]')
+            self.image_list = []
+            for image in images:
+                image_url = image['src']
+                if 'arsn_key_illonly_0620' in image_url:
+                    continue
+                image_url = image_url.replace('-scaled', '')
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
 
 # Yofukashi no Uta
