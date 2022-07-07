@@ -900,25 +900,51 @@ class VermeilDownload(Summer2022AnimeDownload, NewsTemplate):
 # Kumichou Musume to Sewagakari
 class KumichoMusumeDownload(Summer2022AnimeDownload, NewsTemplate):
     title = 'Kumichou Musume to Sewagakari'
-    keywords = [title, 'kumichomusume']
+    keywords = [title, 'kumichomusume', "The Yakuza's Guide to Babysitting"]
     website = 'https://kumichomusume.com/'
     hashtags = '組長娘と世話係'
     twitter = 'kumichomusume'
     folder_name = 'kumichomusume'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
 
     def __init__(self):
         super().__init__()
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_external()
         self.download_news()
         self.download_key_visual()
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            divs = soup.select('.episode')
+            for div in divs:
+                number = div.select('.number')
+                try:
+                    episode = str(int(number[0].text.replace('#', ''))).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                self.image_list = []
+                images = div.select('.image img[src]')
+                for i in range(len(images)):
+                    image_url = images[i]['src']
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
+
+    def download_episode_preview_external(self):
+        jp_title = '組長娘と世話係'
+        AniverseMagazineScanner(jp_title, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                end_date='20220707', download_id=self.download_id).run()
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='div.archive li', date_select='.date',
