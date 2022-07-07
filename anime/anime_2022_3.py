@@ -1559,13 +1559,14 @@ class ShadowsHouse2Download(Summer2022AnimeDownload, NewsTemplate):
 # Soredemo Ayumu wa Yosetekuru
 class SoreayuDownload(Summer2022AnimeDownload, NewsTemplate):
     title = "Soredemo Ayumu wa Yosetekuru"
-    keywords = [title, "Soreayu"]
+    keywords = [title, "Soreayu", "When Will Ayumu Make His Move?"]
     website = 'https://soreayu.com/'
     twitter = 'soreayu_staff'
     hashtags = 'それあゆ'
     folder_name = 'soreayu'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
 
     def __init__(self):
         super().__init__()
@@ -1577,7 +1578,29 @@ class SoreayuDownload(Summer2022AnimeDownload, NewsTemplate):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        image_prefix = self.PAGE_PREFIX + '_nuxt/'
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            js_url = soup.select('link[rel=preload][href]')[-1]['href']
+            if js_url.startswith('/'):
+                js_url = js_url[1:]
+            js_file_content = self.get_response(self.PAGE_PREFIX + js_url)
+            for ep in range(self.FINAL_EPISODE):
+                episode = str(ep + 1).zfill(2)
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                js_split = js_file_content.split('img/story' + str(ep + 1) + '_')
+                if len(js_split) > 5:
+                    self.image_list = []
+                    for j in range(1, len(js_split), 1):
+                        split2 = js_split[j].split('"')[0]
+                        if split2.endswith('.jpg') or split2.endswith('.png'):
+                            image_url = image_prefix + 'img/story' + str(ep + 1) + '_' + split2
+                            image_name = episode + '_' + str(j)
+                            self.add_to_image_list(image_name, image_url)
+                    self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='div.news-page-news',
