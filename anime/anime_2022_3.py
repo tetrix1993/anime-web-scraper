@@ -209,8 +209,11 @@ class EngageKissDownload(Summer2022AnimeDownload, NewsTemplate):
                             processed.append(str(i))
                         else:
                             break
-                    elif i == 1 and len(self.image_list) > 1:
-                        processed.append(str(i))
+                    elif i == 1:
+                        if len(self.image_list) > 1:
+                            processed.append(str(i))
+                        else:
+                            break
                     self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Blu-ray')
@@ -439,8 +442,6 @@ class IsekaiMeikyuuHaremDownload(Summer2022AnimeDownload, NewsTemplate):
                             self.download_image(yt_image_url, f'{yt_folder}/{yt_image_name}')
         except Exception as e:
             self.print_exception(e)
-
-
 
     def download_episode_preview_external(self):
         jp_title = '異世界迷宮でハーレムを'
@@ -1115,7 +1116,7 @@ class LycorisRecoilDownload(Summer2022AnimeDownload, NewsTemplate):
                 try:
                     episode = str(int(a_tag[0].text)).zfill(2)
                 except:
-                    pass
+                    continue
                 if li.has_attr('class') and 'is-current' in li['class']:
                     ep_soup = soup
                 else:
@@ -1193,8 +1194,11 @@ class LycorisRecoilDownload(Summer2022AnimeDownload, NewsTemplate):
                             processed.append(str(i))
                         else:
                             break
-                    elif i == 1 and len(self.image_list) > 1:
-                        processed.append(str(i))
+                    elif i == 1:
+                        if len(self.image_list) > 1:
+                            processed.append(str(i))
+                        else:
+                            break
                     self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Blu-ray')
@@ -1512,8 +1516,11 @@ class PrimaDollDownload(Summer2022AnimeDownload, NewsTemplate):
                             processed.append(str(i))
                         else:
                             break
-                    elif i == 2 and len(self.image_list) > 1:
-                        processed.append(str(i))
+                    elif i == 2:
+                        if len(self.image_list) > 1:
+                            processed.append(str(i))
+                        else:
+                            break
                     self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Blu-ray')
@@ -2025,6 +2032,7 @@ class YofukashiDownload(Summer2022AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
@@ -2077,6 +2085,46 @@ class YofukashiDownload(Summer2022AnimeDownload, NewsTemplate):
         except Exception as e:
             self.print_exception(e, 'Character')
         self.download_image_list(folder)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+
+        # Blu-ray
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        bd_urls = ['tokuten', 'vol1', 'vol2']
+        try:
+            for i in range(len(bd_urls)):
+                bd_url = self.PAGE_PREFIX + 'bd/' + bd_urls[i] + '/'
+                if i > 0 and str(i) in processed:
+                    continue
+                soup = self.get_soup(bd_url)
+                if soup is not None:
+                    images = soup.select('article figure[data-bg],article img[src]')
+                    self.image_list = []
+                    for image in images:
+                        if image.name == 'figure':
+                            src = image['data-bg']
+                        else:   # img
+                            src = image['src']
+                        if not src.endswith('np_cd.svg') and not src.endswith('np_bd.svg'):
+                            image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                            image_name = self.extract_image_name_from_url(image_url)
+                            self.add_to_image_list(image_name, image_url)
+                    if i > 1:
+                        if len(self.image_list) > 0:
+                            processed.append(str(i))
+                        else:
+                            break
+                    elif i == 1:
+                        if len(self.image_list) > 1:
+                            processed.append(str(i))
+                        else:
+                            break
+                    self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e S2
