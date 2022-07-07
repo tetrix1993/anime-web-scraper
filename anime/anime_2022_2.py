@@ -932,7 +932,7 @@ class Kingdom4Download(Spring2022AnimeDownload):
     folder_name = 'kingdom4'
 
     STORY_PAGE = "https://kingdom-anime.com/story/"
-    FINAL_EPISODE = 13
+    FINAL_EPISODE = 26
 
     def __init__(self):
         super().__init__()
