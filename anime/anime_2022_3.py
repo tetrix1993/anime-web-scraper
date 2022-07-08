@@ -249,19 +249,44 @@ class HatarakuMaousama2Download(Summer2022AnimeDownload, NewsTemplate):
     folder_name = 'hataraku-maousama2'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
 
     def __init__(self):
         super().__init__()
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_external()
         self.download_news()
         self.download_key_visual()
         self.download_character()
         self.download_media()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            stories = soup.select('.storyDetail')
+            for story in stories:
+                try:
+                    episode = str(int(story.select('.story_num')[0].text.replace('#', ''))).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                self.image_list = []
+                images = story.select('.story_imgList img[src]')
+                for i in range(len(images)):
+                    image_url = images[i]['src']
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
+
+    def download_episode_preview_external(self):
+        jp_title = 'はたらく魔王さま'
+        AniverseMagazineScanner(jp_title, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                end_date='20220708', download_id=self.download_id).run()
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.newsList',
@@ -516,18 +541,28 @@ class IsekaiOjisanDownload(Summer2022AnimeDownload, NewsTemplate2):
     folder_name = 'isekaiojisan'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 13
 
     def __init__(self):
         super().__init__()
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_external()
         self.download_news()
         self.download_key_visual()
         self.download_character()
         self.download_media()
 
     def download_episode_preview(self):
+        yt_folder = self.create_custom_directory('yt')  # YouTube thumbnails
+        yt_images = os.listdir(yt_folder)
+        yt_episodes = ['01']
+        for yt_image in yt_images:
+            if os.path.isfile(yt_folder + '/' + yt_image) and yt_image.endswith('.jpg') \
+                    and yt_image[0:2].isnumeric() and yt_image[2] == '_':
+                yt_episodes.append(yt_image[0:2])
+
         try:
             soup = self.get_soup(self.PAGE_PREFIX + 'story/01.html')
             trs = soup.select('#ContentsListUnit02 tr[class]')
@@ -539,7 +574,7 @@ class IsekaiOjisanDownload(Summer2022AnimeDownload, NewsTemplate2):
                     episode = str(int(a_tags[0].text.replace('#', ''))).zfill(2)
                 except:
                     continue
-                if self.is_image_exists(episode + '_1'):
+                if self.is_image_exists(episode + '_1') and episode in yt_episodes:
                     continue
                 if 'is-crt' in tr['class']:
                     ep_soup = soup
@@ -554,8 +589,20 @@ class IsekaiOjisanDownload(Summer2022AnimeDownload, NewsTemplate2):
                     image_name = episode + '_' + str(i + 1)
                     self.add_to_image_list(image_name, image_url)
                 self.download_image_list(self.base_folder)
+
+                yt_tag = ep_soup.select('.contInner iframe[src]')
+                if len(yt_tag) > 0 and 'youtube' in yt_tag[0]['src']:
+                    yt_id = yt_tag[0]['src'].split('/')[-1]
+                    yt_image_url = f'https://img.youtube.com/vi/{yt_id}/maxresdefault.jpg'
+                    yt_image_name = f'{episode}_{yt_id}'
+                    self.download_image(yt_image_url, f'{yt_folder}/{yt_image_name}')
         except Exception as e:
             self.print_exception(e)
+
+    def download_episode_preview_external(self):
+        jp_title = '異世界おじさん'
+        AniverseMagazineScanner(jp_title, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                end_date='20220708', download_id=self.download_id).run()
 
     def download_news(self):
         self.download_template_news(self.PAGE_PREFIX)
