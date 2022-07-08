@@ -1689,9 +1689,54 @@ class ShadowsHouse2Download(Summer2022AnimeDownload, NewsTemplate):
         self.download_episode_preview()
         self.download_news()
         self.download_key_visual()
+        self.download_media()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        # YouTube thumbnails
+        yt_folder = self.create_custom_directory('yt')
+        yt_images = os.listdir(yt_folder)
+        yt_episodes = []
+        for yt_image in yt_images:
+            if os.path.isfile(yt_folder + '/' + yt_image) and yt_image.endswith('.jpg') \
+                    and yt_image[0:2].isnumeric() and yt_image[2] == '_':
+                yt_episodes.append(yt_image[0:2])
+
+        story_url = self.PAGE_PREFIX + 'story/'
+        try:
+            soup = self.get_soup(story_url)
+            page_tabs = soup.select('.page_tab li')
+            for page_tab in page_tabs:
+                try:
+                    episode = str(int(page_tab.select('p')[0].text)).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1') and episode in yt_episodes:
+                    continue
+                if page_tab.has_attr('class') and 'is-current' in page_tab['class']:
+                    ep_soup = soup
+                else:
+                    a_tag = page_tab.select('a[href]')
+                    if len(a_tag) == 0:
+                        continue
+                    ep_soup = self.get_soup(story_url + a_tag[0]['href'].replace('./', ''))
+                if ep_soup is None:
+                    continue
+                self.image_list = []
+                images = ep_soup.select('.swiper-slide img[src]')
+                for i in range(len(images)):
+                    image_url = story_url + images[i]['src']
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+
+                yt_tag = ep_soup.select('.p-movie_item[data-video-id]')
+                if len(yt_tag) > 0:
+                    yt_id = yt_tag[0]['data-video-id']
+                    yt_image_url = f'https://img.youtube.com/vi/{yt_id}/maxresdefault.jpg'
+                    yt_image_name = f'{episode}_{yt_id}'
+                    self.download_image(yt_image_url, f'{yt_folder}/{yt_image_name}')
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + 'news/'
@@ -1710,6 +1755,42 @@ class ShadowsHouse2Download(Summer2022AnimeDownload, NewsTemplate):
         self.add_to_image_list('kv_tw', 'https://pbs.twimg.com/media/FUJUvxmVIAAd734?format=jpg&name=large')
         self.add_to_image_list('kv1st_00', self.PAGE_PREFIX + 'assets/img/kv1st_00.jpg')
         self.download_image_list(folder)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+
+        # Blu-ray
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        bd_urls = ['special', 'vol01', 'vol02', 'vol03', 'vol04', 'vol05', 'vol06']
+        try:
+            for i in range(len(bd_urls)):
+                bd_url = self.PAGE_PREFIX + 'bddvd/' + bd_urls[i] + '.html'
+                if i > 0 and str(i) in processed:
+                    continue
+                soup = self.get_soup(bd_url)
+                if soup is not None:
+                    images = soup.select('.p-in-bddvd img[src]')
+                    self.image_list = []
+                    for image in images:
+                        if not image['src'].endswith('/np.jpg'):
+                            image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                            image_name = self.generate_image_name_from_url(image_url, 'bddvd')
+                            self.add_to_image_list(image_name, image_url)
+                    if i > 1:
+                        if len(self.image_list) > 0:
+                            processed.append(str(i))
+                        else:
+                            break
+                    elif i == 1:
+                        if len(self.image_list) > 1:
+                            processed.append(str(i))
+                        else:
+                            break
+                    self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Soredemo Ayumu wa Yosetekuru
