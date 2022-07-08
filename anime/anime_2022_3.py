@@ -1468,6 +1468,7 @@ class Overlord4Download(Summer2022AnimeDownload):
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_external()
 
     def download_episode_preview(self):
         template = self.PAGE_PREFIX + 'assets/story/%s/%s.jpg'
@@ -1484,6 +1485,11 @@ class Overlord4Download(Summer2022AnimeDownload):
                         return
         except Exception as e:
             self.print_exception(e)
+
+    def download_episode_preview_external(self):
+        jp_title = 'オーバーロードⅣ'
+        AniverseMagazineScanner(jp_title, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                end_date='20220702', download_id=self.download_id).run()
 
 
 # Prima Doll
