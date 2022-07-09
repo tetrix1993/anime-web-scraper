@@ -1546,6 +1546,7 @@ class PrimaDollDownload(Summer2022AnimeDownload, NewsTemplate):
     def download_episode_preview(self):
         template = self.ASSETS_IMAGE_URL + 'story_%s_img%s.jpg'
         try:
+            stop = False
             for i in range(self.FINAL_EPISODE):
                 episode = str(i + 1).zfill(2)
                 if self.is_image_exists(episode + '_1'):
@@ -1555,9 +1556,48 @@ class PrimaDollDownload(Summer2022AnimeDownload, NewsTemplate):
                     image_name = episode + '_' + str(j + 1)
                     result = self.download_image(image_url, self.base_folder + '/' + image_name)
                     if result == -1:
-                        return
+                        stop = True
+                        break
+                if stop:
+                    break
         except Exception as e:
             self.print_exception(e)
+
+        # YouTube thumbnails
+        yt_folder = self.create_custom_directory('yt')
+        yt_images = os.listdir(yt_folder)
+        yt_episodes = ['01']
+        for yt_image in yt_images:
+            if os.path.isfile(yt_folder + '/' + yt_image) and yt_image.endswith('.jpg') \
+                    and yt_image[0:2].isnumeric() and yt_image[2] == '_':
+                yt_episodes.append(yt_image[0:2])
+
+        story_url = self.PAGE_PREFIX + 'story/'
+        try:
+            soup = self.get_soup(story_url + '02.html', decode=True)
+            a_tags = soup.select('.story_anchor a[href]')
+            for a_tag in a_tags:
+                try:
+                    episode = str(int(a_tag.text.replace('第', '').replace('話', ''))).zfill(2)
+                except:
+                    continue
+                if episode in yt_episodes:
+                    continue
+                if episode == '02':
+                    ep_soup = soup
+                else:
+                    ep_soup = self.get_soup(story_url + a_tag['href'])
+                if ep_soup is None:
+                    continue
+                yt_tag = ep_soup.select('.news_img iframe[src]')
+                if len(yt_tag) > 0:
+                    yt_id = yt_tag[0]['src'].split('/')[-1]
+                    yt_image_url = f'https://img.youtube.com/vi/{yt_id}/maxresdefault.jpg'
+                    yt_image_name = f'{episode}_{yt_id}'
+                    self.download_image(yt_image_url, f'{yt_folder}/{yt_image_name}')
+        except Exception as e:
+            self.print_exception(e, 'YouTube thumbnails')
+
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.top_news_item_style1',
