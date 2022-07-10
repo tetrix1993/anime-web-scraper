@@ -62,14 +62,7 @@ class EngageKissDownload(Summer2022AnimeDownload, NewsTemplate):
         self.download_media()
 
     def download_episode_preview(self):
-        yt_folder = self.create_custom_directory('yt')  # YouTube thumbnails
-        yt_images = os.listdir(yt_folder)
-        yt_episodes = []
-        for yt_image in yt_images:
-            if os.path.isfile(yt_folder + '/' + yt_image) and yt_image.endswith('.jpg') \
-                    and yt_image[0:2].isnumeric() and yt_image[2] == '_':
-                yt_episodes.append(yt_image[0:2])
-
+        yt_folder, yt_episodes = self.init_youtube_thumbnail_variables()
         try:
             soup = self.get_soup(self.PAGE_PREFIX + 'story/', decode=True)
             li_tags = soup.select('.page_tab li')
@@ -99,9 +92,7 @@ class EngageKissDownload(Summer2022AnimeDownload, NewsTemplate):
                     yt_tag = ep_soup.select('.movie_thumb[data-modal]')
                     if len(yt_tag) > 0 and yt_tag[0]['data-modal'].lower().startswith('youtube:'):
                         yt_id = yt_tag[0]['data-modal'][8:]
-                        yt_image_url = f'https://img.youtube.com/vi/{yt_id}/maxresdefault.jpg'
-                        yt_image_name = f'{episode}_{yt_id}'
-                        self.download_image(yt_image_url, f'{yt_folder}/{yt_image_name}')
+                        self.download_youtube_thumbnail_by_id(yt_id, yt_folder, episode)
         except Exception as e:
             self.print_exception(e)
 
@@ -453,14 +444,7 @@ class IsekaiMeikyuuHaremDownload(Summer2022AnimeDownload, NewsTemplate):
             if stop:
                 break
 
-        yt_folder = self.create_custom_directory('yt')  # YouTube thumbnails
-        yt_images = os.listdir(yt_folder)
-        yt_episodes = ['01']
-        for yt_image in yt_images:
-            if os.path.isfile(yt_folder + '/' + yt_image) and yt_image.endswith('.jpg') \
-                    and yt_image[0:2].isnumeric() and yt_image[2] == '_':
-                yt_episodes.append(yt_image[0:2])
-
+        yt_folder, yt_episodes = self.init_youtube_thumbnail_variables(['01'])
         try:
             soup = MainDownload.get_soup(self.PAGE_PREFIX + 'story.html')
             tag = soup.select('#story02')[0]
@@ -481,9 +465,7 @@ class IsekaiMeikyuuHaremDownload(Summer2022AnimeDownload, NewsTemplate):
                         iframe = tag.select('iframe[src]')
                         if len(iframe) > 0:
                             yt_id = iframe[0]['src'].split('/')[-1]
-                            yt_image_url = f'https://img.youtube.com/vi/{yt_id}/maxresdefault.jpg'
-                            yt_image_name = f'{episode}_{yt_id}'
-                            self.download_image(yt_image_url, f'{yt_folder}/{yt_image_name}')
+                            self.download_youtube_thumbnail_by_id(yt_id, yt_folder, episode)
         except Exception as e:
             self.print_exception(e)
 
@@ -555,14 +537,7 @@ class IsekaiOjisanDownload(Summer2022AnimeDownload, NewsTemplate2):
         self.download_media()
 
     def download_episode_preview(self):
-        yt_folder = self.create_custom_directory('yt')  # YouTube thumbnails
-        yt_images = os.listdir(yt_folder)
-        yt_episodes = ['01']
-        for yt_image in yt_images:
-            if os.path.isfile(yt_folder + '/' + yt_image) and yt_image.endswith('.jpg') \
-                    and yt_image[0:2].isnumeric() and yt_image[2] == '_':
-                yt_episodes.append(yt_image[0:2])
-
+        yt_folder, yt_episodes = self.init_youtube_thumbnail_variables(['01'])
         try:
             soup = self.get_soup(self.PAGE_PREFIX + 'story/01.html')
             trs = soup.select('#ContentsListUnit02 tr[class]')
@@ -593,9 +568,7 @@ class IsekaiOjisanDownload(Summer2022AnimeDownload, NewsTemplate2):
                 yt_tag = ep_soup.select('.contInner iframe[src]')
                 if len(yt_tag) > 0 and 'youtube' in yt_tag[0]['src']:
                     yt_id = yt_tag[0]['src'].split('/')[-1]
-                    yt_image_url = f'https://img.youtube.com/vi/{yt_id}/maxresdefault.jpg'
-                    yt_image_name = f'{episode}_{yt_id}'
-                    self.download_image(yt_image_url, f'{yt_folder}/{yt_image_name}')
+                    self.download_youtube_thumbnail_by_id(yt_id, yt_folder, episode)
         except Exception as e:
             self.print_exception(e)
 
@@ -825,14 +798,7 @@ class Kanokari2Download(Summer2022AnimeDownload, NewsTemplate):
         self.download_media()
 
     def download_episode_preview(self):
-        yt_folder = self.create_custom_directory('yt')  # YouTube thumbnails
-        yt_images = os.listdir(yt_folder)
-        yt_episodes = ['13']
-        for yt_image in yt_images:
-            if os.path.isfile(yt_folder + '/' + yt_image) and yt_image.endswith('.jpg') \
-                    and yt_image[0:2].isnumeric() and yt_image[2] == '_':
-                yt_episodes.append(yt_image[0:2])
-
+        yt_folder, yt_episodes = self.init_youtube_thumbnail_variables(['13'])
         try:
             soup = self.get_soup(self.PAGE_PREFIX + 'story/')
             lis = soup.select('.story--nav li')
@@ -856,7 +822,7 @@ class Kanokari2Download(Summer2022AnimeDownload, NewsTemplate):
                     a_tag = li.select('a[href]')
                     if len(a_tag) == 0:
                         continue
-                    ep_soup = self.get_soup(a_tag['href'])
+                    ep_soup = self.get_soup(a_tag[0]['href'])
                 if ep_soup is not None:
                     self.image_list = []
                     images = ep_soup.select('.ss img[src]')
@@ -869,9 +835,7 @@ class Kanokari2Download(Summer2022AnimeDownload, NewsTemplate):
                     yt_tag = ep_soup.select('.md-movie[data-youtubeid]')
                     if len(yt_tag) > 0 and len(yt_tag[0]['data-youtubeid']) > 0:
                         yt_id = yt_tag[0]['data-youtubeid']
-                        yt_image_url = f'https://img.youtube.com/vi/{yt_id}/maxresdefault.jpg'
-                        yt_image_name = f'{episode}_{yt_id}'
-                        self.download_image(yt_image_url, f'{yt_folder}/{yt_image_name}')
+                        self.download_youtube_thumbnail_by_id(yt_id, yt_folder, episode)
         except Exception as e:
             self.print_exception(e)
 
@@ -1564,14 +1528,7 @@ class PrimaDollDownload(Summer2022AnimeDownload, NewsTemplate):
             self.print_exception(e)
 
         # YouTube thumbnails
-        yt_folder = self.create_custom_directory('yt')
-        yt_images = os.listdir(yt_folder)
-        yt_episodes = ['01']
-        for yt_image in yt_images:
-            if os.path.isfile(yt_folder + '/' + yt_image) and yt_image.endswith('.jpg') \
-                    and yt_image[0:2].isnumeric() and yt_image[2] == '_':
-                yt_episodes.append(yt_image[0:2])
-
+        yt_folder, yt_episodes = self.init_youtube_thumbnail_variables(['01'])
         story_url = self.PAGE_PREFIX + 'story/'
         try:
             soup = self.get_soup(story_url + '02.html', decode=True)
@@ -1592,9 +1549,7 @@ class PrimaDollDownload(Summer2022AnimeDownload, NewsTemplate):
                 yt_tag = ep_soup.select('.news_img iframe[src]')
                 if len(yt_tag) > 0:
                     yt_id = yt_tag[0]['src'].split('/')[-1]
-                    yt_image_url = f'https://img.youtube.com/vi/{yt_id}/maxresdefault.jpg'
-                    yt_image_name = f'{episode}_{yt_id}'
-                    self.download_image(yt_image_url, f'{yt_folder}/{yt_image_name}')
+                    self.download_youtube_thumbnail_by_id(yt_id, yt_folder, episode)
         except Exception as e:
             self.print_exception(e, 'YouTube thumbnails')
 
@@ -1757,15 +1712,7 @@ class ShadowsHouse2Download(Summer2022AnimeDownload, NewsTemplate):
         self.download_media()
 
     def download_episode_preview(self):
-        # YouTube thumbnails
-        yt_folder = self.create_custom_directory('yt')
-        yt_images = os.listdir(yt_folder)
-        yt_episodes = []
-        for yt_image in yt_images:
-            if os.path.isfile(yt_folder + '/' + yt_image) and yt_image.endswith('.jpg') \
-                    and yt_image[0:2].isnumeric() and yt_image[2] == '_':
-                yt_episodes.append(yt_image[0:2])
-
+        yt_folder, yt_episodes = self.init_youtube_thumbnail_variables()
         story_url = self.PAGE_PREFIX + 'story/'
         try:
             soup = self.get_soup(story_url)
@@ -1797,9 +1744,7 @@ class ShadowsHouse2Download(Summer2022AnimeDownload, NewsTemplate):
                 yt_tag = ep_soup.select('.p-movie_item[data-video-id]')
                 if len(yt_tag) > 0:
                     yt_id = yt_tag[0]['data-video-id']
-                    yt_image_url = f'https://img.youtube.com/vi/{yt_id}/maxresdefault.jpg'
-                    yt_image_name = f'{episode}_{yt_id}'
-                    self.download_image(yt_image_url, f'{yt_folder}/{yt_image_name}')
+                    self.download_youtube_thumbnail_by_id(yt_id, yt_folder, episode)
         except Exception as e:
             self.print_exception(e)
 
@@ -2070,14 +2015,7 @@ class Utawarerumono3Download(Summer2022AnimeDownload, NewsTemplate):
         self.download_character()
 
     def download_episode_preview(self):
-        yt_folder = self.create_custom_directory('yt')  # YouTube thumbnails
-        yt_images = os.listdir(yt_folder)
-        yt_episodes = []
-        for yt_image in yt_images:
-            if os.path.isfile(yt_folder + '/' + yt_image) and yt_image.endswith('.jpg') \
-                    and yt_image[0:2].isnumeric() and yt_image[2] == '_':
-                yt_episodes.append(yt_image[0:2])
-
+        yt_folder, yt_episodes = self.init_youtube_thumbnail_variables()
         try:
             soup = self.get_soup(self.PAGE_PREFIX + 'story/')
             lis = soup.select('.story--nav li')
@@ -2111,9 +2049,7 @@ class Utawarerumono3Download(Summer2022AnimeDownload, NewsTemplate):
                     yt_tag = ep_soup.select('.story--next__btn[data-youtubeid]')
                     if len(yt_tag) > 0 and len(yt_tag[0]['data-youtubeid']) > 0:
                         yt_id = yt_tag[0]['data-youtubeid']
-                        yt_image_url = f'https://img.youtube.com/vi/{yt_id}/maxresdefault.jpg'
-                        yt_image_name = f'{episode}_{yt_id}'
-                        self.download_image(yt_image_url, f'{yt_folder}/{yt_image_name}')
+                        self.download_youtube_thumbnail_by_id(yt_id, yt_folder, episode)
         except Exception as e:
             self.print_exception(e)
 

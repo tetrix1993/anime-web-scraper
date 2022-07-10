@@ -1156,6 +1156,25 @@ class MainDownload:
     def get_youtube_thumbnail_url(youtube_id):
         return f"https://i.ytimg.com/vi/{youtube_id}/hq720.jpg"
 
+    def init_youtube_thumbnail_variables(self, yt_episodes=None, yt_folder=None):
+        if yt_episodes is None:
+            yt_episodes = []
+        elif not isinstance(yt_episodes, list):
+            raise TypeError('Expected type for yt_episodes: list')
+        if yt_folder is None or len(yt_folder) == 0:
+            yt_folder = self.create_custom_directory('yt')
+        yt_images = os.listdir(yt_folder)
+        for yt_image in yt_images:
+            if os.path.isfile(yt_folder + '/' + yt_image) and yt_image.endswith('.jpg') \
+                    and yt_image[0:2].isnumeric() and yt_image[2] == '_':
+                yt_episodes.append(yt_image[0:2])
+        return yt_folder, yt_episodes
+
+    def download_youtube_thumbnail_by_id(self, yt_id, yt_folder, episode):
+        yt_image_url = f'https://img.youtube.com/vi/{yt_id}/maxresdefault.jpg'
+        yt_image_name = f'{episode}_{yt_id}'
+        self.download_image(yt_image_url, f'{yt_folder}/{yt_image_name}')
+
     # Match filter
     def match(self, s_filter):
         if not isinstance(s_filter, SearchFilter):
