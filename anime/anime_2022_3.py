@@ -2328,6 +2328,7 @@ class Youzitsu2Download(Summer2022AnimeDownload, NewsTemplate):
     def download_episode_preview(self):
         template = self.PAGE_PREFIX + 'assets/story/%s/%s.jpg'
         try:
+            stop = False
             for i in range(self.FINAL_EPISODE):
                 episode = str(i + 1).zfill(2)
                 if self.is_image_exists(episode + '_1'):
@@ -2337,9 +2338,34 @@ class Youzitsu2Download(Summer2022AnimeDownload, NewsTemplate):
                     image_name = episode + '_' + str(j + 1)
                     result = self.download_image(image_url, self.base_folder + '/' + image_name)
                     if result == -1:
-                        return
+                        stop = True
+                        break
+                if stop:
+                    break
         except Exception as e:
             self.print_exception(e)
+
+        # YouTube thumbnails
+        yt_folder, yt_episodes = self.init_youtube_thumbnail_variables(['01'])
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story.html')
+            stories = soup.select('.story-data[id]')
+            for story in stories:
+                try:
+                    ep_num = int(story['id'][1:])
+                    if ep_num < 2:
+                        continue
+                    episode = str(ep_num).zfill(2)
+                except:
+                    continue
+                if episode in yt_episodes:
+                    continue
+                yt_tag = story.select('.ep-trailer a[href]')
+                if len(yt_tag) > 0:
+                    yt_id = yt_tag[0]['href'].split('/')[-1].split('?')[0]
+                    self.download_youtube_thumbnail_by_id(yt_id, yt_folder, episode)
+        except Exception as e:
+            self.print_exception(e, 'YouTube thumbnails')
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article.content-entry',
