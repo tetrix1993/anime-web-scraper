@@ -2,6 +2,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 
 
 # Akuyaku Reijou nanode Last Boss wo Kattemimashita https://akulas-pr.com/ #悪ラス @akulas_pr
+# Bocchi the Rock! https://bocchi.rocks/ #ぼっち・ざ・ろっく #BocchiTheRock @BTR_anime
 # Futoku no Guild https://futoku-no-anime.com/ #futoku_anime #不徳のギルド @futoku_anime
 # Kage no Jitsuryokusha ni Naritakute! https://shadow-garden.jp/ #陰の実力者 @Shadowgarden_PR
 # Noumin Kanren no Skill bakka Agetetara Nazeka Tsuyoku Natta. https://nouminkanren.com/ #農民関連 @nouminkanren
@@ -63,6 +64,69 @@ class AkulasDownload(Fall2022AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'wp/wp-content/themes/akulas-teaser/_assets/images/char/detail/char_%s_pc.png'
         self.download_by_template(folder, template, 3, 1, prefix='tz_')
+
+
+# Bocchi the Rock!
+class BocchiTheRockDownload(Fall2022AnimeDownload, NewsTemplate):
+    title = 'Bocchi the Rock!'
+    keywords = [title, 'bozaro']
+    website = 'https://bocchi.rocks/'
+    twitter = 'BTR_anime'
+    hashtags = ['BocchiTheRock', 'bozaro', 'ぼっち・ざ・ろっく', 'ぼざろ']
+    folder_name = 'bocchi-the-rock'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.newsmodal__articles__list__item',
+                                    date_select='.date', title_select='.ttl', id_select='a', news_prefix='')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        css_url = self.PAGE_PREFIX + 'assets/css/top.css'
+        try:
+            content = self.get_response(css_url)
+            if content is None or len(content) == 0:
+                return
+            content_split = content.split('.mv__main {')
+            self.image_list = []
+            for i in range(1, len(content_split), 1):
+                r_index = content_split[i].find(')')
+                if r_index > 0:
+                    l_index = content_split[i][0:r_index].find('url(../../')
+                    if l_index > 0:
+                        image_url = self.PAGE_PREFIX + content_split[i][l_index + 10:r_index]
+                        image_name = self.generate_image_name_from_url(image_url, 'top')
+                        self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.modal_ch__faceup__main img[src],.modal_ch__info__ph img[src]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'][1:]
+                image_name = self.generate_image_name_from_url(image_url, 'detail')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
 
 
 # Futoku no Guild
