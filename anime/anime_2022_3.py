@@ -1361,6 +1361,7 @@ class TsurekanoDownload(Summer2022AnimeDownload, NewsTemplate):
         self.download_media()
 
     def download_episode_preview(self):
+        yt_folder, yt_episodes = self.init_youtube_thumbnail_variables()
         try:
             soup = self.get_soup(self.PAGE_PREFIX + 'story/')
             items = soup.select('.detail__item')
@@ -1372,7 +1373,7 @@ class TsurekanoDownload(Summer2022AnimeDownload, NewsTemplate):
                     episode = str(int(num[0].text.replace('#', ''))).zfill(2)
                 except:
                     continue
-                if self.is_image_exists(episode + '_1'):
+                if self.is_image_exists(episode + '_1') and episode in yt_episodes:
                     continue
                 images = item.select('.mainSwiper img[src]')
                 self.image_list = []
@@ -1381,6 +1382,11 @@ class TsurekanoDownload(Summer2022AnimeDownload, NewsTemplate):
                     image_name = episode + '_' + str(i + 1)
                     self.add_to_image_list(image_name, image_url)
                 self.download_image_list(self.base_folder)
+
+                yt_tag = item.select('.detail__movie iframe[src]')
+                if len(yt_tag) > 0:
+                    yt_id = yt_tag[0]['src'].split('?')[0].split('/')[-1]
+                    self.download_youtube_thumbnail_by_id(yt_id, yt_folder, episode)
         except Exception as e:
             self.print_exception(e)
 
