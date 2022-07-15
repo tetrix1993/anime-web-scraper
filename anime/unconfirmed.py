@@ -13,6 +13,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Itai no wa https://bofuri.jp/story/ #防振り #bofuri @bofuri_anime
 # Kubo-san wa Mob wo Yurusanai https://kubosan-anime.jp/ #久保さん @kubosan_anime
 # Maou Gakuin no Futekigousha 2nd Season https://maohgakuin.com/ #魔王学院 @maohgakuin
+# Masamune-kun no Revenge R https://masamune-tv.com/ #MASA_A @masamune_tv
 # Mato Seihei no Slave https://mabotai.jp/ #魔都精兵のスレイブ #まとスレ @mabotai_kohobu
 # Oshi no Ko https://ichigoproduction.com/ #推しの子 @anime_oshinoko
 # Otonari ni Ginga https://otonari-anime.com/ #おとなりに銀河 @otonariniginga
@@ -548,6 +549,55 @@ class Maohgakuin2Download(UnconfirmedDownload, NewsTemplate):
         self.add_to_image_list('teaser', self.PAGE_PREFIX + 'assets/img/img_main.jpg')
         # self.add_to_image_list('teaser_tw', 'https://pbs.twimg.com/media/EvylQFOVkAID_0B?format=jpg&name=medium')
         self.download_image_list(folder)
+
+
+# Masamune-kun no Revenge R
+class Masamunekun2Download(UnconfirmedDownload, NewsTemplate):
+    title = 'Masamune-kun no Revenge'
+    keywords = [title, "Masamune's Revenge"]
+    website = 'https://masamune-tv.com/'
+    twitter = 'masamune_tv'
+    hashtags = ['MASA_A']
+    folder_name = 'masamune2'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        # Paging logic may need update
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news--lineup article',
+                                    date_select='.txt--date', title_select='.txt--ttl', id_select='a')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_kv', self.PAGE_PREFIX + '_assets/images/fv/fv@2x.png')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            self.image_list = []
+            images = soup.select('.chardata img[src]')
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'][1:]
+                image_name = 'tz_' + self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
 
 
 # Mato Seihei no Slave
