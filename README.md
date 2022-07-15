@@ -107,6 +107,7 @@ The premiere date for the anime listed here has not been announced.
 * [Ijiranaide, Nagatoro-san 2nd Attack](https://www.nagatorosan.jp/)
 * [Kyokou Suiri Season 2](https://kyokousuiri.jp/)
 * [Tomo-chan wa Onnanoko!](https://tomo-chan.jp/)
+* [Tsundere Akuyaku Reijou Liselotte to Jikkyou no Endou-kun to Kaisetsu no Kobayashi-san](https://tsunlise-pr.com/)
 
 ### Fall 2022 Anime
 * [Akuyaku Reijou nanode Last Boss wo Kattemimashita](https://akulas-pr.com/)

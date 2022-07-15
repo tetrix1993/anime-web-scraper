@@ -5,6 +5,7 @@ from anime.main_download import MainDownload, NewsTemplate
 # Ijiranaide, Nagatoro-san 2nd Attack https://www.nagatorosan.jp/ #長瀞さん @nagatoro_tv
 # Kyokou Suiri S2 https://kyokousuiri.jp/ #虚構推理 @kyokou_suiri
 # Tomo-chan wa Onnanoko! https://tomo-chan.jp/ #tomochan @tomo_chan_ani
+# Tsundere Akuyaku Reijou Liselotte to Jikkyou no Endou-kun to Kaisetsu no Kobayashi-san http://tsunlise-pr.com/ #ツンリゼ @tsunlise_pr
 
 
 # Winter 2023 Anime
@@ -186,3 +187,41 @@ class TomochanDownload(Winter2023AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'assets/t/img/chara/img_chara%s.png'
         self.download_by_template(folder, template, 2, 1, prefix='tz_')
+
+
+# Tsundere Akuyaku Reijou Liselotte to Jikkyou no Endou-kun to Kaisetsu no Kobayashi-san
+class TsunliseDownload(Winter2023AnimeDownload, NewsTemplate):
+    title = 'Tsundere Akuyaku Reijou Liselotte to Jikkyou no Endou-kun to Kaisetsu no Kobayashi-san'
+    keywords = [title, 'tsunlise', 'Endo and Kobayashi Live! The Latest on Tsundere Villainess Lieselotte']
+    website = 'https://tsunlise-pr.com/'
+    twitter = 'tsunlise_pr'
+    hashtags = 'ツンリゼ'
+    folder_name = 'tsunlise'
+
+    PAGE_PREFIX = website
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        # Paging logic need update
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-item',
+                                    date_select='.date', title_select='.title', id_select='a')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('kv1_1', self.PAGE_PREFIX + 'wp/wp-content/uploads/2022/07/01_ツンリゼ_第1弾KV_ツンver..jpg')
+        self.add_to_image_list('kv1_2', self.PAGE_PREFIX + 'wp/wp-content/uploads/2022/07/02_ツンリゼ_第1弾KV_デレver..jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'wp/wp-content/themes/tunlise-teaser-theme/img/chara-pic%s.png'
+        self.download_by_template(folder, template, 1, 1, prefix='tz_')
