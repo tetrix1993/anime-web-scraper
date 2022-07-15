@@ -825,6 +825,8 @@ class SpyroomDownload(UnconfirmedDownload, NewsTemplate2):
         self.image_list = []
         self.add_to_image_list('tz_kv_chara', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv_chara.png')
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FNuvFFSaAAkbDy3?format=jpg&name=4096x4096')
+        self.add_to_image_list('home_kv', self.PAGE_PREFIX + 'core_sys/images/main/home/kv.png')
+        self.add_to_image_list('tz_kv', self.PAGE_PREFIX + 'core_sys/images/news/00000015/block/00000031/00000005.jpg')
         self.download_image_list(folder)
 
 
