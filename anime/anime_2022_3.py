@@ -1829,6 +1829,7 @@ class SoreayuDownload(Summer2022AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         image_prefix = self.PAGE_PREFIX + '_nuxt/'
@@ -1891,6 +1892,42 @@ class SoreayuDownload(Summer2022AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        pages = ['bd1', 'bd2']
+        try:
+            for i in range(len(pages)):
+                soup = self.get_soup(self.PAGE_PREFIX + 'cd-bd/' + pages[i])
+
+                # Blu-ray Bonus
+                if i == 0:
+                    self.image_list = []
+                    images = soup.select('.benefits-table img[src]')
+                    for image in images:
+                        image_url = self.PAGE_PREFIX + image['src'][1:]
+                        image_name = self.extract_image_name_from_url(image_url)
+                        self.add_to_image_list(image_name, image_url)
+                    self.download_image_list(folder)
+
+                # Blu-ray
+                images = soup.select('.product img[src]')
+                if len(images) > 0:
+                    self.image_list = []
+                    for image in images:
+                        image_url = self.PAGE_PREFIX + image['src'][1:]
+                        if self.is_matching_content_length(image_url, 146157):
+                            continue
+                        image_name = self.extract_image_name_from_url(image_url)
+                        self.add_to_image_list(image_name, image_url)
+                    if len(self.image_list) > 0:
+                        self.download_image_list(folder)
+                    else:
+                        break
+                else:
+                    break
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
 
 # Tensei Kenja no Isekai Life: Dai-2 no Shokugyou wo Ete, Sekai Saikyou ni Narimashita
