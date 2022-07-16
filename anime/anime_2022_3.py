@@ -1,8 +1,9 @@
 import os
 import requests
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
-from scan import AniverseMagazineScanner
+from scan import AniverseMagazineScanner, MocaNewsScanner
 from bs4.element import Tag
+from datetime import datetime
 
 
 # Engage Kiss https://engage-kiss.com/ #エンゲージキス #EngageKiss @engage_kiss
@@ -1559,7 +1560,6 @@ class PrimaDollDownload(Summer2022AnimeDownload, NewsTemplate):
         except Exception as e:
             self.print_exception(e, 'YouTube thumbnails')
 
-
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.top_news_item_style1',
                                     date_select='.top_news_text_style1', title_select='.top_news_text_style2',
@@ -1568,8 +1568,17 @@ class PrimaDollDownload(Summer2022AnimeDownload, NewsTemplate):
 
     def download_episode_preview_external(self):
         jp_title = 'プリマドール'
-        AniverseMagazineScanner(jp_title, self.base_folder, last_episode=self.FINAL_EPISODE,
-                                end_date='20220702', download_id=self.download_id).run()
+        last_date = datetime.strptime('20221101', '%Y%m%d')
+        today = datetime.today()
+        if today < last_date:
+            end_date = today
+        else:
+            end_date = last_date
+        MocaNewsScanner(jp_title, self.base_folder, '20220702', end_date.strftime('%Y%m%d'),
+                        download_id=self.download_id).run()
+
+        # AniverseMagazineScanner(jp_title, self.base_folder, last_episode=self.FINAL_EPISODE,
+        #                        end_date='20220702', download_id=self.download_id).run()
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
