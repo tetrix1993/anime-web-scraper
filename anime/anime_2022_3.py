@@ -82,7 +82,7 @@ class EngageKissDownload(Summer2022AnimeDownload, NewsTemplate):
                     if a_tag is not None:
                         ep_soup = self.get_soup(self.PAGE_PREFIX + a_tag['href'][1:])
                 if ep_soup is not None and episode is not None:
-                    images = ep_soup.select('.pager_slider img[src]')
+                    images = ep_soup.select('.story_slider img[src]')
                     self.image_list = []
                     for i in range(len(images)):
                         image_url = self.PAGE_PREFIX + images[i]['src'][1:]
