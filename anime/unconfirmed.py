@@ -7,6 +7,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Anohana S2 https://10th.anohana.jp/ #あの花 #anohana @anohana_project
 # Ayakashi Triangle https://ayakashitriangle-anime.com/ #あやかしトライアングル #あやトラ @ayakashi_anime
 # Do It Yourself!! https://diy-anime.com/ #diyアニメ @diy_anime
+# Eiyuu Kyoushitsu https://eiyukyoushitsu-anime.com/ #英雄教室 #eiyu_anime @eiyu_anime
 # Fuufu Ijou, Koibito Miman. https://fuukoi-anime.com/ #ふうこいアニメ @fuukoi_anime
 # Goblin Slayer S2 http://www.goblinslayer.jp/ #ゴブスレ @GoblinSlayer_GA
 # Inu ni Nattara Suki na Hito ni Hirowareta. https://inuhiro-anime.com/ #犬ひろ @inuninattara
@@ -278,6 +279,34 @@ class DoItYourselfDownload(UnconfirmedDownload):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'assets/images/pc/teaser/img_chara-%s.png'
         self.download_by_template(folder, template, 1, 0)
+
+
+# Eiyuu Kyoushitsu
+class EiyuKyoushitsuDownload(UnconfirmedDownload):
+    title = 'Eiyuu Kyoushitsu'
+    keywords = [title, 'Classroom for Heroes']
+    website = 'https://eiyukyoushitsu-anime.com/'
+    twitter = 'eiyu_anime'
+    hashtags = ['英雄教室', 'eiyu_anime']
+    folder_name = 'eiyukyoushitsu'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('eiyukyoushitsu_KV', self.PAGE_PREFIX + 'images/eiyukyoushitsu_KV.jpg')
+        self.download_image_list(folder)
 
 
 # Fuufu Ijou, Koibito Miman.
