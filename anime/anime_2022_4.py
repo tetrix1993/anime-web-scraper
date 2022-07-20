@@ -6,6 +6,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Futoku no Guild https://futoku-no-anime.com/ #futoku_anime #不徳のギルド @futoku_anime
 # Kage no Jitsuryokusha ni Naritakute! https://shadow-garden.jp/ #陰の実力者 @Shadowgarden_PR
 # Noumin Kanren no Skill bakka Agetetara Nazeka Tsuyoku Natta. https://nouminkanren.com/ #農民関連 @nouminkanren
+# Shinmai Renkinjutsushi no Tenpo Keiei https://shinmai-renkin.com/ #shinmai_renkin @shinmai_renkin
 # Tensei shitara Ken Deshita https://tenken-anime.com/ #転生したら剣でした #転剣 @tenken_official
 # Uchi no Shishou wa Shippo ga Nai https://shippona-anime.com/ #しっぽな @shippona_anime
 # Yama no Susume: Next Summit https://yamanosusume-ns.com/ #ヤマノススメ @yamanosusume
@@ -260,6 +261,52 @@ class NouminKanrenDownload(Fall2022AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+
+# Shinmai Renkinjutsushi no Tenpo Keiei
+class ShinmaiRenkinDownload(Fall2022AnimeDownload, NewsTemplate2):
+    title = 'Shinmai Renkinjutsushi no Tenpo Keiei'
+    keywords = [title, 'Management of Novice Alchemist']
+    website = 'https://shinmai-renkin.com/'
+    twitter = 'shinmai_renkin'
+    hashtags = 'shinmai_renkin'
+    folder_name = 'shinmai-renkin'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'special/visual.html')
+            images = soup.select('ul.tp5 img[src]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'].replace('../', '').split('?')[0]
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'core_sys/images/main/cont/character/%s.png'
+        self.download_by_template(folder, template, 2, 1)
 
 
 # Tensei shitara Ken Deshita
