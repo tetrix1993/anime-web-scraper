@@ -1595,6 +1595,15 @@ class PrimaDollDownload(Summer2022AnimeDownload, NewsTemplate):
 
     def download_character(self):
         folder = self.create_character_directory()
+        chara_names = []
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'haizakura.html')
+            a_tags = soup.select('.character_icon_list_box a[href]')
+            for a_tag in a_tags:
+                chara_names.append(a_tag['href'].replace('.html', '').strip())
+        except:
+            pass
+
         self.image_list = []
         js_file = self.PAGE_PREFIX + 'common/js/character.js'
         try:
@@ -1611,7 +1620,12 @@ class PrimaDollDownload(Summer2022AnimeDownload, NewsTemplate):
                         image_name = split3[j][0:dot_index] if dot_index > 0 else split3[j]
                         if self.is_image_exists(image_name, folder):
                             continue
-                        if self.is_matching_content_length(image_url, 17474):
+                        chara_name_found = False
+                        for chara_name in chara_names:
+                            if chara_name in image_name:
+                                chara_name_found = True
+                                break
+                        if not chara_name_found or self.is_matching_content_length(image_url, 17474):
                             continue
                         self.add_to_image_list(image_name, image_url)
         except Exception as e:
