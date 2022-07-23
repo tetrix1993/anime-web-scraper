@@ -1,6 +1,7 @@
-from anime.main_download import MainDownload, NewsTemplate
+from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 
 
+# Benriya Saitou-san, Isekai ni Iku https://saitou-anime.com/ #便利屋斎藤さん @saitou_anime
 # Eiyuuou, Bu wo Kiwameru Tame Tenseisu: Soshite, Sekai Saikyou no Minarai Kishi https://auo-anime.com/ #英雄王 @auo_anime
 # Ijiranaide, Nagatoro-san 2nd Attack https://www.nagatorosan.jp/ #長瀞さん @nagatoro_tv
 # Kyokou Suiri S2 https://kyokousuiri.jp/ #虚構推理 @kyokou_suiri
@@ -16,6 +17,46 @@ class Winter2023AnimeDownload(MainDownload):
 
     def __init__(self):
         super().__init__()
+
+
+# Benriya Saitou-san, Isekai ni Iku
+class BenriyaSaitouDownload(Winter2023AnimeDownload, NewsTemplate2):
+    title = 'Benriya Saitou-san, Isekai ni Iku'
+    keywords = [title, 'Handyman Saitou in Another World']
+    website = 'https://saitou-anime.com/'
+    twitter = 'saitou_anime'
+    hashtags = '便利屋斎藤さん'
+    folder_name = 'benriya-saitou'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz', self.PAGE_PREFIX + 'core_sys/images/news/00000003/block/00000008/00000001.jpg')
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FYMHT1jVUAAUtmQ?format=jpg&name=medium')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        prefix = self.PAGE_PREFIX + 'core_sys/images/main/tz/chara/chara_%s'
+        templates = [prefix + '.png', prefix + '_face.png']
+        self.download_by_template(folder, templates, 2, 1, prefix='tz_')
 
 
 # Eiyuuou, Bu wo Kiwameru Tame Tenseisu: Soshite, Sekai Saikyou no Minarai Kishi

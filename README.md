@@ -107,6 +107,7 @@ The premiere date for the anime listed here has not been announced.
 * [Isekai wa Smartphone to Tomo ni. 2](http://isesuma-anime.jp/)
 
 ### Winter 2023 Anime
+* [Benriya Saitou-san, Isekai ni Iku](https://saitou-anime.com/)
 * [Eiyuuou, Bu wo Kiwameru Tame Tenseisu: Soshite, Sekai Saikyou no Minarai Kishi](https://auo-anime.com/)
 * [Ijiranaide, Nagatoro-san 2nd Attack](https://www.nagatorosan.jp/)
 * [Kyokou Suiri Season 2](https://kyokousuiri.jp/)
