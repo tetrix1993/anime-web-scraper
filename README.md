@@ -103,6 +103,9 @@ The premiere date for the anime listed here has not been announced.
 * [Watashi no Yuri wa Oshigoto desu!](https://watayuri-anime.com/)
 * [Yuusha ga Shinda!: Murabito no Ore ga Hotta Otoshiana ni Yuusha ga Ochita Kekka.](https://heroisdead.com/)
 
+### Spring 2023 Anime
+* [Isekai wa Smartphone to Tomo ni. 2](http://isesuma-anime.jp/)
+
 ### Winter 2023 Anime
 * [Eiyuuou, Bu wo Kiwameru Tame Tenseisu: Soshite, Sekai Saikyou no Minarai Kishi](https://auo-anime.com/)
 * [Ijiranaide, Nagatoro-san 2nd Attack](https://www.nagatorosan.jp/)
