@@ -6,6 +6,7 @@ from bs4.element import Tag
 from datetime import datetime
 
 
+# Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka IV http://danmachi.com/ #danmachi @danmachi_anime
 # Engage Kiss https://engage-kiss.com/ #エンゲージキス #EngageKiss @engage_kiss
 # Hataraku Maou-sama!! https://maousama.jp/ #maousama @anime_maousama
 # Hoshi no Samidare https://hoshinosamidare.jp/ #惑星のさみだれ @AnimeSamidare
@@ -39,6 +40,68 @@ class Summer2022AnimeDownload(MainDownload):
 
     def __init__(self):
         super().__init__()
+
+
+# Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka IV: Shin Shou - Meikyuu-hen
+class Danmachi4Download(Summer2022AnimeDownload):
+    title = 'Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka IV: Shin Shou - Meikyuu-hen'
+    keywords = [title, 'Danmachi', 'Is It Wrong to Try to Pick Up Girls in a Dungeon? IV', '4th']
+    website = 'http://danmachi.com/'
+    twitter = 'danmachi_anime'
+    hashtags = 'danmachi'
+    folder_name = 'danmachi4'
+
+    PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 6
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        template = self.PAGE_PREFIX + 'story/images/%s_%s.jpg'
+        stop = False
+        for i in range(self.FINAL_EPISODE):
+            episode = str(i + 1).zfill(2)
+            for j in range(self.IMAGES_PER_EPISODE):
+                image_name = episode + '_' + str(j + 1)
+                if self.is_image_exists(image_name):
+                    continue
+                image_url = template % (episode, str(j + 1).zfill(2))
+                result = self.download_image(image_url, self.base_folder + '/' + image_name)
+                if result == -1:
+                    stop = True
+                    break
+            if stop:
+                break
+
+        misc_folder = self.create_custom_directory('misc')
+        story_title_template = self.PAGE_PREFIX + 'story/images/title_story%s.png'
+        self.download_by_template(misc_folder, story_title_template, 2, 1)
+
+        # YouTube thumbnails
+        yt_folder, yt_episodes = self.init_youtube_thumbnail_variables()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/', decode=True)
+            storyConts = soup.select('.storyCont')
+            for storyCont in storyConts:
+                yt_tag = storyCont.select('.youtubeMovie iframe[src]')
+                if len(yt_tag) > 0:
+                    image = storyCont.select('h3 img[src]')
+                    if len(image) > 0:
+                        try:
+                            episode = str(int(image[0]['src'].split('story')[1].split('.')[0])).zfill(2)
+                        except:
+                            continue
+                        if yt_tag[0]['src'].lower().startswith('https://www.youtube.com/embed/'):
+                            yt_id = yt_tag[0]['src'][30:].split('?')[0]
+                            self.download_youtube_thumbnail_by_id(yt_id, yt_folder, episode)
+        except Exception as e:
+            self.print_exception(e, 'YouTube thumbnails')
 
 
 # Engage Kiss

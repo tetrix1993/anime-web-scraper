@@ -126,6 +126,7 @@ The premiere date for the anime listed here has not been announced.
 * [Yuusha Party wo Tsuihou sareta Beast Tamer, Saikyoushu no Nekomimi Shoujo to Deau](https://beasttamer.jp/)
 
 ### Summer 2022 Anime
+* [Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka IV: Shin Shou - Meikyuu-hen](http://danmachi.com/)
 * [Engage Kiss](https://engage-kiss.com/)
 * [Hataraku Maou-sama! 2nd Season](https://maousama.jp/)
 * [Hoshi no Samidare](https://hoshinosamidare.jp/)
