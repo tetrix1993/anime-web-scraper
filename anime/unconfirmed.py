@@ -19,7 +19,6 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Oshi no Ko https://ichigoproduction.com/ #推しの子 @anime_oshinoko
 # Otonari ni Ginga https://otonari-anime.com/ #おとなりに銀河 @otonariniginga
 # Otonari no Tenshi-sama ni Itsunomanika Dame Ningen ni Sareteita Ken https://otonarino-tenshisama.jp/ #お隣の天使様 @tenshisama_PR
-# Renai Flops https://loveflops.com/ #恋愛フロップス @loveflops_pr
 # Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita 2nd Season https://slime300-anime.com/ #スライム倒して300年 @slime300_PR
 # Spy Kyoushitsu https://spyroom-anime.com/ #スパイ教室 #spyroom #SpyClassroom @spyroom_anime
 # Tonikaku Kawaii S2 http://tonikawa.com/ #トニカクカワイイ #tonikawa @tonikawa_anime
@@ -790,70 +789,6 @@ class OtonarinoTenshisamaDownload(UnconfirmedDownload, NewsTemplate):
         self.add_to_image_list('valentine_pos', self.PAGE_PREFIX + 'wordpress/wp-content/uploads/2022/02/valentine_pos.jpg')
         self.add_to_image_list('valentine', self.PAGE_PREFIX + 'wordpress/wp-content/uploads/2022/02/valentine_sp-kabegami.jpg')
         self.download_image_list(folder)
-
-
-# Renai Flops
-class RenaiFlopsDownload(UnconfirmedDownload, NewsTemplate):
-    title = 'Renai Flops'
-    keywords = [title, 'Love Flops']
-    website = 'https://loveflops.com/'
-    twitter = 'loveflops_pr'
-    hashtags = '恋愛フロップス'
-    folder_name = 'renai-flops'
-
-    PAGE_PREFIX = website
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_news()
-        self.download_key_visual()
-        self.download_character()
-        self.download_media()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_news(self):
-        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news_list article',
-                                    date_select='.news_list_day', title_select='.ne', id_select='a',
-                                    date_separator='/', news_prefix='news.html', a_tag_prefix=self.PAGE_PREFIX)
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FOrTLwXagAE6Q-C?format=jpg&name=large')
-        self.add_to_image_list('tz_aniverse', 'https://aniverse-mag.com/wp-content/uploads/2022/03/6a1f645dc99cda5844a8d86a77f24193-e1648196815379.jpg')
-        self.download_image_list(folder)
-
-        self.download_by_template(folder, self.PAGE_PREFIX + 'images/top/visual/v%s.jpg', 3, prefix='top_visual_')
-        self.download_by_template(folder, self.PAGE_PREFIX + 'images/news/p_%s.jpg', 3, prefix='news_')
-
-    def download_character(self):
-        folder = self.create_character_directory()
-        template_prefix = self.PAGE_PREFIX + 'images/chara/'
-        templates = [template_prefix + 'b_%s.png', template_prefix + 'a_%s.png']
-        self.download_by_template(folder, templates, 3, 1)
-
-    def download_media(self):
-        folder = self.create_media_directory()
-
-        # Sample Voices
-        voice_folder = folder + '/voice'
-        if not os.path.exists(voice_folder):
-            os.makedirs(voice_folder)
-        for chara in ['asahi', 'aoi', 'amelia', 'ilya', 'mongfa', 'karin', 'yoshio']:
-            name_template = f'{chara}_mix_%s.mp3'
-            template_prefix = self.PAGE_PREFIX + f'chara/mp3/'
-            for i in range(3):
-                audio_name = name_template % str(i + 1).zfill(3)
-                audio_url = template_prefix + audio_name
-                audio_filepath = voice_folder + '/' + audio_name
-                result = self.download_content(audio_url, audio_filepath)
-                if result == -1:
-                    break
 
 
 # Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita 2nd Season
