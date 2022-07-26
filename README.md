@@ -110,6 +110,7 @@ The premiere date for the anime listed here has not been announced.
 * [Eiyuuou, Bu wo Kiwameru Tame Tenseisu: Soshite, Sekai Saikyou no Minarai Kishi](https://auo-anime.com/)
 * [Ijiranaide, Nagatoro-san 2nd Attack](https://www.nagatorosan.jp/)
 * [Kyokou Suiri Season 2](https://kyokousuiri.jp/)
+* [Saikyou Onmyouji no Isekai Tenseiki](https://saikyo-onmyouji.asmik-ace.co.jp/)
 * [Tomo-chan wa Onnanoko!](https://tomo-chan.jp/)
 * [Tsundere Akuyaku Reijou Liselotte to Jikkyou no Endou-kun to Kaisetsu no Kobayashi-san](https://tsunlise-pr.com/)
 

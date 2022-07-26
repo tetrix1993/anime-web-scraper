@@ -5,6 +5,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Eiyuuou, Bu wo Kiwameru Tame Tenseisu: Soshite, Sekai Saikyou no Minarai Kishi https://auo-anime.com/ #英雄王 @auo_anime
 # Ijiranaide, Nagatoro-san 2nd Attack https://www.nagatorosan.jp/ #長瀞さん @nagatoro_tv
 # Kyokou Suiri S2 https://kyokousuiri.jp/ #虚構推理 @kyokou_suiri
+# Saikyou Onmyouji no Isekai Tenseiki https://saikyo-onmyouji.asmik-ace.co.jp/ #最強陰陽師 @saikyo_onmyouji
 # Tomo-chan wa Onnanoko! https://tomo-chan.jp/ #tomochan @tomo_chan_ani
 # Tsundere Akuyaku Reijou Liselotte to Jikkyou no Endou-kun to Kaisetsu no Kobayashi-san http://tsunlise-pr.com/ #ツンリゼ @tsunlise_pr
 
@@ -182,6 +183,54 @@ class KyokouSuiri2Download(Winter2023AnimeDownload, NewsTemplate):
                     image_url = self.PAGE_PREFIX + image['src'][1:]
                     image_name = self.extract_image_name_from_url(image_url)
                     self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+
+
+# Saikyou Onmyouji no Isekai Tenseiki
+class SaikyoOnmyoujiDownload(Winter2023AnimeDownload, NewsTemplate):
+    title = 'Saikyou Onmyouji no Isekai Tenseiki'
+    keywords = [title]
+    website = 'https://saikyo-onmyouji.asmik-ace.co.jp/'
+    twitter = 'saikyo_onmyouji'
+    hashtags = '最強陰陽師'
+    folder_name = 'saikyo-onmyouji'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        # self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        pass
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('fv_fv_pc', self.PAGE_PREFIX + 'assets/images/fv/fv_pc.png')
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FYj0CqraUAAQhht?format=jpg&name=4096x4096')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            self.image_list = []
+            images = soup.select('.chardata .v img[src]')
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'][1:]
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
