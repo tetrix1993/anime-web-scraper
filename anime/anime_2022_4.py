@@ -49,11 +49,24 @@ class AkulasDownload(Fall2022AnimeDownload, NewsTemplate):
         self.has_website_updated(self.PAGE_PREFIX)
 
     def download_news(self):
-        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.md-list__news li',
-                                    title_select='h4', date_select='dt', id_select='a')
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news article',
+                                    title_select='.ttl', date_select='.release', id_select='a')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            self.image_list = []
+            images = soup.select('.visual img[src]')
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'][1:]
+                if '/top/' in image_url:
+                    image_name = self.generate_image_name_from_url(image_url, 'top')
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
         self.image_list = []
         aniverse_prefix = 'https://aniverse-mag.com/wp-content/uploads/2022/03/'
         teaser_prefix = self.PAGE_PREFIX + 'wp/wp-content/themes/akulas-teaser/_assets/images/fv/visual/'
