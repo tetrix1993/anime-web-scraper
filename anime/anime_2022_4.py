@@ -78,6 +78,18 @@ class AkulasDownload(Fall2022AnimeDownload, NewsTemplate):
 
     def download_character(self):
         folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            images = soup.select('.chardata img[src]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'][1:]
+                image_name = self.generate_image_name_from_url(image_url, 'detail')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+
         template = self.PAGE_PREFIX + 'wp/wp-content/themes/akulas-teaser/_assets/images/char/detail/char_%s_pc.png'
         self.download_by_template(folder, template, 3, 1, prefix='tz_')
 
