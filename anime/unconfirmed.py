@@ -631,7 +631,7 @@ class Masamunekun2Download(UnconfirmedDownload, NewsTemplate):
 # Mato Seihei no Slave
 class MatoSlaveDownload(UnconfirmedDownload, NewsTemplate):
     title = 'Mato Seihei no Slave'
-    keywords = [title]
+    keywords = [title, 'Chained Soldier', 'matoslave', 'mabotai']
     website = 'https://mabotai.jp/'
     twitter = 'mabotai_kohobu'
     hashtags = ['魔都精兵のスレイブ', 'まとスレ']
@@ -646,6 +646,7 @@ class MatoSlaveDownload(UnconfirmedDownload, NewsTemplate):
         self.download_episode_preview()
         # self.download_news()
         self.download_key_visual()
+        self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
@@ -668,6 +669,21 @@ class MatoSlaveDownload(UnconfirmedDownload, NewsTemplate):
             result = self.download_image(image_url, f'{folder}/{image_name}')
             if result == -1:
                 break
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.chara-item__visual img[src]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src']
+                if 'character/' in image_url:
+                    image_name = self.generate_image_name_from_url(image_url, 'character')
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
 
 
 # Oshi no Ko
