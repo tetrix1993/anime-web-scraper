@@ -5,6 +5,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Akuyaku Reijou nanode Last Boss wo Kattemimashita https://akulas-pr.com/ #悪ラス @akulas_pr
 # Bocchi the Rock! https://bocchi.rocks/ #ぼっち・ざ・ろっく #BocchiTheRock @BTR_anime
 # Futoku no Guild https://futoku-no-anime.com/ #futoku_anime #不徳のギルド @futoku_anime
+# Fuufu Ijou, Koibito Miman. https://fuukoi-anime.com/ #ふうこいアニメ @fuukoi_anime
 # Kage no Jitsuryokusha ni Naritakute! https://shadow-garden.jp/ #陰の実力者 @Shadowgarden_PR
 # Noumin Kanren no Skill bakka Agetetara Nazeka Tsuyoku Natta. https://nouminkanren.com/ #農民関連 @nouminkanren
 # Renai Flops https://loveflops.com/ #恋愛フロップス @loveflops_pr
@@ -189,6 +190,78 @@ class FutokunoGuildDownload(Fall2022AnimeDownload, NewsTemplate2):
         self.add_to_image_list('tz_kv', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv.png')
         self.add_to_image_list('top_kv', self.PAGE_PREFIX + 'core_sys/images/main/top/kv.jpg')
         self.download_image_list(folder)
+
+
+# Fuufu Ijou, Koibito Miman.
+class FuukoiDownload(Fall2022AnimeDownload, NewsTemplate2):
+    title = 'Fuufu Ijou, Koibito Miman.'
+    keywords = [title, 'More Than a Married Couple, But Not Lovers', 'fuukoi']
+    website = 'https://fuukoi-anime.com/'
+    twitter = 'fuukoi_anime'
+    hashtags = 'ふうこいアニメ'
+    folder_name = 'fuukoi'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        image_prefix = self.PAGE_PREFIX + 'core_sys/images/'
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FRbNkGEakAEHfD5?format=jpg&name=4096x4096')
+        self.add_to_image_list('tz_kv_webp', image_prefix + 'main/tz/kv.webp')
+        self.add_to_image_list('tz_kv', image_prefix + 'main/tz/kv.jpg')
+        self.add_to_image_list('tz_news', image_prefix + 'news/00000003/block/00000006/00000001.jpg')
+        self.add_to_image_list('kv1', image_prefix + 'news/00000007/block/00000013/00000004.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'chara/')
+            a_tags = soup.select('#ContentsListUnit01 a[href]')
+            for a_tag in a_tags:
+                if not a_tag['href'].endswith('.html'):
+                    continue
+                page = a_tag['href'].split('/')[-1].split('.html')[0]
+                if page in processed:
+                    continue
+                if page == 'index':
+                    chara_soup = soup
+                else:
+                    chara_soup = self.get_soup(self.PAGE_PREFIX + a_tag['href'].replace('../', ''))
+                if chara_soup is None:
+                    continue
+                self.image_list = []
+                images = chara_soup.select('.chara__img img[src], .chara__face img[src]')
+                for image in images:
+                    if '/chara/' not in image['src']:
+                        continue
+                    image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                    image_name = self.generate_image_name_from_url(image_url, 'chara')
+                    self.add_to_image_list(image_name, image_url)
+                if len(self.image_list) > 0:
+                    processed.append(page)
+                self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Kage no Jitsuryokusha ni Naritakute!

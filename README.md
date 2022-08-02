@@ -85,7 +85,6 @@ The premiere date for the anime listed here has not been announced.
 * [Akiba Meido Sensou](https://akibamaidwar.com/)
 * [Ayakashi Triangle](https://ayakashitriangle-anime.com/)
 * [Eiyuu Kyoushitsu](https://eiyukyoushitsu-anime.com/)
-* [Fuufu Ijou, Koibito Miman.](https://fuukoi-anime.com/)
 * [Goblin Slayer 2nd Season](http://www.goblinslayer.jp/)
 * [Inu ni Nattara Suki na Hito ni Hirowareta.](https://inuhiro-anime.com/)
 * [Itai no wa Iya nano de Bougyoryoku ni Kyokufuri Shitai to Omoimasu. 2nd Season](https://bofuri.jp/)
@@ -116,7 +115,9 @@ The premiere date for the anime listed here has not been announced.
 
 ### Fall 2022 Anime
 * [Akuyaku Reijou nanode Last Boss wo Kattemimashita](https://akulas-pr.com/)
+* [Bocchi the Rock!](https://bocchi.rocks/)
 * [Futoku no Guild](https://futoku-no-anime.com/)
+* [Fuufu Ijou, Koibito Miman.](https://fuukoi-anime.com/)
 * [Kage no Jitsuryokusha ni Naritakute!](https://shadow-garden.jp/)
 * [Noumin Kanren no Skill bakka Agetetara Nazeka Tsuyoku Natta.](https://nouminkanren.com/)
 * [Renai Flops](https://loveflops.com/)

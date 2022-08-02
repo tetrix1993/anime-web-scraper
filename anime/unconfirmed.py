@@ -8,7 +8,6 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Ayakashi Triangle https://ayakashitriangle-anime.com/ #あやかしトライアングル #あやトラ @ayakashi_anime
 # Do It Yourself!! https://diy-anime.com/ #diyアニメ @diy_anime
 # Eiyuu Kyoushitsu https://eiyukyoushitsu-anime.com/ #英雄教室 #eiyu_anime @eiyu_anime
-# Fuufu Ijou, Koibito Miman. https://fuukoi-anime.com/ #ふうこいアニメ @fuukoi_anime
 # Goblin Slayer S2 http://www.goblinslayer.jp/ #ゴブスレ @GoblinSlayer_GA
 # Inu ni Nattara Suki na Hito ni Hirowareta. https://inuhiro-anime.com/ #犬ひろ @inuninattara
 # Itai no wa https://bofuri.jp/story/ #防振り #bofuri @bofuri_anime
@@ -305,42 +304,6 @@ class EiyuKyoushitsuDownload(UnconfirmedDownload):
         folder = self.create_key_visual_directory()
         self.image_list = []
         self.add_to_image_list('eiyukyoushitsu_KV', self.PAGE_PREFIX + 'images/eiyukyoushitsu_KV.jpg')
-        self.download_image_list(folder)
-
-
-# Fuufu Ijou, Koibito Miman.
-class FuukoiDownload(UnconfirmedDownload, NewsTemplate2):
-    title = 'Fuufu Ijou, Koibito Miman.'
-    keywords = [title, 'More Than a Married Couple, But Not Lovers', 'fuukoi']
-    website = 'https://fuukoi-anime.com/'
-    twitter = 'fuukoi_anime'
-    hashtags = 'ふうこいアニメ'
-    folder_name = 'fuukoi'
-
-    PAGE_PREFIX = website
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_news()
-        self.download_key_visual()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_news(self):
-        self.download_template_news(self.PAGE_PREFIX)
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        image_prefix = self.PAGE_PREFIX + 'core_sys/images/'
-        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FRbNkGEakAEHfD5?format=jpg&name=4096x4096')
-        self.add_to_image_list('tz_kv_webp', image_prefix + 'main/tz/kv.webp')
-        self.add_to_image_list('tz_kv', image_prefix + 'main/tz/kv.jpg')
-        self.add_to_image_list('tz_news', image_prefix + 'news/00000003/block/00000006/00000001.jpg')
         self.download_image_list(folder)
 
 
