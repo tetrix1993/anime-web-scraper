@@ -673,8 +673,16 @@ class BeastTamerDownload(Fall2022AnimeDownload, NewsTemplate):
         folder = self.create_key_visual_directory()
         self.image_list = []
         self.add_to_image_list('kv_tw', 'https://pbs.twimg.com/media/FUtiIgLaQAEcqA2?format=jpg&name=4096x4096')
-        self.add_to_image_list('top_t1_vis', self.PAGE_PREFIX + 'assets/top/t1/vis.jpg')
+        self.add_to_image_list('kv2_tw', 'https://pbs.twimg.com/media/FZJK9EzaUAA1-sW?format=jpg&name=4096x4096')
         self.download_image_list(folder)
+
+        for i in range(10):
+            image_url = self.PAGE_PREFIX + f'assets/top/t{i + 1}/vis.jpg'
+            image_name = f'top_t{i + 1}_vis'
+            if not self.is_image_exists(image_name, folder):
+                result = self.download_image(image_url, folder + '/' + image_name)
+                if result == -1:
+                    break
 
     def download_character(self):
         folder = self.create_character_directory()
