@@ -2,6 +2,7 @@ from anime.main_download import MainDownload, NewsTemplate
 
 
 # Isekai wa Smartphone to Tomo ni. 2 http://isesuma-anime.jp/ #イセスマ @isesumaofficial
+# Tensei Kizoku no Isekai Boukenroku https://www.tensei-kizoku.jp/ #転生貴族 @tenseikizoku
 
 
 # Spring 2023 Anime
@@ -61,3 +62,32 @@ class Isesuma2Download(Spring2023AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+
+# Tensei Kizoku no Isekai Boukenroku
+class TenseiKizokuDownload(Spring2023AnimeDownload):
+    title = 'Tensei Kizoku no Isekai Boukenroku'
+    keywords = [title, "Chronicles of an Aristocrat Reborn in Another World"]
+    website = 'https://www.tensei-kizoku.jp/'
+    twitter = 'tenseikizoku'
+    hashtags = '転生貴族'
+    folder_name = 'tenseikizoku'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        # self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('kv', self.PAGE_PREFIX + 'img/kv.png')
+        self.download_image_list(folder)
