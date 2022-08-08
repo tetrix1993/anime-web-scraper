@@ -5,6 +5,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Eiyuuou, Bu wo Kiwameru Tame Tenseisu: Soshite, Sekai Saikyou no Minarai Kishi https://auo-anime.com/ #英雄王 @auo_anime
 # Ijiranaide, Nagatoro-san 2nd Attack https://www.nagatorosan.jp/ #長瀞さん @nagatoro_tv
 # Kyokou Suiri S2 https://kyokousuiri.jp/ #虚構推理 @kyokou_suiri
+# Rougo ni Sonaete Isekai de 8-manmai no Kinka wo Tamemasu https://roukin8-anime.com/ #ろうきん8 #roukin8 @roukin8_anime
 # Saikyou Onmyouji no Isekai Tenseiki https://saikyo-onmyouji.asmik-ace.co.jp/ #最強陰陽師 @saikyo_onmyouji
 # Tomo-chan wa Onnanoko! https://tomo-chan.jp/ #tomochan @tomo_chan_ani
 # Tsundere Akuyaku Reijou Liselotte to Jikkyou no Endou-kun to Kaisetsu no Kobayashi-san http://tsunlise-pr.com/ #ツンリゼ @tsunlise_pr
@@ -186,6 +187,43 @@ class KyokouSuiri2Download(Winter2023AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+
+# Rougo ni Sonaete Isekai de 8-manmai no Kinka wo Tamemasu
+class Roukin8Download(Winter2023AnimeDownload, NewsTemplate):
+    title = 'Rougo ni Sonaete Isekai de 8-manmai no Kinka wo Tamemasu'
+    keywords = [title, 'roukin8', 'Saving 80,000 Gold in Another World for My Retirement']
+    website = 'https://roukin8-anime.com/'
+    twitter = 'roukin8_anime'
+    hashtags = ['roukin8', 'ろうきん8']
+    folder_name = 'roukin8'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        # self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.bl_vertPosts_item',
+                                    date_select='time', title_select='.bl_vertPosts_txt',
+                                    id_select='.bl_vertPosts_link', a_tag_prefix=self.PAGE_PREFIX,
+                                    a_tag_start_text_to_remove='../')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('top_kv', self.PAGE_PREFIX + 'assets/img/top/kv.jpg')
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FZkU-3hagAAU3fg?format=jpg&name=medium')
+        self.download_image_list(folder)
 
 
 # Saikyou Onmyouji no Isekai Tenseiki
