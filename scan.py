@@ -1,8 +1,8 @@
 import os
 import re
 import requests
-from anime.external_download import AnimeRecorderDownload, AniverseMagazineDownload, WebNewtypeDownload, MocaNewsDownload, NatalieDownload
-from anime.constants import EXTERNAL_FOLDER_ANIME_RECORDER, EXTERNAL_FOLDER_ANIVERSE, EXTERNAL_FOLDER_MOCANEWS, EXTERNAL_FOLDER_NATALIE, EXTERNAL_FOLDER_WEBNEWTYPE
+from anime.external_download import AnimeRecorderDownload, AniverseMagazineDownload, WebNewtypeDownload, MocaNewsDownload, NatalieDownload, EeoMediaDownload
+from anime.constants import EXTERNAL_FOLDER_ANIME_RECORDER, EXTERNAL_FOLDER_ANIVERSE, EXTERNAL_FOLDER_EEOMEDIA, EXTERNAL_FOLDER_MOCANEWS, EXTERNAL_FOLDER_NATALIE, EXTERNAL_FOLDER_WEBNEWTYPE
 from bs4 import BeautifulSoup as bs
 from datetime import datetime
 from datetime import timedelta
@@ -668,3 +668,61 @@ class NatalieScanner(MainScanner):
         except Exception as e:
             print("Error in running " + self.__class__.__name__)
             print(e)
+
+
+class EeoMediaScanner(MainScanner):
+    PAGE_PREFIX = 'https://eeo.today/media/'
+    SEARCH_PREFIX = PAGE_PREFIX + '?s='
+
+    def __init__(self, keywords, base_folder, prefix='第', suffix='話',
+                 last_episode=None, first_episode=0, download_id=None):
+        super().__init__(download_id)
+        if isinstance(keywords, str):
+            self.keywords = [keywords]
+        elif isinstance(keywords, list):
+            self.keywords = keywords
+        else:
+            raise Exception('Unexpected type for keywords')
+        self.base_folder = base_folder.replace("download/", "") + "/" + EXTERNAL_FOLDER_EEOMEDIA
+
+        if prefix is None or len(prefix) == 0:
+            raise Exception('Prefix is required.')
+        self.prefix = prefix
+
+        if suffix is None or len(suffix) == 0:
+            raise Exception('Suffix is required.')
+        self.suffix = suffix
+        self.first_episode = first_episode
+        self.last_episode = last_episode
+
+    def run(self):
+        if self.last_episode:
+            # Stop processing if the last episode has already been downloaded
+            stop = False
+            for i in reversed(range(self.last_episode)):
+                if self.is_image_exists(str(i + 1).zfill(2) + '_01', self.base_folder):
+                    stop = True
+                    break
+            if stop:
+                return
+
+        first_page_url = self.SEARCH_PREFIX + '+'.join(self.keywords)
+        try:
+            soup = self.get_soup(first_page_url)
+            a_tags = soup.select('.article_panel_article_list a.article_title[href]')
+            for a_tag in a_tags:
+                title = a_tag.text
+                prefix_index = title.find(self.prefix)
+                suffix_index = title.find(self.suffix)
+                if prefix_index == -1 or suffix_index == -1 or prefix_index >= suffix_index:
+                    continue
+                try:
+                    episode = int(title[prefix_index + 1:suffix_index])
+                except:
+                    continue
+                if episode < self.first_episode or (self.last_episode is not None and episode > self.last_episode):
+                    continue
+                article_id = a_tag['href'][len(self.PAGE_PREFIX):]
+                EeoMediaDownload(article_id, self.base_folder, episode, self.download_id).run()
+        except:
+            return
