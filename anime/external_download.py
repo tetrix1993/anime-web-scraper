@@ -200,7 +200,7 @@ class EeoMediaDownload(ExternalDownload):
         try:
             article_url = self.PAGE_PREFIX + self.article_id
             soup = self.get_soup(article_url)
-            images = soup.select('.article_panel figure.wp-block-image img[src]')
+            images = soup.select('.article_panel .wp-block-image img[src]')
             self.image_list = []
             for i in range(len(images)):
                 image_url = self.clear_resize_in_url(images[i]['src'])
