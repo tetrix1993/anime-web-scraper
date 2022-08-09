@@ -7,6 +7,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Anohana S2 https://10th.anohana.jp/ #あの花 #anohana @anohana_project
 # Ayakashi Triangle https://ayakashitriangle-anime.com/ #あやかしトライアングル #あやトラ @ayakashi_anime
 # Do It Yourself!! https://diy-anime.com/ #diyアニメ @diy_anime
+# Dungeon Meshi https://delicious-in-dungeon.com/ #ダンジョン飯 #deliciousindungeon @dun_meshi_anime
 # Eiyuu Kyoushitsu https://eiyukyoushitsu-anime.com/ #英雄教室 #eiyu_anime @eiyu_anime
 # Goblin Slayer S2 http://www.goblinslayer.jp/ #ゴブスレ @GoblinSlayer_GA
 # Inu ni Nattara Suki na Hito ni Hirowareta. https://inuhiro-anime.com/ #犬ひろ @inuninattara
@@ -277,6 +278,46 @@ class DoItYourselfDownload(UnconfirmedDownload):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'assets/images/pc/teaser/img_chara-%s.png'
         self.download_by_template(folder, template, 1, 0)
+
+
+# Dungeon Meshi
+class DungeonMeshiDownload(UnconfirmedDownload, NewsTemplate):
+    title = 'Dungeon Meshi'
+    keywords = [title, 'Delicious in Dungeon']
+    website = 'https://delicious-in-dungeon.com/'
+    twitter = 'dun_meshi_anime'
+    hashtags = ['ダンジョン飯', 'deliciousindungeon']
+    folder_name = 'dungeon-meshi'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.content-entry',
+                                    title_select='.entry-title span', date_select='.entry-date span',
+                                    id_select=None, id_has_id=True, news_prefix='news.html')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        template = self.PAGE_PREFIX + 'assets/top/t%s/vis.jpg'
+        for i in range(1, 10, 1):
+            image_name = f'top_t{i}_vis'
+            if self.is_image_exists(image_name, folder):
+                continue
+            image_url = template % str(i)
+            result = self.download_image(image_url, folder + '/' + image_name)
+            if result == -1:
+                break
 
 
 # Eiyuu Kyoushitsu

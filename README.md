@@ -84,6 +84,7 @@ pip install -r requirements.txt
 The premiere date for the anime listed here has not been announced.
 * [Akiba Meido Sensou](https://akibamaidwar.com/)
 * [Ayakashi Triangle](https://ayakashitriangle-anime.com/)
+* [Dungeon Meshi](https://delicious-in-dungeon.com/)
 * [Eiyuu Kyoushitsu](https://eiyukyoushitsu-anime.com/)
 * [Goblin Slayer 2nd Season](http://www.goblinslayer.jp/)
 * [Inu ni Nattara Suki na Hito ni Hirowareta.](https://inuhiro-anime.com/)
