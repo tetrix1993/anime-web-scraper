@@ -4,6 +4,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Benriya Saitou-san, Isekai ni Iku https://saitou-anime.com/ #便利屋斎藤さん @saitou_anime
 # Eiyuuou, Bu wo Kiwameru Tame Tenseisu: Soshite, Sekai Saikyou no Minarai Kishi https://auo-anime.com/ #英雄王 @auo_anime
 # Ijiranaide, Nagatoro-san 2nd Attack https://www.nagatorosan.jp/ #長瀞さん @nagatoro_tv
+# Inu ni Nattara Suki na Hito ni Hirowareta. https://inuhiro-anime.com/ #犬ひろ @inuninattara
 # Kyokou Suiri S2 https://kyokousuiri.jp/ #虚構推理 @kyokou_suiri
 # Rougo ni Sonaete Isekai de 8-manmai no Kinka wo Tamemasu https://roukin8-anime.com/ #ろうきん8 #roukin8 @roukin8_anime
 # Saikyou Onmyouji no Isekai Tenseiki https://saikyo-onmyouji.asmik-ace.co.jp/ #最強陰陽師 @saikyo_onmyouji
@@ -131,6 +132,43 @@ class Nagatorosan2Download(Winter2023AnimeDownload, NewsTemplate):
         self.image_list = []
         self.add_to_image_list('teaser_img_mainimg', self.PAGE_PREFIX + 'teaser/img/mainimg.jpg')
         self.add_to_image_list('tz', 'https://pbs.twimg.com/media/FWeINYraUAEG6y9?format=jpg&name=medium')
+        self.download_image_list(folder)
+
+
+# Inu ni Nattara Suki na Hito ni Hirowareta.
+class InuhiroDownload(Winter2023AnimeDownload, NewsTemplate):
+    title = "Inu ni Nattara Suki na Hito ni Hirowareta."
+    keywords = [title, 'Inuhiro']
+    website = 'https://inuhiro-anime.com/'
+    twitter = 'inuninattara'
+    hashtags = '犬ひろ'
+    folder_name = 'inuhiro'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='#news article',
+                                    date_select='time', title_select='h3', id_select=None,
+                                    id_has_id=True, news_prefix='')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FNybC1EaAAEoRmq?format=jpg&name=large')
+        self.add_to_image_list('tz_mainimg_pc', self.PAGE_PREFIX + 'teaser/images/mainimg_pc.png')
+        self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/FZyBd0xVEAAz4kn?format=jpg&name=medium')
+        self.add_to_image_list('kv1', self.PAGE_PREFIX + 'teaser/images/mainimg.jpg')
         self.download_image_list(folder)
 
 
