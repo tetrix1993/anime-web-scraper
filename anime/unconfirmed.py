@@ -10,6 +10,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Dungeon Meshi https://delicious-in-dungeon.com/ #ダンジョン飯 #deliciousindungeon @dun_meshi_anime
 # Eiyuu Kyoushitsu https://eiyukyoushitsu-anime.com/ #英雄教室 #eiyu_anime @eiyu_anime
 # Goblin Slayer S2 http://www.goblinslayer.jp/ #ゴブスレ @GoblinSlayer_GA
+# Isekai One Turn Kill Neesan https://onekillsister.com/ #一撃姉 @onekillsister
 # Isekai Shoukan wa Nidome desu https://isenido.com/ #いせにど @isenido_anime
 # Itai no wa https://bofuri.jp/story/ #防振り #bofuri @bofuri_anime
 # Kubo-san wa Mob wo Yurusanai https://kubosan-anime.jp/ #久保さん @kubosan_anime
@@ -405,6 +406,60 @@ class GoblinSlayer2Download(UnconfirmedDownload):
         self.image_list = []
         self.add_to_image_list('teaser', 'https://pbs.twimg.com/media/EtDYBThUYAEBIWI?format=jpg&name=4096x4096')
         self.download_image_list(folder)
+
+
+# Isekai One Turn Kill Nee-san: Ane Douhan no Isekai Seikatsu Hajimemashita
+class OneKillSisterDownload(UnconfirmedDownload, NewsTemplate):
+    title = 'Isekai One Turn Kill Nee-san: Ane Douhan no Isekai Seikatsu Hajimemashita'
+    keywords = [title, 'My One-Hit Kill Sister']
+    website = 'https://onekillsister.com/'
+    twitter = 'onekillsister'
+    hashtags = '一撃姉'
+    folder_name = 'onekillsister'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news article',
+                                    date_select='.post_time', title_select='.list-title', id_select='a',
+                                    date_func=lambda x: x.replace('年', '.').replace('月', '.').replace('日', ''),
+                                    news_prefix='?page_id=62')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz', 'https://i0.wp.com/onekillsister.com/wp-content/uploads/2022/07/%E3%83%86%E3%82%A3%E3%82%B5%E3%82%99%E3%83%BC%E3%83%92%E3%82%99%E3%82%B7%E3%82%99%E3%83%A5%E3%82%A2%E3%83%AB.jpg')
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FZxIaC6VsAAOfL0?format=jpg&name=4096x4096')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            self.image_list = []
+            images = soup.select('.n2-ss-slide-background-image img[src]')
+            for image in images:
+                if image['src'].startswith('//'):
+                    image_url = 'https:' + image['src']
+                else:
+                    image_url = image['src']
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
 
 
 # Isekai Shoukan wa Nidome desu
