@@ -506,9 +506,25 @@ class TenkenDownload(Fall2022AnimeDownload, NewsTemplate):
         folder = self.create_key_visual_directory()
         self.image_list = []
         self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/FOcR3ESaMAIIZAo?format=jpg&name=4096x4096')
-        self.add_to_image_list('kv1_vis', self.PAGE_PREFIX + 'assets/top/vis.png')
+        # self.add_to_image_list('kv1_vis', self.PAGE_PREFIX + 'assets/top/vis.png')
         self.add_to_image_list('kv1_vis-t1', self.PAGE_PREFIX + 'assets/news/vis-t1.jpg')
         self.download_image_list(folder)
+
+        for i in range(1, 10, 1):
+            image_name = f'top_t{i}_vis'
+            if self.is_image_exists(image_name, folder):
+                continue
+            is_successful = False
+            for j in ['jpg', 'png']:
+                image_url = self.PAGE_PREFIX + f'assets/top/t{i}/vis.' + j
+                result = self.download_image(image_url, folder + '/' + image_name)
+                if result == -1:
+                    continue
+                else:
+                    is_successful = True
+                    break
+            if not is_successful:
+                break
 
     def download_character(self):
         folder = self.create_character_directory()
