@@ -22,6 +22,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Otonari no Tenshi-sama ni Itsunomanika Dame Ningen ni Sareteita Ken https://otonarino-tenshisama.jp/ #お隣の天使様 @tenshisama_PR
 # Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita 2nd Season https://slime300-anime.com/ #スライム倒して300年 @slime300_PR
 # Spy Kyoushitsu https://spyroom-anime.com/ #スパイ教室 #spyroom #SpyClassroom @spyroom_anime
+# Tensei Oujo to Tensai Reijou no Mahou Kakumei https://tenten-kakumei.com/ #転天アニメ @tenten_kakumei
 # Tonikaku Kawaii S2 http://tonikawa.com/ #トニカクカワイイ #tonikawa @tonikawa_anime
 # Vlad Love https://www.vladlove.com/index.html #ぶらどらぶ #vladlove @VLADLOVE_ANIME
 # Watashi no Yuri wa Oshigoto desu! https://watayuri-anime.com/ #わたゆり #私の百合はお仕事です @watayuri_anime
@@ -982,6 +983,68 @@ class SpyroomDownload(UnconfirmedDownload, NewsTemplate2):
         except Exception as e:
             self.print_exception(e, 'Character')
         self.create_cache_file(cache_filepath, processed, num_processed)
+
+
+# Tensei Oujo to Tensai Reijou no Mahou Kakumei
+class TentenKakumeiDownload(UnconfirmedDownload, NewsTemplate):
+    title = 'Tensei Oujo to Tensai Reijou no Mahou Kakumei'
+    keywords = [title, 'tenten kakumei', 'The Magical Revolution of the Reincarnated Princess and the Genius Young Lady']
+    website = 'https://tenten-kakumei.com/'
+    twitter = 'tenten_kakumei'
+    hashtags = '転天アニメ'
+    folder_name = 'tenten-kakumei'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_character()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article.element',
+                                    title_select='.title', date_select='.day', id_select='a',
+                                    date_separator='/', news_prefix='news.html', a_tag_prefix=self.PAGE_PREFIX)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'chara.html')
+            a_tags = soup.select('.chara_list_wrap a[href]')
+            for a_tag in a_tags:
+                image = a_tag.select('img[src]')
+                if len(image) == 0:
+                    continue
+                front_image_url = self.PAGE_PREFIX + image[0]['src']
+                front_image_name = self.extract_image_name_from_url(front_image_url)
+                split1 = front_image_name.split('.')[0].split('_')
+                if len(split1) == 2 and split1[1].isnumeric() and len(split1[0]) > 0:
+                    chara_name = split1[0]
+                    if self.is_image_exists(chara_name + '_01', folder):
+                        continue
+                    image_prefix = self.PAGE_PREFIX + 'images/chara/'
+                    self.image_list = []
+                    self.add_to_image_list(chara_name + '_01', image_prefix + f'list01/{chara_name}_01.png')
+                    self.add_to_image_list(chara_name + '_02', image_prefix + f'{chara_name}_02.png')
+                    self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('top_visual_01_v_001_pc', self.PAGE_PREFIX + 'images/top/visual_01/v_001_pc.jpg')
+        self.download_image_list(folder)
+
+        template = self.PAGE_PREFIX + 'images/news/p_%s.jpg'
+        self.download_by_template(folder, template, 3, 1, prefix='news_')
 
 
 # Tonikaku Kawaii S2
