@@ -1985,11 +1985,8 @@ class ShadowsHouse2Download(Summer2022AnimeDownload, NewsTemplate):
                             processed.append(str(i))
                         else:
                             break
-                    elif i == 1:
-                        if len(self.image_list) > 1:
-                            processed.append(str(i))
-                        else:
-                            break
+                    elif i == 1 and len(self.image_list) > 1:
+                        processed.append(str(i))
                     self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Blu-ray')
