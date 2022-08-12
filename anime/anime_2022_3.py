@@ -1040,11 +1040,11 @@ class Kanokari2Download(Summer2022AnimeDownload, NewsTemplate):
                 img_tag = li.select('img[src]')
                 if len(a_tag) == 0 or len(img_tag) == 0 or 'nowprinting' in img_tag[0]['src']:
                     continue
-                bd_url = a_tag['href']
+                bd_url = a_tag[0]['href']
                 bd_page_name = bd_url.replace(bd_prefix, '').replace('/', '')
                 if bd_page_name in processed:
                     continue
-                bd_soup = soup.select(a_tag['href'])
+                bd_soup = self.get_soup(bd_url)
                 if bd_soup is None:
                     continue
                 images = bd_soup.select('.bd--main img[src]')
