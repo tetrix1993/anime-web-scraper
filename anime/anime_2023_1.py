@@ -6,6 +6,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Ijiranaide, Nagatoro-san 2nd Attack https://www.nagatorosan.jp/ #長瀞さん @nagatoro_tv
 # Inu ni Nattara Suki na Hito ni Hirowareta. https://inuhiro-anime.com/ #犬ひろ @inuninattara
 # Kyokou Suiri S2 https://kyokousuiri.jp/ #虚構推理 @kyokou_suiri
+# Oniichan wa Oshimai! https://onimai.jp/ #おにまい @onimai_anime
 # Rougo ni Sonaete Isekai de 8-manmai no Kinka wo Tamemasu https://roukin8-anime.com/ #ろうきん8 #roukin8 @roukin8_anime
 # Saikyou Onmyouji no Isekai Tenseiki https://saikyo-onmyouji.asmik-ace.co.jp/ #最強陰陽師 @saikyo_onmyouji
 # Tomo-chan wa Onnanoko! https://tomo-chan.jp/ #tomochan @tomo_chan_ani
@@ -225,6 +226,74 @@ class KyokouSuiri2Download(Winter2023AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+
+# Oniichan wa Oshimai!
+class OnimaiDownload(Winter2023AnimeDownload, NewsTemplate):
+    title = 'Oniichan wa Oshimai!'
+    keywords = [title, 'Onimai']
+    website = 'https://onimai.jp/'
+    twitter = 'onimai_anime'
+    hashtags = 'おにまい'
+    folder_name = 'onimai'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.newsList',
+                                    date_select='.newsList__date', title_select='.newsList__title', id_select='a',
+                                    a_tag_prefix=self.PAGE_PREFIX + 'news/', a_tag_start_text_to_remove='./')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('top_visual_mahiro', self.PAGE_PREFIX + 'assets/img/top/visual_mahiro.png')
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FQ6O8FgVIAEp7rm?format=jpg&name=4096x4096')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        chara_url = self.PAGE_PREFIX + 'character/'
+        try:
+            soup = self.get_soup(chara_url)
+            a_tags = soup.select('.characterList a[href]')
+            for a_tag in a_tags:
+                if not a_tag['href'].endswith('.html'):
+                    continue
+                page = a_tag['href'].split('/')[-1].split('.html')[0]
+                if page in processed:
+                    continue
+                chara_soup = self.get_soup(chara_url + a_tag['href'].replace('./', ''))
+                if chara_soup is None:
+                    continue
+                self.image_list = []
+                images = chara_soup.select('.characterDetail_img img[src]')
+                for image in images:
+                    if '/character/' not in image['src']:
+                        continue
+                    image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                    image_name = self.generate_image_name_from_url(image_url, 'character')
+                    self.add_to_image_list(image_name, image_url)
+                if len(self.image_list) > 0:
+                    processed.append(page)
+                self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Rougo ni Sonaete Isekai de 8-manmai no Kinka wo Tamemasu
