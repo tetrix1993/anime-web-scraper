@@ -255,16 +255,12 @@ class EngageKissDownload(Summer2022AnimeDownload, NewsTemplate):
                     for image in images:
                         if not image['src'].endswith('img_nopri_s.jpg')\
                                 and not image['src'].endswith('img_nowpri.jpg')\
-                                and not image['src'].endswith('arrow.png'):
+                                and not image['src'].endswith('arrow.png')\
+                                and 'bnr_' not in image['src']:
                             image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
                             image_name = 'bddvd_' + self.generate_image_name_from_url(image_url, 'bddvd')
                             self.add_to_image_list(image_name, image_url)
-                    if i > 1:
-                        if len(self.image_list) > 0:
-                            processed.append(str(i))
-                        else:
-                            break
-                    elif i == 1:
+                    if i >= 1:
                         if len(self.image_list) > 1:
                             processed.append(str(i))
                         elif len(self.image_list) == 0:
