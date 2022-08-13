@@ -1686,7 +1686,7 @@ class PrimaDollDownload(Summer2022AnimeDownload, NewsTemplate):
                     episode = str(int(a_tag.text.replace('第', '').replace('話', ''))).zfill(2)
                 except:
                     continue
-                if episode in yt_episodes:
+                if episode in yt_episodes and self.is_image_exists(episode + '_6'):
                     continue
                 if episode == '02':
                     ep_soup = soup
@@ -1694,6 +1694,16 @@ class PrimaDollDownload(Summer2022AnimeDownload, NewsTemplate):
                     ep_soup = self.get_soup(story_url + a_tag['href'])
                 if ep_soup is None:
                     continue
+                images = ep_soup.select('.center-item_gallery_cg img[src]')
+                self.image_list = []
+                for i in range(len(images)):
+                    image_name = episode + '_' + str(i + 1)
+                    if self.is_image_exists(image_name):
+                        continue
+                    image_url = images[i]['src'].split('?')[0]
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+
                 yt_tag = ep_soup.select('.news_img iframe[src]')
                 if len(yt_tag) > 0:
                     yt_id = yt_tag[0]['src'].split('/')[-1]
