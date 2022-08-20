@@ -9,7 +9,8 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Do It Yourself!! https://diy-anime.com/ #diyアニメ @diy_anime
 # Dungeon Meshi https://delicious-in-dungeon.com/ #ダンジョン飯 #deliciousindungeon @dun_meshi_anime
 # Eiyuu Kyoushitsu https://eiyukyoushitsu-anime.com/ #英雄教室 #eiyu_anime @eiyu_anime
-# Goblin Slayer S2 http://www.goblinslayer.jp/ #ゴブスレ @GoblinSlayer_GA
+# Goblin Slayer S2 http://www.goblinslayer.jp/ #ゴブスレ #いせれべ @GoblinSlayer_GA
+# Isekai de Cheat Skill wo Te ni Shita Ore wa https://iseleve.com　@iseleve_anime
 # Isekai One Turn Kill Neesan https://onekillsister.com/ #一撃姉 @onekillsister
 # Isekai Shoukan wa Nidome desu https://isenido.com/ #いせにど @isenido_anime
 # Itai no wa https://bofuri.jp/story/ #防振り #bofuri @bofuri_anime
@@ -406,6 +407,45 @@ class GoblinSlayer2Download(UnconfirmedDownload):
         folder = self.create_key_visual_directory()
         self.image_list = []
         self.add_to_image_list('teaser', 'https://pbs.twimg.com/media/EtDYBThUYAEBIWI?format=jpg&name=4096x4096')
+        self.download_image_list(folder)
+
+
+# Isekai de Cheat Skill wo Te ni Shita Ore wa, Genjitsu Sekai wo mo Musou Suru: Level Up wa Jinsei wo Kaeta
+class IseleveDownload(UnconfirmedDownload):
+    title = 'Isekai de Cheat Skill wo Te ni Shita Ore wa, Genjitsu Sekai wo mo Musou Suru: Level Up wa Jinsei wo Kaeta'
+    keywords = [title, 'I Got a Cheat Skill in Another World and Became Unrivaled in The Real World, Too', 'iseleve']
+    website = 'https://www.iseleve.com/'
+    twitter = 'iseleve_anime'
+    hashtags = 'いせれべ'
+    folder_name = 'iseleve'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        # self.download_news()
+        self.download_key_visual()
+        self.download_media()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz', 'https://pbs.twimg.com/media/FagU_nNVQAAy78W?format=jpg&name=medium')
+        self.add_to_image_list('tz_main_visual01', self.PAGE_PREFIX + 'img/main_visual01.jpg')
+        self.add_to_image_list('tz_main_visual02', self.PAGE_PREFIX + 'img/main_visual02.png')
+        self.download_image_list(folder)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        self.image_list = []
+        self.add_to_image_list('teaser_coment_img01', self.PAGE_PREFIX + 'img/teaser_coment_img01.jpg')
+        self.add_to_image_list('teaser_coment_img02', self.PAGE_PREFIX + 'img/teaser_coment_img02.jpg')
         self.download_image_list(folder)
 
 
@@ -859,6 +899,38 @@ class OtonarinoTenshisamaDownload(UnconfirmedDownload, NewsTemplate):
         self.add_to_image_list('valentine_pos', self.PAGE_PREFIX + 'wordpress/wp-content/uploads/2022/02/valentine_pos.jpg')
         self.add_to_image_list('valentine', self.PAGE_PREFIX + 'wordpress/wp-content/uploads/2022/02/valentine_sp-kabegami.jpg')
         self.download_image_list(folder)
+
+        # Special
+        special_folder = folder + '/special'
+        if not os.path.exists(special_folder):
+            os.makedirs(special_folder)
+        special_cache_filepath = special_folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(special_cache_filepath)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'special/')
+            a_tags = soup.select('li.card a[href]')
+            for a_tag in reversed(a_tags):
+                href = a_tag['href']
+                if '/special/' not in href:
+                    continue
+                if href.endswith('/'):
+                    href = href[:-1]
+                page_name = href.split('/')[-1]
+                if page_name in processed:
+                    continue
+                page_soup = self.get_soup(a_tag['href'])
+                if page_soup is not None:
+                    images = page_soup.select('article img[src]')
+                    self.image_list = []
+                    for image in images:
+                        image_url = self.clear_resize_in_url(image['src'])
+                        image_name = self.extract_image_name_from_url(image_url)
+                        self.add_to_image_list(image_name, image_url)
+                    self.download_image_list(special_folder)
+                processed.append(page_name)
+        except Exception as e:
+            self.print_exception(e, 'Special')
+        self.create_cache_file(special_cache_filepath, processed, num_processed)
 
 
 # Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita 2nd Season
