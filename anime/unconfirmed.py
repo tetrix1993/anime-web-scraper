@@ -14,6 +14,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Isekai One Turn Kill Neesan https://onekillsister.com/ #一撃姉 @onekillsister
 # Isekai Shoukan wa Nidome desu https://isenido.com/ #いせにど @isenido_anime
 # Itai no wa https://bofuri.jp/story/ #防振り #bofuri @bofuri_anime
+# Kaiko sareta Ankoku Heishi (30-dai) no Slow na Second Life https://ankokuheishi-anime.com/ #暗黒兵士 @ankokuheishi_PR
 # Kubo-san wa Mob wo Yurusanai https://kubosan-anime.jp/ #久保さん @kubosan_anime
 # Maou Gakuin no Futekigousha 2nd Season https://maohgakuin.com/ #魔王学院 @maohgakuin
 # Masamune-kun no Revenge R https://masamune-tv.com/ #MASA_A @masamune_tv
@@ -593,6 +594,48 @@ class Bofuri2Download(UnconfirmedDownload):
         self.add_to_image_list('aprilfools_tw', 'https://pbs.twimg.com/media/FPOV5F5agAE3czc?format=jpg&name=4096x4096')
         self.add_to_image_list('aprilfools_news', self.PAGE_PREFIX + 'assets/news/65a.jpg')
         self.add_to_image_list('aprilfools_top', self.PAGE_PREFIX + 'images/top-visual/2022apr/all.jpg')
+        self.download_image_list(folder)
+
+
+# Kaiko sareta Ankoku Heishi (30-dai) no Slow na Second Life
+class AnkokuHeishiDownload(UnconfirmedDownload):
+    title = 'Kaiko sareta Ankoku Heishi (30-dai) no Slow na Second Life'
+    keywords = [title]
+    website = 'https://ankokuheishi-anime.com/'
+    twitter = 'ankokuheishi_PR'
+    hashtags = '暗黒兵士'
+    folder_name = 'ankokuheishi'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        # self.download_news()
+        self.download_key_visual()
+        self.download_character()
+        self.download_media()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz', 'https://pbs.twimg.com/media/FagSmPnUEAA4PNg?format=jpg&name=medium')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'img/chara_%s.png'
+        self.download_by_template(folder, template, 2, 1, prefix='tz_')
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        self.image_list = []
+        self.add_to_image_list('comment_img', self.PAGE_PREFIX + 'img/comment_img.png')
         self.download_image_list(folder)
 
 
