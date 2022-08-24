@@ -671,7 +671,7 @@ class MainDownload:
 
     @staticmethod
     def extract_image_name_from_url(text, with_extension=False):
-        split1 = text.split('/')[-1]
+        split1 = text.split('?')[0].split('/')[-1]
 
         # Expected input with extension e.g. image.jpg or http://website.com/image.jpg
         if not with_extension:
@@ -693,7 +693,7 @@ class MainDownload:
 
     @staticmethod
     def generate_image_name_from_url(url, stop_text):
-        period_index = url.rfind('.')
+        period_index = url.split('?')[0].rfind('.')
         if period_index >= 0:
             name = url[0:period_index]
         else:

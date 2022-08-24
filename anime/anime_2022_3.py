@@ -1576,7 +1576,7 @@ class TsurekanoDownload(Summer2022AnimeDownload, NewsTemplate):
             self.image_list = []
             images = soup.select('.bddvd__image img[src],.item__image img[src]')
             for image in images:
-                image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                image_url = self.PAGE_PREFIX + image['src'].replace('../', '').split('?')[0]
                 if self.is_matching_content_length(image_url, 234752):
                     continue
                 image_name = self.extract_image_name_from_url(image_url)
