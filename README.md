@@ -82,7 +82,6 @@ pip install -r requirements.txt
 
 ### New Anime
 The premiere date for the anime listed here has not been announced.
-* [Akiba Meido Sensou](https://akibamaidwar.com/)
 * [Ayakashi Triangle](https://ayakashitriangle-anime.com/)
 * [Dungeon Meshi](https://delicious-in-dungeon.com/)
 * [Eiyuu Kyoushitsu](https://eiyukyoushitsu-anime.com/)
@@ -123,6 +122,7 @@ The premiere date for the anime listed here has not been announced.
 * [Tsundere Akuyaku Reijou Liselotte to Jikkyou no Endou-kun to Kaisetsu no Kobayashi-san](https://tsunlise-pr.com/)
 
 ### Fall 2022 Anime
+* [Akiba Meido Sensou](https://akibamaidwar.com/)
 * [Akuyaku Reijou nanode Last Boss wo Kattemimashita](https://akulas-pr.com/)
 * [Bocchi the Rock!](https://bocchi.rocks/)
 * [Futoku no Guild](https://futoku-no-anime.com/)

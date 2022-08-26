@@ -1,7 +1,9 @@
 import os
+from anime.constants import HTTP_HEADER_USER_AGENT
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 
 
+# Akiba Meido Sensou https://akibamaidwar.com/ #アキバ冥途戦争 @akbmaidwar
 # Akuyaku Reijou nanode Last Boss wo Kattemimashita https://akulas-pr.com/ #悪ラス @akulas_pr
 # Bocchi the Rock! https://bocchi.rocks/ #ぼっち・ざ・ろっく #BocchiTheRock @BTR_anime
 # Futoku no Guild https://futoku-no-anime.com/ #futoku_anime #不徳のギルド @futoku_anime
@@ -24,6 +26,132 @@ class Fall2022AnimeDownload(MainDownload):
 
     def __init__(self):
         super().__init__()
+
+
+# Akiba Meido Sensou
+class AkibaMaidWarDownload(Fall2022AnimeDownload, NewsTemplate):
+    title = 'Akiba Meido Sensou'
+    keywords = [title, 'Akiba Maid War']
+    website = 'https://akibamaidwar.com/'
+    twitter = 'akbmaidwar'
+    hashtags = 'アキバ冥途戦争'
+    folder_name = 'akibamaidwar'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        try:
+            api_url = 'https://'
+            bundle = self.get_response(self.PAGE_PREFIX + 'assets/js/news.bundle.js')
+            keyword = '"https://".concat('
+            index = bundle.find(keyword)
+            if index <= 0:
+                return
+            bundle_split = bundle[len(keyword) + index:]
+            next_index = bundle_split.find(')')
+            if next_index <= 0:
+                return
+            items = bundle_split[0:next_index].split(',')
+            for item in items:
+                api_url += item.replace('"', '')
+            api_url += "news?limit=1000&fields="
+            microcms_keyword = '"X-MICROCMS-API-KEY":"'
+            microcms_index = bundle.find(microcms_keyword)
+            if microcms_index <= 0:
+                return
+            bundle_split2 = bundle[len(microcms_keyword) + microcms_index:]
+            microcms_next_index = bundle_split2.find('"')
+            if microcms_next_index <= 0:
+                return
+            microcms_key = bundle_split2[0:microcms_next_index]
+            headers = HTTP_HEADER_USER_AGENT
+            headers['x-microcms-api-key'] = microcms_key
+            json_obj = self.get_json(api_url, headers)
+
+            results = []
+            news_obj = self.get_last_news_log_object()
+            for content in json_obj['contents']:
+                if 'id' in content and 'date' in content and 'title' in content:
+                    article_id = self.PAGE_PREFIX + 'news/detail?i=' + content['id']
+                    if news_obj is not None and news_obj['id'] == article_id:
+                        break
+                    date = content['date'][0:10].replace('-', '.')
+                    title = content['title']
+                    results.append(self.create_news_log_object(date, title, article_id))
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log_from_news_log_object(result)
+                if process_result == 0:
+                    success_count += 1
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
+        except Exception as e:
+            self.print_exception(e, 'News')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FWAaCg-UEAAJ5sw?format=jpg&name=4096x4096')
+        self.add_to_image_list('tz_kv', self.PAGE_PREFIX + 'assets/images/pc/kv.png')
+        self.add_to_image_list('kv_tw', 'https://pbs.twimg.com/media/FbDjkZAUcAANv9o?format=jpg&name=large')
+        self.add_to_image_list('top_kv', self.PAGE_PREFIX + 'assets/images/pc/top/kv.png')
+        self.add_to_image_list('special_kv', 'https://images.microcms-assets.io/assets/cf7267b9b8d74564a1239e1d0515090a/53a656f88fe146b9bd88a24da741fc97/special_kv.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_chara_image', self.PAGE_PREFIX + 'assets/images/pc/chara_image.png')
+        self.download_image_list(folder)
+
+        try:
+            api_url = 'https://'
+            bundle = self.get_response(self.PAGE_PREFIX + 'assets/js/character.bundle.js')
+            keyword = '"https://".concat('
+            index = bundle.find(keyword)
+            if index <= 0:
+                return
+            bundle_split = bundle[len(keyword) + index:]
+            next_index = bundle_split.find(')')
+            if next_index <= 0:
+                return
+            items = bundle_split[0:next_index].split(',')
+            for item in items:
+                api_url += item.replace('"', '')
+            api_url += "character?limit=1000&fields="
+            microcms_keyword = '"X-MICROCMS-API-KEY":"'
+            microcms_index = bundle.find(microcms_keyword)
+            if microcms_index <= 0:
+                return
+            bundle_split2 = bundle[len(microcms_keyword) + microcms_index:]
+            microcms_next_index = bundle_split2.find('"')
+            if microcms_next_index <= 0:
+                return
+            microcms_key = bundle_split2[0:microcms_next_index]
+            headers = HTTP_HEADER_USER_AGENT
+            headers['x-microcms-api-key'] = microcms_key
+            json_obj = self.get_json(api_url, headers)
+            self.image_list = []
+            for content in json_obj['contents']:
+                if 'main_img' in content and 'url' in content['main_img']:
+                    image_url = content['main_img']['url']
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
 
 
 # Akuyaku Reijou nanode Last Boss wo Kattemimashita
