@@ -114,6 +114,7 @@ The premiere date for the anime listed here has not been announced.
 * [Eiyuuou, Bu wo Kiwameru Tame Tenseisu: Soshite, Sekai Saikyou no Minarai Kishi](https://auo-anime.com/)
 * [Ijiranaide, Nagatoro-san 2nd Attack](https://www.nagatorosan.jp/)
 * [Inu ni Nattara Suki na Hito ni Hirowareta.](https://inuhiro-anime.com/)
+* [Isekai Nonbiri Nouka](https://nonbiri-nouka.com/)
 * [Kyokou Suiri Season 2](https://kyokousuiri.jp/)
 * [Oniichan wa Oshimai!](https://onimai.jp/)
 * [Rougo ni Sonaete Isekai de 8-manmai no Kinka wo Tamemasu](https://roukin8-anime.com/)

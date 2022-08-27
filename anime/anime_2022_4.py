@@ -29,7 +29,7 @@ class Fall2022AnimeDownload(MainDownload):
 
 
 # Akiba Meido Sensou
-class AkibaMaidWarDownload(Fall2022AnimeDownload, NewsTemplate):
+class AkibaMaidWarDownload(Fall2022AnimeDownload):
     title = 'Akiba Meido Sensou'
     keywords = [title, 'Akiba Maid War']
     website = 'https://akibamaidwar.com/'

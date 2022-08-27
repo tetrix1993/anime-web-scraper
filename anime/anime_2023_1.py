@@ -5,6 +5,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Eiyuuou, Bu wo Kiwameru Tame Tenseisu: Soshite, Sekai Saikyou no Minarai Kishi https://auo-anime.com/ #英雄王 @auo_anime
 # Ijiranaide, Nagatoro-san 2nd Attack https://www.nagatorosan.jp/ #長瀞さん @nagatoro_tv
 # Inu ni Nattara Suki na Hito ni Hirowareta. https://inuhiro-anime.com/ #犬ひろ @inuninattara
+# Isekai Nonbiri Nouka https://nonbiri-nouka.com/ #のんびり農家 @nonbiri_nouka
 # Kyokou Suiri S2 https://kyokousuiri.jp/ #虚構推理 @kyokou_suiri
 # Oniichan wa Oshimai! https://onimai.jp/ #おにまい @onimai_anime
 # Rougo ni Sonaete Isekai de 8-manmai no Kinka wo Tamemasu https://roukin8-anime.com/ #ろうきん8 #roukin8 @roukin8_anime
@@ -170,6 +171,34 @@ class InuhiroDownload(Winter2023AnimeDownload, NewsTemplate):
         self.add_to_image_list('tz_mainimg_pc', self.PAGE_PREFIX + 'teaser/images/mainimg_pc.png')
         self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/FZyBd0xVEAAz4kn?format=jpg&name=medium')
         self.add_to_image_list('kv1', self.PAGE_PREFIX + 'teaser/images/mainimg.jpg')
+        self.download_image_list(folder)
+
+
+# Isekai Nonbiri Nouka
+class IsekaiNonbiriNoukaDownload(Winter2023AnimeDownload):
+    title = 'Isekai Nonbiri Nouka'
+    keywords = [title]
+    website = 'https://nonbiri-nouka.com/'
+    twitter = 'nonbiri_nouka'
+    hashtags = 'のんびり農家'
+    folder_name = 'nonbiri-nouka'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz', 'https://ogre.natalie.mu/media/news/comic/2022/0826/nonbiri-nouka_Teaser.jpg')
         self.download_image_list(folder)
 
 
