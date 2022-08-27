@@ -53,32 +53,9 @@ class AkibaMaidWarDownload(Fall2022AnimeDownload):
 
     def download_news(self):
         try:
-            api_url = 'https://'
-            bundle = self.get_response(self.PAGE_PREFIX + 'assets/js/news.bundle.js')
-            keyword = '"https://".concat('
-            index = bundle.find(keyword)
-            if index <= 0:
+            json_obj = self.get_json_obj_from_api('news')
+            if json_obj is None:
                 return
-            bundle_split = bundle[len(keyword) + index:]
-            next_index = bundle_split.find(')')
-            if next_index <= 0:
-                return
-            items = bundle_split[0:next_index].split(',')
-            for item in items:
-                api_url += item.replace('"', '')
-            api_url += "news?limit=1000&fields="
-            microcms_keyword = '"X-MICROCMS-API-KEY":"'
-            microcms_index = bundle.find(microcms_keyword)
-            if microcms_index <= 0:
-                return
-            bundle_split2 = bundle[len(microcms_keyword) + microcms_index:]
-            microcms_next_index = bundle_split2.find('"')
-            if microcms_next_index <= 0:
-                return
-            microcms_key = bundle_split2[0:microcms_next_index]
-            headers = HTTP_HEADER_USER_AGENT
-            headers['x-microcms-api-key'] = microcms_key
-            json_obj = self.get_json(api_url, headers)
 
             results = []
             news_obj = self.get_last_news_log_object()
@@ -117,32 +94,10 @@ class AkibaMaidWarDownload(Fall2022AnimeDownload):
         self.download_image_list(folder)
 
         try:
-            api_url = 'https://'
-            bundle = self.get_response(self.PAGE_PREFIX + 'assets/js/character.bundle.js')
-            keyword = '"https://".concat('
-            index = bundle.find(keyword)
-            if index <= 0:
+            json_obj = self.get_json_obj_from_api('character')
+            if json_obj is None:
                 return
-            bundle_split = bundle[len(keyword) + index:]
-            next_index = bundle_split.find(')')
-            if next_index <= 0:
-                return
-            items = bundle_split[0:next_index].split(',')
-            for item in items:
-                api_url += item.replace('"', '')
-            api_url += "character?limit=1000&fields="
-            microcms_keyword = '"X-MICROCMS-API-KEY":"'
-            microcms_index = bundle.find(microcms_keyword)
-            if microcms_index <= 0:
-                return
-            bundle_split2 = bundle[len(microcms_keyword) + microcms_index:]
-            microcms_next_index = bundle_split2.find('"')
-            if microcms_next_index <= 0:
-                return
-            microcms_key = bundle_split2[0:microcms_next_index]
-            headers = HTTP_HEADER_USER_AGENT
-            headers['x-microcms-api-key'] = microcms_key
-            json_obj = self.get_json(api_url, headers)
+
             self.image_list = []
             for content in json_obj['contents']:
                 if 'main_img' in content and 'url' in content['main_img']:
@@ -152,6 +107,34 @@ class AkibaMaidWarDownload(Fall2022AnimeDownload):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+    def get_json_obj_from_api(self, name):
+        api_url = 'https://'
+        bundle = self.get_response(self.PAGE_PREFIX + f'assets/js/{name}.bundle.js')
+        keyword = '"https://".concat('
+        index = bundle.find(keyword)
+        if index <= 0:
+            return None
+        bundle_split = bundle[len(keyword) + index:]
+        next_index = bundle_split.find(')')
+        if next_index <= 0:
+            return None
+        items = bundle_split[0:next_index].split(',')
+        for item in items:
+            api_url += item.replace('"', '')
+        api_url += f"{name}?limit=1000&fields="
+        microcms_keyword = '"X-MICROCMS-API-KEY":"'
+        microcms_index = bundle.find(microcms_keyword)
+        if microcms_index <= 0:
+            return None
+        bundle_split2 = bundle[len(microcms_keyword) + microcms_index:]
+        microcms_next_index = bundle_split2.find('"')
+        if microcms_next_index <= 0:
+            return None
+        microcms_key = bundle_split2[0:microcms_next_index]
+        headers = HTTP_HEADER_USER_AGENT
+        headers['x-microcms-api-key'] = microcms_key
+        return self.get_json(api_url, headers)
 
 
 # Akuyaku Reijou nanode Last Boss wo Kattemimashita
