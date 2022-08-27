@@ -132,6 +132,7 @@ The premiere date for the anime listed here has not been announced.
 * [Noumin Kanren no Skill bakka Agetetara Nazeka Tsuyoku Natta.](https://nouminkanren.com/)
 * [Renai Flops](https://loveflops.com/)
 * [Shinmai Renkinjutsushi no Tenpo Keiei](https://shinmai-renkin.com/)
+* [Shinobi no Ittoki](https://ninja-ittoki.com/)
 * [Tensei shitara Ken Deshita](https://tenken-anime.com/)
 * [Uchi no Shishou wa Shippo ga Nai](https://shippona-anime.com/)
 * [Yama no Susume: Next Summit](https://yamanosusume-ns.com/)

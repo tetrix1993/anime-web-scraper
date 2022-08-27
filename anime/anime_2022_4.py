@@ -12,6 +12,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Noumin Kanren no Skill bakka Agetetara Nazeka Tsuyoku Natta. https://nouminkanren.com/ #農民関連 @nouminkanren
 # Renai Flops https://loveflops.com/ #恋愛フロップス @loveflops_pr
 # Shinmai Renkinjutsushi no Tenpo Keiei https://shinmai-renkin.com/ #shinmai_renkin @shinmai_renkin
+# Shinobi no Ittoki https://ninja-ittoki.com/ #忍の一時 #ninja @ninja_ittoki
 # Tensei shitara Ken Deshita https://tenken-anime.com/ #転生したら剣でした #転剣 @tenken_official
 # Uchi no Shishou wa Shippo ga Nai https://shippona-anime.com/ #しっぽな @shippona_anime
 # Yama no Susume: Next Summit https://yamanosusume-ns.com/ #ヤマノススメ @yamanosusume
@@ -581,6 +582,47 @@ class ShinmaiRenkinDownload(Fall2022AnimeDownload, NewsTemplate2):
     def download_character(self):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'core_sys/images/main/cont/character/%s.png'
+        self.download_by_template(folder, template, 2, 1)
+
+
+# Shinobi no Ittoki
+class ShinobinoIttoki(Fall2022AnimeDownload, NewsTemplate):
+    title = 'Shinobi no Ittoki'
+    keywords = [title]
+    website = 'https://ninja-ittoki.com/'
+    twitter = 'ninja_ittoki'
+    hashtags = ['忍の一時', 'ninja']
+    folder_name = 'shinobi-ittoki'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.newsLists__item',
+                                    date_select='time', title_select='.newsLists--title', id_select='a',
+                                    next_page_select='.wp-pagenavi *', next_page_eval_index_class='current',
+                                    next_page_eval_index=-1)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('top_main_visual', self.PAGE_PREFIX + 'assets/img/top/main_visual.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'assets/img/character/character%s_main.png'
         self.download_by_template(folder, template, 2, 1)
 
 
