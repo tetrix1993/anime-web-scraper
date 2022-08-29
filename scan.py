@@ -698,12 +698,8 @@ class EeoMediaScanner(MainScanner):
     def run(self):
         if self.last_episode:
             # Stop processing if the last episode has already been downloaded
-            stop = False
-            for i in reversed(range(self.last_episode)):
-                if self.is_image_exists(str(i + 1).zfill(2) + '_01', self.base_folder):
-                    stop = True
-                    break
-            if stop:
+            if self.is_image_exists(str(self.last_episode).zfill(2) + '_01', self.base_folder) or \
+                    self.is_image_exists('last_01', self.base_folder):
                 return
 
         first_page_url = self.SEARCH_PREFIX + '+'.join(self.keywords)
