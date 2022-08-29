@@ -1,7 +1,7 @@
 import os
 import requests
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
-from scan import AniverseMagazineScanner, MocaNewsScanner
+from scan import AniverseMagazineScanner, MocaNewsScanner, EeoMediaScanner
 from bs4.element import Tag
 from datetime import datetime
 
@@ -1535,8 +1535,9 @@ class TsurekanoDownload(Summer2022AnimeDownload, NewsTemplate):
 
     def download_episode_preview_external(self):
         keywords = ['継母の連れ子が元カノだった', '先行カット']
-        AniverseMagazineScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE,
-                                end_date='20220602', download_id=self.download_id).run()
+        EeoMediaScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE, download_id=self.download_id).run()
+        # AniverseMagazineScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE,
+        #                        end_date='20220602', download_id=self.download_id).run()
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
