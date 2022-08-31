@@ -13,9 +13,10 @@ def run():
     for subclass in Summer2022AnimeDownload.__subclasses__():
         if subclass.enabled:
             downloads.append(subclass())
-    downloads += [AkebichanDownload(), KisekoiDownload()]
-    subclasses = Spring2022AnimeDownload.__subclasses__() \
-        + Fall2022AnimeDownload.__subclasses__() \
+    downloads += [SpyFamilyDownload(), KakkounoIinazukeDownload(), SummertimeRenderDownload(), Kingdom4Download(),
+                  KunoichiTsubakiDownload(), MachikadoMazoku2Download(), MobsekaDownload(), ShikimorisanDownload(),
+                  Kaguyasama3Download(), TateNoYuusha2Download()]
+    subclasses = Fall2022AnimeDownload.__subclasses__() \
         + Winter2023AnimeDownload.__subclasses__() \
         + Spring2023AnimeDownload.__subclasses__() \
         + UnconfirmedDownload.__subclasses__()
