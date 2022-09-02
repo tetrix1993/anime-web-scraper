@@ -2029,10 +2029,16 @@ class SoreayuDownload(Summer2022AnimeDownload, NewsTemplate):
         image_prefix = self.PAGE_PREFIX + '_nuxt/'
         try:
             soup = self.get_soup(self.PAGE_PREFIX + 'story/')
-            js_url = soup.select('link[rel=preload][href]')[-1]['href']
-            if js_url.startswith('/'):
-                js_url = js_url[1:]
-            js_file_content = self.get_response(self.PAGE_PREFIX + js_url)
+            js_urls = soup.select('link[rel=preload][href]')
+            js_file_content = None
+            for url in reversed(js_urls):
+                test_url = url['href'][1:] if url['href'].startswith('/') else url['href']
+                file_content = self.get_response(self.PAGE_PREFIX + test_url)
+                if 'img/story1_' in file_content:
+                    js_file_content = file_content
+                    break
+            if js_file_content is None:
+                return
             for ep in range(self.FINAL_EPISODE):
                 episode = str(ep + 1).zfill(2)
                 if self.is_image_exists(episode + '_1'):
