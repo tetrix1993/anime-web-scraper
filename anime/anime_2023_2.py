@@ -65,7 +65,7 @@ class Isesuma2Download(Spring2023AnimeDownload, NewsTemplate):
 
 
 # Tensei Kizoku no Isekai Boukenroku
-class TenseiKizokuDownload(Spring2023AnimeDownload):
+class TenseiKizokuDownload(Spring2023AnimeDownload, NewsTemplate):
     title = 'Tensei Kizoku no Isekai Boukenroku'
     keywords = [title, "Chronicles of an Aristocrat Reborn in Another World"]
     website = 'https://www.tensei-kizoku.jp/'
@@ -80,14 +80,35 @@ class TenseiKizokuDownload(Spring2023AnimeDownload):
 
     def run(self):
         self.download_episode_preview()
-        # self.download_news()
+        self.download_news()
         self.download_key_visual()
+        self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news li',
+                                    date_select='.news_date', title_select='.news_title', id_select='a',
+                                    news_prefix='')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         self.image_list = []
         self.add_to_image_list('kv', self.PAGE_PREFIX + 'img/kv.png')
         self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            self.image_list = []
+            images = soup.select('.character img[src]')
+            for image in images:
+                if '/chara/' in image['src']:
+                    image_url = self.PAGE_PREFIX + image['src']
+                    image_name = self.generate_image_name_from_url(image_url, 'chara')
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
