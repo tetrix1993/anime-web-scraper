@@ -288,6 +288,7 @@ class FutokunoGuildDownload(Fall2022AnimeDownload, NewsTemplate2):
         self.download_episode_preview()
         self.download_news()
         self.download_key_visual()
+        self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
@@ -302,6 +303,40 @@ class FutokunoGuildDownload(Fall2022AnimeDownload, NewsTemplate2):
         self.add_to_image_list('tz_kv', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv.png')
         self.add_to_image_list('top_kv', self.PAGE_PREFIX + 'core_sys/images/main/top/kv.jpg')
         self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'chara/kikuru.html')
+            a_tags = soup.select('#ContentsListUnit01 a[href]')
+            for a_tag in a_tags:
+                if not a_tag['href'].endswith('.html'):
+                    continue
+                page = a_tag['href'].split('/')[-1].split('.html')[0]
+                if page in processed:
+                    continue
+                if page == 'kikuru':
+                    chara_soup = soup
+                else:
+                    chara_soup = self.get_soup(self.PAGE_PREFIX + a_tag['href'].replace('../', ''))
+                if chara_soup is None:
+                    continue
+                self.image_list = []
+                images = chara_soup.select('.chara__img img[src]')
+                for image in images:
+                    if '/chara/' not in image['src']:
+                        continue
+                    image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                    image_name = self.generate_image_name_from_url(image_url, 'chara')
+                    self.add_to_image_list(image_name, image_url)
+                if len(self.image_list) > 0:
+                    processed.append(page)
+                self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Fuufu Ijou, Koibito Miman.
