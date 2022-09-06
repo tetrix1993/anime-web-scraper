@@ -100,6 +100,7 @@ The premiere date for the anime listed here has not been announced.
 * [Otonari no Tenshi-sama ni Itsunomanika Dame Ningen ni Sareteita Ken](https://otonarino-tenshisama.jp/)
 * [Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita 2nd Season](https://slime300-anime.com/)
 * [Spy Kyoushitsu](https://spyroom-anime.com/)
+* [Tearmoon Teikoku Monogatari: Dantoudai kara Hajimaru, Hime no Tensei Gyakuten Story](https://tearmoon-pr.com/)
 * [Tensei Oujo to Tensai Reijou no Mahou Kakumei](https://tenten-kakumei.com/)
 * [Tonikaku Kawaii 2nd Season](http://tonikawa.com/)
 * [Watashi no Yuri wa Oshigoto desu!](https://watayuri-anime.com/)
