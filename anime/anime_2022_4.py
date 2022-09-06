@@ -6,6 +6,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Akiba Meido Sensou https://akibamaidwar.com/ #アキバ冥途戦争 @akbmaidwar
 # Akuyaku Reijou nanode Last Boss wo Kattemimashita https://akulas-pr.com/ #悪ラス @akulas_pr
 # Bocchi the Rock! https://bocchi.rocks/ #ぼっち・ざ・ろっく #BocchiTheRock @BTR_anime
+# Do It Yourself!! https://diy-anime.com/ #diyアニメ @diy_anime
 # Futoku no Guild https://futoku-no-anime.com/ #futoku_anime #不徳のギルド @futoku_anime
 # Fuufu Ijou, Koibito Miman. https://fuukoi-anime.com/ #ふうこいアニメ @fuukoi_anime
 # Kage no Jitsuryokusha ni Naritakute! https://shadow-garden.jp/ #陰の実力者 @Shadowgarden_PR
@@ -268,6 +269,98 @@ class BocchiTheRockDownload(Fall2022AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+
+# Do It Yourself!!
+class DoItYourselfDownload(Fall2022AnimeDownload):
+    title = 'Do It Yourself!!'
+    keywords = [title, 'DIY']
+    website = 'https://diy-anime.com/'
+    twitter = 'diy_anime'
+    hashtags = 'diyアニメ'
+    folder_name = 'diy'
+    enabled = False
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index', diff=2)
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        try:
+            page = 0
+            stop = False
+            news_obj = self.get_last_news_log_object()
+            results = []
+            curr_news_url = news_url
+            while len(curr_news_url) > 0:
+                page += 1
+                soup = self.get_soup(curr_news_url, decode=True)
+                articles = soup.select('li.news_List_Item')
+                for article in articles:
+                    tag_date = article.find('time', class_='roboto')
+                    tag_title = article.find('div', class_='ttl')
+                    a_tag = article.find('a')
+                    if tag_date and a_tag and a_tag.has_attr('href'):
+                        article_id = news_url + a_tag['href']
+                        date = self.format_news_date(tag_date.text.strip().replace('/', '.'))
+                        if len(date) == 0:
+                            continue
+                        title = ' '.join(tag_title.text.strip().split())
+                        if news_obj and ((news_obj['id'] == article_id and news_obj['title'] == title)
+                                         or date < news_obj['date']):
+                            stop = True
+                            break
+                        results.append(self.create_news_log_object(date, title, article_id))
+
+                if stop:
+                    break
+                next_page = soup.select('div.paging a.next')
+                if len(next_page) > 0:
+                    try:
+                        next_page_num = int(next_page[0]['href'].split('=')[1])
+                        if next_page_num == page:
+                            break
+                        else:
+                            curr_news_url = next_page[0]['href']
+                    except Exception:
+                        break
+                else:
+                    break
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log_from_news_log_object(result)
+                if process_result == 0:
+                    success_count += 1
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
+        except Exception as e:
+            self.print_exception(e, 'News')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('teaser', 'https://pbs.twimg.com/media/ExRRykWU4AEZ6Cy?format=jpg&name=large')
+        self.add_to_image_list('teaser_tw', self.PAGE_PREFIX + 'assets/images/pc/teaser/img_kv.png')
+        self.download_image_list(folder)
+
+        template = self.PAGE_PREFIX + 'assets/images/pc/index/img_kv-%s.png'
+        self.download_by_template(folder, template, 1)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'assets/images/pc/teaser/img_chara-%s.png'
+        self.download_by_template(folder, template, 1, 0)
 
 
 # Futoku no Guild
