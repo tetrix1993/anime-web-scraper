@@ -470,7 +470,7 @@ class JitsuoresaikyouDownload(UnconfirmedDownload, NewsTemplate):
     keywords = [title, 'Am I Actually the Strongest?']
     website = 'https://jitsuhaoresaikyo-anime.com/'
     twitter = 'jitsuoresaikyo'
-    # hashtags = ''
+    hashtags = '実は俺最強でした '
     folder_name = 'jitsuoresaikyo'
 
     PAGE_PREFIX = website
@@ -484,7 +484,8 @@ class JitsuoresaikyouDownload(UnconfirmedDownload, NewsTemplate):
         self.download_key_visual()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        pass
+        # self.has_website_updated(self.PAGE_PREFIX, 'index')
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.c-in-news__item',
