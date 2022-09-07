@@ -90,6 +90,7 @@ The premiere date for the anime listed here has not been announced.
 * [Isekai One Turn Kill Nee-san: Ane Douhan no Isekai Seikatsu Hajimemashita](https://onekillsister.com/)
 * [Isekai Shoukan wa Nidome desu](https://isenido.com/)
 * [Itai no wa Iya nano de Bougyoryoku ni Kyokufuri Shitai to Omoimasu. 2nd Season](https://bofuri.jp/)
+* [Jitsu wa Ore, Saikyou deshita?](https://jitsuhaoresaikyo-anime.com/)
 * [Kaiko sareta Ankoku Heishi (30-dai) no Slow na Second Life](https://ankokuheishi-anime.com/)
 * [Kubo-san wa Mob wo Yurusanai](https://kubosan-anime.jp/)
 * [Maou Gakuin no Futekigousha: Shijou Saikyou no Maou no Shiso, Tensei shite Shison-tachi no Gakkou e 2nd Season](https://maohgakuin.com/)

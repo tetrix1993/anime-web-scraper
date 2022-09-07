@@ -12,6 +12,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Isekai One Turn Kill Neesan https://onekillsister.com/ #一撃姉 @onekillsister
 # Isekai Shoukan wa Nidome desu https://isenido.com/ #いせにど @isenido_anime
 # Itai no wa https://bofuri.jp/story/ #防振り #bofuri @bofuri_anime
+# Jitsu wa Ore, Saikyou deshita? https://jitsuhaoresaikyo-anime.com/ @jitsuoresaikyo
 # Kaiko sareta Ankoku Heishi (30-dai) no Slow na Second Life https://ankokuheishi-anime.com/ #暗黒兵士 @ankokuheishi_PR
 # Kubo-san wa Mob wo Yurusanai https://kubosan-anime.jp/ #久保さん @kubosan_anime
 # Maou Gakuin no Futekigousha 2nd Season https://maohgakuin.com/ #魔王学院 @maohgakuin
@@ -460,6 +461,41 @@ class Bofuri2Download(UnconfirmedDownload):
         self.add_to_image_list('aprilfools_tw', 'https://pbs.twimg.com/media/FPOV5F5agAE3czc?format=jpg&name=4096x4096')
         self.add_to_image_list('aprilfools_news', self.PAGE_PREFIX + 'assets/news/65a.jpg')
         self.add_to_image_list('aprilfools_top', self.PAGE_PREFIX + 'images/top-visual/2022apr/all.jpg')
+        self.download_image_list(folder)
+
+
+# Jitsu wa Ore, Saikyou deshita?
+class JitsuoresaikyouDownload(UnconfirmedDownload, NewsTemplate):
+    title = 'Jitsu wa Ore, Saikyou deshita?'
+    keywords = [title, 'Am I Actually the Strongest?']
+    website = 'https://jitsuhaoresaikyo-anime.com/'
+    twitter = 'jitsuoresaikyo'
+    # hashtags = ''
+    folder_name = 'jitsuoresaikyo'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.c-in-news__item',
+                                    date_select='.c-in-news__item-date', title_select='.c-in-news__item-ttl',
+                                    id_select='a', a_tag_prefix=self.PAGE_PREFIX, a_tag_start_text_to_remove='../')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FcBIWLTaMAA2GK6?format=jpg&name=large')
+        self.add_to_image_list('top_img_main', self.PAGE_PREFIX + 'assets/img/top/img_main.jpg')
         self.download_image_list(folder)
 
 
