@@ -14,6 +14,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Itai no wa https://bofuri.jp/story/ #防振り #bofuri @bofuri_anime
 # Jitsu wa Ore, Saikyou deshita? https://jitsuhaoresaikyo-anime.com/ @jitsuoresaikyo
 # Kaiko sareta Ankoku Heishi (30-dai) no Slow na Second Life https://ankokuheishi-anime.com/ #暗黒兵士 @ankokuheishi_PR
+# Keikenzumi na Kimi to, Keiken Zero na Ore ga, Otsukiai suru Hanashi. https://kimizero.com/ #キミゼロ @kimizero_anime
 # Kubo-san wa Mob wo Yurusanai https://kubosan-anime.jp/ #久保さん @kubosan_anime
 # Maou Gakuin no Futekigousha 2nd Season https://maohgakuin.com/ #魔王学院 @maohgakuin
 # Masamune-kun no Revenge R https://masamune-tv.com/ #MASA_A @masamune_tv
@@ -539,6 +540,40 @@ class AnkokuHeishiDownload(UnconfirmedDownload):
         folder = self.create_media_directory()
         self.image_list = []
         self.add_to_image_list('comment_img', self.PAGE_PREFIX + 'img/comment_img.png')
+        self.download_image_list(folder)
+
+
+# Keikenzumi na Kimi to, Keiken Zero na Ore ga, Otsukiai suru Hanashi.
+class KimizeroDownload(UnconfirmedDownload, NewsTemplate2):
+    title = 'Keikenzumi na Kimi to, Keiken Zero na Ore ga, Otsukiai suru Hanashi.'
+    keywords = [title, "Kimizero"]
+    website = 'https://kimizero.com/'
+    twitter = 'kimizero_anime'
+    hashtags = 'キミゼロ'
+    folder_name = 'kimizero'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FcM7PglaIAA_9Bd?format=jpg&name=4096x4096')
+        self.add_to_image_list('tz_kv', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv.jpg')
+        self.add_to_image_list('tz_loading_kv', self.PAGE_PREFIX + 'core_sys/images/main/tz/loading_kv.jpg')
         self.download_image_list(folder)
 
 
