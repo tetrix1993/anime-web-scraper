@@ -395,6 +395,7 @@ class FutokunoGuildDownload(Fall2022AnimeDownload, NewsTemplate2):
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FNfyKsbVcAMufgT?format=jpg&name=medium')
         self.add_to_image_list('tz_kv', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv.png')
         self.add_to_image_list('top_kv', self.PAGE_PREFIX + 'core_sys/images/main/top/kv.jpg')
+        self.add_to_image_list('top_kv2', self.PAGE_PREFIX + 'core_sys/images/main/top/kv2.jpg')
         self.download_image_list(folder)
 
     def download_character(self):
