@@ -237,20 +237,20 @@ class BocchiTheRockDownload(Fall2022AnimeDownload, NewsTemplate):
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
-        css_url = self.PAGE_PREFIX + 'assets/css/top.css'
+        css_url = self.PAGE_PREFIX + 'assets/css/page/top.css'
         try:
             content = self.get_response(css_url)
             if content is None or len(content) == 0:
                 return
-            content_split = content.split('.mv__main {')
+            content_split = content.split('.mainvisual__ph__slide {')
             self.image_list = []
             for i in range(1, len(content_split), 1):
                 r_index = content_split[i].find(')')
                 if r_index > 0:
-                    l_index = content_split[i][0:r_index].find('url(../../')
+                    l_index = content_split[i][0:r_index].find('url(/')
                     if l_index > 0:
-                        image_url = self.PAGE_PREFIX + content_split[i][l_index + 10:r_index]
-                        image_name = self.generate_image_name_from_url(image_url, 'top')
+                        image_url = self.PAGE_PREFIX + content_split[i][l_index + 5:r_index]
+                        image_name = self.generate_image_name_from_url(image_url, 'slides')
                         self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)
         except Exception as e:
@@ -258,14 +258,16 @@ class BocchiTheRockDownload(Fall2022AnimeDownload, NewsTemplate):
 
     def download_character(self):
         folder = self.create_character_directory()
+        prefix = self.PAGE_PREFIX + 'assets/img/page/character/'
         try:
-            soup = self.get_soup(self.PAGE_PREFIX)
-            images = soup.select('.modal_ch__faceup__main img[src],.modal_ch__info__ph img[src]')
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            a_tags = soup.select('.c-inner ul.tabs.c-barlow a[href]')
             self.image_list = []
-            for image in images:
-                image_url = self.PAGE_PREFIX + image['src'][1:]
-                image_name = self.generate_image_name_from_url(image_url, 'detail')
-                self.add_to_image_list(image_name, image_url)
+            for a_tag in a_tags:
+                if a_tag['href'].endswith('.html'):
+                    chara_name = a_tag['href'].replace('.html', '')
+                    self.add_to_image_list('main_' + chara_name, prefix + chara_name + '/main.png')
+                    self.add_to_image_list('icon_' + chara_name, prefix + chara_name + '/icon.png')
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
