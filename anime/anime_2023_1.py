@@ -6,6 +6,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Ijiranaide, Nagatoro-san 2nd Attack https://www.nagatorosan.jp/ #長瀞さん @nagatoro_tv
 # Inu ni Nattara Suki na Hito ni Hirowareta. https://inuhiro-anime.com/ #犬ひろ @inuninattara
 # Isekai Nonbiri Nouka https://nonbiri-nouka.com/ #のんびり農家 @nonbiri_nouka
+# Kubo-san wa Mob wo Yurusanai https://kubosan-anime.jp/ #久保さん @kubosan_anime
 # Kyokou Suiri S2 https://kyokousuiri.jp/ #虚構推理 @kyokou_suiri
 # Oniichan wa Oshimai! https://onimai.jp/ #おにまい @onimai_anime
 # Rougo ni Sonaete Isekai de 8-manmai no Kinka wo Tamemasu https://roukin8-anime.com/ #ろうきん8 #roukin8 @roukin8_anime
@@ -199,6 +200,49 @@ class IsekaiNonbiriNoukaDownload(Winter2023AnimeDownload):
         folder = self.create_key_visual_directory()
         self.image_list = []
         self.add_to_image_list('tz', 'https://ogre.natalie.mu/media/news/comic/2022/0826/nonbiri-nouka_Teaser.jpg')
+        self.download_image_list(folder)
+
+
+# Kubo-san wa Mob wo Yurusanai
+class KubosanDownload(Winter2023AnimeDownload, NewsTemplate2):
+    title = 'Kubo-san wa Mob wo Yurusanai'
+    keywords = [title, "Kubo Won't Let Me Be Invisible"]
+    website = 'https://kubosan-anime.jp/'
+    twitter = 'kubosan_anime'
+    hashtags = '久保さん'
+    folder_name = 'kubosan'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz', self.PAGE_PREFIX + 'core_sys/images/news/00000002/block/00000008/00000002.jpg')
+        self.add_to_image_list('tz2', self.PAGE_PREFIX + 'core_sys/images/news/00000006/block/00000014/00000007.png')
+        self.add_to_image_list('img_kv1', 'https://pbs.twimg.com/media/FXsiHJWaQAU3UsM?format=jpg&name=large')
+        # self.add_to_image_list('img_kv2', 'https://pbs.twimg.com/media/Fcmcmk2acAAd4mc?format=jpg&name=large')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_chara_kubo', self.PAGE_PREFIX + 'core_sys/images/main/tz/chara_kubo.png')
+        self.add_to_image_list('tz_chara_shiraishi', self.PAGE_PREFIX + 'core_sys/images/main/tz/chara_shiraishi.png')
         self.download_image_list(folder)
 
 
