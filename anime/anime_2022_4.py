@@ -538,6 +538,8 @@ class KagenoJitsuryokushaDownload(Fall2022AnimeDownload, NewsTemplate):
         self.image_list = []
         self.add_to_image_list('tz', self.PAGE_PREFIX + 'news/img/20211027_03_1.jpg')
         self.add_to_image_list('top_newvisual', self.PAGE_PREFIX + 'assets/img/top/newvisual.jpg')
+        self.add_to_image_list('common_visual_b', self.PAGE_PREFIX + 'assets/img/common/visual_b.jpg')
+        self.add_to_image_list('common_visual_w', self.PAGE_PREFIX + 'assets/img/common/visual_w.jpg')
         self.download_image_list(folder)
 
     def download_character(self):
