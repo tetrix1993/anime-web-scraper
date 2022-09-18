@@ -140,6 +140,7 @@ The premiere date for the anime listed here has not been announced.
 * [Koukyuu no Karasu](https://kokyu-anime.com/)
 * [Mairimashita! Iruma-kun 3rd Season](https://www.nhk-character.com/chara/iruma/)
 * [Mob Psycho 100 III](https://mobpsycho100.com/)
+* [Mushikaburi-hime](https://mushikaburihime.com/)
 * [Noumin Kanren no Skill bakka Agetetara Nazeka Tsuyoku Natta.](https://nouminkanren.com/)
 * [Renai Flops](https://loveflops.com/)
 * [Shinmai Renkinjutsushi no Tenpo Keiei](https://shinmai-renkin.com/)

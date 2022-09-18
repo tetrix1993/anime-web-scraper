@@ -17,6 +17,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Koukyuu no Karasu https://kokyu-anime.com/ #後宮の烏 @kokyu_anime
 # Mairimashita! Iruma-kun S3 https://www.nhk-character.com/chara/iruma/ #魔入りました入間くん #irumakun @nep_irumakun
 # Mob Psycho 100 III https://mobpsycho100.com/ #モブサイコ100 #mobpsycho100 @mobpsycho_anime
+# Mushikaburi-hime https://mushikaburihime.com/ #虫かぶり姫 @mushikaburihime
 # Noumin Kanren no Skill bakka Agetetara Nazeka Tsuyoku Natta. https://nouminkanren.com/ #農民関連 @nouminkanren
 # Renai Flops https://loveflops.com/ #恋愛フロップス @loveflops_pr
 # Shinmai Renkinjutsushi no Tenpo Keiei https://shinmai-renkin.com/ #shinmai_renkin @shinmai_renkin
@@ -841,6 +842,43 @@ class MobPsycho3Download(Fall2022AnimeDownload, NewsTemplate):
 
         template = self.PAGE_PREFIX + 'wp-content/themes/mobpsycho3rd/assets/images/common/index/img_kv_%s.jpg'
         self.download_by_template(folder, template, 2, 2)
+
+
+# Mushikaburi-hime
+class MushikaburihimeDownload(Fall2022AnimeDownload, NewsTemplate):
+    title = 'Mushikaburi-hime'
+    keywords = [title, 'Princess of the Bibliophile.']
+    website = 'https://mushikaburihime.com/'
+    twitter = 'mushikaburihime'
+    hashtags = '虫かぶり姫'
+    folder_name = 'mushikaburihime'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article.content-entry',
+                                    title_select='h2.entry-title span', date_select='div.entry-date span',
+                                    id_select=None, id_has_id=True, news_prefix='news.html')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FUEy08VagAA2T4K?format=jpg&name=large')
+        self.download_image_list(folder)
+
+        template = self.PAGE_PREFIX + 'assets/news/vis-t%s.jpg'
+        self.download_by_template(folder, template, 1, 1, prefix='news_')
 
 
 # Noumin Kanren no Skill bakka Agetetara Nazeka Tsuyoku Natta.
