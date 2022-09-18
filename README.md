@@ -134,6 +134,7 @@ The premiere date for the anime listed here has not been announced.
 * [Fumetsu no Anata e Season 2](https://www.anime-fumetsunoanatae.com/)
 * [Futoku no Guild](https://futoku-no-anime.com/)
 * [Fuufu Ijou, Koibito Miman.](https://fuukoi-anime.com/)
+* [Golden Kamuy 4th Season](https://www.kamuy-anime.com/)
 * [Kage no Jitsuryokusha ni Naritakute!](https://shadow-garden.jp/)
 * [Noumin Kanren no Skill bakka Agetetara Nazeka Tsuyoku Natta.](https://nouminkanren.com/)
 * [Renai Flops](https://loveflops.com/)

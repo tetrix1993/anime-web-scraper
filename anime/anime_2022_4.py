@@ -11,6 +11,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Fumetsu no Anata e S2 https://anime-fumetsunoanatae.com/ #不滅のあなたへ @nep_fumetsu
 # Futoku no Guild https://futoku-no-anime.com/ #futoku_anime #不徳のギルド @futoku_anime
 # Fuufu Ijou, Koibito Miman. https://fuukoi-anime.com/ #ふうこいアニメ @fuukoi_anime
+# Golden Kamuy S4 https://www.kamuy-anime.com/ #ゴールデンカムイ @kamuy_official
 # Kage no Jitsuryokusha ni Naritakute! https://shadow-garden.jp/ #陰の実力者 @Shadowgarden_PR
 # Noumin Kanren no Skill bakka Agetetara Nazeka Tsuyoku Natta. https://nouminkanren.com/ #農民関連 @nouminkanren
 # Renai Flops https://loveflops.com/ #恋愛フロップス @loveflops_pr
@@ -608,6 +609,41 @@ class FuukoiDownload(Fall2022AnimeDownload, NewsTemplate2):
         except Exception as e:
             self.print_exception(e, 'Character')
         self.create_cache_file(cache_filepath, processed, num_processed)
+
+
+# Golden Kamuy 4th Season
+class GoldenKamuy4Download(Fall2022AnimeDownload, NewsTemplate2):
+    title = "Golden Kamuy 4th Season"
+    keywords = [title, "Kamui"]
+    website = 'https://kamuy-anime.com/'
+    twitter = 'kamuy_anime'
+    hashtags = 'ゴールデンカムイ'
+    folder_name = 'golden-kamuy4'
+
+    PAGE_PREFIX = website
+    PAGE_URL = PAGE_PREFIX + "story/%s.html"
+    FIRST_EPISODE = 37
+    FINAL_EPISODE = 48
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(self.PAGE_PREFIX, stop_date='2021.11', date_select='.day')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('kv', 'https://pbs.twimg.com/media/FcwhM9-agAEwhIm?format=jpg&name=4096x4096')
+        self.download_image_list(folder)
 
 
 # Kage no Jitsuryokusha ni Naritakute!

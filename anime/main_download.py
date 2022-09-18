@@ -1348,7 +1348,7 @@ class NewsTemplate:
 # News template
 # Where exists div.list_01, date = td.day, title = div.title, nagivation next page = nb_nex
 class NewsTemplate2:
-    def download_template_news(self, page_prefix, first_page_url=None, stop_date=None):
+    def download_template_news(self, page_prefix, first_page_url=None, stop_date=None, date_select=None):
         if not issubclass(self.__class__, MainDownload):
             return
 
@@ -1373,7 +1373,13 @@ class NewsTemplate2:
                     continue
                 trs = list_div.find_all('tr')
                 for tr in trs:
-                    tag_date = tr.find('td', class_='day')
+                    tag_date = None
+                    if date_select is None:
+                        tag_date = tr.find('td', class_='day')
+                    else:
+                        tag_dates = tr.select(date_select)
+                        if len(tag_dates) > 0:
+                            tag_date = tag_dates[0]
                     tag_title = tr.find('div', class_='title')
                     a_tag = tr.find('a')
                     if tag_date and tag_title:
