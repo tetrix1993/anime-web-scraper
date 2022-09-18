@@ -13,6 +13,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Fuufu Ijou, Koibito Miman. https://fuukoi-anime.com/ #ふうこいアニメ @fuukoi_anime
 # Golden Kamuy S4 https://www.kamuy-anime.com/ #ゴールデンカムイ @kamuy_official
 # Kage no Jitsuryokusha ni Naritakute! https://shadow-garden.jp/ #陰の実力者 @Shadowgarden_PR
+# KanColle: Itsuka Ano Umi de https://kancolle-itsuumi.com/ #艦これ #いつかあの海で @anime_KanColle
 # Noumin Kanren no Skill bakka Agetetara Nazeka Tsuyoku Natta. https://nouminkanren.com/ #農民関連 @nouminkanren
 # Renai Flops https://loveflops.com/ #恋愛フロップス @loveflops_pr
 # Shinmai Renkinjutsushi no Tenpo Keiei https://shinmai-renkin.com/ #shinmai_renkin @shinmai_renkin
@@ -687,6 +688,46 @@ class KagenoJitsuryokushaDownload(Fall2022AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         prefix = self.PAGE_PREFIX + 'assets/img/top/character/chara'
         self.download_by_template(folder, [prefix + '%s_main1.png', prefix + '%s_main2.png'], 2, 1)
+
+
+# KanColle: Itsuka Ano Umi de
+class KanColle2Download(Fall2022AnimeDownload, NewsTemplate2):
+    title = 'KanColle: Itsuka Ano Umi de'
+    keywords = [title]
+    website = 'https://kancolle-itsuumi.com/'
+    twitter = 'anime_KanColle'
+    hashtags = ['艦これ', 'いつかあの海で']
+    folder_name = 'kancolle2'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.kvSlide__slide img[src]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src']
+                image_name = self.generate_image_name_from_url(image_url, 'images')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
 
 
 # Noumin Kanren no Skill bakka Agetetara Nazeka Tsuyoku Natta.
