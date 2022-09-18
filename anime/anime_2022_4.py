@@ -15,6 +15,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Kage no Jitsuryokusha ni Naritakute! https://shadow-garden.jp/ #陰の実力者 @Shadowgarden_PR
 # KanColle: Itsuka Ano Umi de https://kancolle-itsuumi.com/ #艦これ #いつかあの海で @anime_KanColle
 # Koukyuu no Karasu https://kokyu-anime.com/ #後宮の烏 @kokyu_anime
+# Mairimashita! Iruma-kun S3 https://www.nhk-character.com/chara/iruma/ #魔入りました入間くん #irumakun @nep_irumakun
 # Noumin Kanren no Skill bakka Agetetara Nazeka Tsuyoku Natta. https://nouminkanren.com/ #農民関連 @nouminkanren
 # Renai Flops https://loveflops.com/ #恋愛フロップス @loveflops_pr
 # Shinmai Renkinjutsushi no Tenpo Keiei https://shinmai-renkin.com/ #shinmai_renkin @shinmai_renkin
@@ -774,6 +775,34 @@ class KokyuKarasuDownload(Fall2022AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Key Visual')
+
+
+# Mairimashita! Iruma-kun 3rd Season
+class IrumaKun3Download(Fall2022AnimeDownload):
+    title = "Mairimashita! Iruma-kun 3rd Season"
+    keywords = ["Mairimashita! Iruma-kun", "Welcome to Demon School! Iruma-kun", "Irumakun"]
+    website = 'https://www.nhk-character.com/chara/iruma/'
+    twitter = 'nep_irumakun'
+    hashtags = ['魔入りました入間くん', 'irumakun']
+    folder_name = 'iruma-kun3'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('kv', 'https://pbs.twimg.com/media/FaMNYFhagAIIDJ8?format=jpg&name=4096x4096')
+        self.download_image_list(folder)
 
 
 # Noumin Kanren no Skill bakka Agetetara Nazeka Tsuyoku Natta.
