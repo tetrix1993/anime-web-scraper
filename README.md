@@ -131,6 +131,7 @@ The premiere date for the anime listed here has not been announced.
 * [Akuyaku Reijou nanode Last Boss wo Kattemimashita](https://akulas-pr.com/)
 * [Bocchi the Rock!](https://bocchi.rocks/)
 * [Chainsaw Man](https://www.chainsawman.dog/)
+* [Fumetsu no Anata e Season 2](https://www.anime-fumetsunoanatae.com/)
 * [Futoku no Guild](https://futoku-no-anime.com/)
 * [Fuufu Ijou, Koibito Miman.](https://fuukoi-anime.com/)
 * [Kage no Jitsuryokusha ni Naritakute!](https://shadow-garden.jp/)

@@ -416,7 +416,7 @@ class FumetsuNoAnataeDownload(Spring2021AnimeDownload):
             for topic in topics:
                 try:
                     date = self.format_news_date(topic['date'])
-                    if len(date) == 0:
+                    if len(date) == 0 or date > '2022.08.30':
                         continue
                     title = topic['text'].strip()
                     article_id = ''
