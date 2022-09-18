@@ -25,6 +25,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Shinobi no Ittoki https://ninja-ittoki.com/ #忍の一時 #ninja @ninja_ittoki
 # Tensei shitara Ken Deshita https://tenken-anime.com/ #転生したら剣でした #転剣 @tenken_official
 # Uchi no Shishou wa Shippo ga Nai https://shippona-anime.com/ #しっぽな @shippona_anime
+# Urusei Yatsura (2022) https://uy-allstars.com/ #うる星やつら @uy_allstars
 # Yama no Susume: Next Summit https://yamanosusume-ns.com/ #ヤマノススメ @yamanosusume
 # Yuusha Party wo Tsuihou sareta Beast Tamer, Saikyoushu no Nekomimi Shoujo to Deau
 
@@ -1270,6 +1271,65 @@ class ShipponaDownload(Fall2022AnimeDownload, NewsTemplate):
             print("Error in running " + self.__class__.__name__ + " - Character")
             print(e)
         self.download_image_list(folder)
+
+
+# Urusei Yatsura (2022)
+class UruseiYatsuraDownload(Fall2022AnimeDownload, NewsTemplate):
+    title = 'Urusei Yatsura (2022)'
+    keywords = [title]
+    website = 'https://uy-allstars.com/'
+    twitter = 'uy_allstars'
+    hashtags = 'うる星やつら'
+    folder_name = 'uruseiyatsura'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.md-news--li',
+                                    date_select='time', title_select='h4', id_select='a',
+                                    date_func=lambda x: x.replace(' ', ''),
+                                    paging_type=0, next_page_select='ul.pagenation-list li', next_page_eval_index=-1,
+                                    next_page_eval_index_class='is__current')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.fvimg img[src]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'][1:]
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character')
+            images = soup.select('.chardata picture img[src]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'][1:]
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
 
 
 # Yama no Susume: Next Summit

@@ -148,6 +148,7 @@ The premiere date for the anime listed here has not been announced.
 * [Shinobi no Ittoki](https://ninja-ittoki.com/)
 * [Tensei shitara Ken Deshita](https://tenken-anime.com/)
 * [Uchi no Shishou wa Shippo ga Nai](https://shippona-anime.com/)
+* [Urusei Yatsura (2022)](https://uy-allstars.com/)
 * [Yama no Susume: Next Summit](https://yamanosusume-ns.com/)
 * [Yuusha Party wo Tsuihou sareta Beast Tamer, Saikyoushu no Nekomimi Shoujo to Deau](https://beasttamer.jp/)
 
