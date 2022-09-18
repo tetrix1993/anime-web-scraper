@@ -14,6 +14,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Golden Kamuy S4 https://www.kamuy-anime.com/ #ゴールデンカムイ @kamuy_official
 # Kage no Jitsuryokusha ni Naritakute! https://shadow-garden.jp/ #陰の実力者 @Shadowgarden_PR
 # KanColle: Itsuka Ano Umi de https://kancolle-itsuumi.com/ #艦これ #いつかあの海で @anime_KanColle
+# Koukyuu no Karasu https://kokyu-anime.com/ #後宮の烏 @kokyu_anime
 # Noumin Kanren no Skill bakka Agetetara Nazeka Tsuyoku Natta. https://nouminkanren.com/ #農民関連 @nouminkanren
 # Renai Flops https://loveflops.com/ #恋愛フロップス @loveflops_pr
 # Shinmai Renkinjutsushi no Tenpo Keiei https://shinmai-renkin.com/ #shinmai_renkin @shinmai_renkin
@@ -724,6 +725,51 @@ class KanColle2Download(Fall2022AnimeDownload, NewsTemplate2):
             for image in images:
                 image_url = self.PAGE_PREFIX + image['src']
                 image_name = self.generate_image_name_from_url(image_url, 'images')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+
+# Koukyuu no Karasu
+class KokyuKarasuDownload(Fall2022AnimeDownload, NewsTemplate):
+    title = 'Koukyuu no Karasu'
+    keywords = [title, 'Raven of the Inner Palace']
+    website = 'https://kokyu-anime.com/'
+    twitter = 'kokyu_anime'
+    hashtags = '後宮の烏'
+    folder_name = 'kokyukarasu'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.c-news__item',
+                                    date_select='.c-news__item-date', title_select='.c-news__item-ttl',
+                                    id_select='.c-news__item-link', a_tag_prefix=news_url, paging_type=1,
+                                    a_tag_start_text_to_remove='./', next_page_select='.c-pagination__count-item',
+                                    next_page_eval_index_class='is-current', next_page_eval_index=-1)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.p-kv_data img[src]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'][1:]
+                image_name = self.generate_image_name_from_url(image_url, 'img')
                 self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)
         except Exception as e:

@@ -137,6 +137,7 @@ The premiere date for the anime listed here has not been announced.
 * [Golden Kamuy 4th Season](https://www.kamuy-anime.com/)
 * [Kage no Jitsuryokusha ni Naritakute!](https://shadow-garden.jp/)
 * [KanColle: Itsuka Ano Umi de](https://kancolle-itsuumi.com/)
+* [Koukyuu no Karasu](https://kokyu-anime.com/)
 * [Noumin Kanren no Skill bakka Agetetara Nazeka Tsuyoku Natta.](https://nouminkanren.com/)
 * [Renai Flops](https://loveflops.com/)
 * [Shinmai Renkinjutsushi no Tenpo Keiei](https://shinmai-renkin.com/)
