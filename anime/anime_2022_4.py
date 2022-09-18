@@ -16,6 +16,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # KanColle: Itsuka Ano Umi de https://kancolle-itsuumi.com/ #艦これ #いつかあの海で @anime_KanColle
 # Koukyuu no Karasu https://kokyu-anime.com/ #後宮の烏 @kokyu_anime
 # Mairimashita! Iruma-kun S3 https://www.nhk-character.com/chara/iruma/ #魔入りました入間くん #irumakun @nep_irumakun
+# Mob Psycho 100 III https://mobpsycho100.com/ #モブサイコ100 #mobpsycho100 @mobpsycho_anime
 # Noumin Kanren no Skill bakka Agetetara Nazeka Tsuyoku Natta. https://nouminkanren.com/ #農民関連 @nouminkanren
 # Renai Flops https://loveflops.com/ #恋愛フロップス @loveflops_pr
 # Shinmai Renkinjutsushi no Tenpo Keiei https://shinmai-renkin.com/ #shinmai_renkin @shinmai_renkin
@@ -803,6 +804,43 @@ class IrumaKun3Download(Fall2022AnimeDownload):
         self.image_list = []
         self.add_to_image_list('kv', 'https://pbs.twimg.com/media/FaMNYFhagAIIDJ8?format=jpg&name=4096x4096')
         self.download_image_list(folder)
+
+
+# Mob Psycho 100 III
+class MobPsycho3Download(Fall2022AnimeDownload, NewsTemplate):
+    title = 'Mob Psycho 100 III'
+    keywords = [title, '3rd']
+    website = 'https://mobpsycho100.com/'
+    twitter = 'mobpsycho_anime'
+    hashtags = ['モブサイコ100', 'mobpsycho100']
+    folder_name = 'mobpsycho3'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news_List article',
+                                    date_select='.date', title_select='.ttl p', id_select='a',
+                                    date_func=lambda x: x[0:4] + '.' + x[4:])
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('img_kv', self.PAGE_PREFIX + 'wp-content/themes/mobpsycho3rd/assets/images/common/index/img_kv.jpg')
+        self.download_image_list(folder)
+
+        template = self.PAGE_PREFIX + 'wp-content/themes/mobpsycho3rd/assets/images/common/index/img_kv_%s.jpg'
+        self.download_by_template(folder, template, 2, 2)
 
 
 # Noumin Kanren no Skill bakka Agetetara Nazeka Tsuyoku Natta.
