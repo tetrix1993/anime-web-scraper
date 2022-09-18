@@ -6,6 +6,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Akiba Meido Sensou https://akibamaidwar.com/ #アキバ冥途戦争 @akbmaidwar
 # Akuyaku Reijou nanode Last Boss wo Kattemimashita https://akulas-pr.com/ #悪ラス @akulas_pr
 # Bocchi the Rock! https://bocchi.rocks/ #ぼっち・ざ・ろっく #BocchiTheRock @BTR_anime
+# Chainsaw Man https://www.chainsawman.dog/ https://www.chainsawman.dog/ #チェンソーマン @CHAINSAWMAN_PR
 # Do It Yourself!! https://diy-anime.com/ #diyアニメ @diy_anime
 # Futoku no Guild https://futoku-no-anime.com/ #futoku_anime #不徳のギルド @futoku_anime
 # Fuufu Ijou, Koibito Miman. https://fuukoi-anime.com/ #ふうこいアニメ @fuukoi_anime
@@ -271,6 +272,40 @@ class BocchiTheRockDownload(Fall2022AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+
+# Chainsaw Man
+class ChainsawManDownload(Fall2022AnimeDownload, NewsTemplate):
+    title = 'Chainsaw Man'
+    keywords = [title]
+    website = 'https://www.chainsawman.dog/'
+    twitter = 'CHAINSAWMAN_PR'
+    hashtags = 'チェンソーマン'
+    folder_name = 'chainsawman'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.p-news__item',
+                                    date_select='.p-news__date span', title_select='.p-news__txt p', id_select='a',
+                                    a_tag_prefix=self.PAGE_PREFIX + 'news/', a_tag_start_text_to_remove='./')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('index_main_img', self.PAGE_PREFIX + 'assets/img/index/main_img.png')
+        self.download_image_list(folder)
 
 
 # Do It Yourself!!
