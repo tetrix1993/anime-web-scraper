@@ -19,6 +19,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Mob Psycho 100 III https://mobpsycho100.com/ #モブサイコ100 #mobpsycho100 @mobpsycho_anime
 # Mushikaburi-hime https://mushikaburihime.com/ #虫かぶり姫 @mushikaburihime
 # Noumin Kanren no Skill bakka Agetetara Nazeka Tsuyoku Natta. https://nouminkanren.com/ #農民関連 @nouminkanren
+# Peter Grill to Kenja no Jikan: Super Extra https://petergrill-anime.jp/ #賢者タイムアニメ @petergrillanime
 # Renai Flops https://loveflops.com/ #恋愛フロップス @loveflops_pr
 # Shinmai Renkinjutsushi no Tenpo Keiei https://shinmai-renkin.com/ #shinmai_renkin @shinmai_renkin
 # Shinobi no Ittoki https://ninja-ittoki.com/ #忍の一時 #ninja @ninja_ittoki
@@ -938,6 +939,47 @@ class NouminKanrenDownload(Fall2022AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+
+# Peter Grill to Kenja no Jikan: Super Extra
+class PeterGrill2Download(Fall2022AnimeDownload, NewsTemplate):
+    title = "Peter Grill to Kenja no Jikan: Super Extra"
+    keywords = [title, "Peter Grill and the Philosopher's Time", "2nd"]
+    website = 'http://petergrill-anime.jp/'
+    twitter = 'petergrillanime'
+    hashtags = '賢者タイムアニメ'
+    folder_name = 'petergrill2'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-list',
+                                    date_select='h2', title_select='h1', id_select='a',
+                                    news_prefix='news.php', a_tag_prefix=self.PAGE_PREFIX,
+                                    a_tag_start_text_to_remove='./')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('kv_tw', 'https://pbs.twimg.com/media/FRKIUkuaQAAAS4G?format=jpg&name=4096x4096')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'img/char/char_%s.png'
+        self.download_by_template(folder, template, 2, 1)
 
 
 # Renai Flops

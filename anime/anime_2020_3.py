@@ -661,7 +661,7 @@ class PeterGrillDownload(Summer2020AnimeDownload):
     keywords = [title, "Peter Grill and the Philosopher's Time"]
     folder_name = 'petergrill'
 
-    PAGE_PREFIX = 'http://petergrill-anime.jp/'
+    PAGE_PREFIX = 'http://petergrill-anime.jp/pg_1'
 
     def __init__(self):
         super().__init__()
@@ -677,7 +677,7 @@ class PeterGrillDownload(Summer2020AnimeDownload):
     def download_episode_preview(self):
         #self.has_website_updated(self.PAGE_PREFIX)
         try:
-            soup = self.get_soup('http://petergrill-anime.jp/works.php')
+            soup = self.get_soup(self.PAGE_PREFIX + 'works.php')
             episode_list_items = soup.find_all('li', class_='episode_list_item')
             for episode_list_item in episode_list_items:
                 para = episode_list_item.find('p', class_='episode_list_honbun')
@@ -709,7 +709,7 @@ class PeterGrillDownload(Summer2020AnimeDownload):
             print("Error in running " + self.__class__.__name__)
             print(e)
 
-        template_url = 'http://petergrill-anime.jp/images/upload/pg%s_still_%s.png'
+        template_url = self.PAGE_PREFIX + 'images/upload/pg%s_still_%s.png'
         for i in range(13):
             episode = str(i + 1).zfill(2)
             if self.is_image_exists(episode + '_1'):
@@ -740,13 +740,13 @@ class PeterGrillDownload(Summer2020AnimeDownload):
     def download_key_visual(self):
         keyvisual_folder = self.create_key_visual_directory()
         image_objs = [
-            {'name': 'kv', 'url': 'http://petergrill-anime.jp/images/key_v_202003.png'}]
+            {'name': 'kv', 'url': self.PAGE_PREFIX + 'images/key_v_202003.png'}]
         self.download_image_objects(image_objs, keyvisual_folder)
 
     def download_character(self):
         character_folder = self.create_character_directory()
         try:
-            soup = self.get_soup("http://petergrill-anime.jp/character.php")
+            soup = self.get_soup(self.PAGE_PREFIX + "character.php")
             chara_details = soup.find_all('li', class_='character_item')
             for chara_detail in chara_details:
                 images = chara_detail.find_all('img')
@@ -769,8 +769,8 @@ class PeterGrillDownload(Summer2020AnimeDownload):
         image_objs = [
             {'name': 'bd_1_1', 'url': 'https://aniverse-mag.com/wp-content/uploads/2020/07/200702_01.jpg'},
             {'name': 'bd_1_2', 'url': 'https://aniverse-mag.com/wp-content/uploads/2020/07/200702_02.jpg'},
-            {'name': 'bd_2_1', 'url': 'http://petergrill-anime.jp/images/upload/pg_dvd2.png'},
-            {'name': 'bd_3_1', 'url': 'http://petergrill-anime.jp/images/upload/pg_dvd3.png'},
+            {'name': 'bd_2_1', 'url': self.PAGE_PREFIX + 'images/upload/pg_dvd2.png'},
+            {'name': 'bd_3_1', 'url': self.PAGE_PREFIX + 'images/upload/pg_dvd3.png'},
             {'name': 'bd_bonus_1', 'url': 'https://ecdnimg.toranoana.jp/ec/img/21/0006/61/50/210006615043-1p.jpg'},
             {'name': 'bd_bonus_2', 'url': 'https://www.gamers.co.jp/resize_image.php?image=08181030_5f3b2f360cd25.jpg'},
         ]
