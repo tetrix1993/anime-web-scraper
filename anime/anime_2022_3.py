@@ -1597,7 +1597,7 @@ class Overlord4Download(Summer2022AnimeDownload):
     folder_name = 'overlord4'
 
     PAGE_PREFIX = 'https://overlord-anime.com/'
-    FINAL_EPISODE = 12
+    FINAL_EPISODE = 13
     IMAGES_PER_EPISODE = 6
 
     def run(self):
