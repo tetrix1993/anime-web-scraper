@@ -2526,7 +2526,12 @@ class YofukashiDownload(Summer2022AnimeDownload, NewsTemplate):
                         else:   # img
                             src = image['src']
                         if not src.endswith('np_cd.svg') and not src.endswith('np_bd.svg'):
-                            image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                            if src.startswith('../'):
+                                image_url = self.PAGE_PREFIX + src.replace('../', '')
+                            elif src.startswith('http'):
+                                image_url = src
+                            else:
+                                image_url = bd_url + src
                             image_name = self.extract_image_name_from_url(image_url)
                             self.add_to_image_list(image_name, image_url)
                     if i > 1:
