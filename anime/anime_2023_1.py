@@ -3,6 +3,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 
 # Benriya Saitou-san, Isekai ni Iku https://saitou-anime.com/ #便利屋斎藤さん @saitou_anime
 # Eiyuuou, Bu wo Kiwameru Tame Tenseisu: Soshite, Sekai Saikyou no Minarai Kishi https://auo-anime.com/ #英雄王 @auo_anime
+# Hyouken no Majutsushi ga Sekai wo Suberu http://www.tbs.co.jp/anime/hyouken/ #冰剣の魔術師 #hyouken @hyouken_pr
 # Ijiranaide, Nagatoro-san 2nd Attack https://www.nagatorosan.jp/ #長瀞さん @nagatoro_tv
 # Inu ni Nattara Suki na Hito ni Hirowareta. https://inuhiro-anime.com/ #犬ひろ @inuninattara
 # Isekai Nonbiri Nouka https://nonbiri-nouka.com/ #のんびり農家 @nonbiri_nouka
@@ -106,6 +107,64 @@ class EiyuuouDownload(Winter2023AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'wp/wp-content/themes/euo-teaser-theme/img/chara-pic%s.png'
         self.download_by_template(folder, template, 1, 1, prefix='tz_')
+
+
+# Hyouken no Majutsushi ga Sekai wo Suberu
+class HyoukenDownload(Winter2023AnimeDownload, NewsTemplate):
+    title = 'Hyouken no Majutsushi ga Sekai wo Suberu'
+    keywords = [title, 'The Iceblade Sorcerer Shall Rule the World']
+    website = 'http://www.tbs.co.jp/anime/hyouken/'
+    twitter = 'hyouken_pr'
+    hashtags = ['冰剣の魔術師', 'hyouken']
+    folder_name = 'hyouken'
+
+    PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 6
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+        # self.download_media()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_episode_preview_temp(self):
+        template = self.PAGE_PREFIX + 'story/img/story%s/%s.jpg'
+        for i in range(self.FINAL_EPISODE):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_' + str(self.IMAGES_PER_EPISODE)):
+                continue
+            for j in range(self.IMAGES_PER_EPISODE):
+                image_url = template % (episode, str(j + 1).zfill(2))
+                image_name = episode + '_' + str(j + 1)
+                if self.download_image(image_url, self.base_folder + '/' + image_name) == -1:
+                    return
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.newsall-box',
+                                    date_select='.newsall-date', title_select='a', id_select='a',
+                                    a_tag_prefix=self.PAGE_PREFIX + 'news/')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.add_to_image_list('top_teaser_pc@2x', self.PAGE_PREFIX + 'img/top_teaser_pc@2x.jpg')
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FdP3sZqagAIEGcr?format=jpg&name=large')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'character/img/chara_img_%s@2x.png'
+        self.download_by_template(folder, template, 2, 1)
+
+    def download_media(self):
+        pass
 
 
 # Ijiranaide, Nagatoro-san 2nd Attack

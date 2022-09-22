@@ -115,6 +115,7 @@ The premiere date for the anime listed here has not been announced.
 ### Winter 2023 Anime
 * [Benriya Saitou-san, Isekai ni Iku](https://saitou-anime.com/)
 * [Eiyuuou, Bu wo Kiwameru Tame Tenseisu: Soshite, Sekai Saikyou no Minarai Kishi](https://auo-anime.com/)
+* [Hyouken no Majutsushi ga Sekai wo Suberu](http://www.tbs.co.jp/anime/hyouken/)
 * [Ijiranaide, Nagatoro-san 2nd Attack](https://www.nagatorosan.jp/)
 * [Inu ni Nattara Suki na Hito ni Hirowareta.](https://inuhiro-anime.com/)
 * [Isekai Nonbiri Nouka](https://nonbiri-nouka.com/)
