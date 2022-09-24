@@ -1,6 +1,7 @@
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 
 
+# Ayakashi Triangle https://ayakashitriangle-anime.com/ #あやかしトライアングル #あやトラ @ayakashi_anime
 # Benriya Saitou-san, Isekai ni Iku https://saitou-anime.com/ #便利屋斎藤さん @saitou_anime
 # Eiyuuou, Bu wo Kiwameru Tame Tenseisu: Soshite, Sekai Saikyou no Minarai Kishi https://auo-anime.com/ #英雄王 @auo_anime
 # Hyouken no Majutsushi ga Sekai wo Suberu http://www.tbs.co.jp/anime/hyouken/ #冰剣の魔術師 #hyouken @hyouken_pr
@@ -24,6 +25,75 @@ class Winter2023AnimeDownload(MainDownload):
 
     def __init__(self):
         super().__init__()
+
+
+# Ayakashi Triangle
+class AyakashiTriangleDownload(Winter2023AnimeDownload, NewsTemplate):
+    title = 'Ayakashi Triangle'
+    keywords = [title]
+    website = 'https://ayakashitriangle-anime.com/'
+    twitter = 'ayakashi_anime'
+    hashtags = ['あやトラ', 'あやかしトライアングル']
+    folder_name = 'ayakashi-triangle'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.p-news__list-item',
+                                    date_select='.p-news_data__date', title_select='.p-news_data__title',
+                                    id_select='a', a_tag_start_text_to_remove='/', paging_type=1,
+                                    a_tag_prefix=self.PAGE_PREFIX,
+                                    next_page_select='div.c-pagination__link.-next',
+                                    next_page_eval_index_class='is-disable', next_page_eval_index=-1)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        # self.add_to_image_list('announce_tw', 'https://pbs.twimg.com/media/FG33dXJagAY1HcQ?format=jpg&name=medium')
+        self.add_to_image_list('announce_aniverse', 'https://aniverse-mag.com/wp-content/uploads/2021/12/img_kokuchi.jpg')
+        self.add_to_image_list('announce', self.PAGE_PREFIX + 'assets/img/img_kv.png')
+        self.download_image_list(folder)
+
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.p-hero_kv__visual-img img[src]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'][1:]
+                image_name = self.generate_image_name_from_url(image_url, 'img')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'assets/img/chara/chara_%s.png'
+        self.image_list = []
+        self.add_to_image_list('chara01-1', template % '01-1')
+        self.add_to_image_list('chara01-2', template % '01-2')
+        self.download_image_list(folder)
+        self.download_by_template(folder, template, 2, 2)
+
+        # Face
+        for i in range(20):
+            if self.is_image_exists(f'/face_{str(i + 1).zfill(2)}-1', folder):
+                continue
+            face_template = self.PAGE_PREFIX + f'assets/img/chara/face_{str(i + 1).zfill(2)}-%s.jpg'
+            success = self.download_by_template(folder, face_template, 1, 1)
+            if not success:
+                break
 
 
 # Benriya Saitou-san, Isekai ni Iku

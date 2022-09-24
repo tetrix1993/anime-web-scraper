@@ -4,7 +4,6 @@ import anime.constants as constants
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsTemplate3
 
 # Anohana S2 https://10th.anohana.jp/ #あの花 #anohana @anohana_project
-# Ayakashi Triangle https://ayakashitriangle-anime.com/ #あやかしトライアングル #あやトラ @ayakashi_anime
 # Dungeon Meshi https://delicious-in-dungeon.com/ #ダンジョン飯 #deliciousindungeon @dun_meshi_anime
 # Eiyuu Kyoushitsu https://eiyukyoushitsu-anime.com/ #英雄教室 #eiyu_anime @eiyu_anime
 # Goblin Slayer S2 http://www.goblinslayer.jp/ #ゴブスレ #いせれべ @GoblinSlayer_GA
@@ -117,38 +116,6 @@ class Anohana2Download(UnconfirmedDownload):
         self.image_list = []
         self.add_to_image_list('teaser', 'https://pbs.twimg.com/media/ExRRykWU4AEZ6Cy?format=jpg&name=large')
         self.add_to_image_list('teaser_tw', self.PAGE_PREFIX + 'assets/images/pc/teaser/img_kv.png')
-        self.download_image_list(folder)
-
-
-# Ayakashi Triangle
-class AyakashiTriangleDownload(UnconfirmedDownload):
-    title = 'Ayakashi Triangle'
-    keywords = [title]
-    website = 'https://ayakashitriangle-anime.com/'
-    twitter = 'ayakashi_anime'
-    hashtags = ['あやトラ', 'あやかしトライアングル']
-    folder_name = 'ayakashi-triangle'
-
-    PAGE_PREFIX = website
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_key_visual()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_news(self):
-        self.download_template_news(self.PAGE_PREFIX)
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        # self.add_to_image_list('announce_tw', 'https://pbs.twimg.com/media/FG33dXJagAY1HcQ?format=jpg&name=medium')
-        self.add_to_image_list('announce_aniverse', 'https://aniverse-mag.com/wp-content/uploads/2021/12/img_kokuchi.jpg')
-        self.add_to_image_list('announce', self.PAGE_PREFIX + 'assets/img/img_kv.png')
         self.download_image_list(folder)
 
 

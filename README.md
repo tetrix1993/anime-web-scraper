@@ -82,7 +82,6 @@ pip install -r requirements.txt
 
 ### New Anime
 The premiere date for the anime listed here has not been announced.
-* [Ayakashi Triangle](https://ayakashitriangle-anime.com/)
 * [Dungeon Meshi](https://delicious-in-dungeon.com/)
 * [Eiyuu Kyoushitsu](https://eiyukyoushitsu-anime.com/)
 * [Goblin Slayer 2nd Season](http://www.goblinslayer.jp/)
@@ -113,6 +112,7 @@ The premiere date for the anime listed here has not been announced.
 * [Tensei Kizoku no Isekai Boukenroku](https://www.tensei-kizoku.jp/)
 
 ### Winter 2023 Anime
+* [Ayakashi Triangle](https://ayakashitriangle-anime.com/)
 * [Benriya Saitou-san, Isekai ni Iku](https://saitou-anime.com/)
 * [Eiyuuou, Bu wo Kiwameru Tame Tenseisu: Soshite, Sekai Saikyou no Minarai Kishi](https://auo-anime.com/)
 * [Hyouken no Majutsushi ga Sekai wo Suberu](http://www.tbs.co.jp/anime/hyouken/)
