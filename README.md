@@ -109,6 +109,7 @@ The premiere date for the anime listed here has not been announced.
 
 ### Spring 2023 Anime
 * [Isekai wa Smartphone to Tomo ni. 2](http://isesuma-anime.jp/)
+* [Shiro Seijo to Kuro Bokushi](https://shiroseijyo-anime.com/)
 * [Tensei Kizoku no Isekai Boukenroku](https://www.tensei-kizoku.jp/)
 
 ### Winter 2023 Anime
