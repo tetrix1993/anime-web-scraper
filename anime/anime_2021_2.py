@@ -1400,7 +1400,7 @@ class SeijonoMaryokuDownload(Spring2021AnimeDownload, NewsTemplate):
     hashtags = ['seijyonoanime', '聖女の魔力は万能です']
     folder_name = 'seijyonomaryoku'
 
-    PAGE_PREFIX = website
+    PAGE_PREFIX = website + '1st/'
 
     def __init__(self):
         super().__init__()
