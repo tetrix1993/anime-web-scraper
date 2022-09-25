@@ -383,7 +383,7 @@ class MaohgakuinDownload(Summer2020AnimeDownload):
     keywords = [title, 'Maohgakuin', 'The Misfit of Demon King Academy']
     folder_name = 'maohgakuin'
 
-    PAGE_PREFIX = "https://maohgakuin.com/"
+    PAGE_PREFIX = "https://maohgakuin.com/1st/"
     CHARACTER_PREFIX = PAGE_PREFIX + 'character/'
     STORY_PAGE = PAGE_PREFIX + 'story/'
 
