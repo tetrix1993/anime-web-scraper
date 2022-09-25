@@ -124,6 +124,7 @@ The premiere date for the anime listed here has not been announced.
 * [Oniichan wa Oshimai!](https://onimai.jp/)
 * [Rougo ni Sonaete Isekai de 8-manmai no Kinka wo Tamemasu](https://roukin8-anime.com/)
 * [Saikyou Onmyouji no Isekai Tenseiki](https://saikyo-onmyouji.asmik-ace.co.jp/)
+* [Shin Shinka no Mi: Shiranai Uchi ni Kachigumi Jinsei](https://shinkanomi-anime.com/)
 * [Tomo-chan wa Onnanoko!](https://tomo-chan.jp/)
 * [Tsundere Akuyaku Reijou Liselotte to Jikkyou no Endou-kun to Kaisetsu no Kobayashi-san](https://tsunlise-pr.com/)
 
@@ -238,7 +239,7 @@ The premiere date for the anime listed here has not been announced.
 * [Sekai Saikou no Ansatsusha, Isekai Kizoku ni Tensei suru](https://ansatsu-kizoku.jp/)
 * [Senpai ga Uzai Kouhai no Hanashi](https://senpaiga-uzai-anime.com/)
 * [Shin no Nakama ja Nai to Yuusha no Party wo Oidasareta node, Henkyou de Slow Life suru Koto ni Shimashita](https://shinnonakama.com/)
-* [Shinka no Mi: Shiranai Uchi ni Kachigumi Jinsei](https://www.shinkanomi-anime.com/)
+* [Shinka no Mi: Shiranai Uchi ni Kachigumi Jinsei](https://shinkanomi-anime.com/2021/)
 * [Taishou Otome Otogibanashi](http://taisho-otome.com/)
 * [takt op.Destiny](https://anime.takt-op.jp/)
 * [Tsuki to Laika to Nosferatu](https://tsuki-laika-nosferatu.com/)

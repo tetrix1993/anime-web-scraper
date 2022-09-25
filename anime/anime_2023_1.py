@@ -13,6 +13,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Oniichan wa Oshimai! https://onimai.jp/ #おにまい @onimai_anime
 # Rougo ni Sonaete Isekai de 8-manmai no Kinka wo Tamemasu https://roukin8-anime.com/ #ろうきん8 #roukin8 @roukin8_anime
 # Saikyou Onmyouji no Isekai Tenseiki https://saikyo-onmyouji.asmik-ace.co.jp/ #最強陰陽師 @saikyo_onmyouji
+# Shin Shinka no Mi: Shiranai Uchi ni Kachigumi Jinsei https://shinkanomi-anime.com/ #進化の実 #勝ち組人生 #ゴリラ系女子 @shinkanomianime
 # Tomo-chan wa Onnanoko! https://tomo-chan.jp/ #tomochan @tomo_chan_ani
 # Tsundere Akuyaku Reijou Liselotte to Jikkyou no Endou-kun to Kaisetsu no Kobayashi-san http://tsunlise-pr.com/ #ツンリゼ @tsunlise_pr
 
@@ -578,6 +579,72 @@ class SaikyoOnmyoujiDownload(Winter2023AnimeDownload, NewsTemplate):
                 image_url = self.PAGE_PREFIX + image['src'][1:]
                 image_name = self.extract_image_name_from_url(image_url)
                 self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+
+
+# Shin Shinka no Mi: Shiranai Uchi ni Kachigumi Jinsei
+class Shinkanomi2Download(Winter2023AnimeDownload, NewsTemplate):
+    title = 'Shin Shinka no Mi: Shiranai Uchi ni Kachigumi Jinsei'
+    keywords = [title, 'Shinkanomi', '2nd']
+    website = 'https://shinkanomi-anime.com/'
+    twitter = 'shinkanomianime'
+    hashtags = ['進化の実', '勝ち組人生', 'ゴリラ系女子']
+    folder_name = 'shinkanomi2'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.newsArchive .block',
+                                    date_select='.date', title_select='h2', id_select='a')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('kv_tw', 'https://pbs.twimg.com/media/FdY2SacakAECMAq?format=jpg&name=medium')
+        self.download_image_list(folder)
+
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            self.image_list = []
+            images = soup.select('.kv .bg img[src]')
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'][1:].split('?')[0]
+                image_name = self.generate_image_name_from_url(image_url, 'img')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            p_tags = soup.select('.general p.img')
+            self.image_list = []
+            for p_tag in p_tags:
+                if 'sp' in p_tag['class']:
+                    continue
+                image = p_tag.find('img')
+                if image is not None:
+                    if not image.has_attr('src') or (image.has_attr('class') and 'sp' in image['class']):
+                        continue
+                    image_url = self.PAGE_PREFIX + image['src'][1:]
+                    image_name = self.generate_image_name_from_url(image_url, 'character')
+                    self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
