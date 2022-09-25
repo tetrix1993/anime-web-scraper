@@ -4,6 +4,7 @@ import anime.constants as constants
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsTemplate3
 
 # Anohana S2 https://10th.anohana.jp/ #あの花 #anohana @anohana_project
+# ATRI -My Dear Moments- https://atri-anime.com/ #ATRI @ATRI_anime
 # Dungeon Meshi https://delicious-in-dungeon.com/ #ダンジョン飯 #deliciousindungeon @dun_meshi_anime
 # Eiyuu Kyoushitsu https://eiyukyoushitsu-anime.com/ #英雄教室 #eiyu_anime @eiyu_anime
 # Goblin Slayer S2 http://www.goblinslayer.jp/ #ゴブスレ #いせれべ @GoblinSlayer_GA
@@ -116,6 +117,35 @@ class Anohana2Download(UnconfirmedDownload):
         self.image_list = []
         self.add_to_image_list('teaser', 'https://pbs.twimg.com/media/ExRRykWU4AEZ6Cy?format=jpg&name=large')
         self.add_to_image_list('teaser_tw', self.PAGE_PREFIX + 'assets/images/pc/teaser/img_kv.png')
+        self.download_image_list(folder)
+
+
+# ATRI -My Dear Moments-
+class AtriDownload(UnconfirmedDownload):
+    title = 'ATRI -My Dear Moments-'
+    keywords = [title]
+    website = 'https://atri-anime.com/'
+    twitter = 'ATRI_anime'
+    hashtags = 'ATRI'
+    folder_name = 'atri'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('ATRI_visual', 'https://ogre.natalie.mu/media/news/comic/2022/0924/ATRI_visual.jpg')
+        self.add_to_image_list('kv_kv_wide', self.PAGE_PREFIX + 'assets/img/kv/kv_wide.png')
         self.download_image_list(folder)
 
 
