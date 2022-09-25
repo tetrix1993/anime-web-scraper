@@ -1155,6 +1155,7 @@ class TenkenDownload(Fall2022AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         template = self.PAGE_PREFIX + 'assets/story/%s/%s.jpg'
@@ -1211,6 +1212,21 @@ class TenkenDownload(Fall2022AnimeDownload, NewsTemplate):
         template_prefix = self.PAGE_PREFIX + 'assets/character/'
         templates = [template_prefix + 'c%s.png', template_prefix + 'f%s.png']
         self.download_by_template(folder, templates, 1, 1, prefix='tz_')
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'bddvd.html')
+            images = soup.select('#BdData img[src]')
+            self.image_list = []
+            for image in images:
+                if '/bddvd/' in image['src']:
+                    image_url = self.PAGE_PREFIX + image['src'][2:]
+                    image_name = self.generate_image_name_from_url(image_url, 'bddvd')
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
 
 # Uchi no Shishou wa Shippo ga Nai
