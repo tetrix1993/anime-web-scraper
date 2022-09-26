@@ -1103,6 +1103,8 @@ class ShinobinoIttoki(Fall2022AnimeDownload, NewsTemplate):
     folder_name = 'shinobi-ittoki'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 6
 
     def __init__(self):
         super().__init__()
@@ -1114,7 +1116,53 @@ class ShinobinoIttoki(Fall2022AnimeDownload, NewsTemplate):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        template = self.PAGE_PREFIX + 'story/img/story%s.jpg'
+        try:
+            stop = False
+            for i in range(self.FINAL_EPISODE):
+                episode = str(i + 1).zfill(2)
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                for j in range(self.IMAGES_PER_EPISODE):
+                    image_name = episode + '_' + str(j + 1)
+                    image_url = template % image_name
+                    result = self.download_image(image_url, self.base_folder + '/' + image_name)
+                    if result == -1:
+                        stop = True
+                        break
+                if stop:
+                    break
+        except Exception as e:
+            self.print_exception(e)
+
+        # YouTube thumbnails
+        story_url = self.PAGE_PREFIX + 'story/'
+        yt_folder, yt_episodes = self.init_youtube_thumbnail_variables()
+        try:
+            soup = self.get_soup(story_url)
+            newstories = soup.select('div[data-newstory]')
+            for newstory in newstories:
+                try:
+                    episode = str(int(newstory['data-newstory'])).zfill(2)
+                    has_image_downloaded = self.is_image_exists(episode + '_1')
+                    has_yt_thumbnail_downloaded = episode in yt_episodes
+                except:
+                    continue
+                if not has_image_downloaded:
+                    images = newstory.select('.story_imgLists img[src]')
+                    self.image_list = []
+                    for i in range(len(images)):
+                        image_url = story_url + images[i]['src'].replace('./', '')
+                        image_name = episode + '_' + str(i + 1)
+                        self.add_to_image_list(image_name, image_url)
+                    self.download_image_list(self.base_folder)
+                if not has_yt_thumbnail_downloaded:
+                    yt_tag = newstory.select('.storyMov iframe[src]')
+                    if len(yt_tag) > 0:
+                        yt_id = yt_tag[0]['src'].split('?')[0].split('/')[-1]
+                        self.download_youtube_thumbnail_by_id(yt_id, yt_folder, episode)
+        except Exception as e:
+            self.print_exception(e, 'YouTube thumbnails')
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.newsLists__item',
