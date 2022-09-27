@@ -756,7 +756,47 @@ class KokyuKarasuDownload(Fall2022AnimeDownload, NewsTemplate):
         self.download_key_visual()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        story_url = self.PAGE_PREFIX + 'story/'
+        yt_folder, yt_episodes = self.init_youtube_thumbnail_variables()
+        try:
+            soup = self.get_soup(story_url, decode=True)
+            story_list = soup.select('.tab_list')
+            if len(story_list) > 0:
+                stories = story_list[0].select('li')
+                for story in stories:
+                    p_tag = story.select('p')
+                    try:
+                        ep_num = self.convert_kanji_to_number(p_tag[0].text.replace('第', '').replace('話', ''))
+                        if ep_num is None or ep_num < 1:
+                            continue
+                        episode = str(ep_num).zfill(2)
+                    except:
+                        continue
+                    if self.is_image_exists(episode + '_1') and episode in yt_episodes:
+                        continue
+                    if story.has_attr('class') and 'is-current' in story['class']:
+                        ep_soup = soup
+                    else:
+                        a_tags = story.select('a[href]')
+                        if len(a_tags) < 1:
+                            continue
+                        ep_soup = self.get_soup(story_url + a_tags[0].replace('./', ''))
+                    if ep_soup is not None:
+                        images = ep_soup.select('.swiper-wrapper img[src]')
+                        self.image_list = []
+                        for i in range(len(images)):
+                            image_url = story_url + images[i]['src']
+                            image_name = episode + '_' + str(i + 1)
+                            self.add_to_image_list(image_name, image_url)
+                        self.download_image_list(self.base_folder)
+
+                        # You-Tube thumbnails
+                        yt_tag = ep_soup.select('.p-movie__play[data-trailer]')
+                        if len(yt_tag) > 0:
+                            yt_id = yt_tag[0]['data-trailer']
+                            self.download_youtube_thumbnail_by_id(yt_id, yt_folder, episode)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + 'news/'
