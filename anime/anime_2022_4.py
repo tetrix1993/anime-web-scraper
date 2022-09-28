@@ -1024,18 +1024,24 @@ class PeterGrill2Download(Fall2022AnimeDownload, NewsTemplate):
     folder_name = 'petergrill2'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
 
     def __init__(self):
         super().__init__()
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_external()
         self.download_news()
         self.download_key_visual()
         self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_episode_preview_external(self):
+        keywords = ['ピーター・グリルと賢者の時間', '先行']
+        EeoMediaScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE, download_id=self.download_id).run()
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-list',
