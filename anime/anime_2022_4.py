@@ -498,7 +498,34 @@ class FutokunoGuildDownload(Fall2022AnimeDownload, NewsTemplate2):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/01.html')
+            trs = soup.select('#ContentsListUnit02 tr[class]')
+            for tr in trs:
+                a_tags = tr.select('a[href]')
+                if len(a_tags) == 0:
+                    continue
+                try:
+                    episode = str(int(a_tags[0].text.replace('#', ''))).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                if 'is-crt' in tr['class']:
+                    ep_soup = soup
+                else:
+                    ep_soup = self.get_soup(self.PAGE_PREFIX + a_tags[0]['href'].replace('../', ''))
+                if ep_soup is None:
+                    continue
+                self.image_list = []
+                images = ep_soup.select('ul.tp5 img[src]')
+                for i in range(len(images)):
+                    image_url = self.PAGE_PREFIX + images[i]['src'].split('?')[0].replace('../', '').replace('sn_', '')
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(self.PAGE_PREFIX)
