@@ -1532,6 +1532,7 @@ class ShipponaDownload(Fall2022AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         template = self.PAGE_PREFIX + 'story/img/%s/%s_%s.jpg'
@@ -1580,6 +1581,37 @@ class ShipponaDownload(Fall2022AnimeDownload, NewsTemplate):
             print("Error in running " + self.__class__.__name__ + " - Character")
             print(e)
         self.download_image_list(folder)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        bd_url = self.PAGE_PREFIX + 'product/bdbox/'
+        try:
+            soup = self.get_soup(bd_url)
+            images = soup.select('.c-article-visual__item img[src], .c-card__thumb[data-bg]')
+            self.image_list = []
+            for image in images:
+                if image.has_attr('src'):
+                    suffix = image['src']
+                elif image.has_attr('data-bg'):
+                    suffix = image['data-bg']
+                else:
+                    continue
+                if suffix.startswith('../'):
+                    image_url = self.PAGE_PREFIX + suffix.replace('../', '')
+                elif suffix.startswith('./'):
+                    image_url = bd_url + suffix[2:]
+                else:
+                    continue
+                if '/img/' not in image_url:
+                    continue
+                temp_image_name = self.extract_image_name_from_url(image_url)
+                if temp_image_name == 'np_cd':
+                    continue
+                image_name = self.generate_image_name_from_url(image_url, 'img')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
 
 # Urusei Yatsura (2022)
