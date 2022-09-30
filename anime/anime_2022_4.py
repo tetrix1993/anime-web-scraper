@@ -1030,7 +1030,28 @@ class NouminKanrenDownload(Fall2022AnimeDownload, NewsTemplate):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            eps = soup.select('.episode')
+            for ep in eps:
+                num_span = ep.select('.number')
+                if len(num_span) == 0:
+                    continue
+                try:
+                    episode = str(int(num_span[0].text.replace('#', ''))).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                self.image_list = []
+                images = ep.select('.image img[src]')
+                for i in range(len(images)):
+                    image_url = self.clear_resize_in_url(images[i]['src'])
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.sw-NewsArchive_Item',
