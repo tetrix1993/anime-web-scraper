@@ -1694,6 +1694,7 @@ class YamaNoSusume4Download(Fall2022AnimeDownload):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -1805,6 +1806,48 @@ class YamaNoSusume4Download(Fall2022AnimeDownload):
         except Exception as e:
             self.print_exception(e, 'Character')
         self.create_cache_file(cache_filepath, processed, num_processed)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+
+        # Blu-rays
+        first = 31
+        second = 31
+        third = 41
+        bd_template = self.PAGE_PREFIX + 'core_sys/images/contents/%s/block/%s/%s.jpg'
+        try:
+            self.image_list = []
+            for i in range(3):
+                image_name = 'bd_vol' + str(i + 1)
+                if self.is_image_exists(image_name, folder):
+                    continue
+                first_num = str(first + i).zfill(8)
+                second_num = str(second + i * 3).zfill(8)
+                third_num = str(third + i if i > 0 else 40).zfill(8)
+                image_url = bd_template % (first_num, second_num, third_num)
+                if not self.is_matching_content_length(image_url, 27132):
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
+
+        # Blu-ray Bonus
+        second = 57
+        try:
+            self.image_list = []
+            for i in range(7):
+                image_name = 'bd_bonus' + str(i + 1)
+                if self.is_image_exists(image_name, folder):
+                    continue
+                first_num = '00000034'
+                second_num = str(second + i).zfill(8)
+                third_num = str(second + i + 12).zfill(8)
+                image_url = bd_template % (first_num, second_num, third_num)
+                if not self.is_matching_content_length(image_url, 23858):
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray Bonus')
 
 
 # Yuusha Party wo Tsuihou sareta Beast Tamer, Saikyoushu no Nekomimi Shoujo to Deau
