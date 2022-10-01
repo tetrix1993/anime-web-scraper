@@ -1871,6 +1871,7 @@ class BeastTamerDownload(Fall2022AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         template = self.PAGE_PREFIX + 'assets/story/%s/%s.jpg'
@@ -1927,3 +1928,22 @@ class BeastTamerDownload(Fall2022AnimeDownload, NewsTemplate):
             self.print_exception(e, 'Character')
             print(e)
         self.download_image_list(folder)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'bddvd.html')
+            images = soup.select('.content-entry img[src]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'].replace('./', '')
+                if '/bddvd/' not in image_url:
+                    continue
+                if 'np' in image_url.split('/')[-1].split('.')[0]:
+                    continue
+                image_name = 'bddvd_' + self.generate_image_name_from_url(image_url, 'bddvd')
+                if not self.is_image_exists(image_name, folder):
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
