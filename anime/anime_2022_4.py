@@ -978,7 +978,31 @@ class MobPsycho3Download(Fall2022AnimeDownload, NewsTemplate):
         self.download_key_visual()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            stories = soup.select('.story_List a[href]')
+            for story in stories:
+                try:
+                    episode = str(int(story.text.replace('#', ''))).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                if story.has_attr('class') and 'current' in story['class']:
+                    ep_soup = soup
+                else:
+                    ep_soup = self.get_soup(story['href'])
+                if ep_soup is None:
+                    continue
+                self.image_list = []
+                images = ep_soup.select('.swiper-wrapper img[src]')
+                for i in range(len(images)):
+                    image_url = images[i]['src']
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news_List article',
@@ -1937,9 +1961,7 @@ class BeastTamerDownload(Fall2022AnimeDownload, NewsTemplate):
             self.image_list = []
             for image in images:
                 image_url = self.PAGE_PREFIX + image['src'].replace('./', '')
-                if '/bddvd/' not in image_url:
-                    continue
-                if 'np' in image_url.split('/')[-1].split('.')[0]:
+                if '/bddvd/' not in image_url or 'np' in image_url.split('/')[-1].split('.')[0]:
                     continue
                 image_name = 'bddvd_' + self.generate_image_name_from_url(image_url, 'bddvd')
                 if not self.is_image_exists(image_name, folder):
