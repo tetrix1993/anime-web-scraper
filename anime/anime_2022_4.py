@@ -1248,10 +1248,11 @@ class RenaiFlopsDownload(Fall2022AnimeDownload, NewsTemplate):
         self.image_list = []
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FOrTLwXagAE6Q-C?format=jpg&name=large')
         self.add_to_image_list('tz_aniverse', 'https://aniverse-mag.com/wp-content/uploads/2022/03/6a1f645dc99cda5844a8d86a77f24193-e1648196815379.jpg')
+        self.add_to_image_list('news_p_001', self.PAGE_PREFIX + 'images/news/p_001.jpg')
+        self.add_to_image_list('top_visual_v_ver02', self.PAGE_PREFIX + 'images/top/visual/v_ver02.jpg')
         self.download_image_list(folder)
 
-        self.download_by_template(folder, self.PAGE_PREFIX + 'images/top/visual/v%s.jpg', 3, prefix='top_visual_')
-        self.download_by_template(folder, self.PAGE_PREFIX + 'images/news/p_%s.jpg', 3, prefix='news_')
+        self.download_by_template(folder, self.PAGE_PREFIX + 'images/top/visual/v%s.jpg', 3, prefix='top_visual_', end=2)
 
     def download_character(self):
         folder = self.create_character_directory()
