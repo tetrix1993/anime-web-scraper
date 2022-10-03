@@ -830,6 +830,26 @@ class MainDownload:
             pass
         return False
 
+    @staticmethod
+    def is_content_length_in_range(url, less_than_amount=None, more_than_amount=None,
+                                   less_than_equal=False, more_than_equal=False):
+        if less_than_amount is None and more_than_amount is None:
+            return False
+        try:
+            content_length = int(requests.head(url).headers['Content-Length'])
+            if less_than_amount is not None and\
+                    ((less_than_equal and content_length > less_than_amount) or
+                     (not less_than_equal and content_length >= less_than_amount)):
+                return False
+            if more_than_amount is not None and\
+                    ((more_than_equal and content_length < more_than_amount) or
+                     (not more_than_equal and content_length <= more_than_amount)):
+                return False
+            return True
+        except:
+            pass
+        return False
+
     def is_content_length_same_as_existing(self, url, name, filepath=None):
         if filepath is None:
             filepath = self.base_folder
