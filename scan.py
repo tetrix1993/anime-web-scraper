@@ -715,7 +715,12 @@ class EeoMediaScanner(MainScanner):
                 try:
                     episode = int(title[prefix_index + 1:suffix_index])
                 except:
-                    continue
+                    try:
+                        episode = self.convert_kanji_to_number(title[prefix_index + 1:suffix_index])
+                        if episode is None:
+                            continue
+                    except:
+                        continue
                 if episode < self.first_episode or (self.last_episode is not None and episode > self.last_episode):
                     continue
                 article_id = a_tag['href'][len(self.PAGE_PREFIX):]

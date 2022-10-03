@@ -750,11 +750,37 @@ class GoldenKamuy4Download(Fall2022AnimeDownload, NewsTemplate2):
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_external()
         self.download_news()
         self.download_key_visual()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            for ep in range(self.FIRST_EPISODE, self.FINAL_EPISODE + 1, 1):
+                episode = str(ep).zfill(2)
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                soup = self.get_soup(self.PAGE_URL % episode)
+                if soup is not None:
+                    self.image_list = []
+                    images = soup.select('.img_l img[src]')
+                    if len(images) == 0:
+                        break
+                    for i in range(len(images)):
+                        image_url = self.PAGE_PREFIX + images[i]['src'].split('?')[0].replace('../', '')\
+                            .replace('sn_', '')
+                        image_name = episode + '_' + str(i + 1)
+                        self.add_to_image_list(image_name, image_url)
+                    self.download_image_list(self.base_folder)
+                else:
+                    break
+        except Exception as e:
+            self.print_exception(e)
+
+    def download_episode_preview_external(self):
+        keywords = ['ゴールデンカムイ', 'カット']
+        EeoMediaScanner(keywords, self.base_folder, first_episode=self.FIRST_EPISODE,
+                        last_episode=self.FINAL_EPISODE, download_id=self.download_id).run()
 
     def download_news(self):
         self.download_template_news(self.PAGE_PREFIX, stop_date='2021.11', date_select='.day')
