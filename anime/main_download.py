@@ -866,7 +866,7 @@ class MainDownload:
             content_length = int(requests.head(url).headers['Content-Length'])
         except Exception as e:
             print(e)
-            return False
+            return True
         return existing_length == content_length
 
     def download_image_with_different_length(self, url, name, new_dir, filepath=None):
