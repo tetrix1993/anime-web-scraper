@@ -19,7 +19,6 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Mato Seihei no Slave https://mabotai.jp/ #魔都精兵のスレイブ #まとスレ @mabotai_kohobu
 # Oshi no Ko https://ichigoproduction.com/ #推しの子 @anime_oshinoko
 # Otonari ni Ginga https://otonari-anime.com/ #おとなりに銀河 @otonariniginga
-# Otonari no Tenshi-sama ni Itsunomanika Dame Ningen ni Sareteita Ken https://otonarino-tenshisama.jp/ #お隣の天使様 @tenshisama_PR
 # Seijo no Maryoku wa Bannou Desu S2 https://seijyonomaryoku.jp/ #seijyonoanime @seijyonoanime
 # Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita 2nd Season https://slime300-anime.com/ #スライム倒して300年 @slime300_PR
 # Sousou no Frieren https://frieren-anime.jp/ #フリーレン #frieren @Anime_Frieren
@@ -745,94 +744,6 @@ class OtonariniGingaDownload(UnconfirmedDownload, NewsTemplate):
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FRV6mlUVIAAa9xK?format=jpg&name=medium')
         self.add_to_image_list('tz_mainimg', self.PAGE_PREFIX + 'teaser/images/mainimg.png')
         self.download_image_list(folder)
-
-
-# Otonari no Tenshi-sama ni Itsunomanika Dame Ningen ni Sareteita Ken
-class OtonarinoTenshisamaDownload(UnconfirmedDownload, NewsTemplate):
-    title = 'Otonari no Tenshi-sama ni Itsunomanika Dame Ningen ni Sareteita Ken'
-    keywords = [title, 'The Angel Next Door Spoils Me Rotten']
-    website = 'https://otonarino-tenshisama.jp/'
-    twitter = 'tenshisama_PR'
-    hashtags = 'お隣の天使様'
-    folder_name = 'otonarino-tenshisama'
-
-    PAGE_PREFIX = website
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_news()
-        self.download_key_visual()
-        self.download_character()
-        self.download_media()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_news(self):
-        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.allNews__item',
-                                    title_select='.allNews__title', date_select='.allNews__date',
-                                    id_select='a', next_page_select='a.next.page-numbers')
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FIQhzRlagAAxK-X?format=jpg&name=large')
-        self.add_to_image_list('tz', self.PAGE_PREFIX + 'wordpress/wp-content/themes/otonari/images/mainvisual.jpg')
-        self.add_to_image_list('tz2_tw', 'https://pbs.twimg.com/media/FOtPcAMVkAcoYzY?format=jpg&name=4096x4096')
-        self.add_to_image_list('aprilfool_0331_A', self.PAGE_PREFIX + 'wordpress/wp-content/uploads/2022/03/aprilfool_0331_A.jpg')
-        self.add_to_image_list('aprilfool_all', self.PAGE_PREFIX + 'wordpress/wp-content/uploads/2022/03/aprilfool_all.jpg')
-        self.add_to_image_list('tz3', self.PAGE_PREFIX + 'wordpress/wp-content/themes/otonari/images/mainvisual-v2.jpg')
-        self.add_to_image_list('tz3_pc', self.PAGE_PREFIX + 'wordpress/wp-content/themes/otonari/images/mainvisual-v2_pc.jpg')
-        self.add_to_image_list('tz3_news', self.PAGE_PREFIX + 'wordpress/wp-content/uploads/2022/05/tenshisama_teser3_title.jpg')
-        self.download_image_list(folder)
-
-    def download_character(self):
-        folder = self.create_character_directory()
-        template = self.PAGE_PREFIX + 'wordpress/wp-content/themes/otonari/images/character-%s.png'
-        self.download_by_template(folder, template, 1, prefix='tz_')
-
-    def download_media(self):
-        folder = self.create_media_directory()
-        # self.add_to_image_list('valentine_tw', 'https://pbs.twimg.com/media/FLfDFR8aQAIWt1u?format=jpg&name=large')
-        self.add_to_image_list('valentine_chara', 'https://aniverse-mag.com/wp-content/uploads/2022/02/8e5cda5d29024d4bf78d1e9452225fb6-e1644755501739.png')
-        self.add_to_image_list('valentine_pos', self.PAGE_PREFIX + 'wordpress/wp-content/uploads/2022/02/valentine_pos.jpg')
-        self.add_to_image_list('valentine', self.PAGE_PREFIX + 'wordpress/wp-content/uploads/2022/02/valentine_sp-kabegami.jpg')
-        self.download_image_list(folder)
-
-        # Special
-        special_folder = folder + '/special'
-        if not os.path.exists(special_folder):
-            os.makedirs(special_folder)
-        special_cache_filepath = special_folder + '/cache'
-        processed, num_processed = self.get_processed_items_from_cache_file(special_cache_filepath)
-        try:
-            soup = self.get_soup(self.PAGE_PREFIX + 'special/')
-            a_tags = soup.select('li.card a[href]')
-            for a_tag in reversed(a_tags):
-                href = a_tag['href']
-                if '/special/' not in href:
-                    continue
-                if href.endswith('/'):
-                    href = href[:-1]
-                page_name = href.split('/')[-1]
-                if page_name in processed:
-                    continue
-                page_soup = self.get_soup(a_tag['href'])
-                if page_soup is not None:
-                    images = page_soup.select('article img[src]')
-                    self.image_list = []
-                    for image in images:
-                        image_url = self.clear_resize_in_url(image['src'])
-                        image_name = self.extract_image_name_from_url(image_url)
-                        self.add_to_image_list(image_name, image_url)
-                    self.download_image_list(special_folder)
-                processed.append(page_name)
-        except Exception as e:
-            self.print_exception(e, 'Special')
-        self.create_cache_file(special_cache_filepath, processed, num_processed)
 
 
 # Seijo no Maryoku wa Bannou Desu 2nd Season
