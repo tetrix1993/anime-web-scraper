@@ -851,6 +851,7 @@ class KagenoJitsuryokushaDownload(Fall2022AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -893,6 +894,22 @@ class KagenoJitsuryokushaDownload(Fall2022AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         prefix = self.PAGE_PREFIX + 'assets/img/top/character/chara'
         self.download_by_template(folder, [prefix + '%s_main1.png', prefix + '%s_main2.png'], 2, 1)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'goods/bddvd/')
+            images = soup.select('#bddvdContWrap img[src]')
+            self.image_list = []
+            for image in images:
+                if '/bddvd/' not in image['src'] or 'np_l.jpg' in image['src']:
+                    continue
+                image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                image_name = 'bddvd_' + self.generate_image_name_from_url(image_url, 'bddvd')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
 
 # KanColle: Itsuka Ano Umi de
