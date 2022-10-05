@@ -587,6 +587,7 @@ class FutokunoGuildDownload(Fall2022AnimeDownload, NewsTemplate2):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -663,6 +664,45 @@ class FutokunoGuildDownload(Fall2022AnimeDownload, NewsTemplate2):
         except Exception as e:
             self.print_exception(e, 'Character')
         self.create_cache_file(cache_filepath, processed, num_processed)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+
+        # Blu-rays
+        first = 32
+        second = 111
+        third = 110
+        bd_template = self.PAGE_PREFIX + 'core_sys/images/contents/%s/block/%s/%s.jpg'
+        try:
+            for i in range(3):
+                image_name = 'bd_vol' + str(i + 1)
+                if self.is_image_exists(image_name, folder):
+                    continue
+                first_str = str(first + i).zfill(8)
+                second_str = str(second + i).zfill(8)
+                third_str = str(third + i).zfill(8)
+                image_url = bd_template % (first_str, second_str, third_str)
+                if self.is_content_length_in_range(image_url, more_than_amount=100000):
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
+
+        # Blu-ray Bonus
+        for page in ['privilege', 'campaign']:
+            try:
+                soup = self.get_soup(self.PAGE_PREFIX + f'bd/{page}.html')
+                images = soup.select('.block_inner img[src]')
+                self.image_list = []
+                for image in images:
+                    if 'nowprinting' in image['src']:
+                        continue
+                    image_url = self.PAGE_PREFIX + image['src'].replace('../', '').split('?')[0]
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(folder)
+            except Exception as e:
+                self.print_exception(e, f'Blu-ray Bonus - {page}')
 
 
 # Fuufu Ijou, Koibito Miman.
