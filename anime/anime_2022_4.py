@@ -1224,8 +1224,10 @@ class MushikaburihimeDownload(Fall2022AnimeDownload, NewsTemplate):
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FUEy08VagAA2T4K?format=jpg&name=large')
         self.download_image_list(folder)
 
-        template = self.PAGE_PREFIX + 'assets/news/vis-t%s.jpg'
-        self.download_by_template(folder, template, 1, 1, prefix='news_')
+        template1 = self.PAGE_PREFIX + 'assets/news/vis-t%s.jpg'
+        template2 = self.PAGE_PREFIX + 'assets/news/vis-h%s.jpg'
+        self.download_by_template(folder, template1, 1, 1, prefix='news_')
+        self.download_by_template(folder, template2, 1, 1, prefix='news_')
 
     def download_character(self):
         folder = self.create_character_directory()
