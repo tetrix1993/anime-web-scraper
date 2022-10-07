@@ -726,6 +726,7 @@ class FuukoiDownload(Fall2022AnimeDownload, NewsTemplate2):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -809,6 +810,27 @@ class FuukoiDownload(Fall2022AnimeDownload, NewsTemplate2):
         except Exception as e:
             self.print_exception(e, 'Character')
         self.create_cache_file(cache_filepath, processed, num_processed)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        for page in ['', '02', 'privilege', 'campaign']:
+            try:
+                bd_url = self.PAGE_PREFIX + f'bd/'
+                if len(page) > 0:
+                    bd_url += f'{page}.html'
+                soup = self.get_soup(bd_url)
+                images = soup.select('.block_inner img[src]')
+                self.image_list = []
+                for image in images:
+                    image_url = self.PAGE_PREFIX + image['src'].replace('../', '').split('?')[0]
+                    image_name = self.extract_image_name_from_url(image_url)
+                    if self.is_image_exists(image_name, folder):
+                        continue
+                    if self.is_content_length_in_range(image_url, more_than_amount=100000):
+                        self.add_to_image_list(image_name, image_url)
+                self.download_image_list(folder)
+            except Exception as e:
+                self.print_exception(e, f'Blu-ray - {page}')
 
 
 # Golden Kamuy 4th Season
