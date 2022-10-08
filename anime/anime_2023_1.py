@@ -9,6 +9,7 @@ import os
 # Ijiranaide, Nagatoro-san 2nd Attack https://www.nagatorosan.jp/ #長瀞さん @nagatoro_tv
 # Inu ni Nattara Suki na Hito ni Hirowareta. https://inuhiro-anime.com/ #犬ひろ @inuninattara
 # Isekai Nonbiri Nouka https://nonbiri-nouka.com/ #のんびり農家 @nonbiri_nouka
+# Kaiko sareta Ankoku Heishi (30-dai) no Slow na Second Life https://ankokuheishi-anime.com/ #暗黒兵士 @ankokuheishi_PR
 # Kubo-san wa Mob wo Yurusanai https://kubosan-anime.jp/ #久保さん @kubosan_anime
 # Kyokou Suiri S2 https://kyokousuiri.jp/ #虚構推理 @kyokou_suiri
 # Maou Gakuin no Futekigousha 2nd Season https://maohgakuin.com/ #魔王学院 @maohgakuin
@@ -333,6 +334,55 @@ class IsekaiNonbiriNoukaDownload(Winter2023AnimeDownload):
         folder = self.create_key_visual_directory()
         self.image_list = []
         self.add_to_image_list('tz', 'https://ogre.natalie.mu/media/news/comic/2022/0826/nonbiri-nouka_Teaser.jpg')
+        self.download_image_list(folder)
+
+
+# Kaiko sareta Ankoku Heishi (30-dai) no Slow na Second Life
+class AnkokuHeishiDownload(Winter2023AnimeDownload):
+    title = 'Kaiko sareta Ankoku Heishi (30-dai) no Slow na Second Life'
+    keywords = [title]
+    website = 'https://ankokuheishi-anime.com/'
+    twitter = 'ankokuheishi_PR'
+    hashtags = '暗黒兵士'
+    folder_name = 'ankokuheishi'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        # self.download_news()
+        self.download_key_visual()
+        self.download_character()
+        self.download_media()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz', 'https://pbs.twimg.com/media/FagSmPnUEAA4PNg?format=jpg&name=medium')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'img/character/character%s.png'
+        self.download_by_template(folder, template, 2, 1)
+
+        self.image_list = []
+        self.add_to_image_list('character01_02', self.PAGE_PREFIX + 'img/character/character01_02.png')
+        self.download_image_list(folder)
+
+        template = self.PAGE_PREFIX + 'img/chara_%s.png'
+        self.download_by_template(folder, template, 2, 1, prefix='tz_')
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        self.image_list = []
+        self.add_to_image_list('comment_img', self.PAGE_PREFIX + 'img/comment_img.png')
         self.download_image_list(folder)
 
 
