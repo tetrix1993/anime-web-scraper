@@ -289,6 +289,7 @@ class BocchiTheRockDownload(Fall2022AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         story_url = self.PAGE_PREFIX + 'story/'
@@ -362,6 +363,27 @@ class BocchiTheRockDownload(Fall2022AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        bd_template = self.PAGE_PREFIX + 'assets/img/page/bddvd/vol/ph_vol%s.jpg'
+        self.download_by_template(folder, bd_template, 1, start=1, end=6)
+
+        # Blu-ray Bonus
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'bddvd/tokuten.html')
+            images = soup.select('.bddvd__tokuten__kyotsu__ph__thumb img[src], '
+                                 + '.bddvd__tokuten__shop__list__item__thumb img[src]')
+            self.image_list = []
+            for image in images:
+                if '/bddvd/' not in image['src'] or 'nowprinting' in image['src']:
+                    continue
+                image_url = self.PAGE_PREFIX + image['src'][1:].split('?')[0]
+                image_name = self.generate_image_name_from_url(image_url, 'bddvd')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray Bonus')
 
 
 # Chainsaw Man
