@@ -101,7 +101,6 @@ The premiere date for the anime listed here has not been announced.
 * [Sousou no Frieren](https://frieren-anime.jp/)
 * [Spy Kyoushitsu](https://spyroom-anime.com/)
 * [Tearmoon Teikoku Monogatari: Dantoudai kara Hajimaru, Hime no Tensei Gyakuten Story](https://tearmoon-pr.com/)
-* [Tensei Oujo to Tensai Reijou no Mahou Kakumei](https://tenten-kakumei.com/)
 * [Tonikaku Kawaii 2nd Season](http://tonikawa.com/)
 * [Watashi no Yuri wa Oshigoto desu!](https://watayuri-anime.com/)
 * [Yamada-kun to Lv999 no Koi wo Suru](https://yamadalv999-anime.com/)
@@ -129,6 +128,7 @@ The premiere date for the anime listed here has not been announced.
 * [Rougo ni Sonaete Isekai de 8-manmai no Kinka wo Tamemasu](https://roukin8-anime.com/)
 * [Saikyou Onmyouji no Isekai Tenseiki](https://saikyo-onmyouji.asmik-ace.co.jp/)
 * [Shin Shinka no Mi: Shiranai Uchi ni Kachigumi Jinsei](https://shinkanomi-anime.com/)
+* [Tensei Oujo to Tensai Reijou no Mahou Kakumei](https://tenten-kakumei.com/)
 * [Tomo-chan wa Onnanoko!](https://tomo-chan.jp/)
 * [Tsundere Akuyaku Reijou Liselotte to Jikkyou no Endou-kun to Kaisetsu no Kobayashi-san](https://tsunlise-pr.com/)
 

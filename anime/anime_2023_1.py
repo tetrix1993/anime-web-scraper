@@ -18,6 +18,7 @@ import os
 # Rougo ni Sonaete Isekai de 8-manmai no Kinka wo Tamemasu https://roukin8-anime.com/ #ろうきん8 #roukin8 @roukin8_anime
 # Saikyou Onmyouji no Isekai Tenseiki https://saikyo-onmyouji.asmik-ace.co.jp/ #最強陰陽師 @saikyo_onmyouji
 # Shin Shinka no Mi: Shiranai Uchi ni Kachigumi Jinsei https://shinkanomi-anime.com/ #進化の実 #勝ち組人生 #ゴリラ系女子 @shinkanomianime
+# Tensei Oujo to Tensai Reijou no Mahou Kakumei https://tenten-kakumei.com/ #転天アニメ @tenten_kakumei
 # Tomo-chan wa Onnanoko! https://tomo-chan.jp/ #tomochan @tomo_chan_ani
 # Tsundere Akuyaku Reijou Liselotte to Jikkyou no Endou-kun to Kaisetsu no Kobayashi-san http://tsunlise-pr.com/ #ツンリゼ @tsunlise_pr
 
@@ -830,6 +831,73 @@ class Shinkanomi2Download(Winter2023AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+
+# Tensei Oujo to Tensai Reijou no Mahou Kakumei
+class TentenKakumeiDownload(Winter2023AnimeDownload, NewsTemplate):
+    title = 'Tensei Oujo to Tensai Reijou no Mahou Kakumei'
+    keywords = [title, 'tenten kakumei', 'The Magical Revolution of the Reincarnated Princess and the Genius Young Lady']
+    website = 'https://tenten-kakumei.com/'
+    twitter = 'tenten_kakumei'
+    hashtags = '転天アニメ'
+    folder_name = 'tenten-kakumei'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article.element',
+                                    title_select='.title', date_select='.day', id_select='a',
+                                    date_separator='/', news_prefix='news.html', a_tag_prefix=self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('top_visual_01_v_001_pc', self.PAGE_PREFIX + 'images/top/visual_01/v_001_pc.jpg')
+        self.add_to_image_list('top_visual_02_v_002', self.PAGE_PREFIX + 'images/top/visual_02/v_002.jpg')
+        self.download_image_list(folder)
+
+        template = self.PAGE_PREFIX + 'images/news/p_%s.jpg'
+        self.download_by_template(folder, template, 3, 1, prefix='news_')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'chara.html')
+            a_tags = soup.select('.chara_list_wrap a[href], .chara_sub_wrap a[href]')
+            for a_tag in a_tags:
+                link = a_tag['href']
+                page = link.split('/')[-1].split('.html')[0]
+                if page in processed:
+                    continue
+                chara_soup = self.get_soup(self.PAGE_PREFIX + link)
+                if chara_soup is None:
+                    continue
+                images = chara_soup.select('.chara_calc img[src],.chara_face img[src],.chara_face2 img[src]')
+                self.image_list = []
+                for image in images:
+                    image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+                if len(self.image_list) > 0:
+                    processed.append(page)
+                self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Tomo-chan wa Onnanoko!
