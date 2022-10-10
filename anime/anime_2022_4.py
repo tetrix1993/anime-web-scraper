@@ -4,6 +4,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 from scan import AniverseMagazineScanner, EeoMediaScanner
 
 
+# 4-nin wa Sorezore Uso wo Tsuku https://4uso-anime.com/ #4ウソ #よにぞれ @4uso_anime
 # Akiba Meido Sensou https://akibamaidwar.com/ #アキバ冥途戦争 @akbmaidwar
 # Akuyaku Reijou nanode Last Boss wo Kattemimashita https://akulas-pr.com/ #悪ラス @akulas_pr
 # Bocchi the Rock! https://bocchi.rocks/ #ぼっち・ざ・ろっく #BocchiTheRock @BTR_anime
@@ -39,6 +40,58 @@ class Fall2022AnimeDownload(MainDownload):
 
     def __init__(self):
         super().__init__()
+
+
+# 4-nin wa Sorezore Uso wo Tsuku
+class YoninUsoDownload(Fall2022AnimeDownload, NewsTemplate):
+    title = '4-nin wa Sorezore Uso wo Tsuku'
+    keywords = [title, 'The Little Lies We All Tell', '4uso']
+    website = 'https://4uso-anime.com/'
+    twitter = '4uso_anime'
+    hashtags = ['4ウソ', 'よにぞれ']
+    folder_name = '4uso'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(self.PAGE_PREFIX, paging_type=3, paging_suffix='?page=%s',
+                                    article_select='#newsArea li', title_select='.ttl span',
+                                    date_select='time', id_select='a[href]', a_tag_prefix=self.PAGE_PREFIX,
+                                    date_func=lambda x: x[0:4] + '.' + x[5:], a_tag_start_text_to_remove='../',
+                                    next_page_select='li.prev_next', next_page_eval_index=-1,
+                                    next_page_eval_index_class='notactiv')
+    
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.visualBox .pc-only img[src],.visualBox img[src].pc-only')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src']
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template1 = self.PAGE_PREFIX + 'img/character/chara%s_img1.png'
+        template2 = self.PAGE_PREFIX + 'img/character/chara%s_img2.png'
+        self.download_by_template(folder, [template1, template2], 1, 1)
 
 
 # Akiba Meido Sensou

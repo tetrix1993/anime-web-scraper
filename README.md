@@ -133,6 +133,7 @@ The premiere date for the anime listed here has not been announced.
 * [Tsundere Akuyaku Reijou Liselotte to Jikkyou no Endou-kun to Kaisetsu no Kobayashi-san](https://tsunlise-pr.com/)
 
 ### Fall 2022 Anime
+* [4-nin wa Sorezore Uso wo Tsuku](https://4uso-anime.com/)
 * [Akiba Meido Sensou](https://akibamaidwar.com/)
 * [Akuyaku Reijou nanode Last Boss wo Kattemimashita](https://akulas-pr.com/)
 * [Bocchi the Rock!](https://bocchi.rocks/)
