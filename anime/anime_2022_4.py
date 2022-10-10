@@ -1494,7 +1494,37 @@ class PeterGrill2Download(Fall2022AnimeDownload, NewsTemplate):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'works.php')
+            stories = soup.select('.story_change a[href]')
+            for story in stories:
+                try:
+                    episode = str(int(story.text)).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                use_current_soup = False
+                if 'class' in story:
+                    if 'this_story' in story['class']:
+                        use_current_soup = True
+                    elif 'story_none' in story['class']:
+                        continue
+                if use_current_soup:
+                    ep_soup = soup
+                else:
+                    ep_soup = self.get_soup(self.PAGE_PREFIX + story['href'].replace('./', ''))
+                if ep_soup is None:
+                    continue
+                self.image_list = []
+                images = ep_soup.select('.mySwiper2 img[src]')
+                for i in range(len(images)):
+                    image_url = self.PAGE_PREFIX + images[i]['src'].replace('./', '')
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_episode_preview_external(self):
         keywords = ['ピーター・グリルと賢者の時間', '先行']
