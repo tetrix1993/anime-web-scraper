@@ -1366,7 +1366,8 @@ class MushikaburihimeDownload(Fall2022AnimeDownload, NewsTemplate):
 
     def download_episode_preview_external(self):
         keywords = ['虫かぶり姫', '先行カット']
-        EeoMediaScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE, download_id=self.download_id).run()
+        AniverseMagazineScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                end_date='20220928', download_id=self.download_id).run()
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article.content-entry',
