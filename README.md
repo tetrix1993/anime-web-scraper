@@ -144,6 +144,7 @@ The premiere date for the anime listed here has not been announced.
 * [Golden Kamuy 4th Season](https://www.kamuy-anime.com/)
 * [Kage no Jitsuryokusha ni Naritakute!](https://shadow-garden.jp/)
 * [KanColle: Itsuka Ano Umi de](https://kancolle-itsuumi.com/)
+* [Kidou Senshi Gundam: Suisei no Majo](https://g-witch.net/)
 * [Koukyuu no Karasu](https://kokyu-anime.com/)
 * [Mairimashita! Iruma-kun 3rd Season](https://www.nhk-character.com/chara/iruma/)
 * [Mob Psycho 100 III](https://mobpsycho100.com/)

@@ -16,6 +16,7 @@ from scan import AniverseMagazineScanner, EeoMediaScanner
 # Golden Kamuy S4 https://www.kamuy-anime.com/ #ゴールデンカムイ @kamuy_official
 # Kage no Jitsuryokusha ni Naritakute! https://shadow-garden.jp/ #陰の実力者 @Shadowgarden_PR
 # KanColle: Itsuka Ano Umi de https://kancolle-itsuumi.com/ #艦これ #いつかあの海で @anime_KanColle
+# Kidou Senshi Gundam: Suisei no Majo https://g-witch.net/ #水星の魔女 #G_Witch @g_witch_m
 # Koukyuu no Karasu https://kokyu-anime.com/ #後宮の烏 @kokyu_anime
 # Mairimashita! Iruma-kun S3 https://www.nhk-character.com/chara/iruma/ #魔入りました入間くん #irumakun @nep_irumakun
 # Mob Psycho 100 III https://mobpsycho100.com/ #モブサイコ100 #mobpsycho100 @mobpsycho_anime
@@ -1087,6 +1088,63 @@ class KanColle2Download(Fall2022AnimeDownload, NewsTemplate2):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Key Visual')
+
+
+# Kidou Senshi Gundam: Suisei no Majo
+class GundamWitchDownload(Fall2022AnimeDownload):
+    title = 'Kidou Senshi Gundam: Suisei no Majo'
+    keywords = [title, 'Mobile Suit Gundam: The Witch from Mercury', 'G-Witch']
+    website = 'https://g-witch.net/'
+    twitter = 'g_witch_m'
+    hashtags = ['水星の魔女', 'G_Witch']
+    folder_name = 'g-witch'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        story_url = self.PAGE_PREFIX + 'story/'
+        try:
+            soup = self.get_soup(story_url)
+            stories = soup.select('.list__inner li')
+            for story in stories:
+                try:
+                    episode = str(int(story.select('.desc--number')[0].text.strip().replace('第', '')
+                                      .replace('話', ''))).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                a_tag = story.select('a[href]')
+                if len(a_tag) == 0:
+                    continue
+                ep_soup = self.get_soup(story_url + a_tag[0]['href'].replace('./', ''))
+                if ep_soup is None:
+                    continue
+                images = ep_soup.select('#detailImages p[style]')
+                self.image_list = []
+                for i in range(len(images)):
+                    if images[i]['style'].startswith("background-image: url('") and images[i]['style'].endswith("')"):
+                        image_url = images[i]['style'][23:-2]
+                        image_name = episode + '_' + str(i + 1)
+                        self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        prefix = self.PAGE_PREFIX + 'shared/img/top/visual_main'
+        self.image_list = []
+        self.add_to_image_list('visual_main', prefix + '.jpg')
+        self.download_image_list(folder)
+        self.download_by_template(folder, prefix + '%s.jpg', 1, 2)
 
 
 # Koukyuu no Karasu
