@@ -2073,7 +2073,38 @@ class UruseiYatsuraDownload(Fall2022AnimeDownload, NewsTemplate):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            a_tags = soup.select('.story--nav a[href]')
+            for a_tag in a_tags:
+                try:
+                    episode = str(int(a_tag.text)).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                story_num = soup.select('.story--num')
+                ep_soup = None
+                if len(story_num) > 0:
+                    try:
+                        episode_num = str(int(story_num[0].text)).zfill(2)
+                        if episode == episode_num:
+                            ep_soup = soup
+                    except:
+                        pass
+                if ep_soup is None:
+                    ep_soup = self.get_soup(a_tag['href'])
+                    if ep_soup is None:
+                        continue
+                self.image_list = []
+                images = ep_soup.select('.ss img[src]')
+                for i in range(len(images)):
+                    image_url = images[i]['src'].split('?')[0]
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.md-news--li',
