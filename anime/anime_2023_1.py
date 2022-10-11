@@ -13,6 +13,7 @@ import os
 # Kubo-san wa Mob wo Yurusanai https://kubosan-anime.jp/ #久保さん @kubosan_anime
 # Kyokou Suiri S2 https://kyokousuiri.jp/ #虚構推理 @kyokou_suiri
 # Maou Gakuin no Futekigousha 2nd Season https://maohgakuin.com/ #魔王学院 @maohgakuin
+# Ningen Fushin no Boukensha-tachi ga Sekai wo Sukuu you desu https://www.ningenfushin-anime.jp/ #人間不信 @ningenfushinPR
 # Oniichan wa Oshimai! https://onimai.jp/ #おにまい @onimai_anime
 # Otonari no Tenshi-sama ni Itsunomanika Dame Ningen ni Sareteita Ken https://otonarino-tenshisama.jp/ #お隣の天使様 @tenshisama_PR
 # Rougo ni Sonaete Isekai de 8-manmai no Kinka wo Tamemasu https://roukin8-anime.com/ #ろうきん8 #roukin8 @roukin8_anime
@@ -521,6 +522,47 @@ class Maohgakuin2Download(Winter2023AnimeDownload, NewsTemplate):
         self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/FdRkMFnaMAImkFJ?format=jpg&name=large')
         self.add_to_image_list('kv1', self.PAGE_PREFIX + 'assets/img/img_main_fix.jpg')
         self.download_image_list(folder)
+
+
+# Ningen Fushin no Boukensha-tachi ga Sekai wo Sukuu you desu
+class NingenFushinDownload(Winter2023AnimeDownload, NewsTemplate):
+    title = 'Ningen Fushin no Boukensha-tachi ga Sekai wo Sukuu you desu'
+    keywords = [title, 'Apparently, Disillusioned Adventurers Will Save the World']
+    website = 'https://www.ningenfushin-anime.jp/'
+    twitter = 'ningenfushinPR'
+    hashtags = '人間不信'
+    folder_name = 'ningenfushin'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.c-News__articleLink',
+                                    date_select='.c-date-line', title_select='.c-text-hover', id_select=None,
+                                    date_func=lambda x: '2022.' + x[0:2] + '.' + x[3:])
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz', self.PAGE_PREFIX + 'wp-content/themes/ningenfushin/dist/img/top/kv.png')
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FextUiWaEAEBfcR?format=jpg&name=4096x4096')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        prefix = self.PAGE_PREFIX + 'wp-content/themes/ningenfushin/dist/img/character/body_char_'
+        self.download_by_template(folder, [prefix + '%s.png', prefix + '%s_on.png'], 1, 1)
 
 
 # Oniichan wa Oshimai!

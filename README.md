@@ -123,6 +123,7 @@ The premiere date for the anime listed here has not been announced.
 * [Kubo-san wa Mob wo Yurusanai](https://kubosan-anime.jp/)
 * [Kyokou Suiri Season 2](https://kyokousuiri.jp/)
 * [Maou Gakuin no Futekigousha: Shijou Saikyou no Maou no Shiso, Tensei shite Shison-tachi no Gakkou e II](https://maohgakuin.com/)
+* [Ningen Fushin no Boukensha-tachi ga Sekai wo Sukuu you desu](https://www.ningenfushin-anime.jp/)
 * [Oniichan wa Oshimai!](https://onimai.jp/)
 * [Otonari no Tenshi-sama ni Itsunomanika Dame Ningen ni Sareteita Ken](https://otonarino-tenshisama.jp/)
 * [Rougo ni Sonaete Isekai de 8-manmai no Kinka wo Tamemasu](https://roukin8-anime.com/)
