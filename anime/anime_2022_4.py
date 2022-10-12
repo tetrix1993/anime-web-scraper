@@ -1616,6 +1616,22 @@ class RenaiFlopsDownload(Fall2022AnimeDownload, NewsTemplate):
 
     def download_media(self):
         folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'package.html')
+            images = soup.select('.package img[src]')
+            self.image_list = []
+            for image in images:
+                if '/package/' not in image['src']:
+                    continue
+                temp_name = image['src'].split('/')[-1]
+                if temp_name.startswith('nowpri') or temp_name.startswith('i_00'):
+                    continue
+                image_url = self.PAGE_PREFIX + image['src']
+                image_name = self.generate_image_name_from_url(image_url, 'package')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
         # Sample Voices
         voice_folder = folder + '/voice'
