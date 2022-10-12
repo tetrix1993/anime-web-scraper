@@ -2256,6 +2256,7 @@ class Utawarerumono3Download(Summer2022AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         yt_folder, yt_episodes = self.init_youtube_thumbnail_variables()
@@ -2323,6 +2324,36 @@ class Utawarerumono3Download(Summer2022AnimeDownload, NewsTemplate):
 
         template2 = prefix + '-new/_assets/images/contents/char/detail/char_%s_pc.png'
         self.download_by_template(folder, template2, 3, 1)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            self.image_list = []
+            images = soup.select('.bddata img[src]')
+            for image in images:
+                image_url = image['src']
+                image_name = self.extract_image_name_from_url(image_url)
+                if 'bd_np' in image_name:
+                    continue
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
+
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'store/')
+            self.image_list = []
+            images = soup.select('.store picture img[src]')
+            for image in images:
+                image_url = image['src']
+                image_name = self.extract_image_name_from_url(image_url)
+                if 'bd_np' in image_name:
+                    continue
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray Bonus')
 
 
 # Warau Arsnotoria Sun!
