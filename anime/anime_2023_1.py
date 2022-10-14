@@ -19,6 +19,7 @@ import os
 # Rougo ni Sonaete Isekai de 8-manmai no Kinka wo Tamemasu https://roukin8-anime.com/ #ろうきん8 #roukin8 @roukin8_anime
 # Saikyou Onmyouji no Isekai Tenseiki https://saikyo-onmyouji.asmik-ace.co.jp/ #最強陰陽師 @saikyo_onmyouji
 # Shin Shinka no Mi: Shiranai Uchi ni Kachigumi Jinsei https://shinkanomi-anime.com/ #進化の実 #勝ち組人生 #ゴリラ系女子 @shinkanomianime
+# Spy Kyoushitsu https://spyroom-anime.com/ #スパイ教室 #spyroom #SpyClassroom @spyroom_anime
 # Tensei Oujo to Tensai Reijou no Mahou Kakumei https://tenten-kakumei.com/ #転天アニメ @tenten_kakumei
 # Tomo-chan wa Onnanoko! https://tomo-chan.jp/ #tomochan @tomo_chan_ani
 # Tsundere Akuyaku Reijou Liselotte to Jikkyou no Endou-kun to Kaisetsu no Kobayashi-san http://tsunlise-pr.com/ #ツンリゼ @tsunlise_pr
@@ -873,6 +874,112 @@ class Shinkanomi2Download(Winter2023AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+
+# Spy Kyoushitsu
+class SpyroomDownload(Winter2023AnimeDownload, NewsTemplate2):
+    title = "Spy Kyoushitsu"
+    keywords = [title, "Spy Classroom", "Spyroom"]
+    website = 'https://spyroom-anime.com/'
+    twitter = 'spyroom_anime'
+    hashtags = ['スパイ教室', 'spyroom', 'SpyClassroom']
+    folder_name = 'spyroom'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_kv_chara', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv_chara.png')
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FNuvFFSaAAkbDy3?format=jpg&name=4096x4096')
+        self.add_to_image_list('home_kv', self.PAGE_PREFIX + 'core_sys/images/main/home/kv.png')
+        self.add_to_image_list('tz_kv', self.PAGE_PREFIX + 'core_sys/images/news/00000015/block/00000031/00000005.jpg')
+        self.download_image_list(folder)
+
+        sub_folder = self.create_custom_directory(folder.split('/')[-1] + '/news')
+        cache_filepath = sub_folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'news/')
+            while True:
+                stop = False
+                items = soup.select('#list_01 a[href]')
+                for item in items:
+                    if not item['href'].startswith('../') or '/news/' not in item['href']\
+                            or not item['href'].endswith('.html'):
+                        continue
+                    page_name = item['href'].split('/')[-1].split('.html')[0]
+                    if page_name in processed:
+                        stop = True
+                        break
+                    title = item.text.strip()
+                    if 'ビジュアル' in title:
+                        news_soup = self.get_soup(self.PAGE_PREFIX + item['href'].replace('../', ''))
+                        if news_soup is not None:
+                            images = news_soup.select('#news_block img[src]')
+                            self.image_list = []
+                            for image in images:
+                                image_url = self.PAGE_PREFIX + image['src'].replace('../', '').split('?')[0]
+                                if '/news/' not in image_url:
+                                    continue
+                                image_name = self.generate_image_name_from_url(image_url, 'news')\
+                                    .replace('_block_', '_')
+                                self.add_to_image_list(image_name, image_url)
+                            self.download_image_list(sub_folder)
+                        processed.append(page_name)
+                if stop:
+                    break
+                next_page = soup.select('.nb_nex a[href]')
+                if len(next_page) == 0:
+                    break
+                soup = self.get_soup(self.PAGE_PREFIX + next_page[0]['href'].replace('../', ''))
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+        self.create_cache_file(cache_filepath, processed, num_processed)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'chara/lily.html')
+            a_tags = soup.select('#ContentsListUnit02 a[href]')
+            for a_tag in a_tags:
+                chara_url = self.PAGE_PREFIX + a_tag['href'].replace('../', '')
+                chara_name = chara_url.split('/')[-1].replace('.html', '')
+                if chara_name in processed:
+                    continue
+                if chara_name == 'lily':
+                    chara_soup = soup
+                else:
+                    chara_soup = self.get_soup(chara_url)
+                if chara_soup is not None:
+                    images = chara_soup.select('.chara__img img[src]')
+                    for image in images:
+                        image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                        image_name = self.extract_image_name_from_url(image_url)
+                        self.add_to_image_list(image_name, image_url)
+                    if len(self.image_list) > 0:
+                        processed.append(chara_name)
+                    self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Tensei Oujo to Tensai Reijou no Mahou Kakumei

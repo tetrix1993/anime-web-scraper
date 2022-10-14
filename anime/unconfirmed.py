@@ -21,7 +21,6 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Seijo no Maryoku wa Bannou Desu S2 https://seijyonomaryoku.jp/ #seijyonoanime @seijyonoanime
 # Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita 2nd Season https://slime300-anime.com/ #スライム倒して300年 @slime300_PR
 # Sousou no Frieren https://frieren-anime.jp/ #フリーレン #frieren @Anime_Frieren
-# Spy Kyoushitsu https://spyroom-anime.com/ #スパイ教室 #spyroom #SpyClassroom @spyroom_anime
 # Tearmoon Teikoku Monogatari: Dantoudai kara Hajimaru, Hime no Tensei Gyakuten Story https://tearmoon-pr.com/ #ティアムーン @tearmoon_pr
 # Tonikaku Kawaii S2 http://tonikawa.com/ #トニカクカワイイ #tonikawa @tonikawa_anime
 # Vlad Love https://www.vladlove.com/index.html #ぶらどらぶ #vladlove @VLADLOVE_ANIME
@@ -821,71 +820,6 @@ class FrierenDownload(UnconfirmedDownload):
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FcgQDbKaAAAEBu_?format=jpg&name=4096x4096')
         self.add_to_image_list('index_visual', self.PAGE_PREFIX + 'assets/img/index/visual.jpg')
         self.download_image_list(folder)
-
-
-# Spy Kyoushitsu
-class SpyroomDownload(UnconfirmedDownload, NewsTemplate2):
-    title = "Spy Kyoushitsu"
-    keywords = [title, "Spy Classroom", "Spyroom"]
-    website = 'https://spyroom-anime.com/'
-    twitter = 'spyroom_anime'
-    hashtags = ['スパイ教室', 'spyroom', 'SpyClassroom']
-    folder_name = 'spyroom'
-
-    PAGE_PREFIX = website
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_news()
-        self.download_key_visual()
-        self.download_character()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_news(self):
-        self.download_template_news(self.PAGE_PREFIX)
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('tz_kv_chara', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv_chara.png')
-        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FNuvFFSaAAkbDy3?format=jpg&name=4096x4096')
-        self.add_to_image_list('home_kv', self.PAGE_PREFIX + 'core_sys/images/main/home/kv.png')
-        self.add_to_image_list('tz_kv', self.PAGE_PREFIX + 'core_sys/images/news/00000015/block/00000031/00000005.jpg')
-        self.download_image_list(folder)
-
-    def download_character(self):
-        folder = self.create_character_directory()
-        cache_filepath = folder + '/cache'
-        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
-        try:
-            soup = self.get_soup(self.PAGE_PREFIX + 'chara/lily.html')
-            a_tags = soup.select('#ContentsListUnit02 a[href]')
-            for a_tag in a_tags:
-                chara_url = self.PAGE_PREFIX + a_tag['href'].replace('../', '')
-                chara_name = chara_url.split('/')[-1].replace('.html', '')
-                if chara_name in processed:
-                    continue
-                if chara_name == 'lily':
-                    chara_soup = soup
-                else:
-                    chara_soup = self.get_soup(chara_url)
-                if chara_soup is not None:
-                    images = chara_soup.select('.chara__img img[src]')
-                    for image in images:
-                        image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
-                        image_name = self.extract_image_name_from_url(image_url)
-                        self.add_to_image_list(image_name, image_url)
-                    if len(self.image_list) > 0:
-                        processed.append(chara_name)
-                    self.download_image_list(folder)
-        except Exception as e:
-            self.print_exception(e, 'Character')
-        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Tearmoon Teikoku Monogatari: Dantoudai kara Hajimaru, Hime no Tensei Gyakuten Story
