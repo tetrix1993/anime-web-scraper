@@ -941,7 +941,7 @@ class SpyroomDownload(Winter2023AnimeDownload, NewsTemplate2):
                                     .replace('_block_', '_')
                                 self.add_to_image_list(image_name, image_url)
                             self.download_image_list(sub_folder)
-                        processed.append(page_name)
+                    processed.append(page_name)
                 if stop:
                     break
                 next_page = soup.select('.nb_nex a[href]')
@@ -949,7 +949,7 @@ class SpyroomDownload(Winter2023AnimeDownload, NewsTemplate2):
                     break
                 soup = self.get_soup(self.PAGE_PREFIX + next_page[0]['href'].replace('../', ''))
         except Exception as e:
-            self.print_exception(e, 'Key Visual')
+            self.print_exception(e, 'Key Visual News')
         self.create_cache_file(cache_filepath, processed, num_processed)
 
     def download_character(self):
