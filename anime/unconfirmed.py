@@ -664,6 +664,7 @@ class OshinokoDownload(UnconfirmedDownload, NewsTemplate2):
         self.image_list = []
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FU0bJsjaAAAE7Bf?format=jpg&name=large')
         self.add_to_image_list('tz_kv', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv.jpg')
+        self.add_to_image_list('tz_kv2', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv2/kv.jpg')
         self.download_image_list(folder)
 
 
