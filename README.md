@@ -97,6 +97,7 @@ The premiere date for the anime listed here has not been announced.
 * [Oshi no Ko](https://ichigoproduction.com/)
 * [Otonari ni Ginga](https://otonari-anime.com/)
 * [Seijo no Maryoku wa Bannou Desu 2nd Season](https://seijyonomaryoku.jp/)
+* [Seiken Gakuin no Makentsukai](https://seikengakuin.com/)
 * [Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita 2nd Season](https://slime300-anime.com/)
 * [Sousou no Frieren](https://frieren-anime.jp/)
 * [Tearmoon Teikoku Monogatari: Dantoudai kara Hajimaru, Hime no Tensei Gyakuten Story](https://tearmoon-pr.com/)
