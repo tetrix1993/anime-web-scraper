@@ -624,7 +624,26 @@ class FumetsuNoAnatae2Download(Fall2022AnimeDownload):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        json_url = self.PAGE_PREFIX + '/assets2022/data/story-ja.json'
+        image_url_template = self.PAGE_PREFIX + '/story/images/%s_%s/%s.png'
+        self.image_list = []
+        try:
+            json_obj = self.get_json(json_url)
+            if 'list' in json_obj and isinstance(json_obj['list'], list):
+                for obj in json_obj['list']:
+                    if 'series' in obj and 'episodes' in obj and isinstance(obj['series'], int) \
+                            and isinstance(obj['episodes'], int):
+                        episode = str(obj['episodes']).zfill(2)
+                        if self.is_image_exists(episode + '_1'):
+                            continue
+                        for i in range(3):
+                            image_url = image_url_template % (str(obj['series']), str(obj['episodes']), str(i + 1))
+                            image_name = episode + '_' + str(i + 1)
+                            self.add_to_image_list(image_name, image_url)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
+        self.download_image_list(self.base_folder)
 
     def download_news(self):
         json_url = self.PAGE_PREFIX + '/assets/data/topics-ja.json'
