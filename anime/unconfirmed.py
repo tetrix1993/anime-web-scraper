@@ -337,9 +337,10 @@ class OneKillSisterDownload(UnconfirmedDownload, NewsTemplate):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
 
     def download_news(self):
-        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.info-news__item a',
-                                    date_select='.info-news__item-data', title_select='.info-news__item-title',
-                                    id_select=None, date_separator='/', news_prefix='')
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-list__item',
+                                    date_select='.news-list__item-data', title_select='.news-list__item-text',
+                                    id_select='a', date_separator='/', next_page_select='div.pagination .page-numbers',
+                                    next_page_eval_index_class='current', next_page_eval_index=-1)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
