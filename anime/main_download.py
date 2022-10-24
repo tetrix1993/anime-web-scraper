@@ -1190,10 +1190,21 @@ class MainDownload:
                 yt_episodes.append(yt_image[0:2])
         return yt_folder, yt_episodes
 
-    def download_youtube_thumbnail_by_id(self, yt_id, yt_folder, episode):
-        yt_image_url = f'https://img.youtube.com/vi/{yt_id}/maxresdefault.jpg'
-        yt_image_name = f'{episode}_{yt_id}'
-        self.download_image(yt_image_url, f'{yt_folder}/{yt_image_name}')
+    def download_youtube_thumbnail_by_id(self, yt_ids, yt_folder, episode):
+        if isinstance(yt_ids, str):
+            youtube_ids = [yt_ids]
+        elif isinstance(yt_ids, list):
+            youtube_ids = yt_ids
+        else:
+            return
+        for i in range(len(youtube_ids)):
+            yt_id = youtube_ids[i]
+            yt_image_url = f'https://img.youtube.com/vi/{yt_id}/maxresdefault.jpg'
+            if len(youtube_ids) > 1:
+                yt_image_name = f'{episode}_{i + 1}_{yt_id}'
+            else:
+                yt_image_name = f'{episode}_{yt_id}'
+            self.download_image(yt_image_url, f'{yt_folder}/{yt_image_name}')
 
     # Match filter
     def match(self, s_filter):

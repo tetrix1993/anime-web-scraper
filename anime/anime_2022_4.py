@@ -1036,6 +1036,7 @@ class KagenoJitsuryokushaDownload(Fall2022AnimeDownload, NewsTemplate):
         self.download_media()
 
     def download_episode_preview(self):
+        yt_folder, yt_episodes = self.init_youtube_thumbnail_variables()
         try:
             soup = self.get_soup(self.PAGE_PREFIX + 'story/')
             sections = soup.select('section[id]')
@@ -1046,7 +1047,7 @@ class KagenoJitsuryokushaDownload(Fall2022AnimeDownload, NewsTemplate):
                     episode = str(int(section['id'][5:])).zfill(2)
                 except:
                     continue
-                if self.is_image_exists(episode + '_1'):
+                if self.is_image_exists(episode + '_1') and episode in yt_episodes:
                     continue
                 self.image_list = []
                 images = section.select('.storyImgLists img[src]')
@@ -1055,6 +1056,13 @@ class KagenoJitsuryokushaDownload(Fall2022AnimeDownload, NewsTemplate):
                     image_name = episode + '_' + str(i + 1)
                     self.add_to_image_list(image_name, image_url)
                 self.download_image_list(self.base_folder)
+
+                yt_tags = section.select('.movieLists__item a[data-ytid]')
+                if len(yt_tags) > 0:
+                    yt_ids = []
+                    for yt_tag in yt_tags:
+                        yt_ids.append(yt_tag['data-ytid'])
+                    self.download_youtube_thumbnail_by_id(yt_ids, yt_folder, episode)
         except Exception as e:
             self.print_exception(e)
 
