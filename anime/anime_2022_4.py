@@ -372,12 +372,13 @@ class BocchiTheRockDownload(Fall2022AnimeDownload, NewsTemplate):
 
     def download_episode_preview(self):
         story_url = self.PAGE_PREFIX + 'story/'
+        yt_folder, yt_episodes = self.init_youtube_thumbnail_variables()
         try:
             soup = self.get_soup(story_url, decode=True)
             story_list = soup.select('.story__navs')
             if len(story_list) > 0:
                 stories = story_list[0].select('li')
-                for story in stories:
+                for story in reversed(stories):
                     a_tag = story.select('a[href]')
                     if len(a_tag) == 0:
                         continue
@@ -385,7 +386,7 @@ class BocchiTheRockDownload(Fall2022AnimeDownload, NewsTemplate):
                         episode = str(int(a_tag[0].text.replace('＃', '').replace('#', ''))).zfill(2)
                     except:
                         continue
-                    if self.is_image_exists(episode + '_1'):
+                    if self.is_image_exists(episode + '_1') and episode in yt_episodes:
                         continue
                     if story.has_attr('class') and '-active' in story['class']:
                         ep_soup = soup
@@ -399,6 +400,11 @@ class BocchiTheRockDownload(Fall2022AnimeDownload, NewsTemplate):
                             image_name = episode + '_' + str(i + 1)
                             self.add_to_image_list(image_name, image_url)
                         self.download_image_list(self.base_folder)
+
+                        yt_tag = ep_soup.select('.movie__item[data-videoid]')
+                        if len(yt_tag) > 0:
+                            yt_id = yt_tag[0]['data-videoid']
+                            self.download_youtube_thumbnail_by_id(yt_id, yt_folder, episode)
         except Exception as e:
             self.print_exception(e)
 
