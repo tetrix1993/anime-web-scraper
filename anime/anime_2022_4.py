@@ -1987,6 +1987,7 @@ class TenkenDownload(Fall2022AnimeDownload, NewsTemplate):
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_external()
         self.download_news()
         self.download_key_visual()
         self.download_character()
@@ -2011,6 +2012,31 @@ class TenkenDownload(Fall2022AnimeDownload, NewsTemplate):
                     break
         except Exception as e:
             self.print_exception(e)
+
+        # YouTube thumbnails
+        yt_folder, yt_episodes = self.init_youtube_thumbnail_variables(['01'])
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'movie.html')
+            movies = soup.select('.movie-tiles a[href]')
+            for movie in movies:
+                img = movie.select('img[src]')
+                if len(img) == 0 or '/story/' not in img[0]['src']:
+                    continue
+                try:
+                    episode = str(int(img[0]['src'][img[0]['src'].find('/story/') + 7:].split('/')[0])).zfill(2)
+                    if episode in yt_episodes:
+                        continue
+                except:
+                    continue
+                yt_id = movie['href'].split('?')[0].split('/')[-1]
+                self.download_youtube_thumbnail_by_id(yt_id, yt_folder, episode)
+        except Exception as e:
+            self.print_exception(e)
+
+    def download_episode_preview_external(self):
+        keywords = ['転生したら剣でした', 'カット']
+        AniverseMagazineScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                end_date='20220909', download_id=self.download_id).run()
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article.content-entry',
