@@ -1416,6 +1416,27 @@ class MushikaburihimeDownload(Fall2022AnimeDownload, NewsTemplate):
         except Exception as e:
             self.print_exception(e)
 
+        # YouTube thumbnails
+        yt_folder, yt_episodes = self.init_youtube_thumbnail_variables(['01'])
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story.html')
+            stories = soup.select('.story-data[id]')
+            for story in stories:
+                if len(story['id']) > 1 and story['id'].startswith('S') and story['id'][1:].isnumeric():
+                    ep_num = int(story['id'][1:])
+                    if ep_num < 2:
+                        continue
+                    episode = str(ep_num).zfill(2)
+                    if episode in yt_episodes:
+                        continue
+                    yt_tag = story.select('.ep-trailer a[href]')
+                    if len(yt_tag) > 0:
+                        yt_id = yt_tag[0]['href'].split('?')[0].split('/')[-1]
+                        self.download_youtube_thumbnail_by_id(yt_id, yt_folder, episode)
+        except Exception as e:
+            self.print_exception(e, 'YouTube thumbnails')
+
+
     def download_episode_preview_external(self):
         keywords = ['虫かぶり姫', '先行カット']
         AniverseMagazineScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE,
