@@ -1421,7 +1421,7 @@ class MushikaburihimeDownload(Fall2022AnimeDownload, NewsTemplate):
         try:
             soup = self.get_soup(self.PAGE_PREFIX + 'story.html')
             stories = soup.select('.story-data[id]')
-            for story in stories:
+            for story in reversed(stories):
                 if len(story['id']) > 1 and story['id'].startswith('S') and story['id'][1:].isnumeric():
                     ep_num = int(story['id'][1:])
                     if ep_num < 2:
@@ -1435,7 +1435,6 @@ class MushikaburihimeDownload(Fall2022AnimeDownload, NewsTemplate):
                         self.download_youtube_thumbnail_by_id(yt_id, yt_folder, episode)
         except Exception as e:
             self.print_exception(e, 'YouTube thumbnails')
-
 
     def download_episode_preview_external(self):
         keywords = ['虫かぶり姫', '先行カット']
@@ -1653,12 +1652,38 @@ class RenaiFlopsDownload(Fall2022AnimeDownload, NewsTemplate):
             if self.is_image_exists(episode + '_1'):
                 continue
             ep_template = template % (str(i + 1).zfill(3), '%s')
+            stop = False
             for j in range(self.IMAGES_PER_EPISODE):
                 image_url = ep_template % str(j + 1).zfill(3)
                 image_name = episode + '_' + str(j + 1)
                 result = self.download_image(image_url, self.base_folder + '/' + image_name)
                 if result == -1:
-                    return
+                    stop = True
+                    break
+            if stop:
+                break
+
+        # YouTube thumbnails
+        yt_folder, yt_episodes = self.init_youtube_thumbnail_variables()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story.html')
+            stories = soup.select('.thumb_wrap a[href]')
+            for story in reversed(stories):
+                try:
+                    episode = str(int(story['href'].split('/')[-1].replace('story_', '').replace('.html', ''))).zfill(2)
+                    if episode in yt_episodes:
+                        continue
+                except:
+                    continue
+                story_url = self.PAGE_PREFIX + story['href']
+                story_soup = self.get_soup(story_url)
+                if story_soup is not None:
+                    yt_tag = story_soup.select('.yt_movie iframe[src]')
+                    if len(yt_tag) > 0:
+                        yt_id = yt_tag[0]['src'].split('?')[0].split('/')[-1]
+                        self.download_youtube_thumbnail_by_id(yt_id, yt_folder, episode)
+        except Exception as e:
+            self.print_exception(e, 'YouTube thumbnails')
 
     def download_episode_preview_external(self):
         keywords = ['恋愛フロップス', 'カット']
