@@ -2472,6 +2472,12 @@ class YamaNoSusume4Download(Fall2022AnimeDownload):
                 image_url = bd_template % (first_num, second_num, third_num)
                 if not self.is_matching_content_length(image_url, 27132):
                     self.add_to_image_list(image_name, image_url)
+
+                sd_name = image_name + '_sd'
+                second_num = str(second + 1 + i * 3).zfill(8)
+                third_num = str(157 + i).zfill(8)
+                sd_image_url = bd_template % (first_num, second_num, third_num)
+                self.add_to_image_list(sd_name, sd_image_url)
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Blu-ray')
