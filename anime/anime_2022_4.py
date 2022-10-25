@@ -498,11 +498,40 @@ class ChainsawManDownload(Fall2022AnimeDownload, NewsTemplate):
             episode = str(i + 1).zfill(2)
             if self.is_image_exists(episode + '_' + str(self.IMAGES_PER_EPISODE)):
                 continue
+            stop = False
             for j in range(self.IMAGES_PER_EPISODE):
                 image_name = episode + '_' + str(j + 1)
                 image_url = template % image_name
                 if self.download_image(image_url, self.base_folder + '/' + image_name) == -1:
-                    return
+                    stop = True
+                    break
+            if stop:
+                break
+
+        # YouTube thumbnails
+        yt_folder, yt_episodes = self.init_youtube_thumbnail_variables()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'movie/')
+            items = soup.select('.p-movie__movieList--item.-trailer')
+            for item in reversed(items):
+                title = item.select('.p-movie__movieList--title')
+                a_tag = item.select('a[data-yt]')
+                if len(title) == 0 or len(a_tag) == 0:
+                    continue
+                try:
+                    index1 = title[0].text.find('第')
+                    index2 = title[0].text.find('話')
+                    if index1 == -1 or index2 == -1 or index1 >= index2:
+                        continue
+                    episode = str(int(title[0].text[index1 + 1: index2])).zfill(2)
+                except:
+                    continue
+                if episode in yt_episodes:
+                    continue
+                yt_id = a_tag[0]['data-yt']
+                self.download_youtube_thumbnail_by_id(yt_id, yt_folder, episode)
+        except Exception as e:
+            self.print_exception(e, 'YouTube thumbnail')
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.p-news__item',
