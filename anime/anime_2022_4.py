@@ -965,7 +965,7 @@ class GoldenKamuy4Download(Fall2022AnimeDownload, NewsTemplate2):
     PAGE_PREFIX = website
     PAGE_URL = PAGE_PREFIX + "story/%s.html"
     FIRST_EPISODE = 37
-    FINAL_EPISODE = 48
+    FINAL_EPISODE = 49
 
     def __init__(self):
         super().__init__()
