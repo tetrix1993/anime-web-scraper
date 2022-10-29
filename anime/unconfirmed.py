@@ -14,6 +14,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Itai no wa https://bofuri.jp/story/ #防振り #bofuri @bofuri_anime
 # Jitsu wa Ore, Saikyou deshita? https://jitsuhaoresaikyo-anime.com/ @jitsuoresaikyo
 # Keikenzumi na Kimi to, Keiken Zero na Ore ga, Otsukiai suru Hanashi. https://kimizero.com/ #キミゼロ @kimizero_anime
+# Level 1 dakedo Unique Skill de Saikyou desu https://level1-anime.com/ #レベル1だけどアニメ化です @level1_anime
 # Masamune-kun no Revenge R https://masamune-tv.com/ #MASA_A @masamune_tv
 # Mato Seihei no Slave https://mabotai.jp/ #魔都精兵のスレイブ #まとスレ @mabotai_kohobu
 # Oshi no Ko https://ichigoproduction.com/ #推しの子 @anime_oshinoko
@@ -538,6 +539,49 @@ class KimizeroDownload(UnconfirmedDownload, NewsTemplate2):
         self.add_to_image_list('tz_kv', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv.jpg')
         self.add_to_image_list('tz_loading_kv', self.PAGE_PREFIX + 'core_sys/images/main/tz/loading_kv.jpg')
         self.download_image_list(folder)
+
+
+# Level 1 dakedo Unique Skill de Saikyou desu
+class Level1Download(UnconfirmedDownload, NewsTemplate):
+    title = 'Level 1 dakedo Unique Skill de Saikyou desu'
+    keywords = [title, 'My Unique Skill Makes Me OP Even at Level 1']
+    website = 'https://level1-anime.com/'
+    twitter = 'level1_anime'
+    hashtags = 'レベル1だけどアニメ化です'
+    folder_name = 'level1'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-item',
+                                    date_select='.date', title_select='.title', id_select='a',
+                                    next_page_select='div.pagination .page-numbers',
+                                    next_page_eval_index_class='current', next_page_eval_index=-1)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FeSNHVXaYAEXR1w?format=jpg&name=medium')
+        self.add_to_image_list('tz_kv-pc', self.PAGE_PREFIX + 'wp/wp-content/themes/level1_teaser/images/kv-pc.jpg')
+        self.add_to_image_list('tz_kv-sp', self.PAGE_PREFIX + 'wp/wp-content/themes/level1_teaser/images/kv-sp.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'wp/wp-content/themes/level1_teaser/images/chara-pic%s.png'
+        self.download_by_template(folder, template, 1, 1, prefix='tz_')
 
 
 # Masamune-kun no Revenge R
