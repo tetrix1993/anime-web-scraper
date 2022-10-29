@@ -266,18 +266,31 @@ class Nagatorosan2Download(Winter2023AnimeDownload, NewsTemplate):
 
     def run(self):
         self.download_episode_preview()
-        # self.download_news()
+        self.download_news()
         self.download_key_visual()
+        self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.list li',
+                                    date_select='time', title_select='p', id_select='a',
+                                    a_tag_prefix=self.PAGE_PREFIX + 'news/')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         self.image_list = []
         self.add_to_image_list('teaser_img_mainimg', self.PAGE_PREFIX + 'teaser/img/mainimg.jpg')
         self.add_to_image_list('tz', 'https://pbs.twimg.com/media/FWeINYraUAEG6y9?format=jpg&name=medium')
+        self.add_to_image_list('img_top_mainimg', self.PAGE_PREFIX + 'assets/img/top/mainimg.jpg')
+        self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/FflFw89UcAIGEf9?format=jpg&name=medium')
         self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'assets/img/character/img_%s.png'
+        self.download_by_template(folder, template, 2, 1)
 
 
 # Inu ni Nattara Suki na Hito ni Hirowareta.
