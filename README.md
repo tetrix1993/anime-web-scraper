@@ -107,6 +107,9 @@ The premiere date for the anime listed here has not been announced.
 * [Yamada-kun to Lv999 no Koi wo Suru](https://yamadalv999-anime.com/)
 * [Yuusha ga Shinda!: Murabito no Ore ga Hotta Otoshiana ni Yuusha ga Ochita Kekka.](https://heroisdead.com/)
 
+### Summer 2023 Anime
+*[Tsuyokute New Saga](https://tsuyosaga-pr.com/)
+
 ### Spring 2023 Anime
 * [Isekai wa Smartphone to Tomo ni. 2](http://isesuma-anime.jp/)
 * [Shiro Seijo to Kuro Bokushi](https://shiroseijyo-anime.com/)
