@@ -170,7 +170,7 @@ class EiyuuouDownload(Winter2023AnimeDownload, NewsTemplate):
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.news-item',
                                     date_select='p.date', title_select='p.title', id_select='a',
-                                    next_page_select='div.pagination a.next',
+                                    next_page_select='.next-button',
                                     next_page_eval_index_class='off', next_page_eval_index=0)
 
     def download_key_visual(self):
@@ -179,12 +179,17 @@ class EiyuuouDownload(Winter2023AnimeDownload, NewsTemplate):
         self.add_to_image_list('tz', self.PAGE_PREFIX + 'wp/wp-content/themes/euo-teaser-theme/img/kv.jpg')
         # self.add_to_image_list('tz_news', self.PAGE_PREFIX + 'wp/wp-content/uploads/2022/02/英雄王_ティザービジュアル.jpg')
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FNYCWh2VgAM1rSE?format=jpg&name=large')
+        self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/FfkoAcKUYAEtkVS?format=jpg&name=4096x4096')
+        self.add_to_image_list('kv1', self.PAGE_PREFIX + 'wp/wp-content/themes/euo-honban-theme/images/kv-pc.jpg')
         self.download_image_list(folder)
 
     def download_character(self):
         folder = self.create_character_directory()
-        template = self.PAGE_PREFIX + 'wp/wp-content/themes/euo-teaser-theme/img/chara-pic%s.png'
-        self.download_by_template(folder, template, 1, 1, prefix='tz_')
+        template = self.PAGE_PREFIX + 'wp/wp-content/themes/euo-honban-theme/images/chara-pic%s.png'
+        self.download_by_template(folder, template, 2, 1)
+
+        # template = self.PAGE_PREFIX + 'wp/wp-content/themes/euo-teaser-theme/img/chara-pic%s.png'
+        # self.download_by_template(folder, template, 1, 1, prefix='tz_')
 
 
 # Hyouken no Majutsushi ga Sekai wo Suberu
