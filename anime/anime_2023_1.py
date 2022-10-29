@@ -22,6 +22,7 @@ import os
 # Spy Kyoushitsu https://spyroom-anime.com/ #スパイ教室 #spyroom #SpyClassroom @spyroom_anime
 # Tensei Oujo to Tensai Reijou no Mahou Kakumei https://tenten-kakumei.com/ #転天アニメ @tenten_kakumei
 # Tomo-chan wa Onnanoko! https://tomo-chan.jp/ #tomochan @tomo_chan_ani
+# Tondemo Skill de Isekai Hourou Meshi https://tondemoskill-anime.com/ #とんでもスキル #tondemo_skill @tonsuki_anime
 # Tsundere Akuyaku Reijou Liselotte to Jikkyou no Endou-kun to Kaisetsu no Kobayashi-san http://tsunlise-pr.com/ #ツンリゼ @tsunlise_pr
 
 
@@ -1108,6 +1109,47 @@ class TomochanDownload(Winter2023AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'assets/t/img/chara/img_chara%s.png'
         self.download_by_template(folder, template, 2, 1, prefix='tz_')
+
+
+# Tondemo Skill de Isekai Hourou Meshi
+class TondemoSkillDownload(Winter2023AnimeDownload, NewsTemplate):
+    title = 'Tondemo Skill de Isekai Hourou Meshi'
+    keywords = [title, 'Campfire Cooking in Another World with My Absurd Skill', 'Tonsuki']
+    website = 'https://tondemoskill-anime.com/'
+    twitter = 'tonsuki_anime'
+    hashtags = ['とんでもスキル', 'tondemo_skill']
+    folder_name = 'tondemo-skill'
+
+    PAGE_PREFIX = website
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='ul.p-news__list li.p-news__list-item',
+                                    date_select='.p-news_data__date', title_select='.p-news_data__title',
+                                    id_select='a', date_func=lambda x: x[0:4] + '.' + x[4:],
+                                    next_page_select='div.c-pagination__nav.-next', next_page_eval_index=-1,
+                                    next_page_eval_index_class='is-disable')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz', self.PAGE_PREFIX + 'wordpress/wp-content/themes/tondemoskill/assets/img/top/kv.jpg')
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FgNCmj5aMAE1Hv6?format=jpg&name=4096x4096')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        prefix = self.PAGE_PREFIX + 'wordpress/wp-content/themes/tondemoskill/assets/img/character/'
+        templates = [prefix + 'ch%s_stand.png', prefix + 'ch%s_look.png']
+        self.download_by_template(folder, templates, 2, 1)
 
 
 # Tsundere Akuyaku Reijou Liselotte to Jikkyou no Endou-kun to Kaisetsu no Kobayashi-san

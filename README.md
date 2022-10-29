@@ -138,6 +138,7 @@ The premiere date for the anime listed here has not been announced.
 * [Spy Kyoushitsu](https://spyroom-anime.com/)
 * [Tensei Oujo to Tensai Reijou no Mahou Kakumei](https://tenten-kakumei.com/)
 * [Tomo-chan wa Onnanoko!](https://tomo-chan.jp/)
+* [Tondemo Skill de Isekai Hourou Meshi](https://tondemoskill-anime.com/)
 * [Tsundere Akuyaku Reijou Liselotte to Jikkyou no Endou-kun to Kaisetsu no Kobayashi-san](https://tsunlise-pr.com/)
 
 ### Fall 2022 Anime
