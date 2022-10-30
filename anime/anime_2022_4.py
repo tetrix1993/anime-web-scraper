@@ -1690,18 +1690,34 @@ class PeterGrill2Download(Fall2022AnimeDownload, NewsTemplate):
 
     PAGE_PREFIX = website
     FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 10
 
     def __init__(self):
         super().__init__()
 
     def run(self):
         self.download_episode_preview()
-        self.download_episode_preview_external()
+        # self.download_episode_preview_external()
         self.download_news()
         self.download_key_visual()
         self.download_character()
 
     def download_episode_preview(self):
+        for i in range(1, self.FINAL_EPISODE + 1, 1):
+            episode = str(i).zfill(2)
+            if self.is_image_exists(episode + '_10'):
+                continue
+            success = True
+            for j in range(self.IMAGES_PER_EPISODE):
+                image_name = episode + '_' + str(j + 1).zfill(2)
+                image_url = self.PAGE_PREFIX + f'img/story/pgse{image_name}.jpg'
+                result = self.download_image(image_url, self.base_folder + '/' + image_name)
+                if result == -1:
+                    success = False
+            if not success:
+                break
+
+    def download_episode_preview_old(self):
         try:
             soup = self.get_soup(self.PAGE_PREFIX + 'works.php')
             stories = soup.select('.story_change a[href]')
