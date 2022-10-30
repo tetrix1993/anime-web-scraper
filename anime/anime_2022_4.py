@@ -1908,12 +1908,15 @@ class ShinmaiRenkinDownload(Fall2022AnimeDownload, NewsTemplate2):
     folder_name = 'shinmai-renkin'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 6
 
     def __init__(self):
         super().__init__()
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_guess()
         self.download_news()
         self.download_key_visual()
         self.download_character()
@@ -1948,6 +1951,37 @@ class ShinmaiRenkinDownload(Fall2022AnimeDownload, NewsTemplate2):
                 self.download_image_list(self.base_folder)
         except Exception as e:
             self.print_exception(e)
+
+    def download_episode_preview_guess(self):
+        folder = self.create_custom_directory('guess')
+        template = self.PAGE_PREFIX + 'core_sys/images/contents/%s/block/%s/%s.jpg'
+        is_successful = False
+        for i in range(6, self.FINAL_EPISODE + 1, 1):
+            episode = str(i).zfill(2)
+            is_success = False
+            if self.is_image_exists(episode + '_1'):
+                continue
+            first = 22 + (i - 6)
+            second = 65 + 5 * (i - 6)
+            third = 65 + self.IMAGES_PER_EPISODE * (i - 6)
+            for j in range(self.IMAGES_PER_EPISODE):
+                image_url = template % (str(first).zfill(8), str(second).zfill(8), str(third + j).zfill(8))
+                image_name = episode + '_' + str(j + 1)
+                result = self.download_image(image_url, folder + '/' + image_name)
+                if result == 0:
+                    is_success = True
+                    is_successful = True
+                elif result == -1:
+                    break
+            if is_success:
+                print(self.__class__.__name__ + ' - Guessed successfully!')
+            else:
+                if len(os.listdir(folder)) == 0:
+                    os.rmdir(folder)
+                return
+        if len(os.listdir(folder)) == 0:
+            os.rmdir(folder)
+        return is_successful
 
     def download_news(self):
         self.download_template_news(self.PAGE_PREFIX)
