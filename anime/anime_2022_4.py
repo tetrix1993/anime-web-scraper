@@ -1111,6 +1111,9 @@ class GoldenKamuy4Download(Fall2022AnimeDownload, NewsTemplate2):
     def download_episode_preview_guess(self):
         folder = self.create_custom_directory('guess')
         template = self.PAGE_PREFIX + 'core_sys/images/contents/%s/block/%s/%s.jpg'
+
+        # Episode 38's image file size in bytes
+        skip_length = [52033, 90487, 128299, 110493, 100718, 58624, 67285, 65135]
         is_successful = False
         for i in range(41, self.FINAL_EPISODE + 1, 1):
             episode = str(i).zfill(2)
@@ -1123,6 +1126,9 @@ class GoldenKamuy4Download(Fall2022AnimeDownload, NewsTemplate2):
             for j in range(self.IMAGES_PER_EPISODE):
                 image_url = template % (str(first).zfill(8), str(second).zfill(8), str(third + j).zfill(8))
                 image_name = episode + '_' + str(j + 1)
+                content_length = self.get_content_length(image_url)
+                if content_length < 1 or content_length == skip_length[j]:
+                    break
                 result = self.download_image(image_url, folder + '/' + image_name)
                 if result == 0:
                     is_success = True
