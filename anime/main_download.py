@@ -290,6 +290,8 @@ class MainDownload:
                             filepath = filepath_without_extension + ".gif"
                         elif 'image/webp' in content_type and to_jpg:
                             filepath = filepath_without_extension + ".jpg"
+                        elif 'image/tiff' in content_type:
+                            filepath = filepath_without_extension + ".tif"
                         else:
                             extension = url.split('.')[-1]
                             if extension == 'jpg' or extension == 'jpeg':
@@ -300,6 +302,8 @@ class MainDownload:
                                 filepath = filepath_without_extension + ".gif"
                             elif extension == 'webp':
                                 filepath = filepath_without_extension + ".webp"
+                            elif extension == 'tif':
+                                filepath = filepath_without_extension + ".tif"
                             else:
                                 return -1
 
@@ -320,24 +324,42 @@ class MainDownload:
                                 if extension == 'jpg':
                                     im = Image.open(temp_filepath).convert('RGB')
                                     im.save(filepath, 'jpeg')
+                                    im.close()
                                     os.remove(temp_filepath)
                                 elif extension == 'png':
                                     im = Image.open(temp_filepath).convert('RGB')
                                     im.save(filepath, 'png')
+                                    im.close()
                                     os.remove(temp_filepath)
                                 elif extension == 'gif':
                                     im = Image.open(temp_filepath)
                                     im.info.pop('background', None)
                                     im.save(filepath, 'gif', save_all=True)
+                                    im.close()
                                     os.remove(temp_filepath)
                                 else: #webp
                                     os.rename(temp_filepath, filepath)
                             elif to_jpg:
                                 im = Image.open(temp_filepath).convert('RGB')
                                 im.save(filepath, 'jpeg')
+                                im.close()
                                 #os.remove(temp_filepath)
                                 # Keep a copy
                                 os.rename(temp_filepath, filepath[0:len(filepath) - 3] + 'webp')
+                        elif 'image/tiff' in content_type:
+                            r.raise_for_status()
+                            with open(temp_filepath, 'wb') as f:
+                                for chunk in r.iter_content(chunk_size=8192):
+                                    if chunk:
+                                        f.write(chunk)
+                            if to_jpg:
+                                im = Image.open(temp_filepath).convert('RGB')
+                                im.save(filepath, 'jpeg')
+                                im.close()
+                                os.rename(filepath, filepath[0:len(filepath) - 3] + 'jpg')
+                                os.remove(temp_filepath)
+                            else:
+                                os.rename(temp_filepath, filepath)
                         else:
                             r.raise_for_status()
                             with open(filepath, 'wb') as f:
