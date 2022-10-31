@@ -158,9 +158,9 @@ class AkibaMaidWarDownload(Fall2022AnimeDownload):
                         self.image_list = []
                         for i in range(len(content['img_slide'])):
                             if 'img' in content['img_slide'][i] and 'url' in content['img_slide'][i]['img']:
-                                image_url = content['img_slide'][i]['img']['url']
+                                image_url = content['img_slide'][i]['img']['url'] + '?a'
                                 image_name = episode + '_' + str(i + 1).zfill(2)
-                                self.add_to_image_list(image_name, image_url, to_jpg=True)
+                                self.add_to_image_list(image_name, image_url)
                         self.download_image_list(self.base_folder)
                     if 'mv_id' in content and len(content['mv_id']) > 0:
                         self.download_youtube_thumbnail_by_id(content['mv_id'], yt_folder, episode)
