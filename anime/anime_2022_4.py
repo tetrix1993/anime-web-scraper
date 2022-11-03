@@ -1253,6 +1253,7 @@ class KanColle2Download(Fall2022AnimeDownload, NewsTemplate2):
     folder_name = 'kancolle2'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 8
 
     def __init__(self):
         super().__init__()
@@ -1263,7 +1264,26 @@ class KanColle2Download(Fall2022AnimeDownload, NewsTemplate2):
         self.download_key_visual()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        try:
+            for i in range(self.FINAL_EPISODE):
+                episode = str(i + 1).zfill(2)
+                if self.is_image_exists(episode + '_1'):
+                    continue
+
+                soup = self.get_soup(f'{self.PAGE_PREFIX}story/{episode}.html')
+                if soup is None:
+                    continue
+                images = soup.select('ul.tp5 img[src]')
+                self.image_list = []
+                j = 0
+                for image in images:
+                    j += 1
+                    image_url = self.PAGE_PREFIX + image['src'].replace('../', '').split('?')[0].replace('sn_', '')
+                    image_name = episode + '_' + str(j)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(self.PAGE_PREFIX)
