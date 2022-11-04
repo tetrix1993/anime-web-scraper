@@ -1,4 +1,5 @@
 import os
+from PIL import Image
 from anime.constants import HTTP_HEADER_USER_AGENT
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 from scan import AniverseMagazineScanner, EeoMediaScanner
@@ -1178,6 +1179,7 @@ class KagenoJitsuryokushaDownload(Fall2022AnimeDownload, NewsTemplate):
 
     def download_episode_preview(self):
         yt_folder, yt_episodes = self.init_youtube_thumbnail_variables()
+        original_folder = self.create_custom_directory('original')
         try:
             soup = self.get_soup(self.PAGE_PREFIX + 'story/')
             sections = soup.select('section[id]')
@@ -1190,14 +1192,26 @@ class KagenoJitsuryokushaDownload(Fall2022AnimeDownload, NewsTemplate):
                     continue
                 if self.is_image_exists(episode + '_1') and episode in yt_episodes:
                     continue
-                self.image_list = []
                 images = section.select('.storyImgLists img[src]')
                 for i in range(len(images)):
                     image_url = self.PAGE_PREFIX + images[i]['src'].replace('../', '').split('?')[0]
                     image_name = episode + '_' + str(i + 1)
-                    self.add_to_image_list(image_name, image_url)
-                self.download_image_list(self.base_folder)
-
+                    filepath = self.base_folder + '/' + image_name
+                    result = self.download_image(image_url, filepath)
+                    if result == 0:
+                        try:
+                            im = Image.open(filepath + '.jpg')
+                            width, height = im.size
+                            if width == 1000 and height == 600:
+                                im2 = im.crop((0, 19, 1000, 581))
+                                temp_image = filepath + '_temp.jpg'
+                                im2.save(temp_image)
+                                im2.close()
+                                os.rename(filepath + '.jpg', original_folder + '/' + image_name + '.jpg')
+                                os.rename(temp_image, filepath + '.jpg')
+                            im.close()
+                        except Exception as e:
+                            self.print_exception(e, f'Image cropping for {image_name} failed.')
                 yt_tags = section.select('.movieLists__item a[data-ytid]')
                 if len(yt_tags) > 0:
                     yt_ids = []
