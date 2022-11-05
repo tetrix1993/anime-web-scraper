@@ -312,14 +312,14 @@ class InuhiroDownload(Winter2023AnimeDownload, NewsTemplate):
         self.download_episode_preview()
         self.download_news()
         self.download_key_visual()
+        self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='#news article',
-                                    date_select='time', title_select='h3', id_select=None,
-                                    id_has_id=True, news_prefix='')
+                                    date_select='time', title_select='h3', id_select=None, id_has_id=True)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -328,7 +328,14 @@ class InuhiroDownload(Winter2023AnimeDownload, NewsTemplate):
         self.add_to_image_list('tz_mainimg_pc', self.PAGE_PREFIX + 'teaser/images/mainimg_pc.png')
         self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/FZyBd0xVEAAz4kn?format=jpg&name=medium')
         self.add_to_image_list('kv1', self.PAGE_PREFIX + 'teaser/images/mainimg.jpg')
+        self.add_to_image_list('kv2_tw', 'https://pbs.twimg.com/media/FgduJ2uaEAEPqiy?format=jpg&name=4096x4096')
+        self.add_to_image_list('kv2', self.PAGE_PREFIX + 'assets/images/top/mainimg.jpg')
         self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'assets/images/character/img_%s.png'
+        self.download_by_template(folder, template, 2, 1)
 
 
 # Isekai Nonbiri Nouka
