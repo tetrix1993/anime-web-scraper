@@ -18,7 +18,6 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Masamune-kun no Revenge R https://masamune-tv.com/ #MASA_A @masamune_tv
 # Mato Seihei no Slave https://mabotai.jp/ #魔都精兵のスレイブ #まとスレ @mabotai_kohobu
 # Oshi no Ko https://ichigoproduction.com/ #推しの子 @anime_oshinoko
-# Otonari ni Ginga https://otonari-anime.com/ #おとなりに銀河 @otonariniginga
 # Seijo no Maryoku wa Bannou Desu S2 https://seijyonomaryoku.jp/ #seijyonoanime @seijyonoanime
 # Seiken Gakuin no Makentsukai https://seikengakuin.com/ #聖剣学院の魔剣使い #せまつか @SEIKEN_MAKEN
 # Shy https://shy-anime.com/ #SHY_hero @SHY_off
@@ -719,41 +718,6 @@ class OshinokoDownload(UnconfirmedDownload, NewsTemplate2):
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FU0bJsjaAAAE7Bf?format=jpg&name=large')
         self.add_to_image_list('tz_kv', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv.jpg')
         self.add_to_image_list('tz_kv2', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv2/kv.jpg')
-        self.download_image_list(folder)
-
-
-# Otonari ni Ginga
-class OtonariniGingaDownload(UnconfirmedDownload, NewsTemplate):
-    title = 'Otonari ni Ginga'
-    keywords = [title, 'A Galaxy Next Door']
-    website = 'https://otonari-anime.com/'
-    twitter = 'otonariniginga'
-    hashtags = 'おとなりに銀河'
-    folder_name = 'otonariniginga'
-
-    PAGE_PREFIX = website
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_news()
-        self.download_key_visual()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_news(self):
-        self.download_template_news(page_prefix=self.PAGE_PREFIX, news_prefix='', article_select='#news article',
-                                    title_select='h3', date_select='time', id_select=None, id_has_id=True,
-                                    date_func=lambda x: x[0:4] + '.' + x[5:7] + '.' + x[8:10])
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FRV6mlUVIAAa9xK?format=jpg&name=medium')
-        self.add_to_image_list('tz_mainimg', self.PAGE_PREFIX + 'teaser/images/mainimg.png')
         self.download_image_list(folder)
 
 

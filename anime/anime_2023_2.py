@@ -3,6 +3,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 
 # Isekai wa Smartphone to Tomo ni. 2 http://isesuma-anime.jp/ #イセスマ @isesumaofficial
 # Kuma Kuma Kuma Bear Punch! https://kumakumakumabear.com/ #くまクマ熊ベアー #kumabear @kumabear_anime
+# Otonari ni Ginga https://otonari-anime.com/ #おとなりに銀河 @otonariniginga
 # Shiro Seijo to Kuro Bokushi https://shiroseijyo-anime.com/ @shiroseijyo_tv #白聖女と黒牧師
 # Tensei Kizoku no Isekai Boukenroku https://www.tensei-kizoku.jp/ #転生貴族 @tenseikizoku
 
@@ -120,6 +121,49 @@ class KumaBear2Download(Spring2023AnimeDownload, NewsTemplate2):
 
         template = self.PAGE_PREFIX + 'core_sys/images/main/tz/chara_%s.png'
         self.download_by_template(folder, template, 2, 1, prefix='tz_')
+
+
+# Otonari ni Ginga
+class OtonariniGingaDownload(Spring2023AnimeDownload, NewsTemplate):
+    title = 'Otonari ni Ginga'
+    keywords = [title, 'A Galaxy Next Door']
+    website = 'https://otonari-anime.com/'
+    twitter = 'otonariniginga'
+    hashtags = 'おとなりに銀河'
+    folder_name = 'otonariniginga'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='#news article',
+                                    title_select='h3', date_select='time', id_select=None, id_has_id=True,
+                                    date_func=lambda x: x[0:4] + '.' + x[4:])
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FRV6mlUVIAAa9xK?format=jpg&name=medium')
+        self.add_to_image_list('tz_mainimg', self.PAGE_PREFIX + 'teaser/images/mainimg.png')
+        self.add_to_image_list('kv_tw', 'https://pbs.twimg.com/media/FgjBzJOaAAADdI_?format=jpg&name=medium')
+        self.add_to_image_list('top_mainimg1', self.PAGE_PREFIX + 'assets/images/top/mainimg1.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'assets/images/character/img_%s.png'
+        self.download_by_template(folder, template, 2, 1)
 
 
 # Shiro Seijo to Kuro Bokushi
