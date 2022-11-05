@@ -19,7 +19,7 @@ from PIL import Image
 # Kamisama ni Natta Hi https://kamisama-day.jp/ #神様になった日 @kamisama_Ch_AB [SAT/SUN]
 # Kami-tachi ni Hirowareta Otoko https://kamihiro-anime.com/ #神達に拾われた男 @kamihiro_anime [FRI]
 # Kimi to Boku no Saigo no Senjou, Aruiwa Sekai ga Hajimaru Seisen https://kimisentv.com/ #キミ戦 #kimisen @kimisen_project [THU]
-# Kuma Kuma Kuma Bear https://kumakumakumabear.com/ #くまクマ熊ベアー #kumabear @kumabear_anime [TUE]
+# Kuma Kuma Kuma Bear https://kumakumakumabear.com/1st/ #くまクマ熊ベアー #kumabear @kumabear_anime [TUE]
 # Maesetsu https://maesetsu.jp/ #まえせつ @maesetsu_anime [WED]
 # Mahouka Koukou no Rettousei: Raihousha-hen https://mahouka.jp/2nd/ #mahouka @mahouka_anime [FRI]
 # Majo no Tabitabi https://majotabi.jp/ #魔女の旅々 #魔女の旅々はいいぞ #majotabi @majotabi_PR [MON]
@@ -1620,10 +1620,12 @@ class KimisenDownload(Fall2020AnimeDownload):
 class KumaBearDownload(Fall2020AnimeDownload):
     title = "Kuma Kuma Kuma Bear"
     keywords = [title, 'Kumabear']
+    website = 'https://kumakumakumabear.com/1st/'
+    twitter = 'kumabear_anime'
+    hashtags = ['くまクマ熊ベアー', 'kumabear']
     folder_name = 'kumabear'
 
-    PAGE_PREFIX = 'https://kumakumakumabear.com/'
-    STORY_PAGE = 'https://kumakumakumabear.com/story/'
+    PAGE_PREFIX = website
 
     def __init__(self):
         super().__init__()
@@ -1639,7 +1641,7 @@ class KumaBearDownload(Fall2020AnimeDownload):
 
     def download_episode_preview(self):
         try:
-            soup = self.get_soup(self.STORY_PAGE)
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
             content_div = soup.find('div', id='ContentsListUnit02')
             if content_div:
                 title_divs = content_div.find_all('div', class_='title')
@@ -1688,7 +1690,7 @@ class KumaBearDownload(Fall2020AnimeDownload):
 
     def download_episode_preview_guess(self):
         folder = self.create_custom_directory('guess')
-        story_template = 'https://kumakumakumabear.com/core_sys/images/contents/%s/block/%s/%s.jpg'
+        story_template = self.PAGE_PREFIX + 'core_sys/images/contents/%s/block/%s/%s.jpg'
         # Start from Episode 6
         content_num_first = 24
         block_num_first = 47
@@ -1724,11 +1726,11 @@ class KumaBearDownload(Fall2020AnimeDownload):
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         image_objs = [
-            {'name': 'main_img', 'url': 'https://kumakumakumabear.com/core_sys/images/main/tz/main_img.jpg'},
-            {'name': 'main_img_2', 'url': 'https://kumakumakumabear.com/core_sys/images/main/tz/main_img_2.jpg'},
-            {'name': 'main_img_3', 'url': 'https://kumakumakumabear.com/core_sys/images/main/tz/main_img_3.jpg'},
-            {'name': 'main_img_4', 'url': 'https://kumakumakumabear.com/core_sys/images/main/tz/main_img_4.jpg'},
-            {'name': 'pop_img', 'url': 'https://kumakumakumabear.com/core_sys/images/main/tz/pop_img.jpg'},
+            {'name': 'main_img', 'url': self.PAGE_PREFIX + 'core_sys/images/main/tz/main_img.jpg'},
+            {'name': 'main_img_2', 'url': self.PAGE_PREFIX + 'core_sys/images/main/tz/main_img_2.jpg'},
+            {'name': 'main_img_3', 'url': self.PAGE_PREFIX + 'core_sys/images/main/tz/main_img_3.jpg'},
+            {'name': 'main_img_4', 'url': self.PAGE_PREFIX + 'core_sys/images/main/tz/main_img_4.jpg'},
+            {'name': 'pop_img', 'url': self.PAGE_PREFIX + 'core_sys/images/main/tz/pop_img.jpg'},
             {'name': 'pop_img', 'url': 'https://pbs.twimg.com/media/EeFRDpaU8AAiFuh?format=jpg&name=large'}
         ]
         self.download_image_objects(image_objs, folder)
@@ -1736,8 +1738,7 @@ class KumaBearDownload(Fall2020AnimeDownload):
     def download_character(self):
         folder = self.create_character_directory()
         try:
-            img_objs = [{'name': 'list_img',
-                'url': 'https://kumakumakumabear.com/core_sys/images/main/character/list_img.png'}]
+            img_objs = [{'name': 'list_img', 'url': self.PAGE_PREFIX + 'core_sys/images/main/character/list_img.png'}]
 
             special_chara_numbers = [str(num).zfill(2) for num in range(1, 6, 1)]
             special_chara_images = [
@@ -1751,7 +1752,7 @@ class KumaBearDownload(Fall2020AnimeDownload):
                 img_objs.append({'name': 'main_' + str(i + 1).zfill(2), 'url': special_chara_images[i]})
             self.download_image_objects(img_objs, folder)
 
-            soup = self.get_soup('https://kumakumakumabear.com/chara/')
+            soup = self.get_soup( self.PAGE_PREFIX + 'chara/')
             chara_tags = soup.find_all('div', class_='nwu_box')
             for chara_tag in chara_tags:
                 chara_url_tag = chara_tag.find('a')

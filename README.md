@@ -114,6 +114,7 @@ The premiere date for the anime listed here has not been announced.
 
 ### Spring 2023 Anime
 * [Isekai wa Smartphone to Tomo ni. 2](http://isesuma-anime.jp/)
+* [Kuma Kuma Kuma Bear Punch!](https://kumakumakumabear.com/)
 * [Shiro Seijo to Kuro Bokushi](https://shiroseijyo-anime.com/)
 * [Tensei Kizoku no Isekai Boukenroku](https://www.tensei-kizoku.jp/)
 
@@ -337,7 +338,7 @@ The premiere date for the anime listed here has not been announced.
 * [Kamisama ni Natta Hi](https://kamisama-day.jp/)
 * [Kami-tachi ni Hirowareta Otoko](https://kamihiro-anime.com/)
 * [Kimi to Boku no Saigo no Senjou, Aruiwa Sekai ga Hajimaru Seisen](https://kimisentv.com/)
-* [Kuma Kuma Kuma Bear](https://kumakumakumabear.com/)
+* [Kuma Kuma Kuma Bear](https://kumakumakumabear.com/1st/)
 * [Maesetsu!](https://maesetsu.jp/)
 * [Mahouka Koukou no Rettousei: Raihousha-hen](https://mahouka.jp/2nd/)
 * [Majo no Tabitabi](https://majotabi.jp/)
