@@ -96,13 +96,13 @@ The premiere date for the anime listed here has not been announced.
 * [Masamune-kun no Revenge R](https://masamune-tv.com/)
 * [Mato Seihei no Slave](https://mabotai.jp/)
 * [Oshi no Ko](https://ichigoproduction.com/)
-* [Otonari ni Ginga](https://otonari-anime.com/)
 * [Seijo no Maryoku wa Bannou Desu 2nd Season](https://seijyonomaryoku.jp/)
 * [Seiken Gakuin no Makentsukai](https://seikengakuin.com/)
 * [Shy](https://shy-anime.com/)
 * [Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita 2nd Season](https://slime300-anime.com/)
 * [Sousou no Frieren](https://frieren-anime.jp/)
 * [Tearmoon Teikoku Monogatari: Dantoudai kara Hajimaru, Hime no Tensei Gyakuten Story](https://tearmoon-pr.com/)
+* [Tensei shitara Dainana Ouji Datta node, Kimama ni Majutsu wo Kiwamemasu](https://dainanaoji.com/)
 * [Tonikaku Kawaii 2nd Season](http://tonikawa.com/)
 * [Watashi no Yuri wa Oshigoto desu!](https://watayuri-anime.com/)
 * [Yamada-kun to Lv999 no Koi wo Suru](https://yamadalv999-anime.com/)
@@ -115,6 +115,7 @@ The premiere date for the anime listed here has not been announced.
 ### Spring 2023 Anime
 * [Isekai wa Smartphone to Tomo ni. 2](http://isesuma-anime.jp/)
 * [Kuma Kuma Kuma Bear Punch!](https://kumakumakumabear.com/)
+* [Otonari ni Ginga](https://otonari-anime.com/)
 * [Shiro Seijo to Kuro Bokushi](https://shiroseijyo-anime.com/)
 * [Tensei Kizoku no Isekai Boukenroku](https://www.tensei-kizoku.jp/)
 
