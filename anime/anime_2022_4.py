@@ -1693,6 +1693,7 @@ class NouminKanrenDownload(Fall2022AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -1752,6 +1753,20 @@ class NouminKanrenDownload(Fall2022AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'bd-dvd/')
+            images = soup.select('.subpage-Body img[src]')
+            self.image_list = []
+            for image in images:
+                image_url = image['src']
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
 
 # Peter Grill to Kenja no Jikan: Super Extra
