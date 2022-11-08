@@ -90,27 +90,28 @@ class AniverseMagazineDownload(ExternalDownload):
                     self.download_image(imageUrl, filepathWithoutExtension, min_width=self.min_width)
             else:
                 soup = self.get_soup(article_url)
-                gallery = soup.select('.jetpack-slideshow-window[data-gallery]')
-                if len(gallery) == 0:
+                galleries = soup.select('.jetpack-slideshow-window[data-gallery]')
+                if len(galleries) == 0:
                     return
-                imgs = json.loads(gallery[0]['data-gallery'])
                 i = 1
                 image_objs = []
-                for img in imgs:
-                    if 'src' in img:
-                        if self.check_resize:
-                            image_url_temp = self.check_resize_in_url_custom(img['src'])
-                            if not self.is_valid_url(image_url_temp, is_image=True):
-                                image_url = self.clear_resize_in_url(img['src'])
+                for gallery in galleries:
+                    imgs = json.loads(gallery['data-gallery'])
+                    for img in imgs:
+                        if 'src' in img:
+                            if self.check_resize:
+                                image_url_temp = self.check_resize_in_url_custom(img['src'])
+                                if not self.is_valid_url(image_url_temp, is_image=True):
+                                    image_url = self.clear_resize_in_url(img['src'])
+                                else:
+                                    image_url = image_url_temp
                             else:
-                                image_url = image_url_temp
-                        else:
-                            image_url = self.clear_resize_in_url(img['src'])
-                        image_name = str(i).zfill(2)
-                        if self.episode is not None:
-                            image_name = self.episode + '_' + image_name
-                        image_objs.append({'name': image_name, 'url': image_url})
-                        i += 1
+                                image_url = self.clear_resize_in_url(img['src'])
+                            image_name = str(i).zfill(2)
+                            if self.episode is not None:
+                                image_name = self.episode + '_' + image_name
+                            image_objs.append({'name': image_name, 'url': image_url})
+                            i += 1
                 self.download_image_objects(image_objs, self.base_folder, min_width=self.min_width)
 
                 # old logic
