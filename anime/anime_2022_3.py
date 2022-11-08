@@ -1052,7 +1052,9 @@ class Kanokari2Download(Summer2022AnimeDownload, NewsTemplate):
                         image_url = self.PAGE_PREFIX + image['src'][1:]
                     else:
                         image_url = image['src']
-                    image_name = self.generate_image_name_from_url(image_url, 'bd')
+                    if image_url.endswith(');'):
+                        image_url = image_url[:-2]
+                    image_name = self.extract_image_name_from_url(image_url)
                     self.add_to_image_list(image_name, image_url)
                 if len(self.image_list) > 0:
                     processed.append(bd_page_name)
