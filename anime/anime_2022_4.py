@@ -2628,7 +2628,7 @@ class YamaNoSusume4Download(Fall2022AnimeDownload):
             if self.is_image_exists(episode + '_1'):
                 continue
             first = 68 + (i - 7)
-            second = 94 + 10 * (i - 7)
+            second = 93 + 9 * (i - 7)
             third = 103 + self.IMAGES_PER_EPISODE * (i - 7)
             for j in range(self.IMAGES_PER_EPISODE):
                 second_ = second if j < 6 else second + 5
