@@ -66,6 +66,7 @@ class YoninUsoDownload(Fall2022AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         template = self.PAGE_PREFIX + 'img/story/ep%s/img%s.jpg'
@@ -119,6 +120,22 @@ class YoninUsoDownload(Fall2022AnimeDownload, NewsTemplate):
         template1 = self.PAGE_PREFIX + 'img/character/chara%s_img1.png'
         template2 = self.PAGE_PREFIX + 'img/character/chara%s_img2.png'
         self.download_by_template(folder, [template1, template2], 1, 1)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'bd/')
+            images = soup.select('.img_area img[src]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                if not self.is_content_length_in_range(image_url, more_than_amount=30000):
+                    continue
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
 
 
 # Akiba Meido Sensou
