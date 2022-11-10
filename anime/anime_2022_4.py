@@ -782,14 +782,14 @@ class FutokunoGuildDownload(Fall2022AnimeDownload, NewsTemplate2):
         folder = self.create_custom_directory('guess')
         template = self.PAGE_PREFIX + 'core_sys/images/contents/%s/block/%s/%s.jpg'
         is_successful = False
-        for i in range(6, self.FINAL_EPISODE + 1, 1):
+        for i in range(8, self.FINAL_EPISODE + 1, 1):
             episode = str(i).zfill(2)
             is_success = False
             if self.is_image_exists(episode + '_1'):
                 continue
-            first = 24 + (i - 6)
-            second = 73 + 5 * (i - 6)
-            third = 62 + self.IMAGES_PER_EPISODE * (i - 6)
+            first = 27 + (i - 8)
+            second = 88 + 5 * (i - 8)
+            third = 80 + self.IMAGES_PER_EPISODE * (i - 8)
             for j in range(self.IMAGES_PER_EPISODE):
                 image_url = template % (str(first).zfill(8), str(second).zfill(8), str(third + j).zfill(8))
                 image_name = episode + '_' + str(j + 1)
