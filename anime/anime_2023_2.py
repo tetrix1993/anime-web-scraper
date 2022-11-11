@@ -7,6 +7,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Otonari ni Ginga https://otonari-anime.com/ #おとなりに銀河 @otonariniginga
 # Shiro Seijo to Kuro Bokushi https://shiroseijyo-anime.com/ @shiroseijyo_tv #白聖女と黒牧師
 # Tensei Kizoku no Isekai Boukenroku https://www.tensei-kizoku.jp/ #転生貴族 @tenseikizoku
+# Watashi no Yuri wa Oshigoto desu! https://watayuri-anime.com/ #わたゆり #私の百合はお仕事です @watayuri_anime
 
 
 # Spring 2023 Anime
@@ -328,3 +329,38 @@ class TenseiKizokuDownload(Spring2023AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+
+# Watashi no Yuri wa Oshigoto desu!
+class WatayuriDownload(Spring2023AnimeDownload, NewsTemplate):
+    title = 'Watashi no Yuri wa Oshigoto desu!'
+    keywords = [title, 'watayuri', 'Yuri is My Job!']
+    website = 'https://watayuri-anime.com/'
+    twitter = 'watayuri_anime'
+    hashtags = ['わたゆり', '私の百合はお仕事です']
+    folder_name = 'watayuri'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.newsList',
+                                    date_select='time', title_select='.news__title', id_select='a')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FStxiD1VIAEX1nk?format=jpg&name=4096x4096')
+        self.add_to_image_list('tz_mv1', self.PAGE_PREFIX + 'assets/img/top/mv1.jpg')
+        self.add_to_image_list('tz_mv2', self.PAGE_PREFIX + 'assets/img/top/mv2.jpg')
+        self.download_image_list(folder)

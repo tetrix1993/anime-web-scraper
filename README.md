@@ -89,7 +89,6 @@ The premiere date for the anime listed here has not been announced.
 * [Isekai de Cheat Skill wo Te ni Shita Ore wa, Genjitsu Sekai wo mo Musou Suru: Level Up wa Jinsei wo Kaeta](https://www.iseleve.com/)
 * [Isekai One Turn Kill Nee-san: Ane Douhan no Isekai Seikatsu Hajimemashita](https://onekillsister.com/)
 * [Isekai Shoukan wa Nidome desu](https://isenido.com/)
-* [Itai no wa Iya nano de Bougyoryoku ni Kyokufuri Shitai to Omoimasu. 2nd Season](https://bofuri.jp/)
 * [Jitsu wa Ore, Saikyou deshita?](https://jitsuhaoresaikyo-anime.com/)
 * [Keikenzumi na Kimi to, Keiken Zero na Ore ga, Otsukiai suru Hanashi.](https://kimizero.com/)
 * [Level 1 dakedo Unique Skill de Saikyou desu](https://level1-anime.com/)
@@ -104,7 +103,6 @@ The premiere date for the anime listed here has not been announced.
 * [Tearmoon Teikoku Monogatari: Dantoudai kara Hajimaru, Hime no Tensei Gyakuten Story](https://tearmoon-pr.com/)
 * [Tensei shitara Dainana Ouji Datta node, Kimama ni Majutsu wo Kiwamemasu](https://dainanaoji.com/)
 * [Tonikaku Kawaii 2nd Season](http://tonikawa.com/)
-* [Watashi no Yuri wa Oshigoto desu!](https://watayuri-anime.com/)
 * [Yamada-kun to Lv999 no Koi wo Suru](https://yamadalv999-anime.com/)
 * [Yuusha ga Shinda!: Murabito no Ore ga Hotta Otoshiana ni Yuusha ga Ochita Kekka.](https://heroisdead.com/)
 
@@ -119,6 +117,7 @@ The premiere date for the anime listed here has not been announced.
 * [Otonari ni Ginga](https://otonari-anime.com/)
 * [Shiro Seijo to Kuro Bokushi](https://shiroseijyo-anime.com/)
 * [Tensei Kizoku no Isekai Boukenroku](https://www.tensei-kizoku.jp/)
+* [Watashi no Yuri wa Oshigoto desu!](https://watayuri-anime.com/)
 
 ### Winter 2023 Anime
 * [Ayakashi Triangle](https://ayakashitriangle-anime.com/)
@@ -128,6 +127,7 @@ The premiere date for the anime listed here has not been announced.
 * [Ijiranaide, Nagatoro-san 2nd Attack](https://www.nagatorosan.jp/)
 * [Inu ni Nattara Suki na Hito ni Hirowareta.](https://inuhiro-anime.com/)
 * [Isekai Nonbiri Nouka](https://nonbiri-nouka.com/)
+* [Itai no wa Iya nano de Bougyoryoku ni Kyokufuri Shitai to Omoimasu. 2](https://bofuri.jp/)
 * [Kaiko sareta Ankoku Heishi (30-dai) no Slow na Second Life](https://ankokuheishi-anime.com/)
 * [Kubo-san wa Mob wo Yurusanai](https://kubosan-anime.jp/)
 * [Kyokou Suiri Season 2](https://kyokousuiri.jp/)
@@ -389,7 +389,7 @@ The premiere date for the anime listed here has not been announced.
 * [Infinite Dendrogram](http://dendro-anime.jp/)
 * [Isekai Quartet 2](http://isekai-quartet.com/)
 * [Ishuzoku Reviewers](https://isyuzoku.com/)
-* [Itai no wa Iya nano de Bougyoryoku ni Kyokufuri Shitai to Omoimasu.](https://bofuri.jp/)
+* [Itai no wa Iya nano de Bougyoryoku ni Kyokufuri Shitai to Omoimasu.](https://bofuri.jp/season1/)
 * [Jibaku Shounen Hanako-kun](https://www.tbs.co.jp/anime/hanakokun/)
 * [Koisuru Asteroid](http://koiastv.com/)
 * [Kyokou Suiri](https://kyokousuiri.jp/season1/)

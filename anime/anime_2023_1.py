@@ -9,6 +9,7 @@ import os
 # Ijiranaide, Nagatoro-san 2nd Attack https://www.nagatorosan.jp/ #長瀞さん @nagatoro_tv
 # Inu ni Nattara Suki na Hito ni Hirowareta. https://inuhiro-anime.com/ #犬ひろ @inuninattara
 # Isekai Nonbiri Nouka https://nonbiri-nouka.com/ #のんびり農家 @nonbiri_nouka
+# Itai no wa https://bofuri.jp/story/ #防振り #bofuri @bofuri_anime
 # Kaiko sareta Ankoku Heishi (30-dai) no Slow na Second Life https://ankokuheishi-anime.com/ #暗黒兵士 @ankokuheishi_PR
 # Kubo-san wa Mob wo Yurusanai https://kubosan-anime.jp/ #久保さん @kubosan_anime
 # Kyokou Suiri S2 https://kyokousuiri.jp/ #虚構推理 @kyokou_suiri
@@ -379,6 +380,77 @@ class IsekaiNonbiriNoukaDownload(Winter2023AnimeDownload):
         self.image_list = []
         self.add_to_image_list('tz', 'https://ogre.natalie.mu/media/news/comic/2022/0826/nonbiri-nouka_Teaser.jpg')
         self.download_image_list(folder)
+
+
+# Itai no wa Iya nano de Bougyoryoku ni Kyokufuri Shitai to Omoimasu. 2nd Season
+class Bofuri2Download(Winter2023AnimeDownload):
+    title = "Itai no wa Iya nano de Bougyoryoku ni Kyokufuri Shitai to Omoimasu. 2"
+    keywords = [title, 'bofuri', "BOFURI: I Don't Want to Get Hurt, so I'll Max Out My Defense.", '2nd']
+    website = "https://bofuri.jp/"
+    twitter = 'bofuri_anime'
+    hashtags = ['bofuri', '#防振り']
+    folder_name = 'bofuri2'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        try:
+            soup = self.get_soup(news_url, decode=True)
+            articles = soup.select('section.news-data')
+            news_obj = self.get_last_news_log_object()
+            results = []
+            for article in articles:
+                tag_date = article.find('div', class_='date')
+                tag_title = article.find('div', class_='title')
+                a_tag = article.find('a')
+                if tag_date and tag_title and a_tag and a_tag.has_attr('href'):
+                    article_id = news_url + a_tag['href'].replace('./', '')
+                    date = self.format_news_date(tag_date.text.strip().replace('/', '.'))
+                    if len(date) == 0:
+                        continue
+                    title = tag_title.text.strip()
+                    if date.startswith('2021.01.04') or (news_obj and
+                                                         (news_obj['id'] == article_id or date < news_obj['date'])):
+                        break
+                    results.append(self.create_news_log_object(date, title, article_id))
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log_from_news_log_object(result)
+                if process_result == 0:
+                    success_count += 1
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
+        except Exception as e:
+            self.print_exception(e, 'News')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('animation_works', 'https://pbs.twimg.com/media/ErSRQUmVoAAkgt7?format=jpg&name=large')
+        self.add_to_image_list('teaser', 'https://pbs.twimg.com/media/ErSKnRwW8AAjOyU?format=jpg&name=4096x4096')
+        self.add_to_image_list('aprilfools_tw', 'https://pbs.twimg.com/media/FPOV5F5agAE3czc?format=jpg&name=4096x4096')
+        self.add_to_image_list('aprilfools_news', self.PAGE_PREFIX + 'assets/news/65a.jpg')
+        self.add_to_image_list('aprilfools_top', self.PAGE_PREFIX + 'images/top-visual/2022apr/all.jpg')
+        self.add_to_image_list('vis-s2', self.PAGE_PREFIX + 'assets/news/vis-s2.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'assets/character/%s.png'
+        self.download_by_template(folder, template, 1, 1)
 
 
 # Kaiko sareta Ankoku Heishi (30-dai) no Slow na Second Life

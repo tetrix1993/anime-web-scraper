@@ -11,7 +11,7 @@ from scan import WebNewtypeScanner
 # Infinite Dendrogram http://dendro-anime.jp/story/ #デンドロ @dendro_anime [FRI]
 # Isekai Quartet 2 http://isekai-quartet.com/story/ #いせかる @isekai_quartet [WED]
 # Ishuzoku Reviewers https://isyuzoku.com/story/ #isyuzoku @isyuzoku [TUE]
-# Itai no wa https://bofuri.jp/story/ #防振り #bofuri @bofuri_anime [FRI]
+# Itai no wa https://bofuri.jp/season1/story/ #防振り #bofuri @bofuri_anime [FRI]
 # Jibaku Shounen Hanako-kun https://www.tbs.co.jp/anime/hanakokun/story/ #花子くん #花子くんアニメ @hanakokun_info [WED]
 # Koisuru Asteroid http://koiastv.com/story.html #koias #koiastv #恋アス #恋する小惑星 @koiastv [TUE]
 # Kyokou Suiri https://kyokousuiri.jp/ #虚構推理 @kyokou_suiri [THU]
@@ -449,9 +449,9 @@ class BofuriDownload(Winter2020AnimeDownload):
                 "BOFURI: I Don't Want to Get Hurt, so I'll Max Out My Defense."]
     folder_name = 'bofuri'
 
-    PAGE_PREFIX = "https://bofuri.jp/"
-    STORY_PAGE = "https://bofuri.jp/story/"
-    EPISODE_PAGE = "https://bofuri.jp/story/episode.html"
+    PAGE_PREFIX = "https://bofuri.jp/season1/"
+    STORY_PAGE = PAGE_PREFIX + "story/"
+    EPISODE_PAGE = STORY_PAGE + "episode.html"
     FINAL_EPISODE = 12
     
     def __init__(self):
@@ -485,19 +485,20 @@ class BofuriDownload(Winter2020AnimeDownload):
         if not os.path.exists(bluray_filepath):
             os.makedirs(bluray_filepath)
 
+        bd_prefix = self.PAGE_PREFIX + 'assets/bluray/'
         image_objs = [
-            {'name': 'bd_bonus_1', 'url': 'https://bofuri.jp/assets/bluray/cp/1.png'},
-            {'name': 'bd_bonus_2', 'url': 'https://bofuri.jp/assets/bluray/bnf/th/1.jpg'},
-            {'name': 'bd_bonus_3', 'url': 'https://bofuri.jp/assets/bluray/bnf/th/2.jpg'},
-            {'name': 'bd_bonus_4', 'url': 'https://bofuri.jp/assets/bluray/bnf/th/3.jpg'},
-            {'name': 'bd_bonus_5', 'url': 'https://bofuri.jp/assets/bluray/bnf/th/4.jpg'},
-            {'name': 'bd_bonus_6', 'url': 'https://bofuri.jp/assets/bluray/bnf/th/5.jpg'},
-            {'name': 'bd_bonus_7', 'url': 'https://bofuri.jp/assets/bluray/bnf/th/6.jpg'},
+            {'name': 'bd_bonus_1', 'url': bd_prefix + 'cp/1.png'},
+            {'name': 'bd_bonus_2', 'url': bd_prefix + 'bnf/th/1.jpg'},
+            {'name': 'bd_bonus_3', 'url': bd_prefix + 'bnf/th/2.jpg'},
+            {'name': 'bd_bonus_4', 'url': bd_prefix + 'bnf/th/3.jpg'},
+            {'name': 'bd_bonus_5', 'url': bd_prefix + 'bnf/th/4.jpg'},
+            {'name': 'bd_bonus_6', 'url': bd_prefix + 'bnf/th/5.jpg'},
+            {'name': 'bd_bonus_7', 'url': bd_prefix + 'bnf/th/6.jpg'},
             {'name': 'bd_1_1', 'url': 'https://pbs.twimg.com/media/ES0VfovUMAAY11q?format=jpg&name=4096x4096'},
             {'name': 'bd_1_2', 'url': 'https://tc-animate.techorus-cdn.com/resize_image/resize_image.php?image=03111454_5e687d099c28c.jpg'},
             {'name': 'bd_2_1', 'url': 'https://pbs.twimg.com/media/EUlhuICUMAAvPf6?format=jpg&name=4096x4096'},
             {'name': 'bd_2_2', 'url': 'https://tc-animate.techorus-cdn.com/resize_image/resize_image.php?image=05111439_5eb8e52a46095.jpg'},
-            {'name': 'bd_3_1', 'url': 'https://bofuri.jp/assets/bluray/3/main.jpg'},
+            {'name': 'bd_3_1', 'url': self.PAGE_PREFIX + 'assets/bluray/3/main.jpg'},
             {'name': 'bd_3_2', 'url': 'https://tc-animate.techorus-cdn.com/resize_image/resize_image.php?image=04171104_5e990ebc07a88.jpg'}]
         for image_obj in image_objs:
             if os.path.exists(bluray_filepath + '/' + image_obj['name'] + '.png') or \

@@ -11,7 +11,6 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Isekai de Cheat Skill wo Te ni Shita Ore wa https://iseleve.com　@iseleve_anime
 # Isekai One Turn Kill Neesan https://onekillsister.com/ #一撃姉 @onekillsister
 # Isekai Shoukan wa Nidome desu https://isenido.com/ #いせにど @isenido_anime
-# Itai no wa https://bofuri.jp/story/ #防振り #bofuri @bofuri_anime
 # Jitsu wa Ore, Saikyou deshita? https://jitsuhaoresaikyo-anime.com/ @jitsuoresaikyo
 # Keikenzumi na Kimi to, Keiken Zero na Ore ga, Otsukiai suru Hanashi. https://kimizero.com/ #キミゼロ @kimizero_anime
 # Level 1 dakedo Unique Skill de Saikyou desu https://level1-anime.com/ #レベル1だけどアニメ化です @level1_anime
@@ -27,7 +26,6 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Tensei shitara Dainana Ouji Datta node, Kimama ni Majutsu wo Kiwamemasu https://dainanaoji.com/ #第七王子 @dainanaoji_pro
 # Tonikaku Kawaii S2 http://tonikawa.com/ #トニカクカワイイ #tonikawa @tonikawa_anime
 # Vlad Love https://www.vladlove.com/index.html #ぶらどらぶ #vladlove @VLADLOVE_ANIME
-# Watashi no Yuri wa Oshigoto desu! https://watayuri-anime.com/ #わたゆり #私の百合はお仕事です @watayuri_anime
 # Yamada-kun to Lv999 no Koi wo Suru https://yamadalv999-anime.com/ #山田999 @yamada999_anime
 # Yuusha ga Shinda! https://heroisdead.com/ #勇者が死んだ @yuusyagasinda
 
@@ -404,70 +402,6 @@ class IsenidoDownload(UnconfirmedDownload):
         self.image_list = []
         self.add_to_image_list('kv-bg', self.PAGE_PREFIX + 'img/kv-bg.jpg')
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FZxImcZUIAAV8uv?format=jpg&name=4096x4096')
-        self.download_image_list(folder)
-
-
-# Itai no wa Iya nano de Bougyoryoku ni Kyokufuri Shitai to Omoimasu. 2nd Season
-class Bofuri2Download(UnconfirmedDownload):
-    title = "Itai no wa Iya nano de Bougyoryoku ni Kyokufuri Shitai to Omoimasu. 2nd Season"
-    keywords = [title, 'bofuri', "BOFURI: I Don't Want to Get Hurt, so I'll Max Out My Defense.", '2nd']
-    website = "https://bofuri.jp/"
-    twitter = 'bofuri_anime'
-    hashtags = ['bofuri', '#防振り']
-    folder_name = 'bofuri2'
-
-    PAGE_PREFIX = website
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_news()
-        self.download_key_visual()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_news(self):
-        news_url = self.PAGE_PREFIX + 'news/'
-        try:
-            soup = self.get_soup(news_url, decode=True)
-            articles = soup.select('section.news-data')
-            news_obj = self.get_last_news_log_object()
-            results = []
-            for article in articles:
-                tag_date = article.find('div', class_='date')
-                tag_title = article.find('div', class_='title')
-                a_tag = article.find('a')
-                if tag_date and tag_title and a_tag and a_tag.has_attr('href'):
-                    article_id = news_url + a_tag['href'].replace('./', '')
-                    date = self.format_news_date(tag_date.text.strip().replace('/', '.'))
-                    if len(date) == 0:
-                        continue
-                    title = tag_title.text.strip()
-                    if date.startswith('2021.01.04') or (news_obj and
-                                                         (news_obj['id'] == article_id or date < news_obj['date'])):
-                        break
-                    results.append(self.create_news_log_object(date, title, article_id))
-            success_count = 0
-            for result in reversed(results):
-                process_result = self.create_news_log_from_news_log_object(result)
-                if process_result == 0:
-                    success_count += 1
-            if len(results) > 0:
-                self.create_news_log_cache(success_count, results[0])
-        except Exception as e:
-            self.print_exception(e, 'News')
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('animation_works', 'https://pbs.twimg.com/media/ErSRQUmVoAAkgt7?format=jpg&name=large')
-        self.add_to_image_list('teaser', 'https://pbs.twimg.com/media/ErSKnRwW8AAjOyU?format=jpg&name=4096x4096')
-        self.add_to_image_list('aprilfools_tw', 'https://pbs.twimg.com/media/FPOV5F5agAE3czc?format=jpg&name=4096x4096')
-        self.add_to_image_list('aprilfools_news', self.PAGE_PREFIX + 'assets/news/65a.jpg')
-        self.add_to_image_list('aprilfools_top', self.PAGE_PREFIX + 'images/top-visual/2022apr/all.jpg')
         self.download_image_list(folder)
 
 
@@ -1095,36 +1029,6 @@ class VladLoveDownload(UnconfirmedDownload):
                 self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
-
-
-# Watashi no Yuri wa Oshigoto desu!
-class WatayuriDownload(UnconfirmedDownload):
-    title = 'Watashi no Yuri wa Oshigoto desu!'
-    keywords = [title, 'watayuri', 'Yuri is My Job!']
-    website = 'https://watayuri-anime.com/'
-    twitter = 'watayuri_anime'
-    hashtags = ['わたゆり', '私の百合はお仕事です']
-    folder_name = 'watayuri'
-
-    PAGE_PREFIX = website
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_key_visual()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FStxiD1VIAEX1nk?format=jpg&name=4096x4096')
-        self.add_to_image_list('tz_mv1', self.PAGE_PREFIX + 'assets/img/top/mv1.jpg')
-        self.add_to_image_list('tz_mv2', self.PAGE_PREFIX + 'assets/img/top/mv2.jpg')
-        self.download_image_list(folder)
 
 
 # Yamada-kun to Lv999 no Koi wo Suru
