@@ -465,6 +465,20 @@ class KubosanDownload(Winter2023AnimeDownload, NewsTemplate2):
         # self.add_to_image_list('img_kv2', 'https://pbs.twimg.com/media/Fcmcmk2acAAd4mc?format=jpg&name=large')
         self.download_image_list(folder)
 
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.kvSlide__img img[src]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src']
+                if '/kv/' not in image_url:
+                    continue
+                image_name = self.generate_image_name_from_url(image_url, 'kv')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
     def download_character(self):
         folder = self.create_character_directory()
         self.image_list = []
