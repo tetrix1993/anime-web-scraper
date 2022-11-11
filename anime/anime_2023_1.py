@@ -329,8 +329,23 @@ class InuhiroDownload(Winter2023AnimeDownload, NewsTemplate):
         self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/FZyBd0xVEAAz4kn?format=jpg&name=medium')
         self.add_to_image_list('kv1', self.PAGE_PREFIX + 'teaser/images/mainimg.jpg')
         self.add_to_image_list('kv2_tw', 'https://pbs.twimg.com/media/FgduJ2uaEAEPqiy?format=jpg&name=4096x4096')
-        self.add_to_image_list('kv2', self.PAGE_PREFIX + 'assets/images/top/mainimg.jpg')
+        # self.add_to_image_list('kv2', self.PAGE_PREFIX + 'assets/images/top/mainimg.jpg')
+        self.add_to_image_list('kv3_tw', 'https://pbs.twimg.com/media/FhRGNtKUAAAT8ea?format=jpg&name=4096x4096')
         self.download_image_list(folder)
+
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.mainimg .slider img[src]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src']
+                if '/images/' not in image_url:
+                    continue
+                image_name = self.generate_image_name_from_url(image_url, 'images')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
 
     def download_character(self):
         folder = self.create_character_directory()
