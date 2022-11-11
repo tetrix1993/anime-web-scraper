@@ -804,7 +804,7 @@ class SaikyoOnmyoujiDownload(Winter2023AnimeDownload, NewsTemplate):
 
     def run(self):
         self.download_episode_preview()
-        # self.download_news()
+        self.download_news()
         self.download_key_visual()
         self.download_character()
 
@@ -812,7 +812,10 @@ class SaikyoOnmyoujiDownload(Winter2023AnimeDownload, NewsTemplate):
         self.has_website_updated(self.PAGE_PREFIX)
 
     def download_news(self):
-        pass
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news--lineup li',
+                                    date_select='.date', title_select='.ttl', id_select='a',
+                                    paging_type=0, next_page_select='ul.pagenation-list li', next_page_eval_index=-1,
+                                    next_page_eval_index_class='is__current')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
