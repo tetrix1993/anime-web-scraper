@@ -454,7 +454,7 @@ class Bofuri2Download(Winter2023AnimeDownload):
 
 
 # Kaiko sareta Ankoku Heishi (30-dai) no Slow na Second Life
-class AnkokuHeishiDownload(Winter2023AnimeDownload):
+class AnkokuHeishiDownload(Winter2023AnimeDownload, NewsTemplate):
     title = 'Kaiko sareta Ankoku Heishi (30-dai) no Slow na Second Life'
     keywords = [title]
     website = 'https://ankokuheishi-anime.com/'
@@ -469,7 +469,7 @@ class AnkokuHeishiDownload(Winter2023AnimeDownload):
 
     def run(self):
         self.download_episode_preview()
-        # self.download_news()
+        self.download_news()
         self.download_key_visual()
         self.download_character()
         self.download_media()
@@ -477,23 +477,35 @@ class AnkokuHeishiDownload(Winter2023AnimeDownload):
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX)
 
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, news_prefix='', article_select='.news_item',
+                                    date_select='.post_date', title_select='.news,.news_txt', id_select='a',
+                                    date_func=lambda x: x.replace('年', '.').replace('月', '.').replace('日', ''))
+
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         self.image_list = []
         self.add_to_image_list('tz', 'https://pbs.twimg.com/media/FagSmPnUEAA4PNg?format=jpg&name=medium')
         self.download_image_list(folder)
 
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            self.image_list = []
+            images = soup.select('.header_area p.mv img[src]')
+            for image in images:
+                if '/img/' in image['src']:
+                    image_url = image['src']
+                    image_name = self.generate_image_name_from_url(image_url, 'img')
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
     def download_character(self):
         folder = self.create_character_directory()
-        template = self.PAGE_PREFIX + 'img/character/character%s.png'
-        self.download_by_template(folder, template, 2, 1)
-
-        self.image_list = []
-        self.add_to_image_list('character01_02', self.PAGE_PREFIX + 'img/character/character01_02.png')
-        self.download_image_list(folder)
-
-        template = self.PAGE_PREFIX + 'img/chara_%s.png'
-        self.download_by_template(folder, template, 2, 1, prefix='tz_')
+        prefix = self.PAGE_PREFIX + 'wp-content/themes/ankokuheishi/img/chara'
+        templates = [prefix + '%s_a.png', prefix + '%s_b.png']
+        self.download_by_template(folder, templates, 2, 1)
 
     def download_media(self):
         folder = self.create_media_directory()
