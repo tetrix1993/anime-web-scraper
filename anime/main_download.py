@@ -1238,8 +1238,12 @@ class MainDownload:
             elif self.season is None:
                 return False
         matched_keywords = 0
+        class_name = self.__name__[:-8] if self.__name__.lower().endswith('download') else self.__name__
+        class_keywords = self.keywords + [self.folder_name, class_name]
         for filter_keyword in s_filter.keywords:
-            for keyword in self.keywords:
+            for keyword in class_keywords:
+                if len(keyword) == 0:
+                    continue
                 if filter_keyword.lower() in keyword.lower():
                     matched_keywords += 1
                     break
