@@ -1293,9 +1293,23 @@ class TsunliseDownload(Winter2023AnimeDownload, NewsTemplate):
         self.image_list = []
         self.add_to_image_list('kv1_1', self.PAGE_PREFIX + 'wp/wp-content/uploads/2022/07/01_ツンリゼ_第1弾KV_ツンver..jpg')
         self.add_to_image_list('kv1_2', self.PAGE_PREFIX + 'wp/wp-content/uploads/2022/07/02_ツンリゼ_第1弾KV_デレver..jpg')
+        self.add_to_image_list('kv2', self.PAGE_PREFIX + 'wp/wp-content/uploads/2022/11/ツンリゼ第2弾KV_ロゴ入り.jpg')
         self.download_image_list(folder)
+
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            self.image_list = []
+            images = soup.select('.firstview img[src].pc')
+            for image in images:
+                if '/tunlise-honban-theme/images/' in image['src']:
+                    image_url = image['src']
+                    image_name = self.generate_image_name_from_url(image_url, 'tunlise-honban-theme')
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
 
     def download_character(self):
         folder = self.create_character_directory()
-        template = self.PAGE_PREFIX + 'wp/wp-content/themes/tunlise-teaser-theme/img/chara-pic%s.png'
-        self.download_by_template(folder, template, 1, 1, prefix='tz_')
+        template = self.PAGE_PREFIX + 'wp/wp-content/themes/tunlise-honban-theme/images/chara-pic%s.png'
+        self.download_by_template(folder, template, 1, 1)
