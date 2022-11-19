@@ -13,6 +13,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Jitsu wa Ore, Saikyou deshita? https://jitsuhaoresaikyo-anime.com/ @jitsuoresaikyo
 # Keikenzumi na Kimi to, Keiken Zero na Ore ga, Otsukiai suru Hanashi. https://kimizero.com/ #キミゼロ @kimizero_anime
 # Level 1 dakedo Unique Skill de Saikyou desu https://level1-anime.com/ #レベル1だけどアニメ化です @level1_anime
+# Liar Liar https://liar-liar-anime.com/ #ライアー・ライアー #ライアラ @liar2_official
 # Masamune-kun no Revenge R https://masamune-tv.com/ #MASA_A @masamune_tv
 # Mato Seihei no Slave https://mabotai.jp/ #魔都精兵のスレイブ #まとスレ @mabotai_kohobu
 # Oshi no Ko https://ichigoproduction.com/ #推しの子 @anime_oshinoko
@@ -476,6 +477,52 @@ class Level1Download(UnconfirmedDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'wp/wp-content/themes/level1_teaser/images/chara-pic%s.png'
         self.download_by_template(folder, template, 1, 1, prefix='tz_')
+
+
+# Liar Liar
+class LiarLiarDownload(UnconfirmedDownload, NewsTemplate):
+    title = 'Liar Liar'
+    keywords = [title]
+    website = 'https://liar-liar-anime.com/'
+    twitter = 'liar2_official'
+    hashtags = ['ライアー・ライアー', 'ライアラ']
+    folder_name = 'liarliar'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        # Paging logic may need update
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.archives_ul_li',
+                                    date_select='.archives_ul_li_date', title_select='.archives_ul_li_text',
+                                    id_select='a', date_separator='/')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/Fhu9_4VUYAAz0MW?format=jpg&name=4096x4096')
+        self.download_image_list(folder)
+
+        prefix = self.PAGE_PREFIX + 'common/images/contents_top_fv_stand%s'
+        templates = [prefix + '.jpg', prefix + 'b.jpg']
+        self.download_by_template(folder, templates, 2, 1, prefix='tz_')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        prefix = self.PAGE_PREFIX + 'common/images/contents_character_'
+        templates = [prefix + 'stand%s.png', prefix + 'face%s.png']
+        self.download_by_template(folder, templates, 2, 1, prefix='tz_')
 
 
 # Masamune-kun no Revenge R

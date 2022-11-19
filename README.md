@@ -91,6 +91,7 @@ The premiere date for the anime listed here has not been announced.
 * [Jitsu wa Ore, Saikyou deshita?](https://jitsuhaoresaikyo-anime.com/)
 * [Keikenzumi na Kimi to, Keiken Zero na Ore ga, Otsukiai suru Hanashi.](https://kimizero.com/)
 * [Level 1 dakedo Unique Skill de Saikyou desu](https://level1-anime.com/)
+* [Liar Liar](https://liar-liar-anime.com/)
 * [Masamune-kun no Revenge R](https://masamune-tv.com/)
 * [Mato Seihei no Slave](https://mabotai.jp/)
 * [Oshi no Ko](https://ichigoproduction.com/)
