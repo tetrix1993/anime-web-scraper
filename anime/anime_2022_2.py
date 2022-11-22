@@ -509,7 +509,7 @@ class Honzuki3Download(Spring2022AnimeDownload, NewsTemplate):
 class Kaguyasama3Download(Spring2022AnimeDownload, NewsTemplate):
     title = "Kaguya-sama wa Kokurasetai: Ultra Romantic"
     keywords = [title, "Kaguya", "Kaguyasama", "Kaguya-sama: Love is War 3rd Season"]
-    website = 'https://kaguya.love/'
+    website = 'https://kaguya.love/3rd/'
     twitter = 'anime_kaguya'
     hashtags = 'かぐや様'
     folder_name = 'kaguya-sama3'
