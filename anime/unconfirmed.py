@@ -986,6 +986,9 @@ class Tonikawa2Download(UnconfirmedDownload, NewsTemplate):
         folder = self.create_key_visual_directory()
         self.image_list = []
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FDf9oGkaIAE7jnd?format=jpg&name=large')
+        self.add_to_image_list('kv_seifuku', self.PAGE_PREFIX + 'assets/images/common/news/news-67/img_kv_l.jpg')
+        self.add_to_image_list('tz2_tw', 'https://pbs.twimg.com/media/FiE3-1yVIAA8Scs?format=jpg&name=large')
+        self.add_to_image_list('tz2', self.PAGE_PREFIX + 'assets/images/common/news/news-70/thumb_kv3_l.jpg')
         self.download_image_list(folder)
 
 
