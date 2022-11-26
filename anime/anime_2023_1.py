@@ -882,7 +882,7 @@ class Roukin8Download(Winter2023AnimeDownload, NewsTemplate):
         self.download_episode_preview()
         self.download_news()
         self.download_key_visual()
-        # self.download_character()
+        self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX)
@@ -896,9 +896,25 @@ class Roukin8Download(Winter2023AnimeDownload, NewsTemplate):
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         self.image_list = []
-        self.add_to_image_list('top_kv', self.PAGE_PREFIX + 'assets/img/top/kv.jpg')
+        self.add_to_image_list('top_kv', self.PAGE_PREFIX + 'dist/assets/img/top/kv.jpg')
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FZkU-3hagAAU3fg?format=jpg&name=medium')
+        self.add_to_image_list('kv', self.PAGE_PREFIX + 'dist/assets/img/news/news07/img01.jpeg')
+        self.add_to_image_list('kv_tw', 'https://pbs.twimg.com/media/FiV4ujAakAAeWZZ?format=jpg&name=4096x4096')
         self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        prefix = self.PAGE_PREFIX + 'dist/assets/img/top/'
+        for i in range(1, 21, 1):
+            image_name = 'char_body'
+            if i > 1:
+                image_name += str(i)
+            if self.is_image_exists(image_name, folder):
+                continue
+            image_url = prefix + image_name + '.png'
+            result = self.download_image(image_url, folder + '/' + image_name)
+            if result == -1:
+                break
 
 
 # Saikyou Onmyouji no Isekai Tenseiki
