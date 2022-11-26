@@ -4,6 +4,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Isekai de Cheat Skill wo Te ni Shita Ore wa https://iseleve.com　@iseleve_anime
 # Isekai wa Smartphone to Tomo ni. 2 http://isesuma-anime.jp/ #イセスマ @isesumaofficial
 # Kuma Kuma Kuma Bear Punch! https://kumakumakumabear.com/ #くまクマ熊ベアー #kumabear @kumabear_anime
+# Masamune-kun no Revenge R https://masamune-tv.com/ #MASA_A @masamune_tv
 # Megami no Cafe Terrace https://goddess-cafe.com/ #女神のカフェテラス @goddess_cafe_PR
 # Otonari ni Ginga https://otonari-anime.com/ #おとなりに銀河 @otonariniginga
 # Shiro Seijo to Kuro Bokushi https://shiroseijyo-anime.com/ @shiroseijyo_tv #白聖女と黒牧師
@@ -183,6 +184,57 @@ class KumaBear2Download(Spring2023AnimeDownload, NewsTemplate2):
 
         template = self.PAGE_PREFIX + 'core_sys/images/main/tz/chara_%s.png'
         self.download_by_template(folder, template, 2, 1, prefix='tz_')
+
+
+# Masamune-kun no Revenge R
+class Masamunekun2Download(Spring2023AnimeDownload, NewsTemplate):
+    title = 'Masamune-kun no Revenge R'
+    keywords = [title, "Masamune's Revenge", "2nd"]
+    website = 'https://masamune-tv.com/'
+    twitter = 'masamune_tv'
+    hashtags = ['MASA_A']
+    folder_name = 'masamune2'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        # Paging logic may need update
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news--lineup article',
+                                    date_select='.txt--date', title_select='.txt--ttl', id_select='a',
+                                    next_page_select='ul.pagenation-list li', next_page_eval_index=-1,
+                                    next_page_eval_index_class='is__current')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_kv', self.PAGE_PREFIX + '_assets/images/fv/fv@2x.png')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            self.image_list = []
+            images = soup.select('.chardata img[src]')
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'][1:]
+                image_name = 'tz_' + self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
 
 
 # Megami no Café Terrace
