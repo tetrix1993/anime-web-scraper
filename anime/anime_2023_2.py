@@ -109,7 +109,9 @@ class Isesuma2Download(Spring2023AnimeDownload, NewsTemplate):
         folder = self.create_key_visual_directory()
         self.image_list = []
         self.add_to_image_list('tz_main', self.PAGE_PREFIX + 'img/main.jpg')
+        self.add_to_image_list('main2chara2', self.PAGE_PREFIX + 'img/main2chara2.png')
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FYQeHycaMAIdyyN?format=jpg&name=medium')
+        self.add_to_image_list('kv1', 'https://pbs.twimg.com/media/FiZQEg9acAAZ91t?format=jpg&name=large')
         self.download_image_list(folder)
 
     def download_character(self):
