@@ -11,6 +11,7 @@ import os
 # Isekai Nonbiri Nouka https://nonbiri-nouka.com/ #のんびり農家 @nonbiri_nouka
 # Itai no wa https://bofuri.jp/story/ #防振り #bofuri @bofuri_anime
 # Kaiko sareta Ankoku Heishi (30-dai) no Slow na Second Life https://ankokuheishi-anime.com/ #暗黒兵士 @ankokuheishi_PR
+# Kami-tachi ni Hirowareta Otoko 2 https://kamihiro-anime.com/ #神達に拾われた男 @kamihiro_anime
 # Kubo-san wa Mob wo Yurusanai https://kubosan-anime.jp/ #久保さん @kubosan_anime
 # Kyokou Suiri S2 https://kyokousuiri.jp/ #虚構推理 @kyokou_suiri
 # Maou Gakuin no Futekigousha 2nd Season https://maohgakuin.com/ #魔王学院 @maohgakuin
@@ -512,6 +513,61 @@ class AnkokuHeishiDownload(Winter2023AnimeDownload, NewsTemplate):
         self.image_list = []
         self.add_to_image_list('comment_img', self.PAGE_PREFIX + 'img/comment_img.png')
         self.download_image_list(folder)
+
+
+# Kami-tachi ni Hirowareta Otoko 2
+class KamihiroDownload(Winter2023AnimeDownload, NewsTemplate):
+    title = 'Kami-tachi ni Hirowareta Otoko 2'
+    keywords = [title, 'Kamihiro', 'Kamitachi', '2nd', 'By the Grace of the Gods']
+    website = 'https://kamihiro-anime.com/'
+    twitter = 'kamihiro_anime'
+    hashtags = '神達に拾われた男'
+    folder_name = 'kamihiro2'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        # Paging logic not known
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.md-list__news li',
+                                    date_select='.date', title_select='.ttl', id_select='a')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        news_prefix = self.PAGE_PREFIX + '2nd/wp-content/uploads/'
+        self.image_list = []
+        self.add_to_image_list('news_tz', news_prefix + '2022/09/logoc_GFF_TeaserVisual_s.jpg')
+        self.add_to_image_list('news_kv1', news_prefix + '2022/11/GFF_KeyVisual_logoc.jpg')
+        self.download_image_list(folder)
+
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            self.image_list = []
+            images = soup.select('.fvslide img[src]')
+            for image in images:
+                if '/images/' in image['src']:
+                    image_url = image['src']
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + '2nd/wp-content/themes/kamihiro2-teaser/_assets/images/char/detail/char%s_pc.png'
+        self.download_by_template(folder, template, 2, 1)
 
 
 # Kubo-san wa Mob wo Yurusanai

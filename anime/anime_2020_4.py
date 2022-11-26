@@ -17,7 +17,7 @@ from PIL import Image
 # Iwa Kakeru!: Sport Climbing Girls http://iwakakeru-anime.com/ #いわかける #iwakakeru @iwakakeru_anime [THU]
 # Jujutsu Kaisen https://jujutsukaisen.jp/ #呪術廻戦 @animejujutsu [MON]
 # Kamisama ni Natta Hi https://kamisama-day.jp/ #神様になった日 @kamisama_Ch_AB [SAT/SUN]
-# Kami-tachi ni Hirowareta Otoko https://kamihiro-anime.com/ #神達に拾われた男 @kamihiro_anime [FRI]
+# Kami-tachi ni Hirowareta Otoko https://kamihiro-anime.com/1st/ #神達に拾われた男 @kamihiro_anime [FRI]
 # Kimi to Boku no Saigo no Senjou, Aruiwa Sekai ga Hajimaru Seisen https://kimisentv.com/ #キミ戦 #kimisen @kimisen_project [THU]
 # Kuma Kuma Kuma Bear https://kumakumakumabear.com/1st/ #くまクマ熊ベアー #kumabear @kumabear_anime [TUE]
 # Maesetsu https://maesetsu.jp/ #まえせつ @maesetsu_anime [WED]
@@ -1372,11 +1372,14 @@ class KamisamaNiNattaHiDownload(Fall2020AnimeDownload):
 # Kami-tachi ni Hirowareta Otoko
 class KamihiroDownload(Fall2020AnimeDownload):
     title = 'Kami-tachi ni Hirowareta Otoko'
-    keywords = [title, 'Kamihiro', 'Kamitachi']
+    keywords = [title, 'Kamihiro', 'Kamitachi', 'By the Grace of the Gods']
+    website = 'https://kamihiro-anime.com/1st'
+    twitter = 'kamihiro_anime'
+    hashtags = '神達に拾われた男'
     folder_name = 'kamihiro'
 
-    PAGE_PREFIX = 'https://kamihiro-anime.com'
-    STORY_PAGE = 'https://kamihiro-anime.com/story/'
+    PAGE_PREFIX = website
+    STORY_PAGE = PAGE_PREFIX + '/story/'
 
     def __init__(self):
         super().__init__()
@@ -1421,7 +1424,7 @@ class KamihiroDownload(Fall2020AnimeDownload):
     def download_episode_preview_guess(self):
         folder = self.create_custom_directory('guess')
         dt = datetime.now().strftime("%m").zfill(2)
-        url_base = 'https://kamihiro-anime.com/wp/wp-content/uploads/2020/%s/%s.png'
+        url_base = self.PAGE_PREFIX + '/wp/wp-content/uploads/2020/%s/%s.png'
         for i in range(1, 7, 1):
             j = 0
             while True:
@@ -1445,7 +1448,7 @@ class KamihiroDownload(Fall2020AnimeDownload):
         image_objs = [
             {'name': 'teaser', 'url': 'https://pbs.twimg.com/media/EVy1wvNVcAAWcJH?format=jpg&name=large'},
             {'name': 'kv1', 'url': 'https://pbs.twimg.com/media/Eb_jqRLUYAAZ01A?format=jpg&name=4096x4096'},
-            {'name': 'kv2', 'url': 'https://kamihiro-anime.com/wp/wp-content/uploads/2020/08/GF_KV2_logo.jpg'},
+            {'name': 'kv2', 'url': self.PAGE_PREFIX + '/wp/wp-content/uploads/2020/08/GF_KV2_logo.jpg'},
             #{'name': 'kv2', 'url': 'https://pbs.twimg.com/media/Ee095ywUwAAOSpk?format=jpg&name=4096x4096'}
         ]
         self.download_image_objects(image_objs, folder)
@@ -1453,7 +1456,7 @@ class KamihiroDownload(Fall2020AnimeDownload):
     def download_character(self):
         folder = self.create_character_directory()
         try:
-            soup = self.get_soup('https://kamihiro-anime.com/character/')
+            soup = self.get_soup(self.PAGE_PREFIX + '/character/')
             images = soup.find_all('div', class_='thumb')
             image_objs = []
             for image in images:
