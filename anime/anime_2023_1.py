@@ -1282,6 +1282,7 @@ class TomochanDownload(Winter2023AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX)
@@ -1298,12 +1299,50 @@ class TomochanDownload(Winter2023AnimeDownload, NewsTemplate):
         self.image_list = []
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FWw4blxagAEvI9K?format=jpg&name=medium')
         self.add_to_image_list('main_img_main-illust', self.PAGE_PREFIX + 'assets/t/img/main/img_main-illust.png')
+        self.add_to_image_list('kv1', self.PAGE_PREFIX + 'assets/t/img/main/img_main-illust.jpg')
         self.download_image_list(folder)
 
     def download_character(self):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'assets/t/img/chara/img_chara%s.png'
-        self.download_by_template(folder, template, 2, 1, prefix='tz_')
+        self.download_by_template(folder, template, 2, 1)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+
+        # Blu-ray
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        try:
+            for i in range(6):
+                bd_url = self.PAGE_PREFIX + 'bddvd/'
+                if i > 0:
+                    bd_no = str(i + 1).zfill(2)
+                    if bd_no in processed:
+                        continue
+                    else:
+                        bd_url += bd_no + '.html'
+                soup = self.get_soup(bd_url)
+                if soup is not None:
+                    images = soup.select('.p-bddvd img[src]')
+                    self.image_list = []
+                    for image in images:
+                        src = image['src']
+                        if '/bd-dvd/' not in src:
+                            continue
+                        if not src.endswith('img_novelty_np.jpg') and not src.endswith('img_package_np.jpg'):
+                            image_url = self.PAGE_PREFIX + src.replace('../', '')
+                            image_name = self.generate_image_name_from_url(image_url, 'bd-dvd')
+                            self.add_to_image_list(image_name, image_url)
+                    if i > 0:
+                        if len(self.image_list) > 0:
+                            processed.append(str(i))
+                        else:
+                            break
+                    self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Tondemo Skill de Isekai Hourou Meshi
