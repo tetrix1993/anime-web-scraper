@@ -242,6 +242,8 @@ class HyoukenDownload(Winter2023AnimeDownload, NewsTemplate):
         folder = self.create_key_visual_directory()
         self.add_to_image_list('top_teaser_pc@2x', self.PAGE_PREFIX + 'img/top_teaser_pc@2x.jpg')
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FdP3sZqagAIEGcr?format=jpg&name=large')
+        self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/Fi4YSm9acAA2q3N?format=jpg&name=large')
+        self.add_to_image_list('kv1_news', self.PAGE_PREFIX + 'news/img/news20221201_01.jpg')
         self.download_image_list(folder)
 
     def download_character(self):
@@ -752,6 +754,7 @@ class NingenFushinDownload(Winter2023AnimeDownload, NewsTemplate):
         self.image_list = []
         self.add_to_image_list('tz', self.PAGE_PREFIX + 'wp-content/themes/ningenfushin/dist/img/top/kv.png')
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FextUiWaEAEBfcR?format=jpg&name=4096x4096')
+        self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/Fi4XvsPaEAEKl4i?format=jpg&name=4096x4096')
         self.download_image_list(folder)
 
     def download_character(self):
