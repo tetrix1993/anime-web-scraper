@@ -1,4 +1,5 @@
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
+from scan import AniverseMagazineScanner
 import os
 
 
@@ -1208,18 +1209,63 @@ class TentenKakumeiDownload(Winter2023AnimeDownload, NewsTemplate):
     folder_name = 'tenten-kakumei'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 6
 
     def __init__(self):
         super().__init__()
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_external()
         self.download_news()
         self.download_key_visual()
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        template = self.PAGE_PREFIX + 'images/story/%s/p_%s.jpg'
+        for i in range(self.FINAL_EPISODE):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_1'):
+                continue
+            ep_template = template % (str(i + 1).zfill(3), '%s')
+            stop = False
+            for j in range(self.IMAGES_PER_EPISODE):
+                image_url = ep_template % str(j + 1).zfill(3)
+                image_name = episode + '_' + str(j + 1)
+                result = self.download_image(image_url, self.base_folder + '/' + image_name)
+                if result == -1:
+                    stop = True
+                    break
+            if stop:
+                break
+
+        # YouTube thumbnails
+        # yt_folder, yt_episodes = self.init_youtube_thumbnail_variables()
+        # try:
+        #     soup = self.get_soup(self.PAGE_PREFIX + 'story.html')
+        #     stories = soup.select('.content_wrap a[href]')
+        #     for story in reversed(stories):
+        #         try:
+        #             episode = str(int(story['href'].split('/')[-1].replace('story', '').replace('.html', ''))).zfill(2)
+        #             if episode in yt_episodes:
+        #                 continue
+        #         except:
+        #             continue
+        #         story_url = self.PAGE_PREFIX + story['href']
+        #         story_soup = self.get_soup(story_url)
+        #         if story_soup is not None:
+        #             yt_tag = story_soup.select('.yt_movie iframe[src]')
+        #             if len(yt_tag) > 0:
+        #                 yt_id = yt_tag[0]['src'].split('?')[0].split('/')[-1]
+        #                 self.download_youtube_thumbnail_by_id(yt_id, yt_folder, episode)
+        # except Exception as e:
+        #     self.print_exception(e, 'YouTube thumbnails')
+
+    def download_episode_preview_external(self):
+        keywords = ['転生王女と天才令嬢の魔法革命', 'カット']
+        AniverseMagazineScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                end_date='20221202', download_id=self.download_id).run()
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article.element',
