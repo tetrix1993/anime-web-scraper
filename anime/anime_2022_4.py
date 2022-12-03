@@ -2913,10 +2913,13 @@ class BeastTamerDownload(Fall2022AnimeDownload, NewsTemplate):
         folder = self.create_media_directory()
         try:
             soup = self.get_soup(self.PAGE_PREFIX + 'bddvd.html')
-            images = soup.select('.content-entry img[src]')
+            images = soup.select('#BD1 img[src],#BD2 img[src],#BD3 img[src],#BD4 img[src],#BNF .inner a[href]')
             self.image_list = []
             for image in images:
-                image_url = self.PAGE_PREFIX + image['src'].replace('./', '')
+                if image.has_attr('src'):
+                    image_url = self.PAGE_PREFIX + image['src'].replace('./', '')
+                else:
+                    image_url = self.PAGE_PREFIX + image['href'].replace('./', '')
                 if '/bddvd/' not in image_url or 'np' in image_url.split('/')[-1].split('.')[0]:
                     continue
                 image_name = 'bddvd_' + self.generate_image_name_from_url(image_url, 'bddvd')
