@@ -797,6 +797,7 @@ class OnimaiDownload(Winter2023AnimeDownload, NewsTemplate):
         self.image_list = []
         self.add_to_image_list('top_visual_mahiro', self.PAGE_PREFIX + 'assets/img/top/visual_mahiro.png')
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FQ6O8FgVIAEp7rm?format=jpg&name=4096x4096')
+        self.add_to_image_list('kv_tw', 'https://pbs.twimg.com/media/FjLP6ngagAA3zrm?format=jpg&name=4096x4096')
         self.download_image_list(folder)
 
     def download_character(self):
