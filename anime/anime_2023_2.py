@@ -1,6 +1,7 @@
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 
 
+# Boku no Kokoro no Yabai Yatsu https://bokuyaba-anime.com/ #僕ヤバ #僕の心のヤバイやつ @bokuyaba_anime
 # Isekai de Cheat Skill wo Te ni Shita Ore wa https://iseleve.com　@iseleve_anime
 # Isekai wa Smartphone to Tomo ni. 2 http://isesuma-anime.jp/ #イセスマ @isesumaofficial
 # Kuma Kuma Kuma Bear Punch! https://kumakumakumabear.com/ #くまクマ熊ベアー #kumabear @kumabear_anime
@@ -20,6 +21,66 @@ class Spring2023AnimeDownload(MainDownload):
 
     def __init__(self):
         super().__init__()
+
+
+# Boku no Kokoro no Yabai Yatsu
+class BokuyabaDownload(Spring2023AnimeDownload, NewsTemplate):
+    title = 'Boku no Kokoro no Yabai Yatsu'
+    keywords = [title, 'The Dangers in My Heart', 'Bokuyaba']
+    website = 'https://bokuyaba-anime.com/'
+    twitter = 'bokuyaba_anime'
+    hashtags = ['僕ヤバ', '僕の心のヤバイやつ']
+    folder_name = 'bokuyaba'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.p-news__list-item',
+                                    date_select='.p-news_data__date', title_select='.p-news_data__title',
+                                    id_select='a', a_tag_start_text_to_remove='/', a_tag_prefix=self.PAGE_PREFIX,
+                                    date_func=lambda x: x[0:4] + '.' + x[5:])
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            self.image_list = []
+            images = soup.select('.p-hero_kv_visual__main img[src]')
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'].replace('./', '')
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'assets/img/character/chara_stand_%s.png'
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            self.image_list = []
+            images = soup.select('img.u-lazy[data-src]')
+            for image in images:
+                img_name = image['data-src'].split('/')[-1].split('.')[0].split('_')[-1]
+                image_url = template % img_name
+                image_name = 'chara_stand_' + img_name
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
 
 
 # Isekai de Cheat Skill wo Te ni Shita Ore wa, Genjitsu Sekai wo mo Musou Suru: Level Up wa Jinsei wo Kaeta

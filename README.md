@@ -111,6 +111,7 @@ The premiere date for the anime listed here has not been announced.
 * [Tsuyokute New Saga](https://tsuyosaga-pr.com/)
 
 ### Spring 2023 Anime
+* [Boku no Kokoro no Yabai Yatsu](https://bokuyaba-anime.com/)
 * [Isekai de Cheat Skill wo Te ni Shita Ore wa, Genjitsu Sekai wo mo Musou Suru: Level Up wa Jinsei wo Kaeta](https://www.iseleve.com/)
 * [Isekai wa Smartphone to Tomo ni. 2](http://isesuma-anime.jp/)
 * [Kuma Kuma Kuma Bear Punch!](https://kumakumakumabear.com/)
