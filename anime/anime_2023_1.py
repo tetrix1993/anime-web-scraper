@@ -665,8 +665,11 @@ class KyokouSuiri2Download(Winter2023AnimeDownload, NewsTemplate):
         image_prefix = self.PAGE_PREFIX + 'wp/wp-content/uploads/'
         self.add_to_image_list('tz', image_prefix + '2021/11/6271138d893814b7a21c84b078fca0b9.jpg')
         self.add_to_image_list('kv1', image_prefix + '2022/03/cefd7ddc49fafe239a53b1721361c61e.jpg')
-        self.add_to_image_list('img_main_kv2', self.PAGE_PREFIX + 'assets_2t/img/top/main/img_main_kv2.png')
+        self.add_to_image_list('kv2_tw', 'https://pbs.twimg.com/media/FjQT78GaEAIK2Fs?format=jpg&name=medium')
         self.download_image_list(folder)
+
+        template = self.PAGE_PREFIX + 'assets_2t/img/top/main/img_main_kv%s.png'
+        self.download_by_template(folder, template, 1, 2)
 
     def download_character(self):
         folder = self.create_character_directory()
