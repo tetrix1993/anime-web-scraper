@@ -705,15 +705,18 @@ class Maohgakuin2Download(Winter2023AnimeDownload, NewsTemplate):
         self.download_episode_preview()
         self.download_news()
         self.download_key_visual()
+        self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX)
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + 'news/'
-        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news_list li',
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news_list__item',
                                     date_select='.news_date', title_select='.news_title', id_select='a',
-                                    a_tag_prefix=news_url, a_tag_start_text_to_remove='./')
+                                    a_tag_prefix=news_url, a_tag_start_text_to_remove='./',
+                                    date_func=lambda x: x[6:10] + '.' + x[0:5], next_page_select='.btn_next',
+                                    next_page_eval_index=-1, next_page_eval_index_class='none')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -723,6 +726,22 @@ class Maohgakuin2Download(Winter2023AnimeDownload, NewsTemplate):
         self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/FdRkMFnaMAImkFJ?format=jpg&name=large')
         self.add_to_image_list('kv1', self.PAGE_PREFIX + 'assets/img/img_main_fix.jpg')
         self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            self.image_list = []
+            images = soup.select('.chara_image img[src], .chara_face img[src]')
+            for image in images:
+                if '/character/' not in image['src']:
+                    continue
+                image_url = self.PAGE_PREFIX + image['src']
+                image_name = self.generate_image_name_from_url(image_url, 'character')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
 
 
 # Ningen Fushin no Boukensha-tachi ga Sekai wo Sukuu you desu
