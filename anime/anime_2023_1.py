@@ -1427,9 +1427,24 @@ class TondemoSkillDownload(Winter2023AnimeDownload, NewsTemplate):
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         self.image_list = []
-        self.add_to_image_list('tz', self.PAGE_PREFIX + 'wordpress/wp-content/themes/tondemoskill/assets/img/top/kv.jpg')
+        # self.add_to_image_list('tz', self.PAGE_PREFIX + 'wordpress/wp-content/themes/tondemoskill/assets/img/top/kv.jpg')
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FgNCmj5aMAE1Hv6?format=jpg&name=4096x4096')
+        self.add_to_image_list('kv_tw', 'https://pbs.twimg.com/media/FjcAFh5akAAt0c5?format=jpg&name=4096x4096')
         self.download_image_list(folder)
+
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            self.image_list = []
+            images = soup.select('.js-kv_visual img[src]')
+            for image in images:
+                image_url = image['src']
+                if '/img/' not in image_url:
+                    continue
+                image_name = self.generate_image_name_from_url(image_url, 'img')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
 
     def download_character(self):
         folder = self.create_character_directory()
