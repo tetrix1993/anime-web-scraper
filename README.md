@@ -83,6 +83,7 @@ pip install -r requirements.txt
 ### New Anime
 The premiere date for the anime listed here has not been announced.
 * [ATRI -My Dear Moments-](https://atri-anime.com/)
+* [Buta no Liver wa Kanetsu Shiro](https://butaliver-anime.com/)
 * [Dungeon Meshi](https://delicious-in-dungeon.com/)
 * [Eiyuu Kyoushitsu](https://eiyukyoushitsu-anime.com/)
 * [Goblin Slayer 2nd Season](http://www.goblinslayer.jp/)
