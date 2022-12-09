@@ -144,6 +144,7 @@ The premiere date for the anime listed here has not been announced.
 * [Saikyou Onmyouji no Isekai Tenseiki](https://saikyo-onmyouji.asmik-ace.co.jp/)
 * [Shin Shinka no Mi: Shiranai Uchi ni Kachigumi Jinsei](https://shinkanomi-anime.com/)
 * [Spy Kyoushitsu](https://spyroom-anime.com/)
+* [Sugar Apple Fairy Tale](https://sugarapple-anime.com/)
 * [Tensei Oujo to Tensai Reijou no Mahou Kakumei](https://tenten-kakumei.com/)
 * [Tomo-chan wa Onnanoko!](https://tomo-chan.jp/)
 * [Tondemo Skill de Isekai Hourou Meshi](https://tondemoskill-anime.com/)

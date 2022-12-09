@@ -23,6 +23,7 @@ import os
 # Saikyou Onmyouji no Isekai Tenseiki https://saikyo-onmyouji.asmik-ace.co.jp/ #最強陰陽師 @saikyo_onmyouji
 # Shin Shinka no Mi: Shiranai Uchi ni Kachigumi Jinsei https://shinkanomi-anime.com/ #進化の実 #勝ち組人生 #ゴリラ系女子 @shinkanomianime
 # Spy Kyoushitsu https://spyroom-anime.com/ #スパイ教室 #spyroom #SpyClassroom @spyroom_anime
+# Sugar Apple Fairy Tale https://sugarapple-anime.com/ #砂糖林檎 @sugarapple_PR
 # Tensei Oujo to Tensai Reijou no Mahou Kakumei https://tenten-kakumei.com/ #転天アニメ @tenten_kakumei
 # Tomo-chan wa Onnanoko! https://tomo-chan.jp/ #tomochan @tomo_chan_ani
 # Tondemo Skill de Isekai Hourou Meshi https://tondemoskill-anime.com/ #とんでもスキル #tondemo_skill @tonsuki_anime
@@ -1220,6 +1221,45 @@ class SpyroomDownload(Winter2023AnimeDownload, NewsTemplate2):
         except Exception as e:
             self.print_exception(e, 'Character')
         self.create_cache_file(cache_filepath, processed, num_processed)
+
+
+# Sugar Apple Fairy Tale
+class SugarAppleDownload(Winter2023AnimeDownload, NewsTemplate):
+    title = 'Sugar Apple Fairy Tale'
+    keywords = [title]
+    website = 'https://sugarapple-anime.com/'
+    twitter = 'sugarapple_PR'
+    hashtags = '砂糖林檎'
+    folder_name = 'sugarapple'
+
+    PAGE_PREFIX = website
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.newslist_contents li',
+                                    date_select='.date', title_select='a', id_select='a',
+                                    date_func=lambda x: x[0:4] + '.' + x[4:6] + '.' + x[7:9],
+                                    a_tag_prefix=self.PAGE_PREFIX + 'news/')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FgJTYu-aUAEF8u_?format=jpg&name=large')
+        self.add_to_image_list('kv_tw', 'https://pbs.twimg.com/media/Fh0EdYWUAAAScuD?format=jpg&name=large')
+        self.add_to_image_list('main_img02_pc', self.PAGE_PREFIX + 'img/main_img02_pc.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'img/chara/body_%s.png'
+        self.download_by_template(folder, template, 2, 1)
 
 
 # Tensei Oujo to Tensai Reijou no Mahou Kakumei
