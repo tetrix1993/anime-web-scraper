@@ -20,6 +20,7 @@ import os
 # Maou Gakuin no Futekigousha 2nd Season https://maohgakuin.com/ #魔王学院 @maohgakuin
 # Ningen Fushin no Boukensha-tachi ga Sekai wo Sukuu you desu https://www.ningenfushin-anime.jp/ #人間不信 @ningenfushinPR
 # Oniichan wa Oshimai! https://onimai.jp/ #おにまい @onimai_anime
+# Ooyukiumi no Kaina https://ooyukiumi.net/ #大雪海のカイナ @ooyukiumi_kaina
 # Otonari no Tenshi-sama ni Itsunomanika Dame Ningen ni Sareteita Ken https://otonarino-tenshisama.jp/ #お隣の天使様 @tenshisama_PR
 # Rougo ni Sonaete Isekai de 8-manmai no Kinka wo Tamemasu https://roukin8-anime.com/ #ろうきん8 #roukin8 @roukin8_anime
 # Saikyou Onmyouji no Isekai Tenseiki https://saikyo-onmyouji.asmik-ace.co.jp/ #最強陰陽師 @saikyo_onmyouji
@@ -989,6 +990,47 @@ class OnimaiDownload(Winter2023AnimeDownload, NewsTemplate):
         self.create_cache_file(cache_filepath, processed, num_processed)
 
 
+# Ooyukiumi no Kaina
+class OoyukiumiDownload(Winter2023AnimeDownload, NewsTemplate):
+    title = 'Ooyukiumi no Kaina'
+    keywords = [title, 'Kaina of the Great Snow Sea']
+    website = 'https://ooyukiumi.net/'
+    twitter = 'ooyukiumi_kaina'
+    hashtags = '大雪海のカイナ'
+    folder_name = 'ooyukiumi'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.article__list',
+                                    title_select='.article__listtitle', date_select='.article__listtime',
+                                    id_select='a')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('kv', self.PAGE_PREFIX + 'assets/img/top/kv.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'assets/img/character/character%s_main.jpg'
+        self.download_by_template(folder, template, 1, 1)
+
+
 # Otonari no Tenshi-sama ni Itsunomanika Dame Ningen ni Sareteita Ken
 class OtonarinoTenshisamaDownload(Winter2023AnimeDownload, NewsTemplate):
     title = 'Otonari no Tenshi-sama ni Itsunomanika Dame Ningen ni Sareteita Ken'
@@ -1704,7 +1746,7 @@ class TsunliseDownload(Winter2023AnimeDownload, NewsTemplate):
 
 
 # Vinland Saga Season 2
-class VinlandSaga2Download(Winter2023AnimeDownload, NewsTemplate):
+class VinlandSaga2Download(Winter2023AnimeDownload):
     title = 'Vinland Saga Season 2'
     keywords = [title, '2nd']
     website = 'https://vinlandsaga.jp/'
