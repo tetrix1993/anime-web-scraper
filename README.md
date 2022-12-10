@@ -134,6 +134,7 @@ The premiere date for the anime listed here has not been announced.
 * [Itai no wa Iya nano de Bougyoryoku ni Kyokufuri Shitai to Omoimasu. 2](https://bofuri.jp/)
 * [Kaiko sareta Ankoku Heishi (30-dai) no Slow na Second Life](https://ankokuheishi-anime.com/)
 * [Kami-tachi ni Hirowareta Otoko 2](https://kamihiro-anime.com/)
+* [Koori Zokusei Danshi to Cool na Douryou Joshi](https://icpc-anime.com/)
 * [Kubo-san wa Mob wo Yurusanai](https://kubosan-anime.jp/)
 * [Kyokou Suiri Season 2](https://kyokousuiri.jp/)
 * [Maou Gakuin no Futekigousha: Shijou Saikyou no Maou no Shiso, Tensei shite Shison-tachi no Gakkou e II](https://maohgakuin.com/)

@@ -13,6 +13,7 @@ import os
 # Itai no wa https://bofuri.jp/story/ #防振り #bofuri @bofuri_anime
 # Kaiko sareta Ankoku Heishi (30-dai) no Slow na Second Life https://ankokuheishi-anime.com/ #暗黒兵士 @ankokuheishi_PR
 # Kami-tachi ni Hirowareta Otoko 2 https://kamihiro-anime.com/ #神達に拾われた男 @kamihiro_anime
+# Koori Zokusei Danshi to Cool na Douryou Joshi https://icpc-anime.com/ #氷属性男子 @ice_cool_anime
 # Kubo-san wa Mob wo Yurusanai https://kubosan-anime.jp/ #久保さん @kubosan_anime
 # Kyokou Suiri S2 https://kyokousuiri.jp/ #虚構推理 @kyokou_suiri
 # Maou Gakuin no Futekigousha 2nd Season https://maohgakuin.com/ #魔王学院 @maohgakuin
@@ -571,6 +572,81 @@ class KamihiroDownload(Winter2023AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + '2nd/wp-content/themes/kamihiro2-teaser/_assets/images/char/detail/char%s_pc.png'
         self.download_by_template(folder, template, 2, 1)
+
+
+# Koori Zokusei Danshi to Cool na Douryou Joshi
+class KooriZokuseiDanshiDownload(Winter2023AnimeDownload, NewsTemplate):
+    title = 'Koori Zokusei Danshi to Cool na Douryou Joshi'
+    keywords = [title, 'The Ice Guy and His Cool Female Colleague']
+    website = 'https://icpc-anime.com/'
+    twitter = 'ice_cool_anime'
+    hashtags = '氷属性男子'
+    folder_name = 'koori-zokusei-danshi'
+
+    PAGE_PREFIX = website
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, paging_type=3, paging_suffix='?page=%s',
+                                    article_select='.c-News__item', date_select='.c-News__date', date_separator=' ',
+                                    title_select='.c-News__title', id_select='a', a_tag_start_text_to_remove='./',
+                                    a_tag_prefix=news_url, next_page_select='.c-Pager__item', next_page_eval_index=-1,
+                                    next_page_eval_index_class='-current')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('kv', self.PAGE_PREFIX + '/dist/img/top/kv.jpg')
+        self.add_to_image_list('kv_news', self.PAGE_PREFIX + '/dist/img/news/article/news34/kv.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        data_modal_names = []
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            divs = soup.select('.p-Character__item')
+            self.image_list = []
+            for div in divs:
+                images = div.select('img[src].p-image-item')
+                if len(images) == 0:
+                    continue
+                image = images[0]
+                image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+
+                # Modal
+                if div.has_attr('data-modal_name'):
+                    data_modal_names.append(div['data-modal_name'])
+                else:
+                    modal_divs = div.select('div[data-modal_name]')
+                    if len(modal_divs) > 0:
+                        data_modal_names.append(modal_divs[0]['data-modal_name'])
+            self.download_image_list(folder)
+
+            for data_modal_name in data_modal_names:
+                modal_image_url_base = self.PAGE_PREFIX + f'dist/img/character/chara_modal_{data_modal_name}'
+                modal_image_url = modal_image_url_base + '.png'
+                modal_image_name = f'chara_modal_{data_modal_name}'
+                if self.is_image_exists(modal_image_name, folder):
+                    continue
+                modal_image_filepath = folder + '/' + modal_image_name
+                result = self.download_image(modal_image_url, modal_image_filepath)
+                if result == -1:
+                    new_image_url = modal_image_url_base + '.jpg'
+                    self.download_image(new_image_url, modal_image_filepath)
+        except Exception as e:
+            self.print_exception(e, 'Character')
 
 
 # Kubo-san wa Mob wo Yurusanai
