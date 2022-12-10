@@ -30,6 +30,7 @@ import os
 # Tomo-chan wa Onnanoko! https://tomo-chan.jp/ #tomochan @tomo_chan_ani
 # Tondemo Skill de Isekai Hourou Meshi https://tondemoskill-anime.com/ #とんでもスキル #tondemo_skill @tonsuki_anime
 # Tsundere Akuyaku Reijou Liselotte to Jikkyou no Endou-kun to Kaisetsu no Kobayashi-san http://tsunlise-pr.com/ #ツンリゼ @tsunlise_pr
+# Vinland Saga S2 https://vinlandsaga.jp/
 
 
 # Winter 2023 Anime
@@ -1599,6 +1600,9 @@ class TondemoSkillDownload(Winter2023AnimeDownload, NewsTemplate):
 
     PAGE_PREFIX = website
 
+    def __init__(self):
+        super().__init__()
+
     def run(self):
         self.download_episode_preview()
         self.download_news()
@@ -1655,6 +1659,9 @@ class TsunliseDownload(Winter2023AnimeDownload, NewsTemplate):
 
     PAGE_PREFIX = website
 
+    def __init__(self):
+        super().__init__()
+
     def run(self):
         self.download_episode_preview()
         self.download_news()
@@ -1694,3 +1701,24 @@ class TsunliseDownload(Winter2023AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'wp/wp-content/themes/tunlise-honban-theme/images/chara-pic%s.png'
         self.download_by_template(folder, template, 1, 1)
+
+
+# Vinland Saga Season 2
+class VinlandSaga2Download(Winter2023AnimeDownload, NewsTemplate):
+    title = 'Vinland Saga Season 2'
+    keywords = [title, '2nd']
+    website = 'https://vinlandsaga.jp/'
+    twitter = 'V_SAGA_ANIME'
+    hashtags = ['VINLAND_SAGA', 'ヴィンランド・サガ']
+    folder_name = 'vinlandsaga2'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)

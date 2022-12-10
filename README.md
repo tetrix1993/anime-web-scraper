@@ -151,6 +151,7 @@ The premiere date for the anime listed here has not been announced.
 * [Tomo-chan wa Onnanoko!](https://tomo-chan.jp/)
 * [Tondemo Skill de Isekai Hourou Meshi](https://tondemoskill-anime.com/)
 * [Tsundere Akuyaku Reijou Liselotte to Jikkyou no Endou-kun to Kaisetsu no Kobayashi-san](https://tsunlise-pr.com/)
+* [Vinland Saga Season 2](https://vinlandsaga.jp/)
 
 ### Fall 2022 Anime
 * [4-nin wa Sorezore Uso wo Tsuku](https://4uso-anime.com/)
