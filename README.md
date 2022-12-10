@@ -126,6 +126,7 @@ The premiere date for the anime listed here has not been announced.
 ### Winter 2023 Anime
 * [Ayakashi Triangle](https://ayakashitriangle-anime.com/)
 * [Benriya Saitou-san, Isekai ni Iku](https://saitou-anime.com/)
+* [Buddy Daddies](https://buddy-animeproject.com/)
 * [Eiyuuou, Bu wo Kiwameru Tame Tenseisu: Soshite, Sekai Saikyou no Minarai Kishi](https://auo-anime.com/)
 * [Hyouken no Majutsushi ga Sekai wo Suberu](http://www.tbs.co.jp/anime/hyouken/)
 * [Ijiranaide, Nagatoro-san 2nd Attack](https://www.nagatorosan.jp/)

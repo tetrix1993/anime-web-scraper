@@ -5,6 +5,7 @@ import os
 
 # Ayakashi Triangle https://ayakashitriangle-anime.com/ #あやかしトライアングル #あやトラ @ayakashi_anime
 # Benriya Saitou-san, Isekai ni Iku https://saitou-anime.com/ #便利屋斎藤さん @saitou_anime
+# Buddy Daddies https://buddy-animeproject.com/ #バディダディ @BuddyD_project
 # Eiyuuou, Bu wo Kiwameru Tame Tenseisu: Soshite, Sekai Saikyou no Minarai Kishi https://auo-anime.com/ #英雄王 @auo_anime
 # Hyouken no Majutsushi ga Sekai wo Suberu http://www.tbs.co.jp/anime/hyouken/ #冰剣の魔術師 #hyouken @hyouken_pr
 # Ijiranaide, Nagatoro-san 2nd Attack https://www.nagatorosan.jp/ #長瀞さん @nagatoro_tv
@@ -148,6 +149,58 @@ class BenriyaSaitouDownload(Winter2023AnimeDownload, NewsTemplate2):
         prefix = self.PAGE_PREFIX + 'core_sys/images/main/tz/chara/chara_%s'
         templates = [prefix + '.png', prefix + '_face.png']
         self.download_by_template(folder, templates, 2, 1, prefix='tz_')
+
+
+# Buddy Daddies
+class BuddyDaddiesDownload(Winter2023AnimeDownload, NewsTemplate):
+    title = 'Buddy Daddies'
+    keywords = [title]
+    website = 'https://buddy-animeproject.com/'
+    twitter = 'BuddyD_project'
+    hashtags = 'バディダディ'
+    folder_name = 'buddy-daddies'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, paging_type=1, article_select='.newsList',
+                                    date_select='.newsList__date time', title_select='.newsList__ttl span',
+                                    id_select='a', a_tag_prefix=news_url, next_page_select='.pagination__next')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_news', self.PAGE_PREFIX + 'news/SYS/CONTENTS/4f4398ff-a52c-4179-8717-7e3963739508')
+        self.add_to_image_list('kv', self.PAGE_PREFIX + 'assets/img/top/visual/mv2/mv2_visual.jpg')
+        self.add_to_image_list('kv_news', self.PAGE_PREFIX + 'news/SYS/CONTENTS/5f4446c0-248d-42ac-97e7-4db68bb21042')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            self.image_list = []
+            images = soup.select('.chara_img img[src]')
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'].replace('./', '')
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
 
 
 # Eiyuuou, Bu wo Kiwameru Tame Tenseisu: Soshite, Sekai Saikyou no Minarai Kishi
@@ -585,6 +638,9 @@ class KooriZokuseiDanshiDownload(Winter2023AnimeDownload, NewsTemplate):
 
     PAGE_PREFIX = website
 
+    def __init__(self):
+        super().__init__()
+
     def run(self):
         self.download_episode_preview()
         self.download_news()
@@ -605,8 +661,8 @@ class KooriZokuseiDanshiDownload(Winter2023AnimeDownload, NewsTemplate):
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         self.image_list = []
-        self.add_to_image_list('kv', self.PAGE_PREFIX + '/dist/img/top/kv.jpg')
-        self.add_to_image_list('kv_news', self.PAGE_PREFIX + '/dist/img/news/article/news34/kv.jpg')
+        self.add_to_image_list('kv', self.PAGE_PREFIX + 'dist/img/top/kv.jpg')
+        self.add_to_image_list('kv_news', self.PAGE_PREFIX + 'dist/img/news/article/news34/kv.jpg')
         self.download_image_list(folder)
 
     def download_character(self):
