@@ -25,6 +25,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Tensei shitara Dainana Ouji Datta node, Kimama ni Majutsu wo Kiwamemasu https://dainanaoji.com/ #第七王子 @dainanaoji_pro
 # Tonikaku Kawaii S2 http://tonikawa.com/ #トニカクカワイイ #tonikawa @tonikawa_anime
 # Vlad Love https://www.vladlove.com/index.html #ぶらどらぶ #vladlove @VLADLOVE_ANIME
+# Watashi no Oshi wa Akuyaku Reijou. https://wataoshi-anime.com/ #わたおし #wataoshi #ILTV @wataoshi_anime
 # Yamada-kun to Lv999 no Koi wo Suru https://yamadalv999-anime.com/ #山田999 @yamada999_anime
 # Yumemiru Danshi wa Genjitsushugisha https://yumemirudanshi.com/ #夢見る男子 @yumemiru_anime
 # Yuusha ga Shinda! https://heroisdead.com/ #勇者が死んだ @yuusyagasinda
@@ -994,6 +995,62 @@ class VladLoveDownload(UnconfirmedDownload):
                 self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+
+# Watashi no Oshi wa Akuyaku Reijou.
+class WataoshiDownload(UnconfirmedDownload, NewsTemplate):
+    title = 'Watashi no Oshi wa Akuyaku Reijou.'
+    keywords = [title, 'I\'m in Love with the Villainess']
+    website = 'https://wataoshi-anime.com/'
+    twitter = 'wataoshi_anime'
+    hashtags = ['わたおし', 'wataoshi', 'ILTV']
+    folder_name = 'wataoshi'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+        self.download_media()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, news_prefix='', article_select='#news li',
+                                    date_select='time', title_select='p', id_select='a', a_tag_prefix=self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/Fj120y9VIAAx9Jp?format=jpg&name=medium')
+        self.add_to_image_list('tz', self.PAGE_PREFIX + 'images/mainimg.png')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        prefix = self.PAGE_PREFIX + 'images/img_chara_'
+        templates = [prefix + '%s.png', prefix + 'face_%s.png']
+        self.download_by_template(folder, templates, 2, 1)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+
+        # Voices
+        voice_folder = folder + '/voice'
+        if not os.path.exists(voice_folder):
+            os.makedirs(voice_folder)
+        for i in range(99):
+            audio_name = f'chara_{str(i + 1).zfill(2)}.mp3'
+            audio_url = self.PAGE_PREFIX + 'mp3/' + audio_name
+            result = self.download_content(audio_url, voice_folder + '/' + audio_name)
+            if result == -1:
+                break
 
 
 # Yamada-kun to Lv999 no Koi wo Suru

@@ -102,6 +102,7 @@ The premiere date for the anime listed here has not been announced.
 * [Tearmoon Teikoku Monogatari: Dantoudai kara Hajimaru, Hime no Tensei Gyakuten Story](https://tearmoon-pr.com/)
 * [Tensei shitara Dainana Ouji Datta node, Kimama ni Majutsu wo Kiwamemasu](https://dainanaoji.com/)
 * [Tonikaku Kawaii 2nd Season](http://tonikawa.com/)
+* [Watashi no Oshi wa Akuyaku Reijou.](https://wataoshi-anime.com/)
 * [Yamada-kun to Lv999 no Koi wo Suru](https://yamadalv999-anime.com/)
 * [Yumemiru Danshi wa Genjitsushugisha](https://yumemirudanshi.com/)
 * [Yuusha ga Shinda!: Murabito no Ore ga Hotta Otoshiana ni Yuusha ga Ochita Kekka.](https://heroisdead.com/)
