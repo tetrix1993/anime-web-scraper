@@ -240,6 +240,7 @@ class EiyuKyoushitsuDownload(UnconfirmedDownload):
     def run(self):
         self.download_episode_preview()
         self.download_key_visual()
+        self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
@@ -249,6 +250,11 @@ class EiyuKyoushitsuDownload(UnconfirmedDownload):
         self.image_list = []
         self.add_to_image_list('eiyukyoushitsu_KV', self.PAGE_PREFIX + 'images/eiyukyoushitsu_KV.jpg')
         self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'images/chara_%s.png'
+        self.download_by_template(folder, template, 2, 1, prefix='tz_')
 
 
 # Goblin Slayer 2nd Season
