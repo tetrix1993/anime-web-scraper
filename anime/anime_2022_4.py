@@ -2190,7 +2190,7 @@ class ShinmaiRenkinDownload(Fall2022AnimeDownload, NewsTemplate2):
 
 
 # Shinobi no Ittoki
-class ShinobinoIttoki(Fall2022AnimeDownload, NewsTemplate):
+class ShinobinoIttokiDownload(Fall2022AnimeDownload, NewsTemplate):
     title = 'Shinobi no Ittoki'
     keywords = [title]
     website = 'https://ninja-ittoki.com/'
