@@ -28,6 +28,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Vlad Love https://www.vladlove.com/index.html #ぶらどらぶ #vladlove @VLADLOVE_ANIME
 # Watashi no Oshi wa Akuyaku Reijou. https://wataoshi-anime.com/ #わたおし #wataoshi #ILTV @wataoshi_anime
 # Yamada-kun to Lv999 no Koi wo Suru https://yamadalv999-anime.com/ #山田999 @yamada999_anime
+# Yozakura-san Chi no Daisakusen https://mission-yozakura-family.com/ #夜桜さんちの大作戦 #MissionYozakuraFamily @OfficialHitsuji
 # Yumemiru Danshi wa Genjitsushugisha https://yumemirudanshi.com/ #夢見る男子 @yumemiru_anime
 
 
@@ -1149,6 +1150,51 @@ class Yamada999Download(UnconfirmedDownload, NewsTemplate):
         self.add_to_image_list('tz_aniverse', 'https://aniverse-mag.com/wp-content/uploads/2022/09/259436eb01ba6f500f1c86345c70f63d.jpg')
         self.add_to_image_list('teaser_kv', self.PAGE_PREFIX + 'teaser/img/top/kv.jpg')
         self.download_image_list(folder)
+
+
+# Yozakura-san Chi no Daisakusen
+class YozakurasanDownload(UnconfirmedDownload, NewsTemplate2):
+    title = 'Yozakura-san Chi no Daisakusen'
+    keywords = [title, 'Mission: Yozakura Family']
+    website = 'https://mission-yozakura-family.com/'
+    twitter = 'OfficialHitsuji'
+    hashtags = ['夜桜さんちの大作戦', 'MissionYozakuraFamily']
+    folder_name = 'yozakurasan'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FkJB8aSVEAA5Xd1?format=jpg&name=medium')
+        self.download_image_list(folder)
+
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.kv__img img[src]')
+            self.image_list = []
+            for image in images:
+                if '/images/' in image['src']:
+                    image_url = self.PAGE_PREFIX + image['src']
+                    image_name = self.generate_image_name_from_url(image_url, 'images')
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
 
 
 # Yumemiru Danshi wa Genjitsushugisha

@@ -105,6 +105,7 @@ The premiere date for the anime listed here has not been announced.
 * [Unnamed Memory](https://unnamedmemory.com/)
 * [Watashi no Oshi wa Akuyaku Reijou.](https://wataoshi-anime.com/)
 * [Yamada-kun to Lv999 no Koi wo Suru](https://yamadalv999-anime.com/)
+* [Yozakura-san Chi no Daisakusen](https://mission-yozakura-family.com/)
 * [Yumemiru Danshi wa Genjitsushugisha](https://yumemirudanshi.com/)
 
 ### Summer 2023 Anime
