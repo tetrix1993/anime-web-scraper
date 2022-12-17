@@ -109,6 +109,7 @@ The premiere date for the anime listed here has not been announced.
 
 ### Summer 2023 Anime
 * [Higeki no Genkyou to Naru Saikyou Gedou Last Boss Joou wa Tami no Tame ni Tsukushimasu.](https://lastame.com/)
+* [Okashi na Tensei](https://okashinatensei-pr.com/)
 * [Tsuyokute New Saga](https://tsuyosaga-pr.com/)
 
 ### Spring 2023 Anime

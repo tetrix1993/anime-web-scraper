@@ -2,6 +2,7 @@ from anime.main_download import MainDownload, NewsTemplate
 
 
 # Higeki no Genkyou to Naru Saikyou Gedou Last Boss Joou wa Tami no Tame ni Tsukushimasu. https://lastame.com/ #ラス為 @lastame_pr
+# Okashi na Tensei https://okashinatensei-pr.com/ #おかしな転生 @okashinatensei
 # Tsuyokute New Saga https://tsuyosaga-pr.com/ #つよサガ @tsuyosaga_pr
 
 
@@ -54,6 +55,52 @@ class LastameDownload(Summer2023AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'wp/wp-content/themes/original/assets/img/character01-main%s.png'
         self.download_by_template(folder, template, 2, start=1, end=3)
+
+
+# Okashi na Tensei
+class OkashinaTenseiDownload(Summer2023AnimeDownload, NewsTemplate):
+    title = 'Okashi na Tensei'
+    keywords = [title, 'Sweet Reincarnation']
+    website = 'https://okashinatensei-pr.com/'
+    twitter = 'okashinatensei'
+    hashtags = 'おかしな転生'
+    folder_name = 'okashinatensei'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        pass
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_natalie', 'https://ogre.natalie.mu/media/news/comic/2022/1215/okashinatensei_teaser.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'wp/wp-content/themes/okashinatensei/static/character/%s/main.png'
+        for i in range(10):
+            number = str(i + 1).zfill(2)
+            image_name = 'tz_char' + number
+            if self.is_image_exists(image_name, folder):
+                continue
+            image_url = template % number
+            result = self.download_image(image_url, folder + '/' + image_name)
+            if result == -1:
+                break
 
 
 # Tsuyokute New Saga
