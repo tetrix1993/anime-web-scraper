@@ -500,13 +500,15 @@ class ShiroSeijoDownload(Spring2023AnimeDownload, NewsTemplate):
         self.image_list = []
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FdZsEiyWYAA1hfB?format=jpg&name=4096x4096')
         self.add_to_image_list('top_mv_character', self.PAGE_PREFIX + 'assets/img/top/mv_character.png')
+        self.add_to_image_list('kv_tw', 'https://pbs.twimg.com/media/Fj7f8HNUUAASOrr?format=jpg&name=4096x4096')
+        self.add_to_image_list('top_mv2_character', self.PAGE_PREFIX + 'assets/img/top/mv2_character.jpg')
         self.download_image_list(folder)
 
     def download_character(self):
         folder = self.create_character_directory()
         try:
             soup = self.get_soup(self.PAGE_PREFIX)
-            images = soup.select('.movieCharaImg img[src]')
+            images = soup.select('.characterList img[src]')
             self.image_list = []
             for image in images:
                 image_url = self.PAGE_PREFIX + image['src'][2:]
