@@ -106,7 +106,6 @@ The premiere date for the anime listed here has not been announced.
 * [Watashi no Oshi wa Akuyaku Reijou.](https://wataoshi-anime.com/)
 * [Yamada-kun to Lv999 no Koi wo Suru](https://yamadalv999-anime.com/)
 * [Yumemiru Danshi wa Genjitsushugisha](https://yumemirudanshi.com/)
-* [Yuusha ga Shinda!: Murabito no Ore ga Hotta Otoshiana ni Yuusha ga Ochita Kekka.](https://heroisdead.com/)
 
 ### Summer 2023 Anime
 * [Higeki no Genkyou to Naru Saikyou Gedou Last Boss Joou wa Tami no Tame ni Tsukushimasu.](https://lastame.com/)
@@ -124,6 +123,7 @@ The premiere date for the anime listed here has not been announced.
 * [Shiro Seijo to Kuro Bokushi](https://shiroseijyo-anime.com/)
 * [Tensei Kizoku no Isekai Boukenroku](https://www.tensei-kizoku.jp/)
 * [Watashi no Yuri wa Oshigoto desu!](https://watayuri-anime.com/)
+* [Yuusha ga Shinda!](https://heroisdead.com/)
 
 ### Winter 2023 Anime
 * [Ayakashi Triangle](https://ayakashitriangle-anime.com/)

@@ -12,6 +12,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Shiro Seijo to Kuro Bokushi https://shiroseijyo-anime.com/ @shiroseijyo_tv #白聖女と黒牧師
 # Tensei Kizoku no Isekai Boukenroku https://www.tensei-kizoku.jp/ #転生貴族 @tenseikizoku
 # Watashi no Yuri wa Oshigoto desu! https://watayuri-anime.com/ #わたゆり #私の百合はお仕事です @watayuri_anime
+# Yuusha ga Shinda! https://heroisdead.com/ #勇者が死んだ @yuusyagasinda
 
 
 # Spring 2023 Anime
@@ -602,3 +603,70 @@ class WatayuriDownload(Spring2023AnimeDownload, NewsTemplate):
         self.add_to_image_list('tz_mv1', self.PAGE_PREFIX + 'assets/img/top/mv1.jpg')
         self.add_to_image_list('tz_mv2', self.PAGE_PREFIX + 'assets/img/top/mv2.jpg')
         self.download_image_list(folder)
+
+
+# Yuusha ga Shinda!
+class YuushagaShindaDownload(Spring2023AnimeDownload, NewsTemplate):
+    title = 'Yuusha ga Shinda!'
+    keywords = [title, 'The Legendary Hero Is Dead!']
+    website = 'https://heroisdead.com/'
+    twitter = 'yuusyagasinda'
+    hashtags = '勇者が死んだ'
+    folder_name = 'yuushagashinda'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-list-item',
+                                    date_select='.news-list-item__date', title_select='.news-list-item__title',
+                                    id_select='a', a_tag_start_text_to_remove='/', a_tag_prefix=self.PAGE_PREFIX,
+                                    date_func=lambda x: x.replace('年', '.').replace('月', '.').replace('日', ''))
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_aniverse', 'https://aniverse-mag.com/wp-content/uploads/2022/04/4576fa0e88a0464f6a9b6e8844e05dbd-e1651058246996.jpg')
+        self.add_to_image_list('tz_visual_01_chara', self.PAGE_PREFIX + 'img/teaser/visual_01_chara.png')
+        self.add_to_image_list('vis_kneesock', 'https://pbs.twimg.com/media/FilDh8XagAQnZU0?format=jpg&name=large')
+        self.add_to_image_list('kv2_tw', 'https://pbs.twimg.com/media/FkGRdxEUcAECPlX?format=jpg&name=large')
+        self.download_image_list(folder)
+
+        template = self.PAGE_PREFIX + 'img/home/visual_%s_chara.png'
+        self.download_by_template(folder, template, 2, 1, prefix='home_')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        prefix = self.PAGE_PREFIX + 'character/'
+        self.image_list = []
+        try:
+            obj = self.get_json(prefix + 'chara_data.php')
+            if 'charas' in obj:
+                for chara in obj['charas']:
+                    if 'images' in chara:
+                        if 'visuals' in chara['images']:
+                            for visual in chara['images']['visuals']:
+                                if 'image' in visual:
+                                    image_url = prefix + visual['image'].replace('./', '').split('?')[0]
+                                    image_name = self.extract_image_name_from_url(image_url)
+                                    self.add_to_image_list(image_name, image_url)
+                        if 'faces' in chara['images']:
+                            for face in chara['images']['faces']:
+                                image_url = prefix + face.replace('./', '').split('?')[0]
+                                image_name = self.extract_image_name_from_url(image_url)
+                                self.add_to_image_list(image_name, image_url)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+        self.download_image_list(folder)
+
