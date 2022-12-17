@@ -533,6 +533,47 @@ class KimizeroDownload(UnconfirmedDownload, NewsTemplate2):
         self.add_to_image_list('tz_loading_kv', self.PAGE_PREFIX + 'core_sys/images/main/tz/loading_kv.jpg')
         self.download_image_list(folder)
 
+        sub_folder = self.create_custom_directory(folder.split('/')[-1] + '/news')
+        cache_filepath = sub_folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'news/')
+            while True:
+                stop = False
+                items = soup.select('#list_01 a[href]')
+                for item in items:
+                    if not item['href'].startswith('../') or '/news/' not in item['href'] \
+                            or not item['href'].endswith('.html'):
+                        continue
+                    page_name = item['href'].split('/')[-1].split('.html')[0]
+                    if page_name in processed:
+                        stop = True
+                        break
+                    title = item.text.strip()
+                    if 'ビジュアル' in title or 'イラスト' in title:
+                        news_soup = self.get_soup(self.PAGE_PREFIX + item['href'].replace('../', ''))
+                        if news_soup is not None:
+                            images = news_soup.select('#news_block img[src]')
+                            self.image_list = []
+                            for image in images:
+                                image_url = self.PAGE_PREFIX + image['src'].replace('../', '').split('?')[0]
+                                if '/news/' not in image_url:
+                                    continue
+                                image_name = self.generate_image_name_from_url(image_url, 'news') \
+                                    .replace('_block_', '_')
+                                self.add_to_image_list(image_name, image_url)
+                            self.download_image_list(sub_folder)
+                    processed.append(page_name)
+                if stop:
+                    break
+                next_page = soup.select('.nb_nex a[href]')
+                if len(next_page) == 0:
+                    break
+                soup = self.get_soup(self.PAGE_PREFIX + next_page[0]['href'].replace('../', ''))
+        except Exception as e:
+            self.print_exception(e, 'Key Visual News')
+        self.create_cache_file(cache_filepath, processed, num_processed)
+
 
 # Level 1 dakedo Unique Skill de Saikyou desu
 class Level1Download(UnconfirmedDownload, NewsTemplate):
