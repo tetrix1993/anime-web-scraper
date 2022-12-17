@@ -518,6 +518,7 @@ class KimizeroDownload(UnconfirmedDownload, NewsTemplate2):
         self.download_episode_preview()
         self.download_news()
         self.download_key_visual()
+        self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
@@ -573,6 +574,21 @@ class KimizeroDownload(UnconfirmedDownload, NewsTemplate2):
         except Exception as e:
             self.print_exception(e, 'Key Visual News')
         self.create_cache_file(cache_filepath, processed, num_processed)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            self.image_list = []
+            images = soup.select('.chara__stand img[src]')
+            for image in images:
+                if '/chara/' in image['src']:
+                    image_url = self.PAGE_PREFIX + image['src']
+                    image_name = 'tz_' + self.generate_image_name_from_url(image_url, 'chara')
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
 
 
 # Level 1 dakedo Unique Skill de Saikyou desu
