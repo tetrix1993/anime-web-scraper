@@ -118,6 +118,7 @@ The premiere date for the anime listed here has not been announced.
 * [Boku no Kokoro no Yabai Yatsu](https://bokuyaba-anime.com/)
 * [Isekai de Cheat Skill wo Te ni Shita Ore wa, Genjitsu Sekai wo mo Musou Suru: Level Up wa Jinsei wo Kaeta](https://www.iseleve.com/)
 * [Isekai wa Smartphone to Tomo ni. 2](http://isesuma-anime.jp/)
+* [Kawaisugi Crisis](https://kawaisugi.com/)
 * [Kuma Kuma Kuma Bear Punch!](https://kumakumakumabear.com/)
 * [Masamune-kun no Revenge R](https://masamune-tv.com/)
 * [Megami no Café Terrace](https://goddess-cafe.com/)

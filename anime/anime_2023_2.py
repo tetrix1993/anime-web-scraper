@@ -4,6 +4,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Boku no Kokoro no Yabai Yatsu https://bokuyaba-anime.com/ #僕ヤバ #僕の心のヤバイやつ @bokuyaba_anime
 # Isekai de Cheat Skill wo Te ni Shita Ore wa https://iseleve.com　@iseleve_anime
 # Isekai wa Smartphone to Tomo ni. 2 http://isesuma-anime.jp/ #イセスマ @isesumaofficial
+# Kawaisugi Crisis https://kawaisugi.com/ #カワイスギクライシス @kawaisugicrisis
 # Kuma Kuma Kuma Bear Punch! https://kumakumakumabear.com/ #くまクマ熊ベアー #kumabear @kumabear_anime
 # Masamune-kun no Revenge R https://masamune-tv.com/ #MASA_A @masamune_tv
 # Megami no Cafe Terrace https://goddess-cafe.com/ #女神のカフェテラス @goddess_cafe_PR
@@ -191,6 +192,71 @@ class Isesuma2Download(Spring2023AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+
+# Kawaisugi Crisis https://kawaisugi.com/ #カワイスギクライシス @kawaisugicrisis
+class KawaisugiCrisisDownload(Spring2023AnimeDownload, NewsTemplate):
+    title = 'Kawaisugi Crisis'
+    keywords = [title, 'Too Cute Crisis']
+    website = 'https://kawaisugi.com/'
+    twitter = 'kawaisugicrisis'
+    hashtags = 'カワイスギクライシス'
+    folder_name = 'kawaisugicrisis'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.kwsg_contents_top_news_list_item',
+                                    date_select='.kwsg_contents_top_news_list_item_left',
+                                    title_select='.kwsg_contents_top_news_list_item_right', id_select='a',
+                                    next_page_select='.page-numbers', next_page_eval_index=-1,
+                                    next_page_eval_index_class='current')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        template = self.PAGE_PREFIX + 'common/images/top_kv%s.jpg'
+        self.download_by_template(folder, template, 2, 2)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character')
+            a_tags = soup.select('#kwsg_contents_character_list a[href]')
+            for a_tag in a_tags:
+                if '/character/' not in a_tag['href']:
+                    continue
+                page = a_tag['href'].split('/')[-1]
+                if page in processed:
+                    continue
+                chara_soup = self.get_soup(a_tag['href'])
+                if chara_soup is None:
+                    continue
+                self.image_list = []
+                images = chara_soup.select('#kwsg_contents_character_body img[src]')
+                for image in images:
+                    image_url = image['src']
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+                if len(self.image_list) > 0:
+                    processed.append(page)
+                self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Kuma Kuma Kuma Bear Punch!
