@@ -509,6 +509,36 @@ class Bofuri2Download(Winter2023AnimeDownload):
         self.add_to_image_list('vis-s2', self.PAGE_PREFIX + 'assets/news/vis-s2.jpg')
         self.download_image_list(folder)
 
+        sub_folder = self.create_custom_directory(folder.split('/')[-1] + '/news')
+        cache_filepath = sub_folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'news/')
+            items = soup.select('section.news-data a[href]')
+            for item in items:
+                if not item['href'].endswith('.html'):
+                    continue
+                page_name = item['href'].split('/')[-1].split('.html')[0]
+                if page_name in processed:
+                    break
+                title = item.text.strip()
+                if 'ビジュアル' in title:
+                    news_soup = self.get_soup(self.PAGE_PREFIX + 'news/' + item['href'].replace('./', ''))
+                    if news_soup is not None:
+                        images = news_soup.select('section.news-entry img[src]')
+                        self.image_list = []
+                        for image in images:
+                            image_url = self.PAGE_PREFIX + image['src'].replace('../', '').split('?')[0]
+                            if '/news/' not in image_url:
+                                continue
+                            image_name = self.generate_image_name_from_url(image_url, 'news')
+                            self.add_to_image_list(image_name, image_url)
+                        self.download_image_list(sub_folder)
+                processed.append(page_name)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual News')
+        self.create_cache_file(cache_filepath, processed, num_processed)
+
     def download_character(self):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'assets/character/%s.png'
