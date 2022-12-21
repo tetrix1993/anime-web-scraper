@@ -2840,7 +2840,7 @@ class BeastTamerDownload(Fall2022AnimeDownload, NewsTemplate):
     folder_name = 'beast-tamer'
 
     PAGE_PREFIX = website
-    FINAL_EPISODE = 12
+    FINAL_EPISODE = 13
     IMAGES_PER_EPISODE = 6
 
     def __init__(self):
