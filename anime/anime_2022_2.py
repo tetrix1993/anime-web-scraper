@@ -2432,7 +2432,7 @@ class SpyFamilyDownload(Spring2022AnimeDownload, NewsTemplate):
     folder_name = 'spy-family'
 
     PAGE_PREFIX = website
-    FINAL_EPISODE = 24
+    FINAL_EPISODE = 25
     IMAGES_PER_EPISODE = 6
 
     def run(self):
