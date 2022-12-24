@@ -123,18 +123,58 @@ class BenriyaSaitouDownload(Winter2023AnimeDownload, NewsTemplate2):
     folder_name = 'benriya-saitou'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
 
     def __init__(self):
         super().__init__()
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_external()
         self.download_news()
         self.download_key_visual()
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        yt_folder, yt_episodes = self.init_youtube_thumbnail_variables()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/01.html')
+            trs = soup.select('#ContentsListUnit02 tr[class]')
+            for tr in trs:
+                a_tags = tr.select('a[href]')
+                if len(a_tags) == 0:
+                    continue
+                try:
+                    episode = str(int(a_tags[0].text.replace('#', ''))).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1') and episode in yt_episodes:
+                    continue
+                if episode == '01':
+                    ep_soup = soup
+                else:
+                    ep_soup = self.get_soup(self.PAGE_PREFIX + a_tags[0]['href'].replace('../', ''))
+                if ep_soup is None:
+                    continue
+                self.image_list = []
+                images = ep_soup.select('ul.tp5 img[src]')
+                for i in range(len(images)):
+                    image_url = self.PAGE_PREFIX + images[i]['src'].split('?')[0].replace('../', '').replace('sn_', '')
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+
+                yt_tag = ep_soup.select('.atl_inner iframe[src]')
+                if len(yt_tag) > 0 and 'youtube' in yt_tag[0]['src']:
+                    yt_id = yt_tag[0]['src'].split('/')[-1]
+                    self.download_youtube_thumbnail_by_id(yt_id, yt_folder, episode)
+        except Exception as e:
+            self.print_exception(e)
+
+    def download_episode_preview_external(self):
+        keywords = ['便利屋斎藤さん、異世界に行く', 'カット']
+        AniverseMagazineScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                end_date='20220909', download_id=self.download_id).run()
 
     def download_news(self):
         self.download_template_news(self.PAGE_PREFIX)
@@ -146,11 +186,28 @@ class BenriyaSaitouDownload(Winter2023AnimeDownload, NewsTemplate2):
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FYMHT1jVUAAUtmQ?format=jpg&name=medium')
         self.download_image_list(folder)
 
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            self.image_list = []
+            images = soup.select('.kvSlide__img.-kv1 img[src]')
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src']
+                if '/main/' not in image_url:
+                    continue
+                image_name = self.generate_image_name_from_url(image_url, 'main')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
     def download_character(self):
         folder = self.create_character_directory()
-        prefix = self.PAGE_PREFIX + 'core_sys/images/main/tz/chara/chara_%s'
-        templates = [prefix + '.png', prefix + '_face.png']
-        self.download_by_template(folder, templates, 2, 1, prefix='tz_')
+        # prefix = self.PAGE_PREFIX + 'core_sys/images/main/tz/chara/chara_%s'
+        # templates = [prefix + '.png', prefix + '_face.png']
+        # self.download_by_template(folder, templates, 2, 1, prefix='tz_')
+
+        template = self.PAGE_PREFIX + 'core_sys/images/main/cont/chara/chara_%s.png'
+        self.download_by_template(folder, template, 2, 1)
 
 
 # Buddy Daddies
