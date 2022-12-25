@@ -105,7 +105,6 @@ The premiere date for the anime listed here has not been announced.
 * [Tonikaku Kawaii 2nd Season](http://tonikawa.com/)
 * [Unnamed Memory](https://unnamedmemory.com/)
 * [Watashi no Oshi wa Akuyaku Reijou.](https://wataoshi-anime.com/)
-* [Yamada-kun to Lv999 no Koi wo Suru](https://yamadalv999-anime.com/)
 * [Yozakura-san Chi no Daisakusen](https://mission-yozakura-family.com/)
 * [Yumemiru Danshi wa Genjitsushugisha](https://yumemirudanshi.com/)
 
@@ -127,6 +126,7 @@ The premiere date for the anime listed here has not been announced.
 * [Shiro Seijo to Kuro Bokushi](https://shiroseijyo-anime.com/)
 * [Tensei Kizoku no Isekai Boukenroku](https://www.tensei-kizoku.jp/)
 * [Watashi no Yuri wa Oshigoto desu!](https://watayuri-anime.com/)
+* [Yamada-kun to Lv999 no Koi wo Suru](https://yamadalv999-anime.com/)
 * [Yuusha ga Shinda!](https://heroisdead.com/)
 
 ### Winter 2023 Anime

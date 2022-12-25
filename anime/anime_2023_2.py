@@ -13,6 +13,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Shiro Seijo to Kuro Bokushi https://shiroseijyo-anime.com/ @shiroseijyo_tv #白聖女と黒牧師
 # Tensei Kizoku no Isekai Boukenroku https://www.tensei-kizoku.jp/ #転生貴族 @tenseikizoku
 # Watashi no Yuri wa Oshigoto desu! https://watayuri-anime.com/ #わたゆり #私の百合はお仕事です @watayuri_anime
+# Yamada-kun to Lv999 no Koi wo Suru https://yamadalv999-anime.com/ #山田999 @yamada999_anime
 # Yuusha ga Shinda! https://heroisdead.com/ #勇者が死んだ @yuusyagasinda
 
 
@@ -709,6 +710,45 @@ class WatayuriDownload(Spring2023AnimeDownload, NewsTemplate):
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FStxiD1VIAEX1nk?format=jpg&name=4096x4096')
         self.add_to_image_list('tz_mv1', self.PAGE_PREFIX + 'assets/img/top/mv1.jpg')
         self.add_to_image_list('tz_mv2', self.PAGE_PREFIX + 'assets/img/top/mv2.jpg')
+        self.download_image_list(folder)
+
+
+# Yamada-kun to Lv999 no Koi wo Suru
+class Yamada999Download(Spring2023AnimeDownload, NewsTemplate):
+    title = 'Yamada-kun to Lv999 no Koi wo Suru'
+    keywords = [title, 'My Love Story with Yamada-kun at Lv999']
+    website = 'https://yamadalv999-anime.com/'
+    twitter = 'yamada999_anime'
+    hashtags = '山田999'
+    folder_name = 'yamada999'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.c-news__item',
+                                    date_select='.c-news__item-date', title_select='.c-news__item-ttl',
+                                    id_select='.c-news__item-link', a_tag_prefix=news_url, paging_type=1,
+                                    date_func=lambda x: '20' + x, a_tag_start_text_to_remove='./',
+                                    next_page_select='.c-pagination__count-item',
+                                    next_page_eval_index_class='is-current', next_page_eval_index=-1)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_aniverse', 'https://aniverse-mag.com/wp-content/uploads/2022/09/259436eb01ba6f500f1c86345c70f63d.jpg')
+        self.add_to_image_list('teaser_kv', self.PAGE_PREFIX + 'teaser/img/top/kv.jpg')
         self.download_image_list(folder)
 
 

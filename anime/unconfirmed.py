@@ -28,7 +28,6 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Unnamed Memory https://unnamedmemory.com/ #UnnamedMemory #アンメモ @Project_UM
 # Vlad Love https://www.vladlove.com/index.html #ぶらどらぶ #vladlove @VLADLOVE_ANIME
 # Watashi no Oshi wa Akuyaku Reijou. https://wataoshi-anime.com/ #わたおし #wataoshi #ILTV @wataoshi_anime
-# Yamada-kun to Lv999 no Koi wo Suru https://yamadalv999-anime.com/ #山田999 @yamada999_anime
 # Yozakura-san Chi no Daisakusen https://mission-yozakura-family.com/ #夜桜さんちの大作戦 #MissionYozakuraFamily @OfficialHitsuji
 # Yumemiru Danshi wa Genjitsushugisha https://yumemirudanshi.com/ #夢見る男子 @yumemiru_anime
 
@@ -1223,45 +1222,6 @@ class WataoshiDownload(UnconfirmedDownload, NewsTemplate):
             result = self.download_content(audio_url, voice_folder + '/' + audio_name)
             if result == -1:
                 break
-
-
-# Yamada-kun to Lv999 no Koi wo Suru
-class Yamada999Download(UnconfirmedDownload, NewsTemplate):
-    title = 'Yamada-kun to Lv999 no Koi wo Suru'
-    keywords = [title, 'My Love Story with Yamada-kun at Lv999']
-    website = 'https://yamadalv999-anime.com/'
-    twitter = 'yamada999_anime'
-    hashtags = '山田999'
-    folder_name = 'yamada999'
-
-    PAGE_PREFIX = website
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_news()
-        self.download_key_visual()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_news(self):
-        news_url = self.PAGE_PREFIX + 'news/'
-        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.c-news__item',
-                                    date_select='.c-news__item-date', title_select='.c-news__item-ttl',
-                                    id_select='.c-news__item-link', a_tag_prefix=news_url, paging_type=1,
-                                    date_func=lambda x: '20' + x, a_tag_start_text_to_remove='./',
-                                    next_page_select='.c-pagination__count-item',
-                                    next_page_eval_index_class='is-current', next_page_eval_index=-1)
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('tz_aniverse', 'https://aniverse-mag.com/wp-content/uploads/2022/09/259436eb01ba6f500f1c86345c70f63d.jpg')
-        self.add_to_image_list('teaser_kv', self.PAGE_PREFIX + 'teaser/img/top/kv.jpg')
-        self.download_image_list(folder)
 
 
 # Yozakura-san Chi no Daisakusen
