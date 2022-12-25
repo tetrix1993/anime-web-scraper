@@ -1650,11 +1650,25 @@ class TentenKakumeiDownload(Winter2023AnimeDownload, NewsTemplate):
         folder = self.create_key_visual_directory()
         self.image_list = []
         self.add_to_image_list('top_visual_01_v_001_pc', self.PAGE_PREFIX + 'images/top/visual_01/v_001_pc.jpg')
-        self.add_to_image_list('top_visual_02_v_002', self.PAGE_PREFIX + 'images/top/visual_02/v_002.jpg')
+        # self.add_to_image_list('top_visual_02_v_002', self.PAGE_PREFIX + 'images/top/visual_02/v_002.jpg')
         self.download_image_list(folder)
 
-        template = self.PAGE_PREFIX + 'images/news/p_%s.jpg'
-        self.download_by_template(folder, template, 3, 1, prefix='news_')
+        # template = self.PAGE_PREFIX + 'images/news/p_%s.jpg'
+        # self.download_by_template(folder, template, 3, 1, prefix='news_')
+
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.visual_wrap.pc img[src]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src']
+                if '/images/' not in image_url or 'visual' not in image_url:
+                    continue
+                image_name = self.generate_image_name_from_url(image_url, 'images')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
 
     def download_character(self):
         folder = self.create_character_directory()
