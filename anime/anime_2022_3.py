@@ -2699,6 +2699,36 @@ class Youzitsu2Download(Summer2022AnimeDownload, NewsTemplate):
         except Exception as e:
             self.print_exception(e, 'Key Visual')
 
+        # Calendar Visual download
+        sub_folder = self.create_custom_directory(folder.split('/')[-1] + '/news')
+        cache_filepath = sub_folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'news.html')
+            items = soup.select('.content-entry[id]')
+            for item in items:
+                article_id = item['id']
+                if article_id in processed:
+                    break
+                title_tag = item.select('.entry-title span')
+                if len(title_tag) == 0:
+                    continue
+                title = title_tag[0].text.strip()
+                if 'イラスト' in title and 'カレンダー' in title:
+                    images = item.select('img[src]')
+                    self.image_list = []
+                    for image in images:
+                        image_url = self.PAGE_PREFIX + image['src'].replace('./', '').split('?')[0]
+                        if '/news/' not in image_url:
+                            continue
+                        image_name = self.generate_image_name_from_url(image_url, 'news')
+                        self.add_to_image_list(image_name, image_url)
+                    self.download_image_list(sub_folder)
+                processed.append(article_id)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual News')
+        self.create_cache_file(cache_filepath, processed, num_processed)
+
     def download_media(self):
         folder = self.create_media_directory()
         try:
