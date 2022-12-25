@@ -220,18 +220,63 @@ class BuddyDaddiesDownload(Winter2023AnimeDownload, NewsTemplate):
     folder_name = 'buddy-daddies'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
 
     def __init__(self):
         super().__init__()
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_external()
         self.download_news()
         self.download_key_visual()
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        story_url = self.PAGE_PREFIX + 'story/'
+        yt_folder, yt_episodes = self.init_youtube_thumbnail_variables()
+        try:
+            soup = self.get_soup(story_url, decode=True)
+            story_list = soup.select('.story_tabLists')
+            if len(story_list) > 0:
+                a_tags = story_list[0].select('a[href]')
+                for a_tag in a_tags:
+                    span_tag = a_tag.select('span')
+                    try:
+                        ep_num = int(span_tag[0].text.replace('#', ''))
+                        if ep_num is None or ep_num < 1:
+                            continue
+                        episode = str(ep_num).zfill(2)
+                    except:
+                        continue
+                    if self.is_image_exists(episode + '_1') and episode in yt_episodes:
+                        continue
+                    if a_tag.has_attr('class') and 'is-current' in a_tag['class']:
+                        ep_soup = soup
+                    else:
+                        ep_soup = self.get_soup(story_url + a_tag['href'].replace('./', ''))
+                    if ep_soup is not None:
+                        images = ep_soup.select('.swiper-wrapper img[src]')
+                        self.image_list = []
+                        for i in range(len(images)):
+                            image_url = story_url + images[i]['src']
+                            image_name = episode + '_' + str(i + 1)
+                            self.add_to_image_list(image_name, image_url)
+                        self.download_image_list(self.base_folder)
+
+                        # You-Tube thumbnails
+                        button_tag = ep_soup.select('.story_movieWrap button[onclick]')
+                        if len(button_tag) > 0:
+                            onclick = button_tag[0]['onclick']
+                            if onclick.startswith("moviePlay('") and onclick.endswith("');"):
+                                self.download_youtube_thumbnail_by_id(onclick[11:-3], yt_folder, episode)
+        except Exception as e:
+            self.print_exception(e)
+
+    def download_episode_preview_external(self):
+        keywords = ['Buddy Daddies']
+        AniverseMagazineScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                end_date='20221225', download_id=self.download_id).run()
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + 'news/'
