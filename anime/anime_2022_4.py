@@ -1017,6 +1017,7 @@ class FuukoiDownload(Fall2022AnimeDownload, NewsTemplate2):
         self.add_to_image_list('tz_kv', image_prefix + 'main/tz/kv.jpg')
         self.add_to_image_list('tz_news', image_prefix + 'news/00000003/block/00000006/00000001.jpg')
         self.add_to_image_list('kv1', image_prefix + 'news/00000007/block/00000013/00000004.jpg')
+        self.add_to_image_list('Xmas2022', image_prefix + 'core_sys/images/main/home/Xmas2022.jpg')
         self.download_image_list(folder)
 
     def download_character(self):
