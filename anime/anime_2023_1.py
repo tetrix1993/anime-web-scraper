@@ -480,6 +480,8 @@ class InuhiroDownload(Winter2023AnimeDownload, NewsTemplate):
     folder_name = 'inuhiro'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 6
 
     def __init__(self):
         super().__init__()
@@ -491,7 +493,20 @@ class InuhiroDownload(Winter2023AnimeDownload, NewsTemplate):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        template = self.PAGE_PREFIX + 'assets/images/story/%s_%s.jpg'
+        try:
+            for i in range(self.FINAL_EPISODE):
+                episode = str(i + 1).zfill(2)
+                if self.is_image_exists(episode + '_' + str(self.IMAGES_PER_EPISODE)):
+                    continue
+                for j in range(self.IMAGES_PER_EPISODE):
+                    image_url = template % (str(i + 1).zfill(2), str(j + 1).zfill(2))
+                    image_name = episode + '_' + str(j + 1)
+                    result = self.download_image(image_url, self.base_folder + '/' + image_name)
+                    if result == -1:
+                        return
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='#news article',
