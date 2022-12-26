@@ -172,7 +172,7 @@ class BenriyaSaitouDownload(Winter2023AnimeDownload, NewsTemplate2):
             self.print_exception(e)
 
     def download_episode_preview_external(self):
-        keywords = ['便利屋斎藤さん、異世界に行く', 'カット']
+        keywords = ['便利屋斎藤さん、異世界に行く']
         AniverseMagazineScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE,
                                 end_date='20220909', download_id=self.download_id).run()
 
@@ -1325,18 +1325,44 @@ class Roukin8Download(Winter2023AnimeDownload, NewsTemplate):
     folder_name = 'roukin8'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 4
 
     def __init__(self):
         super().__init__()
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_external()
         self.download_news()
         self.download_key_visual()
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        template = self.PAGE_PREFIX + 'dist/assets/img/story/ep%s/img%s.'
+        template1 = template + 'png'
+        template2 = template + 'jpg'
+        try:
+            for i in range(1, self.FINAL_EPISODE + 1, 1):
+                episode = str(i).zfill(2)
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                for j in range(1, self.IMAGES_PER_EPISODE + 1, 1):
+                    image_url = template1 % (str(i), str(j))
+                    image_name = episode + '_' + str(j)
+                    result = self.download_image(image_url, self.base_folder + '/' + image_name)
+                    if result == -1:
+                        image_url = template2 % (str(i), str(j))
+                        result = self.download_image(image_url, self.base_folder + '/' + image_name)
+                        if result == -1:
+                            return
+        except Exception as e:
+            self.print_exception(e, 'Episode Preview')
+
+    def download_episode_preview_external(self):
+        keywords = ['⽼後に備えて異世界で8万枚の⾦貨を貯めます']
+        AniverseMagazineScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                end_date='20221226', download_id=self.download_id).run()
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.bl_vertPosts_item',
@@ -1694,7 +1720,7 @@ class TentenKakumeiDownload(Winter2023AnimeDownload, NewsTemplate):
         #     self.print_exception(e, 'YouTube thumbnails')
 
     def download_episode_preview_external(self):
-        keywords = ['転生王女と天才令嬢の魔法革命', 'カット']
+        keywords = ['転生王女と天才令嬢の魔法革命']
         AniverseMagazineScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE,
                                 end_date='20221202', download_id=self.download_id).run()
 
