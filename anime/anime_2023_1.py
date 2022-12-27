@@ -784,6 +784,7 @@ class KamihiroDownload(Winter2023AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX)
@@ -818,6 +819,22 @@ class KamihiroDownload(Winter2023AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + '2nd/wp-content/themes/kamihiro2-teaser/_assets/images/char/detail/char%s_pc.png'
         self.download_by_template(folder, template, 2, 1)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'bd/')
+            self.image_list = []
+            images = soup.select('.packageimg img[src], .tokutenimg img[src]')
+            for image in images:
+                if 'np_square' in image['src']:
+                    continue
+                image_url = self.clear_resize_in_url(image['src'])
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
 
 # Koori Zokusei Danshi to Cool na Douryou Joshi
