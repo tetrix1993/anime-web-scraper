@@ -731,7 +731,7 @@ class AnkokuHeishiDownload(Winter2023AnimeDownload, NewsTemplate):
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news_item',
-                                    date_select='.post_date', title_select='.news,.news_txt', id_select='a')
+                                    date_select='.post_date', title_select='a', id_select='a')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
