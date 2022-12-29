@@ -554,16 +554,58 @@ class IsekaiNonbiriNoukaDownload(Winter2023AnimeDownload):
     folder_name = 'nonbiri-nouka'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 5
 
     def __init__(self):
         super().__init__()
 
     def run(self):
         self.download_episode_preview()
+        self.download_news()
         self.download_key_visual()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        template = self.PAGE_PREFIX + 'story/episode%s/images/img_%s.jpg'
+        for i in range(self.FINAL_EPISODE):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_' + str(self.IMAGES_PER_EPISODE)):
+                continue
+            for j in range(self.IMAGES_PER_EPISODE):
+                image_url = template % (episode, str(j + 1).zfill(2))
+                image_name = episode + '_' + str(j + 1)
+                if self.download_image(image_url, self.base_folder + '/' + image_name) == -1:
+                    return
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        try:
+            soup = self.get_soup(news_url, decode=True)
+            dts = soup.select('dl#newsList dt')
+            dds = soup.select('dl#newsList dd')
+            if len(dts) != len(dds):
+                raise Exception('Tags not matched')
+            news_obj = self.get_last_news_log_object()
+            results = []
+            for i in range(len(dts)):
+                date = dts[i].text
+                title = ' '.join(dds[i].text.strip().split())
+                article_id = ''
+                a_tag = dds[i].find('a')
+                if a_tag is not None and a_tag.has_attr('href') and a_tag['href'].startswith('/'):
+                    article_id = self.PAGE_PREFIX + a_tag['href'][1:]
+                if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
+                    break
+                results.append(self.create_news_log_object(date, title, article_id))
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log_from_news_log_object(result)
+                if process_result == 0:
+                    success_count += 1
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
+        except Exception as e:
+            self.print_exception(e, 'News')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
