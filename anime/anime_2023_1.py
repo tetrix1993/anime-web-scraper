@@ -847,6 +847,8 @@ class KooriZokuseiDanshiDownload(Winter2023AnimeDownload, NewsTemplate):
     folder_name = 'koori-zokusei-danshi'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 6
 
     def __init__(self):
         super().__init__()
@@ -858,7 +860,22 @@ class KooriZokuseiDanshiDownload(Winter2023AnimeDownload, NewsTemplate):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        template = self.PAGE_PREFIX + 'dist/img/story/ep%s/img%s.webp'
+        for i in range(self.FINAL_EPISODE):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_' + str(self.IMAGES_PER_EPISODE)):
+                continue
+            for j in range(self.IMAGES_PER_EPISODE):
+                image_url = template % (str(i + 1), str(j + 1))
+                image_name = episode + '_' + str(j + 1)
+                if self.download_image(image_url, self.base_folder + '/' + image_name, to_jpg=True) == -1:
+                    return
+                webp_image_file = self.base_folder + '/' + episode + '_' + str(j + 1) + '.webp'
+                if os.path.exists(webp_image_file):
+                    try:
+                        self.convert_image_to_jpg(webp_image_file)
+                    except Exception as e:
+                        self.print_exception(e, 'Error in converting webp to jpg.')
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + 'news/'

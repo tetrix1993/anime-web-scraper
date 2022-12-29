@@ -543,6 +543,38 @@ class MainDownload:
         except:
             return -1
 
+    @staticmethod
+    def convert_image_to_jpg(filepath, temp_folder_name='temp', delete_temp_file=False):
+        if not os.path.isfile(filepath):
+            raise Exception('Filepath is not a file.')
+        filepath_slash_index = filepath.rfind('/')
+        filename = filepath[filepath_slash_index + 1:]
+        folder = filepath[0: filepath_slash_index]
+        period_index = filename.rfind('.')
+        extension = ''
+        if period_index > 0:
+            filename_without_extension = filename[0: period_index]
+            extension = filename[period_index + 1:]
+        else:
+            filename_without_extension = filename
+        temp_folder_path = folder + '/' + temp_folder_name
+        if not os.path.exists(temp_folder_path):
+            os.makedirs(temp_folder_path)
+        temp_filepath = temp_folder_path + '/' + filename
+        new_filepath = folder + '/' + filename_without_extension + '.jpg'
+        i = 0
+        while os.path.exists(temp_filepath):
+            i += 1
+            temp_filepath = temp_folder_path + '/' + filename_without_extension + ' (' + str(i) + ')'
+            if len(extension) > 0:
+                temp_filepath += '.' + extension
+        os.rename(filepath, temp_filepath)
+        im = Image.open(temp_filepath).convert('RGB')
+        im.save(new_filepath, 'jpeg')
+        im.close()
+        if delete_temp_file:
+            os.remove(temp_filepath)
+
     def create_news_log(self, date='', title='', _id=''):
         if date is None:
             date = ''
