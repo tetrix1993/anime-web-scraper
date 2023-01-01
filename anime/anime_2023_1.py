@@ -18,6 +18,7 @@ import os
 # Kubo-san wa Mob wo Yurusanai https://kubosan-anime.jp/ #久保さん @kubosan_anime
 # Kyokou Suiri S2 https://kyokousuiri.jp/ #虚構推理 @kyokou_suiri
 # Maou Gakuin no Futekigousha 2nd Season https://maohgakuin.com/ #魔王学院 @maohgakuin
+# NieR:Automata Ver1.1a #ニーア https://nierautomata-anime.com/ #NieR #ニーアオートマタ @NieR_A_ANIME
 # Ningen Fushin no Boukensha-tachi ga Sekai wo Sukuu you desu https://www.ningenfushin-anime.jp/ #人間不信 @ningenfushinPR
 # Oniichan wa Oshimai! https://onimai.jp/ #おにまい @onimai_anime
 # Ooyukiumi no Kaina https://ooyukiumi.net/ #大雪海のカイナ @ooyukiumi_kaina
@@ -1144,6 +1145,52 @@ class Maohgakuin2Download(Winter2023AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+            
+
+# NieR:Automata Ver1.1a
+class NierAutomataDownload(Winter2023AnimeDownload, NewsTemplate):
+    title = 'NieR:Automata Ver1.1a'
+    keywords = [title]
+    website = 'https://nierautomata-anime.com/'
+    twitter = 'NieR_A_ANIME'
+    hashtags = ['ニーア', 'NieR', 'ニーアオートマタ']
+    folder_name = 'nier'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.p-news__list-item',
+                                    date_select='.p-news_data__date', title_select='.p-news_data__title',
+                                    id_select='.p-news_data', a_tag_prefix=self.PAGE_PREFIX, paging_type=1,
+                                    a_tag_start_text_to_remove='/', next_page_select='.c-pagination__list-item',
+                                    next_page_eval_index_class='is-current', next_page_eval_index=-1)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.p-kv_slide__all img[src]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'][1:]
+                if '/kv/' not in image_url:
+                    continue
+                image_name = self.generate_image_name_from_url(image_url, 'kv')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
 
 
 # Ningen Fushin no Boukensha-tachi ga Sekai wo Sukuu you desu
