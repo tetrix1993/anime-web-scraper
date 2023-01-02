@@ -885,6 +885,28 @@ class MainDownload:
         return False
 
     @staticmethod
+    def is_not_matching_content_length(url, lengths):
+        content_lengths = []
+        if isinstance(lengths, int):
+            content_lengths.append(str(lengths))
+        elif isinstance(lengths, str):
+            content_lengths.append(lengths)
+        if isinstance(lengths, list):
+            for length in lengths:
+                if isinstance(length, int):
+                    content_lengths.append(str(length))
+                elif isinstance(length, str):
+                    content_lengths.append(length)
+        try:
+            content_length = requests.head(url).headers['Content-Length']
+            for cl in content_lengths:
+                if cl == content_length:  # As long as one match, return false
+                    return False
+        except:
+            return False  # error in retrieving length, returns False
+        return True
+
+    @staticmethod
     def is_content_length_in_range(url, less_than_amount=None, more_than_amount=None,
                                    less_than_equal=False, more_than_equal=False):
         if less_than_amount is None and more_than_amount is None:

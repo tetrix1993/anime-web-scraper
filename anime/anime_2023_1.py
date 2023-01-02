@@ -1234,6 +1234,8 @@ class NingenFushinDownload(Winter2023AnimeDownload, NewsTemplate):
     folder_name = 'ningenfushin'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 4
 
     def __init__(self):
         super().__init__()
@@ -1246,6 +1248,23 @@ class NingenFushinDownload(Winter2023AnimeDownload, NewsTemplate):
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_episode_preview_temp(self):
+        template = self.PAGE_PREFIX + 'wp-content/themes/ningenfushin/dist/img/story/ep%s/img%s.jpg'
+        for i in range(self.FINAL_EPISODE):
+            ep_num = str(i + 1)
+            episode = ep_num.zfill(2)
+            if self.is_image_exists(episode + '_1'):
+                continue
+            is_success = True
+            for j in range(self.IMAGES_PER_EPISODE):
+                image_url = template % (ep_num, str(j + 1))
+                if self.is_not_matching_content_length(image_url, 447760):
+                    image_name = episode + '_' + str(j + 1)
+                    self.download_image(image_url, self.base_folder + '/' + image_name)
+                    is_success = True
+            if not is_success:
+                return
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.c-News__articleLink',
