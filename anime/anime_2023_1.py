@@ -2152,7 +2152,30 @@ class TondemoSkillDownload(Winter2023AnimeDownload, NewsTemplate):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        try:
+            json_obj = self.get_json(self.PAGE_PREFIX + 'data/')
+            if json_obj is None:
+                return
+            if 'story' not in json_obj or 'items' not in json_obj['story']\
+                    or not isinstance(json_obj['story']['items'], list):
+                return
+            for item in json_obj['story']['items']:
+                if 'no' in item:
+                    try:
+                        episode = str(int(item['no'])).zfill(2)
+                    except:
+                        continue
+                    if self.is_image_exists(episode + '_1'):
+                        continue
+                    if 'thumbnails' in item and isinstance(item['thumbnails'], list) and len(item['thumbnails']) > 0:
+                        self.image_list = []
+                        for i in range(len(item['thumbnails'])):
+                            image_url = item['thumbnails'][i].split('?')[0]
+                            image_name = episode + '_' + str(i + 1)
+                            self.add_to_image_list(image_name, image_url)
+                        self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='ul.p-news__list li.p-news__list-item',
