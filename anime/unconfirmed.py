@@ -11,7 +11,6 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Eiyuu Kyoushitsu https://eiyukyoushitsu-anime.com/ #英雄教室 #eiyu_anime @eiyu_anime
 # Goblin Slayer S2 http://www.goblinslayer.jp/ #ゴブスレ #いせれべ @GoblinSlayer_GA
 # Isekai One Turn Kill Neesan https://onekillsister.com/ #一撃姉 @onekillsister
-# Isekai Shoukan wa Nidome desu https://isenido.com/ #いせにど @isenido_anime
 # Jitsu wa Ore, Saikyou deshita? https://jitsuhaoresaikyo-anime.com/ @jitsuoresaikyo
 # Keikenzumi na Kimi to, Keiken Zero na Ore ga, Otsukiai suru Hanashi. https://kimizero.com/ #キミゼロ @kimizero_anime
 # Level 1 dakedo Unique Skill de Saikyou desu https://level1-anime.com/ #レベル1だけどアニメ化です @level1_anime
@@ -432,35 +431,6 @@ class OneKillSisterDownload(UnconfirmedDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
-
-
-# Isekai Shoukan wa Nidome desu
-class IsenidoDownload(UnconfirmedDownload):
-    title = 'Isekai Shoukan wa Nidome desu'
-    keywords = [title, 'isenido']
-    website = 'https://isenido.com/'
-    twitter = 'isenido_anime'
-    hashtags = 'いせにど'
-    folder_name = 'isenido'
-
-    PAGE_PREFIX = website
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_key_visual()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('kv-bg', self.PAGE_PREFIX + 'img/kv-bg.jpg')
-        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FZxImcZUIAAV8uv?format=jpg&name=4096x4096')
-        self.download_image_list(folder)
 
 
 # Jitsu wa Ore, Saikyou deshita?
