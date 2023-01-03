@@ -66,7 +66,36 @@ class AyakashiTriangleDownload(Winter2023AnimeDownload, NewsTemplate):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        story_url = self.PAGE_PREFIX + 'story/'
+        try:
+            soup = self.get_soup(story_url, decode=True)
+            li_tags = soup.select('li.story_pager__list')
+            for li in li_tags:
+                ep_soup = None
+                a_tag = li.find('a')
+                if a_tag is not None:
+                    try:
+                        episode = str(int(a_tag.text)).zfill(2)
+                    except:
+                        continue
+                else:
+                    continue
+                if self.is_image_exists(episode + '_5'):
+                    continue
+                if li.has_attr('class') and 'is_current' in li['class']:
+                    ep_soup = soup
+                else:
+                    ep_soup = self.get_soup(story_url + a_tag['href'].replace('./', ''))
+                if ep_soup is not None and episode is not None:
+                    images = ep_soup.select('.main_slide img[src]')
+                    self.image_list = []
+                    for i in range(len(images)):
+                        image_url = story_url + images[i]['src']
+                        image_name = episode + '_' + str(i + 1)
+                        self.add_to_image_list(image_name, image_url)
+                    self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.p-news__list-item',
