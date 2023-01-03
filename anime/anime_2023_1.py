@@ -386,25 +386,59 @@ class HyoukenDownload(Winter2023AnimeDownload, NewsTemplate):
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_external()
         self.download_news()
         self.download_key_visual()
         self.download_character()
         # self.download_media()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        try:
+            template = self.PAGE_PREFIX + 'story/img/story%s/%s.jpg'
+            stop = False
+            for i in range(self.FINAL_EPISODE):
+                episode = str(i + 1).zfill(2)
+                if self.is_image_exists(episode + '_' + str(self.IMAGES_PER_EPISODE)):
+                    continue
+                for j in range(self.IMAGES_PER_EPISODE):
+                    image_url = template % (episode, str(j + 1).zfill(2))
+                    image_name = episode + '_' + str(j + 1)
+                    if self.download_image(image_url, self.base_folder + '/' + image_name) == -1:
+                        stop = True
+                        break
+                if stop:
+                    break
+        except Exception as e:
+            self.print_exception(e)
 
-    def download_episode_preview_temp(self):
-        template = self.PAGE_PREFIX + 'story/img/story%s/%s.jpg'
-        for i in range(self.FINAL_EPISODE):
-            episode = str(i + 1).zfill(2)
-            if self.is_image_exists(episode + '_' + str(self.IMAGES_PER_EPISODE)):
-                continue
-            for j in range(self.IMAGES_PER_EPISODE):
-                image_url = template % (episode, str(j + 1).zfill(2))
-                image_name = episode + '_' + str(j + 1)
-                if self.download_image(image_url, self.base_folder + '/' + image_name) == -1:
-                    return
+        yt_folder, yt_episodes = self.init_youtube_thumbnail_variables()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            stories = soup.select('.story-nav a[href]')
+            for story in stories:
+                img_tag = story.select('img[alt]')
+                if len(img_tag) == 0:
+                    continue
+                try:
+                    episode = str(int(img_tag[0]['alt'].replace('#', ''))).zfill(2)
+                except:
+                    continue
+                if episode in yt_episodes:
+                    continue
+                ep_soup = self.get_soup(self.PAGE_PREFIX + story['href'].replace('../', ''))
+                if ep_soup is None:
+                    continue
+                yt_tag = ep_soup.select('.story-yokoku-block a[href]')
+                if len(yt_tag) > 0 and 'youtube' in yt_tag[0]['href'] and '=' in yt_tag[0]['href']:
+                    yt_id = yt_tag[0]['href'].split('=')[-1]
+                    self.download_youtube_thumbnail_by_id(yt_id, yt_folder, episode)
+        except Exception as e:
+            self.print_exception(e, 'YouTube thumbnails')
+
+    def download_episode_preview_external(self):
+        keywords = ['冰剣の魔術師が世界を統べる']
+        AniverseMagazineScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                end_date='20230103', download_id=self.download_id).run()
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.newsall-box',
