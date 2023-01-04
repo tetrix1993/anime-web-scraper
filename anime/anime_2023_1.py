@@ -1072,12 +1072,14 @@ class KubosanDownload(Winter2023AnimeDownload, NewsTemplate2):
     folder_name = 'kubosan'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
 
     def __init__(self):
         super().__init__()
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_external()
         self.download_news()
         self.download_key_visual()
         self.download_character()
@@ -1111,6 +1113,11 @@ class KubosanDownload(Winter2023AnimeDownload, NewsTemplate2):
                 self.download_image_list(self.base_folder)
         except Exception as e:
             self.print_exception(e)
+
+    def download_episode_preview_external(self):
+        keywords = ['久保さんは僕を許さない']
+        AniverseMagazineScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                end_date='20230104', download_id=self.download_id).run()
 
     def download_news(self):
         self.download_template_news(self.PAGE_PREFIX)
