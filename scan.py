@@ -236,12 +236,18 @@ class AniverseMagazineScanner(MainScanner):
     @staticmethod
     def get_episode_num(result, prefix, suffix):
         if len(prefix) > 0:
-            split1 = result[0].split(suffix)[0].split(prefix)
+            if len(suffix) == 0:
+                split1 = result[0].split(prefix)
+            else:
+                split1 = result[0].split(suffix)[0].split(prefix)
             if len(split1) < 2:
                 return -1
             episode = split1[1]
         else:
-            episode = result[0].split(suffix)[0]
+            if len(suffix) == 0:
+                episode = result[0]
+            else:
+                episode = result[0].split(suffix)[0]
         if len(episode) == 0:
             return -1
         
