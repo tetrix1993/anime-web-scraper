@@ -2324,7 +2324,29 @@ class TsunliseDownload(Winter2023AnimeDownload, NewsTemplate):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            story_boxes = soup.select('.story-box')
+            for story_box in story_boxes:
+                episode = None
+                if story_box.has_attr('class'):
+                    for _class in story_box['class']:
+                        if _class.startswith('story') and _class[5:].strip().isnumeric():
+                            episode = str(int(_class[5:].strip())).zfill(2)
+                            break
+                if episode is None:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                images = story_box.select('.story-pic img[src]')
+                self.image_list = []
+                for i in range(len(images)):
+                    image_url = images[i]['src']
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         # Paging logic need update
