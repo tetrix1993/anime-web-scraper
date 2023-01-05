@@ -140,7 +140,6 @@ class AyakashiTriangleDownload(Winter2023AnimeDownload, NewsTemplate):
             soup = self.get_soup(story_url, decode=True)
             li_tags = soup.select('li.story_pager__list')
             for li in li_tags:
-                ep_soup = None
                 a_tag = li.find('a')
                 if a_tag is not None:
                     try:
@@ -1800,18 +1799,52 @@ class SaikyoOnmyoujiDownload(Winter2023AnimeDownload, NewsTemplate):
     folder_name = 'saikyo-onmyouji'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
 
     def __init__(self):
         super().__init__()
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_external()
         self.download_news()
         self.download_key_visual()
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/', decode=True)
+            li_tags = soup.select('ul[data-type="archive"] li')
+            for li in li_tags:
+                a_tag = li.find('a')
+                if a_tag is not None:
+                    try:
+                        episode = str(int(a_tag.text)).zfill(2)
+                    except:
+                        continue
+                else:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                if li.has_attr('class') and 'is_current' in li['class']:
+                    ep_soup = soup
+                else:
+                    ep_soup = self.get_soup(a_tag['href'])
+                if ep_soup is not None and episode is not None:
+                    images = ep_soup.select('.ssslider img[src]')
+                    self.image_list = []
+                    for i in range(len(images)):
+                        image_url = images[i]['src']
+                        image_name = episode + '_' + str(i + 1)
+                        self.add_to_image_list(image_name, image_url)
+                    self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
+
+    def download_episode_preview_external(self):
+        keywords = ['最強陰陽師の異世界転生記']
+        AniverseMagazineScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                end_date='20230105', download_id=self.download_id).run()
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news--lineup li',
