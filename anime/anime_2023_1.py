@@ -3,6 +3,7 @@ from scan import AniverseMagazineScanner
 import os
 
 
+# Ars no Kyojuu https://ars-giant.com/ #アルスの巨獣 @ars_giant
 # Ayakashi Triangle https://ayakashitriangle-anime.com/ #あやかしトライアングル #あやトラ @ayakashi_anime
 # Benriya Saitou-san, Isekai ni Iku https://saitou-anime.com/ #便利屋斎藤さん @saitou_anime
 # Buddy Daddies https://buddy-animeproject.com/ #バディダディ @BuddyD_project
@@ -43,6 +44,74 @@ class Winter2023AnimeDownload(MainDownload):
 
     def __init__(self):
         super().__init__()
+
+
+# Ars no Kyojuu
+class ArsGiantDownload(Winter2023AnimeDownload, NewsTemplate):
+    title = 'Ars no Kyojuu'
+    keywords = [title, 'Giant Beasts of Ars']
+    website = 'https://ars-giant.com/'
+    twitter = 'ars_giant'
+    hashtags = ['アルスの巨獣', 'ars_giant']
+    folder_name = 'arsgiant'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        story_url = self.PAGE_PREFIX + 'story/'
+        try:
+            soup = self.get_soup(story_url, decode=True)
+            li_tags = soup.select('.story nav li')
+            for li in li_tags:
+                a_tag = li.find('a')
+                if a_tag is not None:
+                    try:
+                        episode = str(int(a_tag.text)).zfill(2)
+                    except:
+                        continue
+                else:
+                    continue
+                if self.is_image_exists(episode + '_5'):
+                    continue
+                if li.has_attr('class') and 'is__current' in li['class']:
+                    ep_soup = soup
+                else:
+                    ep_soup = self.get_soup(a_tag['href'])
+                if ep_soup is not None and episode is not None:
+                    images = ep_soup.select('.ssslider img[src]')
+                    self.image_list = []
+                    for i in range(len(images)):
+                        image_url = images[i]['src']
+                        image_name = episode + '_' + str(i + 1)
+                        self.add_to_image_list(image_name, image_url)
+                    self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.md-list__news li',
+                                    date_select='.date', title_select='.ttl',
+                                    id_select='a')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('ars_kv_logo_c', self.PAGE_PREFIX + 'wp/wp-content/uploads/2022/12/ars_kv_logo_c.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + '_assets/images/char/detail/char_%s.png'
+        self.download_by_template(folder, template, 3, 1)
 
 
 # Ayakashi Triangle

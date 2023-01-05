@@ -130,6 +130,7 @@ The premiere date for the anime listed here has not been announced.
 * [Yuusha ga Shinda!](https://heroisdead.com/)
 
 ### Winter 2023 Anime
+* [Ars no Kyojuu](https://ars-giant.com/)
 * [Ayakashi Triangle](https://ayakashitriangle-anime.com/)
 * [Benriya Saitou-san, Isekai ni Iku](https://saitou-anime.com/)
 * [Buddy Daddies](https://buddy-animeproject.com/)
