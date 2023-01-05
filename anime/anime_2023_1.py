@@ -623,6 +623,7 @@ class InuhiroDownload(Winter2023AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         template = self.PAGE_PREFIX + 'assets/images/story/%s_%s.jpg'
@@ -674,6 +675,25 @@ class InuhiroDownload(Winter2023AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'assets/images/character/img_%s.png'
         self.download_by_template(folder, template, 2, 1)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'blu-ray/')
+            images = soup.select('.jacket img[src], .tokuten img[src]')
+            self.image_list = []
+            for image in images:
+                if '/blu-ray/' not in image['src']:
+                    continue
+                temp_name = image['src'].split('/')[-1]
+                if temp_name.startswith('nowprinting'):
+                    continue
+                image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                image_name = self.generate_image_name_from_url(image_url, 'blu-ray')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
 
 # Isekai Nonbiri Nouka
