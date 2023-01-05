@@ -1547,6 +1547,7 @@ class OnimaiDownload(Winter2023AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         template = self.PAGE_PREFIX + 'episode/img/%s_%s.jpg'
@@ -1609,6 +1610,40 @@ class OnimaiDownload(Winter2023AnimeDownload, NewsTemplate):
                 self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+        self.create_cache_file(cache_filepath, processed, num_processed)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        bd_prefix = self.PAGE_PREFIX + 'bdbox/'
+        for page in ['tokuten', 'vol1', 'vol2']:
+            try:
+                if page != 'tokuten' and page in processed:
+                    continue
+                page_url = bd_prefix + page + '.html'
+                soup = self.get_soup(page_url)
+                images = soup.select('.bdboxContent img[src]')
+                self.image_list = []
+                for image in images:
+                    image_url = bd_prefix + image['src']
+                    if '/img/' in image_url:
+                        image_name = self.generate_image_name_from_url(image_url, 'img')
+                    else:
+                        image_name = self.extract_image_name_from_url(image_url)
+                    if self.is_image_exists(image_name, folder):
+                        continue
+                    if not self.is_content_length_in_range(image_url, more_than_amount=10000):
+                        continue
+                    self.add_to_image_list(image_name, image_url)
+                if (page != 'vol1' and page != 'privilege' and len(self.image_list) > 0) \
+                        or (page == 'vol1' and len(self.image_list) > 1):
+                    processed.append(page)
+                if page.startswith('vol') and len(self.image_list) == 0:
+                    break
+                self.download_image_list(folder)
+            except Exception as e:
+                self.print_exception(e, f'Blu-ray - {page}')
         self.create_cache_file(cache_filepath, processed, num_processed)
 
 
@@ -2152,6 +2187,8 @@ class SpyroomDownload(Winter2023AnimeDownload, NewsTemplate2):
                         image_name = self.generate_image_name_from_url(image_url, 'bddvd')
                     else:
                         image_name = self.extract_image_name_from_url(image_url)
+                    if self.is_image_exists(image_name, folder):
+                        continue
                     if not self.is_content_length_in_range(image_url, more_than_amount=88800):
                         continue
                     self.add_to_image_list(image_name, image_url)
