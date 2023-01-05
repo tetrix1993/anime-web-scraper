@@ -1300,7 +1300,39 @@ class Maohgakuin2Download(Winter2023AnimeDownload, NewsTemplate):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        story_url = self.PAGE_PREFIX + 'story/'
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX, decode=True)
+            li_tags = soup.select('.story_list__item')
+            for li in li_tags:
+                p_tags = li.select('p')
+                p_tag = None
+                for tag in p_tags:
+                    if tag.has_attr('class') and '-no' in tag['class']:
+                        p_tag = tag
+                        break
+                if p_tag is None:
+                    continue
+                try:
+                    episode = str(int(p_tag.text.upper().replace('EPISODE', ''))).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                a_tag = li.find('a')
+                if a_tag is None:
+                    continue
+                ep_soup = self.get_soup(self.PAGE_PREFIX + a_tag['href'])
+                if ep_soup is not None:
+                    images = ep_soup.select('.image_slide img[src]')
+                    self.image_list = []
+                    for i in range(len(images)):
+                        image_url = story_url + images[i]['src']
+                        image_name = episode + '_' + str(i + 1)
+                        self.add_to_image_list(image_name, image_url)
+                    self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + 'news/'
