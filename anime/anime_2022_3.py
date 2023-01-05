@@ -730,21 +730,35 @@ class IsekaiOjisanDownload(Summer2022AnimeDownload, NewsTemplate2):
         folder = self.create_media_directory()
 
         # Blu-rays
-        first = 40
-        second = 79
-        third = 119
-        bd_template = self.PAGE_PREFIX + 'core_sys/images/contents/%s/block/%s/%s.jpg'
-        try:
-            for i in range(3):
-                image_name = 'bd_vol' + str(i + 1)
-                if self.is_image_exists(image_name, folder):
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        for page in ['01', '02', '03', 'campaign']:
+            try:
+                if page in processed:
                     continue
-                image_url = bd_template % (str(first + i).zfill(8), str(second + i).zfill(8), str(third + i).zfill(8))
-                if not self.is_matching_content_length(image_url, 56755):
+                page_url = self.PAGE_PREFIX + 'bd/'
+                if page != '01':
+                    page_url += page + '.html'
+                soup = self.get_soup(page_url)
+                images = soup.select('.block_inner img[src]')
+                self.image_list = []
+                for image in images:
+                    if 'nowprinting' in image['src']:
+                        continue
+                    image_url = self.PAGE_PREFIX + image['src'].replace('../', '').split('?')[0]
+                    if '/bddvd/' in image_url:
+                        image_name = self.generate_image_name_from_url(image_url, 'bddvd')
+                    else:
+                        image_name = self.extract_image_name_from_url(image_url)
+                    if self.is_content_length_in_range(image_url, less_than_amount=60000):
+                        continue
                     self.add_to_image_list(image_name, image_url)
-            self.download_image_list(folder)
-        except Exception as e:
-            self.print_exception(e, 'Blu-ray')
+                if len(self.image_list) > 0:
+                    processed.append(page)
+                self.download_image_list(folder)
+            except Exception as e:
+                self.print_exception(e, f'Blu-ray Bonus - {page}')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
         # Blu-ray Bonus
         try:
