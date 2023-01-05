@@ -750,7 +750,7 @@ class IsekaiOjisanDownload(Summer2022AnimeDownload, NewsTemplate2):
                         image_name = self.generate_image_name_from_url(image_url, 'bddvd')
                     else:
                         image_name = self.extract_image_name_from_url(image_url)
-                    if self.is_content_length_in_range(image_url, less_than_amount=60000):
+                    if not self.is_content_length_in_range(image_url, more_than_amount=60000):
                         continue
                     self.add_to_image_list(image_name, image_url)
                 if len(self.image_list) > 0:
