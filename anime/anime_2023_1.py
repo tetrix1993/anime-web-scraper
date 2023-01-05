@@ -2232,6 +2232,7 @@ class TentenKakumeiDownload(Winter2023AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         template = self.PAGE_PREFIX + 'images/story/%s/p_%s.jpg'
@@ -2334,6 +2335,25 @@ class TentenKakumeiDownload(Winter2023AnimeDownload, NewsTemplate):
         except Exception as e:
             self.print_exception(e, 'Character')
         self.create_cache_file(cache_filepath, processed, num_processed)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'package.html')
+            images = soup.select('.package_content img[src]')
+            self.image_list = []
+            for image in images:
+                if '/package/' not in image['src']:
+                    continue
+                temp_name = image['src'].split('/')[-1]
+                if temp_name.startswith('nowpri'):
+                    continue
+                image_url = self.PAGE_PREFIX + image['src']
+                image_name = self.generate_image_name_from_url(image_url, 'package')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
 
 # Tomo-chan wa Onnanoko!
