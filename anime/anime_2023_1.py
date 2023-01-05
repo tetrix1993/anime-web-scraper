@@ -1624,7 +1624,25 @@ class OtonarinoTenshisamaDownload(Winter2023AnimeDownload, NewsTemplate):
         self.download_media()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            sections = soup.select('.story__episode section.episode[id]')
+            for section in sections:
+                try:
+                    episode = str(int(section['id'].replace('ep', ''))).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                images = section.select('img[src]')
+                self.image_list = []
+                for i in range(len(images)):
+                    image_url = images[i]['src']
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.allNews__item',
