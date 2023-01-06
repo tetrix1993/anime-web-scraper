@@ -2563,26 +2563,26 @@ class TentenKakumeiDownload(Winter2023AnimeDownload, NewsTemplate):
                 break
 
         # YouTube thumbnails
-        # yt_folder, yt_episodes = self.init_youtube_thumbnail_variables()
-        # try:
-        #     soup = self.get_soup(self.PAGE_PREFIX + 'story.html')
-        #     stories = soup.select('.content_wrap a[href]')
-        #     for story in reversed(stories):
-        #         try:
-        #             episode = str(int(story['href'].split('/')[-1].replace('story', '').replace('.html', ''))).zfill(2)
-        #             if episode in yt_episodes:
-        #                 continue
-        #         except:
-        #             continue
-        #         story_url = self.PAGE_PREFIX + story['href']
-        #         story_soup = self.get_soup(story_url)
-        #         if story_soup is not None:
-        #             yt_tag = story_soup.select('.yt_movie iframe[src]')
-        #             if len(yt_tag) > 0:
-        #                 yt_id = yt_tag[0]['src'].split('?')[0].split('/')[-1]
-        #                 self.download_youtube_thumbnail_by_id(yt_id, yt_folder, episode)
-        # except Exception as e:
-        #     self.print_exception(e, 'YouTube thumbnails')
+        yt_folder, yt_episodes = self.init_youtube_thumbnail_variables(['01'])
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story.html')
+            stories = soup.select('.content_wrap a[href]')
+            for story in reversed(stories):
+                try:
+                    episode = str(int(story['href'].split('/')[-1].replace('story', '').replace('.html', ''))).zfill(2)
+                    if episode in yt_episodes:
+                        continue
+                except:
+                    continue
+                story_url = self.PAGE_PREFIX + story['href']
+                story_soup = self.get_soup(story_url)
+                if story_soup is not None:
+                    yt_tag = story_soup.select('.yt_movie iframe[src]')
+                    if len(yt_tag) > 0:
+                        yt_id = yt_tag[0]['src'].split('?')[0].split('/')[-1]
+                        self.download_youtube_thumbnail_by_id(yt_id, yt_folder, episode)
+        except Exception as e:
+            self.print_exception(e, 'YouTube thumbnails')
 
     def download_episode_preview_external(self):
         keywords = ['転生王女と天才令嬢の魔法革命']
