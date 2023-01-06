@@ -1240,7 +1240,7 @@ class YozakurasanDownload(UnconfirmedDownload, NewsTemplate2):
 
 
 # Yumemiru Danshi wa Genjitsushugisha
-class YumemiruDanshiDownlaod(UnconfirmedDownload, NewsTemplate):
+class YumemiruDanshiDownload(UnconfirmedDownload, NewsTemplate):
     title = 'Yumemiru Danshi wa Genjitsushugisha'
     keywords = [title]
     website = 'https://yumemirudanshi.com/'
