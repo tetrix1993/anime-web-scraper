@@ -1134,6 +1134,7 @@ class KooriZokuseiDanshiDownload(Winter2023AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         template = self.PAGE_PREFIX + 'dist/img/story/ep%s/img%s.webp'
@@ -1206,6 +1207,40 @@ class KooriZokuseiDanshiDownload(Winter2023AnimeDownload, NewsTemplate):
                     self.download_image(new_image_url, modal_image_filepath)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        bd_prefix = self.PAGE_PREFIX + 'bd/'
+        for page in ['vol1', 'vol2', 'vol3', 'vol4']:
+            try:
+                if page in processed:
+                    continue
+                page_url = bd_prefix + page + '.php'
+                soup = self.get_soup(page_url)
+                images = soup.select('.p-BdDetail__content img[src]')
+                now_printing = False
+                self.image_list = []
+                for image in images:
+                    image_url = self.PAGE_PREFIX + image['src'].replace('../', '').split('?')[0]
+                    if '/bd/' not in image_url:
+                        continue
+                    image_name = self.generate_image_name_from_url(image_url, 'bd')
+                    if self.is_image_exists(image_name, folder):
+                        continue
+                    if self.is_not_matching_content_length(image_url, 16854):
+                        self.add_to_image_list(image_name, image_url)
+                    else:
+                        now_printing = True
+                self.download_image_list(folder)
+                if not now_printing:
+                    processed.append(page)
+                else:
+                    break
+            except Exception as e:
+                self.print_exception(e, f'Blu-ray - {page}')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Kubo-san wa Mob wo Yurusanai
