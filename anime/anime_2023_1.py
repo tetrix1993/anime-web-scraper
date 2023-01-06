@@ -1264,6 +1264,7 @@ class KubosanDownload(Winter2023AnimeDownload, NewsTemplate2):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -1332,6 +1333,39 @@ class KubosanDownload(Winter2023AnimeDownload, NewsTemplate2):
         self.add_to_image_list('tz_chara_kubo', self.PAGE_PREFIX + 'core_sys/images/main/tz/chara_kubo.png')
         self.add_to_image_list('tz_chara_shiraishi', self.PAGE_PREFIX + 'core_sys/images/main/tz/chara_shiraishi.png')
         self.download_image_list(folder)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        for page in ['privilege', 'campaign', '01', '02']:
+            try:
+                if page != 'privilege' and page != 'campaign' and page in processed:
+                    continue
+                page_url = self.PAGE_PREFIX + 'bd/'
+                if page != '01':
+                    page_url += page + '.html'
+                soup = self.get_soup(page_url)
+                images = soup.select('.block_inner img[src]')
+                self.image_list = []
+                for image in images:
+                    image_url = self.PAGE_PREFIX + image['src'].replace('../', '').split('?')[0]
+                    if '/bddvd/' in image_url:
+                        image_name = self.generate_image_name_from_url(image_url, 'bddvd')
+                    else:
+                        image_name = self.extract_image_name_from_url(image_url)
+                    if self.is_image_exists(image_name, folder):
+                        continue
+                    if (page.isnumeric() and not self.is_not_matching_content_length(image_url, 14750))\
+                            or (page == 'privilege' and not self.is_not_matching_content_length(image_url, 30208)):
+                        continue
+                    self.add_to_image_list(image_name, image_url)
+                if page.isnumeric() and len(self.image_list) == 0:
+                    break
+                self.download_image_list(folder)
+            except Exception as e:
+                self.print_exception(e, f'Blu-ray - {page}')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Kyokou Suiri S2
