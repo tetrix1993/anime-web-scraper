@@ -1551,6 +1551,7 @@ class Maohgakuin2Download(Winter2023AnimeDownload, NewsTemplate):
 
     def download_episode_preview(self):
         story_url = self.PAGE_PREFIX + 'story/'
+        yt_folder, yt_episodes = self.init_youtube_thumbnail_variables()
         try:
             soup = self.get_soup(self.PAGE_PREFIX, decode=True)
             li_tags = soup.select('.story_list__item')
@@ -1567,7 +1568,7 @@ class Maohgakuin2Download(Winter2023AnimeDownload, NewsTemplate):
                     episode = str(int(p_tag.text.upper().replace('EPISODE', ''))).zfill(2)
                 except:
                     continue
-                if self.is_image_exists(episode + '_1'):
+                if self.is_image_exists(episode + '_1') and episode in yt_episodes:
                     continue
                 a_tag = li.find('a')
                 if a_tag is None:
@@ -1581,6 +1582,12 @@ class Maohgakuin2Download(Winter2023AnimeDownload, NewsTemplate):
                         image_name = episode + '_' + str(i + 1)
                         self.add_to_image_list(image_name, image_url)
                     self.download_image_list(self.base_folder)
+
+                    # YouTube thumbnail
+                    yt_tag = ep_soup.select('.movie_item[data-modal]')
+                    if len(yt_tag) > 0 and len(yt_tag[0]['data-modal']) > 0:
+                        yt_id = yt_tag[0]['data-modal'].split(':')[-1]
+                        self.download_youtube_thumbnail_by_id(yt_id, yt_folder, episode)
         except Exception as e:
             self.print_exception(e)
 
