@@ -487,7 +487,7 @@ class HyoukenDownload(Winter2023AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
-        # self.download_media()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -556,7 +556,29 @@ class HyoukenDownload(Winter2023AnimeDownload, NewsTemplate):
         self.download_by_template(folder, template, 2, 1)
 
     def download_media(self):
-        pass
+        folder = self.create_media_directory()
+        bd_url = self.PAGE_PREFIX + 'disc/'
+        try:
+            soup = self.get_soup(bd_url)
+            images = soup.select('.music-artist-img img[src], .news-img img[src], .disc-oritoku-img img[src]')
+            self.image_list = []
+            for image in images:
+                if not image['src'].startswith('img/'):
+                    continue
+                temp_name = image['src'].split('/')[-1]
+                if 'nowprint' in temp_name:
+                    continue
+                image_url = bd_url + image['src']
+                image_name = self.generate_image_name_from_url(image_url, 'img')
+                if image_name.startswith('gentei_sample'):
+                    if self.is_image_exists(image_name, folder):
+                        continue
+                    if not self.is_content_length_in_range(image_url, more_than_amount=7300):
+                        continue
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
 
 # Ijiranaide, Nagatoro-san 2nd Attack
