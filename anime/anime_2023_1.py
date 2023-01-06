@@ -636,9 +636,34 @@ class Nagatorosan2Download(Winter2023AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        story_url = self.PAGE_PREFIX + 'story/'
+        try:
+            soup = self.get_soup(story_url, decode=True)
+            a_tags = soup.select('.tab a[href]')
+            for a_tag in a_tags:
+                try:
+                    episode = str(int(a_tag.text)).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_8'):
+                    continue
+                if a_tag['href'] == './':
+                    ep_soup = soup
+                else:
+                    ep_soup = self.get_soup(story_url + a_tag['href'].replace('./', ''))
+                if ep_soup is not None:
+                    images = ep_soup.select('.thumb .swiper-wrapper img[src]')
+                    self.image_list = []
+                    for i in range(len(images)):
+                        image_url = self.PAGE_PREFIX + images[i]['src'].replace('../', '')
+                        image_name = episode + '_' + str(i + 1)
+                        self.add_to_image_list(image_name, image_url)
+                    self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.list li',
@@ -658,6 +683,41 @@ class Nagatorosan2Download(Winter2023AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'assets/img/character/img_%s.png'
         self.download_by_template(folder, template, 2, 1)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        for page in ['tokuten', '01', '02', '03', '04']:
+            try:
+                if page != 'tokuten' and page in processed:
+                    continue
+                page_url = self.PAGE_PREFIX + 'blu-ray/' + page + '.html'
+                soup = self.get_soup(page_url)
+                images = soup.select('.jacket img[src]')
+                self.image_list = []
+                for image in images:
+                    image_url = self.PAGE_PREFIX + image['src'].replace('../', '').split('?')[0]
+                    if 'nowprinting' in image_url:
+                        continue
+                    if '/blu-ray/' in image_url:
+                        image_name = self.generate_image_name_from_url(image_url, 'blu-ray')
+                    elif '/common/' in image_url:
+                        image_name = self.generate_image_name_from_url(image_url, 'common')
+                    else:
+                        continue
+                    if self.is_image_exists(image_name, folder):
+                        continue
+                    self.add_to_image_list(image_name, image_url)
+                if page.isnumeric():
+                    if len(self.image_list) == 0:
+                        break
+                    else:
+                        processed.append(page)
+                self.download_image_list(folder)
+            except Exception as e:
+                self.print_exception(e, f'Blu-ray - {page}')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Inu ni Nattara Suki na Hito ni Hirowareta.
@@ -1360,8 +1420,11 @@ class KubosanDownload(Winter2023AnimeDownload, NewsTemplate2):
                             or (page == 'privilege' and not self.is_not_matching_content_length(image_url, 30208)):
                         continue
                     self.add_to_image_list(image_name, image_url)
-                if page.isnumeric() and len(self.image_list) == 0:
-                    break
+                if page.isnumeric():
+                    if len(self.image_list) == 0:
+                        break
+                    else:
+                        processed.append(page)
                 self.download_image_list(folder)
             except Exception as e:
                 self.print_exception(e, f'Blu-ray - {page}')
@@ -2322,8 +2385,11 @@ class SpyroomDownload(Winter2023AnimeDownload, NewsTemplate2):
                 if (page != '01' and page != 'privilege' and len(self.image_list) > 0)\
                         or (page == '01' and len(self.image_list) > 1):
                     processed.append(page)
-                if page.isnumeric() and len(self.image_list) == 0:
-                    break
+                if page.isnumeric():
+                    if len(self.image_list) == 0:
+                        break
+                    else:
+                        processed.append(page)
                 self.download_image_list(folder)
             except Exception as e:
                 self.print_exception(e, f'Blu-ray - {page}')
