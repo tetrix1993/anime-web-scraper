@@ -1089,7 +1089,7 @@ class AnkokuHeishiDownload(Winter2023AnimeDownload, NewsTemplate):
                 if story.has_attr('class') and 'active' in story['class']:
                     ep_soup = soup
                 else:
-                    ep_soup = soup.select(story['href'])
+                    ep_soup = self.get_soup(story['href'])
                 if ep_soup is None:
                     continue
                 images = ep_soup.select('.wp-swiper__slide-content img[src]')
