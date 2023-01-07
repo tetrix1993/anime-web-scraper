@@ -2886,6 +2886,7 @@ class TsunliseDownload(Winter2023AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -2942,6 +2943,26 @@ class TsunliseDownload(Winter2023AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'wp/wp-content/themes/tunlise-honban-theme/images/chara-pic%s.png'
         self.download_by_template(folder, template, 1, 1)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        for page in ['privilege', 'bluray']:
+            try:
+                page_url = self.PAGE_PREFIX + page + '/'
+                soup = self.get_soup(page_url)
+                images = soup.select('.bluray-page img[src]')
+                self.image_list = []
+                for image in images:
+                    image_url = image['src']
+                    image_name = self.extract_image_name_from_url(image_url)
+                    if self.is_image_exists(image_name, folder):
+                        continue
+                    if page == 'bluray' and not self.is_content_length_in_range(image_url, more_than_amount=8000):
+                        continue
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(folder)
+            except Exception as e:
+                self.print_exception(e, f'Blu-ray - {page}')
 
 
 # Vinland Saga Season 2
