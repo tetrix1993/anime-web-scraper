@@ -2169,6 +2169,7 @@ class Roukin8Download(Winter2023AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         template = self.PAGE_PREFIX + 'dist/assets/img/story/ep%s/img%s.'
@@ -2224,6 +2225,26 @@ class Roukin8Download(Winter2023AnimeDownload, NewsTemplate):
             result = self.download_image(image_url, folder + '/' + image_name)
             if result == -1:
                 break
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.bdbox_imgitem img[src], .tp_bdshop_img img[src]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'].replace('./', '')
+                image_name = self.extract_image_name_from_url(image_url)
+                if 'bd_shop' in image_name:
+                    continue
+                if 'bd_box' == image_name:
+                    if self.is_image_exists('bd_box', folder)\
+                            or not self.is_content_length_in_range(image_url, more_than_amount=8000):
+                        continue
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
 
 # Saikyou Onmyouji no Isekai Tenseiki
