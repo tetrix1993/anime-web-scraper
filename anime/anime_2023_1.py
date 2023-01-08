@@ -1277,7 +1277,7 @@ class KooriZokuseiDanshiDownload(Winter2023AnimeDownload, NewsTemplate):
                 break
 
         # YouTube thumbnails
-        yt_folder, yt_episodes = self.init_youtube_thumbnail_variables()
+        yt_folder, yt_episodes = self.init_youtube_thumbnail_variables(['01'])
         try:
             soup = self.get_soup(self.PAGE_PREFIX + 'special/')
             items = soup.select('.p-MovieList__item')
@@ -2061,6 +2061,37 @@ class OtonarinoTenshisamaDownload(Winter2023AnimeDownload, NewsTemplate):
 
     def download_media(self):
         folder = self.create_media_directory()
+
+        # Blu-ray
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        bd_prefix = self.PAGE_PREFIX + 'bddvd/'
+        for page in ['spacial', 'vol1', 'vol2', 'vol3', 'vol4']:
+            try:
+                if page.startswith('vol') and page in processed:
+                    continue
+                bd_url = bd_prefix + page + '/'
+                soup = self.get_soup(bd_url)
+                images = soup.select('.page-bddvd img[src]')
+                self.image_list = []
+                for image in images:
+                    image_url = image['src']
+                    image_name = self.extract_image_name_from_url(image_url)
+                    if 'comming' in image_url:
+                        continue
+                    if self.is_image_exists(image_name, folder):
+                        continue
+                    self.add_to_image_list(image_name, image_url)
+                if page.startswith('vol'):
+                    if len(self.image_list) == 0:
+                        break
+                    else:
+                        processed.append(page)
+                self.download_image_list(folder)
+            except Exception as e:
+                self.print_exception(e, f'Blu-ray - {page}')
+        self.create_cache_file(cache_filepath, processed, num_processed)
+
         # self.add_to_image_list('valentine_tw', 'https://pbs.twimg.com/media/FLfDFR8aQAIWt1u?format=jpg&name=large')
         self.add_to_image_list('valentine_chara', 'https://aniverse-mag.com/wp-content/uploads/2022/02/8e5cda5d29024d4bf78d1e9452225fb6-e1644755501739.png')
         self.add_to_image_list('valentine_pos', self.PAGE_PREFIX + 'wordpress/wp-content/uploads/2022/02/valentine_pos.jpg')
