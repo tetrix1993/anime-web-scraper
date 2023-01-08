@@ -354,7 +354,7 @@ class BuddyDaddiesDownload(Winter2023AnimeDownload, NewsTemplate):
     folder_name = 'buddy-daddies'
 
     PAGE_PREFIX = website
-    FINAL_EPISODE = 12
+    FINAL_EPISODE = 13
 
     def __init__(self):
         super().__init__()
@@ -2880,6 +2880,7 @@ class TomochanDownload(Winter2023AnimeDownload, NewsTemplate):
 
     def download_episode_preview(self):
         story_url = self.PAGE_PREFIX + 'story/'
+        # yt_folder, yt_episodes = self.init_youtube_thumbnail_variables()
         try:
             soup = self.get_soup(story_url, decode=True)
             stories = soup.select('.p-story__nav li')
@@ -2894,7 +2895,7 @@ class TomochanDownload(Winter2023AnimeDownload, NewsTemplate):
                     episode = str(ep_num).zfill(2)
                 except:
                     continue
-                if self.is_image_exists(episode + '_1'):
+                if self.is_image_exists(episode + '_1'):  # and episode in yt_episodes:
                     continue
                 if story.has_attr('class') and 'is-current' in story['class']:
                     ep_soup = soup
@@ -2908,6 +2909,11 @@ class TomochanDownload(Winter2023AnimeDownload, NewsTemplate):
                         image_name = episode + '_' + str(i + 1)
                         self.add_to_image_list(image_name, image_url)
                     self.download_image_list(self.base_folder)
+
+                # yt_tag = ep_soup.select('.md-movie[data-youtubeid]')
+                # if len(yt_tag) > 0 and len(yt_tag[0]['data-youtubeid']) > 0:
+                #     yt_id = yt_tag[0]['data-youtubeid']
+                #     self.download_youtube_thumbnail_by_id(yt_id, yt_folder, episode)
         except Exception as e:
             self.print_exception(e)
 
