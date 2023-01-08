@@ -1260,17 +1260,46 @@ class KooriZokuseiDanshiDownload(Winter2023AnimeDownload, NewsTemplate):
             episode = str(i + 1).zfill(2)
             if self.is_image_exists(episode + '_' + str(self.IMAGES_PER_EPISODE)):
                 continue
+            stop = False
             for j in range(self.IMAGES_PER_EPISODE):
                 image_url = template % (str(i + 1), str(j + 1))
                 image_name = episode + '_' + str(j + 1)
                 if self.download_image(image_url, self.base_folder + '/' + image_name, to_jpg=True) == -1:
-                    return
+                    stop = True
+                    break
                 webp_image_file = self.base_folder + '/' + episode + '_' + str(j + 1) + '.webp'
                 if os.path.exists(webp_image_file):
                     try:
                         self.convert_image_to_jpg(webp_image_file)
                     except Exception as e:
                         self.print_exception(e, 'Error in converting webp to jpg.')
+            if stop:
+                break
+
+        # YouTube thumbnails
+        yt_folder, yt_episodes = self.init_youtube_thumbnail_variables()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'special/')
+            items = soup.select('.p-MovieList__item')
+            for item in reversed(items):
+                title = item.select('.p-figcatiopn-text')
+                image = item.select('.p-Movie__figure img[src]')
+                if len(title) == 0 or len(image) == 0:
+                    continue
+                try:
+                    index1 = title[0].text.find('第')
+                    index2 = title[0].text.find('話')
+                    if index1 == -1 or index2 == -1 or index1 >= index2:
+                        continue
+                    episode = str(int(title[0].text[index1 + 1: index2])).zfill(2)
+                except:
+                    continue
+                if episode in yt_episodes:
+                    continue
+                yt_id = image[0]['src'].split('/')[-2]
+                self.download_youtube_thumbnail_by_id(yt_id, yt_folder, episode)
+        except Exception as e:
+            self.print_exception(e, 'YouTube thumbnail')
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + 'news/'
