@@ -1153,6 +1153,21 @@ class AnkokuHeishiDownload(Winter2023AnimeDownload, NewsTemplate):
         self.add_to_image_list('comment_img', self.PAGE_PREFIX + 'img/comment_img.png')
         self.download_image_list(folder)
 
+        # Modal PV
+        modal_folder = folder + '/modal'
+        if not os.path.exists(modal_folder):
+            os.makedirs(modal_folder)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            modal_tag = soup.select('a[href].modal_pv2')
+            if len(modal_tag) > 0 and 'youtube' in modal_tag[0]['href']:
+                yt_id = modal_tag[0]['href'].split('/')[-1]
+                yt_image_url = f'https://img.youtube.com/vi/{yt_id}/maxresdefault.jpg'
+                if not self.is_image_exists(yt_id, modal_folder):
+                    self.download_image(yt_image_url, modal_folder + '/' + yt_id)
+        except Exception as e:
+            self.print_exception(e, 'Modal')
+
 
 # Kami-tachi ni Hirowareta Otoko 2
 class Kamihiro2Download(Winter2023AnimeDownload, NewsTemplate):
