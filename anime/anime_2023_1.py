@@ -19,6 +19,7 @@ import os
 # Kubo-san wa Mob wo Yurusanai https://kubosan-anime.jp/ #久保さん @kubosan_anime
 # Kyokou Suiri S2 https://kyokousuiri.jp/ #虚構推理 @kyokou_suiri
 # Maou Gakuin no Futekigousha 2nd Season https://maohgakuin.com/ #魔王学院 @maohgakuin
+# Mononogatari https://mononogatari-pr.com #もののがたり @mononogatari_pr
 # NieR:Automata Ver1.1a #ニーア https://nierautomata-anime.com/ #NieR #ニーアオートマタ @NieR_A_ANIME
 # Ningen Fushin no Boukensha-tachi ga Sekai wo Sukuu you desu https://www.ningenfushin-anime.jp/ #人間不信 @ningenfushinPR
 # Oniichan wa Oshimai! https://onimai.jp/ #おにまい @onimai_anime
@@ -1755,6 +1756,105 @@ class Maohgakuin2Download(Winter2023AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+
+# Mononogatari
+class MononogatariDownload(Winter2023AnimeDownload):
+    title = 'Mononogatari'
+    keywords = [title, 'Malevolent Spirits']
+    website = 'https://mononogatari-pr.com/'
+    twitter = 'mononogatari_pr'
+    hashtags = ['もののがたり', 'mononogatari']
+    folder_name = 'mononogatari'
+
+    PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/', decode=True)
+            stories = soup.select('.Story_panel')
+            for story in stories:
+                try:
+                    ep_num = int(story.select('h3 span')[0].text.replace('#', ''))
+                    if ep_num is None or ep_num < 1:
+                        continue
+                    episode = str(ep_num).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                images = story.select('.storyThum img[src]')
+                self.image_list = []
+                for i in range(len(images)):
+                    image_url = self.PAGE_PREFIX + images[i]['src'].replace('../', '')
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
+
+    def download_news(self):
+        try:
+            results = []
+            news_obj = self.get_last_news_log_object()
+            response = self.get_response(self.PAGE_PREFIX, decode=True)
+            index = response.find('//配列を宣言')
+            if index == -1:
+                return
+            end_index = response[index:].find('];')
+            if end_index == -1:
+                return
+            arr = response[index + 7:][0:end_index].split('},')
+            for i in range(len(arr)):
+                try:
+                    content = arr[i].split('{')[1].split('}')[0]
+                    cont_split = content.split(',')
+                    year = month = day = title = None
+                    for cont in cont_split:
+                        subcontent = cont.strip()
+                        if subcontent.startswith("'y':'"):
+                            year = subcontent[5:9]
+                        elif subcontent.startswith("'m':"):
+                            month = subcontent[5:7]
+                        elif subcontent.startswith("'d':"):
+                            day = subcontent[5:7]
+                        elif subcontent.startswith("'txt':'"):
+                            last_index = subcontent.rfind("'")
+                            if last_index != -1:
+                                title = subcontent[7:last_index]
+                    if year is None or month is None or day is None or title is None:
+                        continue
+                    date = year + '.' + month + '.' + day
+                    title = ' '.join(title.split())
+                    if news_obj and (title == news_obj['title'] or date < news_obj['date']):
+                        break
+                    results.append(self.create_news_log_object(date, title, ''))
+                except:
+                    continue
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log_from_news_log_object(result)
+                if process_result == 0:
+                    success_count += 1
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
+        except Exception as e:
+            self.print_exception(e, 'News')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('kv_aniverse', 'https://aniverse-mag.com/wp-content/uploads/2022/12/sub5-2.jpg')
+        self.download_image_list(folder)
             
 
 # NieR:Automata Ver1.1a
