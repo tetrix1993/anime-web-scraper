@@ -500,6 +500,7 @@ class EiyuuouDownload(Winter2023AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         yt_folder, yt_episodes = self.init_youtube_thumbnail_variables(['13'])
@@ -572,6 +573,20 @@ class EiyuuouDownload(Winter2023AnimeDownload, NewsTemplate):
 
         # template = self.PAGE_PREFIX + 'wp/wp-content/themes/euo-teaser-theme/img/chara-pic%s.png'
         # self.download_by_template(folder, template, 1, 1, prefix='tz_')
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'bluray/')
+            self.image_list = []
+            images = soup.select('.section-contents img[src]')
+            for image in images:
+                image_url = image['src']
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
 
 # Hyouken no Majutsushi ga Sekai wo Suberu
