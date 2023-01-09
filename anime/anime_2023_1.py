@@ -1604,6 +1604,7 @@ class KyokouSuiri2Download(Winter2023AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -1660,6 +1661,35 @@ class KyokouSuiri2Download(Winter2023AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        bd_prefix = self.PAGE_PREFIX + 'bd/'
+        for page in ['store', 'vol1', 'vol2', 'vol3', 'vol4']:
+            try:
+                if page != 'store' and page in processed:
+                    continue
+                page_url = bd_prefix + page + '/'
+                soup = self.get_soup(page_url)
+                images = soup.select('.p-bddvd__inner img[src]')
+                self.image_list = []
+                for image in images:
+                    image_url = self.PAGE_PREFIX + image['src'][1:]
+                    image_name = self.extract_image_name_from_url(image_url)
+                    if 'nowpri' == image_name or self.is_image_exists(image_name, folder):
+                        continue
+                    self.add_to_image_list(image_name, image_url)
+                if page.startswith('vol'):
+                    if len(self.image_list) > 0:
+                        processed.append(page)
+                    else:
+                        break
+                self.download_image_list(folder)
+            except Exception as e:
+                self.print_exception(e, f'Blu-ray - {page}')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Maou Gakuin no Futekigousha: Shijou Saikyou no Maou no Shiso, Tensei shite Shison-tachi no Gakkou e II
