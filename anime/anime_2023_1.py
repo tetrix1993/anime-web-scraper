@@ -967,6 +967,8 @@ class Bofuri2Download(Winter2023AnimeDownload):
     folder_name = 'bofuri2'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 6
 
     def __init__(self):
         super().__init__()
@@ -979,7 +981,55 @@ class Bofuri2Download(Winter2023AnimeDownload):
         self.download_media()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            template = self.PAGE_PREFIX + 'assets/story/%s/%s.jpg'
+            stop = False
+            for i in range(self.FINAL_EPISODE):
+                episode = str(i + 1).zfill(2)
+                if self.is_image_exists(episode + '_' + str(self.IMAGES_PER_EPISODE)):
+                    continue
+                for j in range(self.IMAGES_PER_EPISODE):
+                    image_url = template % (str(i + 1), str(j + 1))
+                    image_name = episode + '_' + str(j + 1)
+                    if self.download_image(image_url, self.base_folder + '/' + image_name) == -1:
+                        stop = True
+                        break
+                if stop:
+                    break
+        except Exception as e:
+            self.print_exception(e)
+
+        # YouTube thumbnails
+        yt_folder, yt_episodes = self.init_youtube_thumbnail_variables()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'news/')
+            items = soup.select('section.news-data')
+            for item in items:
+                tag_title = item.find('div', class_='title')
+                a_tag = item.select('a[href]')
+                if tag_title is not None and len(a_tag) > 0:
+                    title = tag_title.text.strip()
+                    if '予告' not in title:
+                        continue
+                    dai_index = title.find('第')
+                    wa_index = title.find('話')
+                    if dai_index >= 0 and wa_index >= 0 and dai_index + 1 < wa_index:
+                        try:
+                            episode = str(int(title[dai_index + 1:wa_index])).zfill(2)
+                        except:
+                            continue
+                        if episode in yt_episodes:
+                            break
+                        news_soup = self.get_soup(self.PAGE_PREFIX + 'news/' + a_tag[0]['href'].replace('./', ''))
+                        if news_soup is not None:
+                            tags = news_soup.select('.news-body a[href]')
+                            for tag in tags:
+                                if 'youtube' in tag['href'] and 'watch?v=' in tag['href']:
+                                    yt_id = tag['href'].split('=')[-1]
+                                    self.download_youtube_thumbnail_by_id(yt_id, yt_folder, episode)
+                                    break
+        except Exception as e:
+            self.print_exception(e, 'YouTube thumbnails')
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + 'news/'
