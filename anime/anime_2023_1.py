@@ -2006,7 +2006,6 @@ class OnimaiDownload(Winter2023AnimeDownload, NewsTemplate):
 
     PAGE_PREFIX = website
     FINAL_EPISODE = 12
-    IMAGES_PER_EPISODE = 8
 
     def __init__(self):
         super().__init__()
@@ -2026,13 +2025,16 @@ class OnimaiDownload(Winter2023AnimeDownload, NewsTemplate):
                 continue
             ep_template = template % (episode, '%s')
             stop = False
-            for j in range(self.IMAGES_PER_EPISODE):
+            is_successful = False
+            for j in range(20):
                 image_url = ep_template % str(j + 1).zfill(2)
-                image_name = episode + '_' + str(j + 1)
+                image_name = episode + '_' + str(j + 1).zfill(2)
                 result = self.download_image(image_url, self.base_folder + '/' + image_name)
                 if result == -1:
-                    stop = True
+                    if not is_successful:
+                        stop = True
                     break
+                is_successful = True
             if stop:
                 break
 
