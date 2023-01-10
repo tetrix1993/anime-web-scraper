@@ -2617,7 +2617,29 @@ class Shinkanomi2Download(Winter2023AnimeDownload, NewsTemplate):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + '/story/')
+            ep_nums = soup.select('.jsEpisodeNum .episodeNumItem')
+            ep_list = soup.select('.jsEpisodeList .episodeListItem')
+            if len(ep_nums) == len(ep_list):
+                for index in range(len(ep_nums)):
+                    try:
+                        episode = str(int(ep_nums[index].text.strip()[1:3])).zfill(2)
+                    except:
+                        continue
+                    if self.is_image_exists(episode + '_1'):
+                        continue
+                    images = ep_list[index].select('img[src]')
+                    self.image_list = []
+                    for i in range(len(images)):
+                        image_url = images[i]['src']
+                        image_name = f'{episode}_{i + 1}'
+                        self.add_to_image_list(image_name, image_url)
+                    self.download_image_list(self.base_folder)
+            else:
+                raise Exception("Expected ep_num == ep_list")
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.newsArchive .block',
