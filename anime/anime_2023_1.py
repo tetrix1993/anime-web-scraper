@@ -2251,7 +2251,32 @@ class OoyukiumiDownload(Winter2023AnimeDownload, NewsTemplate):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        story_url = self.PAGE_PREFIX + 'episodes/'
+        try:
+            soup = self.get_soup(story_url)
+            stories = soup.select('.episodes__list a[href]')
+            for story in stories:
+                et_num = story.select('.et--num')
+                if len(et_num) == 0:
+                    continue
+                try:
+                    episode = str(int(et_num[0].text.replace('第', '').replace('話', ''))).zfill(2)
+                except:
+                    continue
+                ep_soup = self.get_soup(story_url + story['href'].replace('./', ''))
+                if ep_soup is None:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                images = ep_soup.select('.episode__imgList img[src]')
+                self.image_list = []
+                for i in range(len(images)):
+                    image_url = story_url + images[i]['src'].replace('./', '')
+                    image_name = f'{episode}_{i + 1}'
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + 'news/'
@@ -2618,7 +2643,7 @@ class Shinkanomi2Download(Winter2023AnimeDownload, NewsTemplate):
 
     def download_episode_preview(self):
         try:
-            soup = self.get_soup(self.PAGE_PREFIX + '/story/')
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
             ep_nums = soup.select('.jsEpisodeNum .episodeNumItem')
             ep_list = soup.select('.jsEpisodeList .episodeListItem')
             if len(ep_nums) == len(ep_list):
