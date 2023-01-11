@@ -3255,6 +3255,7 @@ class TondemoSkillDownload(Winter2023AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -3316,6 +3317,42 @@ class TondemoSkillDownload(Winter2023AnimeDownload, NewsTemplate):
         prefix = self.PAGE_PREFIX + 'wordpress/wp-content/themes/tondemoskill/assets/img/character/'
         templates = [prefix + 'ch%s_stand.png', prefix + 'ch%s_look.png']
         self.download_by_template(folder, templates, 2, 1)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        for page in ['bd-store', 'vol01', 'vol02', 'vol03']:
+            try:
+                if page.startswith('vol'):
+                    if page in processed:
+                        continue
+                    bd_url = self.PAGE_PREFIX + 'bd/' + page + '/'
+                else:
+                    bd_url = self.PAGE_PREFIX + 'bd-store/'
+                soup = self.get_soup(bd_url)
+                if page.startswith('vol'):
+                    images = soup.select('.p-bd_thumb__visual img[src]')
+                else:
+                    images = soup.select('.p-bd_special_data__thumb img[src]')
+                self.image_list = []
+                for image in images:
+                    image_url = image['src']
+                    if '/common/cs.png' in image_url:
+                        continue
+                    image_name = self.extract_image_name_from_url(image_url)
+                    if self.is_image_exists(image_name, folder):
+                        continue
+                    self.add_to_image_list(image_name, image_url)
+                if page.startswith('vol'):
+                    if len(self.image_list) == 0:
+                        break
+                    else:
+                        processed.append(page)
+                self.download_image_list(folder)
+            except Exception as e:
+                self.print_exception(e, f'Blu-ray - {page}')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Tsundere Akuyaku Reijou Liselotte to Jikkyou no Endou-kun to Kaisetsu no Kobayashi-san
