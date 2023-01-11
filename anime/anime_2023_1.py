@@ -990,6 +990,7 @@ class Bofuri2Download(Winter2023AnimeDownload):
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_external()
         self.download_news()
         self.download_key_visual()
         self.download_character()
@@ -1045,6 +1046,11 @@ class Bofuri2Download(Winter2023AnimeDownload):
                                     break
         except Exception as e:
             self.print_exception(e, 'YouTube thumbnails')
+
+    def download_episode_preview_external(self):
+        keywords = ['痛いのは嫌なので防御力に極振りしたいと思います']
+        AniverseMagazineScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                end_date='20230110', download_id=self.download_id).run()
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + 'news/'
