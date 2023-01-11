@@ -491,6 +491,7 @@ class EiyuuouDownload(Winter2023AnimeDownload, NewsTemplate):
 
     PAGE_PREFIX = website
     FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 6
 
     def __init__(self):
         super().__init__()
@@ -498,6 +499,7 @@ class EiyuuouDownload(Winter2023AnimeDownload, NewsTemplate):
     def run(self):
         self.download_episode_preview()
         self.download_episode_preview_external()
+        self.download_episode_preview_guess()
         self.download_news()
         self.download_key_visual()
         self.download_character()
@@ -538,6 +540,33 @@ class EiyuuouDownload(Winter2023AnimeDownload, NewsTemplate):
         keywords = ['英雄王、武を極めるため転生す']
         AniverseMagazineScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE,
                                 end_date='20230106', download_id=self.download_id).run()
+
+    def download_episode_preview_guess(self):
+        folder = self.create_custom_directory('guess')
+        template = self.PAGE_PREFIX + 'wp/wp-content/uploads/%s/%s/%s.jpg'
+        current_date = datetime.now() + timedelta(hours=1)
+        year = current_date.strftime('%Y')
+        month = current_date.strftime('%m')
+        is_successful = False
+        for i in range(self.FINAL_EPISODE):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_1') or self.is_image_exists(episode + '_1', folder):
+                continue
+            stop = False
+            for j in range(self.IMAGES_PER_EPISODE):
+                img_name = 'story-pic' + str(i + 1) + '-' + str(j + 1)
+                image_url = template % (year, month, img_name)
+                image_name = episode + '_' + str(j + 1)
+                result = self.download_image(image_url, folder + '/' + image_name)
+                if result == -1:
+                    stop = True
+                    break
+                is_successful = True
+            if stop:
+                break
+        if is_successful:
+            print(self.__class__.__name__ + ' - Guessed correctly!')
+        return is_successful
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.news-item',
