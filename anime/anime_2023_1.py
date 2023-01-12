@@ -3382,7 +3382,7 @@ class TondemoSkillDownload(Winter2023AnimeDownload, NewsTemplate):
                         episode = str(int(item['no'])).zfill(2)
                     except:
                         continue
-                    if self.is_image_exists(episode + '_1'):
+                    if self.is_image_exists(episode + '_5'):
                         continue
                     if 'thumbnails' in item and isinstance(item['thumbnails'], list) and len(item['thumbnails']) > 0:
                         self.image_list = []
