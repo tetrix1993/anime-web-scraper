@@ -2169,9 +2169,21 @@ class OnimaiDownload(Winter2023AnimeDownload, NewsTemplate):
         template = self.PAGE_PREFIX + 'episode/img/%s_%s.jpg'
         for i in range(self.FINAL_EPISODE):
             episode = str(i + 1).zfill(2)
-            if self.is_image_exists(episode + '_1'):
+            if self.is_image_exists(episode + '_09'):
                 continue
             ep_template = template % (episode, '%s')
+            if self.is_valid_url(ep_template % '09', is_image=True):
+                old_folder = self.base_folder + '/old'
+                if not os.path.exists(old_folder):
+                    os.makedirs(old_folder)
+                for j in range(8):
+                    image_name = episode + '_' + str(j + 1).zfill(2) + '.jpg'
+                    try:
+                        os.rename(self.base_folder + '/' + image_name, old_folder + '/' + image_name)
+                    except:
+                        pass
+            elif self.is_image_exists(episode + '_01'):
+                continue
             stop = False
             is_successful = False
             for j in range(20):
