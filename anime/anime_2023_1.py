@@ -3108,38 +3108,46 @@ class TentenKakumeiDownload(Winter2023AnimeDownload, NewsTemplate):
         self.download_media()
 
     def download_episode_preview(self):
-        template = self.PAGE_PREFIX + 'images/story/%s/p_%s.jpg'
-        for i in range(self.FINAL_EPISODE):
-            episode = str(i + 1).zfill(2)
-            if self.is_image_exists(episode + '_1'):
-                continue
-            ep_template = template % (str(i + 1).zfill(3), '%s')
-            stop = False
-            for j in range(self.IMAGES_PER_EPISODE):
-                image_url = ep_template % str(j + 1).zfill(3)
-                image_name = episode + '_' + str(j + 1)
-                result = self.download_image(image_url, self.base_folder + '/' + image_name)
-                if result == -1:
-                    stop = True
-                    break
-            if stop:
-                break
+        # template = self.PAGE_PREFIX + 'images/story/%s/p_%s.jpg'
+        # for i in range(self.FINAL_EPISODE):
+        #     episode = str(i + 1).zfill(2)
+        #     if self.is_image_exists(episode + '_1'):
+        #         continue
+        #     ep_template = template % (str(i + 1).zfill(3), '%s')
+        #     stop = False
+        #     for j in range(self.IMAGES_PER_EPISODE):
+        #         image_url = ep_template % str(j + 1).zfill(3)
+        #         image_name = episode + '_' + str(j + 1)
+        #         result = self.download_image(image_url, self.base_folder + '/' + image_name)
+        #         if result == -1:
+        #             stop = True
+        #             break
+        #     if stop:
+        #         break
 
-        # YouTube thumbnails
         yt_folder, yt_episodes = self.init_youtube_thumbnail_variables(['01'])
         try:
             soup = self.get_soup(self.PAGE_PREFIX + 'story.html')
             stories = soup.select('.content_wrap a[href]')
-            for story in reversed(stories):
+            for story in stories:
                 try:
                     episode = str(int(story['href'].split('/')[-1].replace('story', '').replace('.html', ''))).zfill(2)
-                    if episode in yt_episodes:
+                    if self.is_image_exists(episode + '_1') and episode in yt_episodes:
                         continue
                 except:
                     continue
                 story_url = self.PAGE_PREFIX + story['href']
                 story_soup = self.get_soup(story_url)
                 if story_soup is not None:
+                    self.image_list = []
+                    images = story_soup.select('.thumbnail-list img[src]')
+                    for i in range(len(images)):
+                        image_url = self.PAGE_PREFIX + images[i]['src'].replace('../', '')
+                        image_name = episode + '_' + str(i + 1)
+                        self.add_to_image_list(image_name, image_url)
+                    self.download_image_list(self.base_folder)
+
+                    # YouTube thumbnail
                     yt_tag = story_soup.select('.yt_movie iframe[src]')
                     if len(yt_tag) > 0:
                         yt_id = yt_tag[0]['src'].split('?')[0].split('/')[-1]
