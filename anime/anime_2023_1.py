@@ -2369,6 +2369,7 @@ class OtonarinoTenshisamaDownload(Winter2023AnimeDownload, NewsTemplate):
         self.download_media()
 
     def download_episode_preview(self):
+        yt_folder, yt_episodes = self.init_youtube_thumbnail_variables(['01'])
         try:
             soup = self.get_soup(self.PAGE_PREFIX)
             sections = soup.select('.story__episode section.episode[id]')
@@ -2377,7 +2378,7 @@ class OtonarinoTenshisamaDownload(Winter2023AnimeDownload, NewsTemplate):
                     episode = str(int(section['id'].replace('ep', ''))).zfill(2)
                 except:
                     continue
-                if self.is_image_exists(episode + '_1'):
+                if self.is_image_exists(episode + '_1') and episode in yt_episodes:
                     continue
                 images = section.select('img[src]')
                 self.image_list = []
@@ -2386,6 +2387,12 @@ class OtonarinoTenshisamaDownload(Winter2023AnimeDownload, NewsTemplate):
                     image_name = episode + '_' + str(i + 1)
                     self.add_to_image_list(image_name, image_url)
                 self.download_image_list(self.base_folder)
+
+                # YouTube thumbnail
+                yt_tag = section.select('.youtube-embed iframe[src]')
+                if len(yt_tag) > 0:
+                    yt_id = yt_tag[0]['src'].split('?')[0].split('/')[-1]
+                    self.download_youtube_thumbnail_by_id(yt_id, yt_folder, episode)
         except Exception as e:
             self.print_exception(e)
 
