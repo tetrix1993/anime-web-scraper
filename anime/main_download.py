@@ -1280,7 +1280,10 @@ class MainDownload:
                 yt_image_name = f'{episode}_{i + 1}_{yt_id}'
             else:
                 yt_image_name = f'{episode}_{yt_id}'
-            self.download_image(yt_image_url, f'{yt_folder}/{yt_image_name}')
+            result = self.download_image(yt_image_url, f'{yt_folder}/{yt_image_name}')
+            if result == -1:
+                yt_image_url = f'https://img.youtube.com/vi/{yt_id}/sddefault.jpg'
+                self.download_image(yt_image_url, f'{yt_folder}/{yt_image_name}')
 
     # Match filter
     def match(self, s_filter):
