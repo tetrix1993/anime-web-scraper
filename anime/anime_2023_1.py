@@ -2378,7 +2378,8 @@ class OtonarinoTenshisamaDownload(Winter2023AnimeDownload, NewsTemplate):
             sections = soup.select('.story__episode section.episode[id]')
             for section in sections:
                 try:
-                    episode = str(int(section['id'].replace('ep', ''))).zfill(2)
+                    ep_num = section.select('.episode__number')[0].text.replace('第', '').replace('話', '')
+                    episode = str(int(ep_num)).zfill(2)
                 except:
                     continue
                 if self.is_image_exists(episode + '_1') and episode in yt_episodes:
