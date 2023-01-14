@@ -2524,6 +2524,25 @@ class OtonarinoTenshisamaDownload(Winter2023AnimeDownload, NewsTemplate):
             self.print_exception(e, 'Special')
         self.create_cache_file(special_cache_filepath, processed, num_processed)
 
+        # With You
+        withyou_prefix = self.PAGE_PREFIX + 'withyou/'
+        withyou_page = withyou_prefix + 'prefectures/prefectures.html'
+        withyou_folder = folder + '/withyou'
+        if not os.path.exists(withyou_folder):
+            os.makedirs(withyou_folder)
+        try:
+            soup = self.get_soup(withyou_page)
+            images = soup.select('.slide-items .slide-img img[src]')
+            self.image_list = []
+            for image in images:
+                image_url = withyou_prefix + image['src'].replace('../', '')
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+                self.add_to_image_list('2' + image_name, image_url.replace(image_name, '2' + image_name))
+            self.download_image_list(withyou_folder)
+        except Exception as e:
+            self.print_exception(e, 'With You')
+
 
 # Rougo ni Sonaete Isekai de 8-manmai no Kinka wo Tamemasu
 class Roukin8Download(Winter2023AnimeDownload, NewsTemplate):
