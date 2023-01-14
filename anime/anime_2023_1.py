@@ -2093,28 +2093,26 @@ class NingenFushinDownload(Winter2023AnimeDownload, NewsTemplate):
 
     PAGE_PREFIX = website
     FINAL_EPISODE = 12
-    IMAGES_PER_EPISODE = 4
+    IMAGES_PER_EPISODE = 6
 
     def __init__(self):
         super().__init__()
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_external()
         self.download_news()
         self.download_key_visual()
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
-
-    def download_episode_preview_temp(self):
         template = self.PAGE_PREFIX + 'wp-content/themes/ningenfushin/dist/img/story/ep%s/img%s.jpg'
         for i in range(self.FINAL_EPISODE):
             ep_num = str(i + 1)
             episode = ep_num.zfill(2)
             if self.is_image_exists(episode + '_1'):
                 continue
-            is_success = True
+            is_success = False
             for j in range(self.IMAGES_PER_EPISODE):
                 image_url = template % (ep_num, str(j + 1))
                 if self.is_not_matching_content_length(image_url, 447760):
@@ -2123,6 +2121,11 @@ class NingenFushinDownload(Winter2023AnimeDownload, NewsTemplate):
                     is_success = True
             if not is_success:
                 return
+
+    def download_episode_preview_external(self):
+        keywords = ['人間不信の冒険者たちが世界を救うようです']
+        AniverseMagazineScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                end_date='20230106', download_id=self.download_id).run()
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.c-News__articleLink',
