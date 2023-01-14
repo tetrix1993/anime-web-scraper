@@ -1274,7 +1274,7 @@ class MainDownload:
         else:
             return
         for i in range(len(youtube_ids)):
-            yt_id = youtube_ids[i]
+            yt_id = ' '.join(youtube_ids[i].split())
             yt_image_url = f'https://img.youtube.com/vi/{yt_id}/maxresdefault.jpg'
             if len(youtube_ids) > 1:
                 yt_image_name = f'{episode}_{i + 1}_{yt_id}'
