@@ -138,6 +138,7 @@ class AyakashiTriangleDownload(Winter2023AnimeDownload, NewsTemplate):
 
     def download_episode_preview(self):
         story_url = self.PAGE_PREFIX + 'story/'
+        yt_folder, yt_episodes = self.init_youtube_thumbnail_variables(['01'])
         try:
             soup = self.get_soup(story_url, decode=True)
             li_tags = soup.select('li.story_pager__list')
@@ -150,7 +151,7 @@ class AyakashiTriangleDownload(Winter2023AnimeDownload, NewsTemplate):
                         continue
                 else:
                     continue
-                if self.is_image_exists(episode + '_5'):
+                if self.is_image_exists(episode + '_5') and episode in yt_episodes:
                     continue
                 if li.has_attr('class') and 'is_current' in li['class']:
                     ep_soup = soup
@@ -164,6 +165,10 @@ class AyakashiTriangleDownload(Winter2023AnimeDownload, NewsTemplate):
                         image_name = episode + '_' + str(i + 1)
                         self.add_to_image_list(image_name, image_url)
                     self.download_image_list(self.base_folder)
+                    yt_tag = ep_soup.select('.p-story_movie_data[data-modal]')
+                    if len(yt_tag) > 0:
+                        yt_id = yt_tag[0]['data-modal'].split(':')[-1]
+                        self.download_youtube_thumbnail_by_id(yt_id, yt_folder, episode)
         except Exception as e:
             self.print_exception(e)
 
