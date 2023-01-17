@@ -305,17 +305,19 @@ def download_from_news_website():
             print("Invalid input. Please enter an integer.")
             continue
 
-        if 0 < choice < 7:
+        if 0 < choice < 8:
             id = input('Enter article ID: ').strip()
             if len(id) == 0:
                 print('Invalid article ID')
                 continue
             base_folder = 'news/%s/%s'
             if choice == 1:
+                AnimagePlusDownload(str(id), base_folder % (constants.EXTERNAL_FOLDER_ANIMAGE_PLUS, str(id)), None).run()
+            elif choice == 2:
                 AnimeRecorderDownload(str(id), base_folder % (constants.EXTERNAL_FOLDER_ANIME_RECORDER, str(id)), None).run()
-            if choice == 2:
+            elif choice == 3:
                 AniverseMagazineDownload(str(id), base_folder % (constants.EXTERNAL_FOLDER_ANIVERSE, str(id)), None).run()
-            if choice == 3:
+            elif choice == 4:
                 id_str = str(id)
                 if id_str.endswith('/'):
                     id_str = id_str[0:len(id_str) - 1]
@@ -329,15 +331,15 @@ def download_from_news_website():
                     print('Invalid article ID')
                     continue
                 EeoMediaDownload(id_str, base_folder % (constants.EXTERNAL_FOLDER_EEOMEDIA, folder_name), None).run()
-            if choice == 4:
+            elif choice == 5:
                 if len(id) != 15:
                     print('Invalid article ID')
                     continue
                 article_id = id[0:8] + '/' + id
                 MocaNewsDownload(article_id, base_folder % (constants.EXTERNAL_FOLDER_MOCANEWS, str(id)), None).run()
-            elif choice == 5:
-                NatalieDownload(str(id), base_folder % (constants.EXTERNAL_FOLDER_NATALIE, str(id)), None).run()
             elif choice == 6:
+                NatalieDownload(str(id), base_folder % (constants.EXTERNAL_FOLDER_NATALIE, str(id)), None).run()
+            elif choice == 7:
                 WebNewtypeDownload(str(id), base_folder % (constants.EXTERNAL_FOLDER_WEBNEWTYPE, str(id)), None).run()
         elif choice == 0:
             break
@@ -347,12 +349,13 @@ def download_from_news_website():
 
 
 def print_news_website_choice():
-    print('1 - Anime Recorder')
-    print('2 - Aniverse')
-    print('3 - Eeo Media')
-    print('4 - Moca News')
-    print('5 - Natalie')
-    print('6 - WebNewtype')
+    print('1 - Animage Plus')
+    print('2 - Anime Recorder')
+    print('3 - Aniverse')
+    print('4 - Eeo Media')
+    print('5 - Moca News')
+    print('6 - Natalie')
+    print('7 - WebNewtype')
     print("0 - Return")
 
 

@@ -71,9 +71,10 @@ pip install -r requirements.txt
 
 ## Websites
 <details>
-<summary>Here are the some of the websites that are scraped (click to expand):</summary>
+<summary>Here are some of the websites that are scraped (click to expand):</summary>
 
 ### News Website
+* [Animage Plus](https://animageplus.jp/)
 * [Anime Recorder](https://anime-recorder.com/)
 * [Aniverse Magazine](https://aniverse-mag.com/)
 * [Moca News](https://moca-news.net/)

@@ -13,6 +13,61 @@ class ExternalDownload(MainDownload):
         self.download_id = download_id
 
 
+class AnimagePlusDownload(ExternalDownload):
+    folder_name = None
+    TEMPLATE = 'https://animageplus.jp/articles/gallery/%s/1'
+
+    def __init__(self, article_id, save_folder, episode, download_id=None):
+        super().__init__(download_id)
+        self.base_folder = self.base_folder + "/" + save_folder
+        if not os.path.exists(self.base_folder):
+            os.makedirs(self.base_folder)
+        self.article_id = str(article_id)
+        if episode:
+            self.episode = str(episode).zfill(2)
+        else:
+            self.episode = None
+
+    def process_article(self):
+        try:
+            article_url = self.TEMPLATE % self.article_id
+            soup = self.get_soup(article_url)
+            images = soup.select('.articleGalleryList li p.img[style]')
+            self.image_list = []
+            for i in range(len(images)):
+                if 'background-image:url(' in images[i]['style']:
+                    image_url = images[i]['style'][21:].split(');')[0]
+                    j = len(image_url)
+                    first_index = -1
+                    second_index = -1
+                    for k in reversed(image_url):
+                        j -= 1
+                        if k == '/':
+                            if first_index == -1:
+                                first_index = j
+                            else:
+                                second_index = j
+                                break
+                    if first_index == -1 or second_index == -1:
+                        continue
+                    image_url = image_url[0:second_index + 1] + 'ORG' + image_url[first_index:]
+                    if self.episode is None:
+                        image_name = str(i + 1).zfill(2)
+                    else:
+                        image_name = self.episode + '_' + str(i + 1).zfill(2)
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
+
+    def run(self):
+        self.process_article()
+        if len(os.listdir(self.base_folder)) == 0:
+            print('No content is downloaded for article ID: %s' % self.article_id)
+            os.removedirs(self.base_folder)
+
+
 class AnimeRecorderDownload(ExternalDownload):
     folder_name = None
     PAGE_PREFIX = 'https://www.anime-recorder.com/tvanime/'
