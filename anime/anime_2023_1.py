@@ -2109,6 +2109,7 @@ class NingenFushinDownload(Winter2023AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         template = self.PAGE_PREFIX + 'wp-content/themes/ningenfushin/dist/img/story/ep%s/img%s.jpg'
@@ -2149,6 +2150,35 @@ class NingenFushinDownload(Winter2023AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         prefix = self.PAGE_PREFIX + 'wp-content/themes/ningenfushin/dist/img/character/body_char_'
         self.download_by_template(folder, [prefix + '%s.png', prefix + '%s_on.png'], 1, 1)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        bd_prefix = self.PAGE_PREFIX + 'products/'
+        for page in ['bd3', 'bd', 'bd2']:
+            try:
+                if page != 'bd3' and page in processed:
+                    continue
+                bd_url = bd_prefix + page
+                soup = self.get_soup(bd_url)
+                images = soup.select('.p-Products__column img[src]')
+                self.image_list = []
+                for image in images:
+                    image_url = image['src']
+                    image_name = self.extract_image_name_from_url(image_url)
+                    if image_name == 'now_printing':
+                        continue
+                    self.add_to_image_list(image_name, image_url)
+                if page != 'bd3':
+                    if len(self.image_list) == 0:
+                        break
+                    else:
+                        processed.append(page)
+                self.download_image_list(folder)
+            except Exception as e:
+                self.print_exception(e, f'Blu-ray - {page}')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Oniichan wa Oshimai!
