@@ -22,6 +22,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita 2nd Season https://slime300-anime.com/ #スライム倒して300年 @slime300_PR
 # Sousou no Frieren https://frieren-anime.jp/ #フリーレン #frieren @Anime_Frieren
 # Tearmoon Teikoku Monogatari: Dantoudai kara Hajimaru, Hime no Tensei Gyakuten Story https://tearmoon-pr.com/ #ティアムーン @tearmoon_pr
+# Temple https://temple-anime.com/ #てんぷる #Tenpuru_anime @temple_tvanime
 # Tensei shitara Dainana Ouji Datta node, Kimama ni Majutsu wo Kiwamemasu https://dainanaoji.com/ #第七王子 @dainanaoji_pro
 # Tonikaku Kawaii S2 http://tonikawa.com/ #トニカクカワイイ #tonikawa @tonikawa_anime
 # Unnamed Memory https://unnamedmemory.com/ #UnnamedMemory #アンメモ @Project_UM
@@ -953,6 +954,41 @@ class TearmoonDownload(UnconfirmedDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+
+# Temple
+class TempleDownload(UnconfirmedDownload, NewsTemplate):
+    title = 'Temple'
+    keywords = [title, 'TenPuru: No One Can Live on Loneliness']
+    website = 'https://temple-anime.com/'
+    twitter = 'temple_tvanime'
+    hashtags = ['てんぷる', 'Tenpuru_anime']
+    folder_name = 'temple'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, news_prefix='', article_select='#news article',
+                                    date_select='time', title_select='h3', id_select=None, id_has_id=True)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/FmrextbacAMbNvi?format=jpg&name=large')
+        self.add_to_image_list('mainimg', self.PAGE_PREFIX + 'images/mainimg.jpg')
+        self.add_to_image_list('img_story', self.PAGE_PREFIX + 'images/img_story.jpg')
+        self.download_image_list(folder)
 
 
 # Tensei shitara Dainana Ouji Datta node, Kimama ni Majutsu wo Kiwamemasu
