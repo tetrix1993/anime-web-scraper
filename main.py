@@ -10,14 +10,15 @@ def run():
         os.makedirs(constants.FOLDER_OUTPUT)
 
     downloads = []
+    for subclass in Winter2023AnimeDownload.__subclasses__():
+        if subclass.enabled:
+            downloads.append(subclass())
+    downloads += [IsekaiOjisanDownload(), SpyFamilyDownload(), Danmachi4Download(), KakkounoIinazukeDownload(),
+                  EngageKissDownload(), LycorisRecoilDownload(), Youzitsu2Download()]
     for subclass in Fall2022AnimeDownload.__subclasses__():
         if subclass.enabled:
             downloads.append(subclass())
-    downloads += [IsekaiOjisanDownload(), Utawarerumono3Download(), SpyFamilyDownload(), Danmachi4Download(),
-                  KakkounoIinazukeDownload(), KunoichiTsubakiDownload(), EngageKissDownload(), LycorisRecoilDownload(),
-                  ShadowsHouse2Download(), ArsnotoriaDownload(), Youzitsu2Download()]
-    subclasses = Winter2023AnimeDownload.__subclasses__() \
-        + Spring2023AnimeDownload.__subclasses__() \
+    subclasses = Spring2023AnimeDownload.__subclasses__() \
         + Summer2023AnimeDownload.__subclasses__() \
         + UnconfirmedDownload.__subclasses__()
     for subclass in subclasses:
