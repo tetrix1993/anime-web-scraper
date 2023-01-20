@@ -1,8 +1,9 @@
 import os
 import re
 import requests
-from anime.external_download import AnimeRecorderDownload, AniverseMagazineDownload, WebNewtypeDownload, MocaNewsDownload, NatalieDownload, EeoMediaDownload
-from anime.constants import EXTERNAL_FOLDER_ANIME_RECORDER, EXTERNAL_FOLDER_ANIVERSE, EXTERNAL_FOLDER_EEOMEDIA, EXTERNAL_FOLDER_MOCANEWS, EXTERNAL_FOLDER_NATALIE, EXTERNAL_FOLDER_WEBNEWTYPE
+import urllib.parse
+from anime.external_download import AnimagePlusDownload, AnimeRecorderDownload, AniverseMagazineDownload, WebNewtypeDownload, MocaNewsDownload, NatalieDownload, EeoMediaDownload
+from anime.constants import EXTERNAL_FOLDER_ANIMAGE_PLUS, EXTERNAL_FOLDER_ANIME_RECORDER, EXTERNAL_FOLDER_ANIVERSE, EXTERNAL_FOLDER_EEOMEDIA, EXTERNAL_FOLDER_MOCANEWS, EXTERNAL_FOLDER_NATALIE, EXTERNAL_FOLDER_WEBNEWTYPE
 from bs4 import BeautifulSoup as bs
 from datetime import datetime
 from datetime import timedelta
@@ -92,6 +93,89 @@ class MainScanner:
         elif len(eval) == 3 and eval[1] == 0 and eval[0] > 1:
             return eval[0] * 10 + eval[2]
         return None
+
+
+class AnimagePlusScanner(MainScanner):
+    CSRF_TOKEN = '8ee2767dd32a5ee850903f79c87a84d7'
+    SEARCH_API = 'https://animageplus.jp/search/index'
+    HEADERS = {'content-type': 'application/x-www-form-urlencoded'}
+    COOKIES = {'CSRF_cookie': CSRF_TOKEN}
+
+    def __init__(self, keyword, base_folder, last_episode=None, suffix=None, skip_article_ids=[], download_id=None):
+        super().__init__(download_id)
+        self.keyword = keyword
+        self.encoded_keyword = urllib.parse.quote(self.keyword)
+        self.base_folder = base_folder.replace("download/", "") + "/" + EXTERNAL_FOLDER_ANIMAGE_PLUS
+        self.last_episode = last_episode
+        self.suffix = suffix
+        self.skip_article_ids = skip_article_ids
+
+    def run(self):
+        if self.last_episode:
+            if self.is_image_exists(str(self.last_episode).zfill(2) + '_01', self.base_folder) or \
+                    self.is_image_exists('last_01', self.base_folder):
+                return
+
+        payload = f'CSRF_token={self.CSRF_TOKEN}&term={self.encoded_keyword}&q=1'
+        try:
+            r = requests.post(url=self.SEARCH_API, cookies=self.COOKIES, data=payload, headers=self.HEADERS)
+            if r.status_code == 200:
+                soup = bs(r.content.decode(), 'html.parser')
+                self.process_page(soup)
+            else:
+                raise Exception('Animage Scanner status code: ' + str(r.status_code))
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
+
+    def process_page(self, soup):
+        if soup is None:
+            return
+        articles = soup.select('.articlesList li a[href]')
+        for article in articles:
+            article_id = article['href'].split('/')[-1]
+            if article_id in self.skip_article_ids:
+                continue
+
+            title_tag = article.select('p.tit')
+            if len(title_tag) == 0:
+                continue
+            news_title = ' '.join(title_tag[0].text.split())
+            suffix = self.suffix
+            if suffix is None:
+                suffix = '話'
+
+            regex = '第[０|１|２|３|４|５|６|７|８|９|十|一|二|三|四|五|六|七|八|九|0-9]+' + suffix
+            prog = re.compile(regex)
+            result = prog.findall(news_title)
+            if ('最終' + suffix) in news_title and len(result) == 0:
+                episode = 'last'
+            elif len(result) > 0:
+                episode_num = self.get_episode_num(result, suffix)
+                if episode_num < 1:
+                    continue
+                episode = str(episode_num).zfill(2)
+            else:
+                continue
+            filepath = self.base_folder + "/" + episode + "_01.jpg"
+            if not filepath.startswith("download/"):
+                filepath = "download/" + filepath
+            if os.path.isfile(filepath):
+                return 1
+            AnimagePlusDownload(article_id, self.base_folder, episode, download_id=self.download_id).run()
+
+    @staticmethod
+    def get_episode_num(result, suffix):
+        split1 = result[0].split(suffix)[0].split('第')
+        if len(split1) < 2:
+            return -1
+        try:
+            return int(split1[1])
+        except:
+            result = MainScanner.convert_kanji_to_number(split1[1])
+            if result is not None:
+                return result
+            return -1
 
 
 class AnimeRecorderScanner(MainScanner):
