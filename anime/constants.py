@@ -9,9 +9,11 @@ FOLDER_ENDCARD = "endcard"
 FOLDER_GOODS = "goods"
 FOLDER_EVENT = "event"
 FOLDER_OTHER = "other"
-HTTP_HEADER_USER_AGENT = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) ' +
+HTTP_HEADER_USER_AGENT = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) ' +
                                         'AppleWebKit/537.36 (KHTML, like Gecko) ' +
-                                        'Chrome/50.0.2661.102 Safari/537.36'}
+                                        'Chrome/109.0.0.0 Safari/537.36',
+                          'Cache-Control': 'no-cache',
+                          'Pragma': 'no-cache'}
 
 MAX_PROCESSES = 30
 FOLDER_OUTPUT = 'out'
