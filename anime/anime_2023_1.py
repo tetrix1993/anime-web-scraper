@@ -585,22 +585,27 @@ class EiyuuouDownload(Winter2023AnimeDownload, NewsTemplate):
         current_date = datetime.now() + timedelta(hours=1)
         year = current_date.strftime('%Y')
         month = current_date.strftime('%m')
+        sub_folder = f'{folder}/{year}/{month}'
+        if not os.path.exists(sub_folder):
+            os.makedirs(sub_folder)
         is_successful = False
-        for i in range(self.FINAL_EPISODE):
-            episode = str(i + 1).zfill(2)
-            if self.is_image_exists(episode + '_1') or self.is_image_exists(episode + '_1', folder):
-                continue
-            stop = False
-            for j in range(self.IMAGES_PER_EPISODE):
-                img_name = 'story-pic' + str(i + 1) + '-' + str(j + 1)
+        for i in range(1, self.IMAGES_PER_EPISODE + 1, 1):
+            j = -1
+            while j < 10:
+                j += 1
+                image_name = f'{i}-{j}'
+                if self.is_image_exists(image_name, sub_folder):
+                    continue
+                if j == 0:
+                    img_name = str(i).zfill(2)
+                else:
+                    img_name = str(i).zfill(2) + '-' + str(j)
                 image_url = template % (year, month, img_name)
-                image_name = episode + '_' + str(j + 1)
-                result = self.download_image(image_url, folder + '/' + image_name)
+                result = self.download_image(image_url, sub_folder + '/' + image_name)
                 if result == -1:
-                    stop = True
                     break
                 is_successful = True
-            if stop:
+            if not is_successful:
                 break
         if is_successful:
             print(self.__class__.__name__ + ' - Guessed correctly!')
