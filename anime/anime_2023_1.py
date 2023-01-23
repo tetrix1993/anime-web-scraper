@@ -1244,6 +1244,7 @@ class AnkokuHeishiDownload(Winter2023AnimeDownload, NewsTemplate):
     folder_name = 'ankokuheishi'
 
     PAGE_PREFIX = website
+    IMAGES_PER_EPISODE = 8
 
     def __init__(self):
         super().__init__()
@@ -1251,6 +1252,7 @@ class AnkokuHeishiDownload(Winter2023AnimeDownload, NewsTemplate):
     def run(self):
         self.download_episode_preview()
         self.download_news()
+        self.download_episode_preview_guess()
         self.download_key_visual()
         self.download_character()
         self.download_media()
@@ -1285,6 +1287,49 @@ class AnkokuHeishiDownload(Winter2023AnimeDownload, NewsTemplate):
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news_item',
                                     date_select='.post_date', title_select='a', id_select='a')
+
+    def download_episode_preview_guess(self):
+        folder = self.create_custom_directory('guess')
+        template = self.PAGE_PREFIX + 'wp-content/uploads/%s/%s/%s.png'
+        current_date = datetime.now() + timedelta(hours=1)
+        year = current_date.strftime('%Y')
+        month = current_date.strftime('%m')
+        skip_filenames = self.get_skip_filenames(folder, year, month)
+        sub_folder = f'{folder}/{year}/{month}'
+        if not os.path.exists(sub_folder):
+            os.makedirs(sub_folder)
+        is_successful = False
+        for i in range(1, self.IMAGES_PER_EPISODE + 1, 1):
+            j = -1
+            while j < 10:
+                j += 1
+                image_name = f'{i}-{j}'
+                skip_name = f'{year}-{month}-{i}-{j}'
+                if self.is_image_exists(image_name, sub_folder) or skip_name in skip_filenames:
+                    continue
+                if j == 0:
+                    img_name = str(i).zfill(2)
+                else:
+                    img_name = str(i).zfill(2) + '-' + str(j)
+                image_url = template % (year, month, img_name)
+                result = self.download_image(image_url, sub_folder + '/' + image_name)
+                if result == -1:
+                    break
+                is_successful = True
+            if not is_successful:
+                break
+        if is_successful:
+            print(self.__class__.__name__ + ' - Guessed correctly!')
+        return is_successful
+
+    @staticmethod
+    def get_skip_filenames(folder, year, month):
+        skip_filenames = []
+        if year == '2023' and month == '01':
+            for i in range(8):
+                for j in range(2):
+                    skip_filenames.append(f'2023-01-{i + 1}-{j}')
+        return skip_filenames
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
