@@ -2805,7 +2805,8 @@ class SaikyoOnmyoujiDownload(Winter2023AnimeDownload, NewsTemplate):
     folder_name = 'saikyo-onmyouji'
 
     PAGE_PREFIX = website
-    FINAL_EPISODE = 12
+    FINAL_EPISODE = 13
+    IMAGES_PER_EPISODE = 6
 
     def __init__(self):
         super().__init__()
@@ -2813,6 +2814,7 @@ class SaikyoOnmyoujiDownload(Winter2023AnimeDownload, NewsTemplate):
     def run(self):
         self.download_episode_preview()
         self.download_episode_preview_external()
+        self.download_episode_preview_guess()
         self.download_news()
         self.download_key_visual()
         self.download_character()
@@ -2852,6 +2854,51 @@ class SaikyoOnmyoujiDownload(Winter2023AnimeDownload, NewsTemplate):
         keywords = ['最強陰陽師の異世界転生記']
         AniverseMagazineScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE,
                                 end_date='20230105', download_id=self.download_id).run()
+
+    def download_episode_preview_guess(self):
+        folder = self.create_custom_directory('guess')
+        template = self.PAGE_PREFIX + 'wp/wp-content/uploads/%s/%s/%s.jpg'
+        current_date = datetime.now() + timedelta(hours=1)
+        curr_month = current_date.strftime('%m')
+        is_successful = False
+        for year in ['2022', '2023']:
+            months = []
+            if year == '2022':
+                months.append('12')
+            else:
+                k = 0
+                while k <= 12:
+                    k += 1
+                    months.append(str(k).zfill(2))
+                    if curr_month == str(k).zfill(2):
+                        break
+            for month in months:
+                sub_folder = f'{folder}/{year}/{month}'
+                if not os.path.exists(sub_folder):
+                    os.makedirs(sub_folder)
+                for i in range(1, self.IMAGES_PER_EPISODE + 1, 1):
+                    j = -1
+                    while j < 13:
+                        j += 1
+                        image_name = f'{i}-{j}'
+                        if self.is_image_exists(image_name, sub_folder):
+                            continue
+                        if j == 0:
+                            img_name = str(i).zfill(2)
+                        else:
+                            img_name = str(i).zfill(2) + '-' + str(j)
+                        image_url = template % (year, month, img_name)
+                        result = self.download_image(image_url, sub_folder + '/' + image_name)
+                        if result == -1:
+                            break
+                        is_successful = True
+                    if not is_successful:
+                        break
+                if len(os.listdir(sub_folder)) == 0:
+                    break
+        if is_successful:
+            print(self.__class__.__name__ + ' - Guessed correctly!')
+        return is_successful
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news--lineup li',
