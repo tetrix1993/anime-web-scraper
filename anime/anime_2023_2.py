@@ -49,7 +49,7 @@ class BokuyabaDownload(Spring2023AnimeDownload, NewsTemplate):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        self.has_website_updated(self.PAGE_PREFIX, 'index', diff=5)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.p-news__list-item',
