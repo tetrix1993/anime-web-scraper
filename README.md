@@ -92,7 +92,6 @@ The premiere date for the anime listed here has not been announced.
 * [Isekai One Turn Kill Nee-san: Ane Douhan no Isekai Seikatsu Hajimemashita](https://onekillsister.com/)
 * [Jitsu wa Ore, Saikyou deshita?](https://jitsuhaoresaikyo-anime.com/)
 * [Keikenzumi na Kimi to, Keiken Zero na Ore ga, Otsukiai suru Hanashi.](https://kimizero.com/)
-* [Level 1 dakedo Unique Skill de Saikyou desu](https://level1-anime.com/)
 * [Liar Liar](https://liar-liar-anime.com/)
 * [Mato Seihei no Slave](https://mabotai.jp/)
 * [Seijo no Maryoku wa Bannou Desu 2nd Season](https://seijyonomaryoku.jp/)
@@ -111,6 +110,7 @@ The premiere date for the anime listed here has not been announced.
 
 ### Summer 2023 Anime
 * [Higeki no Genkyou to Naru Saikyou Gedou Last Boss Joou wa Tami no Tame ni Tsukushimasu.](https://lastame.com/)
+* [Level 1 dakedo Unique Skill de Saikyou desu](https://level1-anime.com/)
 * [Okashi na Tensei](https://okashinatensei-pr.com/)
 * [Tsuyokute New Saga](https://tsuyosaga-pr.com/)
 
