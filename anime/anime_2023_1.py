@@ -580,6 +580,9 @@ class EiyuuouDownload(Winter2023AnimeDownload, NewsTemplate):
                                 end_date='20230106', download_id=self.download_id).run()
 
     def download_episode_preview_guess(self):
+        if self.is_image_exists(str(self.FINAL_EPISODE).zfill(2) + '_1'):
+            return
+
         folder = self.create_custom_directory('guess')
         template = self.PAGE_PREFIX + 'wp/wp-content/uploads/%s/%s/%s.jpg'
         current_date = datetime.now() + timedelta(hours=1)
@@ -1244,6 +1247,7 @@ class AnkokuHeishiDownload(Winter2023AnimeDownload, NewsTemplate):
     folder_name = 'ankokuheishi'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
     IMAGES_PER_EPISODE = 8
 
     def __init__(self):
@@ -1289,6 +1293,9 @@ class AnkokuHeishiDownload(Winter2023AnimeDownload, NewsTemplate):
                                     date_select='.post_date', title_select='a', id_select='a')
 
     def download_episode_preview_guess(self):
+        if self.is_image_exists(str(self.FINAL_EPISODE).zfill(2) + '_1'):
+            return
+
         folder = self.create_custom_directory('guess')
         template = self.PAGE_PREFIX + 'wp-content/uploads/%s/%s/%s.png'
         current_date = datetime.now() + timedelta(hours=1)
@@ -2903,6 +2910,9 @@ class SaikyoOnmyoujiDownload(Winter2023AnimeDownload, NewsTemplate):
                                 end_date='20230105', download_id=self.download_id).run()
 
     def download_episode_preview_guess(self):
+        if self.is_image_exists(str(self.FINAL_EPISODE).zfill(2) + '_1'):
+            return
+
         folder = self.create_custom_directory('guess')
         template = self.PAGE_PREFIX + 'wp/wp-content/uploads/%s/%s/%s.jpg'
         current_date = datetime.now() + timedelta(hours=1)
@@ -2925,7 +2935,7 @@ class SaikyoOnmyoujiDownload(Winter2023AnimeDownload, NewsTemplate):
                     os.makedirs(sub_folder)
                 for i in range(1, self.IMAGES_PER_EPISODE + 1, 1):
                     j = -1
-                    while j < 13:
+                    while j < 20:
                         j += 1
                         image_name = f'{i}-{j}'
                         if self.is_image_exists(image_name, sub_folder):
