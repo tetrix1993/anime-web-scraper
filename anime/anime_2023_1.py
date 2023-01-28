@@ -1,5 +1,5 @@
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
-from scan import AniverseMagazineScanner
+from scan import AnimagePlusScanner, AniverseMagazineScanner
 from datetime import datetime, timedelta
 import os
 
@@ -4002,12 +4002,17 @@ class VinlandSaga2Download(Winter2023AnimeDownload):
     folder_name = 'vinlandsaga2'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 24
 
     def __init__(self):
         super().__init__()
 
     def run(self):
-        self.download_episode_preview()
+        self.download_episode_preview_external()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_episode_preview_external(self):
+        AnimagePlusScanner('ヴィンランド・サガ', self.base_folder, last_episode=self.FINAL_EPISODE,
+                           end_date='20221219', download_id=self.download_id).run()

@@ -101,13 +101,14 @@ class AnimagePlusScanner(MainScanner):
     HEADERS = {'content-type': 'application/x-www-form-urlencoded'}
     COOKIES = {'CSRF_cookie': CSRF_TOKEN}
 
-    def __init__(self, keyword, base_folder, last_episode=None, suffix=None, skip_article_ids=[], download_id=None):
+    def __init__(self, keyword, base_folder, last_episode=None, suffix=None, end_date='00000000', skip_article_ids=[], download_id=None):
         super().__init__(download_id)
         self.keyword = keyword
         self.encoded_keyword = urllib.parse.quote(self.keyword)
         self.base_folder = base_folder.replace("download/", "") + "/" + EXTERNAL_FOLDER_ANIMAGE_PLUS
         self.last_episode = last_episode
         self.suffix = suffix
+        self.end_date = end_date
         self.skip_article_ids = skip_article_ids
 
     def run(self):
@@ -130,12 +131,18 @@ class AnimagePlusScanner(MainScanner):
 
     def process_page(self, soup):
         if soup is None:
-            return
+            return -1
         articles = soup.select('.articlesList li a[href]')
         for article in articles:
             article_id = article['href'].split('/')[-1]
             if article_id in self.skip_article_ids:
                 continue
+
+            news_date_tag = article.select('.date')
+            if len(news_date_tag) > 0:
+                news_date = news_date_tag[0].text.replace('.', '')
+                if news_date < self.end_date:
+                    return 1
 
             title_tag = article.select('p.tit')
             if len(title_tag) == 0:
