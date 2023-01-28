@@ -2891,6 +2891,7 @@ class OtonarinoTenshisamaDownload(Winter2023AnimeDownload, NewsTemplate):
             last_num = count + len(area['prefectures'])
             count += len(area['prefectures'])
             is_successful = False
+            prefectures = area['prefectures']
             for i in range(first_num, last_num + 1, 1):
                 number = str(i).zfill(2)
                 file_exist = False
@@ -2901,7 +2902,8 @@ class OtonarinoTenshisamaDownload(Winter2023AnimeDownload, NewsTemplate):
                 if file_exist:
                     is_successful = True
                     continue
-                for prefecture in area['prefectures']:
+                prefecture_to_remove = None
+                for prefecture in prefectures:
                     image_name = f'w{number}_{prefecture}'
                     image_url = template % (area['name'], image_name)
                     result = self.download_image(image_url, withyou_folder + '/' + image_name)
@@ -2912,6 +2914,10 @@ class OtonarinoTenshisamaDownload(Winter2023AnimeDownload, NewsTemplate):
                     image_name = f'2w{number}_{prefecture}'
                     image_url = template % (area, image_name)
                     self.download_image(image_url, withyou_folder + '/' + image_name)
+                    prefecture_to_remove = prefecture
+                    break
+                if prefecture_to_remove is not None:
+                    prefectures.remove(prefecture_to_remove)
             if not is_successful:
                 break
 
