@@ -1696,6 +1696,7 @@ class MushikaburihimeDownload(Fall2022AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         template = self.PAGE_PREFIX + 'assets/story/%s/%s.jpg'
@@ -1763,6 +1764,21 @@ class MushikaburihimeDownload(Fall2022AnimeDownload, NewsTemplate):
         template1 = self.PAGE_PREFIX + 'assets/character/%sc.png'
         template2 = self.PAGE_PREFIX + 'assets/character/%sf.png'
         self.download_by_template(folder, [template1, template2], 1, 1)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'bddvd.html')
+            images = soup.select('.sub-content-container img[src]')
+            self.image_list = []
+            for image in images:
+                if '/bddvd/' in image['src'] and not image['src'].endswith('np.png'):
+                    image_url = self.PAGE_PREFIX + image['src'][2:].split('?')[0]
+                    image_name = self.generate_image_name_from_url(image_url, 'bddvd')
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
 
 # Noumin Kanren no Skill bakka Agetetara Nazeka Tsuyoku Natta.
