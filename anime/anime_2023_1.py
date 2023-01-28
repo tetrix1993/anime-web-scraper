@@ -1047,6 +1047,8 @@ class IsekaiNonbiriNoukaDownload(Winter2023AnimeDownload):
         self.download_episode_preview()
         self.download_news()
         self.download_key_visual()
+        self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         template = self.PAGE_PREFIX + 'story/episode%s/images/img_%s.jpg'
@@ -1095,6 +1097,38 @@ class IsekaiNonbiriNoukaDownload(Winter2023AnimeDownload):
         self.image_list = []
         self.add_to_image_list('tz', 'https://ogre.natalie.mu/media/news/comic/2022/0826/nonbiri-nouka_Teaser.jpg')
         self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'character/%s/images/img_character.png'
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            charas = soup.select('#characterNavList a[href]')
+            self.image_list = []
+            for chara in charas:
+                split1 = chara['href'].split('/')
+                if len(split1) > 1:
+                    image_name = split1[-2]
+                    image_url = template % image_name
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'media/blu-ray/index.html')
+            images = soup.select('#contentsBg img[src]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src']
+                if self.is_content_length_in_range(image_url, more_than_amount=22919):
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
 
 # Itai no wa Iya nano de Bougyoryoku ni Kyokufuri Shitai to Omoimasu. 2nd Season
