@@ -2848,6 +2848,74 @@ class OtonarinoTenshisamaDownload(Winter2023AnimeDownload, NewsTemplate):
         except Exception as e:
             self.print_exception(e, 'With You')
 
+    def download_media_withyou_guess(self):
+        folder = self.create_media_directory()
+        withyou_folder = folder + '/withyou'
+        if not os.path.exists(withyou_folder):
+            os.makedirs(withyou_folder)
+        areas = [
+            {
+                'name': 'hokkaido-tohoku',
+                'prefectures': ['hokkaido', 'aomori', 'iwate', 'miyagi', 'akita', 'yamagata', 'fukushima']
+            },
+            {
+                'name': 'kanto',
+                'prefectures': ['ibaraki', 'tochigi', 'gunma', 'saitama', 'chiba', 'tokyo', 'kanagawa']
+            },
+            {
+                'name': 'chubu',
+                'prefectures': ['niigata', 'toyama', 'ishikawa', 'fukui', 'yamanashi', 'nagano', 'gifu', 'shizuoka', 'aichi']
+            },
+            {
+                'name': 'kinki',
+                'prefectures': ['mie', 'shiga', 'kyoto', 'osaka', 'hyogo', 'nara', 'wakayama']
+            },
+            {
+                'name': 'chugoku',
+                'prefectures': ['tottori', 'shimane', 'okayama', 'hiroshima', 'yamaguchi']
+            },
+            {
+                'name': 'shikoku',
+                'prefectures': ['tokushima', 'kagawa', 'ehime', 'kochi']
+            },
+            {
+                'name': 'kyushu-okinawa',
+                'prefectures': ['fukuoka', 'saga', 'nagasaki', 'kumamoto', 'oita', 'miyazaki', 'kagoshima', 'okinawa']
+            }
+        ]
+        current_files = os.listdir(withyou_folder)
+        count = 0
+        template = self.PAGE_PREFIX + 'withyou/assets/img/common/kv/%s/%s.jpg'
+        for area in areas:
+            first_num = count + 1
+            last_num = count + len(area['prefectures'])
+            count += len(area['prefectures'])
+            is_successful = False
+            for i in range(first_num, last_num + 1, 1):
+                number = str(i).zfill(2)
+                file_exist = False
+                for file in current_files:
+                    if file.startswith(f'2w{number}') or file.startswith(f'w{number}'):
+                        file_exist = True
+                        break
+                if file_exist:
+                    is_successful = True
+                    continue
+                for prefecture in area['prefectures']:
+                    image_name = f'w{number}_{prefecture}'
+                    image_url = template % (area['name'], image_name)
+                    result = self.download_image(image_url, withyou_folder + '/' + image_name)
+                    if result == -1:
+                        print('FAILED - ' + image_url)
+                        continue
+                    is_successful = True
+                    image_name = f'2w{number}_{prefecture}'
+                    image_url = template % (area, image_name)
+                    self.download_image(image_url, withyou_folder + '/' + image_name)
+            if not is_successful:
+                break
+
+
 
 # Rougo ni Sonaete Isekai de 8-manmai no Kinka wo Tamemasu
 class Roukin8Download(Winter2023AnimeDownload, NewsTemplate):
