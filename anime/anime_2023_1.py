@@ -2588,6 +2588,7 @@ class OoyukiumiDownload(Winter2023AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         story_url = self.PAGE_PREFIX + 'episodes/'
@@ -2633,6 +2634,22 @@ class OoyukiumiDownload(Winter2023AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'assets/img/character/character%s_main.jpg'
         self.download_by_template(folder, template, 1, 1)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        bd_url = self.PAGE_PREFIX + 'bdbox/'
+        try:
+            soup = self.get_soup(bd_url)
+            images = soup.select('#bdCont img[src]')
+            self.image_list = []
+            for image in images:
+                if not image['src'].endswith('nowprinting.png'):
+                    image_url = bd_url + image['src'][2:].split('?')[0]
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
 
 # Otonari no Tenshi-sama ni Itsunomanika Dame Ningen ni Sareteita Ken
