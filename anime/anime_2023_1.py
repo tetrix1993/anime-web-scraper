@@ -2886,6 +2886,7 @@ class OtonarinoTenshisamaDownload(Winter2023AnimeDownload, NewsTemplate):
         current_files = os.listdir(withyou_folder)
         count = 0
         template = self.PAGE_PREFIX + 'withyou/assets/img/common/kv/%s/%s.jpg'
+        success_download = 0
         for area in areas:
             first_num = count + 1
             last_num = count + len(area['prefectures'])
@@ -2911,6 +2912,7 @@ class OtonarinoTenshisamaDownload(Winter2023AnimeDownload, NewsTemplate):
                         print('FAILED - ' + image_url)
                         continue
                     is_successful = True
+                    success_download += 1
                     image_name = f'2w{number}_{prefecture}'
                     image_url = template % (area, image_name)
                     self.download_image(image_url, withyou_folder + '/' + image_name)
@@ -2920,7 +2922,7 @@ class OtonarinoTenshisamaDownload(Winter2023AnimeDownload, NewsTemplate):
                     prefectures.remove(prefecture_to_remove)
             if not is_successful:
                 break
-
+        return -1 if success_download == 0 else 0
 
 
 # Rougo ni Sonaete Isekai de 8-manmai no Kinka wo Tamemasu
