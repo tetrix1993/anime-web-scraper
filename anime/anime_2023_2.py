@@ -620,8 +620,10 @@ class OtonariniGingaDownload(Spring2023AnimeDownload, NewsTemplate):
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FRV6mlUVIAAa9xK?format=jpg&name=medium')
         self.add_to_image_list('tz_mainimg', self.PAGE_PREFIX + 'teaser/images/mainimg.png')
         self.add_to_image_list('kv_tw', 'https://pbs.twimg.com/media/FgjBzJOaAAADdI_?format=jpg&name=medium')
-        self.add_to_image_list('top_mainimg1', self.PAGE_PREFIX + 'assets/images/top/mainimg1.jpg')
         self.download_image_list(folder)
+
+        template = self.PAGE_PREFIX + 'assets/images/top/mainimg%s.jpg'
+        self.download_by_template(folder, template, 1, 1, prefix='top_')
 
     def download_character(self):
         folder = self.create_character_directory()
