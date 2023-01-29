@@ -907,7 +907,7 @@ class Nagatorosan2Download(Winter2023AnimeDownload, NewsTemplate):
                     continue
                 page_url = self.PAGE_PREFIX + 'blu-ray/' + page + '.html'
                 soup = self.get_soup(page_url)
-                images = soup.select('.jacket img[src]')
+                images = soup.select('.jacket img[src], .tokuten img[src]')
                 self.image_list = []
                 for image in images:
                     image_url = self.PAGE_PREFIX + image['src'].replace('../', '').split('?')[0]
