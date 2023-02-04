@@ -180,6 +180,22 @@ class IsenidoDownload(Spring2023AnimeDownload, NewsTemplate):
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FZxImcZUIAAV8uv?format=jpg&name=4096x4096')
         self.download_image_list(folder)
 
+        self.image_list = []
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.kv-main__wrap .js_kv-img img[src]')
+            for image in images:
+                if image.has_attr('class') and '-sp' in image['class']:
+                    continue
+                if not image['src'].startswith('/img/'):
+                    continue
+                image_url = self.PAGE_PREFIX + image['src'][1:]
+                image_name = self.generate_image_name_from_url(image_url, 'img')
+                self.add_to_image_list(image_name, image_url)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+        self.download_image_list(folder)
+
     def download_character(self):
         folder = self.create_character_directory()
         try:
