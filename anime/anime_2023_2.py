@@ -736,11 +736,11 @@ class TenseiKizokuDownload(Spring2023AnimeDownload, NewsTemplate):
     def download_character(self):
         folder = self.create_character_directory()
         try:
-            soup = self.get_soup(self.PAGE_PREFIX)
+            soup = self.get_soup(self.PAGE_PREFIX + '/character.html')
             self.image_list = []
-            images = soup.select('.character img[src]')
+            images = soup.select('ul[name=chara] img[src]')
             for image in images:
-                if '/chara/' in image['src']:
+                if '/chara/' in image['src'] and '/name/' not in image['src']:
                     image_url = self.PAGE_PREFIX + image['src']
                     image_name = self.generate_image_name_from_url(image_url, 'chara')
                     self.add_to_image_list(image_name, image_url)
