@@ -3571,10 +3571,7 @@ class SugarAppleDownload(Winter2023AnimeDownload, NewsTemplate):
             images = soup.select('.page_wrapper img[src]')
             self.image_list = []
             for image in images:
-                if '/bluray/' not in image['src']:
-                    continue
-                temp_name = image['src'].split('/')[-1]
-                if temp_name.startswith('img_cs_'):
+                if '/bluray/' not in image['src'] or image['src'].endswith('img_cs_02.jpg'):
                     continue
                 image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
                 image_name = self.generate_image_name_from_url(image_url, 'bluray')
