@@ -3,7 +3,7 @@ import re
 import requests
 import urllib.parse
 from anime.external_download import AnimagePlusDownload, AnimeRecorderDownload, AniverseMagazineDownload, WebNewtypeDownload, MocaNewsDownload, NatalieDownload, EeoMediaDownload
-from anime.constants import EXTERNAL_FOLDER_ANIMAGE_PLUS, EXTERNAL_FOLDER_ANIME_RECORDER, EXTERNAL_FOLDER_ANIVERSE, EXTERNAL_FOLDER_EEOMEDIA, EXTERNAL_FOLDER_MOCANEWS, EXTERNAL_FOLDER_NATALIE, EXTERNAL_FOLDER_WEBNEWTYPE
+from anime.constants import EXTERNAL_FOLDER_ANIMAGE_PLUS, EXTERNAL_FOLDER_ANIME_RECORDER, EXTERNAL_FOLDER_ANIVERSE, EXTERNAL_FOLDER_EEOMEDIA, EXTERNAL_FOLDER_MOCANEWS, EXTERNAL_FOLDER_NATALIE, EXTERNAL_FOLDER_WEBNEWTYPE, HTTP_HEADER_USER_AGENT
 from bs4 import BeautifulSoup as bs
 from datetime import datetime
 from datetime import timedelta
@@ -98,7 +98,8 @@ class MainScanner:
 class AnimagePlusScanner(MainScanner):
     CSRF_TOKEN = '8ee2767dd32a5ee850903f79c87a84d7'
     SEARCH_API = 'https://animageplus.jp/search/index'
-    HEADERS = {'content-type': 'application/x-www-form-urlencoded'}
+    HEADERS = HTTP_HEADER_USER_AGENT
+    HEADERS['content-type'] = 'application/x-www-form-urlencoded'
     COOKIES = {'CSRF_cookie': CSRF_TOKEN}
 
     def __init__(self, keyword, base_folder, last_episode=None, suffix=None, end_date='00000000', skip_article_ids=[], download_id=None):
