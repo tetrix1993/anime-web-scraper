@@ -1766,6 +1766,7 @@ class KooriZokuseiDanshiDownload(Winter2023AnimeDownload, NewsTemplate):
                 soup = self.get_soup(page_url)
                 images = soup.select('.p-BdDetail__content img[src]')
                 now_printing = False
+                is_image_downloaded = False
                 self.image_list = []
                 for image in images:
                     image_url = self.PAGE_PREFIX + image['src'].replace('../', '').split('?')[0]
@@ -1773,15 +1774,18 @@ class KooriZokuseiDanshiDownload(Winter2023AnimeDownload, NewsTemplate):
                         continue
                     image_name = self.generate_image_name_from_url(image_url, 'bd')
                     if self.is_image_exists(image_name, folder):
+                        is_image_downloaded = True
                         continue
                     if self.is_not_matching_content_length(image_url, 16854):
                         self.add_to_image_list(image_name, image_url)
                     else:
                         now_printing = True
+                if len(self.image_list) > 0:
+                    is_image_downloaded = True
                 self.download_image_list(folder)
                 if not now_printing:
                     processed.append(page)
-                else:
+                elif not is_image_downloaded:
                     break
             except Exception as e:
                 self.print_exception(e, f'Blu-ray - {page}')
