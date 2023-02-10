@@ -3363,6 +3363,8 @@ class SpyroomDownload(Winter2023AnimeDownload, NewsTemplate2):
             is_success = False
             first = 20 + i
             second = 46 + 4 * i
+            if i > 3:
+                second += 1
             third = 62 + self.IMAGES_PER_EPISODE * i
             for j in range(self.IMAGES_PER_EPISODE):
                 image_url = template % (str(first).zfill(8), str(second).zfill(8), str(third + j).zfill(8))
