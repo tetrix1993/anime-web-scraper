@@ -112,6 +112,7 @@ The premiere date for the anime listed here has not been announced.
 * [Higeki no Genkyou to Naru Saikyou Gedou Last Boss Joou wa Tami no Tame ni Tsukushimasu.](https://lastame.com/)
 * [Level 1 dakedo Unique Skill de Saikyou desu](https://level1-anime.com/)
 * [Okashi na Tensei](https://okashinatensei-pr.com/)
+* [Shiro Seijo to Kuro Bokushi](https://shiroseijyo-anime.com/)
 * [Tsuyokute New Saga](https://tsuyosaga-pr.com/)
 
 ### Spring 2023 Anime
@@ -125,7 +126,6 @@ The premiere date for the anime listed here has not been announced.
 * [Megami no Café Terrace](https://goddess-cafe.com/)
 * [Oshi no Ko](https://ichigoproduction.com/)
 * [Otonari ni Ginga](https://otonari-anime.com/)
-* [Shiro Seijo to Kuro Bokushi](https://shiroseijyo-anime.com/)
 * [Tensei Kizoku no Isekai Boukenroku](https://www.tensei-kizoku.jp/)
 * [Watashi no Yuri wa Oshigoto desu!](https://watayuri-anime.com/)
 * [Yamada-kun to Lv999 no Koi wo Suru](https://yamadalv999-anime.com/)

@@ -4,6 +4,7 @@ from anime.main_download import MainDownload, NewsTemplate
 # Higeki no Genkyou to Naru Saikyou Gedou Last Boss Joou wa Tami no Tame ni Tsukushimasu. https://lastame.com/ #ラス為 @lastame_pr
 # Level 1 dakedo Unique Skill de Saikyou desu https://level1-anime.com/ #レベル1だけどアニメ化です @level1_anime
 # Okashi na Tensei https://okashinatensei-pr.com/ #おかしな転生 @okashinatensei
+# Shiro Seijo to Kuro Bokushi https://shiroseijyo-anime.com/ @shiroseijyo_tv #白聖女と黒牧師
 # Tsuyokute New Saga https://tsuyosaga-pr.com/ #つよサガ @tsuyosaga_pr
 
 
@@ -145,6 +146,58 @@ class OkashinaTenseiDownload(Summer2023AnimeDownload, NewsTemplate):
             result = self.download_image(image_url, folder + '/' + image_name)
             if result == -1:
                 break
+
+
+# Shiro Seijo to Kuro Bokushi
+class ShiroSeijoDownload(Summer2023AnimeDownload, NewsTemplate):
+    title = 'Shiro Seijo to Kuro Bokushi'
+    keywords = [title, "Saint Cecilia and Pastor Lawrence", 'shiroseijyo']
+    website = 'https://shiroseijyo-anime.com/'
+    twitter = 'shiroseijyo_tv'
+    hashtags = '白聖女と黒牧師'
+    folder_name = 'shiroseijyo'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.newsList',
+                                    date_select='.newsList__date', title_select='.newsList__title span', id_select='a',
+                                    a_tag_prefix=self.PAGE_PREFIX + 'news/')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FdZsEiyWYAA1hfB?format=jpg&name=4096x4096')
+        self.add_to_image_list('top_mv_character', self.PAGE_PREFIX + 'assets/img/top/mv_character.png')
+        self.add_to_image_list('kv_tw', 'https://pbs.twimg.com/media/Fj7f8HNUUAASOrr?format=jpg&name=4096x4096')
+        self.add_to_image_list('top_mv2_character', self.PAGE_PREFIX + 'assets/img/top/mv2_character.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.characterList img[src]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'][2:]
+                image_name = self.generate_image_name_from_url(image_url, 'img')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
 
 
 # Tsuyokute New Saga

@@ -11,7 +11,6 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Megami no Cafe Terrace https://goddess-cafe.com/ #女神のカフェテラス @goddess_cafe_PR
 # Oshi no Ko https://ichigoproduction.com/ #推しの子 @anime_oshinoko
 # Otonari ni Ginga https://otonari-anime.com/ #おとなりに銀河 @otonariniginga
-# Shiro Seijo to Kuro Bokushi https://shiroseijyo-anime.com/ @shiroseijyo_tv #白聖女と黒牧師
 # Tensei Kizoku no Isekai Boukenroku https://www.tensei-kizoku.jp/ #転生貴族 @tenseikizoku
 # Watashi no Yuri wa Oshigoto desu! https://watayuri-anime.com/ #わたゆり #私の百合はお仕事です @watayuri_anime
 # Yamada-kun to Lv999 no Koi wo Suru https://yamadalv999-anime.com/ #山田999 @yamada999_anime
@@ -645,58 +644,6 @@ class OtonariniGingaDownload(Spring2023AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'assets/images/character/img_%s.png'
         self.download_by_template(folder, template, 2, 1)
-
-
-# Shiro Seijo to Kuro Bokushi
-class ShiroSeijoDownload(Spring2023AnimeDownload, NewsTemplate):
-    title = 'Shiro Seijo to Kuro Bokushi'
-    keywords = [title, "Saint Cecilia and Pastor Lawrence", 'shiroseijyo']
-    website = 'https://shiroseijyo-anime.com/'
-    twitter = 'shiroseijyo_tv'
-    hashtags = '白聖女と黒牧師'
-    folder_name = 'shiroseijyo'
-
-    PAGE_PREFIX = website
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_news()
-        self.download_key_visual()
-        self.download_character()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
-
-    def download_news(self):
-        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.newsList',
-                                    date_select='.newsList__date', title_select='.newsList__title span', id_select='a',
-                                    a_tag_prefix=self.PAGE_PREFIX + 'news/')
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FdZsEiyWYAA1hfB?format=jpg&name=4096x4096')
-        self.add_to_image_list('top_mv_character', self.PAGE_PREFIX + 'assets/img/top/mv_character.png')
-        self.add_to_image_list('kv_tw', 'https://pbs.twimg.com/media/Fj7f8HNUUAASOrr?format=jpg&name=4096x4096')
-        self.add_to_image_list('top_mv2_character', self.PAGE_PREFIX + 'assets/img/top/mv2_character.jpg')
-        self.download_image_list(folder)
-
-    def download_character(self):
-        folder = self.create_character_directory()
-        try:
-            soup = self.get_soup(self.PAGE_PREFIX)
-            images = soup.select('.characterList img[src]')
-            self.image_list = []
-            for image in images:
-                image_url = self.PAGE_PREFIX + image['src'][2:]
-                image_name = self.generate_image_name_from_url(image_url, 'img')
-                self.add_to_image_list(image_name, image_url)
-            self.download_image_list(folder)
-        except Exception as e:
-            self.print_exception(e, 'Character')
 
 
 # Tensei Kizoku no Isekai Boukenroku
