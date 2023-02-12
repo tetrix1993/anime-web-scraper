@@ -10,6 +10,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Dungeon Meshi https://delicious-in-dungeon.com/ #ダンジョン飯 #deliciousindungeon @dun_meshi_anime
 # Eiyuu Kyoushitsu https://eiyukyoushitsu-anime.com/ #英雄教室 #eiyu_anime @eiyu_anime
 # Goblin Slayer S2 http://www.goblinslayer.jp/ #ゴブスレ #いせれべ @GoblinSlayer_GA
+# Hoshikuzu Telepath https://hoshitele-anime.com/ #星テレ #hoshitele @hoshitele_anime
 # Isekai One Turn Kill Neesan https://onekillsister.com/ #一撃姉 @onekillsister
 # Jitsu wa Ore, Saikyou deshita? https://jitsuhaoresaikyo-anime.com/ @jitsuoresaikyo
 # Keikenzumi na Kimi to, Keiken Zero na Ore ga, Otsukiai suru Hanashi. https://kimizero.com/ #キミゼロ @kimizero_anime
@@ -368,6 +369,87 @@ class GoblinSlayer2Download(UnconfirmedDownload):
         self.image_list = []
         self.add_to_image_list('teaser', 'https://pbs.twimg.com/media/EtDYBThUYAEBIWI?format=jpg&name=4096x4096')
         self.download_image_list(folder)
+
+
+# Hoshikuzu Telepath
+class HoshiteleDownload(UnconfirmedDownload, NewsTemplate):
+    title = 'Hoshikuzu Telepath'
+    keywords = [title, 'Hoshitele']
+    website = 'https://hoshitele-anime.com/'
+    twitter = 'hoshitele_anime'
+    hashtags = ['星テレ', 'hoshitele']
+    folder_name = 'hoshitele'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.bl_vertPosts_item',
+                                    date_select='.bl_vertPosts_date', title_select='.bl_vertPosts_txt',
+                                    id_select='a', a_tag_prefix=news_url, a_tag_start_text_to_remove='./')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.tp_hero img[src]')
+            self.image_list = []
+            for image in images:
+                if '/top/' not in image['src']:
+                    continue
+                image_name = self.extract_image_name_from_url(image['src'])
+                if 'kv' not in image_name:
+                    continue
+                image_name = self.generate_image_name_from_url(image['src'], 'top')
+                image_url = self.PAGE_PREFIX + image['src'].replace('./', '')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+        sub_folder = self.create_custom_directory(folder.split('/')[-1] + '/news')
+        cache_filepath = sub_folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        news_url = self.PAGE_PREFIX + 'news/'
+        try:
+            soup = self.get_soup(news_url)
+            items = soup.select('.bl_vertPosts_item a[href]')
+            for item in items:
+                if not item['href'].startswith('./') or '?id=' not in item['href']:
+                    continue
+                page_name = item['href'].split('?id=')[-1]
+                if len(page_name) == 0:
+                    continue
+                if page_name in processed:
+                    break
+                title = item.text.strip()
+                if 'ビジュアル' in title:
+                    news_soup = self.get_soup(news_url + item['href'].replace('./', ''))
+                    if news_soup is not None:
+                        images = news_soup.select('.bl_news img[src]')
+                        self.image_list = []
+                        for image in images:
+                            image_url = self.PAGE_PREFIX + image['src'].replace('../', '').split('?')[0]
+                            if '/news/' not in image_url:
+                                continue
+                            image_name = self.generate_image_name_from_url(image_url, 'news')
+                            self.add_to_image_list(image_name, image_url)
+                        self.download_image_list(sub_folder)
+                processed.append(page_name)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual News')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Isekai One Turn Kill Nee-san: Ane Douhan no Isekai Seikatsu Hajimemashita
