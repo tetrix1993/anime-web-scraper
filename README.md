@@ -114,6 +114,7 @@ The premiere date for the anime listed here has not been announced.
 * [Higeki no Genkyou to Naru Saikyou Gedou Last Boss Joou wa Tami no Tame ni Tsukushimasu.](https://lastame.com/)
 * [Level 1 dakedo Unique Skill de Saikyou desu](https://level1-anime.com/)
 * [Okashi na Tensei](https://okashinatensei-pr.com/)
+* [Shinigami Bocchan to Kuro Maid 2nd Season](https://bocchan-anime.com/)
 * [Shiro Seijo to Kuro Bokushi](https://shiroseijyo-anime.com/)
 * [Tsuyokute New Saga](https://tsuyosaga-pr.com/)
 
