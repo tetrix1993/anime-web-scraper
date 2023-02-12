@@ -6,6 +6,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Anohana S2 https://10th.anohana.jp/ #あの花 #anohana @anohana_project
 # ATRI -My Dear Moments- https://atri-anime.com/ #ATRI @ATRI_anime
 # Buta no Liver wa Kanetsu Shiro https://butaliver-anime.com/ #豚レバ @butaliver_anime
+# Dekoboko Majo no Oyako Jijou https://dekoboko-majo-anime.jp/ @DEKOBOKO_anime #でこぼこ魔女の親子事情
 # Dosanko Gal wa Namara Menkoi https://dosankogal-pr.com/ #道産子ギャル #どさこい @dosankogal_pr
 # Dungeon Meshi https://delicious-in-dungeon.com/ #ダンジョン飯 #deliciousindungeon @dun_meshi_anime
 # Eiyuu Kyoushitsu https://eiyukyoushitsu-anime.com/ #英雄教室 #eiyu_anime @eiyu_anime
@@ -181,6 +182,40 @@ class ButaLiverDownload(UnconfirmedDownload, NewsTemplate):
         folder = self.create_key_visual_directory()
         self.add_to_image_list('tz', self.PAGE_PREFIX + 'assets/img/visual.png')
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FjefZkkVQAAq-_0?format=jpg&name=4096x4096')
+        self.download_image_list(folder)
+
+
+# Dekoboko Majo no Oyako Jijou
+class DekobokoMajoDownload(UnconfirmedDownload, NewsTemplate):
+    title = 'Dekoboko Majo no Oyako Jijou'
+    keywords = [title]
+    website = 'https://dekoboko-majo-anime.jp/'
+    twitter = 'DEKOBOKO_anime'
+    hashtags = ['でこぼこ魔女の親子事情']
+    folder_name = 'dekoboko-majo'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='#news article', date_select='time',
+                                    title_select='h3', id_select=None, id_has_id=True, news_prefix='')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('teaser-visual', self.PAGE_PREFIX + 'images/teaser-visual.jpg')
+        self.add_to_image_list('mainimg', self.PAGE_PREFIX + 'images/mainimg.jpg')
         self.download_image_list(folder)
 
 

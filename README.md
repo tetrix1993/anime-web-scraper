@@ -85,6 +85,7 @@ pip install -r requirements.txt
 The premiere date for the anime listed here has not been announced.
 * [ATRI -My Dear Moments-](https://atri-anime.com/)
 * [Buta no Liver wa Kanetsu Shiro](https://butaliver-anime.com/)
+* [Dekoboko Majo no Oyako Jijou](https://dekoboko-majo-anime.jp/)
 * [Dosanko Gal wa Namara Menkoi](https://dosankogal-pr.com/)
 * [Dungeon Meshi](https://delicious-in-dungeon.com/)
 * [Eiyuu Kyoushitsu](https://eiyukyoushitsu-anime.com/)
