@@ -670,9 +670,9 @@ class TenseiKizokuDownload(Spring2023AnimeDownload, NewsTemplate):
         self.has_website_updated(self.PAGE_PREFIX)
 
     def download_news(self):
-        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news li',
-                                    date_select='.news_date', title_select='.news_title', id_select='a',
-                                    news_prefix='')
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-list li',
+                                    date_select='.news-date', title_select='.news-title', id_select='a',
+                                    news_prefix='news.html', reverse_article_list=True)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
