@@ -3,6 +3,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 
 # Higeki no Genkyou to Naru Saikyou Gedou Last Boss Joou wa Tami no Tame ni Tsukushimasu. https://lastame.com/ #ラス為 @lastame_pr
 # Level 1 dakedo Unique Skill de Saikyou desu https://level1-anime.com/ #レベル1だけどアニメ化です @level1_anime
+# Liar Liar https://liar-liar-anime.com/ #ライアー・ライアー #ライアラ @liar2_official
 # Okashi na Tensei https://okashinatensei-pr.com/ #おかしな転生 @okashinatensei
 # Shinigami Bocchan to Kuro Maid S2 https://bocchan-anime.com/ #死神坊ちゃん @bocchan_anime
 # Shiro Seijo to Kuro Bokushi https://shiroseijyo-anime.com/ @shiroseijyo_tv #白聖女と黒牧師
@@ -101,6 +102,55 @@ class Level1Download(Summer2023AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'wp/wp-content/themes/level1_teaser/images/chara-pic%s.png'
         self.download_by_template(folder, template, 1, 1, prefix='tz_')
+
+
+# Liar Liar
+class LiarLiarDownload(Summer2023AnimeDownload, NewsTemplate):
+    title = 'Liar Liar'
+    keywords = [title]
+    website = 'https://liar-liar-anime.com/'
+    twitter = 'liar2_official'
+    hashtags = ['ライアー・ライアー', 'ライアラ']
+    folder_name = 'liarliar'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        # Paging logic may need update
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.archives_ul_li',
+                                    date_select='.archives_ul_li_date', title_select='.archives_ul_li_text',
+                                    id_select='a', date_separator='/')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/Fhu9_4VUYAAz0MW?format=jpg&name=4096x4096')
+        self.download_image_list(folder)
+
+        prefix = self.PAGE_PREFIX + 'common/images/contents_top_fv_stand%s'
+        templates = [prefix + '.jpg', prefix + 'b.jpg']
+        self.download_by_template(folder, templates, 2, 1, prefix='tz_')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        prefix = self.PAGE_PREFIX + 'common/images/contents_character_'
+        prefix2 = self.PAGE_PREFIX + 'common/images/contents_character02_'
+        templates = [prefix + 'stand%s.png', prefix + 'face%s.png']
+        templates2 = [prefix2 + 'stand%s.png', prefix2 + 'face%s.png']
+        self.download_by_template(folder, templates, 2, 1)
+        self.download_by_template(folder, templates2, 2, 1)
 
 
 # Okashi na Tensei
