@@ -3358,7 +3358,7 @@ class SpyroomDownload(Winter2023AnimeDownload, NewsTemplate2):
         is_successful = False
         for i in range(self.FINAL_EPISODE):
             episode = str(i + 1).zfill(2)
-            if self.is_image_exists(episode + '_1'):
+            if self.is_image_exists(episode + '_1') or self.is_image_exists(episode + '_1', folder):
                 continue
             is_success = False
             first = 20 + i
@@ -3368,6 +3368,8 @@ class SpyroomDownload(Winter2023AnimeDownload, NewsTemplate2):
             third = 62 + self.IMAGES_PER_EPISODE * i
             for j in range(self.IMAGES_PER_EPISODE):
                 image_url = template % (str(first).zfill(8), str(second).zfill(8), str(third + j).zfill(8))
+                if not self.is_content_length_in_range(image_url, more_than_amount=16000):
+                    break
                 image_name = episode + '_' + str(j + 1)
                 result = self.download_image(image_url, folder + '/' + image_name)
                 if result == 0:
