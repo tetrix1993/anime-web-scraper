@@ -729,6 +729,7 @@ class WatayuriDownload(Spring2023AnimeDownload, NewsTemplate):
         self.download_episode_preview()
         self.download_news()
         self.download_key_visual()
+        self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
@@ -741,9 +742,43 @@ class WatayuriDownload(Spring2023AnimeDownload, NewsTemplate):
         folder = self.create_key_visual_directory()
         self.image_list = []
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FStxiD1VIAEX1nk?format=jpg&name=4096x4096')
-        self.add_to_image_list('tz_mv1', self.PAGE_PREFIX + 'assets/img/top/mv1.jpg')
-        self.add_to_image_list('tz_mv2', self.PAGE_PREFIX + 'assets/img/top/mv2.jpg')
+        self.add_to_image_list('top_visual_mv1_p1', self.PAGE_PREFIX + 'assets/img/top/top/visual/mv1_p1.jpg')
+        self.add_to_image_list('top_visual_mv1_p2', self.PAGE_PREFIX + 'assets/img/top/top/visual/mv1_p2.jpg')
+        self.add_to_image_list('top_visual_mv2', self.PAGE_PREFIX + 'assets/img/top/top/visual/mv2.jpg')
+        self.add_to_image_list('news_23_kv', self.PAGE_PREFIX + 'liebe/wp-content/uploads/2022/12/75f074420bc90cf826a501bd011f8312.jpg')
+        self.add_to_image_list('kv_tw', 'https://pbs.twimg.com/media/Fo6mh3saUAIVZPF?format=jpg&name=large')
         self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            a_tags = soup.select('li.characterList a[href]')
+            for a_tag in a_tags:
+                if not a_tag['href'].startswith("javascript:chara('") or not a_tag['href'].endswith("');"):
+                    continue
+                page = a_tag['href'][18:-3]
+                if len(page) == 0:
+                    continue
+                if page in processed:
+                    continue
+                chara_soup = self.get_soup(self.PAGE_PREFIX + 'character/data/chara_' + page + '.html')
+                if chara_soup is None:
+                    continue
+                self.image_list = []
+                images = chara_soup.select('.charaImage_stand img[src], .charaFaceImg img[src]')
+                for image in images:
+                    image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+                if len(self.image_list) > 0:
+                    processed.append(page)
+                self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Yamada-kun to Lv999 no Koi wo Suru
