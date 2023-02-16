@@ -24,7 +24,6 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Tearmoon Teikoku Monogatari: Dantoudai kara Hajimaru, Hime no Tensei Gyakuten Story https://tearmoon-pr.com/ #ティアムーン @tearmoon_pr
 # Temple https://temple-anime.com/ #てんぷる #Tenpuru_anime @temple_tvanime
 # Tensei shitara Dainana Ouji Datta node, Kimama ni Majutsu wo Kiwamemasu https://dainanaoji.com/ #第七王子 @dainanaoji_pro
-# Tonikaku Kawaii S2 http://tonikawa.com/ #トニカクカワイイ #tonikawa @tonikawa_anime
 # Unnamed Memory https://unnamedmemory.com/ #UnnamedMemory #アンメモ @Project_UM
 # Vlad Love https://www.vladlove.com/index.html #ぶらどらぶ #vladlove @VLADLOVE_ANIME
 # Watashi no Oshi wa Akuyaku Reijou. https://wataoshi-anime.com/ #わたおし #wataoshi #ILTV @wataoshi_anime
@@ -1057,44 +1056,6 @@ class DainanaojiDownload(UnconfirmedDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'd81Ft6ye/wp-content/themes/v0/assets/img/character/%s.webp'
         self.download_by_template(folder, template, 1, 0, prefix='tz_')
-
-
-# Tonikaku Kawaii S2
-class Tonikawa2Download(UnconfirmedDownload, NewsTemplate):
-    title = "Tonikaku Kawaii 2nd Season"
-    keywords = [title, "Tonikawa", "Cawaii", "Fly Me to the Moon", "Over the Moon for You", "2nd"]
-    website = 'http://tonikawa.com/'
-    twitter = 'tonikawa_anime'
-    hashtags = ['トニカクカワイイ', 'tonikawa']
-    folder_name = 'tonikawa2'
-
-    PAGE_PREFIX = website
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_news()
-        self.download_key_visual()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_news(self):
-        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='div.archive li',
-                                    date_select='.date', title_select='.title p', id_select='a',
-                                    a_tag_prefix=self.PAGE_PREFIX, a_tag_start_text_to_remove='/',
-                                    stop_date='2021.10.08')
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FDf9oGkaIAE7jnd?format=jpg&name=large')
-        self.add_to_image_list('kv_seifuku', self.PAGE_PREFIX + 'assets/images/common/news/news-67/img_kv_l.jpg')
-        self.add_to_image_list('tz2_tw', 'https://pbs.twimg.com/media/FiE3-1yVIAA8Scs?format=jpg&name=large')
-        self.add_to_image_list('tz2', self.PAGE_PREFIX + 'assets/images/common/news/news-70/thumb_kv3_l.jpg')
-        self.download_image_list(folder)
 
 
 # Unnamed Memory

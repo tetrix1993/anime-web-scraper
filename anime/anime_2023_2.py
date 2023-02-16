@@ -7,11 +7,11 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Isekai wa Smartphone to Tomo ni. 2 http://isesuma-anime.jp/ #イセスマ @isesumaofficial
 # Kawaisugi Crisis https://kawaisugi.com/ #カワイスギクライシス @kawaisugicrisis
 # Kuma Kuma Kuma Bear Punch! https://kumakumakumabear.com/ #くまクマ熊ベアー #kumabear @kumabear_anime
-# Masamune-kun no Revenge R https://masamune-tv.com/ #MASA_A @masamune_tv
 # Megami no Cafe Terrace https://goddess-cafe.com/ #女神のカフェテラス @goddess_cafe_PR
 # Oshi no Ko https://ichigoproduction.com/ #推しの子 @anime_oshinoko
 # Otonari ni Ginga https://otonari-anime.com/ #おとなりに銀河 @otonariniginga
 # Tensei Kizoku no Isekai Boukenroku https://www.tensei-kizoku.jp/ #転生貴族 @tenseikizoku
+# Tonikaku Kawaii S2 http://tonikawa.com/ #トニカクカワイイ #tonikawa @tonikawa_anime
 # Watashi no Yuri wa Oshigoto desu! https://watayuri-anime.com/ #わたゆり #私の百合はお仕事です @watayuri_anime
 # Yamada-kun to Lv999 no Koi wo Suru https://yamadalv999-anime.com/ #山田999 @yamada999_anime
 # Yuusha ga Shinda! https://heroisdead.com/ #勇者が死んだ @yuusyagasinda
@@ -411,57 +411,6 @@ class KumaBear2Download(Spring2023AnimeDownload, NewsTemplate2):
         self.download_by_template(folder, template, 2, 1, prefix='tz_')
 
 
-# Masamune-kun no Revenge R
-class Masamunekun2Download(Spring2023AnimeDownload, NewsTemplate):
-    title = 'Masamune-kun no Revenge R'
-    keywords = [title, "Masamune's Revenge", "2nd"]
-    website = 'https://masamune-tv.com/'
-    twitter = 'masamune_tv'
-    hashtags = ['MASA_A']
-    folder_name = 'masamune2'
-
-    PAGE_PREFIX = website
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_news()
-        self.download_key_visual()
-        self.download_character()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_news(self):
-        # Paging logic may need update
-        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news--lineup article',
-                                    date_select='.txt--date', title_select='.txt--ttl', id_select='a',
-                                    next_page_select='ul.pagenation-list li', next_page_eval_index=-1,
-                                    next_page_eval_index_class='is__current')
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('tz_kv', self.PAGE_PREFIX + '_assets/images/fv/fv@2x.png')
-        self.download_image_list(folder)
-
-    def download_character(self):
-        folder = self.create_character_directory()
-        try:
-            soup = self.get_soup(self.PAGE_PREFIX)
-            self.image_list = []
-            images = soup.select('.chardata img[src]')
-            for image in images:
-                image_url = self.PAGE_PREFIX + image['src'][1:]
-                image_name = 'tz_' + self.extract_image_name_from_url(image_url)
-                self.add_to_image_list(image_name, image_url)
-            self.download_image_list(folder)
-        except Exception as e:
-            self.print_exception(e, 'Character')
-
-
 # Megami no Café Terrace
 class MegamiCafeDownload(Spring2023AnimeDownload, NewsTemplate):
     title = 'Megami no Café Terrace'
@@ -721,6 +670,45 @@ class TenseiKizokuDownload(Spring2023AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+
+# Tonikaku Kawaii S2
+class Tonikawa2Download(Spring2023AnimeDownload, NewsTemplate):
+    title = "Tonikaku Kawaii 2nd Season"
+    keywords = [title, "Tonikawa", "Cawaii", "Fly Me to the Moon", "Over the Moon for You", "2nd"]
+    website = 'http://tonikawa.com/'
+    twitter = 'tonikawa_anime'
+    hashtags = ['トニカクカワイイ', 'tonikawa']
+    folder_name = 'tonikawa2'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='div.archive li',
+                                    date_select='.date', title_select='.title p', id_select='a',
+                                    a_tag_prefix=self.PAGE_PREFIX, a_tag_start_text_to_remove='/',
+                                    stop_date='2021.10.08')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FDf9oGkaIAE7jnd?format=jpg&name=large')
+        self.add_to_image_list('kv_seifuku', self.PAGE_PREFIX + 'assets/images/common/news/news-67/img_kv_l.jpg')
+        self.add_to_image_list('tz2_tw', 'https://pbs.twimg.com/media/FiE3-1yVIAA8Scs?format=jpg&name=large')
+        self.add_to_image_list('tz2', self.PAGE_PREFIX + 'assets/images/common/news/news-70/thumb_kv3_l.jpg')
+        self.add_to_image_list('kv_tw', 'https://pbs.twimg.com/media/Fo6mnWmaYAE8cfj?format=jpg&name=large')
+        self.download_image_list(folder)
 
 
 # Watashi no Yuri wa Oshigoto desu!

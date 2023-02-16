@@ -4,6 +4,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Higeki no Genkyou to Naru Saikyou Gedou Last Boss Joou wa Tami no Tame ni Tsukushimasu. https://lastame.com/ #ラス為 @lastame_pr
 # Level 1 dakedo Unique Skill de Saikyou desu https://level1-anime.com/ #レベル1だけどアニメ化です @level1_anime
 # Liar Liar https://liar-liar-anime.com/ #ライアー・ライアー #ライアラ @liar2_official
+# Masamune-kun no Revenge R https://masamune-tv.com/ #MASA_A @masamune_tv
 # Okashi na Tensei https://okashinatensei-pr.com/ #おかしな転生 @okashinatensei
 # Shinigami Bocchan to Kuro Maid S2 https://bocchan-anime.com/ #死神坊ちゃん @bocchan_anime
 # Shiro Seijo to Kuro Bokushi https://shiroseijyo-anime.com/ @shiroseijyo_tv #白聖女と黒牧師
@@ -151,6 +152,57 @@ class LiarLiarDownload(Summer2023AnimeDownload, NewsTemplate):
         templates2 = [prefix2 + 'stand%s.png', prefix2 + 'face%s.png']
         self.download_by_template(folder, templates, 2, 1)
         self.download_by_template(folder, templates2, 2, 1)
+
+
+# Masamune-kun no Revenge R
+class Masamunekun2Download(Summer2023AnimeDownload, NewsTemplate):
+    title = 'Masamune-kun no Revenge R'
+    keywords = [title, "Masamune's Revenge", "2nd"]
+    website = 'https://masamune-tv.com/'
+    twitter = 'masamune_tv'
+    hashtags = ['MASA_A']
+    folder_name = 'masamune2'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        # Paging logic may need update
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news--lineup article',
+                                    date_select='.txt--date', title_select='.txt--ttl', id_select='a',
+                                    next_page_select='ul.pagenation-list li', next_page_eval_index=-1,
+                                    next_page_eval_index_class='is__current')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_kv', self.PAGE_PREFIX + '_assets/images/fv/fv@2x.png')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            self.image_list = []
+            images = soup.select('.chardata img[src]')
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'][1:]
+                image_name = 'tz_' + self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
 
 
 # Okashi na Tensei
