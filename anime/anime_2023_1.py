@@ -3473,6 +3473,7 @@ class SpyroomDownload(Winter2023AnimeDownload, NewsTemplate2):
         folder = self.create_media_directory()
         cache_filepath = folder + '/cache'
         processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        privilege_names = ['amazon', 'animate', 'gamers', 'kadokawa', 'sofmap']
         for page in ['privilege', 'campaign', '01', '02']:
             try:
                 if page != 'privilege' and page in processed:
@@ -3490,7 +3491,10 @@ class SpyroomDownload(Winter2023AnimeDownload, NewsTemplate2):
                     else:
                         image_name = self.extract_image_name_from_url(image_url)
                     if self.is_image_exists(image_name, folder):
-                        continue
+                        if page == 'privilege' and image_name in privilege_names:
+                            self.download_image_with_different_length(image_url, image_name, 'old', folder)
+                        else:
+                            continue
                     if not self.is_content_length_in_range(image_url, more_than_amount=88800):
                         continue
                     self.add_to_image_list(image_name, image_url)
