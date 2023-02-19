@@ -95,6 +95,7 @@ The premiere date for the anime listed here has not been announced.
 * [Jitsu wa Ore, Saikyou deshita?](https://jitsuhaoresaikyo-anime.com/)
 * [Keikenzumi na Kimi to, Keiken Zero na Ore ga, Otsukiai suru Hanashi.](https://kimizero.com/)
 * [Kusuriya no Hitorigoto](https://kusuriyanohitorigoto.jp/)
+* [Lv1 Maou to One Room Yuusha](https://lv1room.com/)
 * [Mato Seihei no Slave](https://mabotai.jp/)
 * [Seijo no Maryoku wa Bannou Desu 2nd Season](https://seijyonomaryoku.jp/)
 * [Seiken Gakuin no Makentsukai](https://seikengakuin.com/)
