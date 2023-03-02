@@ -3114,7 +3114,7 @@ class SaikyoOnmyoujiDownload(Winter2023AnimeDownload, NewsTemplate):
                     months.append(str(k).zfill(2))
                     if curr_month == str(k).zfill(2):
                         break
-            for month in months:
+            for month in reversed(months):
                 sub_folder = f'{folder}/{year}/{month}'
                 if not os.path.exists(sub_folder):
                     os.makedirs(sub_folder)
