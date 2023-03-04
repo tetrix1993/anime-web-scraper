@@ -1,6 +1,7 @@
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 
 
+# Ao no Orchestra https://aooke-anime.com/ #青のオーケストラ @aooke_anime
 # Boku no Kokoro no Yabai Yatsu https://bokuyaba-anime.com/ #僕ヤバ #僕の心のヤバイやつ @bokuyaba_anime
 # Isekai de Cheat Skill wo Te ni Shita Ore wa https://iseleve.com　@iseleve_anime
 # Isekai One Turn Kill Neesan https://onekillsister.com/ #一撃姉 @onekillsister
@@ -26,6 +27,50 @@ class Spring2023AnimeDownload(MainDownload):
 
     def __init__(self):
         super().__init__()
+
+
+# Ao no Orchestra
+class AookeDownload(Spring2023AnimeDownload, NewsTemplate):
+    title = 'Ao no Orchestra'
+    keywords = [title, 'Blue Orchestra']
+    website = 'https://aooke-anime.com/'
+    twitter = 'aooke_anime'
+    hashtags = '青のオーケストラ'
+    folder_name = 'aooke'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index', diff=5)
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news_item',
+                                    date_select='time', title_select='.ttl',
+                                    id_select=None, a_tag_start_text_to_remove='./', a_tag_prefix=news_url)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('ta_mainv', 'https://aooke-anime.com/common/img/ta_mainv.jpg')
+        self.add_to_image_list('news_kv', 'https://aooke-anime.com/news/img/20230224_01.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'common/img/chara_full_%s.png'
+        face1_template = self.PAGE_PREFIX + 'common/img/chara_face_%s_01.png'
+        face2_template = self.PAGE_PREFIX + 'common/img/chara_face_%s_02.png'
+        self.download_by_template(folder, [template, face1_template, face2_template], 2, 1)
 
 
 # Boku no Kokoro no Yabai Yatsu
