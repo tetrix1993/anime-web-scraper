@@ -3,6 +3,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 
 # Boku no Kokoro no Yabai Yatsu https://bokuyaba-anime.com/ #僕ヤバ #僕の心のヤバイやつ @bokuyaba_anime
 # Isekai de Cheat Skill wo Te ni Shita Ore wa https://iseleve.com　@iseleve_anime
+# Isekai One Turn Kill Neesan https://onekillsister.com/ #一撃姉 @onekillsister
 # Isekai Shoukan wa Nidome desu https://isenido.com/ #いせにど @isenido_anime
 # Isekai wa Smartphone to Tomo ni. 2 http://isesuma-anime.jp/ #イセスマ @isesumaofficial
 # Kawaisugi Crisis https://kawaisugi.com/ #カワイスギクライシス @kawaisugicrisis
@@ -142,6 +143,69 @@ class IseleveDownload(Spring2023AnimeDownload, NewsTemplate):
         self.add_to_image_list('teaser_coment_img01', self.PAGE_PREFIX + 'img/teaser_coment_img01.jpg')
         self.add_to_image_list('teaser_coment_img02', self.PAGE_PREFIX + 'img/teaser_coment_img02.jpg')
         self.download_image_list(folder)
+
+
+# Isekai One Turn Kill Nee-san: Ane Douhan no Isekai Seikatsu Hajimemashita
+class OneKillSisterDownload(Spring2023AnimeDownload, NewsTemplate):
+    title = 'Isekai One Turn Kill Nee-san: Ane Douhan no Isekai Seikatsu Hajimemashita'
+    keywords = [title, 'My One-Hit Kill Sister']
+    website = 'https://onekillsister.com/'
+    twitter = 'onekillsister'
+    hashtags = '一撃姉'
+    folder_name = 'onekillsister'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-list__item',
+                                    date_select='.news-list__item-data', title_select='.news-list__item-text',
+                                    id_select='a', date_separator='/', next_page_select='div.pagination .page-numbers',
+                                    next_page_eval_index_class='current', next_page_eval_index=-1)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz', self.PAGE_PREFIX + 'wp-content/uploads/2022/07/%E3%83%86%E3%82%A3%E3%82%B5%E3%82%99%E3%83%BC%E3%83%92%E3%82%99%E3%82%B7%E3%82%99%E3%83%A5%E3%82%A2%E3%83%AB.jpg')
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FZxIaC6VsAAOfL0?format=jpg&name=4096x4096')
+        self.download_image_list(folder)
+
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.main__mv img[src]')
+            self.image_list = []
+            for image in images:
+                image_url = image['src']
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character')
+            self.image_list = []
+            images = soup.select('ul.gallery img[src]')
+            for image in images:
+                image_url = image['src']
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
 
 
 # Isekai Shoukan wa Nidome desu
@@ -784,7 +848,7 @@ class WatayuriDownload(Spring2023AnimeDownload, NewsTemplate):
 # Yamada-kun to Lv999 no Koi wo Suru
 class Yamada999Download(Spring2023AnimeDownload, NewsTemplate):
     title = 'Yamada-kun to Lv999 no Koi wo Suru'
-    keywords = [title, 'My Love Story with Yamada-kun at Lv999']
+    keywords = [title, 'Loving Yamada at Lv999']
     website = 'https://yamadalv999-anime.com/'
     twitter = 'yamada999_anime'
     hashtags = '山田999'

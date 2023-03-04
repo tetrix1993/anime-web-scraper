@@ -12,7 +12,6 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Eiyuu Kyoushitsu https://eiyukyoushitsu-anime.com/ #英雄教室 #eiyu_anime @eiyu_anime
 # Goblin Slayer S2 http://www.goblinslayer.jp/ #ゴブスレ #いせれべ @GoblinSlayer_GA
 # Hoshikuzu Telepath https://hoshitele-anime.com/ #星テレ #hoshitele @hoshitele_anime
-# Isekai One Turn Kill Neesan https://onekillsister.com/ #一撃姉 @onekillsister
 # Jitsu wa Ore, Saikyou deshita? https://jitsuhaoresaikyo-anime.com/ @jitsuoresaikyo
 # Keikenzumi na Kimi to, Keiken Zero na Ore ga, Otsukiai suru Hanashi. https://kimizero.com/ #キミゼロ @kimizero_anime
 # Kusuriya no Hitorigoto https://kusuriyanohitorigoto.jp/ #薬屋のひとりごと @kusuriya_PR
@@ -485,69 +484,6 @@ class HoshiteleDownload(UnconfirmedDownload, NewsTemplate):
         except Exception as e:
             self.print_exception(e, 'Key Visual News')
         self.create_cache_file(cache_filepath, processed, num_processed)
-
-
-# Isekai One Turn Kill Nee-san: Ane Douhan no Isekai Seikatsu Hajimemashita
-class OneKillSisterDownload(UnconfirmedDownload, NewsTemplate):
-    title = 'Isekai One Turn Kill Nee-san: Ane Douhan no Isekai Seikatsu Hajimemashita'
-    keywords = [title, 'My One-Hit Kill Sister']
-    website = 'https://onekillsister.com/'
-    twitter = 'onekillsister'
-    hashtags = '一撃姉'
-    folder_name = 'onekillsister'
-
-    PAGE_PREFIX = website
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_news()
-        self.download_key_visual()
-        self.download_character()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_news(self):
-        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-list__item',
-                                    date_select='.news-list__item-data', title_select='.news-list__item-text',
-                                    id_select='a', date_separator='/', next_page_select='div.pagination .page-numbers',
-                                    next_page_eval_index_class='current', next_page_eval_index=-1)
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('tz', self.PAGE_PREFIX + 'wp-content/uploads/2022/07/%E3%83%86%E3%82%A3%E3%82%B5%E3%82%99%E3%83%BC%E3%83%92%E3%82%99%E3%82%B7%E3%82%99%E3%83%A5%E3%82%A2%E3%83%AB.jpg')
-        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FZxIaC6VsAAOfL0?format=jpg&name=4096x4096')
-        self.download_image_list(folder)
-
-        try:
-            soup = self.get_soup(self.PAGE_PREFIX)
-            images = soup.select('.main__mv img[src]')
-            self.image_list = []
-            for image in images:
-                image_url = image['src']
-                image_name = self.extract_image_name_from_url(image_url)
-                self.add_to_image_list(image_name, image_url)
-            self.download_image_list(folder)
-        except Exception as e:
-            self.print_exception(e, 'Key Visual')
-
-    def download_character(self):
-        folder = self.create_character_directory()
-        try:
-            soup = self.get_soup(self.PAGE_PREFIX + 'character')
-            self.image_list = []
-            images = soup.select('ul.gallery img[src]')
-            for image in images:
-                image_url = image['src']
-                image_name = self.extract_image_name_from_url(image_url)
-                self.add_to_image_list(image_name, image_url)
-            self.download_image_list(folder)
-        except Exception as e:
-            self.print_exception(e, 'Character')
 
 
 # Jitsu wa Ore, Saikyou deshita?

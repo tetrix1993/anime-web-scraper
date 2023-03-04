@@ -91,7 +91,6 @@ The premiere date for the anime listed here has not been announced.
 * [Eiyuu Kyoushitsu](https://eiyukyoushitsu-anime.com/)
 * [Goblin Slayer 2nd Season](http://www.goblinslayer.jp/)
 * [Hoshikuzu Telepath](https://hoshitele-anime.com/)
-* [Isekai One Turn Kill Nee-san: Ane Douhan no Isekai Seikatsu Hajimemashita](https://onekillsister.com/)
 * [Jitsu wa Ore, Saikyou deshita?](https://jitsuhaoresaikyo-anime.com/)
 * [Keikenzumi na Kimi to, Keiken Zero na Ore ga, Otsukiai suru Hanashi.](https://kimizero.com/)
 * [Kusuriya no Hitorigoto](https://kusuriyanohitorigoto.jp/)
@@ -123,6 +122,7 @@ The premiere date for the anime listed here has not been announced.
 ### Spring 2023 Anime
 * [Boku no Kokoro no Yabai Yatsu](https://bokuyaba-anime.com/)
 * [Isekai de Cheat Skill wo Te ni Shita Ore wa, Genjitsu Sekai wo mo Musou Suru: Level Up wa Jinsei wo Kaeta](https://www.iseleve.com/)
+* [Isekai One Turn Kill Nee-san: Ane Douhan no Isekai Seikatsu Hajimemashita](https://onekillsister.com/)
 * [Isekai Shoukan wa Nidome desu](https://isenido.com/)
 * [Isekai wa Smartphone to Tomo ni. 2](http://isesuma-anime.jp/)
 * [Kawaisugi Crisis](https://kawaisugi.com/)
