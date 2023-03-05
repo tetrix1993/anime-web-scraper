@@ -14,6 +14,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Kono Subarashii Sekai ni Bakuen wo! http://konosuba.com/bakuen/ #konosuba #このすば @konosubaanime
 # Kuma Kuma Kuma Bear Punch! https://kumakumakumabear.com/ #くまクマ熊ベアー #kumabear @kumabear_anime
 # Megami no Cafe Terrace https://goddess-cafe.com/ #女神のカフェテラス @goddess_cafe_PR
+# My Home Hero https://myhomehero-anime.com/ #マイホームヒーロー @myhomehero_pr
 # Oshi no Ko https://ichigoproduction.com/ #推しの子 @anime_oshinoko
 # Otonari ni Ginga https://otonari-anime.com/ #おとなりに銀河 @otonariniginga
 # Tensei Kizoku no Isekai Boukenroku https://www.tensei-kizoku.jp/ #転生貴族 @tenseikizoku
@@ -823,6 +824,46 @@ class MegamiCafeDownload(Spring2023AnimeDownload, NewsTemplate):
             self.print_exception(e, 'Character')
 
 
+# My Home Hero
+class MyHomeHeroDownload(Spring2023AnimeDownload, NewsTemplate):
+    title = 'My Home Hero'
+    keywords = [title]
+    website = 'https://myhomehero-anime.com/'
+    twitter = 'myhomehero_pr'
+    hashtags = ['MyHomeHero', 'マイホームヒーロー']
+    folder_name = 'myhomehero'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-item',
+                                    title_select='p.title', date_select='p.date', id_select='a')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('mhh_honban_images_kv-pc', self.PAGE_PREFIX + "wp/wp-content/themes/mhh-honban/images/kv-pc.jpg")
+        self.add_to_image_list('mhh_teaser_images_kv-pc', self.PAGE_PREFIX + "wp/wp-content/themes/mhh-teaser/images/kv-pc.jpg")
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'wp/wp-content/themes/mhh-honban/images/chara-pic%s.png'
+        self.download_by_template(folder, template, 2, 1)
+
+
 # Oshi no Ko
 class OshinokoDownload(Spring2023AnimeDownload, NewsTemplate2):
     title = 'Oshi no Ko'
@@ -833,6 +874,9 @@ class OshinokoDownload(Spring2023AnimeDownload, NewsTemplate2):
     folder_name = 'oshinoko'
 
     PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
 
     def run(self):
         self.download_episode_preview()
