@@ -7,6 +7,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Isekai One Turn Kill Neesan https://onekillsister.com/ #一撃姉 @onekillsister
 # Isekai Shoukan wa Nidome desu https://isenido.com/ #いせにど @isenido_anime
 # Isekai wa Smartphone to Tomo ni. 2 http://isesuma-anime.jp/ #イセスマ @isesumaofficial
+# Jijou wo Shiranai Tenkousei ga Guigui Kuru. https://guiguikuru.com/ #転校生がグイグイくる @guiguikuru_pr
 # Kawaisugi Crisis https://kawaisugi.com/ #カワイスギクライシス @kawaisugicrisis
 # Kuma Kuma Kuma Bear Punch! https://kumakumakumabear.com/ #くまクマ熊ベアー #kumabear @kumabear_anime
 # Megami no Cafe Terrace https://goddess-cafe.com/ #女神のカフェテラス @goddess_cafe_PR
@@ -367,6 +368,55 @@ class Isesuma2Download(Spring2023AnimeDownload, NewsTemplate):
                 image_url = self.PAGE_PREFIX + image['src']
                 image_name = self.generate_image_name_from_url(image_url, 'chara')
                 self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+
+
+# Jijou wo Shiranai Tenkousei ga Guigui Kuru.
+class GuiguikuruDownload(Spring2023AnimeDownload, NewsTemplate):
+    title = 'Jijou wo Shiranai Tenkousei ga Guigui Kuru.'
+    keywords = [title, 'My Clueless First Friend', 'guiguikuru']
+    website = 'https://guiguikuru.com/'
+    twitter = 'guiguikuru_pr'
+    hashtags = '転校生がグイグイくる'
+    folder_name = 'guiguikuru'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.md-list__news li',
+                                    date_select='.date', title_select='.ttl',
+                                    id_select='a', next_page_select='.item-next__link')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        template = self.PAGE_PREFIX + '_assets/images/top/fv/webp/fv_%s_pc.webp'
+        self.download_by_template(folder, template, 3, 1)
+
+    def download_character(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            images = soup.select('.chardata source[type="image/webp"][srcset]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['srcset'][1:]
+                image_name = self.extract_image_name_from_url(image_url)
+                if image_name.endswith('_pc'):
+                    self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')

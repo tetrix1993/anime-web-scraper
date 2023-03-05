@@ -103,7 +103,7 @@ class ArsGiantDownload(Winter2023AnimeDownload, NewsTemplate):
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.md-list__news li',
                                     date_select='.date', title_select='.ttl',
-                                    id_select='a')
+                                    id_select='a', next_page_select='.item-next__link')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()

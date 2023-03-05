@@ -126,6 +126,7 @@ The premiere date for the anime listed here has not been announced.
 * [Isekai One Turn Kill Nee-san: Ane Douhan no Isekai Seikatsu Hajimemashita](https://onekillsister.com/)
 * [Isekai Shoukan wa Nidome desu](https://isenido.com/)
 * [Isekai wa Smartphone to Tomo ni. 2](http://isesuma-anime.jp/)
+* [Jijou wo Shiranai Tenkousei ga Guigui Kuru.](https://guiguikuru.com/)
 * [Kawaisugi Crisis](https://kawaisugi.com/)
 * [Kuma Kuma Kuma Bear Punch!](https://kumakumakumabear.com/)
 * [Megami no Café Terrace](https://goddess-cafe.com/)
