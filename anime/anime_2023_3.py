@@ -2,6 +2,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 
 
 # Higeki no Genkyou to Naru Saikyou Gedou Last Boss Joou wa Tami no Tame ni Tsukushimasu. https://lastame.com/ #ラス為 @lastame_pr
+# Kanojo, Okarishimasu 3rd Season https://kanokari-official.com/ #かのかり #kanokari @kanokari_anime
 # Level 1 dakedo Unique Skill de Saikyou desu https://level1-anime.com/ #レベル1だけどアニメ化です @level1_anime
 # Liar Liar https://liar-liar-anime.com/ #ライアー・ライアー #ライアラ @liar2_official
 # Masamune-kun no Revenge R https://masamune-tv.com/ #MASA_A @masamune_tv
@@ -60,6 +61,76 @@ class LastameDownload(Summer2023AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'wp/wp-content/themes/original/assets/img/character01-main%s.png'
         self.download_by_template(folder, template, 2, start=1, end=3)
+
+
+# Kanojo, Okarishimasu 3rd Season
+class Kanokari3Download(Summer2023AnimeDownload, NewsTemplate):
+    title = "Kanojo, Okarishimasu 3rd Season"
+    keywords = [title, "Kanokari", "Rent-a-Girlfriend"]
+    website = 'https://kanokari-official.com/'
+    twitter = 'kanokari_anime'
+    hashtags = ['彼女お借りします', 'かのかり', 'kanokari']
+    folder_name = 'kanokari3'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+        self.download_media()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-item',
+                                    title_select='.news-title', date_select='.news-date', id_select='a',
+                                    paging_type=0, next_page_select='ul.pagenation-list li', next_page_eval_index=-1,
+                                    next_page_eval_index_class='is__current')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            divs = soup.select('.firstview>div[class]')
+            self.image_list = []
+            for div in divs:
+                has_visual_class = False
+                for _class in div['class']:
+                    if 'visual' in _class:
+                        has_visual_class = True
+                        break
+                if not has_visual_class:
+                    continue
+                images = div.select('img[src]')
+                for image in images:
+                    image_url = image['src']
+                    if '/images/' not in image_url:
+                        continue
+                    image_name = self.generate_image_name_from_url(image_url, 'images')
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'chara/')
+            images = soup.select('.chara-stand img[src]')
+            self.image_list = []
+            for image in images:
+                image_url = image['src']
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
 
 
 # Level 1 dakedo Unique Skill de Saikyou desu

@@ -13,7 +13,7 @@ from datetime import datetime
 # Isekai Meikyuu de Harem wo https://isekai-harem.com/ #異世界迷宮でハーレムを #異世界迷宮 @isekaiharem_ani
 # Isekai Ojisan #いせおじ #異世界おじさん @Isekai_Ojisan
 # Isekai Yakkyoku https://isekai-yakkyoku.jp/ #異世界薬局 @isekai_yakkyoku
-# Kanojo, Okarishimasu 2nd Season https://kanokari-official.com/ #かのかり #kanokari @kanokari_anime
+# Kanojo, Okarishimasu 2nd Season https://kanokari-official.com/2nd/ #かのかり #kanokari @kanokari_anime
 # Kinsou no Vermeil: Gakeppuchi Majutsushi wa Saikyou no Yakusai to Mahou Sekai wo Tsukisusumu #ヴェルメイユ #vermeil @vermeil_animePR
 # Kumichou Musume to Sewagakari https://kumichomusume.com/ #組長娘と世話係 @kumichomusume
 # Kuro no Shoukanshi https://kuronoshokanshi.com/ #黒の召喚士 @kuronoshokanshi
@@ -932,12 +932,13 @@ class IsekaiYakkyokuDownload(Summer2022AnimeDownload, NewsTemplate2):
 class Kanokari2Download(Summer2022AnimeDownload, NewsTemplate):
     title = "Kanojo, Okarishimasu 2nd Season"
     keywords = [title, "Kanokari", "Rent-a-Girlfriend"]
-    website = 'https://kanokari-official.com/'
+    website = 'https://kanokari-official.com/2nd/'
     twitter = 'kanokari_anime'
     hashtags = ['彼女お借りします', 'かのかり', 'kanokari']
     folder_name = 'kanokari2'
 
-    PAGE_PREFIX = website
+    PAGE_PREFIX = 'https://kanokari-official.com/'
+    PAGE_PREFIX_2 = website
 
     def __init__(self):
         super().__init__()
@@ -952,7 +953,7 @@ class Kanokari2Download(Summer2022AnimeDownload, NewsTemplate):
     def download_episode_preview(self):
         yt_folder, yt_episodes = self.init_youtube_thumbnail_variables(['13'])
         try:
-            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            soup = self.get_soup(self.PAGE_PREFIX_2 + 'story/')
             lis = soup.select('.story--nav li')
             curr = soup.select('.story--ttl__num em')
             curr_ep = '12'
@@ -992,7 +993,7 @@ class Kanokari2Download(Summer2022AnimeDownload, NewsTemplate):
             self.print_exception(e)
 
     def download_news(self):
-        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.md-news__li',
+        self.download_template_news(page_prefix=self.PAGE_PREFIX_2, article_select='.md-news__li',
                                     title_select='.postttl', date_select='time', id_select='a', stop_date='2021.02.26',
                                     paging_type=0, next_page_select='ul.pagenation-list li', next_page_eval_index=-1,
                                     next_page_eval_index_class='is__current')
@@ -1003,7 +1004,7 @@ class Kanokari2Download(Summer2022AnimeDownload, NewsTemplate):
         # self.add_to_image_list('tz', self.PAGE_PREFIX + '2nd/wp-content/themes/kanokari-2nd/_assets/images/fv/fv_pc.jpg')
 
         try:
-            soup = self.get_soup(self.PAGE_PREFIX)
+            soup = self.get_soup(self.PAGE_PREFIX_2)
             images = soup.select('.fv--visual img[src]')
             self.image_list = []
             for image in images:
@@ -1021,12 +1022,12 @@ class Kanokari2Download(Summer2022AnimeDownload, NewsTemplate):
             self.add_to_image_list(image_name, image_url)
         self.download_image_list(folder)
 
-        self.download_youtube_thumbnails(self.PAGE_PREFIX, folder)
+        # self.download_youtube_thumbnails(self.PAGE_PREFIX, folder)
 
     def download_character(self):
         folder = self.create_character_directory()
         try:
-            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            soup = self.get_soup(self.PAGE_PREFIX_2 + 'character/')
             images = soup.select('.char .v img[src]')
             self.image_list = []
             for image in images:
@@ -1041,7 +1042,7 @@ class Kanokari2Download(Summer2022AnimeDownload, NewsTemplate):
         folder = self.create_media_directory()
         cache_filepath = folder + '/cache'
         processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
-        bd_prefix = self.PAGE_PREFIX + 'bd/'
+        bd_prefix = self.PAGE_PREFIX_2 + 'bd/'
         try:
             soup = self.get_soup(bd_prefix)
             lis = soup.select('.bd--lineup li')

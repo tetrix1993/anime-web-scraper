@@ -111,6 +111,7 @@ The premiere date for the anime listed here has not been announced.
 
 ### Summer 2023 Anime
 * [Higeki no Genkyou to Naru Saikyou Gedou Last Boss Joou wa Tami no Tame ni Tsukushimasu.](https://lastame.com/)
+* [Kanojo, Okarishimasu 3rd Season](https://kanokari-official.com/)
 * [Level 1 dakedo Unique Skill de Saikyou desu](https://level1-anime.com/)
 * [Liar Liar](https://liar-liar-anime.com/)
 * [Masamune-kun no Revenge R](https://masamune-tv.com/)
@@ -212,7 +213,7 @@ The premiere date for the anime listed here has not been announced.
 * [Isekai Meikyuu de Harem wo](https://isekai-harem.com/)
 * [Isekai Ojisan](https://isekaiojisan.com/)
 * [Isekai Yakkyoku](https://isekai-yakkyoku.jp/)
-* [Kanojo, Okarishimasu 2nd Season](https://kanokari-official.com/)
+* [Kanojo, Okarishimasu 2nd Season](https://kanokari-official.com/2nd/)
 * [Kinsou no Vermeil: Gakeppuchi Majutsushi wa Saikyou no Yakusai to Mahou Sekai wo Tsukisusumu](https://vermeilingold.jp/)
 * [Kumichou Musume to Sewagakari](https://kumichomusume.com/)
 * [Kuro no Shoukanshi](https://kuronoshokanshi.com/)
