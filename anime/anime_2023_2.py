@@ -10,6 +10,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Jijou wo Shiranai Tenkousei ga Guigui Kuru. https://guiguikuru.com/ #転校生がグイグイくる @guiguikuru_pr
 # Kaminaki Sekai no Kamisama Katsudou https://kamikatsu-anime.jp/ #カミカツ @kamikatsu_anime
 # Kawaisugi Crisis https://kawaisugi.com/ #カワイスギクライシス @kawaisugicrisis
+# Kimi wa Houkago Insomnia https://kimisomu-anime.com/ #君ソム @kimisomu_anime
 # Kuma Kuma Kuma Bear Punch! https://kumakumakumabear.com/ #くまクマ熊ベアー #kumabear @kumabear_anime
 # Megami no Cafe Terrace https://goddess-cafe.com/ #女神のカフェテラス @goddess_cafe_PR
 # Oshi no Ko https://ichigoproduction.com/ #推しの子 @anime_oshinoko
@@ -530,6 +531,72 @@ class KawaisugiCrisisDownload(Spring2023AnimeDownload, NewsTemplate):
                     self.add_to_image_list(image_name, image_url)
                 if len(self.image_list) > 0:
                     processed.append(page)
+                self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+        self.create_cache_file(cache_filepath, processed, num_processed)
+
+
+# Kimi wa Houkago Insomnia
+class KimisomuDownload(Spring2023AnimeDownload, NewsTemplate):
+    title = 'Kimi wa Houkago Insomnia'
+    keywords = [title, 'Insomniacs After School', 'kimisomu']
+    website = 'https://kimisomu-anime.com/'
+    twitter = 'kimisomu_anime'
+    hashtags = ['kimisomu', '君ソム']
+    folder_name = 'kimisomu'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-List_Item',
+                                    date_select='time', title_select='.ttl', id_select='a',
+                                    date_func=lambda x: x[0:4] + '.' + x[4:],
+                                    next_page_select='.nextpostslink')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('img_kv_02', self.PAGE_PREFIX + 'wp/wp-content/themes/insomnia_v0/assets/images/pc/index/img_kv_02.png')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            a_tags = soup.select('.chara-List li>a[href]')
+            for a_tag in a_tags:
+                chara_url = a_tag['href']
+                if chara_url.endswith('/'):
+                    chara_url = chara_url[:-1]
+                chara_name = chara_url.split('/')[-1]
+                if chara_name in processed:
+                    continue
+                chara_soup = self.get_soup(chara_url)
+                if chara_soup is None:
+                    continue
+                images = chara_soup.select('.chara-Detail_Img_Body img[src], .chara-Detail_Face img[src]')
+                self.image_list = []
+                for image in images:
+                    image_url = image['src']
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+                if len(self.image_list) > 0:
+                    processed.append(chara_name)
                 self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')

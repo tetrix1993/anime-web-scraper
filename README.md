@@ -129,6 +129,7 @@ The premiere date for the anime listed here has not been announced.
 * [Jijou wo Shiranai Tenkousei ga Guigui Kuru.](https://guiguikuru.com/)
 * [Kaminaki Sekai no Kamisama Katsudou](https://kamikatsu-anime.jp/)
 * [Kawaisugi Crisis](https://kawaisugi.com/)
+* [Kimi wa Houkago Insomnia](https://kimisomu-anime.com/)
 * [Kuma Kuma Kuma Bear Punch!](https://kumakumakumabear.com/)
 * [Megami no Café Terrace](https://goddess-cafe.com/)
 * [Oshi no Ko](https://ichigoproduction.com/)
