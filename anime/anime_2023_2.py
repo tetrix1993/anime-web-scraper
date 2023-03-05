@@ -571,6 +571,7 @@ class KimisomuDownload(Spring2023AnimeDownload, NewsTemplate):
         folder = self.create_key_visual_directory()
         self.image_list = []
         self.add_to_image_list('img_kv_02', self.PAGE_PREFIX + 'wp/wp-content/themes/insomnia_v0/assets/images/pc/index/img_kv_02.png')
+        self.add_to_image_list('img_kv_03', self.PAGE_PREFIX + 'wp/wp-content/themes/insomnia_v0/assets/images/pc/index/img_kv_03.png')
         self.download_image_list(folder)
 
     def download_character(self):
