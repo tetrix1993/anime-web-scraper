@@ -8,6 +8,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Isekai Shoukan wa Nidome desu https://isenido.com/ #いせにど @isenido_anime
 # Isekai wa Smartphone to Tomo ni. 2 http://isesuma-anime.jp/ #イセスマ @isesumaofficial
 # Jijou wo Shiranai Tenkousei ga Guigui Kuru. https://guiguikuru.com/ #転校生がグイグイくる @guiguikuru_pr
+# Kaminaki Sekai no Kamisama Katsudou https://kamikatsu-anime.jp/ #カミカツ @kamikatsu_anime
 # Kawaisugi Crisis https://kawaisugi.com/ #カワイスギクライシス @kawaisugicrisis
 # Kuma Kuma Kuma Bear Punch! https://kumakumakumabear.com/ #くまクマ熊ベアー #kumabear @kumabear_anime
 # Megami no Cafe Terrace https://goddess-cafe.com/ #女神のカフェテラス @goddess_cafe_PR
@@ -417,6 +418,54 @@ class GuiguikuruDownload(Spring2023AnimeDownload, NewsTemplate):
                 image_name = self.extract_image_name_from_url(image_url)
                 if image_name.endswith('_pc'):
                     self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+
+
+# Kaminaki Sekai no Kamisama Katsudou
+class KamikatsuDownload(Spring2023AnimeDownload, NewsTemplate):
+    title = 'Kaminaki Sekai no Kamisama Katsudou'
+    keywords = [title, 'kamikatsu']
+    website = 'https://kamikatsu-anime.jp/'
+    twitter = 'kamikatsu_anime'
+    hashtags = ['kamikatsu', 'カミカツ']
+    folder_name = 'kamikatsu'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.newsList li',
+                                    date_select='div>i', title_select='div>p', id_select='.abcd',
+                                    news_prefix='')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        template = self.PAGE_PREFIX + '_image/kvp%s.png'
+        self.download_by_template(folder, template, 1, 1)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('#character .swiper-slide img[src]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + self.get_image_url_from_srcset(image)
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')

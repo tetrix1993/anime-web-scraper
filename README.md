@@ -127,6 +127,7 @@ The premiere date for the anime listed here has not been announced.
 * [Isekai Shoukan wa Nidome desu](https://isenido.com/)
 * [Isekai wa Smartphone to Tomo ni. 2](http://isesuma-anime.jp/)
 * [Jijou wo Shiranai Tenkousei ga Guigui Kuru.](https://guiguikuru.com/)
+* [Kaminaki Sekai no Kamisama Katsudou](https://kamikatsu-anime.jp/)
 * [Kawaisugi Crisis](https://kawaisugi.com/)
 * [Kuma Kuma Kuma Bear Punch!](https://kumakumakumabear.com/)
 * [Megami no Café Terrace](https://goddess-cafe.com/)

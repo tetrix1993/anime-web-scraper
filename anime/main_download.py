@@ -987,7 +987,7 @@ class MainDownload:
             sources = srcset.split(',')
             for source in sources:
                 split1 = source.strip().split(' ')
-                if len(split1) == 2 and split1[1].endswith('w'):
+                if len(split1) == 2 and (split1[1].endswith('w') or split1[1].endswith('x')):
                     try:
                         size = int(split1[1][:-1])
                         if biggest_size is None or size > biggest_size:
