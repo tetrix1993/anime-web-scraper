@@ -130,6 +130,7 @@ The premiere date for the anime listed here has not been announced.
 * [Kaminaki Sekai no Kamisama Katsudou](https://kamikatsu-anime.jp/)
 * [Kawaisugi Crisis](https://kawaisugi.com/)
 * [Kimi wa Houkago Insomnia](https://kimisomu-anime.com/)
+* [Kono Subarashii Sekai ni Bakuen wo!](http://konosuba.com/bakuen/)
 * [Kuma Kuma Kuma Bear Punch!](https://kumakumakumabear.com/)
 * [Megami no Café Terrace](https://goddess-cafe.com/)
 * [Oshi no Ko](https://ichigoproduction.com/)

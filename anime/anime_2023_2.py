@@ -11,6 +11,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Kaminaki Sekai no Kamisama Katsudou https://kamikatsu-anime.jp/ #カミカツ @kamikatsu_anime
 # Kawaisugi Crisis https://kawaisugi.com/ #カワイスギクライシス @kawaisugicrisis
 # Kimi wa Houkago Insomnia https://kimisomu-anime.com/ #君ソム @kimisomu_anime
+# Kono Subarashii Sekai ni Bakuen wo! http://konosuba.com/bakuen/ #konosuba #このすば @konosubaanime
 # Kuma Kuma Kuma Bear Punch! https://kumakumakumabear.com/ #くまクマ熊ベアー #kumabear @kumabear_anime
 # Megami no Cafe Terrace https://goddess-cafe.com/ #女神のカフェテラス @goddess_cafe_PR
 # Oshi no Ko https://ichigoproduction.com/ #推しの子 @anime_oshinoko
@@ -563,8 +564,7 @@ class KimisomuDownload(Spring2023AnimeDownload, NewsTemplate):
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-List_Item',
                                     date_select='time', title_select='.ttl', id_select='a',
-                                    date_func=lambda x: x[0:4] + '.' + x[4:],
-                                    next_page_select='.nextpostslink')
+                                    date_func=lambda x: x[0:4] + '.' + x[4:], next_page_select='.nextpostslink')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -601,6 +601,80 @@ class KimisomuDownload(Spring2023AnimeDownload, NewsTemplate):
         except Exception as e:
             self.print_exception(e, 'Character')
         self.create_cache_file(cache_filepath, processed, num_processed)
+
+
+# Kono Subarashii Sekai ni Bakuen wo!
+class KonoSubaBakuenDownload(Spring2023AnimeDownload, NewsTemplate):
+    title = 'Kono Subarashii Sekai ni Bakuen wo!'
+    keywords = [title, 'KonoSuba', 'An Explosion on This Wonderful World!']
+    website = 'http://konosuba.com/bakuen/'
+    twitter = 'konosubaanime'
+    hashtags = ['konosuba', 'このすば']
+    folder_name = 'konosuba-bakuen'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-list__item',
+                                    date_select='.news-list__date', title_select='.news-list__title',
+                                    id_select='a', a_tag_prefix=news_url,
+                                    next_page_select='div.pagination .page-numbers',
+                                    next_page_eval_index_class='current', next_page_eval_index=-1)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            divs = soup.select('section.top-main div')
+            for div in divs:
+                if not div.has_attr('class'):
+                    continue
+                has_mv = False
+                for _class in div['class']:
+                    if 'mv' in _class and 'logo' not in _class:
+                        has_mv = True
+                        break
+                if not has_mv:
+                    continue
+                images = div.select('img[src]')
+                self.image_list = []
+                for image in images:
+                    image_url = image['src']
+                    if '/img/' not in image_url:
+                        continue
+                    image_name = self.generate_image_name_from_url(image_url, 'img')
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        chara_url = self.PAGE_PREFIX + 'character/'
+        try:
+            soup = self.get_soup(chara_url)
+            images = soup.select('.chara-list__item img[src]')
+            self.image_list = []
+            for image in images:
+                image_url = chara_url + image['src']
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
 
 
 # Kuma Kuma Kuma Bear Punch!
