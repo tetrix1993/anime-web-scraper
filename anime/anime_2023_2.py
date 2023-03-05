@@ -407,7 +407,7 @@ class GuiguikuruDownload(Spring2023AnimeDownload, NewsTemplate):
         self.download_by_template(folder, template, 3, 1)
 
     def download_character(self):
-        folder = self.create_key_visual_directory()
+        folder = self.create_character_directory()
         try:
             soup = self.get_soup(self.PAGE_PREFIX + 'character/')
             images = soup.select('.chardata source[type="image/webp"][srcset]')
