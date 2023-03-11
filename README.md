@@ -118,6 +118,7 @@ The premiere date for the anime listed here has not been announced.
 * [Level 1 dakedo Unique Skill de Saikyou desu](https://level1-anime.com/)
 * [Liar Liar](https://liar-liar-anime.com/)
 * [Masamune-kun no Revenge R](https://masamune-tv.com/)
+* [Nanatsu no Maken ga Shihai suru](https://nanatsuma-pr.com/)
 * [Okashi na Tensei](https://okashinatensei-pr.com/)
 * [Shinigami Bocchan to Kuro Maid 2nd Season](https://bocchan-anime.com/)
 * [Shiro Seijo to Kuro Bokushi](https://shiroseijyo-anime.com/)

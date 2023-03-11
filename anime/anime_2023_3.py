@@ -7,6 +7,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Level 1 dakedo Unique Skill de Saikyou desu https://level1-anime.com/ #レベル1だけどアニメ化です @level1_anime
 # Liar Liar https://liar-liar-anime.com/ #ライアー・ライアー #ライアラ @liar2_official
 # Masamune-kun no Revenge R https://masamune-tv.com/ #MASA_A @masamune_tv
+# Nanatsu no Maken ga Shihai suru https://nanatsuma-pr.com/ #nanatsuma #ななつま @nanatsuma_pr
 # Okashi na Tensei https://okashinatensei-pr.com/ #おかしな転生 @okashinatensei
 # Shinigami Bocchan to Kuro Maid S2 https://bocchan-anime.com/ #死神坊ちゃん @bocchan_anime
 # Shiro Seijo to Kuro Bokushi https://shiroseijyo-anime.com/ @shiroseijyo_tv #白聖女と黒牧師
@@ -351,6 +352,82 @@ class Masamunekun2Download(Summer2023AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+
+# Nanatsu no Maken ga Shihai suru
+class NanatsumaDownload(Summer2023AnimeDownload, NewsTemplate):
+    title = 'Nanatsu no Maken ga Shihai suru'
+    keywords = [title, 'Reign of the Seven Spellblades']
+    website = 'https://nanatsuma-pr.com/'
+    twitter = 'nanatsuma_pr'
+    hashtags = ['nanatsuma', 'ななつま']
+    folder_name = 'nanatsuma'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        pass
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/FqyTIkYaAAUAKWT?format=jpg&name=large')
+        self.download_image_list(folder)
+
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            self.image_list = []
+            divs = soup.select('main div[class]')
+            for div in divs:
+                has_visual_class = False
+                for _class in div['class']:
+                    if 'visual' in _class.lower():
+                        has_visual_class = True
+                        break
+                if not has_visual_class:
+                    continue
+                images = div.select('picture *[srcset]')
+                for image in images:
+                    image_url = self.PAGE_PREFIX + image['srcset'][1:]
+                    if '/static/' not in image_url:
+                        continue
+                    image_name = self.generate_image_name_from_url(image_url, 'static')
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        prefix = self.PAGE_PREFIX + 'wp/wp-content/themes/ssd/static/character/'
+        for i in range(30):
+            num = str(i + 1).zfill(2)
+            if self.is_image_exists(num + '_full', folder) and self.is_image_exists(num + '_close_01', folder):
+                continue
+            chara_prefix = prefix + num + '/'
+            full_name = num + '_full'
+            result = self.download_image(chara_prefix + 'full.png', folder + '/' + full_name)
+            if result == -1:
+                break
+            template = chara_prefix + 'close/%s.png'
+            for j in range(3):
+                close_url = template % str(j + 1).zfill(2)
+                close_name = num + '_close_' + str(j + 1).zfill(2)
+                result2 = self.download_image(close_url, folder + '/' + close_name)
+                if result2 == -1:
+                    break
 
 
 # Okashi na Tensei
