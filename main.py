@@ -20,6 +20,7 @@ def run():
                   LycorisRecoilDownload(), Youzitsu2Download()]
     subclasses = Spring2023AnimeDownload.__subclasses__() \
         + Summer2023AnimeDownload.__subclasses__() \
+        + Fall2023AnimeDownload.__subclasses__() \
         + UnconfirmedDownload.__subclasses__()
     for subclass in subclasses:
         if subclass.enabled:

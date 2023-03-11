@@ -100,7 +100,6 @@ The premiere date for the anime listed here has not been announced.
 * [Seiken Gakuin no Makentsukai](https://seikengakuin.com/)
 * [Shy](https://shy-anime.com/)
 * [Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita 2nd Season](https://slime300-anime.com/)
-* [Sousou no Frieren](https://frieren-anime.jp/)
 * [Tearmoon Teikoku Monogatari: Dantoudai kara Hajimaru, Hime no Tensei Gyakuten Story](https://tearmoon-pr.com/)
 * [Temple](https://temple-anime.com/)
 * [Tensei shitara Dainana Ouji Datta node, Kimama ni Majutsu wo Kiwamemasu](https://dainanaoji.com/)
@@ -108,6 +107,9 @@ The premiere date for the anime listed here has not been announced.
 * [Watashi no Oshi wa Akuyaku Reijou.](https://wataoshi-anime.com/)
 * [Yozakura-san Chi no Daisakusen](https://mission-yozakura-family.com/)
 * [Yumemiru Danshi wa Genjitsushugisha](https://yumemirudanshi.com/)
+
+### Fall 2023 Anime
+* [Sousou no Frieren](https://frieren-anime.jp/)
 
 ### Summer 2023 Anime
 * [Higeki no Genkyou to Naru Saikyou Gedou Last Boss Joou wa Tami no Tame ni Tsukushimasu.](https://lastame.com/)
