@@ -90,6 +90,7 @@ The premiere date for the anime listed here has not been announced.
 * [Dungeon Meshi](https://delicious-in-dungeon.com/)
 * [Eiyuu Kyoushitsu](https://eiyukyoushitsu-anime.com/)
 * [Goblin Slayer 2nd Season](http://www.goblinslayer.jp/)
+* [Highspeed Etoile](https://highspeed-etoile.com/)
 * [Hoshikuzu Telepath](https://hoshitele-anime.com/)
 * [Jitsu wa Ore, Saikyou deshita?](https://jitsuhaoresaikyo-anime.com/)
 * [Keikenzumi na Kimi to, Keiken Zero na Ore ga, Otsukiai suru Hanashi.](https://kimizero.com/)
