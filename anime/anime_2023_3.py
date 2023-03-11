@@ -2,6 +2,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 
 
 # Higeki no Genkyou to Naru Saikyou Gedou Last Boss Joou wa Tami no Tame ni Tsukushimasu. https://lastame.com/ #ラス為 @lastame_pr
+# Jidou Hanbaiki ni Umarekawatta Ore wa Meikyuu wo Samayou https://jihanki-anime.com/ #俺自販機 @jihanki_anime
 # Kanojo, Okarishimasu 3rd Season https://kanokari-official.com/ #かのかり #kanokari @kanokari_anime
 # Level 1 dakedo Unique Skill de Saikyou desu https://level1-anime.com/ #レベル1だけどアニメ化です @level1_anime
 # Liar Liar https://liar-liar-anime.com/ #ライアー・ライアー #ライアラ @liar2_official
@@ -61,6 +62,69 @@ class LastameDownload(Summer2023AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'wp/wp-content/themes/original/assets/img/character01-main%s.png'
         self.download_by_template(folder, template, 2, start=1, end=3)
+
+
+# Jidou Hanbaiki ni Umarekawatta Ore wa Meikyuu wo Samayou
+class JihankiDownload(Summer2023AnimeDownload, NewsTemplate):
+    title = 'Jidou Hanbaiki ni Umarekawatta Ore wa Meikyuu wo Samayou'
+    keywords = [title, "jihanki", 'Reborn as a Vending Machine, I Now Wander the Dungeon']
+    website = 'https://jihanki-anime.com/'
+    twitter = 'jihanki_anime'
+    hashtags = ['jihanki', '俺自販機']
+    folder_name = 'jihanki'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        news_url = 'https://up-info.news/jihanki-anime/'
+        self.download_template_news(page_prefix=news_url, article_select='.modListNews li', title_select='h3',
+                                    date_select='time', id_select='a', date_separator='/', news_prefix='')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FqhSbfPaYAIYg4i?format=jpg&name=4096x4096')
+        self.download_image_list(folder)
+
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            self.image_list = []
+            divs = soup.select('.l-jihanki-kv__inner>div[class]')
+            for div in divs:
+                has_visual_class = False
+                for _class in div['class']:
+                    if 'visual' in _class:
+                        has_visual_class = True
+                        break
+                if not has_visual_class:
+                    continue
+                images = div.select('img[src]')
+                for image in images:
+                    image_url = self.PAGE_PREFIX + image['src'].replace('./', '')
+                    if '/img/' not in image_url:
+                        continue
+                    image_name = self.generate_image_name_from_url(image_url, 'img')
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'assets/img/chara/img_chara%s.png'
+        self.download_by_template(folder, template, 1, 1)
 
 
 # Kanojo, Okarishimasu 3rd Season

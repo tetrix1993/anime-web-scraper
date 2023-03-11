@@ -113,6 +113,7 @@ The premiere date for the anime listed here has not been announced.
 
 ### Summer 2023 Anime
 * [Higeki no Genkyou to Naru Saikyou Gedou Last Boss Joou wa Tami no Tame ni Tsukushimasu.](https://lastame.com/)
+* [Jidou Hanbaiki ni Umarekawatta Ore wa Meikyuu wo Samayou](https://jihanki-anime.com/)
 * [Kanojo, Okarishimasu 3rd Season](https://kanokari-official.com/)
 * [Level 1 dakedo Unique Skill de Saikyou desu](https://level1-anime.com/)
 * [Liar Liar](https://liar-liar-anime.com/)
