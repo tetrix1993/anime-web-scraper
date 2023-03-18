@@ -94,6 +94,7 @@ The premiere date for the anime listed here has not been announced.
 * [Hoshikuzu Telepath](https://hoshitele-anime.com/)
 * [Jitsu wa Ore, Saikyou deshita?](https://jitsuhaoresaikyo-anime.com/)
 * [Keikenzumi na Kimi to, Keiken Zero na Ore ga, Otsukiai suru Hanashi.](https://kimizero.com/)
+* [Kimi no Koto ga Daidaidaidaidaisuki na 100-nin no Kanojo](https://hyakkano.com/)
 * [Kusuriya no Hitorigoto](https://kusuriyanohitorigoto.jp/)
 * [Lv1 Maou to One Room Yuusha](https://lv1room.com/)
 * [Mato Seihei no Slave](https://mabotai.jp/)
