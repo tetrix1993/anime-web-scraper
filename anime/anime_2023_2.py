@@ -156,6 +156,7 @@ class IseleveDownload(Spring2023AnimeDownload, NewsTemplate):
         self.download_episode_preview()
         self.download_news()
         self.download_key_visual()
+        self.download_character()
         self.download_media()
 
     def download_episode_preview(self):
@@ -178,14 +179,20 @@ class IseleveDownload(Spring2023AnimeDownload, NewsTemplate):
         try:
             soup = self.get_soup(self.PAGE_PREFIX)
             self.image_list = []
-            images = soup.select('.accshow img[src], img[src].main_img')
+            images = soup.select('.top_mv_navi a[href]')
             for image in images:
-                image_url = self.PAGE_PREFIX + image['src']
+                image_url = self.PAGE_PREFIX + image['href']
                 image_name = self.extract_image_name_from_url(image_url)
                 self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        prefix = self.PAGE_PREFIX + 'character/img/'
+        templates = [prefix + 'body_%s_upd.png', prefix + 'face_%s_upd.png']
+        self.download_by_template(folder, templates, 2, 1)
 
     def download_media(self):
         folder = self.create_media_directory()
