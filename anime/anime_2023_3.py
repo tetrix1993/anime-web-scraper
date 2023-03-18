@@ -11,6 +11,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Okashi na Tensei https://okashinatensei-pr.com/ #おかしな転生 @okashinatensei
 # Shinigami Bocchan to Kuro Maid S2 https://bocchan-anime.com/ #死神坊ちゃん @bocchan_anime
 # Shiro Seijo to Kuro Bokushi https://shiroseijyo-anime.com/ @shiroseijyo_tv #白聖女と黒牧師
+# Suki na Ko ga Megane wo Wasureta https://anime.shochiku.co.jp/sukimega/ #好きめが @Sukimega
 # Tsuyokute New Saga https://tsuyosaga-pr.com/ #つよサガ @tsuyosaga_pr
 
 
@@ -602,6 +603,55 @@ class ShiroSeijoDownload(Summer2023AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+
+# Suki na Ko ga Megane wo Wasureta
+class SukimegaDownload(Summer2023AnimeDownload, NewsTemplate):
+    title = 'Suki na Ko ga Megane wo Wasureta'
+    keywrods = [title, 'The Girl I Like Forgot Her Glasses']
+    website = 'https://anime.shochiku.co.jp/sukimega/'
+    twitter = 'Sukimega'
+    hashtags = '好きめが'
+    folder_name = 'sukimega'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='section .list_item',
+                                    date_select='.date', title_select='.title', id_select='a')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('kv_tw', 'https://pbs.twimg.com/media/FrLPIEiakAA_j0O?format=jpg&name=4096x4096')
+        self.download_image_list(folder)
+
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.skmg_top_fv_kv_box_item_image img[src]')
+            self.image_list = []
+            self.image_list = []
+            for image in images:
+                image_url = image['src']
+                if '/images/' not in image_url:
+                    continue
+                image_name = self.generate_image_name_from_url(image_url, 'images')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e)
 
 
 # Tsuyokute New Saga

@@ -124,6 +124,7 @@ The premiere date for the anime listed here has not been announced.
 * [Okashi na Tensei](https://okashinatensei-pr.com/)
 * [Shinigami Bocchan to Kuro Maid 2nd Season](https://bocchan-anime.com/)
 * [Shiro Seijo to Kuro Bokushi](https://shiroseijyo-anime.com/)
+* [Suki na Ko ga Megane wo Wasureta](https://anime.shochiku.co.jp/sukimega/)
 * [Tsuyokute New Saga](https://tsuyosaga-pr.com/)
 
 ### Spring 2023 Anime
