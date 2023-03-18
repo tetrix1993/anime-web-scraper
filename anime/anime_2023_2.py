@@ -1275,7 +1275,7 @@ class YuushagaShindaDownload(Spring2023AnimeDownload, NewsTemplate):
         self.add_to_image_list('kv2_tw', 'https://pbs.twimg.com/media/FkGRdxEUcAECPlX?format=jpg&name=large')
         self.download_image_list(folder)
 
-        template = self.PAGE_PREFIX + 'img/home/visual_%s_chara.png'
+        template = self.PAGE_PREFIX + 'img/home/visual_%s_chara.webp'
         self.download_by_template(folder, template, 2, 1, prefix='home_')
 
     def download_character(self):
