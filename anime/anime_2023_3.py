@@ -13,6 +13,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Shiro Seijo to Kuro Bokushi https://shiroseijyo-anime.com/ @shiroseijyo_tv #白聖女と黒牧師
 # Suki na Ko ga Megane wo Wasureta https://anime.shochiku.co.jp/sukimega/ #好きめが @Sukimega
 # Tsuyokute New Saga https://tsuyosaga-pr.com/ #つよサガ @tsuyosaga_pr
+# Uchi no Kaisha no Chiisai Senpai no Hanashi https://chiisaisenpai.com/ #うちの会社の小さい先輩の話 @smallsenpai_pr
 
 
 # Summer 2023 Anime
@@ -698,3 +699,56 @@ class TsuyosagaDownload(Summer2023AnimeDownload, NewsTemplate):
             result = self.download_image(image_url, folder + '/' + image_name)
             if result == -1:
                 break
+
+
+# Uchi no Kaisha no Chiisai Senpai no Hanashi
+class ChiisaiSenpaiDownload(Summer2023AnimeDownload, NewsTemplate):
+    title = 'Uchi no Kaisha no Chiisai Senpai no Hanashi'
+    keywords = [title]
+    website = 'https://chiisaisenpai.com/'
+    twitter = 'smallsenpai_pr'
+    hashtags = 'うちの会社の小さい先輩の話'
+    folder_name = 'chiisaisenpai'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, date_separator='-',
+                                    article_select='.jet-listing-grid__item[data-post-id]',
+                                    date_select='.elementor-heading-title', title_select='a', id_select='a')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FrY-UPcaAAAxGJO?format=jpg&name=medium')
+        self.add_to_image_list('PC-フロントビュー-1', self.PAGE_PREFIX + 'wp-content/uploads/2023/03/PC-フロントビュー-1.jpg')
+        self.add_to_image_list('SP-フロントビュー-1', self.PAGE_PREFIX + 'wp-content/uploads/2023/03/SP-フロントビュー-1.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            self.image_list = []
+            images = soup.select('#character img[src]')
+            for image in images:
+                image_url = self.clear_resize_in_url(image['src'])
+                image_name = self.extract_image_name_from_url(image_url)
+                if image_name.startswith('cv'):
+                    continue
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')

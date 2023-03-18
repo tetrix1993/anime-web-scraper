@@ -126,6 +126,7 @@ The premiere date for the anime listed here has not been announced.
 * [Shiro Seijo to Kuro Bokushi](https://shiroseijyo-anime.com/)
 * [Suki na Ko ga Megane wo Wasureta](https://anime.shochiku.co.jp/sukimega/)
 * [Tsuyokute New Saga](https://tsuyosaga-pr.com/)
+* [Uchi no Kaisha no Chiisai Senpai no Hanashi](https://chiisaisenpai.com/)
 
 ### Spring 2023 Anime
 * [Ao no Orchestra](https://aooke-anime.com/)
