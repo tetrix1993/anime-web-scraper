@@ -110,6 +110,9 @@ The premiere date for the anime listed here has not been announced.
 * [Yozakura-san Chi no Daisakusen](https://mission-yozakura-family.com/)
 * [Yumemiru Danshi wa Genjitsushugisha](https://yumemirudanshi.com/)
 
+### Winter 2024 Anime
+* [Sasayaku You ni Koi wo Utau](https://sasakoi-anime.com/)
+
 ### Fall 2023 Anime
 * [Sousou no Frieren](https://frieren-anime.jp/)
 
