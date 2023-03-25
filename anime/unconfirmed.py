@@ -398,6 +398,8 @@ class GoblinSlayer2Download(UnconfirmedDownload):
         folder = self.create_key_visual_directory()
         self.image_list = []
         self.add_to_image_list('teaser', 'https://pbs.twimg.com/media/EtDYBThUYAEBIWI?format=jpg&name=4096x4096')
+        self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/FsCxEnRaMAEQ9US?format=jpg&name=4096x4096')
+        self.add_to_image_list('kv1', self.PAGE_PREFIX + 'images/top-img.jpg')
         self.download_image_list(folder)
 
 
