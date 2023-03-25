@@ -10,7 +10,7 @@ from scan import MocaNewsScanner, NatalieScanner, AniverseMagazineScanner, WebNe
 # Gotoubun no Hanayome S2 https://www.tbs.co.jp/anime/5hanayome/ #五等分の花嫁 @5Hanayome_anime [TUE]
 # Hataraku Saibou S2 https://hataraku-saibou.com/2nd.html #はたらく細胞 @hataraku_saibou [WED]
 # Hataraku Saibou Black https://saibou-black.com/ #細胞BLACK @cellsatworkbla1 [FRI]
-# Horimiya https://horimiya-anime.com/ #ホリミヤ #horimiya @horimiya_anime [SAT]
+# Horimiya https://horimiya-anime.com/1st/ #ホリミヤ #horimiya @horimiya_anime [SAT]
 # Jaku-Chara Tomozaki-kun http://tomozaki-koushiki.com/ #友崎くん @tomozakikoshiki [MON]
 # Kaifuku Jutsushi no Yarinaoshi http://kaiyari.com/ #回復術士 @kaiyari_anime [WED]
 # Kemono Jihen https://kemonojihen-anime.com/ #怪物事変 #kemonojihen @Kemonojihen_tv [WED]
@@ -406,7 +406,7 @@ class HatarakuSaibouBlackDownload(Winter2021AnimeDownload):
 class HorimiyaDownload(Winter2021AnimeDownload):
     title = "Horimiya"
     keywords = [title]
-    website = 'https://horimiya-anime.com/'
+    website = 'https://horimiya-anime.com/1st/'
     twitter = 'horimiya_anime'
     hashtags = ['ホリミヤ', 'horimiya']
     folder_name = 'horimiya'
@@ -504,7 +504,7 @@ class HorimiyaDownload(Winter2021AnimeDownload):
         folder = self.create_key_visual_directory()
         image_objs = [
             {'name': 'kv1_1', 'url': 'https://pbs.twimg.com/media/EiH_LNCU8AM5msx?format=png&name=900x900'},
-            {'name': 'kv1_2', 'url': self.PAGE_PREFIX + 'teaser/img/top/main/img_main.jpg'},
+            {'name': 'kv1_2', 'url': 'ttps://horimiya-anime.com/teaser/img/top/main/img_main.jpg'},
             {'name': 'kv2', 'url': self.PAGE_PREFIX + 'assets/img/top/main/img_main.jpg'},
             {'name': 'kv3', 'url': self.PAGE_PREFIX + 'assets/img/top/main/img_main02.jpg'},
         ]
@@ -518,7 +518,7 @@ class HorimiyaDownload(Winter2021AnimeDownload):
         ]
         self.download_image_objects(image_objs, folder)
 
-        chara_url_template = 'https://horimiya-anime.com/assets/img/chara/img/img_chara%s-%s.jpg'
+        chara_url_template = self.PAGE_PREFIX + 'assets/img/chara/img/img_chara%s-%s.jpg'
         try:
             i = 0
             stop = False

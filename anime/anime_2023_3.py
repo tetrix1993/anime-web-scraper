@@ -3,6 +3,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 
 # Eiyuu Kyoushitsu https://eiyukyoushitsu-anime.com/ #英雄教室 #eiyu_anime @eiyu_anime
 # Higeki no Genkyou to Naru Saikyou Gedou Last Boss Joou wa Tami no Tame ni Tsukushimasu. https://lastame.com/ #ラス為 @lastame_pr
+# Horimiya: Piece https://horimiya-anime.com/ #ホリミヤ #horimiya @horimiya_anime
 # Jidou Hanbaiki ni Umarekawatta Ore wa Meikyuu wo Samayou https://jihanki-anime.com/ #俺自販機 @jihanki_anime
 # Kanojo, Okarishimasu 3rd Season https://kanokari-official.com/ #かのかり #kanokari @kanokari_anime
 # Level 1 dakedo Unique Skill de Saikyou desu https://level1-anime.com/ #レベル1だけどアニメ化です @level1_anime
@@ -109,6 +110,37 @@ class LastameDownload(Summer2023AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'wp/wp-content/themes/original/assets/img/character01-main%s.png'
         self.download_by_template(folder, template, 2, start=1, end=3)
+
+
+# Horimiya: Piece
+class Horimiya2Download(Summer2023AnimeDownload, NewsTemplate):
+    title = "Horimiya: Piece"
+    keywords = [title]
+    website = 'https://horimiya-anime.com/'
+    twitter = 'horimiya_anime'
+    hashtags = ['ホリミヤ', 'horimiya']
+    folder_name = 'horimiya2'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        # self.download_news()
+        self.download_key_visual()
+        # self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/Fr_j-0eWAAEq9Id?format=jpg&name=4096x4096')
+        self.download_image_list(folder)
+
 
 
 # Jidou Hanbaiki ni Umarekawatta Ore wa Meikyuu wo Samayou

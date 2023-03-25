@@ -123,6 +123,7 @@ The premiere date for the anime listed here has not been announced.
 ### Summer 2023 Anime
 * [Eiyuu Kyoushitsu](https://eiyukyoushitsu-anime.com/)
 * [Higeki no Genkyou to Naru Saikyou Gedou Last Boss Joou wa Tami no Tame ni Tsukushimasu.](https://lastame.com/)
+* [Horimiya: Piece](https://horimiya-anime.com/)
 * [Jidou Hanbaiki ni Umarekawatta Ore wa Meikyuu wo Samayou](https://jihanki-anime.com/)
 * [Kanojo, Okarishimasu 3rd Season](https://kanokari-official.com/)
 * [Level 1 dakedo Unique Skill de Saikyou desu](https://level1-anime.com/)
@@ -363,7 +364,7 @@ The premiere date for the anime listed here has not been announced.
 * [Gotoubun no Hanayome ∬](https://www.tbs.co.jp/anime/5hanayome/)
 * [Hataraku Saibou Black](https://saibou-black.com/)
 * [Hataraku Saibou!!](https://hataraku-saibou.com/2nd.html)
-* [Horimiya](https://horimiya-anime.com/)
+* [Horimiya](https://horimiya-anime.com/1st/)
 * [Jaku-Chara Tomozaki-kun](http://tomozaki-koushiki.com/)
 * [Kaifuku Jutsushi no Yarinaoshi](http://kaiyari.com/)
 * [Kemono Jihen](https://kemonojihen-anime.com/)
