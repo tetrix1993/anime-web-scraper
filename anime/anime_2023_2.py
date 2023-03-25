@@ -480,7 +480,6 @@ class KamikatsuDownload(Spring2023AnimeDownload, NewsTemplate):
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         template = self.PAGE_PREFIX + '_image/kvp%s.png'
-        template = self.PAGE_PREFIX + '_image/kvp%s.png'
         self.download_by_template(folder, template, 1, 1)
         
         self.image_list = []
@@ -763,15 +762,16 @@ class KumaBear2Download(Spring2023AnimeDownload, NewsTemplate2):
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         self.image_list = []
-        self.add_to_image_list('kv_aniverse', 'https://aniverse-mag.com/wp-content/uploads/2022/11/96785c9962f5ef9863dc77113ebdf26f.jpg')
+        # self.add_to_image_list('kv_aniverse', 'https://aniverse-mag.com/wp-content/uploads/2022/11/96785c9962f5ef9863dc77113ebdf26f.jpg')
+        self.add_to_image_list('tz_kv', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv.webp')
         self.download_image_list(folder)
 
         try:
             soup = self.get_soup(self.PAGE_PREFIX)
-            images = soup.select('.loading__kv-img img[src]')
+            images = soup.select('.loading__kv source[srcset]')
             self.image_list = []
             for image in images:
-                image_url = self.PAGE_PREFIX + image['src']
+                image_url = self.PAGE_PREFIX + image['srcset']
                 if '/main/' in image_url:
                     image_name = self.generate_image_name_from_url(image_url, 'main')
                     self.add_to_image_list(image_name, image_url)
