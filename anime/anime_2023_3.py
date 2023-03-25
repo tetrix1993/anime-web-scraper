@@ -290,6 +290,7 @@ class LiarLiarDownload(Summer2023AnimeDownload, NewsTemplate):
         folder = self.create_key_visual_directory()
         self.image_list = []
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/Fhu9_4VUYAAz0MW?format=jpg&name=4096x4096')
+        self.add_to_image_list('kv', self.PAGE_PREFIX + 'common/media/24d9f99eea98f74d6add5b03db11dcd9.jpg')
         self.download_image_list(folder)
 
         prefix = self.PAGE_PREFIX + 'common/images/contents_top_fv_stand%s'
@@ -300,10 +301,13 @@ class LiarLiarDownload(Summer2023AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         prefix = self.PAGE_PREFIX + 'common/images/contents_character_'
         prefix2 = self.PAGE_PREFIX + 'common/images/contents_character02_'
+        prefix3 = self.PAGE_PREFIX + 'common/images/contents_character03_'
         templates = [prefix + 'stand%s.png', prefix + 'face%s.png']
         templates2 = [prefix2 + 'stand%s.png', prefix2 + 'face%s.png']
+        templates3 = [prefix3 + 'stand%s.png', prefix3 + 'face%s.png']
         self.download_by_template(folder, templates, 2, 1)
         self.download_by_template(folder, templates2, 2, 1)
+        self.download_by_template(folder, templates3, 2, 1)
 
 
 # Masamune-kun no Revenge R
