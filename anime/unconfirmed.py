@@ -15,6 +15,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Highspeed Etoile https://highspeed-etoile.com/ #ハイスピ @HSE_Project_PR
 # Jitsu wa Ore, Saikyou deshita? https://jitsuhaoresaikyo-anime.com/ @jitsuoresaikyo
 # Keikenzumi na Kimi to, Keiken Zero na Ore ga, Otsukiai suru Hanashi. https://kimizero.com/ #キミゼロ @kimizero_anime
+# Kekkon Yubiwa Monogatari https://talesofweddingrings-anime.jp/ #結婚指輪物語 @weddingringsPR
 # Kimi no Koto ga Daidaidaidaidaisuki na 100-nin no Kanojo https://hyakkano.com/ @hyakkano_anime #100カノ
 # Kusuriya no Hitorigoto https://kusuriyanohitorigoto.jp/ #薬屋のひとりごと @kusuriya_PR
 # Lv1 Maou to One Room Yuusha https://lv1room.com/ #lv1room @Lv1room
@@ -657,6 +658,45 @@ class KimizeroDownload(UnconfirmedDownload, NewsTemplate2):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+
+# Kekkon Yubiwa Monogatari
+class KekkonYubiwaDownload(UnconfirmedDownload):
+    title = 'Kekkon Yubiwa Monogatari'
+    keywords = [title, 'Tales of Wedding Rings']
+    website = 'https://talesofweddingrings-anime.jp/'
+    twitter = 'weddingringsPR'
+    hashtags = '結婚指輪物語'
+    folder_name = 'kekkonyubiwa'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        # self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        pass
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz', self.PAGE_PREFIX + 'images/mob02/per_bg.png')
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FsCGtvQaMAEldYZ?format=jpg&name=large')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'images/mob02/chara_%s.png'
+        self.download_by_template(folder, template, 2, 1)
 
 
 # Kimi no Koto ga Daidaidaidaidaisuki na 100-nin no Kanojo
