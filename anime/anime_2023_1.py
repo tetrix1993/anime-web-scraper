@@ -2137,6 +2137,7 @@ class Maohgakuin2Download(Winter2023AnimeDownload, NewsTemplate):
         # self.add_to_image_list('teaser_tw', 'https://pbs.twimg.com/media/EvylQFOVkAID_0B?format=jpg&name=medium')
         self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/FdRkMFnaMAImkFJ?format=jpg&name=large')
         self.add_to_image_list('kv1', self.PAGE_PREFIX + 'assets/img/img_main_fix.jpg')
+        self.add_to_image_list('kv2_tw', 'https://pbs.twimg.com/media/FsCeMyIaQAI_Vkk?format=jpg&name=4096x4096')
         self.download_image_list(folder)
 
     def download_character(self):
