@@ -11,6 +11,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Nanatsu no Maken ga Shihai suru https://nanatsuma-pr.com/ #nanatsuma #ななつま @nanatsuma_pr
 # Okashi na Tensei https://okashinatensei-pr.com/ #おかしな転生 @okashinatensei
 # Ryza no Atelier: Tokoyami no Joou to Himitsu no Kakurega https://ar-anime.com/ #ライザのアトリエ @Ryza_PR
+# Seija Musou: Salaryman, Isekai de Ikinokoru Tame ni Ayumu Michi https://www.tbs.co.jp/anime/seija/ #聖者無双 @seija_anime
 # Shinigami Bocchan to Kuro Maid S2 https://bocchan-anime.com/ #死神坊ちゃん @bocchan_anime
 # Shiro Seijo to Kuro Bokushi https://shiroseijyo-anime.com/ @shiroseijyo_tv #白聖女と黒牧師
 # Suki na Ko ga Megane wo Wasureta https://anime.shochiku.co.jp/sukimega/ #好きめが @Sukimega
@@ -557,6 +558,47 @@ class AtelierRyzaDownload(Summer2023AnimeDownload, NewsTemplate):
         self.image_list = []
         self.add_to_image_list('tz', self.PAGE_PREFIX + 'news/SYS/CONTENTS/afaf78fb-2da9-4a38-85e8-36282052d381')
         self.download_image_list(folder)
+
+
+# Seija Musou: Salaryman, Isekai de Ikinokoru Tame ni Ayumu Michi
+class SeijaMusouDownload(Summer2023AnimeDownload, NewsTemplate):
+    title = 'Seija Musou: Salaryman, Isekai de Ikinokoru Tame ni Ayumu Michi'
+    keywords = [title, 'The Great Cleric']
+    website = 'https://www.tbs.co.jp/anime/seija/'
+    twitter = 'seija_anime'
+    hashtags = '聖者無双'
+    folder_name = 'seijamusou'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.newsall-box',
+                                    date_select='.newsall-date', title_select='.newsall-text',
+                                    id_select='a', a_tag_prefix=news_url)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FpJpjE6acAEXVFF?format=jpg&name=large')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'img/chara_img_%s@2x.png'
+        self.download_by_template(folder, template, 2, 1)
 
 
 # Shinigami Bocchan to Kuro Maid S2

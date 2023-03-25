@@ -130,6 +130,7 @@ The premiere date for the anime listed here has not been announced.
 * [Nanatsu no Maken ga Shihai suru](https://nanatsuma-pr.com/)
 * [Okashi na Tensei](https://okashinatensei-pr.com/)
 * [Ryza no Atelier: Tokoyami no Joou to Himitsu no Kakurega](https://ar-anime.com/)
+* [Seija Musou: Salaryman, Isekai de Ikinokoru Tame ni Ayumu Michi](https://www.tbs.co.jp/anime/seija/)
 * [Shinigami Bocchan to Kuro Maid 2nd Season](https://bocchan-anime.com/)
 * [Shiro Seijo to Kuro Bokushi](https://shiroseijyo-anime.com/)
 * [Suki na Ko ga Megane wo Wasureta](https://anime.shochiku.co.jp/sukimega/)
