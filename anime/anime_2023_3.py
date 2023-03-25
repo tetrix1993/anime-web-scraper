@@ -9,6 +9,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Masamune-kun no Revenge R https://masamune-tv.com/ #MASA_A @masamune_tv
 # Nanatsu no Maken ga Shihai suru https://nanatsuma-pr.com/ #nanatsuma #ななつま @nanatsuma_pr
 # Okashi na Tensei https://okashinatensei-pr.com/ #おかしな転生 @okashinatensei
+# Ryza no Atelier: Tokoyami no Joou to Himitsu no Kakurega https://ar-anime.com/ #ライザのアトリエ @Ryza_PR
 # Shinigami Bocchan to Kuro Maid S2 https://bocchan-anime.com/ #死神坊ちゃん @bocchan_anime
 # Shiro Seijo to Kuro Bokushi https://shiroseijyo-anime.com/ @shiroseijyo_tv #白聖女と黒牧師
 # Suki na Ko ga Megane wo Wasureta https://anime.shochiku.co.jp/sukimega/ #好きめが @Sukimega
@@ -476,6 +477,40 @@ class OkashinaTenseiDownload(Summer2023AnimeDownload, NewsTemplate):
             result = self.download_image(image_url, folder + '/' + image_name)
             if result == -1:
                 break
+
+
+# Ryza no Atelier: Tokoyami no Joou to Himitsu no Kakurega
+class AtelierRyzaDownload(Summer2023AnimeDownload, NewsTemplate):
+    title = 'Ryza no Atelier: Tokoyami no Joou to Himitsu no Kakurega'
+    keywords = [title, 'Atelier Ryza: Ever Darkness & the Secret Hideout']
+    website = 'https://ar-anime.com/'
+    twitter = 'Ryza_PR'
+    hashtags = 'ライザのアトリエ'
+    folder_name = 'atelier-ryza'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.p-news__list-item',
+                                    date_select='.p-news_data__date', title_select='.p-news_data__title',
+                                    id_select='a', a_tag_start_text_to_remove='/', a_tag_prefix=self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz', self.PAGE_PREFIX + 'news/SYS/CONTENTS/afaf78fb-2da9-4a38-85e8-36282052d381')
+        self.download_image_list(folder)
 
 
 # Shinigami Bocchan to Kuro Maid S2
