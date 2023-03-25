@@ -9,7 +9,6 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Dekoboko Majo no Oyako Jijou https://dekoboko-majo-anime.jp/ @DEKOBOKO_anime #でこぼこ魔女の親子事情
 # Dosanko Gal wa Namara Menkoi https://dosankogal-pr.com/ #道産子ギャル #どさこい @dosankogal_pr
 # Dungeon Meshi https://delicious-in-dungeon.com/ #ダンジョン飯 #deliciousindungeon @dun_meshi_anime
-# Eiyuu Kyoushitsu https://eiyukyoushitsu-anime.com/ #英雄教室 #eiyu_anime @eiyu_anime
 # Goblin Slayer S2 http://www.goblinslayer.jp/ #ゴブスレ #いせれべ @GoblinSlayer_GA
 # Hoshikuzu Telepath https://hoshitele-anime.com/ #星テレ #hoshitele @hoshitele_anime
 # Highspeed Etoile https://highspeed-etoile.com/ #ハイスピ @HSE_Project_PR
@@ -24,7 +23,6 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Shy https://shy-anime.com/ #SHY_hero @SHY_off
 # Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita 2nd Season https://slime300-anime.com/ #スライム倒して300年 @slime300_PR
 # Tearmoon Teikoku Monogatari: Dantoudai kara Hajimaru, Hime no Tensei Gyakuten Story https://tearmoon-pr.com/ #ティアムーン @tearmoon_pr
-# Temple https://temple-anime.com/ #てんぷる #Tenpuru_anime @temple_tvanime
 # Tensei shitara Dainana Ouji Datta node, Kimama ni Majutsu wo Kiwamemasu https://dainanaoji.com/ #第七王子 @dainanaoji_pro
 # Unnamed Memory https://unnamedmemory.com/ #UnnamedMemory #アンメモ @Project_UM
 # Vlad Love https://www.vladlove.com/index.html #ぶらどらぶ #vladlove @VLADLOVE_ANIME
@@ -311,40 +309,6 @@ class DungeonMeshiDownload(UnconfirmedDownload, NewsTemplate):
             result = self.download_image(image_url, folder + '/' + image_name)
             if result == -1:
                 break
-
-
-# Eiyuu Kyoushitsu
-class EiyuKyoushitsuDownload(UnconfirmedDownload):
-    title = 'Eiyuu Kyoushitsu'
-    keywords = [title, 'Classroom for Heroes']
-    website = 'https://eiyukyoushitsu-anime.com/'
-    twitter = 'eiyu_anime'
-    hashtags = ['英雄教室', 'eiyu_anime']
-    folder_name = 'eiyukyoushitsu'
-
-    PAGE_PREFIX = website
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_key_visual()
-        self.download_character()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('eiyukyoushitsu_KV', self.PAGE_PREFIX + 'images/eiyukyoushitsu_KV.jpg')
-        self.download_image_list(folder)
-
-    def download_character(self):
-        folder = self.create_character_directory()
-        template = self.PAGE_PREFIX + 'images/chara_%s.png'
-        self.download_by_template(folder, template, 2, 1, prefix='tz_')
 
 
 # Goblin Slayer 2nd Season
@@ -1058,41 +1022,6 @@ class TearmoonDownload(UnconfirmedDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
-
-
-# Temple
-class TempleDownload(UnconfirmedDownload, NewsTemplate):
-    title = 'Temple'
-    keywords = [title, 'TenPuru: No One Can Live on Loneliness']
-    website = 'https://temple-anime.com/'
-    twitter = 'temple_tvanime'
-    hashtags = ['てんぷる', 'Tenpuru_anime']
-    folder_name = 'temple'
-
-    PAGE_PREFIX = website
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_news()
-        self.download_key_visual()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_news(self):
-        self.download_template_news(page_prefix=self.PAGE_PREFIX, news_prefix='', article_select='#news article',
-                                    date_select='time', title_select='h3', id_select=None, id_has_id=True)
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/FmrextbacAMbNvi?format=jpg&name=large')
-        self.add_to_image_list('mainimg', self.PAGE_PREFIX + 'images/mainimg.jpg')
-        self.add_to_image_list('img_story', self.PAGE_PREFIX + 'images/img_story.jpg')
-        self.download_image_list(folder)
 
 
 # Tensei shitara Dainana Ouji Datta node, Kimama ni Majutsu wo Kiwamemasu

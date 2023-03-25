@@ -88,7 +88,6 @@ The premiere date for the anime listed here has not been announced.
 * [Dekoboko Majo no Oyako Jijou](https://dekoboko-majo-anime.jp/)
 * [Dosanko Gal wa Namara Menkoi](https://dosankogal-pr.com/)
 * [Dungeon Meshi](https://delicious-in-dungeon.com/)
-* [Eiyuu Kyoushitsu](https://eiyukyoushitsu-anime.com/)
 * [Goblin Slayer 2nd Season](http://www.goblinslayer.jp/)
 * [Highspeed Etoile](https://highspeed-etoile.com/)
 * [Hoshikuzu Telepath](https://hoshitele-anime.com/)
@@ -103,7 +102,6 @@ The premiere date for the anime listed here has not been announced.
 * [Shy](https://shy-anime.com/)
 * [Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita 2nd Season](https://slime300-anime.com/)
 * [Tearmoon Teikoku Monogatari: Dantoudai kara Hajimaru, Hime no Tensei Gyakuten Story](https://tearmoon-pr.com/)
-* [Temple](https://temple-anime.com/)
 * [Tensei shitara Dainana Ouji Datta node, Kimama ni Majutsu wo Kiwamemasu](https://dainanaoji.com/)
 * [Unnamed Memory](https://unnamedmemory.com/)
 * [Watashi no Oshi wa Akuyaku Reijou.](https://wataoshi-anime.com/)
@@ -117,6 +115,7 @@ The premiere date for the anime listed here has not been announced.
 * [Sousou no Frieren](https://frieren-anime.jp/)
 
 ### Summer 2023 Anime
+* [Eiyuu Kyoushitsu](https://eiyukyoushitsu-anime.com/)
 * [Higeki no Genkyou to Naru Saikyou Gedou Last Boss Joou wa Tami no Tame ni Tsukushimasu.](https://lastame.com/)
 * [Jidou Hanbaiki ni Umarekawatta Ore wa Meikyuu wo Samayou](https://jihanki-anime.com/)
 * [Kanojo, Okarishimasu 3rd Season](https://kanokari-official.com/)
@@ -129,6 +128,7 @@ The premiere date for the anime listed here has not been announced.
 * [Shinigami Bocchan to Kuro Maid 2nd Season](https://bocchan-anime.com/)
 * [Shiro Seijo to Kuro Bokushi](https://shiroseijyo-anime.com/)
 * [Suki na Ko ga Megane wo Wasureta](https://anime.shochiku.co.jp/sukimega/)
+* [Temple](https://temple-anime.com/)
 * [Tsuyokute New Saga](https://tsuyosaga-pr.com/)
 * [Uchi no Kaisha no Chiisai Senpai no Hanashi](https://chiisaisenpai.com/)
 

@@ -1,6 +1,7 @@
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 
 
+# Eiyuu Kyoushitsu https://eiyukyoushitsu-anime.com/ #英雄教室 #eiyu_anime @eiyu_anime
 # Higeki no Genkyou to Naru Saikyou Gedou Last Boss Joou wa Tami no Tame ni Tsukushimasu. https://lastame.com/ #ラス為 @lastame_pr
 # Jidou Hanbaiki ni Umarekawatta Ore wa Meikyuu wo Samayou https://jihanki-anime.com/ #俺自販機 @jihanki_anime
 # Kanojo, Okarishimasu 3rd Season https://kanokari-official.com/ #かのかり #kanokari @kanokari_anime
@@ -13,6 +14,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Shinigami Bocchan to Kuro Maid S2 https://bocchan-anime.com/ #死神坊ちゃん @bocchan_anime
 # Shiro Seijo to Kuro Bokushi https://shiroseijyo-anime.com/ @shiroseijyo_tv #白聖女と黒牧師
 # Suki na Ko ga Megane wo Wasureta https://anime.shochiku.co.jp/sukimega/ #好きめが @Sukimega
+# Temple https://temple-anime.com/ #てんぷる #Tenpuru_anime @temple_tvanime
 # Tsuyokute New Saga https://tsuyosaga-pr.com/ #つよサガ @tsuyosaga_pr
 # Uchi no Kaisha no Chiisai Senpai no Hanashi https://chiisaisenpai.com/ #うちの会社の小さい先輩の話 @smallsenpai_pr
 
@@ -25,6 +27,46 @@ class Summer2023AnimeDownload(MainDownload):
 
     def __init__(self):
         super().__init__()
+
+
+# Eiyuu Kyoushitsu
+class EiyuKyoushitsuDownload(Summer2023AnimeDownload, NewsTemplate):
+    title = 'Eiyuu Kyoushitsu'
+    keywords = [title, 'Classroom for Heroes']
+    website = 'https://eiyukyoushitsu-anime.com/'
+    twitter = 'eiyu_anime'
+    hashtags = ['英雄教室', 'eiyu_anime']
+    folder_name = 'eiyukyoushitsu'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.newslist li',
+                                    date_select='.newstime', title_select='p', id_select='a')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('eiyukyoushitsu_KV', self.PAGE_PREFIX + 'images/eiyukyoushitsu_KV.jpg')
+        self.add_to_image_list('eiyukyoushitsu_KV02', self.PAGE_PREFIX + 'images/eiyukyoushitsu_KV02.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'images/chara_%s.png'
+        self.download_by_template(folder, template, 2, 1, prefix='tz_')
 
 
 # Higeki no Genkyou to Naru Saikyou Gedou Last Boss Joou wa Tami no Tame ni Tsukushimasu.
@@ -692,6 +734,41 @@ class SukimegaDownload(Summer2023AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e)
+
+
+# Temple
+class TempleDownload(Summer2023AnimeDownload, NewsTemplate):
+    title = 'Temple'
+    keywords = [title, 'TenPuru: No One Can Live on Loneliness']
+    website = 'https://temple-anime.com/'
+    twitter = 'temple_tvanime'
+    hashtags = ['てんぷる', 'Tenpuru_anime']
+    folder_name = 'temple'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, news_prefix='', article_select='#news article',
+                                    date_select='time', title_select='h3', id_select=None, id_has_id=True)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/FmrextbacAMbNvi?format=jpg&name=large')
+        self.add_to_image_list('mainimg', self.PAGE_PREFIX + 'images/mainimg.jpg')
+        self.add_to_image_list('img_story', self.PAGE_PREFIX + 'images/img_story.jpg')
+        self.download_image_list(folder)
 
 
 # Tsuyokute New Saga
