@@ -480,7 +480,12 @@ class KamikatsuDownload(Spring2023AnimeDownload, NewsTemplate):
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         template = self.PAGE_PREFIX + '_image/kvp%s.png'
+        template = self.PAGE_PREFIX + '_image/kvp%s.png'
         self.download_by_template(folder, template, 1, 1)
+        
+        self.image_list = []
+        self.add_to_image_list('kv_aniverse', 'https://aniverse-mag.com/wp-content/uploads/2023/03/ffbb6b09910751e8442a50c4f1b40f8b.jpg')
+        self.download_image_list(folder)
 
     def download_character(self):
         folder = self.create_character_directory()
