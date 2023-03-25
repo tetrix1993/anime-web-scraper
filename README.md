@@ -118,6 +118,7 @@ The premiere date for the anime listed here has not been announced.
 * [Sasayaku You ni Koi wo Utau](https://sasakoi-anime.com/)
 
 ### Fall 2023 Anime
+* [Hametsu no Oukoku](https://hametsu-anime.com/)
 * [Sousou no Frieren](https://frieren-anime.jp/)
 
 ### Summer 2023 Anime
