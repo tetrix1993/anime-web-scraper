@@ -1070,7 +1070,9 @@ class TenseiKizokuDownload(Spring2023AnimeDownload, NewsTemplate):
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         self.image_list = []
-        self.add_to_image_list('kv', self.PAGE_PREFIX + 'img/kv.png')
+        # self.add_to_image_list('kv', self.PAGE_PREFIX + 'img/kv.png')
+        self.add_to_image_list('top_illust_alpha', self.PAGE_PREFIX + 'assets/images/top_illust_alpha.webp')
+        self.add_to_image_list('kv2', 'https://pbs.twimg.com/media/FqX1jaNaIAIqtSE?format=jpg&name=large')
         self.download_image_list(folder)
 
     def download_character(self):
