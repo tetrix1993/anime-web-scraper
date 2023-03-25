@@ -29,4 +29,5 @@ from anime.anime_2023_2 import *
 from anime.anime_2023_3 import *
 from anime.anime_2023_4 import *
 from anime.anime_2024_1 import *
+from anime.anime_2024_2 import *
 from anime.unconfirmed import *
