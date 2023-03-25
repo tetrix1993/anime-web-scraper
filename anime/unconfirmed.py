@@ -3,6 +3,7 @@ import requests
 import anime.constants as constants
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsTemplate3
 
+# Akuyaku Reijou Level 99 https://akuyakulv99-anime.com/ #akuyakuLV99 @akuyakuLV99
 # Anohana S2 https://10th.anohana.jp/ #あの花 #anohana @anohana_project
 # ATRI -My Dear Moments- https://atri-anime.com/ #ATRI @ATRI_anime
 # Buta no Liver wa Kanetsu Shiro https://butaliver-anime.com/ #豚レバ @butaliver_anime
@@ -38,6 +39,35 @@ class UnconfirmedDownload(MainDownload):
 
     def __init__(self):
         super().__init__()
+
+
+# Akuyaku Reijou Level 99
+class AkuyakuLv99Download(UnconfirmedDownload):
+    title = 'Akuyaku Reijou Level 99'
+    keywords = [title, 'Villainess Level 99']
+    website = 'https://akuyakulv99-anime.com/'
+    twitter = 'akuyakuLV99'
+    hashtags = 'akuyakuLV99'
+    folder_name = 'akuyakulv99'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/Fr-S3r0aQAAH2xA?format=jpg&name=medium')
+        self.add_to_image_list('tzkv', self.PAGE_PREFIX + 'core_sys/images/main/home/tzkv.png')
+        self.download_image_list(folder)
 
 
 # Ano Hi Mita Hana no Namae wo Bokutachi wa Mada Shiranai. 10th Anniversary Project

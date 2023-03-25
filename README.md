@@ -83,6 +83,7 @@ pip install -r requirements.txt
 
 ### New Anime
 The premiere date for the anime listed here has not been announced.
+* [Akuyaku Reijou Level 99](https://akuyakulv99-anime.com/)
 * [ATRI -My Dear Moments-](https://atri-anime.com/)
 * [Buta no Liver wa Kanetsu Shiro](https://butaliver-anime.com/)
 * [Dekoboko Majo no Oyako Jijou](https://dekoboko-majo-anime.jp/)
