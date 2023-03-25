@@ -28,6 +28,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Unnamed Memory https://unnamedmemory.com/ #UnnamedMemory #アンメモ @Project_UM
 # Vlad Love https://www.vladlove.com/index.html #ぶらどらぶ #vladlove @VLADLOVE_ANIME
 # Watashi no Oshi wa Akuyaku Reijou. https://wataoshi-anime.com/ #わたおし #wataoshi #ILTV @wataoshi_anime
+# Yoru no Kurage wa Oyogenai https://yorukura-anime.com/ #ヨルクラ #yorukura_anime @yorukura_anime
 # Yozakura-san Chi no Daisakusen https://mission-yozakura-family.com/ #夜桜さんちの大作戦 #MissionYozakuraFamily @OfficialHitsuji
 # Yumemiru Danshi wa Genjitsushugisha https://yumemirudanshi.com/ #夢見る男子 @yumemiru_anime
 
@@ -1234,6 +1235,40 @@ class WataoshiDownload(UnconfirmedDownload, NewsTemplate):
             result = self.download_content(audio_url, voice_folder + '/' + audio_name)
             if result == -1:
                 break
+
+
+# Yoru no Kurage wa Oyogenai
+class YorukuraDownload(UnconfirmedDownload, NewsTemplate):
+    title = 'Yoru no Kurage wa Oyogenai'
+    keywords = [title, 'Jellyfish Can’t Swim in the Night']
+    website = 'https://yorukura-anime.com/'
+    twitter = 'yorukura_anime'
+    hashtags = ['ヨルクラ', 'yorukura_anime']
+    folder_name = 'yorukura'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, news_prefix='', article_select='#news article',
+                                    date_select='time', title_select='h3', id_select=None, id_has_id=True)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/Fr6oNgXaIAIDcgR?format=jpg&name=large')
+        self.add_to_image_list('tz', self.PAGE_PREFIX + 'images/mainimg.jpg')
+        self.download_image_list(folder)
 
 
 # Yozakura-san Chi no Daisakusen

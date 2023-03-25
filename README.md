@@ -106,6 +106,7 @@ The premiere date for the anime listed here has not been announced.
 * [Tensei shitara Dainana Ouji Datta node, Kimama ni Majutsu wo Kiwamemasu](https://dainanaoji.com/)
 * [Unnamed Memory](https://unnamedmemory.com/)
 * [Watashi no Oshi wa Akuyaku Reijou.](https://wataoshi-anime.com/)
+* [Yoru no Kurage wa Oyogenai](https://yorukura-anime.com/)
 * [Yozakura-san Chi no Daisakusen](https://mission-yozakura-family.com/)
 * [Yumemiru Danshi wa Genjitsushugisha](https://yumemirudanshi.com/)
 
