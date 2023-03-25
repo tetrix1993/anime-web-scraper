@@ -96,7 +96,6 @@ The premiere date for the anime listed here has not been announced.
 * [Kimi no Koto ga Daidaidaidaidaisuki na 100-nin no Kanojo](https://hyakkano.com/)
 * [Kusuriya no Hitorigoto](https://kusuriyanohitorigoto.jp/)
 * [Lv1 Maou to One Room Yuusha](https://lv1room.com/)
-* [Mato Seihei no Slave](https://mabotai.jp/)
 * [Seijo no Maryoku wa Bannou Desu 2nd Season](https://seijyonomaryoku.jp/)
 * [Seiken Gakuin no Makentsukai](https://seikengakuin.com/)
 * [Shy](https://shy-anime.com/)
@@ -112,6 +111,7 @@ The premiere date for the anime listed here has not been announced.
 * [Kono Sekai wa Fukanzen Sugiru](https://konofuka.com/)
 
 ### Winter 2024 Anime
+* [Mato Seihei no Slave](https://mabotai.jp/)
 * [Sasayaku You ni Koi wo Utau](https://sasakoi-anime.com/)
 
 ### Fall 2023 Anime
