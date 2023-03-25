@@ -651,6 +651,7 @@ class KonoSubaBakuenDownload(Spring2023AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX)
@@ -704,6 +705,42 @@ class KonoSubaBakuenDownload(Spring2023AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        bd_prefix = self.PAGE_PREFIX + 'bd/'
+        for page in ['shop', 'cmp', 'bd1', 'bd2', 'bd3']:
+            try:
+                if page.startswith('bd') and page in processed:
+                    continue
+                bd_url = bd_prefix + '?mode=' + page
+                soup = self.get_soup(bd_url)
+                images = soup.select('.c-box img[src]')
+                self.image_list = []
+                for image in images:
+                    image_url = image['src']
+                    if image_url.endswith('np.png'):
+                        continue
+                    if not image_url.startswith('http://') and not image_url.startswith('https://'):
+                        image_url = bd_prefix + image_url
+                    if '/img/' in image_url:
+                        image_name = self.generate_image_name_from_url(image_url, 'img')
+                    else:
+                        image_name = self.extract_image_name_from_url(image_url)
+                    if self.is_image_exists(image_name, folder):
+                        continue
+                    self.add_to_image_list(image_name, image_url)
+                if page.startswith('bd'):
+                    if len(self.image_list) == 0:
+                        break
+                    else:
+                        processed.append(page)
+                self.download_image_list(folder)
+            except Exception as e:
+                self.print_exception(e, f'Blu-ray - {page}')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Kuma Kuma Kuma Bear Punch!
