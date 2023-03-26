@@ -19,6 +19,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Temple https://temple-anime.com/ #てんぷる #Tenpuru_anime @temple_tvanime
 # Tsuyokute New Saga https://tsuyosaga-pr.com/ #つよサガ @tsuyosaga_pr
 # Uchi no Kaisha no Chiisai Senpai no Hanashi https://chiisaisenpai.com/ #うちの会社の小さい先輩の話 @smallsenpai_pr
+# Yumemiru Danshi wa Genjitsushugisha https://yumemirudanshi.com/ #夢見る男子 @yumemiru_anime
 
 
 # Summer 2023 Anime
@@ -942,3 +943,71 @@ class ChiisaiSenpaiDownload(Summer2023AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+
+# Yumemiru Danshi wa Genjitsushugisha
+class YumemiruDanshiDownload(Summer2023AnimeDownload, NewsTemplate):
+    title = 'Yumemiru Danshi wa Genjitsushugisha'
+    keywords = [title]
+    website = 'https://yumemirudanshi.com/'
+    twitter = 'yumemiru_anime'
+    hashtags = '夢見る男子'
+    folder_name = 'yumemirudanshi'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-list a',
+                                    date_select='.news-list-item__date', title_select='.news-list-item__title',
+                                    id_select=None, a_tag_start_text_to_remove='/', a_tag_prefix=self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            self.image_list = []
+            images = soup.select('.home-visual__visual img[src]')
+            for image in images:
+                if '/img/' in image['src']:
+                    image_url = self.PAGE_PREFIX + image['src'].split('?')[0].replace('./', '')
+                    image_name = self.generate_image_name_from_url(image_url, 'img')
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        prefix = self.PAGE_PREFIX + 'character/'
+        self.image_list = []
+        try:
+            obj = self.get_json(prefix + 'chara_data.php')
+            if 'charas' in obj:
+                for chara in obj['charas']:
+                    if 'images' in chara:
+                        if 'visuals' in chara['images']:
+                            for visual in chara['images']['visuals']:
+                                if 'image' in visual:
+                                    image_url = prefix + visual['image'].replace('./', '').split('?')[0]
+                                    image_name = self.extract_image_name_from_url(image_url)
+                                    self.add_to_image_list(image_name, image_url)
+                        if 'faces' in chara['images']:
+                            for face in chara['images']['faces']:
+                                image_url = prefix + face.replace('./', '').split('?')[0]
+                                image_name = self.extract_image_name_from_url(image_url)
+                                self.add_to_image_list(image_name, image_url)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+        self.download_image_list(folder)

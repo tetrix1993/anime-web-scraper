@@ -109,7 +109,6 @@ The premiere date for the anime listed here has not been announced.
 * [Watashi no Oshi wa Akuyaku Reijou.](https://wataoshi-anime.com/)
 * [Yoru no Kurage wa Oyogenai](https://yorukura-anime.com/)
 * [Yozakura-san Chi no Daisakusen](https://mission-yozakura-family.com/)
-* [Yumemiru Danshi wa Genjitsushugisha](https://yumemirudanshi.com/)
 
 ### Spring 2024 Anime
 * [Kono Sekai wa Fukanzen Sugiru](https://konofuka.com/)
@@ -141,6 +140,7 @@ The premiere date for the anime listed here has not been announced.
 * [Temple](https://temple-anime.com/)
 * [Tsuyokute New Saga](https://tsuyosaga-pr.com/)
 * [Uchi no Kaisha no Chiisai Senpai no Hanashi](https://chiisaisenpai.com/)
+* [Yumemiru Danshi wa Genjitsushugisha](https://yumemirudanshi.com/)
 
 ### Spring 2023 Anime
 * [Ao no Orchestra](https://aooke-anime.com/)
