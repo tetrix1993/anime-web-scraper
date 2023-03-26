@@ -144,6 +144,7 @@ The premiere date for the anime listed here has not been announced.
 ### Spring 2023 Anime
 * [Ao no Orchestra](https://aooke-anime.com/)
 * [Boku no Kokoro no Yabai Yatsu](https://bokuyaba-anime.com/)
+* [Edomae Elf](https://edomae-elf.com/)
 * [Isekai de Cheat Skill wo Te ni Shita Ore wa, Genjitsu Sekai wo mo Musou Suru: Level Up wa Jinsei wo Kaeta](https://www.iseleve.com/)
 * [Isekai One Turn Kill Nee-san: Ane Douhan no Isekai Seikatsu Hajimemashita](https://onekillsister.com/)
 * [Isekai Shoukan wa Nidome desu](https://isenido.com/)

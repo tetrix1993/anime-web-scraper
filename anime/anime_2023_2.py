@@ -3,6 +3,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 
 # Ao no Orchestra https://aooke-anime.com/ #青のオーケストラ @aooke_anime
 # Boku no Kokoro no Yabai Yatsu https://bokuyaba-anime.com/ #僕ヤバ #僕の心のヤバイやつ @bokuyaba_anime
+# Edomae Elf https://edomae-elf.com/ #江戸前エルフ @edomae_elf
 # Isekai de Cheat Skill wo Te ni Shita Ore wa https://iseleve.com　@iseleve_anime
 # Isekai One Turn Kill Neesan https://onekillsister.com/ #一撃姉 @onekillsister
 # Isekai Shoukan wa Nidome desu https://isenido.com/ #いせにど @isenido_anime
@@ -136,6 +137,64 @@ class BokuyabaDownload(Spring2023AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+
+# Edomae Elf
+class EdomaeElfDownload(Spring2023AnimeDownload, NewsTemplate):
+    title = 'Edomae Elf'
+    keywords = [title, 'Otaku Elf']
+    website = 'https://edomae-elf.com/'
+    twitter = 'edomae_elf'
+    hashtags = '江戸前エルフ'
+    folder_name = 'edomae-elf'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='#Entries article',
+                                    title_select='.entry-title span', date_select='.entry-date span',
+                                    id_select=None, id_has_id=True, news_prefix='news.html',
+                                    date_func=lambda x: x.replace('年', '.').replace('月', '.').replace('日', ''))
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.vis source[srcset]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['srcset'].replace('./', '')
+                if '/assets/' not in image_url:
+                    continue
+                image_name = self.generate_image_name_from_url(image_url, 'assets')
+                if image_name.endswith('-sp'):
+                    continue
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        templates = [
+            self.PAGE_PREFIX + 'assets/character/%sc.webp',
+            self.PAGE_PREFIX + 'assets/character/%sc2.webp',
+            self.PAGE_PREFIX + 'assets/character/%sf.webp',
+            self.PAGE_PREFIX + 'assets/character/%sf2.webp'
+        ]
+        self.download_by_template(folder, templates, 1, 1)
 
 
 # Isekai de Cheat Skill wo Te ni Shita Ore wa, Genjitsu Sekai wo mo Musou Suru: Level Up wa Jinsei wo Kaeta

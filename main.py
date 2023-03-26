@@ -13,11 +13,8 @@ def run():
     for subclass in Winter2023AnimeDownload.__subclasses__():
         if subclass.enabled:
             downloads.append(subclass())
-    downloads += [KagenoJitsuryokushaDownload(), Danmachi4Download(), FumetsuNoAnatae2Download(), KanColle2Download(),
-                  UruseiYatsuraDownload(), IrumaKun3Download(), IsekaiOjisanDownload(), GoldenKamuy4Download(),
-                  BocchiTheRockDownload(), FuukoiDownload(), MushikaburihimeDownload(), RenaiFlopsDownload(),
-                  TenkenDownload(), BeastTamerDownload(), SpyFamilyDownload(), EngageKissDownload(),
-                  LycorisRecoilDownload(), Youzitsu2Download()]
+    downloads += [GundamWitchDownload(), GoldenKamuy4Download(), KagenoJitsuryokushaDownload(), BocchiTheRockDownload(),
+                  MushikaburihimeDownload()]
     subclasses = Spring2023AnimeDownload.__subclasses__() \
         + Summer2023AnimeDownload.__subclasses__() \
         + Fall2023AnimeDownload.__subclasses__() \
