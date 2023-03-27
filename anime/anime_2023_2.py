@@ -1,4 +1,5 @@
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
+import os
 
 
 # Ao no Orchestra https://aooke-anime.com/ #青のオーケストラ @aooke_anime
@@ -1196,7 +1197,37 @@ class TenseiKizokuDownload(Spring2023AnimeDownload, NewsTemplate):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            stories = soup.select('div.introduction')
+            for story in stories:
+                h4 = story.select('h4')
+                if len(h4) == 0:
+                    continue
+                try:
+                    episode = str(int(h4[0].text.replace('第', '').replace('話', ''))).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                images = story.select('.story-img img[src]')
+                stop = False
+                for i in range(len(images)):
+                    image_url = self.PAGE_PREFIX + images[i]['src']
+                    image_name = episode + '_' + str(i + 1)
+                    if self.download_image(image_url, self.base_folder + '/' + image_name, to_jpg=True) == -1:
+                        stop = True
+                        break
+                    webp_image_file = self.base_folder + '/' + episode + '_' + str(i + 1) + '.webp'
+                    if os.path.exists(webp_image_file):
+                        try:
+                            self.convert_image_to_jpg(webp_image_file)
+                        except Exception as e:
+                            self.print_exception(e, 'Error in converting webp to jpg.')
+                if stop:
+                    break
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-list li',
