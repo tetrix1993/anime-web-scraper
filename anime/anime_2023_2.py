@@ -1,5 +1,7 @@
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
+from scan import AniverseMagazineScanner
 import os
+import re
 
 
 # Ao no Orchestra https://aooke-anime.com/ #青のオーケストラ @aooke_anime
@@ -90,18 +92,52 @@ class BokuyabaDownload(Spring2023AnimeDownload, NewsTemplate):
     folder_name = 'bokuyaba'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
 
     def __init__(self):
         super().__init__()
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_external()
         self.download_news()
         self.download_key_visual()
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index', diff=5)
+        story_url = self.PAGE_PREFIX + 'story/'
+        try:
+            soup = self.get_soup(story_url)
+            stories = soup.select('a[href].p-story_card')
+            for story in stories:
+                if 'detail' not in story['href']:
+                    continue
+                title = story.select('.p-story_card__title')
+                if len(title) == 0:
+                    continue
+                try:
+                    episode = str(int(re.sub('\D', '', title[0].text.split('】')[0]))).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                ep_soup = self.get_soup(story_url + story['href'])
+                if ep_soup is None:
+                    continue
+                self.image_list = []
+                images = ep_soup.select('.p-story_in__inner img[src]')
+                for i in range(len(images)):
+                    image_url = images[i]['src']
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
+
+    def download_episode_preview_external(self):
+        keywords = ['僕の心のヤバイやつ']
+        AniverseMagazineScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                end_date='20230328', download_id=self.download_id).run()
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.p-news__list-item',
