@@ -160,6 +160,7 @@ The premiere date for the anime listed here has not been announced.
 * [My Home Hero](https://myhomehero-anime.com/)
 * [Oshi no Ko](https://ichigoproduction.com/)
 * [Otonari ni Ginga](https://otonari-anime.com/)
+* [Skip to Loafer](https://skip-and-loafer.com/)
 * [Tensei Kizoku no Isekai Boukenroku](https://www.tensei-kizoku.jp/)
 * [Tonikaku Kawaii 2nd Season](http://tonikawa.com/)
 * [Watashi no Yuri wa Oshigoto desu!](https://watayuri-anime.com/)

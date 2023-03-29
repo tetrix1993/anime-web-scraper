@@ -21,6 +21,7 @@ import re
 # My Home Hero https://myhomehero-anime.com/ #マイホームヒーロー @myhomehero_pr
 # Oshi no Ko https://ichigoproduction.com/ #推しの子 @anime_oshinoko
 # Otonari ni Ginga https://otonari-anime.com/ #おとなりに銀河 @otonariniginga
+# Skip to Loafer https://skip-and-loafer.com/ #スキップとローファー #スキロー @skip_and_loafer
 # Tensei Kizoku no Isekai Boukenroku https://www.tensei-kizoku.jp/ #転生貴族 @tenseikizoku
 # Tonikaku Kawaii S2 http://tonikawa.com/ #トニカクカワイイ #tonikawa @tonikawa_anime
 # Watashi no Yuri wa Oshigoto desu! https://watayuri-anime.com/ #わたゆり #私の百合はお仕事です @watayuri_anime
@@ -1234,6 +1235,79 @@ class OtonariniGingaDownload(Spring2023AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'assets/images/character/img_%s.png'
         self.download_by_template(folder, template, 2, 1)
+
+
+# Skip to Loafer
+class SkipLoaferDownload(Spring2023AnimeDownload, NewsTemplate):
+    title = 'Skip to Loafer'
+    keywords = [title, 'Skip and Loafer']
+    website = 'https://skip-and-loafer.com/'
+    twitter = 'skip_and_loafer'
+    hashtags = ['スキップとローファー', 'スキロー']
+    folder_name = 'skip-loafer'
+
+    PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 6
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        try:
+            template = self.PAGE_PREFIX + 'assets/story/%s/%s.jpg'
+            stop = False
+            for i in range(self.FINAL_EPISODE):
+                episode = str(i + 1).zfill(2)
+                if self.is_image_exists(episode + '_' + str(self.IMAGES_PER_EPISODE)):
+                    continue
+                for j in range(self.IMAGES_PER_EPISODE):
+                    image_url = template % (str(i + 1), str(j + 1))
+                    image_name = episode + '_' + str(j + 1)
+                    if self.download_image(image_url, self.base_folder + '/' + image_name) == -1:
+                        stop = True
+                        break
+                if stop:
+                    break
+        except Exception as e:
+            self.print_exception(e)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='#Entries article',
+                                    title_select='.entry-title span', date_select='.entry-date span',
+                                    id_select=None, id_has_id=True, news_prefix='news.html')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.vis source[srcset]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['srcset'].replace('./', '')
+                if '/assets/' not in image_url:
+                    continue
+                image_name = self.generate_image_name_from_url(image_url, 'assets')
+                if image_name.endswith('-sp'):
+                    continue
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        templates = [
+            self.PAGE_PREFIX + 'assets/character/%sc.png',
+            self.PAGE_PREFIX + 'assets/character/%sf.png'
+        ]
+        self.download_by_template(folder, templates, 1, 1)
 
 
 # Tensei Kizoku no Isekai Boukenroku
