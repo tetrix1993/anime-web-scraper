@@ -143,6 +143,7 @@ The premiere date for the anime listed here has not been announced.
 * [Yumemiru Danshi wa Genjitsushugisha](https://yumemirudanshi.com/)
 
 ### Spring 2023 Anime
+* [Alice Gear Aegis Expansion](https://colopl.co.jp/alicegearaegis/tv-anime/)
 * [Ao no Orchestra](https://aooke-anime.com/)
 * [Boku no Kokoro no Yabai Yatsu](https://bokuyaba-anime.com/)
 * [Edomae Elf](https://edomae-elf.com/)
