@@ -7,6 +7,7 @@ import re
 # Alice Gear Aegis Expansion https://colopl.co.jp/alicegearaegis/tv-anime/ @alice_anime_nzm #アリスギア #アリスギアEX
 # Ao no Orchestra https://aooke-anime.com/ #青のオーケストラ @aooke_anime
 # Boku no Kokoro no Yabai Yatsu https://bokuyaba-anime.com/ #僕ヤバ #僕の心のヤバイやつ @bokuyaba_anime
+# Dead Mount Death Play https://dmdp-anime.jp/ #DMDP @DMDP_anime
 # Edomae Elf https://edomae-elf.com/ #江戸前エルフ @edomae_elf
 # Isekai de Cheat Skill wo Te ni Shita Ore wa https://iseleve.com　@iseleve_anime
 # Isekai One Turn Kill Neesan https://onekillsister.com/ #一撃姉 @onekillsister
@@ -233,6 +234,56 @@ class BokuyabaDownload(Spring2023AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+
+# Dead Mount Death Play
+class DeadMountDeathPlayDownload(Spring2023AnimeDownload, NewsTemplate):
+    title = 'Dead Mount Death Play'
+    keywords = [title, 'DMDP']
+    website = 'https://dmdp-anime.jp/'
+    twitter = 'DMDP_anime'
+    hashtags = ['DMDP']
+    folder_name = 'dmdp'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='#news article',
+                                    title_select='h3', date_select='time', id_select=None, id_has_id=True)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.mainimg .swiper-wrapper img[src]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src']
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        templates = [
+            self.PAGE_PREFIX + 'images/character/img_%s.png',
+            self.PAGE_PREFIX + 'images/character/face_%s.png'
+        ]
+        self.download_by_template(folder, templates, 2, 1)
 
 
 # Edomae Elf
