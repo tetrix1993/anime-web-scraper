@@ -17,6 +17,7 @@ import re
 # Kawaisugi Crisis https://kawaisugi.com/ #カワイスギクライシス @kawaisugicrisis
 # Kimi wa Houkago Insomnia https://kimisomu-anime.com/ #君ソム @kimisomu_anime
 # Kono Subarashii Sekai ni Bakuen wo! http://konosuba.com/bakuen/ #konosuba #このすば @konosubaanime
+# Kanojo ga Koushaku-tei ni Itta Riyuu https://koshakutei.com/ #公爵邸 @koshakutei
 # Kuma Kuma Kuma Bear Punch! https://kumakumakumabear.com/ #くまクマ熊ベアー #kumabear @kumabear_anime
 # Megami no Cafe Terrace https://goddess-cafe.com/ #女神のカフェテラス @goddess_cafe_PR
 # My Home Hero https://myhomehero-anime.com/ #マイホームヒーロー @myhomehero_pr
@@ -953,6 +954,109 @@ class KonoSubaBakuenDownload(Spring2023AnimeDownload, NewsTemplate):
                 self.download_image_list(folder)
             except Exception as e:
                 self.print_exception(e, f'Blu-ray - {page}')
+        self.create_cache_file(cache_filepath, processed, num_processed)
+
+
+# Kanojo ga Koushaku-tei ni Itta Riyuu
+class KoshakuteiDownload(Spring2023AnimeDownload, NewsTemplate):
+    title = 'Kanojo ga Koushaku-tei ni Itta Riyuu'
+    keywords = [title, "The Reason Why Raeliana Ended up at the Duke's Mansion"]
+    website = 'https://koshakutei.com/'
+    twitter = 'koshakutei'
+    hashtags = ['公爵邸']
+    folder_name = 'koshakutei'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            stories = soup.select('.storyNavi li')
+            for story in stories:
+                try:
+                    episode = str(int(story.select('span')[0].text)).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                a_tag = story.select('a[href]')
+                if len(a_tag) == 0:
+                    continue
+                ep_soup = self.get_soup(a_tag[0]['href'])
+                if ep_soup is None:
+                    continue
+                self.image_list = []
+                images = ep_soup.select('.gallery-top .swiper-slide img[src]')
+                for i in range(len(images)):
+                    image_url = self.clear_resize_in_url(images[i]['src'])
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='#contents li',
+                                    title_select='dd', date_select='span', id_select='a')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('keyV', self.PAGE_PREFIX + 'wp-content/themes/koshakutei-anime/images/top/keyV.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        chara_prefix = self.PAGE_PREFIX + 'character/'
+        try:
+            soup = self.get_soup(chara_prefix)
+            a_tags = soup.select('.character__nav a[href]')
+            for a_tag in a_tags:
+                chara_url = a_tag['href']
+                if not chara_url.startswith(chara_prefix):
+                    continue
+                chara_name = chara_url[len(chara_prefix):].split('/')[0]
+                if len(chara_name) == 0:
+                    chara_name = 'leliana'
+                if chara_name in processed:
+                    continue
+                if chara_name == 'leliana':
+                    chara_soup = soup
+                else:
+                    chara_soup = self.get_soup(chara_url)
+                if chara_soup is not None:
+                    images = chara_soup.select('.character__img img[src], .chara__Face img[src]')
+                    for image in images:
+                        image_url = self.PAGE_PREFIX + image['src'][1:].split('?')[0]
+                        if '/character/' not in image_url:
+                            continue
+                        image_name = self.generate_image_name_from_url(image_url, 'character')
+                        self.add_to_image_list(image_name, image_url)
+                    if len(self.image_list) > 0:
+                        processed.append(chara_name)
+                    self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
         self.create_cache_file(cache_filepath, processed, num_processed)
 
 

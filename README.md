@@ -154,6 +154,7 @@ The premiere date for the anime listed here has not been announced.
 * [Jijou wo Shiranai Tenkousei ga Guigui Kuru.](https://guiguikuru.com/)
 * [Kaminaki Sekai no Kamisama Katsudou](https://kamikatsu-anime.jp/)
 * [Kawaisugi Crisis](https://kawaisugi.com/)
+* [Kanojo ga Koushaku-tei ni Itta Riyuu](https://koshakutei.com/)
 * [Kimi wa Houkago Insomnia](https://kimisomu-anime.com/)
 * [Kono Subarashii Sekai ni Bakuen wo!](http://konosuba.com/bakuen/)
 * [Kuma Kuma Kuma Bear Punch!](https://kumakumakumabear.com/)
