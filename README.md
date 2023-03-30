@@ -159,6 +159,7 @@ The premiere date for the anime listed here has not been announced.
 * [Kimi wa Houkago Insomnia](https://kimisomu-anime.com/)
 * [Kono Subarashii Sekai ni Bakuen wo!](http://konosuba.com/bakuen/)
 * [Kuma Kuma Kuma Bear Punch!](https://kumakumakumabear.com/)
+* [Mashle](https://mashle.pw/)
 * [Megami no Café Terrace](https://goddess-cafe.com/)
 * [My Home Hero](https://myhomehero-anime.com/)
 * [Oshi no Ko](https://ichigoproduction.com/)

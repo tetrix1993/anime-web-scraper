@@ -21,6 +21,7 @@ import re
 # Kanojo ga Koushaku-tei ni Itta Riyuu https://koshakutei.com/ #公爵邸 @koshakutei
 # Kuma Kuma Kuma Bear Punch! https://kumakumakumabear.com/ #くまクマ熊ベアー #kumabear @kumabear_anime
 # Megami no Cafe Terrace https://goddess-cafe.com/ #女神のカフェテラス @goddess_cafe_PR
+# Mashle https://mashle.pw/ #マッシュル @mashle_official
 # My Home Hero https://myhomehero-anime.com/ #マイホームヒーロー @myhomehero_pr
 # Oshi no Ko https://ichigoproduction.com/ #推しの子 @anime_oshinoko
 # Otonari ni Ginga https://otonari-anime.com/ #おとなりに銀河 @otonariniginga
@@ -1256,6 +1257,54 @@ class MegamiCafeDownload(Spring2023AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+
+# Mashle
+class MashleDownload(Spring2023AnimeDownload, NewsTemplate):
+    title = 'Mashle'
+    keywords = [title, 'Magic and Muscles']
+    website = 'https://mashle.pw/'
+    twitter = 'mashle_official'
+    hashtags = ['マッシュル', 'mashle']
+    folder_name = 'mashle'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news__list li',
+                                    date_select='.list--date', title_select='.list--text',
+                                    id_select='a', a_tag_prefix=news_url, a_tag_start_text_to_remove='./',
+                                    paging_type=1, next_page_select='.news__pager__next',
+                                    next_page_eval_index_class='is--last', next_page_eval_index=-1)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz', self.PAGE_PREFIX + "news/SYS/CONTENTS/927ec0b8-5d51-459e-a69f-04381e4f8163")
+        self.add_to_image_list('kv1', self.PAGE_PREFIX + "news/SYS/CONTENTS/8aea33dc-da55-4117-9c7f-c6e26af39323")
+        self.add_to_image_list('kv2', self.PAGE_PREFIX + "news/SYS/CONTENTS/8fcd3e64-a906-4f4c-af99-fa36ec6afc7b")
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        templates = [
+            self.PAGE_PREFIX + 'teaser/img/character/c%s_main.webp',
+            self.PAGE_PREFIX + 'teaser/img/character/c%s_sub.png'
+        ]
+        self.download_by_template(folder, templates, 2, 1)
 
 
 # My Home Hero
