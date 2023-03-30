@@ -1459,18 +1459,53 @@ class WatayuriDownload(Spring2023AnimeDownload, NewsTemplate):
     folder_name = 'watayuri'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 8
 
     def __init__(self):
         super().__init__()
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_external()
         self.download_news()
         self.download_key_visual()
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        story_url = self.PAGE_PREFIX + 'story/'
+        yt_folder, yt_episodes = self.init_youtube_thumbnail_variables()
+        try:
+            soup = self.get_soup(story_url, decode=True)
+            stories = soup.select('.storyDetail')
+            for story in stories:
+                try:
+                    episode = str(int(re.sub('\D', '', story['id']))).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_' + str(self.IMAGES_PER_EPISODE)) and episode in yt_episodes:
+                    continue
+                images = story.select('.story_imageList img[src]')
+                self.image_list = []
+                for i in range(len(images)):
+                    image_url = self.PAGE_PREFIX + images[i]['src'].replace('../', '')
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+                yt_tag = story.select('.story_movie button[onclick]')
+                if len(yt_tag) > 0:
+                    try:
+                        yt_id = yt_tag[0]['onclick'].split("'")[1]
+                        self.download_youtube_thumbnail_by_id(yt_id, yt_folder, episode)
+                    except:
+                        pass
+        except Exception as e:
+            self.print_exception(e)
+
+    def download_episode_preview_external(self):
+        keywords = ['私の百合はお仕事です']
+        AniverseMagazineScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE, prefix='シフト.', suffix='',
+                                end_date='20230330', download_id=self.download_id).run()
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.newsList',
