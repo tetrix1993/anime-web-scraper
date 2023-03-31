@@ -1887,6 +1887,7 @@ class WatayuriDownload(Spring2023AnimeDownload, NewsTemplate):
         self.add_to_image_list('top_visual_mv2', self.PAGE_PREFIX + 'assets/img/top/top/visual/mv2.jpg')
         self.add_to_image_list('news_23_kv', self.PAGE_PREFIX + 'liebe/wp-content/uploads/2022/12/75f074420bc90cf826a501bd011f8312.jpg')
         self.add_to_image_list('kv_tw', 'https://pbs.twimg.com/media/Fo6mh3saUAIVZPF?format=jpg&name=large')
+        self.add_to_image_list('mv_aprilfool__2304010000_gRr2UWbQGQcX', self.PAGE_PREFIX + 'assets/img/top/aprilfool/mv_aprilfool__2304010000_gRr2UWbQGQcX.jpg')
         self.download_image_list(folder)
 
     def download_character(self):
