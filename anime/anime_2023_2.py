@@ -305,6 +305,7 @@ class EdomaeElfDownload(Spring2023AnimeDownload, NewsTemplate):
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_external()
         self.download_news()
         self.download_key_visual()
         self.download_character()
@@ -327,6 +328,11 @@ class EdomaeElfDownload(Spring2023AnimeDownload, NewsTemplate):
                     break
         except Exception as e:
             self.print_exception(e)
+
+    def download_episode_preview_external(self):
+        keywords = ['江⼾前エルフ']
+        AniverseMagazineScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                end_date='20230331', download_id=self.download_id).run()
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='#Entries article',
