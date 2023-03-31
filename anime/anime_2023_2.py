@@ -167,6 +167,7 @@ class BokuyabaDownload(Spring2023AnimeDownload, NewsTemplate):
 
     def download_episode_preview(self):
         story_url = self.PAGE_PREFIX + 'story/'
+        yt_folder, yt_episodes = self.init_youtube_thumbnail_variables()
         try:
             soup = self.get_soup(story_url)
             stories = soup.select('a[href].p-story_card')
@@ -180,7 +181,7 @@ class BokuyabaDownload(Spring2023AnimeDownload, NewsTemplate):
                     episode = str(int(re.sub('\D', '', title[0].text.split('】')[0]))).zfill(2)
                 except:
                     continue
-                if self.is_image_exists(episode + '_1'):
+                if self.is_image_exists(episode + '_1') and episode in yt_episodes:
                     continue
                 ep_soup = self.get_soup(story_url + story['href'])
                 if ep_soup is None:
@@ -192,6 +193,11 @@ class BokuyabaDownload(Spring2023AnimeDownload, NewsTemplate):
                     image_name = episode + '_' + str(i + 1)
                     self.add_to_image_list(image_name, image_url)
                 self.download_image_list(self.base_folder)
+                yt_tags = ep_soup.select('iframe[src]')
+                for yt_tag in yt_tags:
+                    if 'youtube' in yt_tag['src']:
+                        yt_id = yt_tag['src'].split('/')[-1]
+                        self.download_youtube_thumbnail_by_id(yt_id, yt_folder, episode)
         except Exception as e:
             self.print_exception(e)
 
