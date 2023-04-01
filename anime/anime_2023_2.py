@@ -1575,6 +1575,8 @@ class OtonariniGingaDownload(Spring2023AnimeDownload, NewsTemplate):
     folder_name = 'otonariniginga'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 8
 
     def __init__(self):
         super().__init__()
@@ -1584,9 +1586,43 @@ class OtonariniGingaDownload(Spring2023AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            template = self.PAGE_PREFIX + 'assets/images/story/%s_%s.jpg'
+            files = os.listdir(self.base_folder)
+
+            image_count = {}
+            for file in files:
+                if os.path.isfile(self.base_folder + '/' + file) and '_' in file:
+                    split1 = file.split('.')[0].split('_')
+                    if len(split1) == 2 and split1[0].isnumeric() and split1[1].isnumeric() and len(split1[0]) == 2:
+                        ep_num = split1[0]
+                        if ep_num in image_count:
+                            image_count[ep_num] += 1
+                        else:
+                            image_count[ep_num] = 1
+
+            for i in range(self.FINAL_EPISODE):
+                episode = str(i + 1).zfill(2)
+                if episode in image_count and image_count[episode] == self.IMAGES_PER_EPISODE:
+                    continue
+                success = False
+                for j in range(self.IMAGES_PER_EPISODE):
+                    image_url = template % (episode, str(j + 1))
+                    image_name = episode + '_' + str(j + 1)
+                    if self.is_image_exists(image_name):
+                        success = True
+                        continue
+                    if self.download_image(image_url, self.base_folder + '/' + image_name) == -1:
+                        continue
+                    else:
+                        success = True
+                if not success:
+                    break
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='#news article',
@@ -1608,6 +1644,22 @@ class OtonariniGingaDownload(Spring2023AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'assets/images/character/img_%s.png'
         self.download_by_template(folder, template, 2, 1)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'blu-ray/')
+            self.image_list = []
+            images = soup.select(".inner img[src]")
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                image_name = self.extract_image_name_from_url(image_url)
+                if 'nowprinting' in image_name:
+                    continue
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
 
 # Skip to Loafer
