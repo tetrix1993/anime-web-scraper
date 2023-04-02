@@ -1,5 +1,6 @@
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 from scan import AniverseMagazineScanner, AnimagePlusScanner
+from requests.exceptions import HTTPError
 import os
 import re
 
@@ -2122,7 +2123,26 @@ class YuushagaShindaDownload(Spring2023AnimeDownload, NewsTemplate):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            objs = self.get_json('https://heroisdead.com/news/wp-json/wp/v2/pages?orderby=date&order=asc&acf_format=standard&per_page=100&parent=39')
+            for obj in objs:
+                if 'acf' in obj:
+                    acf = obj['acf']
+                    if 'number' in acf and '<span>' in acf['number'] and '</span>' in acf['number']\
+                            and 'images' in acf and isinstance(acf['images'], list):
+                        try:
+                            episode = str(int(acf['number'].split('</span>')[0].split('<span>')[1])).zfill(2)
+                        except:
+                            continue
+                        for i in range(len(acf['images'])):
+                            image_url = acf['images'][i]
+                            image_name = episode + '_' + str(i + 1)
+                            self.add_to_image_list(image_name, image_url)
+                        self.download_image_list(self.base_folder)
+        except HTTPError:
+            print(self.__class__.__name__ + ' - 403 Error when retrieving story API.')
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-list-item',
