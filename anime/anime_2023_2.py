@@ -1,6 +1,7 @@
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 from scan import AniverseMagazineScanner, AnimagePlusScanner
 from requests.exceptions import HTTPError
+from datetime import datetime, timedelta
 import os
 import re
 
@@ -1335,6 +1336,8 @@ class MegamiCafeDownload(Spring2023AnimeDownload, NewsTemplate):
     folder_name = 'megami-cafe'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 6
 
     def __init__(self):
         super().__init__()
@@ -1342,11 +1345,35 @@ class MegamiCafeDownload(Spring2023AnimeDownload, NewsTemplate):
     def run(self):
         self.download_episode_preview()
         self.download_news()
+        self.download_episode_preview_guess()
         self.download_key_visual()
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            a_tags = soup.select('.story__cnt--storyArea--linkArea a[href]')
+            for a_tag in a_tags:
+                try:
+                    episode = str(int(a_tag.text)).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                if a_tag.has_attr('class') and ('current' in a_tag['class'] or 'currentLast' in a_tag['class']):
+                    ep_soup = soup
+                else:
+                    ep_soup = self.get_soup(a_tag['href'])
+                if ep_soup is not None and episode is not None:
+                    images = ep_soup.select('.swiper-slide img[src]')
+                    self.image_list = []
+                    for i in range(len(images)):
+                        image_url = images[i]['src']
+                        image_name = episode + '_' + str(i + 1)
+                        self.add_to_image_list(image_name, image_url)
+                    self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-item',
@@ -1354,6 +1381,52 @@ class MegamiCafeDownload(Spring2023AnimeDownload, NewsTemplate):
                                     date_func=lambda x: x.replace('年', '.').replace('月', '.').replace('日', ''),
                                     next_page_select='.pagination a', next_page_eval_index=-1,
                                     next_page_eval_index_class='disabled')
+
+    def download_episode_preview_guess(self):
+        if self.is_image_exists(str(self.FINAL_EPISODE).zfill(2) + '_1'):
+            return
+
+        folder = self.create_custom_directory('guess')
+        template = self.PAGE_PREFIX + 'wp/wp-content/uploads/%s/%s/%s.jpg'
+        current_date = datetime.now() + timedelta(hours=1)
+        curr_month = current_date.strftime('%m')
+        is_successful = False
+        year = '2023'
+        k = 3
+        months = []
+        while k <= 12:
+            k += 1
+            months.append(str(k).zfill(2))
+            if curr_month == str(k).zfill(2):
+                break
+        months.append('03')
+        for month in reversed(months):
+            sub_folder = f'{folder}/{year}/{month}'
+            if not os.path.exists(sub_folder):
+                os.makedirs(sub_folder)
+            for i in range(1, self.IMAGES_PER_EPISODE + 1, 1):
+                j = -1
+                while j < 20:
+                    j += 1
+                    image_name = f'{i}-{j}'
+                    if self.is_image_exists(image_name, sub_folder):
+                        continue
+                    if j == 0:
+                        img_name = str(i)
+                    else:
+                        img_name = str(i) + '-' + str(j)
+                    image_url = template % (year, month, img_name)
+                    result = self.download_image(image_url, sub_folder + '/' + image_name)
+                    if result == -1:
+                        break
+                    is_successful = True
+                if not is_successful:
+                    break
+            if len(os.listdir(sub_folder)) == 0:
+                break
+        if is_successful:
+            print(self.__class__.__name__ + ' - Guessed correctly!')
+        return is_successful
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
