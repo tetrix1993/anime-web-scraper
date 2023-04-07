@@ -1454,6 +1454,7 @@ class MegamiCafeDownload(Spring2023AnimeDownload, NewsTemplate):
         self.download_episode_preview_guess()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -1565,6 +1566,24 @@ class MegamiCafeDownload(Spring2023AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'bluray')
+            self.image_list = []
+            images = soup.select('.bluray__cnt--area img[src]')
+            for image in images:
+                image_url = image['src']
+                if '/bluray/' not in image_url:
+                    continue
+                image_name = self.generate_image_name_from_url(image_url, 'bluray')
+                if not self.is_content_length_in_range(image_url, more_than_amount=65000):
+                    continue
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
 
 # Mashle
