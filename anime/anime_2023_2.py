@@ -2350,6 +2350,7 @@ class Yamada999Download(Spring2023AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         story_url = self.PAGE_PREFIX + 'story/'
@@ -2417,6 +2418,39 @@ class Yamada999Download(Spring2023AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        for page in ['01', '02', '03', '04', '05', '06', '07']:
+            try:
+                if page != '01' and page in processed:
+                    continue
+                page_url = self.PAGE_PREFIX + 'bddvd/'
+                if page != '01':
+                    page_url += page + '.html'
+                soup = self.get_soup(page_url)
+                if page == '01':
+                    images = soup.select('.p-bddvd img[src], .p-bddvd__shop img[src]')
+                else:
+                    images = soup.select('.p-bddvd img[src]')
+                self.image_list = []
+                for image in images:
+                    image_url = self.PAGE_PREFIX + image['src'].replace('../', '').split('?')[0]
+                    if image_url.endswith('.svg') or '/bddvd/' not in image_url:
+                        continue
+                    image_name = self.generate_image_name_from_url(image_url, 'bddvd')
+                    self.add_to_image_list(image_name, image_url)
+                if page != '01':
+                    if len(self.image_list) == 0:
+                        break
+                    else:
+                        processed.append(page)
+                self.download_image_list(folder)
+            except Exception as e:
+                self.print_exception(e, f'Blu-ray - {page}')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Yuusha ga Shinda!
