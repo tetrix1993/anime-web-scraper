@@ -1566,6 +1566,7 @@ class MashleDownload(Spring2023AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         story_url = self.PAGE_PREFIX + 'episode/'
@@ -1624,6 +1625,43 @@ class MashleDownload(Spring2023AnimeDownload, NewsTemplate):
             self.PAGE_PREFIX + 'teaser/img/character/c%s_sub.png'
         ]
         self.download_by_template(folder, templates, 2, 1)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        for page in ['special', '01', '02', '03', '04']:
+            try:
+                if page != 'special' and page in processed:
+                    continue
+                page_url = self.PAGE_PREFIX + 'bddvd/' + page + '.html'
+                soup = self.get_soup(page_url)
+                sections = soup.select('#bddvd-page>section')
+                for section in sections:
+                    if section.has_attr('class') and 'headline' in section['class']:
+                        continue
+                    images = section.select('img[src]')
+                    self.image_list = []
+                    for image in images:
+                        image_url = self.PAGE_PREFIX + image['src'].replace('../', '').split('?')[0]
+                        if 'np02.jpg' in image_url or 'np.jpg' in image_url:
+                            continue
+                        if '/bddvd/' in image_url:
+                            image_name = self.generate_image_name_from_url(image_url, 'bddvd')
+                        else:
+                            continue
+                        if self.is_image_exists(image_name, folder):
+                            continue
+                        self.add_to_image_list(image_name, image_url)
+                if page.isnumeric():
+                    if len(self.image_list) == 0:
+                        break
+                    else:
+                        processed.append(page)
+                self.download_image_list(folder)
+            except Exception as e:
+                self.print_exception(e, f'Blu-ray - {page}')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # My Home Hero
