@@ -2287,6 +2287,7 @@ class YuushagaShindaDownload(Spring2023AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -2351,4 +2352,21 @@ class YuushagaShindaDownload(Spring2023AnimeDownload, NewsTemplate):
         except Exception as e:
             self.print_exception(e, 'Character')
         self.download_image_list(folder)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        bd_url = self.PAGE_PREFIX + 'product/bdbox/'
+        try:
+            soup = self.get_soup(bd_url)
+            self.image_list = []
+            images = soup.select('article img[src]')
+            for image in images:
+                if image['src'].endswith('.svg') or image['src'].startswith('http') or image['src'].startswith('../'):
+                    continue
+                image_url = bd_url + image['src']
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
