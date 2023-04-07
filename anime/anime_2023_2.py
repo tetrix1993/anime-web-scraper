@@ -1568,7 +1568,38 @@ class MashleDownload(Spring2023AnimeDownload, NewsTemplate):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        story_url = self.PAGE_PREFIX + 'episode/'
+        try:
+            soup = self.get_soup(story_url, decode=True)
+            lis = soup.select('.localnav__list li')
+            for li in lis:
+                span_tag = li.select('span')
+                try:
+                    ep_num = int(span_tag[0].text)
+                    if ep_num is None or ep_num < 1:
+                        continue
+                    episode = str(ep_num).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                if li.has_attr('class') and 'is--current' in li['class']:
+                    ep_soup = soup
+                else:
+                    a_tag = li.select('a[href]')
+                    if len(a_tag) == 0:
+                        continue
+                    ep_soup = self.get_soup(story_url + a_tag[0]['href'].replace('./', ''))
+                if ep_soup is not None:
+                    images = ep_soup.select('.swiper-wrapper img[src]')
+                    self.image_list = []
+                    for i in range(len(images)):
+                        image_url = story_url + images[i]['src']
+                        image_name = episode + '_' + str(i + 1)
+                        self.add_to_image_list(image_name, image_url)
+                    self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + 'news/'
