@@ -932,6 +932,7 @@ class KawaisugiCrisisDownload(Spring2023AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -1004,6 +1005,25 @@ class KawaisugiCrisisDownload(Spring2023AnimeDownload, NewsTemplate):
         except Exception as e:
             self.print_exception(e, 'Character')
         self.create_cache_file(cache_filepath, processed, num_processed)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        bd_url = self.PAGE_PREFIX + 'blu-ray'
+        try:
+            soup = self.get_soup(bd_url)
+            self.image_list = []
+            images = soup.select('#kwsg_contents_main img[src]')
+            for image in images:
+                if image['src'].endswith('.svg'):
+                    continue
+                image_url = image['src']
+                image_name = self.extract_image_name_from_url(image_url)
+                if not self.is_content_length_in_range(image_url, more_than_amount=20000):
+                    continue
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
 
 # Kimi wa Houkago Insomnia
