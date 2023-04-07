@@ -537,6 +537,23 @@ class IseleveDownload(Spring2023AnimeDownload, NewsTemplate):
         self.add_to_image_list('teaser_coment_img02', self.PAGE_PREFIX + 'img/teaser_coment_img02.jpg')
         self.download_image_list(folder)
 
+    def download_media(self):
+        folder = self.create_media_directory()
+        bd_url = self.PAGE_PREFIX + 'bluray/'
+        try:
+            soup = self.get_soup(bd_url)
+            self.image_list = []
+            images = soup.select('.page_contents_body img[src]')
+            for image in images:
+                image_url = bd_url + image['src'].replace('./', '')
+                if '/common/' in image_url:
+                    continue
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
+
 
 # Isekai One Turn Kill Nee-san: Ane Douhan no Isekai Seikatsu Hajimemashita
 class OneKillSisterDownload(Spring2023AnimeDownload, NewsTemplate):
