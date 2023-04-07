@@ -876,7 +876,7 @@ class KamikatsuDownload(Spring2023AnimeDownload, NewsTemplate):
                 self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)
         except Exception as e:
-            self.print_exception(e, 'Key Visual')
+            self.print_exception(e, 'Blu-ray')
 
 
 # Kawaisugi Crisis https://kawaisugi.com/ #カワイスギクライシス @kawaisugicrisis
@@ -2077,6 +2077,7 @@ class WatayuriDownload(Spring2023AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         story_url = self.PAGE_PREFIX + 'story/'
@@ -2159,6 +2160,24 @@ class WatayuriDownload(Spring2023AnimeDownload, NewsTemplate):
         except Exception as e:
             self.print_exception(e, 'Character')
         self.create_cache_file(cache_filepath, processed, num_processed)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'bd/')
+            self.image_list = []
+            images = soup.select('.bdContents img[src]')
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                if '/bd/' not in image_url:
+                    continue
+                image_name = self.generate_image_name_from_url(image_url, 'bd')
+                if image_name.startswith('print'):
+                    continue
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
 
 # Yamada-kun to Lv999 no Koi wo Suru
