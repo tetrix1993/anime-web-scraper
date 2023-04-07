@@ -917,7 +917,35 @@ class KawaisugiCrisisDownload(Spring2023AnimeDownload, NewsTemplate):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            stories = soup.select('#kwsg_contents_introduction_list li')
+            for story in stories:
+                a_tag = story.select('a[href]')
+                if len(a_tag) == 0:
+                    continue
+                try:
+                    episode = str(int(re.sub('\D', '', a_tag[0].text))).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+
+                if story.has_attr('class') and 'current' in story['class']:
+                    ep_soup = soup
+                else:
+                    ep_soup = self.get_soup(a_tag[0]['href'])
+                    if ep_soup is None:
+                        continue
+                self.image_list = []
+                images = ep_soup.select('.story_thumbs img[srcset]')
+                for i in range(len(images)):
+                    image_url = self.PAGE_PREFIX[:-1] + self.get_image_url_from_srcset(images[i])
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.kwsg_contents_top_news_list_item',
