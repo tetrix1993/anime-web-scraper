@@ -867,6 +867,27 @@ class GuiguikuruDownload(Spring2023AnimeDownload, NewsTemplate):
         except Exception as e:
             self.print_exception(e, 'Character')
 
+    def download_episode_preview_guess(self):
+        current_date = datetime.now() + timedelta(hours=1)
+        year = current_date.strftime('%Y')
+        month = current_date.strftime('%m')
+        template = self.PAGE_PREFIX + f'wp/wp-content/uploads/{year}/{month}/%s_%s_T%s.jpg'
+        for i in range(12):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_1'):
+                continue
+            success = 0
+            for j in range(200):
+                for k in range(2):
+                    url = template % (episode, str(j).zfill(3), str(k + 1))
+                    if MainDownload.is_valid_url(url, is_image=True):
+                        print('VALID - ' + url)
+                        success += 1
+                if success == 6:
+                    break
+            if success == 0:
+                break
+
 
 # Kaminaki Sekai no Kamisama Katsudou
 class KamikatsuDownload(Spring2023AnimeDownload, NewsTemplate):
