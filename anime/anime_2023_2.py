@@ -1198,6 +1198,31 @@ class KonoSubaBakuenDownload(Spring2023AnimeDownload, NewsTemplate):
         self.download_media()
 
     def download_episode_preview(self):
+        story_url = self.PAGE_PREFIX + 'story/'
+        try:
+            soup = self.get_soup(story_url)
+            stories = soup.select('.sub-nav__li a[href]')
+            for story in stories:
+                try:
+                    episode = str(int(story.text.replace('第', '').replace('話', ''))).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                ep_soup = self.get_soup(story_url + story['href'])
+                if ep_soup is None:
+                    continue
+                self.image_list = []
+                images = ep_soup.select('.swiper-slide img[src]')
+                for i in range(len(images)):
+                    image_url = story_url + images[i]['src']
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
+
+    def download_episode_preview_guess(self):
         try:
             template = self.PAGE_PREFIX + 'story/img/story%s/%s.jpg'
             stop = False
