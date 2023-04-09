@@ -2377,7 +2377,7 @@ class WatayuriDownload(Spring2023AnimeDownload, NewsTemplate):
                 images = story.select('.story_imageList img[src]')
                 self.image_list = []
                 for i in range(len(images)):
-                    image_url = self.PAGE_PREFIX + images[i]['src'].replace('../', '')
+                    image_url = images[i]['src']
                     image_name = episode + '_' + str(i + 1)
                     self.add_to_image_list(image_name, image_url)
                 self.download_image_list(self.base_folder)
