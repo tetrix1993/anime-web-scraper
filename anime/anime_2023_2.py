@@ -2601,6 +2601,7 @@ class YuushagaShindaDownload(Spring2023AnimeDownload, NewsTemplate):
     def run(self):
         self.download_episode_preview()
         self.download_news()
+        self.download_episode_preview_guess()
         self.download_key_visual()
         self.download_character()
         self.download_media()
@@ -2626,6 +2627,24 @@ class YuushagaShindaDownload(Spring2023AnimeDownload, NewsTemplate):
             print(self.__class__.__name__ + ' - 403 Error when retrieving story API.')
         except Exception as e:
             self.print_exception(e)
+
+    def download_episode_preview_guess(self):
+        current_date = datetime.now() + timedelta(hours=1)
+        year = current_date.strftime('%Y')
+        month = current_date.strftime('%m')
+        prefix = self.PAGE_PREFIX + f'news/wp/wp-content/uploads/{year}/{month}/'
+        templates = [prefix + 'Yuusyagasinda_ep%s-thigh1.jpg', prefix + 'Yuusyagasinda_ep%s-pre1.jpg']
+        for i in range(12):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_1'):
+                continue
+            success = 0
+            for j in range(len(templates)):
+                url = templates[j] % episode
+                if MainDownload.is_valid_url(url, is_image=True):
+                    print('VALID - ' + url)
+            if success == 0:
+                break
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-list-item',
