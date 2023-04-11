@@ -1117,8 +1117,8 @@ class KimisomuDownload(Spring2023AnimeDownload, NewsTemplate):
     folder_name = 'kimisomu'
 
     PAGE_PREFIX = website
-    FINAL_EPISODE = 12
-    IMAGES_PER_EPISODE = 5
+    FINAL_EPISODE = 13
+    IMAGES_PER_EPISODE = 6
 
     def __init__(self):
         super().__init__()
@@ -1126,10 +1126,34 @@ class KimisomuDownload(Spring2023AnimeDownload, NewsTemplate):
     def run(self):
         self.download_episode_preview()
         self.download_news()
+        self.download_episode_preview_guess()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            self.image_list = []
+            stories = soup.select('.story-Contents')
+            for story in stories:
+                try:
+                    episode = str(int(story.select('.number')[0].text.replace('#', ''))).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                self.image_list = []
+                images = story.select('.swiper-slide img[src]')
+                for i in range(len(images)):
+                    image_url = images[i]['src']
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
+
+        '''
         try:
             template = self.PAGE_PREFIX + 'wp/wp-content/themes/insomnia_v0/assets/images/common/story/story_%s-%s.png'
             stop = False
@@ -1147,6 +1171,26 @@ class KimisomuDownload(Spring2023AnimeDownload, NewsTemplate):
                     break
         except Exception as e:
             self.print_exception(e)
+        '''
+
+    def download_episode_preview_guess(self):
+        current_date = datetime.now() + timedelta(hours=1)
+        year = current_date.strftime('%Y')
+        month = current_date.strftime('%m')
+        prefix = self.PAGE_PREFIX + f'wp/wp-content/uploads/{year}/{month}/story_%s-1.'
+        templates = [prefix + 'png', prefix + 'jpg']
+        for i in range(12):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_1'):
+                continue
+            success = 0
+            for j in range(len(templates)):
+                url = templates[j] % str(i + 1)
+                if MainDownload.is_valid_url(url, is_image=True):
+                    print('VALID - ' + url)
+                    break
+            if success == 0:
+                break
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-List_Item',
@@ -1189,6 +1233,20 @@ class KimisomuDownload(Spring2023AnimeDownload, NewsTemplate):
         except Exception as e:
             self.print_exception(e, 'Character')
         self.create_cache_file(cache_filepath, processed, num_processed)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'products/')
+            self.image_list = []
+            images = soup.select('.products img[src]')
+            for image in images:
+                image_url = image['src']
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
 
 # Kono Subarashii Sekai ni Bakuen wo!
@@ -1612,7 +1670,6 @@ class MegamiCafeDownload(Spring2023AnimeDownload, NewsTemplate):
             months.append(str(k).zfill(2))
             if curr_month == str(k).zfill(2):
                 break
-        months.append('03')
         for month in reversed(months):
             sub_folder = f'{folder}/{year}/{month}'
             if not os.path.exists(sub_folder):
