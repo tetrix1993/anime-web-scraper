@@ -1579,7 +1579,6 @@ class KumaBear2Download(Spring2023AnimeDownload, NewsTemplate2):
             third = 29 + 7 * i
             for j in range(self.IMAGES_PER_EPISODE):
                 image_url = template % (str(first).zfill(8), str(second).zfill(8), str(third + j).zfill(8))
-                print(image_url)
                 image_name = episode + '_' + str(j + 1)
                 result = self.download_image(image_url, folder + '/' + image_name)
                 if result == 0:
@@ -1650,7 +1649,7 @@ class MegamiCafeDownload(Spring2023AnimeDownload, NewsTemplate):
     def run(self):
         self.download_episode_preview()
         self.download_news()
-        self.download_episode_preview_guess()
+        # self.download_episode_preview_guess()
         self.download_key_visual()
         self.download_character()
         self.download_media()
@@ -1692,42 +1691,25 @@ class MegamiCafeDownload(Spring2023AnimeDownload, NewsTemplate):
         if self.is_image_exists(str(self.FINAL_EPISODE).zfill(2) + '_1'):
             return
 
-        folder = self.create_custom_directory('guess')
-        template = self.PAGE_PREFIX + 'wp/wp-content/uploads/%s/%s/%s.jpg'
+        template = self.PAGE_PREFIX + 'wp/wp-content/uploads/%s/%s/megami_cafeterrace_%s_%s.jpg'
         current_date = datetime.now() + timedelta(hours=1)
-        curr_month = current_date.strftime('%m')
+        year = current_date.strftime('%Y')
+        month = current_date.strftime('%m')
         is_successful = False
-        year = '2023'
-        k = 3
-        months = []
-        while k <= 12:
-            k += 1
-            months.append(str(k).zfill(2))
-            if curr_month == str(k).zfill(2):
-                break
-        for month in reversed(months):
-            sub_folder = f'{folder}/{year}/{month}'
-            if not os.path.exists(sub_folder):
-                os.makedirs(sub_folder)
-            for i in range(1, self.IMAGES_PER_EPISODE + 1, 1):
-                j = -1
-                while j < 20:
-                    j += 1
-                    image_name = f'{i}-{j}'
-                    if self.is_image_exists(image_name, sub_folder):
-                        continue
-                    if j == 0:
-                        img_name = str(i)
-                    else:
-                        img_name = str(i) + '-' + str(j)
-                    image_url = template % (year, month, img_name)
-                    result = self.download_image(image_url, sub_folder + '/' + image_name)
-                    if result == -1:
-                        break
+        for i in range(self.FINAL_EPISODE):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_1'):
+                continue
+            image_count = 0
+            j = 0
+            while image_count < self.IMAGES_PER_EPISODE or j <= 200:
+                image_url = template % (year, month, episode, str(j).zfill(3))
+                if self.is_valid_url(image_url, is_image=True):
+                    print('VALID - ' + image_url)
                     is_successful = True
-                if not is_successful:
-                    break
-            if len(os.listdir(sub_folder)) == 0:
+                    image_count += 1
+                j += 1
+            if not is_successful:
                 break
         if is_successful:
             print(self.__class__.__name__ + ' - Guessed correctly!')
