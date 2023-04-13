@@ -3968,6 +3968,8 @@ class TondemoSkillDownload(Winter2023AnimeDownload, NewsTemplate):
                 self.image_list = []
                 for image in images:
                     image_url = image['src']
+                    if image_url.startswith('/'):
+                        image_url = self.PAGE_PREFIX + image_url[1:]
                     if '/common/cs.png' in image_url:
                         continue
                     image_name = self.extract_image_name_from_url(image_url)
