@@ -1162,7 +1162,7 @@ class KimisomuDownload(Spring2023AnimeDownload, NewsTemplate):
                     episode = str(int(story.select('.number')[0].text.replace('#', ''))).zfill(2)
                 except:
                     continue
-                if self.is_image_exists(episode + '_1'):
+                if self.is_image_exists(episode + '_' + str(self.IMAGES_PER_EPISODE)):
                     continue
                 self.image_list = []
                 images = story.select('.swiper-slide img[src]')
@@ -1208,8 +1208,12 @@ class KimisomuDownload(Spring2023AnimeDownload, NewsTemplate):
             for j in range(len(templates)):
                 url = templates[j] % str(i + 1)
                 if MainDownload.is_valid_url(url, is_image=True):
-                    print('VALID - ' + url)
-                    break
+                    success = 1
+                    ext = templates[j].split('.')[-1]
+                    for k in range(self.IMAGES_PER_EPISODE):
+                        image_url = self.PAGE_PREFIX + f'wp/wp-content/uploads/{year}/{month}/story_{i + 1}-{k + 1}.{ext}'
+                        image_name = episode + '_' + str(k + 1)
+                        self.download_image(image_url, self.base_folder + '/' + image_name)
             if success == 0:
                 break
 
