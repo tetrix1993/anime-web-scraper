@@ -979,19 +979,40 @@ class KamikatsuDownload(Spring2023AnimeDownload, NewsTemplate):
 
     def download_media(self):
         folder = self.create_media_directory()
-        try:
-            soup = self.get_soup(self.PAGE_PREFIX + 'package/')
-            self.image_list = []
-            images = soup.select('#music div>img[srcset]')
-            for image in images:
-                image_url = self.PAGE_PREFIX + image['srcset'][1:]
-                image_name = self.extract_image_name_from_url(image_url)
-                if image_name.startswith('print'):
-                    continue
-                self.add_to_image_list(image_name, image_url)
-            self.download_image_list(folder)
-        except Exception as e:
-            self.print_exception(e, 'Blu-ray')
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        bd_prefix = self.PAGE_PREFIX + 'package/'
+        for page in ['', 'prize', 'campaign1', 'campaign2', 'campaign3']:
+            try:
+                bd_url = bd_prefix
+                if len(page) > 0:
+                    if page in processed:
+                        continue
+                    bd_url += page + '.html'
+                soup = self.get_soup(bd_url)
+                self.image_list = []
+                images = soup.select('#bd div>img[srcset], #bd div>img[src]')
+                for image in images:
+                    if image.has_attr('srcset'):
+                        src = image['srcset']
+                    else:
+                        src = image['src']
+                    if src.startswith('/'):
+                        image_url = self.PAGE_PREFIX + src[1:]
+                    elif src.startswith('http'):
+                        image_url = src
+                    else:
+                        image_url = bd_prefix + src
+                    image_name = self.extract_image_name_from_url(image_url)
+                    if image_name.startswith('print'):
+                        continue
+                    self.add_to_image_list(image_name, image_url)
+                if len(page) > 0 and page != 'prize' and len(self.image_list) > 0:
+                    processed.append(page)
+                self.download_image_list(folder)
+            except Exception as e:
+                self.print_exception(e, 'Blu-ray')
+            self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Kawaisugi Crisis https://kawaisugi.com/ #カワイスギクライシス @kawaisugicrisis
