@@ -1712,7 +1712,7 @@ class MegamiCafeDownload(Spring2023AnimeDownload, NewsTemplate):
                                     next_page_select='.pagination a', next_page_eval_index=-1,
                                     next_page_eval_index_class='disabled')
 
-    def download_episode_preview_guess(self):
+    def download_episode_preview_guess(self, print_invalid=False):
         if self.is_image_exists(str(self.FINAL_EPISODE).zfill(2) + '_1'):
             return
 
@@ -1727,12 +1727,14 @@ class MegamiCafeDownload(Spring2023AnimeDownload, NewsTemplate):
                 continue
             image_count = 0
             j = 0
-            while image_count < self.IMAGES_PER_EPISODE or j <= 200:
+            while image_count < self.IMAGES_PER_EPISODE and j <= 200:
                 image_url = template % (year, month, episode, str(j).zfill(3))
                 if self.is_valid_url(image_url, is_image=True):
                     print('VALID - ' + image_url)
                     is_successful = True
                     image_count += 1
+                elif print_invalid:
+                    print('INVALID - ' + image_url)
                 j += 1
             if not is_successful:
                 break
