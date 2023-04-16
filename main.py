@@ -10,13 +10,16 @@ def run():
         os.makedirs(constants.FOLDER_OUTPUT)
 
     downloads = []
-    for subclass in Winter2023AnimeDownload.__subclasses__():
+    for subclass in Spring2023AnimeDownload.__subclasses__():
         if subclass.enabled:
             downloads.append(subclass())
-    downloads += [GundamWitchDownload(), GoldenKamuy4Download(), KagenoJitsuryokushaDownload(), BocchiTheRockDownload(),
-                  MushikaburihimeDownload()]
-    subclasses = Spring2023AnimeDownload.__subclasses__() \
-        + Summer2023AnimeDownload.__subclasses__() \
+    downloads += [KubosanDownload(), VinlandSaga2Download(), GundamWitchDownload(), GoldenKamuy4Download(),
+                  Bofuri2Download(), KagenoJitsuryokushaDownload(), BocchiTheRockDownload(), MushikaburihimeDownload(),
+                  AyakashiTriangleDownload(), Maohgakuin2Download(), NierAutomataDownload(), SpyroomDownload(),
+                  ArsGiantDownload(), BenriyaSaitouDownload(), BuddyDaddiesDownload(), KooriZokuseiDanshiDownload(),
+                  KyokouSuiri2Download(), Nagatorosan2Download(), OnimaiDownload(), OtonarinoTenshisamaDownload(),
+                  SugarAppleDownload(), TentenKakumeiDownload(), TondemoSkillDownload()]
+    subclasses = Summer2023AnimeDownload.__subclasses__() \
         + Fall2023AnimeDownload.__subclasses__() \
         + Winter2024AnimeDownload.__subclasses__() \
         + Spring2024AnimeDownload.__subclasses__() \
