@@ -1720,10 +1720,11 @@ class MegamiCafeDownload(Spring2023AnimeDownload, NewsTemplate):
                                     next_page_select='.pagination a', next_page_eval_index=-1,
                                     next_page_eval_index_class='disabled')
 
-    def download_episode_preview_guess(self, print_invalid=False):
+    def download_episode_preview_guess(self, print_invalid=False, download_valid=False):
         if self.is_image_exists(str(self.FINAL_EPISODE).zfill(2) + '_1'):
             return
 
+        folder = self.create_custom_directory('guess')
         template = self.PAGE_PREFIX + 'wp/wp-content/uploads/%s/%s/megami_cafeterrace_%s_%s.jpg'
         current_date = datetime.now() + timedelta(hours=1)
         year = current_date.strftime('%Y')
@@ -1731,21 +1732,29 @@ class MegamiCafeDownload(Spring2023AnimeDownload, NewsTemplate):
         is_successful = False
         for i in range(self.FINAL_EPISODE):
             episode = str(i + 1).zfill(2)
-            if self.is_image_exists(episode + '_1'):
+            if self.is_image_exists(episode + '_1') or self.is_image_exists(episode + '_1', folder):
                 continue
             image_count = 0
             j = 0
+            valid_urls = []
+            episode_success = False
             while image_count < self.IMAGES_PER_EPISODE and j <= 200:
                 image_url = template % (year, month, episode, str(j).zfill(3))
                 if self.is_valid_url(image_url, is_image=True):
                     print('VALID - ' + image_url)
-                    is_successful = True
+                    episode_success = True
                     image_count += 1
+                    valid_urls.append(image_url)
                 elif print_invalid:
                     print('INVALID - ' + image_url)
                 j += 1
-            if not is_successful:
+            if download_valid and len(valid_urls) > 0:
+                for k in range(len(valid_urls)):
+                    image_name = episode + '_' + str(k + 1)
+                    self.download_image(valid_urls[k], folder + '/' + image_name)
+            if not episode_success:
                 break
+            is_successful = True
         if is_successful:
             print(self.__class__.__name__ + ' - Guessed correctly!')
         return is_successful
