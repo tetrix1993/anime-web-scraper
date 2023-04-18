@@ -2036,6 +2036,7 @@ class OshinokoDownload(Spring2023AnimeDownload, NewsTemplate2):
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_external()
         self.download_episode_preview_guess()
         self.download_news()
         self.download_key_visual()
@@ -2068,6 +2069,11 @@ class OshinokoDownload(Spring2023AnimeDownload, NewsTemplate2):
                 self.download_image_list(self.base_folder)
         except Exception as e:
             self.print_exception(e)
+
+    def download_episode_preview_external(self):
+        keywords = ['推しの子']
+        AniverseMagazineScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                end_date='20230418', download_id=self.download_id).run()
 
     def download_episode_preview_guess(self):
         folder = self.create_custom_directory('guess')
