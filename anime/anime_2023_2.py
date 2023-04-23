@@ -2845,7 +2845,9 @@ class YuushagaShindaDownload(Spring2023AnimeDownload, NewsTemplate):
         year = current_date.strftime('%Y')
         month = current_date.strftime('%m')
         prefix = self.PAGE_PREFIX + f'news/wp/wp-content/uploads/{year}/{month}/'
-        templates = [prefix + 'Yuusyagasinda_ep%s-thigh1.jpg', prefix + 'Yuusyagasinda_ep%s-pre1.jpg']
+        thigh_prefix = prefix + 'Yuusyagasinda_ep%s-thigh1.'
+        normal_prefix = prefix + 'Yuusyagasinda_ep%s-pre1.'
+        templates = [thigh_prefix + 'jpg', thigh_prefix + 'jpeg', normal_prefix + 'jpg', normal_prefix + 'jpeg']
         for i in range(12):
             episode = str(i + 1).zfill(2)
             if self.is_image_exists(episode + '_1'):
