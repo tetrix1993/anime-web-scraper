@@ -1861,8 +1861,8 @@ class KubosanDownload(Winter2023AnimeDownload, NewsTemplate2):
             if self.is_image_exists(episode + '_1'):
                 continue
             is_success = False
-            first = 17 + 2 * i
-            second = 36 + 2 * i
+            first = 18 + i
+            second = 34 + 4 * i
             third = 45 + self.IMAGES_PER_EPISODE * i
             for j in range(self.IMAGES_PER_EPISODE):
                 image_url = template % (str(first).zfill(8), str(second).zfill(8), str(third + j).zfill(8))
