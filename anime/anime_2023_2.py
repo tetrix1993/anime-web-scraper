@@ -2085,7 +2085,7 @@ class OshinokoDownload(Spring2023AnimeDownload, NewsTemplate2):
                 continue
             is_success = False
             first = 25 + i
-            second = 69 + 5 * i
+            second = 68 + 6 * i
             third = 65 + self.IMAGES_PER_EPISODE * i
             for j in range(self.IMAGES_PER_EPISODE):
                 image_url = template % (str(first).zfill(8), str(second).zfill(8), str(third + j).zfill(8))
