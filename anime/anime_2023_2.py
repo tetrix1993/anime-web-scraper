@@ -2874,15 +2874,29 @@ class YuushagaShindaDownload(Spring2023AnimeDownload, NewsTemplate):
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'special/')
+            a_tags = soup.select('div.l-grid a[href]')
+            for a_tag in a_tags:
+                href = a_tag['href']
+                if not href.startswith('../special/') or not href.endswith('.jpg'):
+                    continue
+                image_url = self.PAGE_PREFIX + href.replace('../', '')
+                image_name = self.generate_image_name_from_url(image_url, 'special')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
         self.image_list = []
-        self.add_to_image_list('tz_aniverse', 'https://aniverse-mag.com/wp-content/uploads/2022/04/4576fa0e88a0464f6a9b6e8844e05dbd-e1651058246996.jpg')
-        self.add_to_image_list('tz_visual_01_chara', self.PAGE_PREFIX + 'img/teaser/visual_01_chara.png')
-        self.add_to_image_list('vis_kneesock', 'https://pbs.twimg.com/media/FilDh8XagAQnZU0?format=jpg&name=large')
+        # self.add_to_image_list('tz_aniverse', 'https://aniverse-mag.com/wp-content/uploads/2022/04/4576fa0e88a0464f6a9b6e8844e05dbd-e1651058246996.jpg')
+        # self.add_to_image_list('tz_visual_01_chara', self.PAGE_PREFIX + 'img/teaser/visual_01_chara.png')
+        # self.add_to_image_list('vis_kneesock', 'https://pbs.twimg.com/media/FilDh8XagAQnZU0?format=jpg&name=large')
         self.add_to_image_list('kv2_tw', 'https://pbs.twimg.com/media/FkGRdxEUcAECPlX?format=jpg&name=large')
         self.download_image_list(folder)
 
-        template = self.PAGE_PREFIX + 'img/home/visual_%s_chara.webp'
-        self.download_by_template(folder, template, 2, 1, prefix='home_')
+        # template = self.PAGE_PREFIX + 'img/home/visual_%s_chara.webp'
+        # self.download_by_template(folder, template, 2, 1, prefix='home_')
 
     def download_character(self):
         folder = self.create_character_directory()
