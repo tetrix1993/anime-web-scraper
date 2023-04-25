@@ -2087,14 +2087,20 @@ class OshinokoDownload(Spring2023AnimeDownload, NewsTemplate2):
             first = 25 + i
             second = 68 + 6 * i
             third = 65 + self.IMAGES_PER_EPISODE * i
-            for j in range(self.IMAGES_PER_EPISODE):
-                image_url = template % (str(first).zfill(8), str(second).zfill(8), str(third + j).zfill(8))
-                image_name = episode + '_' + str(j + 1)
-                result = self.download_image(image_url, folder + '/' + image_name)
-                if result == 0:
-                    is_success = True
-                    is_successful = True
-                elif result == -1:
+            break_inner_loop = False
+            for k in [0, -1, 1]:
+                for j in range(self.IMAGES_PER_EPISODE):
+                    image_url = template % (str(first).zfill(8), str(second + k).zfill(8), str(third + j).zfill(8))
+                    print(image_url)
+                    image_name = episode + '_' + str(j + 1)
+                    result = self.download_image(image_url, folder + '/' + image_name)
+                    if result == 0:
+                        is_success = True
+                        is_successful = True
+                        break_inner_loop = True
+                    elif result == -1:
+                        break
+                if break_inner_loop:
                     break
             if is_success:
                 print(self.__class__.__name__ + ' - Guessed successfully!')
