@@ -973,12 +973,13 @@ class KamikatsuDownload(Spring2023AnimeDownload, NewsTemplate):
 
     def download_character(self):
         folder = self.create_character_directory()
+        chara_url = self.PAGE_PREFIX + 'character/'
         try:
-            soup = self.get_soup(self.PAGE_PREFIX)
+            soup = self.get_soup(chara_url)
             images = soup.select('#character .swiper-slide img[src]')
             self.image_list = []
             for image in images:
-                image_url = self.PAGE_PREFIX + self.get_image_url_from_srcset(image)
+                image_url = chara_url + self.get_image_url_from_srcset(image)
                 image_name = self.extract_image_name_from_url(image_url)
                 self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)
