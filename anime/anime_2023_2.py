@@ -119,6 +119,7 @@ class AookeDownload(Spring2023AnimeDownload, NewsTemplate):
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_guess()
         self.download_news()
         self.download_key_visual()
         self.download_character()
@@ -147,6 +148,25 @@ class AookeDownload(Spring2023AnimeDownload, NewsTemplate):
                     image_name = episode + '_' + str(i + 1)
                     self.add_to_image_list(image_name, image_url)
                 self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
+
+    def download_episode_preview_guess(self):
+        try:
+            template = self.PAGE_PREFIX + 'story/.assets/%s-%s.jpg'
+            stop = False
+            for i in range(self.FINAL_EPISODE):
+                episode = str(i + 1).zfill(2)
+                if self.is_image_exists(episode + '_' + str(self.IMAGES_PER_EPISODE)):
+                    continue
+                for j in range(self.IMAGES_PER_EPISODE):
+                    image_url = template % (str(i + 1), str(j + 1))
+                    image_name = episode + '_' + str(j + 1)
+                    if self.download_image(image_url, self.base_folder + '/' + image_name) == -1:
+                        stop = True
+                        break
+                if stop:
+                    break
         except Exception as e:
             self.print_exception(e)
 
