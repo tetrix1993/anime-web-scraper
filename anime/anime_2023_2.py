@@ -1403,7 +1403,7 @@ class KonoSubaBakuenDownload(Spring2023AnimeDownload, NewsTemplate):
                 self.image_list = []
                 for image in images:
                     image_url = image['src']
-                    if '/img/' not in image_url:
+                    if '/img/' not in image_url or image_url.endswith('.svg'):
                         continue
                     image_name = self.generate_image_name_from_url(image_url, 'img')
                     self.add_to_image_list(image_name, image_url)
