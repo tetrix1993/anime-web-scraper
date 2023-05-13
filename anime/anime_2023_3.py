@@ -922,11 +922,31 @@ class ChiisaiSenpaiDownload(Summer2023AnimeDownload, NewsTemplate):
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FrY-UPcaAAAxGJO?format=jpg&name=medium')
-        self.add_to_image_list('PC-フロントビュー-1', self.PAGE_PREFIX + 'wp-content/uploads/2023/03/PC-フロントビュー-1.jpg')
-        self.add_to_image_list('SP-フロントビュー-1', self.PAGE_PREFIX + 'wp-content/uploads/2023/03/SP-フロントビュー-1.jpg')
-        self.download_image_list(folder)
+        css_prefix = self.PAGE_PREFIX + 'wp-content/uploads/elementor/css/post-'
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            elements = soup.select('#tpca_front_page .plus-slide-content .elementor[data-elementor-id]')
+            for element in elements:
+                element_id = element['data-elementor-id']
+                css_response = self.get_response(css_prefix + element_id + '.css', decode=True)
+                split1 = css_response.split('background-image:url("')
+                image_urls = []
+                for i in range(1, len(split1), 1):
+                    image_urls.append(split1[i].split('"')[0].replace('-scaled', ''))
+                for image_url in image_urls:
+                    if not image_url.startswith(self.PAGE_PREFIX):
+                        continue
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+        # self.image_list = []
+        # self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FrY-UPcaAAAxGJO?format=jpg&name=medium')
+        # self.add_to_image_list('PC-フロントビュー-1', self.PAGE_PREFIX + 'wp-content/uploads/2023/03/PC-フロントビュー-1.jpg')
+        # self.add_to_image_list('SP-フロントビュー-1', self.PAGE_PREFIX + 'wp-content/uploads/2023/03/SP-フロントビュー-1.jpg')
+        # self.download_image_list(folder)
 
     def download_character(self):
         folder = self.create_character_directory()
