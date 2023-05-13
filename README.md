@@ -121,6 +121,7 @@ The premiere date for the anime listed here has not been announced.
 * [Konyaku Haki sareta Reijou wo Hirotta Ore ga, Ikenai koto wo Oshiekomu](https://ikenaikyo.com/)
 * [Sousou no Frieren](https://frieren-anime.jp/)
 * [Tearmoon Teikoku Monogatari](https://tearmoon-pr.com/)
+* [Toaru Ossan no VRMMO Katsudouki](https://toaru-ossan.com/)
 * [Watashi no Oshi wa Akuyaku Reijou.](https://wataoshi-anime.com/)
 
 ### Summer 2023 Anime

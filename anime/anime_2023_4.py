@@ -5,6 +5,7 @@ import os
 # Konyaku Haki sareta Reijou wo Hirotta Ore ga, Ikenai koto wo Oshiekomu https://ikenaikyo.com/ #イケナイ教 @ikenaikyo_anime
 # Sousou no Frieren https://frieren-anime.jp/ #フリーレン #frieren @Anime_Frieren
 # Tearmoon Teikoku Monogatari https://tearmoon-pr.com/ #ティアムーン @tearmoon_pr
+# Toaru Ossan no VRMMO Katsudouki https://toaru-ossan.com/ #とあるおっさん @toaru_ossan_pr
 # Watashi no Oshi wa Akuyaku Reijou. https://wataoshi-anime.com/ #わたおし #wataoshi #ILTV @wataoshi_anime
 
 
@@ -219,6 +220,48 @@ class TearmoonDownload(Fall2023AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+
+# Toaru Ossan no VRMMO Katsudouki
+class ToaruOssanDownload(Fall2023AnimeDownload, NewsTemplate):
+    title = 'Toaru Ossan no VRMMO Katsudouki'
+    keywords = [title, "A Playthrough of a Certain Dude’s VRMMO Life"]
+    website = 'https://toaru-ossan.com/'
+    twitter = 'toaru_ossan_pr'
+    hashtags = ['とあるおっさん']
+    folder_name = 'toaruossan'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='#news li',
+                                    date_select='time', title_select='p', id_select='a', a_tag_prefix=news_url)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('img_teaser', self.PAGE_PREFIX + 'assets/images/top/img_teaser.jpg')
+        self.add_to_image_list('mainimg', self.PAGE_PREFIX + 'assets/images/top/mainimg.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        prefix = self.PAGE_PREFIX + 'assets/images/character/'
+        templates = [prefix + 'img_%s.png', prefix + 'face_%s.png']
+        self.download_by_template(folder, templates, 2, 1)
 
 
 # Watashi no Oshi wa Akuyaku Reijou.
