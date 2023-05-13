@@ -658,20 +658,26 @@ class AtelierRyzaDownload(Summer2023AnimeDownload, NewsTemplate):
         self.download_episode_preview()
         self.download_news()
         self.download_key_visual()
+        self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX)
 
     def download_news(self):
-        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.p-news__list-item',
-                                    date_select='.p-news_data__date', title_select='.p-news_data__title',
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.p-news_in__content-list-item',
+                                    date_select='.p-in-data', title_select='.p-in-title',
                                     id_select='a', a_tag_start_text_to_remove='/', a_tag_prefix=self.PAGE_PREFIX)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         self.image_list = []
         self.add_to_image_list('tz', self.PAGE_PREFIX + 'news/SYS/CONTENTS/afaf78fb-2da9-4a38-85e8-36282052d381')
+        self.add_to_image_list('kv', self.PAGE_PREFIX + 'assets/img/top/kv.jpg')
         self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        self.download_by_template(folder, self.PAGE_PREFIX + 'assets/img/character/chara_%s.png', 2, 1)
 
 
 # Seija Musou: Salaryman, Isekai de Ikinokoru Tame ni Ayumu Michi
