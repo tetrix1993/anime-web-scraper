@@ -1,4 +1,5 @@
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
+from requests.exceptions import HTTPError
 
 
 # Eiyuu Kyoushitsu https://eiyukyoushitsu-anime.com/ #英雄教室 #eiyu_anime @eiyu_anime
@@ -572,13 +573,58 @@ class OkashinaTenseiDownload(Summer2023AnimeDownload, NewsTemplate):
         self.has_website_updated(self.PAGE_PREFIX)
 
     def download_news(self):
-        pass
+        news_url = self.PAGE_PREFIX + 'news/'
+        try:
+            json_obj = self.get_json(self.PAGE_PREFIX + 'wp-json/okashinatensei/init')
+            news_obj = self.get_last_news_log_object()
+            results = []
+            for item in reversed(json_obj['news']):
+                article_id = news_url + item['id']
+                date = item['date'][0:10].replace('-', '.')
+                title = item['title']
+                if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
+                    break
+                results.append(self.create_news_log_object(date, title, article_id))
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log_from_news_log_object(result)
+                if process_result == 0:
+                    success_count += 1
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
+        except HTTPError:
+            pass
+            # print(self.__class__.__name__ + ' - 403 Error when retrieving news API.')
+        except Exception as e:
+            self.print_exception(e, 'News')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('tz_natalie', 'https://ogre.natalie.mu/media/news/comic/2022/1215/okashinatensei_teaser.jpg')
-        self.download_image_list(folder)
+        # self.image_list = []
+        # self.add_to_image_list('tz_natalie', 'https://ogre.natalie.mu/media/news/comic/2022/1215/okashinatensei_teaser.jpg')
+        # self.download_image_list(folder)
+
+        static_url = self.PAGE_PREFIX + 'wp/wp-content/themes/okashinatensei/static/'
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            scripts = soup.select('script[src*="pages/index-"]')
+            if len(scripts) > 0:
+                js_url = scripts[0]['src']
+                if js_url.startswith('/'):
+                    js_url = self.PAGE_PREFIX + js_url[1:]
+                js_page = self.get_response(js_url)
+                split1 = js_page.split('"mainvisual/')
+                self.image_list = []
+                for i in range(1, len(split1), 1):
+                    s = split1[i].split('"')[0]
+                    if len(s) == 0 or not s.endswith('.webp') or s == 'copy.webp' or 'switch_icon' in s:
+                        continue
+                    image_url = static_url + 'mainvisual/' + s
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
 
     def download_character(self):
         folder = self.create_character_directory()
