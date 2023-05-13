@@ -118,6 +118,7 @@ The premiere date for the anime listed here has not been announced.
 
 ### Fall 2023 Anime
 * [Hametsu no Oukoku](https://hametsu-anime.com/)
+* [Konyaku Haki sareta Reijou wo Hirotta Ore ga, Ikenai koto wo Oshiekomu](https://ikenaikyo.com/)
 * [Sousou no Frieren](https://frieren-anime.jp/)
 * [Tearmoon Teikoku Monogatari](https://tearmoon-pr.com/)
 

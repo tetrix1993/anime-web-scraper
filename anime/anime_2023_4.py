@@ -1,6 +1,7 @@
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 
 # Hametsu no Oukoku https://hametsu-anime.com/ #はめつのおうこく #はめつ @hametsu_anime
+# Konyaku Haki sareta Reijou wo Hirotta Ore ga, Ikenai koto wo Oshiekomu https://ikenaikyo.com/ #イケナイ教 @ikenaikyo_anime
 # Sousou no Frieren https://frieren-anime.jp/ #フリーレン #frieren @Anime_Frieren
 # Tearmoon Teikoku Monogatari https://tearmoon-pr.com/ #ティアムーン @tearmoon_pr
 
@@ -73,6 +74,50 @@ class HametsuDownload(Fall2023AnimeDownload, NewsTemplate):
             self.PAGE_PREFIX + 'assets/character/%ss.webp'
         ]
         self.download_by_template(folder, templates, 1, 1)
+
+
+# Konyaku Haki sareta Reijou wo Hirotta Ore ga, Ikenai koto wo Oshiekomu
+class IkenaikyoDownload(Fall2023AnimeDownload, NewsTemplate):
+    title = 'Konyaku Haki sareta Reijou wo Hirotta Ore ga, Ikenai koto wo Oshiekomu'
+    keywords = [title, "ikenaikyo", "I’m Giving the Disgraced Noble Lady I Rescued a Crash Course in Naughtiness"]
+    website = 'https://ikenaikyo.com/'
+    twitter = 'ikenaikyo_anime'
+    hashtags = ['イケナイ教']
+    folder_name = 'ikenaikyo'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.infoList a',
+                                    date_select='span', title_select='li', id_select=None)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz', self.PAGE_PREFIX + 'manage/wp-content/uploads/2023/04/KV.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        chara_prefix = self.PAGE_PREFIX + 'images/character/chara'
+        templates = [
+            chara_prefix + '%s.png',
+            chara_prefix + '%s-1.png',
+            chara_prefix + '%s-2.png'
+        ]
+        self.download_by_template(folder, templates, 2, 1)
 
 
 # Sousou no Frieren
