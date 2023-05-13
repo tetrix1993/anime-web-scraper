@@ -89,6 +89,7 @@ The premiere date for the anime listed here has not been announced.
 * [Dekoboko Majo no Oyako Jijou](https://dekoboko-majo-anime.jp/)
 * [Dosanko Gal wa Namara Menkoi](https://dosankogal-pr.com/)
 * [Dungeon Meshi](https://delicious-in-dungeon.com/)
+* [Giji Harem](https://gijiharem.com/)
 * [Goblin Slayer 2nd Season](http://www.goblinslayer.jp/)
 * [Highspeed Etoile](https://highspeed-etoile.com/)
 * [Hoshikuzu Telepath](https://hoshitele-anime.com/)
