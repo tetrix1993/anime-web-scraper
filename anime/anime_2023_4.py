@@ -1,9 +1,11 @@
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
+import os
 
 # Hametsu no Oukoku https://hametsu-anime.com/ #はめつのおうこく #はめつ @hametsu_anime
 # Konyaku Haki sareta Reijou wo Hirotta Ore ga, Ikenai koto wo Oshiekomu https://ikenaikyo.com/ #イケナイ教 @ikenaikyo_anime
 # Sousou no Frieren https://frieren-anime.jp/ #フリーレン #frieren @Anime_Frieren
 # Tearmoon Teikoku Monogatari https://tearmoon-pr.com/ #ティアムーン @tearmoon_pr
+# Watashi no Oshi wa Akuyaku Reijou. https://wataoshi-anime.com/ #わたおし #wataoshi #ILTV @wataoshi_anime
 
 
 # Fall 2023 Anime
@@ -217,3 +219,89 @@ class TearmoonDownload(Fall2023AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+
+# Watashi no Oshi wa Akuyaku Reijou.
+class WataoshiDownload(Fall2023AnimeDownload, NewsTemplate):
+    title = 'Watashi no Oshi wa Akuyaku Reijou.'
+    keywords = [title, 'I\'m in Love with the Villainess']
+    website = 'https://wataoshi-anime.com/'
+    twitter = 'wataoshi_anime'
+    hashtags = ['わたおし', 'wataoshi', 'ILTV']
+    folder_name = 'wataoshi'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+        self.download_media()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, news_prefix='', article_select='#news li',
+                                    date_select='time', title_select='p', id_select='a', a_tag_prefix=self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/Fj120y9VIAAx9Jp?format=jpg&name=medium')
+        self.add_to_image_list('kv1', 'https://pbs.twimg.com/media/Fv6DLpYaQAACtjt?format=jpg&name=large')
+        self.add_to_image_list('img_visual1.jpg', self.PAGE_PREFIX + 'images/img_visual1.jpg')
+        self.download_image_list(folder)
+
+        css_url = self.PAGE_PREFIX + 'css/style.min.css'
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            mainslides = soup.select('.mainimg .mainslide[class]')
+            _classes = []
+            for slide in mainslides:
+                for _class in slide['class']:
+                    if _class not in ['mainslide', 'swiper-slide']:
+                        _classes.append(_class)
+                        break
+            if len(_classes) > 0:
+                self.image_list = []
+                css_page = self.get_response(css_url)
+                for _class in _classes:
+                    search_text = '.mainslide.' + _class + '{background:url('
+                    idx = css_page.find(search_text)
+                    if idx > 0:
+                        right_idx = css_page[idx + len(search_text):].find(')')
+                        if right_idx > 0:
+                            start_idx = idx + len(search_text)
+                            image_url = css_page[start_idx:start_idx + right_idx]
+                            if image_url.startswith('../'):
+                                image_url = self.PAGE_PREFIX + image_url[3:]
+                            image_name = self.extract_image_name_from_url(image_url)
+                            self.add_to_image_list(image_name, image_url)
+                self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        prefix = self.PAGE_PREFIX + 'images/img_chara_'
+        templates = [prefix + '%s.png', prefix + 'face_%s.png']
+        self.download_by_template(folder, templates, 2, 1)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+
+        # Voices
+        voice_folder = folder + '/voice'
+        if not os.path.exists(voice_folder):
+            os.makedirs(voice_folder)
+        for i in range(99):
+            audio_name = f'chara_{str(i + 1).zfill(2)}.mp3'
+            audio_url = self.PAGE_PREFIX + 'mp3/' + audio_name
+            result = self.download_content(audio_url, voice_folder + '/' + audio_name)
+            if result == -1:
+                break

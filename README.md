@@ -106,7 +106,6 @@ The premiere date for the anime listed here has not been announced.
 * [Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita 2nd Season](https://slime300-anime.com/)
 * [Tensei shitara Dainana Ouji Datta node, Kimama ni Majutsu wo Kiwamemasu](https://dainanaoji.com/)
 * [Unnamed Memory](https://unnamedmemory.com/)
-* [Watashi no Oshi wa Akuyaku Reijou.](https://wataoshi-anime.com/)
 * [Yoru no Kurage wa Oyogenai](https://yorukura-anime.com/)
 * [Yozakura-san Chi no Daisakusen](https://mission-yozakura-family.com/)
 
@@ -122,6 +121,7 @@ The premiere date for the anime listed here has not been announced.
 * [Konyaku Haki sareta Reijou wo Hirotta Ore ga, Ikenai koto wo Oshiekomu](https://ikenaikyo.com/)
 * [Sousou no Frieren](https://frieren-anime.jp/)
 * [Tearmoon Teikoku Monogatari](https://tearmoon-pr.com/)
+* [Watashi no Oshi wa Akuyaku Reijou.](https://wataoshi-anime.com/)
 
 ### Summer 2023 Anime
 * [Eiyuu Kyoushitsu](https://eiyukyoushitsu-anime.com/)
