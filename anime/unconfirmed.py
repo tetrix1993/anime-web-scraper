@@ -1228,10 +1228,39 @@ class YorukuraDownload(UnconfirmedDownload, NewsTemplate):
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/Fr6oNgXaIAIDcgR?format=jpg&name=large')
-        self.add_to_image_list('tz', self.PAGE_PREFIX + 'images/mainimg.jpg')
-        self.download_image_list(folder)
+        # self.image_list = []
+        # self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/Fr6oNgXaIAIDcgR?format=jpg&name=large')
+        # self.add_to_image_list('tz', self.PAGE_PREFIX + 'images/mainimg.jpg')
+        # self.download_image_list(folder)
+
+        css_url = self.PAGE_PREFIX + 'css/style.min.css'
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            mainslides = soup.select('.mainimg .mainslide[class]')
+            _classes = []
+            for slide in mainslides:
+                for _class in slide['class']:
+                    if _class not in ['mainslide', 'swiper-slide']:
+                        _classes.append(_class)
+                        break
+            if len(_classes) > 0:
+                self.image_list = []
+                css_page = self.get_response(css_url)
+                for _class in _classes:
+                    search_text = '.mainslide.' + _class + '{background:url('
+                    idx = css_page.find(search_text)
+                    if idx > 0:
+                        right_idx = css_page[idx + len(search_text):].find(')')
+                        if right_idx > 0:
+                            start_idx = idx + len(search_text)
+                            image_url = css_page[start_idx:start_idx + right_idx]
+                            if image_url.startswith('../'):
+                                image_url = self.PAGE_PREFIX + image_url[3:]
+                            image_name = self.extract_image_name_from_url(image_url)
+                            self.add_to_image_list(image_name, image_url)
+                self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
 
 
 # Yozakura-san Chi no Daisakusen
