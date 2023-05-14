@@ -100,6 +100,7 @@ The premiere date for the anime listed here has not been announced.
 * [Kimi no Koto ga Daidaidaidaidaisuki na 100-nin no Kanojo](https://hyakkano.com/)
 * [Kusuriya no Hitorigoto](https://kusuriyanohitorigoto.jp/)
 * [Lv1 Maou to One Room Yuusha](https://lv1room.com/)
+* [Saijaku Tamer wa Gomi Hiroi no Tabi wo Hajimemashita.](https://saijakutamer-anime.com/)
 * [Seijo no Maryoku wa Bannou Desu 2nd Season](https://seijyonomaryoku.jp/)
 * [Seiken Gakuin no Makentsukai](https://seikengakuin.com/)
 * [Shy](https://shy-anime.com/)

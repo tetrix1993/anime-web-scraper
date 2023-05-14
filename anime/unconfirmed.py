@@ -21,6 +21,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Kimi no Koto ga Daidaidaidaidaisuki na 100-nin no Kanojo https://hyakkano.com/ @hyakkano_anime #100カノ
 # Kusuriya no Hitorigoto https://kusuriyanohitorigoto.jp/ #薬屋のひとりごと @kusuriya_PR
 # Lv1 Maou to One Room Yuusha https://lv1room.com/ #lv1room @Lv1room
+# Saijaku Tamer wa Gomi Hiroi no Tabi wo Hajimemashita. https://saijakutamer-anime.com/
 # Seijo no Maryoku wa Bannou Desu S2 https://seijyonomaryoku.jp/ #seijyonoanime @seijyonoanime
 # Seiken Gakuin no Makentsukai https://seikengakuin.com/ #聖剣学院の魔剣使い #せまつか @SEIKEN_MAKEN
 # Shy https://shy-anime.com/ #SHY_hero @SHY_off
@@ -887,6 +888,47 @@ class Lv1RoomDownload(UnconfirmedDownload, NewsTemplate2):
         self.add_to_image_list('tz_kv', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv.webp')
         self.add_to_image_list('tz_kv2', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv2.webp')
         self.download_image_list(folder)
+
+
+# Saijaku Tamer wa Gomi Hiroi no Tabi wo Hajimemashita.
+class SaijakuTamerDownload(UnconfirmedDownload, NewsTemplate):
+    title = 'Saijaku Tamer wa Gomi Hiroi no Tabi wo Hajimemashita.'
+    keywords = [title, "The Weakest Tamer Began a Journey to Pick Up Trash"]
+    website = 'https://saijakutamer-anime.com/'
+    twitter = 'saijakutamer'
+    hashtags = ['最弱テイマー']
+    folder_name = 'saijakutamer'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.c-Post__list',
+                                    title_select='.c-Post__title', date_select='.c-Post__date',
+                                    id_select='.c-Post__link')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_announce', 'https://pbs.twimg.com/media/Fv6p1KHacAAuqU6?format=jpg&name=large')
+        self.add_to_image_list('tz_natalie', 'https://ogre.natalie.mu/media/news/comic/2023/0503/saijakutamaer_teaser.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'dist/img/top/visual_chara_%s.webp'
+        self.download_by_template(folder, template, 1, 1)
 
 
 # Seijo no Maryoku wa Bannou Desu 2nd Season
