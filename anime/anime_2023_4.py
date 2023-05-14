@@ -1,6 +1,7 @@
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 import os
 
+# Dekoboko Majo no Oyako Jijou https://dekoboko-majo-anime.jp/ @DEKOBOKO_anime #でこぼこ魔女の親子事情
 # Hametsu no Oukoku https://hametsu-anime.com/ #はめつのおうこく #はめつ @hametsu_anime
 # Konyaku Haki sareta Reijou wo Hirotta Ore ga, Ikenai koto wo Oshiekomu https://ikenaikyo.com/ #イケナイ教 @ikenaikyo_anime
 # Sousou no Frieren https://frieren-anime.jp/ #フリーレン #frieren @Anime_Frieren
@@ -17,6 +18,59 @@ class Fall2023AnimeDownload(MainDownload):
 
     def __init__(self):
         super().__init__()
+
+
+# Dekoboko Majo no Oyako Jijou
+class DekobokoMajoDownload(Fall2023AnimeDownload, NewsTemplate):
+    title = 'Dekoboko Majo no Oyako Jijou'
+    keywords = [title]
+    website = 'https://dekoboko-majo-anime.jp/'
+    twitter = 'DEKOBOKO_anime'
+    hashtags = ['でこぼこ魔女の親子事情']
+    folder_name = 'dekoboko-majo'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='#news article', date_select='time',
+                                    title_select='h3', id_select=None, id_has_id=True, news_prefix='')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        # self.image_list = []
+        # self.add_to_image_list('teaser-visual', self.PAGE_PREFIX + 'images/teaser-visual.jpg')
+        # self.add_to_image_list('mainimg', self.PAGE_PREFIX + 'images/mainimg.jpg')
+        # self.download_image_list(folder)
+
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.mainimg img[src]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src']
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        prefix = self.PAGE_PREFIX + 'assets/images/character/'
+        template = [prefix + 'img_%s.png', prefix + 'face_%s.png']
+        self.download_by_template(folder, template, 2, 1)
 
 
 # Hametsu no Oukoku

@@ -86,7 +86,6 @@ The premiere date for the anime listed here has not been announced.
 * [Akuyaku Reijou Level 99](https://akuyakulv99-anime.com/)
 * [ATRI -My Dear Moments-](https://atri-anime.com/)
 * [Buta no Liver wa Kanetsu Shiro](https://butaliver-anime.com/)
-* [Dekoboko Majo no Oyako Jijou](https://dekoboko-majo-anime.jp/)
 * [Dosanko Gal wa Namara Menkoi](https://dosankogal-pr.com/)
 * [Dungeon Meshi](https://delicious-in-dungeon.com/)
 * [Giji Harem](https://gijiharem.com/)
@@ -119,6 +118,7 @@ The premiere date for the anime listed here has not been announced.
 * [Sasayaku You ni Koi wo Utau](https://sasakoi-anime.com/)
 
 ### Fall 2023 Anime
+* [Dekoboko Majo no Oyako Jijou](https://dekoboko-majo-anime.jp/)
 * [Hametsu no Oukoku](https://hametsu-anime.com/)
 * [Konyaku Haki sareta Reijou wo Hirotta Ore ga, Ikenai koto wo Oshiekomu](https://ikenaikyo.com/)
 * [Sousou no Frieren](https://frieren-anime.jp/)
