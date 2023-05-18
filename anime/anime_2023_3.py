@@ -126,7 +126,7 @@ class LastameDownload(Summer2023AnimeDownload, NewsTemplate):
             soup = self.get_soup(self.PAGE_PREFIX + 'character/')
             images = soup.select('.imageArea img[src], .thumbnailArea img[src]')
             for image in images:
-                image_url = image['src']
+                image_url = self.PAGE_PREFIX + image['src'][1:]
                 image_name = self.extract_image_name_from_url(image_url)
                 self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)
