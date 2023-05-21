@@ -932,6 +932,25 @@ class TempleDownload(Summer2023AnimeDownload, NewsTemplate):
         self.add_to_image_list('img_story', self.PAGE_PREFIX + 'images/img_story.jpg')
         self.download_image_list(folder)
 
+        image_prefix = self.PAGE_PREFIX + 'assets/'
+        css_url = image_prefix + 'css/style.min.css'
+        try:
+            self.image_list = []
+            css_page = self.get_response(css_url)
+            search_text = '.mainimg{background:url('
+            split1 = css_page.split(search_text)
+            for i in range(1, len(split1), 1):
+                right_idx = split1[i].find(')')
+                if right_idx > 0:
+                    image_url = split1[i][0:right_idx]
+                    if image_url.startswith('../'):
+                        image_url = image_prefix + image_url[3:]
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
 
 # Tsuyokute New Saga
 class TsuyosagaDownload(Summer2023AnimeDownload, NewsTemplate):
