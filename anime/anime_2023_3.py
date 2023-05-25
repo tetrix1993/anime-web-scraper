@@ -1,5 +1,4 @@
-from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
-from requests.exceptions import HTTPError
+from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsTemplate4
 
 
 # Eiyuu Kyoushitsu https://eiyukyoushitsu-anime.com/ #英雄教室 #eiyu_anime @eiyu_anime
@@ -570,7 +569,7 @@ class NanatsumaDownload(Summer2023AnimeDownload, NewsTemplate):
 
 
 # Okashi na Tensei
-class OkashinaTenseiDownload(Summer2023AnimeDownload, NewsTemplate):
+class OkashinaTenseiDownload(Summer2023AnimeDownload, NewsTemplate4):
     title = 'Okashi na Tensei'
     keywords = [title, 'Sweet Reincarnation']
     website = 'https://okashinatensei-pr.com/'
@@ -593,30 +592,7 @@ class OkashinaTenseiDownload(Summer2023AnimeDownload, NewsTemplate):
         self.has_website_updated(self.PAGE_PREFIX)
 
     def download_news(self):
-        news_url = self.PAGE_PREFIX + 'news/'
-        try:
-            json_obj = self.get_json(self.PAGE_PREFIX + 'wp-json/okashinatensei/init')
-            news_obj = self.get_last_news_log_object()
-            results = []
-            for item in reversed(json_obj['news']):
-                article_id = news_url + item['id']
-                date = item['date'][0:10].replace('-', '.')
-                title = item['title']
-                if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
-                    break
-                results.append(self.create_news_log_object(date, title, article_id))
-            success_count = 0
-            for result in reversed(results):
-                process_result = self.create_news_log_from_news_log_object(result)
-                if process_result == 0:
-                    success_count += 1
-            if len(results) > 0:
-                self.create_news_log_cache(success_count, results[0])
-        except HTTPError:
-            pass
-            # print(self.__class__.__name__ + ' - 403 Error when retrieving news API.')
-        except Exception as e:
-            self.print_exception(e, 'News')
+        self.download_template_news('okashinatensei')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()

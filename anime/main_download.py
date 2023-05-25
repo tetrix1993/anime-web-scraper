@@ -1581,6 +1581,34 @@ class NewsTemplate3:
             self.print_exception(e, 'News')
 
 
+class NewsTemplate4:
+    def download_template_news(self, name, print_http_error=False):
+        news_url = self.PAGE_PREFIX + 'news/'
+        try:
+            json_obj = self.get_json(self.PAGE_PREFIX + f'wp-json/{name}/init')
+            news_obj = self.get_last_news_log_object()
+            results = []
+            for item in reversed(json_obj['news']):
+                article_id = news_url + item['id']
+                date = item['date'][0:10].replace('-', '.')
+                title = item['title']
+                if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
+                    break
+                results.append(self.create_news_log_object(date, title, article_id))
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log_from_news_log_object(result)
+                if process_result == 0:
+                    success_count += 1
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
+        except requests.exceptions.HTTPError as e:
+            if print_http_error:
+                print(self.__class__.__name__ + ' - 403 Error when retrieving news API.')
+        except Exception as e:
+            self.print_exception(e, 'News')
+
+
 class InvalidImageSizeError(Exception):
     """Raised when image size is not as expected"""
     pass

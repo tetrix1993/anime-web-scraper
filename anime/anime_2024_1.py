@@ -1,7 +1,8 @@
-from anime.main_download import MainDownload, NewsTemplate
+from anime.main_download import MainDownload, NewsTemplate, NewsTemplate4
 
 # Dungeon Meshi https://delicious-in-dungeon.com/ #ダンジョン飯 #deliciousindungeon @dun_meshi_anime
 # Mato Seihei no Slave https://mabotai.jp/ #魔都精兵のスレイブ #まとスレ @mabotai_kohobu
+# Pon no Michi https://ponnomichi-pr.com/ #ぽんのみち @ponnomichi_pr
 # Sasayaku You ni Koi wo Utau https://sasakoi-anime.com/ #ささこい @sasakoi_anime
 
 
@@ -136,6 +137,70 @@ class MatoSlaveDownload(Winter2024AnimeDownload, NewsTemplate):
         except Exception as e:
             self.print_exception(e, 'Character')
         self.download_image_list(folder)
+
+
+# Pon no Michi
+class PonnoMichiDownload(Winter2024AnimeDownload, NewsTemplate4):
+    title = 'Pon no Michi'
+    keywords = [title, "Whisper Me a Love Song"]
+    website = 'https://ponnomichi-pr.com/'
+    twitter = 'ponnomichi_pr'
+    hashtags = ['ぽんのみち', 'ponnomichi']
+    folder_name = 'ponnomichi'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news('ponnomichi')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/Fwy-ZH3aYAAUzwg?format=jpg&name=large')
+        self.download_image_list(folder)
+
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            self.image_list = []
+            images = soup.select('div[class*="Visual"] img[srcset*="visual"]')
+            for image in images:
+                image_url = image['srcset']
+                if '/static/' not in image_url:
+                    continue
+                if image_url.startswith('/'):
+                    image_url = self.PAGE_PREFIX + image_url[1:]
+                image_name = self.generate_image_name_from_url(image_url, 'static')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'wp/wp-content/themes/ponnomichi/static/character/%s/image.webp'
+        try:
+            for i in range(20):
+                image_name = str(i + 1).zfill(2)
+                if self.is_image_exists(image_name, folder):
+                    continue
+                image_url = template % image_name
+                result = self.download_image(image_url, folder + '/' + image_name)
+                if result == -1:
+                    break
+        except Exception as e:
+            self.print_exception(e, 'Character')
 
 
 # Sasayaku You ni Koi wo Utau
