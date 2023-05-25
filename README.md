@@ -86,6 +86,7 @@ The premiere date for the anime listed here has not been announced.
 * [Akuyaku Reijou Level 99](https://akuyakulv99-anime.com/)
 * [ATRI -My Dear Moments-](https://atri-anime.com/)
 * [Buta no Liver wa Kanetsu Shiro](https://butaliver-anime.com/)
+* [Chiyu Mahou no Machigatta Tsukaikata](https://chiyumahou-anime.com/)
 * [Dosanko Gal wa Namara Menkoi](https://dosankogal-pr.com/)
 * [Giji Harem](https://gijiharem.com/)
 * [Goblin Slayer 2nd Season](http://www.goblinslayer.jp/)

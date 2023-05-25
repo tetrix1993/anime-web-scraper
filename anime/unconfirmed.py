@@ -7,6 +7,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Anohana S2 https://10th.anohana.jp/ #あの花 #anohana @anohana_project
 # ATRI -My Dear Moments- https://atri-anime.com/ #ATRI @ATRI_anime
 # Buta no Liver wa Kanetsu Shiro https://butaliver-anime.com/ #豚レバ @butaliver_anime
+# Chiyu Mahou no Machigatta Tsukaikata https://chiyumahou-anime.com/ #治癒魔法 @chiyumahou_PR
 # Dosanko Gal wa Namara Menkoi https://dosankogal-pr.com/ #道産子ギャル #どさこい @dosankogal_pr
 # Giji Harem https://gijiharem.com/ #疑似ハーレム @GijiHarem
 # Goblin Slayer S2 http://www.goblinslayer.jp/ #ゴブスレ #いせれべ @GoblinSlayer_GA
@@ -210,6 +211,41 @@ class ButaLiverDownload(UnconfirmedDownload, NewsTemplate):
         folder = self.create_key_visual_directory()
         self.add_to_image_list('tz', self.PAGE_PREFIX + 'assets/img/visual.png')
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FjefZkkVQAAq-_0?format=jpg&name=4096x4096')
+        self.download_image_list(folder)
+
+
+# Chiyu Mahou no Machigatta Tsukaikata
+class ChiyuMahouDownload(UnconfirmedDownload, NewsTemplate):
+    title = 'Chiyu Mahou no Machigatta Tsukaikata'
+    keywords = [title, 'The Wrong Way to Use Healing Magic']
+    website = 'https://chiyumahou-anime.com/'
+    twitter = 'chiyumahou_PR'
+    hashtags = ['治癒魔法']
+    folder_name = 'chiyumahou'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        # Paging logic not known
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.newsArchive-Item',
+                                    date_select='.date', title_select='.title', id_select='a')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        # self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FwP_QYPaQAMBkyd?format=jpg&name=medium')
+        self.add_to_image_list('tz', self.PAGE_PREFIX + 'wp-content/themes/chiyumahou-anime_teaser/assets/images/pc/index/img_hero.jpg')
         self.download_image_list(folder)
 
 
