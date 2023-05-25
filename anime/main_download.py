@@ -908,11 +908,16 @@ class MainDownload:
 
     @staticmethod
     def is_content_length_in_range(url, less_than_amount=None, more_than_amount=None,
-                                   less_than_equal=False, more_than_equal=False):
+                                   less_than_equal=False, more_than_equal=False, is_or=False):
         if less_than_amount is None and more_than_amount is None:
             return False
         try:
             content_length = int(requests.head(url).headers['Content-Length'])
+            if is_or and less_than_amount is not None and more_than_amount is not None:  # Or Condition
+                return (less_than_equal and content_length <= less_than_amount) or\
+                    (not less_than_equal and content_length < less_than_amount) or\
+                    (more_than_equal and content_length >= more_than_amount) or\
+                    (not more_than_equal and content_length > more_than_amount)
             if less_than_amount is not None and\
                     ((less_than_equal and content_length > less_than_amount) or
                      (not less_than_equal and content_length >= less_than_amount)):
