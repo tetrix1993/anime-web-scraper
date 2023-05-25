@@ -733,6 +733,8 @@ class SeijaMusouDownload(Summer2023AnimeDownload, NewsTemplate):
         folder = self.create_key_visual_directory()
         self.image_list = []
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FpJpjE6acAEXVFF?format=jpg&name=large')
+        self.add_to_image_list('kv_tw', 'https://pbs.twimg.com/media/FwUYw_PaMAA8jF0?format=jpg&name=4096x4096')
+        self.add_to_image_list('topimg_key@2x', self.PAGE_PREFIX + 'img/topimg_key@2x.jpg')
         self.download_image_list(folder)
 
     def download_character(self):
