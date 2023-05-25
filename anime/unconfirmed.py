@@ -234,7 +234,7 @@ class ChiyuMahouDownload(UnconfirmedDownload, NewsTemplate):
         self.download_key_visual()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        self.has_website_updated(self.PAGE_PREFIX, 'index', diff=100)
 
     def download_news(self):
         # Paging logic not known
