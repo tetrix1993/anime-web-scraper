@@ -195,6 +195,7 @@ class FrierenDownload(Fall2023AnimeDownload, NewsTemplate):
         self.download_episode_preview()
         self.download_news()
         self.download_key_visual()
+        self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
@@ -223,6 +224,15 @@ class FrierenDownload(Fall2023AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        prefix = self.PAGE_PREFIX + 'assets/img/character/chara'
+        templates = [
+            prefix + '%s_full1.png', prefix + '%s_full2.png', prefix + '%s_full.png',
+            prefix + '%s_face1.jpg', prefix + '%s_face2.jpg', prefix + '%s_face.jpg'
+        ]
+        self.download_by_template(folder, templates, 1, 1)
 
 
 # Tearmoon Teikoku Monogatari
