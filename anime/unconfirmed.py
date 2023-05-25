@@ -8,7 +8,6 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # ATRI -My Dear Moments- https://atri-anime.com/ #ATRI @ATRI_anime
 # Buta no Liver wa Kanetsu Shiro https://butaliver-anime.com/ #豚レバ @butaliver_anime
 # Dosanko Gal wa Namara Menkoi https://dosankogal-pr.com/ #道産子ギャル #どさこい @dosankogal_pr
-# Dungeon Meshi https://delicious-in-dungeon.com/ #ダンジョン飯 #deliciousindungeon @dun_meshi_anime
 # Giji Harem https://gijiharem.com/ #疑似ハーレム @GijiHarem
 # Goblin Slayer S2 http://www.goblinslayer.jp/ #ゴブスレ #いせれべ @GoblinSlayer_GA
 # Hoshikuzu Telepath https://hoshitele-anime.com/ #星テレ #hoshitele @hoshitele_anime
@@ -266,46 +265,6 @@ class DosankoGalDownload(UnconfirmedDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Key Visual')
-
-
-# Dungeon Meshi
-class DungeonMeshiDownload(UnconfirmedDownload, NewsTemplate):
-    title = 'Dungeon Meshi'
-    keywords = [title, 'Delicious in Dungeon']
-    website = 'https://delicious-in-dungeon.com/'
-    twitter = 'dun_meshi_anime'
-    hashtags = ['ダンジョン飯', 'deliciousindungeon']
-    folder_name = 'dungeon-meshi'
-
-    PAGE_PREFIX = website
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_news()
-        self.download_key_visual()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_news(self):
-        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.content-entry',
-                                    title_select='.entry-title span', date_select='.entry-date span',
-                                    id_select=None, id_has_id=True, news_prefix='news.html')
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        template = self.PAGE_PREFIX + 'assets/top/t%s/vis.jpg'
-        for i in range(1, 10, 1):
-            image_name = f'top_t{i}_vis'
-            if self.is_image_exists(image_name, folder):
-                continue
-            image_url = template % str(i)
-            result = self.download_image(image_url, folder + '/' + image_name)
-            if result == -1:
-                break
 
 
 # Giji Harem

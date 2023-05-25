@@ -1,5 +1,6 @@
 from anime.main_download import MainDownload, NewsTemplate
 
+# Dungeon Meshi https://delicious-in-dungeon.com/ #ダンジョン飯 #deliciousindungeon @dun_meshi_anime
 # Mato Seihei no Slave https://mabotai.jp/ #魔都精兵のスレイブ #まとスレ @mabotai_kohobu
 # Sasayaku You ni Koi wo Utau https://sasakoi-anime.com/ #ささこい @sasakoi_anime
 
@@ -12,6 +13,61 @@ class Winter2024AnimeDownload(MainDownload):
 
     def __init__(self):
         super().__init__()
+
+
+# Dungeon Meshi
+class DungeonMeshiDownload(Winter2024AnimeDownload, NewsTemplate):
+    title = 'Dungeon Meshi'
+    keywords = [title, 'Delicious in Dungeon']
+    website = 'https://delicious-in-dungeon.com/'
+    twitter = 'dun_meshi_anime'
+    hashtags = ['ダンジョン飯', 'deliciousindungeon']
+    folder_name = 'dungeon-meshi'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.content-entry',
+                                    title_select='.entry-title span', date_select='.entry-date span',
+                                    id_select=None, id_has_id=True, news_prefix='news.html')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.vis img[src]')
+            self.image_list = []
+            for image in images:
+                if '/assets/' not in image['src']:
+                    continue
+                image_url = image['src']
+                if image_url.startswith('./'):
+                    image_url = self.PAGE_PREFIX + image_url[2:]
+                image_name = self.generate_image_name_from_url(image_url, 'assets')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        templates = [
+            self.PAGE_PREFIX + 'assets/character/%sc.png',
+            self.PAGE_PREFIX + 'assets/character/%sf.png'
+        ]
+        self.download_by_template(folder, templates, 1, 1)
 
 
 # Mato Seihei no Slave

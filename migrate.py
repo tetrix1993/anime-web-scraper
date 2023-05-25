@@ -4,7 +4,7 @@ import traceback
 from anime import MainDownload, ExternalDownload
 from anime.constants import FOLDER_OUTPUT
 
-VERSION_NUMBER = 93
+VERSION_NUMBER = 94
 DOWNLOAD_DIR = 'download'
 UNCONFIRMED_DIR = DOWNLOAD_DIR + '/unconfirmed'
 MIGRATION_ERROR_LOG = 'migration_error.log'
@@ -135,6 +135,7 @@ def migrate_folders():
     migrate_folder_by_name(UNCONFIRMED_DIR, '2023-4', 'tearmoon')
     migrate_folder_by_name(UNCONFIRMED_DIR, '2023-4', 'wataoshi')
     migrate_folder_by_name(UNCONFIRMED_DIR, '2023-4', 'dekoboko-majo')
+    migrate_folder_by_name(UNCONFIRMED_DIR, '2024-1', 'dungeon-meshi')
     # migrate_external_folder()
 
 
