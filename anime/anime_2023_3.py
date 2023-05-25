@@ -62,15 +62,35 @@ class EiyuKyoushitsuDownload(Summer2023AnimeDownload, NewsTemplate):
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('eiyukyoushitsu_KV', self.PAGE_PREFIX + 'images/eiyukyoushitsu_KV.jpg')
-        self.add_to_image_list('eiyukyoushitsu_KV02', self.PAGE_PREFIX + 'images/eiyukyoushitsu_KV02.jpg')
-        self.download_image_list(folder)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.mobmw img[src]')
+            self.image_list = []
+            for image in images:
+                if 'kv' not in image['src'].lower():
+                    continue
+                image_url = self.PAGE_PREFIX + image['src'][1:]
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
 
     def download_character(self):
         folder = self.create_character_directory()
-        template = self.PAGE_PREFIX + 'images/chara_%s.png'
-        self.download_by_template(folder, template, 2, 1, prefix='tz_')
+        # template = self.PAGE_PREFIX + 'images/chara_%s.png'
+        # self.download_by_template(folder, template, 2, 1, prefix='tz_')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            images = soup.select('.chara_pre_main img[src]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
 
 
 # Higeki no Genkyou to Naru Saikyou Gedou Last Boss Joou wa Tami no Tame ni Tsukushimasu.
