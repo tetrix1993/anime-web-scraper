@@ -106,6 +106,7 @@ The premiere date for the anime listed here has not been announced.
 * [Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita 2nd Season](https://slime300-anime.com/)
 * [Tensei Kizoku, Kantei Skill de Nariagaru](https://kanteiskill.com/)
 * [Tensei shitara Dainana Ouji Datta node, Kimama ni Majutsu wo Kiwamemasu](https://dainanaoji.com/)
+* [Tsuyokute New Saga](https://tsuyosaga-pr.com/)
 * [Unnamed Memory](https://unnamedmemory.com/)
 * [Yoru no Kurage wa Oyogenai](https://yorukura-anime.com/)
 * [Yozakura-san Chi no Daisakusen](https://mission-yozakura-family.com/)
@@ -145,7 +146,6 @@ The premiere date for the anime listed here has not been announced.
 * [Shiro Seijo to Kuro Bokushi](https://shiroseijyo-anime.com/)
 * [Suki na Ko ga Megane wo Wasureta](https://anime.shochiku.co.jp/sukimega/)
 * [Temple](https://temple-anime.com/)
-* [Tsuyokute New Saga](https://tsuyosaga-pr.com/)
 * [Uchi no Kaisha no Chiisai Senpai no Hanashi](https://chiisaisenpai.com/)
 * [Yumemiru Danshi wa Genjitsushugisha](https://yumemirudanshi.com/)
 

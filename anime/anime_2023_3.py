@@ -17,7 +17,6 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Shiro Seijo to Kuro Bokushi https://shiroseijyo-anime.com/ @shiroseijyo_tv #白聖女と黒牧師
 # Suki na Ko ga Megane wo Wasureta https://anime.shochiku.co.jp/sukimega/ #好きめが @Sukimega
 # Temple https://temple-anime.com/ #てんぷる #Tenpuru_anime @temple_tvanime
-# Tsuyokute New Saga https://tsuyosaga-pr.com/ #つよサガ @tsuyosaga_pr
 # Uchi no Kaisha no Chiisai Senpai no Hanashi https://chiisaisenpai.com/ #うちの会社の小さい先輩の話 @smallsenpai_pr
 # Yumemiru Danshi wa Genjitsushugisha https://yumemirudanshi.com/ #夢見る男子 @yumemiru_anime
 
@@ -948,52 +947,6 @@ class TempleDownload(Summer2023AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Key Visual')
-
-
-# Tsuyokute New Saga
-class TsuyosagaDownload(Summer2023AnimeDownload, NewsTemplate):
-    title = 'Tsuyokute New Saga'
-    keywords = [title, 'New Saga', 'Tsuyosaga']
-    website = 'https://tsuyosaga-pr.com/'
-    twitter = 'tsuyosaga_pr'
-    hashtags = 'つよサガ'
-    folder_name = 'tsuyosaga'
-
-    PAGE_PREFIX = website
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_news()
-        self.download_key_visual()
-        self.download_character()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
-
-    def download_news(self):
-        pass
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('tz_aniverse', 'https://aniverse-mag.com/wp-content/uploads/2022/10/1628619ceb9f5f0127d70926036c5ffd.jpg')
-        self.download_image_list(folder)
-
-    def download_character(self):
-        folder = self.create_character_directory()
-        template = self.PAGE_PREFIX + 'wp/wp-content/themes/newsaga/static/character/%s/main.png'
-        for i in range(10):
-            number = str(i + 1).zfill(2)
-            image_name = 'tz_char' + number
-            if self.is_image_exists(image_name, folder):
-                continue
-            image_url = template % number
-            result = self.download_image(image_url, folder + '/' + image_name)
-            if result == -1:
-                break
 
 
 # Uchi no Kaisha no Chiisai Senpai no Hanashi
