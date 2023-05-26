@@ -9,6 +9,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Level 1 dakedo Unique Skill de Saikyou desu https://level1-anime.com/ #レベル1だけどアニメ化です @level1_anime
 # Liar Liar https://liar-liar-anime.com/ #ライアー・ライアー #ライアラ @liar2_official
 # Masamune-kun no Revenge R https://masamune-tv.com/ #MASA_A @masamune_tv
+# Mushoku Tensei II: Isekai Ittara Honki Dasu https://mushokutensei.jp/ #無職転生 #MushokuTensei @mushokutensei_A
 # Nanatsu no Maken ga Shihai suru https://nanatsuma-pr.com/ #nanatsuma #ななつま @nanatsuma_pr
 # Okashi na Tensei https://okashinatensei-pr.com/ #おかしな転生 @okashinatensei
 # Ryza no Atelier: Tokoyami no Joou to Himitsu no Kakurega https://ar-anime.com/ #ライザのアトリエ @Ryza_PR
@@ -485,6 +486,76 @@ class Masamunekun2Download(Summer2023AnimeDownload, NewsTemplate):
             for image in images:
                 image_url = self.PAGE_PREFIX + image['src'][1:]
                 image_name = 'tz_' + self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+
+
+# Mushoku Tensei II: Isekai Ittara Honki Dasu
+class MushokuTensei2Download(Summer2023AnimeDownload, NewsTemplate):
+    title = "Mushoku Tensei: Isekai Ittara Honki Dasu II"
+    keywords = [title, 'Jobless Reincarnation']
+    website = 'https://mushokutensei.jp/'
+    twitter = 'mushokutensei_A'
+    hashtags = ['無職転生', 'MushokuTensei']
+    folder_name = 'mushoku-tensei2'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            stories = soup.select('#js_2nd a.storyarea[href]')
+            for story in stories:
+                try:
+                    episode = str(int(story.select('.storyarea_ttl span')[0].text.replace('#', ''))).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                ep_soup = self.get_soup(story['href'])
+                if ep_soup is None:
+                    continue
+                self.image_list = []
+                images = ep_soup.select('.storycontents_subimg_img[data-imgload]')
+                for i in range(len(images)):
+                    image_url = images[i]['data-imgload']
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.l_news li',
+                                    date_select='.news_date', title_select='.news_ttl',
+                                    id_select='a', stop_date='2022.03.02')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        template = self.PAGE_PREFIX + 'wp-content/themes/mushoku_re/img/index/img_hero%s.jpg'
+        self.download_by_template(folder, template, 2, 10)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            self.image_list = []
+            images = soup.select('#js_charaslide_2nd .charaslide_img[data-imgload], '
+                                 + '#js_charaslide_2nd .charaslide_data_img[data-imgload]')
+            for image in images:
+                image_url = image['data-imgload']
+                image_name = self.extract_image_name_from_url(image_url)
                 self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)
         except Exception as e:
