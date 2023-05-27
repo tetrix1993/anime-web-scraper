@@ -2626,6 +2626,7 @@ class WatayuriDownload(Spring2023AnimeDownload, NewsTemplate):
     def run(self):
         self.download_episode_preview()
         self.download_episode_preview_external()
+        # self.download_episode_preview_guess()
         self.download_news()
         self.download_key_visual()
         self.download_character()
@@ -2665,6 +2666,34 @@ class WatayuriDownload(Spring2023AnimeDownload, NewsTemplate):
         keywords = ['私の百合はお仕事です']
         AniverseMagazineScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE, prefix='シフト.', suffix='',
                                 end_date='20230330', download_id=self.download_id).run()
+
+    def download_episode_preview_guess(self):
+        folder = self.create_custom_directory('aniverse')
+        current_date = datetime.now() + timedelta(hours=1)
+        year = current_date.strftime('%Y')
+        month = current_date.strftime('%m')
+        max_search = 20
+        for i in range(12):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_1') or self.is_image_exists(episode + '_01', folder):
+                continue
+            template = f'https://aniverse-mag.com/wp-content/uploads/{year}/{month}/watayuri_ep{episode}_CAP%s.jpeg'
+            urls = []
+            for j in range(200):
+                url = template % str(j).zfill(3)
+                if MainDownload.is_valid_url(url, is_image=True):
+                    print('VALID - ' + url)
+                    urls.append(url)
+                if len(urls) >= self.IMAGES_PER_EPISODE or (j == max_search and len(urls) == 0):
+                    break
+            if len(urls) == 0:
+                break
+            self.image_list = []
+            for k in range(len(urls)):
+                image_url = urls[k]
+                image_name = episode + '_' + str(k + 1).zfill(2)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.newsList',
