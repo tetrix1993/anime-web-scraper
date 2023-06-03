@@ -1,4 +1,5 @@
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsTemplate4
+from scan import AniverseMagazineScanner
 
 
 # Eiyuu Kyoushitsu https://eiyukyoushitsu-anime.com/ #英雄教室 #eiyu_anime @eiyu_anime
@@ -7,6 +8,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Jidou Hanbaiki ni Umarekawatta Ore wa Meikyuu wo Samayou https://jihanki-anime.com/ #俺自販機 @jihanki_anime
 # Kanojo, Okarishimasu 3rd Season https://kanokari-official.com/ #かのかり #kanokari @kanokari_anime
 # Level 1 dakedo Unique Skill de Saikyou desu https://level1-anime.com/ #レベル1だけどアニメ化です @level1_anime
+# Lv1 Maou to One Room Yuusha https://lv1room.com/ #lv1room @Lv1room
 # Liar Liar https://liar-liar-anime.com/ #ライアー・ライアー #ライアラ @liar2_official
 # Masamune-kun no Revenge R https://masamune-tv.com/ #MASA_A @masamune_tv
 # Mushoku Tensei II: Isekai Ittara Honki Dasu https://mushokutensei.jp/ #無職転生 #MushokuTensei @mushokutensei_A
@@ -418,6 +420,117 @@ class Level1Download(Summer2023AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'wp/wp-content/themes/level1_teaser/images/chara-pic%s.png'
         self.download_by_template(folder, template, 1, 1, prefix='tz_')
+
+
+# Lv1 Maou to One Room Yuusha
+class Lv1RoomDownload(Summer2023AnimeDownload, NewsTemplate2):
+    title = 'Lv1 Maou to One Room Yuusha'
+    keywords = [title, 'Level 1 Demon Lord and One Room Hero']
+    website = 'https://lv1room.com/'
+    twitter = 'Lv1room'
+    hashtags = 'lv1room'
+    folder_name = 'lv1room'
+
+    PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_episode_preview_external()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/01.html')
+            trs = soup.select('#ContentsListUnit02 tr[class]')
+            for tr in trs:
+                a_tags = tr.select('a[href]')
+                if len(a_tags) == 0:
+                    continue
+                try:
+                    episode = str(int(a_tags[0].text.replace('#', ''))).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                if episode == '01':
+                    ep_soup = soup
+                else:
+                    ep_soup = self.get_soup(self.PAGE_PREFIX + a_tags[0]['href'].replace('../', ''))
+                if ep_soup is None:
+                    continue
+                self.image_list = []
+                images = ep_soup.select('.block.line_01 img[src]')
+                for i in range(len(images)):
+                    image_url = self.PAGE_PREFIX + images[i]['src'].split('?')[0].replace('../', '').replace('sn_', '')
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
+
+    def download_episode_preview_external(self):
+        keywords = ['Lv1魔王とワンルーム勇者']
+        AniverseMagazineScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                end_date='20230602', download_id=self.download_id).run()
+
+    def download_news(self):
+        self.download_template_news(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_kv', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv.webp')
+        self.add_to_image_list('tz_kv2', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv2.webp')
+        self.download_image_list(folder)
+
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.kv__img source[srcset]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['srcset']
+                if '/main/' not in image_url:
+                    continue
+                image_name = self.generate_image_name_from_url(image_url, 'main')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'chara/')
+            a_tags = soup.select('#ContentsListUnit01 a[href]')
+            for a_tag in a_tags:
+                chara_url = self.PAGE_PREFIX + a_tag['href'].replace('../', '')
+                chara_name = chara_url.split('/')[-1].replace('.html', '')
+                if chara_name in processed:
+                    continue
+                if chara_name == 'index':
+                    chara_soup = soup
+                else:
+                    chara_soup = self.get_soup(chara_url)
+                if chara_soup is not None:
+                    images = chara_soup.select('.chara img[src]')
+                    for image in images:
+                        image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                        image_name = self.extract_image_name_from_url(image_url)
+                        self.add_to_image_list(image_name, image_url)
+                    if len(self.image_list) > 0:
+                        processed.append(chara_name)
+                    self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Liar Liar

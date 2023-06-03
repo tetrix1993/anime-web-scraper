@@ -19,7 +19,6 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Kekkon Yubiwa Monogatari https://talesofweddingrings-anime.jp/ #結婚指輪物語 @weddingringsPR
 # Kimi no Koto ga Daidaidaidaidaisuki na 100-nin no Kanojo https://hyakkano.com/ @hyakkano_anime #100カノ
 # Kusuriya no Hitorigoto https://kusuriyanohitorigoto.jp/ #薬屋のひとりごと @kusuriya_PR
-# Lv1 Maou to One Room Yuusha https://lv1room.com/ #lv1room @Lv1room
 # Saijaku Tamer wa Gomi Hiroi no Tabi wo Hajimemashita. https://saijakutamer-anime.com/
 # Seijo no Maryoku wa Bannou Desu S2 https://seijyonomaryoku.jp/ #seijyonoanime @seijyonoanime
 # Seiken Gakuin no Makentsukai https://seikengakuin.com/ #聖剣学院の魔剣使い #せまつか @SEIKEN_MAKEN
@@ -815,39 +814,6 @@ class KusuriyaDownload(UnconfirmedDownload, NewsTemplate):
         self.image_list = []
         self.add_to_image_list('tz', self.PAGE_PREFIX + 'assets/img/top/main/main_visual.jpg')
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/Fo_spzaaIAI3CpS?format=jpg&name=4096x4096')
-        self.download_image_list(folder)
-
-
-# Lv1 Maou to One Room Yuusha
-class Lv1RoomDownload(UnconfirmedDownload, NewsTemplate2):
-    title = 'Lv1 Maou to One Room Yuusha'
-    keywords = [title, 'CLevel 1 Demon Lord and One Room Hero']
-    website = 'https://lv1room.com/'
-    twitter = 'Lv1room'
-    hashtags = 'lv1room'
-    folder_name = 'lv1room'
-
-    PAGE_PREFIX = website
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_news()
-        self.download_key_visual()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_news(self):
-        self.download_template_news(self.PAGE_PREFIX)
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('tz_kv', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv.webp')
-        self.add_to_image_list('tz_kv2', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv2.webp')
         self.download_image_list(folder)
 
 
