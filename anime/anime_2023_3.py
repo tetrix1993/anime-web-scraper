@@ -344,7 +344,10 @@ class Kanokari3Download(Summer2023AnimeDownload, NewsTemplate):
                     self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)
         except Exception as e:
-            self.print_exception(e)
+            self.print_exception(e, 'Key Visual')
+
+        template = self.PAGE_PREFIX + '3rd/wp-content/themes/kanokari_3rd/images/kv-3rd%s.jpg'
+        self.download_by_template(folder, template, 1, 4)
 
     def download_character(self):
         folder = self.create_character_directory()
