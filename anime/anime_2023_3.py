@@ -169,19 +169,63 @@ class Horimiya2Download(Summer2023AnimeDownload, NewsTemplate):
 
     def run(self):
         self.download_episode_preview()
-        # self.download_news()
+        self.download_news()
         self.download_key_visual()
         # self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.p-news__list__item',
+                                    date_select='.p-news__list__date', title_select='.p-news__list__title',
+                                    id_select='p-news__list__link', a_tag_prefix=self.PAGE_PREFIX,
+                                    a_tag_start_text_to_remove='/', stop_date='2021', paging_type=1,
+                                    next_page_select='.c-pager__btn--next')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         self.image_list = []
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/Fr_j-0eWAAEq9Id?format=jpg&name=4096x4096')
+        self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/Fxiu43gakAAzJP6?format=jpg&name=4096x4096')
         self.download_image_list(folder)
 
+    def download_media(self):
+        folder = self.create_media_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        for page in ['benefit', '01', '02', '03', '04', '05', '06']:
+            try:
+                if page != 'benefit' and page in processed:
+                    continue
+                page_url = self.PAGE_PREFIX + 'bddvd/' + page + '.html'
+                soup = self.get_soup(page_url)
+                images = soup.select('.p-bddvd img[src]')
+                self.image_list = []
+                for image in images:
+                    if image['src'].startswith('/'):
+                        image_url = self.PAGE_PREFIX + image['src'][1:]
+                    else:
+                        image_url = image['src']
+                    image_url = image_url.split('?')[0]
+                    if '/bddvd/' in image_url:
+                        image_name = self.generate_image_name_from_url(image_url, 'bddvd')
+                    else:
+                        image_name = self.extract_image_name_from_url(image_url)
+                    if image_name in ['np', 'np_mini']:
+                        continue
+                    if self.is_image_exists(image_name, folder):
+                        continue
+                    self.add_to_image_list(image_name, image_url)
+                if page != 'benefit' and len(self.image_list) > 0:
+                    processed.append(page)
+                if page.isnumeric() and len(self.image_list) == 0:
+                    break
+                self.download_image_list(folder)
+            except Exception as e:
+                self.print_exception(e, f'Blu-ray - {page}')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Jidou Hanbaiki ni Umarekawatta Ore wa Meikyuu wo Samayou
