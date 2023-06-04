@@ -22,6 +22,7 @@ from scan import AniverseMagazineScanner
 # Temple https://temple-anime.com/ #てんぷる #Tenpuru_anime @temple_tvanime
 # Uchi no Kaisha no Chiisai Senpai no Hanashi https://chiisaisenpai.com/ #うちの会社の小さい先輩の話 @smallsenpai_pr
 # Yumemiru Danshi wa Genjitsushugisha https://yumemirudanshi.com/ #夢見る男子 @yumemiru_anime
+# Watashi no Shiawase na Kekkon https://watakon-anime.com/ #watakon #わたしの幸せな結婚
 
 
 # Summer 2023 Anime
@@ -1319,3 +1320,77 @@ class YumemiruDanshiDownload(Summer2023AnimeDownload, NewsTemplate):
         except Exception as e:
             self.print_exception(e, 'Character')
         self.download_image_list(folder)
+
+
+# Watashi no Shiawase na Kekkon
+class WatakonDownload(Summer2023AnimeDownload, NewsTemplate):
+    title = 'Watashi no Shiawase na Kekkon'
+    keywords = [title, 'My Happy Marriage', 'watakon']
+    website = 'https://watakon-anime.com/'
+    twitter = 'watashino_info'
+    hashtags = ['watakon', 'わたしの幸せな結婚']
+    folder_name = 'watakon'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news_List li.item',
+                                    date_select='span.time', title_select='.ttl', id_select='a',
+                                    date_func=lambda x: x[0:4] + '.' + x[4:6] + '.' + x[6:8],
+                                    next_page_select='.nextpostslink')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            self.image_list = []
+            images = soup.select('.modal-KV_Img img[src]')
+            for image in images:
+                if '/index/' in image['src']:
+                    image_url = image['src'].split('?')[0]
+                    image_name = self.generate_image_name_from_url(image_url, 'index')
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            a_tags = soup.select('.character-List li>a[href]')
+            for a_tag in a_tags:
+                chara_url = a_tag['href']
+                if chara_url.endswith('/'):
+                    chara_name = chara_url[:-1].split('/')[-1]
+                else:
+                    chara_name = chara_url.split('/')[-1]
+                if chara_name in processed:
+                    continue
+                chara_soup = self.get_soup(chara_url)
+                if chara_soup is not None:
+                    images = chara_soup.select('.character_Content .visual img[src]')
+                    for image in images:
+                        image_url = image['src']
+                        image_name = self.extract_image_name_from_url(image_url)
+                        self.add_to_image_list(image_name, image_url)
+                    if len(self.image_list) > 0:
+                        processed.append(chara_name)
+                    self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+        self.create_cache_file(cache_filepath, processed, num_processed)

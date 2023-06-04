@@ -149,6 +149,7 @@ The premiere date for the anime listed here has not been announced.
 * [Temple](https://temple-anime.com/)
 * [Uchi no Kaisha no Chiisai Senpai no Hanashi](https://chiisaisenpai.com/)
 * [Yumemiru Danshi wa Genjitsushugisha](https://yumemirudanshi.com/)
+* [Watashi no Shiawase na Kekkon](https://watakon-anime.com/)
 
 ### Spring 2023 Anime
 * [Alice Gear Aegis Expansion](https://colopl.co.jp/alicegearaegis/tv-anime/)
