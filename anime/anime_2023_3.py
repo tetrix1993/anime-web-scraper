@@ -419,8 +419,8 @@ class Level1Download(Summer2023AnimeDownload, NewsTemplate):
 
     def download_character(self):
         folder = self.create_character_directory()
-        template = self.PAGE_PREFIX + 'wp/wp-content/themes/level1_teaser/images/chara-pic%s.png'
-        self.download_by_template(folder, template, 1, 1, prefix='tz_')
+        template = self.PAGE_PREFIX + 'wp/wp-content/themes/level1_honban/images/chara-pic%s.png'
+        self.download_by_template(folder, template, 1, 1)
 
 
 # Lv1 Maou to One Room Yuusha
