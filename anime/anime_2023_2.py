@@ -1667,6 +1667,8 @@ class KumaBear2Download(Spring2023AnimeDownload, NewsTemplate2):
             third = 29 + 7 * i
             for j in range(self.IMAGES_PER_EPISODE):
                 image_url = template % (str(first).zfill(8), str(second).zfill(8), str(third + j).zfill(8))
+                if not self.is_content_length_in_range(image_url, more_than_amount=7000):
+                    break
                 image_name = episode + '_' + str(j + 1)
                 result = self.download_image(image_url, folder + '/' + image_name)
                 if result == 0:
