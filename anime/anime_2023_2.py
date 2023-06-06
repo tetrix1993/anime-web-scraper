@@ -133,7 +133,7 @@ class AookeDownload(Spring2023AnimeDownload, NewsTemplate):
                     episode = str(int(story.text)).zfill(2)
                 except:
                     continue
-                if self.is_image_exists(episode + '_1'):
+                if self.is_image_exists(episode + '_' + str(self.IMAGES_PER_EPISODE)):
                     continue
                 if story.has_attr('class') and 'on' in story['class']:
                     ep_soup = soup
@@ -145,6 +145,8 @@ class AookeDownload(Spring2023AnimeDownload, NewsTemplate):
                 self.image_list = []
                 for i in range(len(images)):
                     image_url = self.clear_resize_in_url(images[i]['src'])
+                    if 'dummy' in image_url:
+                        continue
                     image_name = episode + '_' + str(i + 1)
                     self.add_to_image_list(image_name, image_url)
                 self.download_image_list(self.base_folder)
