@@ -1150,7 +1150,7 @@ class TempleDownload(Summer2023AnimeDownload, NewsTemplate):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
 
     def download_news(self):
-        self.download_template_news(page_prefix=self.PAGE_PREFIX, news_prefix='', article_select='#news article',
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='#news article',
                                     date_select='time', title_select='h3', id_select=None, id_has_id=True)
 
     def download_key_visual(self):
