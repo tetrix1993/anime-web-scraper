@@ -1858,6 +1858,8 @@ class MegamiCafeDownload(Spring2023AnimeDownload, NewsTemplate):
                 image_url = image['src']
                 if '/bluray/' not in image_url:
                     continue
+                if image_url.startswith('/'):
+                    image_url = self.PAGE_PREFIX + image_url[1:]
                 image_name = self.generate_image_name_from_url(image_url, 'bluray')
                 if not self.is_content_length_in_range(image_url, more_than_amount=65000):
                     continue
