@@ -679,11 +679,9 @@ class Masamunekun2Download(Summer2023AnimeDownload, NewsTemplate):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
 
     def download_news(self):
-        # Paging logic may need update
-        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news--lineup article',
-                                    date_select='.txt--date', title_select='.txt--ttl', id_select='a',
-                                    next_page_select='ul.pagenation-list li', next_page_eval_index=-1,
-                                    next_page_eval_index_class='is__current')
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.md-news__archive article',
+                                    date_select='.date', title_select='.ttl', id_select='a',
+                                    next_page_select='.item-next__link')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
