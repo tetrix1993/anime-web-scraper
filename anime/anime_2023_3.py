@@ -117,7 +117,33 @@ class LastameDownload(Summer2023AnimeDownload, NewsTemplate):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            stories = soup.select('.story__cnt--storyArea--linkArea a[href]')
+            for i in range(len(stories)):
+                try:
+                    episode = str(int(stories[i].text.strip())).zfill(2)
+                    if self.is_image_exists(episode + '_1'):
+                        continue
+                except:
+                    continue
+                if stories[i].has_attr('class') and 'currentLast' in stories[i]['class'] and (i == len(stories) - 1):
+                    ep_soup = soup
+                else:
+                    ep_soup = self.get_soup(stories[i]['href'])
+                if ep_soup is None:
+                    continue
+                self.image_list = []
+                images = ep_soup.select('.js-storySwiper .swiper-slide img[src]')
+                for j in range(len(images)):
+                    image_url = images[j]['src']
+                    if image_url.endswith('-807.jpg') or image_url.endswith('movie_thumbnail-1.jpg'):
+                        break
+                    image_name = episode + '_' + str(j + 1)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.newsBox li',
