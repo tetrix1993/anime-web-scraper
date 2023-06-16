@@ -24,6 +24,7 @@ from scan import AniverseMagazineScanner
 # Uchi no Kaisha no Chiisai Senpai no Hanashi https://chiisaisenpai.com/ #うちの会社の小さい先輩の話 @smallsenpai_pr
 # Yumemiru Danshi wa Genjitsushugisha https://yumemirudanshi.com/ #夢見る男子 @yumemiru_anime
 # Watashi no Shiawase na Kekkon https://watakon-anime.com/ #watakon #わたしの幸せな結婚
+# Zom 100: Zombie ni Naru made ni Shitai 100 no Koto https://zom100.com/ #ゾン100 #Zom100 @Zom100_anime_JP
 
 
 # Summer 2023 Anime
@@ -1514,3 +1515,56 @@ class WatakonDownload(Summer2023AnimeDownload, NewsTemplate):
         except Exception as e:
             self.print_exception(e, 'Character')
         self.create_cache_file(cache_filepath, processed, num_processed)
+
+
+# Zom 100: Zombie ni Naru made ni Shitai 100 no Koto https://zom100.com/ #ゾン100 #Zom100
+class Zom100Download(Summer2023AnimeDownload, NewsTemplate):
+    title = 'Zom 100: Zombie ni Naru made ni Shitai 100 no Koto'
+    keywords = [title, 'Bucket List of the Dead', 'zom100']
+    website = 'https://zom100.com/'
+    twitter = 'Zom100_anime_JP'
+    hashtags = ['ゾン100', 'Zom100']
+    folder_name = 'zom100'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.content-entry',
+                                    title_select='.entry-title span', date_select='.entry-date span',
+                                    id_select=None, id_has_id=True, news_prefix='news.html',
+                                    date_func=lambda x: x.replace('年', '.').replace('月', '.').replace('日', ''))
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.vis source[srcset]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['srcset'].replace('./', '')
+                if '/assets/' not in image_url:
+                    continue
+                image_name = self.generate_image_name_from_url(image_url, 'assets')
+                if image_name.endswith('-sp'):
+                    continue
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'assets/character/c%s.webp'
+        self.download_by_template(folder, template, 1, 1)

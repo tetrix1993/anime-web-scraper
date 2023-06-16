@@ -150,6 +150,7 @@ The premiere date for the anime listed here has not been announced.
 * [Uchi no Kaisha no Chiisai Senpai no Hanashi](https://chiisaisenpai.com/)
 * [Yumemiru Danshi wa Genjitsushugisha](https://yumemirudanshi.com/)
 * [Watashi no Shiawase na Kekkon](https://watakon-anime.com/)
+* [Zom 100: Zombie ni Naru made ni Shitai 100 no Koto](https://zom100.com/)
 
 ### Spring 2023 Anime
 * [Alice Gear Aegis Expansion](https://colopl.co.jp/alicegearaegis/tv-anime/)
