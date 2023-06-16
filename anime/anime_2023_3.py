@@ -1138,6 +1138,7 @@ class ShiroSeijoDownload(Summer2023AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX)
@@ -1169,6 +1170,42 @@ class ShiroSeijoDownload(Summer2023AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        bd_prefix = self.PAGE_PREFIX + 'bddvd/'
+        for page in ['tokuten', 'vol1', 'vol2', 'vol3']:
+            try:
+                if page != 'tokuten' and page in processed:
+                    continue
+                bd_url = bd_prefix
+                if page != 'vol1':
+                    bd_url += page + '.html'
+                soup = self.get_soup(bd_url)
+                images = soup.select('.bddvdArtile img[src]')
+                self.image_list = []
+                for image in images:
+                    image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                    if '/bddvd/' in image_url:
+                        image_name = self.generate_image_name_from_url(image_url, 'bddvd')
+                    else:
+                        image_name = self.extract_image_name_from_url(image_url)
+                    if 'nowpri' in image_name:
+                        continue
+                    if self.is_image_exists(image_name, folder):
+                        continue
+                    self.add_to_image_list(image_name, image_url)
+                if page.startswith('vol'):
+                    if len(self.image_list) == 0:
+                        break
+                    else:
+                        processed.append(page)
+                self.download_image_list(folder)
+            except Exception as e:
+                self.print_exception(e, f'Blu-ray - {page}')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Suki na Ko ga Megane wo Wasureta
