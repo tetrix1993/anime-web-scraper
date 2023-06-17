@@ -118,6 +118,7 @@ The premiere date for the anime listed here has not been announced.
 * [Sasayaku You ni Koi wo Utau](https://sasakoi-anime.com/)
 
 ### Fall 2023 Anime
+* [Boukensha ni Naritai to Miyako ni Deteitta Musume ga S-Rank ni Natteta](https://s-rank-musume.com/)
 * [Dekoboko Majo no Oyako Jijou](https://dekoboko-majo-anime.jp/)
 * [Hametsu no Oukoku](https://hametsu-anime.com/)
 * [Hoshikuzu Telepath](https://hoshitele-anime.com/)

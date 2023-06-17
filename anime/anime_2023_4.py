@@ -1,6 +1,7 @@
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 import os
 
+# Boukensha ni Naritai to Miyako ni Deteitta Musume ga S-Rank ni Natteta
 # Dekoboko Majo no Oyako Jijou https://dekoboko-majo-anime.jp/ @DEKOBOKO_anime #でこぼこ魔女の親子事情
 # Hametsu no Oukoku https://hametsu-anime.com/ #はめつのおうこく #はめつ @hametsu_anime
 # Hoshikuzu Telepath https://hoshitele-anime.com/ #星テレ #hoshitele @hoshitele_anime
@@ -19,6 +20,65 @@ class Fall2023AnimeDownload(MainDownload):
 
     def __init__(self):
         super().__init__()
+
+
+# Boukensha ni Naritai to Miyako ni Deteitta Musume ga S-Rank ni Natteta
+class SRankMusumeDownload(Fall2023AnimeDownload, NewsTemplate):
+    title = 'Boukensha ni Naritai to Miyako ni Deteitta Musume ga S-Rank ni Natteta'
+    keywords = [title, 'My Daughter Left the Nest and Returned an S-Rank Adventurer']
+    website = 'https://s-rank-musume.com/'
+    twitter = 's_rank_musume'
+    hashtags = 'Sランク娘'
+    folder_name = 'srankmusume'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.newsLists__item',
+                                    date_select='.newsLists__time', title_select='.newsLists__title',
+                                    id_select='a', a_tag_start_text_to_remove='/', a_tag_prefix=self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.visualListsWrap img[src]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'][1:]
+                if '/top/' not in image_url:
+                    continue
+                image_name = self.generate_image_name_from_url(image_url, 'top')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.charaDetail__stand img[src], .charaDetail__faceLists img[src]')
+            self.image_list = []
+            for image in images:
+                image_url = self.clear_resize_in_url(self.PAGE_PREFIX + image['src'][1:])
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
 
 
 # Dekoboko Majo no Oyako Jijou
