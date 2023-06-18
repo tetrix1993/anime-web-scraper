@@ -1588,7 +1588,7 @@ class NewsTemplate4:
             json_obj = self.get_json(self.PAGE_PREFIX + f'wp-json/{name}/init')
             news_obj = self.get_last_news_log_object()
             results = []
-            for item in reversed(json_obj['news']):
+            for item in json_obj['news']:
                 article_id = news_url + item['id']
                 date = item['date'][0:10].replace('-', '.')
                 title = item['title']
