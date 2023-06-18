@@ -971,12 +971,15 @@ class AtelierRyzaDownload(Summer2023AnimeDownload, NewsTemplate):
     folder_name = 'atelier-ryza'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 5
 
     def __init__(self):
         super().__init__()
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_guess()
         self.download_news()
         self.download_key_visual()
         self.download_character()
@@ -984,6 +987,29 @@ class AtelierRyzaDownload(Summer2023AnimeDownload, NewsTemplate):
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_episode_preview_guess(self):
+        folder = self.create_custom_directory('guess')
+        is_success = False
+        end_num = self.IMAGES_PER_EPISODE
+        for i in range(self.FINAL_EPISODE):
+            episode = str(i + 1).zfill(2)
+            start_num = None
+            for j in range(end_num):
+                if self.is_image_exists(episode + '_' + str(j + 1)):
+                    start_num = j + 2
+                else:
+                    start_num = j + 1
+                    break
+            if not start_num or start_num > end_num:
+                continue
+            template1 = self.PAGE_PREFIX + 'assets/img/story/img_ep%s-%s.jpg' % (episode, '%s')
+            template2 = self.PAGE_PREFIX + 'assets/img/story/img_ep%s-%s.png' % (episode, '%s')
+            if not self.download_by_template(folder, [template1, template2], 1, start=start_num, end=end_num):
+                break
+            print(self.__class__.__name__ + ' - Episode %s guessed correctly!' % episode)
+            is_success = True
+        return is_success
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.p-news_in__content-list-item',
