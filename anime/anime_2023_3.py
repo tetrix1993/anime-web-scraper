@@ -1,5 +1,6 @@
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsTemplate4
 from scan import AniverseMagazineScanner
+import os
 
 
 # Eiyuu Kyoushitsu https://eiyukyoushitsu-anime.com/ #英雄教室 #eiyu_anime @eiyu_anime
@@ -979,6 +980,7 @@ class AtelierRyzaDownload(Summer2023AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX)
@@ -998,6 +1000,14 @@ class AtelierRyzaDownload(Summer2023AnimeDownload, NewsTemplate):
     def download_character(self):
         folder = self.create_character_directory()
         self.download_by_template(folder, self.PAGE_PREFIX + 'assets/img/character/chara_%s.png', 2, 1)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        special_folder = folder + '/special'
+        if not os.path.exists(special_folder):
+            os.makedirs(special_folder)
+        template = self.PAGE_PREFIX + 'assets/img/special/illust/illust_%s.jpg'
+        self.download_by_template(special_folder, template, 2, 1)
 
 
 # Seija Musou: Salaryman, Isekai de Ikinokoru Tame ni Ayumu Michi
