@@ -3514,7 +3514,7 @@ class SpyroomDownload(Winter2023AnimeDownload, NewsTemplate2):
                     if (page != '03' and page != 'privilege2' and len(self.image_list) > 0)\
                             or (page == '03' and len(self.image_list) > 1):
                         processed.append(page)
-                    if page.isnumeric() or page == 'privilege2' or page == 'campaign2':
+                    if page.isnumeric():
                         if len(self.image_list) == 0:
                             break
                         else:
