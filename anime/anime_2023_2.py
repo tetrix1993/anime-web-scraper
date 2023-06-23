@@ -1807,11 +1807,9 @@ class MegamiCafeDownload(Spring2023AnimeDownload, NewsTemplate):
             self.print_exception(e)
 
     def download_news(self):
-        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-item',
-                                    title_select='.news-item-title', date_select='.news-item-pubdate', id_select='a',
-                                    date_func=lambda x: x.replace('年', '.').replace('月', '.').replace('日', ''),
-                                    next_page_select='.pagination a', next_page_eval_index=-1,
-                                    next_page_eval_index_class='disabled')
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.newsArchive__cts--flex--item',
+                                    title_select='.txt', date_select='.time', id_select='a',
+                                    next_page_select='.pagination .next')
 
     def download_episode_preview_guess(self, print_invalid=False, download_valid=False):
         if self.is_image_exists(str(self.FINAL_EPISODE).zfill(2) + '_1'):
