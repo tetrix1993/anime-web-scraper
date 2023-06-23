@@ -445,7 +445,7 @@ class Kanokari3Download(Summer2023AnimeDownload, NewsTemplate):
         except Exception as e:
             self.print_exception(e, 'Key Visual')
 
-        template = self.PAGE_PREFIX + '3rd/wp-content/themes/kanokari_3rd/images/kv-3rd%s.jpg'
+        template = self.PAGE_PREFIX + '3rd/wp-content/themes/kanokari_3rd_honban/images/kv-3rd%s.jpg'
         self.download_by_template(folder, template, 1, 4)
 
     def download_character(self):
