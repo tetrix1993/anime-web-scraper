@@ -3310,7 +3310,7 @@ class SpyroomDownload(Winter2023AnimeDownload, NewsTemplate2):
     folder_name = 'spyroom'
 
     PAGE_PREFIX = website
-    FINAL_EPISODE = 12
+    FINAL_EPISODE = 24
     IMAGES_PER_EPISODE = 6
 
     def __init__(self):
@@ -3481,10 +3481,12 @@ class SpyroomDownload(Winter2023AnimeDownload, NewsTemplate2):
         folder = self.create_media_directory()
         cache_filepath = folder + '/cache'
         processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
-        privilege_names = ['amazon', 'animate', 'gamers', 'kadokawa', 'sofmap']
-        for page in ['privilege', 'campaign', '01', '02']:
+        privilege_names = ['amazon', 'animate', 'gamers', 'kadokawa', 'sofmap', 'rakuten']
+        for i in range(len(privilege_names)):
+            privilege_names[i] = '2nd_' + privilege_names[i]
+        for page in ['privilege2', 'campaign2', 'privilege', 'campaign', '01', '02', '03', '04']:
             try:
-                if page != 'privilege' and page in processed:
+                if page != 'privilege2' and page in processed:
                     continue
                 page_url = self.PAGE_PREFIX + 'bd/'
                 if page != '01':
@@ -3499,21 +3501,24 @@ class SpyroomDownload(Winter2023AnimeDownload, NewsTemplate2):
                     else:
                         image_name = self.extract_image_name_from_url(image_url)
                     if self.is_image_exists(image_name, folder):
-                        if page == 'privilege' and image_name in privilege_names:
+                        if page.startswith('privilege') and image_name in privilege_names:
                             self.download_image_with_different_length(image_url, image_name, 'old', folder)
                         else:
                             continue
                     if not self.is_content_length_in_range(image_url, more_than_amount=88800):
                         continue
                     self.add_to_image_list(image_name, image_url)
-                if (page != '01' and page != 'privilege' and len(self.image_list) > 0)\
-                        or (page == '01' and len(self.image_list) > 1):
+                if page in ['privilege', 'campaign', '01', '02']:
                     processed.append(page)
-                if page.isnumeric():
-                    if len(self.image_list) == 0:
-                        break
-                    else:
+                else:
+                    if (page != '03' and page != 'privilege2' and len(self.image_list) > 0)\
+                            or (page == '03' and len(self.image_list) > 1):
                         processed.append(page)
+                    if page.isnumeric() or page == 'privilege' or page == 'campaign':
+                        if len(self.image_list) == 0:
+                            break
+                        else:
+                            processed.append(page)
                 self.download_image_list(folder)
             except Exception as e:
                 self.print_exception(e, f'Blu-ray - {page}')
