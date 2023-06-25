@@ -112,7 +112,7 @@ class AookeDownload(Spring2023AnimeDownload, NewsTemplate):
 
     PAGE_PREFIX = website
     FINAL_EPISODE = 24
-    IMAGES_PER_EPISODE = 3
+    IMAGES_PER_EPISODE = 4
 
     def __init__(self):
         super().__init__()
