@@ -2933,6 +2933,7 @@ class YuushagaShindaDownload(Spring2023AnimeDownload, NewsTemplate):
     folder_name = 'yuushagashinda'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
 
     def __init__(self):
         super().__init__()
@@ -2946,6 +2947,9 @@ class YuushagaShindaDownload(Spring2023AnimeDownload, NewsTemplate):
         self.download_media()
 
     def download_episode_preview(self):
+        if self.is_image_exists(str(self.FINAL_EPISODE) + '_1') and self.is_image_exists('01_1'):
+            return
+
         try:
             objs = self.get_json('https://heroisdead.com/news/wp-json/wp/v2/pages?orderby=date&order=asc&acf_format=standard&per_page=100&parent=39')
             for obj in objs:
@@ -2975,7 +2979,7 @@ class YuushagaShindaDownload(Spring2023AnimeDownload, NewsTemplate):
         thigh_prefix = prefix + 'Yuusyagasinda_ep%s-thigh1.'
         normal_prefix = prefix + 'Yuusyagasinda_ep%s-pre1.'
         templates = [thigh_prefix + 'jpg', thigh_prefix + 'jpeg', normal_prefix + 'jpg', normal_prefix + 'jpeg']
-        for i in range(12):
+        for i in range(self.FINAL_EPISODE):
             episode = str(i + 1).zfill(2)
             if self.is_image_exists(episode + '_1'):
                 continue
