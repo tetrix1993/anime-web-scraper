@@ -116,6 +116,7 @@ The premiere date for the anime listed here has not been announced.
 * [Mato Seihei no Slave](https://mabotai.jp/)
 * [Pon no Michi](https://ponnomichi-pr.com/)
 * [Sasayaku You ni Koi wo Utau](https://sasakoi-anime.com/)
+* [Jaku-Chara Tomozaki-kun 2nd Stage](http://tomozaki-koushiki.com/)
 
 ### Fall 2023 Anime
 * [Boukensha ni Naritai to Miyako ni Deteitta Musume ga S-Rank ni Natteta](https://s-rank-musume.com/)

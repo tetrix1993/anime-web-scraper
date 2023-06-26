@@ -236,3 +236,36 @@ class SasakoiDownload(Winter2024AnimeDownload, NewsTemplate):
         self.add_to_image_list('tz_kv', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv.webp')
         self.add_to_image_list('tz_teaser', self.PAGE_PREFIX + 'core_sys/images/main/tz/teaser.jpg')
         self.download_image_list(folder)
+
+
+# Jaku-Chara Tomozaki-kun 2nd Stage
+class TomozakiKun2Download(Winter2024AnimeDownload, NewsTemplate):
+    title = "Jaku-Chara Tomozaki-kun 2nd Stage"
+    keywords = [title, 'The Low Tier Character "Tomozaki-kun"', 'Tomozaki-kun']
+    website = 'http://tomozaki-koushiki.com/'
+    twitter = 'tomozakikoshiki'
+    hashtags = '友崎くん'
+    folder_name = 'tomozakikun2'
+
+    PAGE_PREFIX = website
+    FINAL_EPISODE = 13
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.box_main',
+                                    date_select='time', title_select='.box_title', id_select='nothing')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        template = self.PAGE_PREFIX + 'img/index/vis_img%s.jpg'
+        self.download_by_template(folder, template, 1, 1)
