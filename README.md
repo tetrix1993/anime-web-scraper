@@ -129,6 +129,7 @@ The premiere date for the anime listed here has not been announced.
 * [Watashi no Oshi wa Akuyaku Reijou.](https://wataoshi-anime.com/)
 
 ### Summer 2023 Anime
+* [Dark Gathering](https://darkgathering.jp/)
 * [Eiyuu Kyoushitsu](https://eiyukyoushitsu-anime.com/)
 * [Higeki no Genkyou to Naru Saikyou Gedou Last Boss Joou wa Tami no Tame ni Tsukushimasu.](https://lastame.com/)
 * [Horimiya: Piece](https://horimiya-anime.com/)

@@ -3,6 +3,7 @@ from scan import AniverseMagazineScanner
 import os
 
 
+# Dark Gathering https://darkgathering.jp/ #ダークギャザリング @DG_anime
 # Eiyuu Kyoushitsu https://eiyukyoushitsu-anime.com/ #英雄教室 #eiyu_anime @eiyu_anime
 # Higeki no Genkyou to Naru Saikyou Gedou Last Boss Joou wa Tami no Tame ni Tsukushimasu. https://lastame.com/ #ラス為 @lastame_pr
 # Horimiya: Piece https://horimiya-anime.com/ #ホリミヤ #horimiya @horimiya_anime
@@ -36,6 +37,64 @@ class Summer2023AnimeDownload(MainDownload):
 
     def __init__(self):
         super().__init__()
+
+
+# Dark Gathering
+class DarkGatheringDownload(Summer2023AnimeDownload, NewsTemplate):
+    title = 'Dark Gathering'
+    keywords = [title]
+    website = 'https://darkgathering.jp/'
+    twitter = 'DG_anime'
+    hashtags = ['ダークギャザリング']
+    folder_name = 'darkgathering'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-item',
+                                    title_select='.news-item__title', date_select='.news-item__date-text',
+                                    id_select='a', a_tag_start_text_to_remove='/', a_tag_prefix=self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        template = self.PAGE_PREFIX + "img/home/visual_%s.webp"
+        self.download_by_template(folder, template, 2, 2)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        prefix = self.PAGE_PREFIX + 'character/'
+        self.image_list = []
+        try:
+            obj = self.get_json(prefix + 'chara_data.php')
+            if 'charas' in obj:
+                for chara in obj['charas']:
+                    if 'images' in chara:
+                        if 'visuals' in chara['images']:
+                            for visual in chara['images']['visuals']:
+                                if 'image' in visual:
+                                    image_url = prefix + visual['image'].replace('./', '').split('?')[0]
+                                    image_name = self.extract_image_name_from_url(image_url)
+                                    self.add_to_image_list(image_name, image_url)
+                        if 'faces' in chara['images']:
+                            for face in chara['images']['faces']:
+                                image_url = prefix + face.replace('./', '').split('?')[0]
+                                image_name = self.extract_image_name_from_url(image_url)
+                                self.add_to_image_list(image_name, image_url)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+        self.download_image_list(folder)
 
 
 # Eiyuu Kyoushitsu
