@@ -113,6 +113,7 @@ The premiere date for the anime listed here has not been announced.
 
 ### Winter 2024 Anime
 * [Dungeon Meshi](https://delicious-in-dungeon.com/)
+* [Himesama "Goumon" no Jikan desu](https://himesama-goumon.com/)
 * [Mato Seihei no Slave](https://mabotai.jp/)
 * [Pon no Michi](https://ponnomichi-pr.com/)
 * [Sasayaku You ni Koi wo Utau](https://sasakoi-anime.com/)

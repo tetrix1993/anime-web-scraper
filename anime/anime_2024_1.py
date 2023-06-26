@@ -1,6 +1,7 @@
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate4
 
 # Dungeon Meshi https://delicious-in-dungeon.com/ #ダンジョン飯 #deliciousindungeon @dun_meshi_anime
+# Himesama "Goumon" no Jikan desu https://himesama-goumon.com/ #姫様拷問の時間です @himesama_goumon
 # Mato Seihei no Slave https://mabotai.jp/ #魔都精兵のスレイブ #まとスレ @mabotai_kohobu
 # Pon no Michi https://ponnomichi-pr.com/ #ぽんのみち @ponnomichi_pr
 # Sasayaku You ni Koi wo Utau https://sasakoi-anime.com/ #ささこい @sasakoi_anime
@@ -69,6 +70,52 @@ class DungeonMeshiDownload(Winter2024AnimeDownload, NewsTemplate):
             self.PAGE_PREFIX + 'assets/character/%sf.png'
         ]
         self.download_by_template(folder, templates, 1, 1)
+
+
+# Himesama "Goumon" no Jikan desu
+class HimesamaGoumonDownload(Winter2024AnimeDownload, NewsTemplate):
+    title = 'Himesama "Goumon" no Jikan desu'
+    keywords = [title, '\'Tis Time for "Torture," Princess']
+    website = 'https://himesama-goumon.com/'
+    twitter = 'himesama_goumon'
+    hashtags = ['姫様拷問の時間です']
+    folder_name = 'himesamagoumon'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.md-li__post article',
+                                    date_select='time', title_select='.ttl', id_select='a')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            self.image_list = []
+            images = soup.select('.fvimg source[srcset]')
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['srcset'][1:]
+                if '/top/' not in image_url:
+                    continue
+                image_name = self.generate_image_name_from_url(image_url, 'top')
+                if image_name.endswith('_sp'):
+                    continue
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
 
 
 # Mato Seihei no Slave
