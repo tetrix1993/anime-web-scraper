@@ -1523,6 +1523,8 @@ class ChiisaiSenpaiDownload(Summer2023AnimeDownload, NewsTemplate):
     folder_name = 'chiisaisenpai'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 6
 
     def __init__(self):
         super().__init__()
@@ -1530,11 +1532,76 @@ class ChiisaiSenpaiDownload(Summer2023AnimeDownload, NewsTemplate):
     def run(self):
         self.download_episode_preview()
         self.download_news()
+        self.download_episode_preview_guess(print_invalid=False, download_valid=True)
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        story_url = self.PAGE_PREFIX + 'story/ep01'
+        try:
+            soup = self.get_soup(story_url)
+            a_tags = soup.select('.elementor-button-wrapper a[href]')
+            for a_tag in a_tags:
+                span_tag = a_tag.select('.elementor-button-text')
+                try:
+                    ep_num = int(span_tag[0].text)
+                    if ep_num is None or ep_num < 1:
+                        continue
+                    episode = str(ep_num).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                if episode == '01':
+                    ep_soup = soup
+                else:
+                    ep_soup = self.get_soup(a_tag['href'])
+                if ep_soup is not None:
+                    images = ep_soup.select('img[src].swiper-slide-image')
+                    self.image_list = []
+                    for i in range(len(images)):
+                        image_url = self.clear_resize_in_url(images[i]['src'])
+                        image_name = episode + '_' + str(i + 1)
+                        self.add_to_image_list(image_name, image_url)
+                    self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
+
+    def download_episode_preview_guess(self, print_invalid=False, download_valid=False):
+        if self.is_image_exists(str(self.FINAL_EPISODE).zfill(2) + '_1'):
+            return
+
+        folder = self.create_custom_directory('guess')
+        template = self.PAGE_PREFIX + 'wp-content/uploads/%s/%s/ep%s-%s-1.jpg'
+        current_date = datetime.now() + timedelta(hours=1)
+        year = current_date.strftime('%Y')
+        month = current_date.strftime('%m')
+        is_successful = False
+        for i in range(self.FINAL_EPISODE):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_1') or self.is_image_exists(episode + '_1', folder):
+                continue
+            episode_success = False
+            valid_urls = []
+            for j in range(self.IMAGES_PER_EPISODE):
+                image_url = template % (year, month, episode, str(j + 1))
+                if self.is_valid_url(image_url, is_image=True):
+                    print('VALID - ' + image_url)
+                    episode_success = True
+                    valid_urls.append(image_url)
+                elif print_invalid:
+                    print('INVALID - ' + image_url)
+            if download_valid and len(valid_urls) > 0:
+                for valid_url in valid_urls:
+                    image_name = self.extract_image_name_from_url(valid_url)
+                    self.download_image(valid_url, folder + '/' + image_name)
+            if not episode_success:
+                break
+            is_successful = True
+        if is_successful:
+            print(self.__class__.__name__ + ' - Guessed correctly!')
+        return is_successful
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, date_separator='-',
@@ -1584,6 +1651,38 @@ class ChiisaiSenpaiDownload(Summer2023AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        for page in ['store', 'vol1', 'vol2', 'vol3', 'vol4']:
+            try:
+                if page.startswith('vol') and page in processed:
+                    continue
+                page_url = self.PAGE_PREFIX + 'blu-ray/' + page + '/'
+                soup = self.get_soup(page_url)
+                if page.startswith('vol'):
+                    images = soup.select('.elementor-container img[src].attachment-large, img[src].swiper-slide-image')
+                else:
+                    images = soup.select('.jet-listing-grid figure img[src]')
+                self.image_list = []
+                for image in images:
+                    image_url = self.clear_resize_in_url(image['src'].split('?')[0])
+                    image_name = self.extract_image_name_from_url(image_url)
+                    if image_name.startswith('Frame-') or '/2023/03/' in image_url:
+                        continue
+                    if self.is_image_exists(image_name, folder):
+                        continue
+                    self.add_to_image_list(image_name, image_url)
+                if page.startswith('vol') and len(self.image_list) > 0:
+                    processed.append(page)
+                if page.startswith('vol') and len(self.image_list) == 0:
+                    break
+                self.download_image_list(folder)
+            except Exception as e:
+                self.print_exception(e, f'Blu-ray - {page}')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Yumemiru Danshi wa Genjitsushugisha
