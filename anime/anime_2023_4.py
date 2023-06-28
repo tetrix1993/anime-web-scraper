@@ -6,6 +6,7 @@ import os
 # Hametsu no Oukoku https://hametsu-anime.com/ #はめつのおうこく #はめつ @hametsu_anime
 # Hoshikuzu Telepath https://hoshitele-anime.com/ #星テレ #hoshitele @hoshitele_anime
 # Konyaku Haki sareta Reijou wo Hirotta Ore ga, Ikenai koto wo Oshiekomu https://ikenaikyo.com/ #イケナイ教 @ikenaikyo_anime
+# Potion-danomi de Ikinobimasu! https://potion-anime.com/ #ポーション頼み @potion_APR
 # Sousou no Frieren https://frieren-anime.jp/ #フリーレン #frieren @Anime_Frieren
 # Tearmoon Teikoku Monogatari https://tearmoon-pr.com/ #ティアムーン @tearmoon_pr
 # Toaru Ossan no VRMMO Katsudouki https://toaru-ossan.com/ #とあるおっさん @toaru_ossan_pr
@@ -317,6 +318,74 @@ class IkenaikyoDownload(Fall2023AnimeDownload, NewsTemplate):
             chara_prefix + '%s-2.png'
         ]
         self.download_by_template(folder, templates, 2, 1)
+
+
+# Potion-danomi de Ikinobimasu!
+class PotionDanomiDownload(Fall2023AnimeDownload, NewsTemplate):
+    title = 'Potion-danomi de Ikinobimasu!'
+    keywords = [title, 'I Shall Survive Using Potions!']
+    website = 'https://potion-anime.com/'
+    twitter = 'potion_APR'
+    hashtags = 'ポーション頼み'
+    folder_name = 'potiondanomi'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-list a',
+                                    date_select='.news-list-item__date', title_select='.news-list-item__title',
+                                    id_select=None, a_tag_start_text_to_remove='/', a_tag_prefix=self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            self.image_list = []
+            images = soup.select('.home-visual__visual source[srcset]')
+            for image in images:
+                if '/img/' in image['srcset']:
+                    image_url = self.PAGE_PREFIX + image['srcset'].split('?')[0].replace('./', '')
+                    image_name = self.generate_image_name_from_url(image_url, 'img')
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        prefix = self.PAGE_PREFIX + 'character/'
+        self.image_list = []
+        try:
+            obj = self.get_json(prefix + 'chara_data.php')
+            if 'charas' in obj:
+                for chara in obj['charas']:
+                    if 'images' in chara:
+                        if 'visuals' in chara['images']:
+                            for visual in chara['images']['visuals']:
+                                if 'image' in visual:
+                                    image_url = prefix + visual['image'].replace('./', '').split('?')[0]
+                                    image_name = self.extract_image_name_from_url(image_url)
+                                    self.add_to_image_list(image_name, image_url)
+                        if 'faces' in chara['images']:
+                            for face in chara['images']['faces']:
+                                image_url = prefix + face.replace('./', '').split('?')[0]
+                                image_name = self.extract_image_name_from_url(image_url)
+                                self.add_to_image_list(image_name, image_url)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+        self.download_image_list(folder)
 
 
 # Sousou no Frieren

@@ -125,6 +125,7 @@ The premiere date for the anime listed here has not been announced.
 * [Hametsu no Oukoku](https://hametsu-anime.com/)
 * [Hoshikuzu Telepath](https://hoshitele-anime.com/)
 * [Konyaku Haki sareta Reijou wo Hirotta Ore ga, Ikenai koto wo Oshiekomu](https://ikenaikyo.com/)
+* [Potion-danomi de Ikinobimasu!](https://potion-anime.com/)
 * [Sousou no Frieren](https://frieren-anime.jp/)
 * [Tearmoon Teikoku Monogatari](https://tearmoon-pr.com/)
 * [Toaru Ossan no VRMMO Katsudouki](https://toaru-ossan.com/)
