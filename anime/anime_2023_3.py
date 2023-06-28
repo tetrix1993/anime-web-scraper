@@ -1077,37 +1077,46 @@ class AtelierRyzaDownload(Summer2023AnimeDownload, NewsTemplate):
 
     def run(self):
         self.download_episode_preview()
-        self.download_episode_preview_guess()
         self.download_news()
         self.download_key_visual()
         self.download_character()
         self.download_media()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
-
-    def download_episode_preview_guess(self):
-        folder = self.create_custom_directory('guess')
-        is_success = False
-        end_num = self.IMAGES_PER_EPISODE
-        for i in range(self.FINAL_EPISODE):
-            episode = str(i + 1).zfill(2)
-            start_num = None
-            for j in range(end_num):
-                if self.is_image_exists(episode + '_' + str(j + 1)):
-                    start_num = j + 2
-                else:
-                    start_num = j + 1
-                    break
-            if not start_num or start_num > end_num:
-                continue
-            template1 = self.PAGE_PREFIX + 'assets/img/story/img_ep%s-%s.jpg' % (episode, '%s')
-            template2 = self.PAGE_PREFIX + 'assets/img/story/img_ep%s-%s.png' % (episode, '%s')
-            if not self.download_by_template(folder, [template1, template2], 1, start=start_num, end=end_num):
-                break
-            print(self.__class__.__name__ + ' - Episode %s guessed correctly!' % episode)
-            is_success = True
-        return is_success
+        story_url = self.PAGE_PREFIX + 'story/'
+        try:
+            soup = self.get_soup(story_url)
+            story_list = soup.select('.tab_list')
+            if len(story_list) > 0:
+                lis = story_list[0].select('li')
+                for li in lis:
+                    p_tag = li.select('p')
+                    try:
+                        ep_num = int(p_tag[0].text)
+                        if ep_num is None or ep_num < 1:
+                            continue
+                        episode = str(ep_num).zfill(2)
+                    except:
+                        continue
+                    if self.is_image_exists(episode + '_1'):
+                        continue
+                    if li.has_attr('class') and 'is-current' in li['class']:
+                        ep_soup = soup
+                    else:
+                        a_tag = li.select('a[href]')
+                        if len(a_tag) == 0:
+                            continue
+                        ep_soup = self.get_soup(story_url + a_tag[0]['href'].replace('./', ''))
+                    if ep_soup is not None:
+                        images = ep_soup.select('.swiper-wrapper img[src]')
+                        self.image_list = []
+                        for i in range(len(images)):
+                            image_url = story_url + images[i]['src']
+                            image_name = episode + '_' + str(i + 1)
+                            self.add_to_image_list(image_name, image_url)
+                        self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.p-news_in__content-list-item',
