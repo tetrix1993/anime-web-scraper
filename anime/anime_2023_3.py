@@ -1627,7 +1627,24 @@ class WatakonDownload(Summer2023AnimeDownload, NewsTemplate):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            stories = soup.select('.index-Story_Content')
+            for story in stories:
+                try:
+                    episode = str(int(self.convert_kanji_to_number(
+                        story.select('span.num')[0].text.replace('第', '').replace('話', '')))).zfill(2)
+                except:
+                    continue
+                self.image_list = []
+                images = story.select('.swiper-slide img[src]')
+                for i in range(len(images)):
+                    image_url = self.PAGE_PREFIX + images[i]['src'][1:]
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news_List li.item',
