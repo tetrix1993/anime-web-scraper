@@ -7,6 +7,7 @@ import os
 # Hoshikuzu Telepath https://hoshitele-anime.com/ #星テレ #hoshitele @hoshitele_anime
 # Konyaku Haki sareta Reijou wo Hirotta Ore ga, Ikenai koto wo Oshiekomu https://ikenaikyo.com/ #イケナイ教 @ikenaikyo_anime
 # Potion-danomi de Ikinobimasu! https://potion-anime.com/ #ポーション頼み @potion_APR
+# Shy https://shy-anime.com/ #SHY_hero @SHY_off
 # Sousou no Frieren https://frieren-anime.jp/ #フリーレン #frieren @Anime_Frieren
 # Tearmoon Teikoku Monogatari https://tearmoon-pr.com/ #ティアムーン @tearmoon_pr
 # Toaru Ossan no VRMMO Katsudouki https://toaru-ossan.com/ #とあるおっさん @toaru_ossan_pr
@@ -386,6 +387,78 @@ class PotionDanomiDownload(Fall2023AnimeDownload, NewsTemplate):
         except Exception as e:
             self.print_exception(e, 'Character')
         self.download_image_list(folder)
+
+
+# Shy
+class ShyDownload(Fall2023AnimeDownload, NewsTemplate):
+    title = 'Shy'
+    keywords = [title]
+    website = 'https://shy-anime.com/'
+    twitter = 'SHY_off'
+    hashtags = 'SHY_hero'
+    folder_name = 'shy'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-box',
+                                    title_select='.news-txt-box', date_select='.news-box-date', id_select='a',
+                                    paging_type=0, next_page_select='span.page-numbers', next_page_eval_index=-1,
+                                    next_page_eval_index_class='current')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FeTEERvaEAAJmXS?format=jpg&name=large')
+        self.download_image_list(folder)
+
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            self.image_list = []
+            images = soup.select('#kv>img[src]')
+            for image in images:
+                image_url = image['src']
+                if '/img/' not in image_url:
+                    continue
+                image_name = self.generate_image_name_from_url(image_url, 'img')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_shy', self.PAGE_PREFIX + 'nE2aBbsJ/wp-content/themes/v0/assets/img/kv/shy.webp')
+        self.add_to_image_list('tz_tel', self.PAGE_PREFIX + 'nE2aBbsJ/wp-content/themes/v0/assets/img/kv/tel.webp')
+        self.download_image_list(folder)
+
+        template = self.PAGE_PREFIX + 'nE2aBbsJ/wp-content/themes/v1/assets/img/character/%s/%s.png'
+        for i in range(30):
+            is_successful = False
+            for j in ['img', 'face']:
+                image_name = str(i).zfill(2) + '_' + j
+                if self.is_image_exists(image_name, folder):
+                    is_successful = True
+                    continue
+                image_url = template % (str(i), j)
+                result = self.download_image(image_url, folder + '/' + image_name)
+                if result != -1:
+                    is_successful = True
+            if not is_successful:
+                break
 
 
 # Sousou no Frieren
