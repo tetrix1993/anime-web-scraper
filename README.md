@@ -134,6 +134,7 @@ The premiere date for the anime listed here has not been announced.
 ### Summer 2023 Anime
 * [Dark Gathering](https://darkgathering.jp/)
 * [Eiyuu Kyoushitsu](https://eiyukyoushitsu-anime.com/)
+* [Helck](https://www.helck-anime.com/)
 * [Higeki no Genkyou to Naru Saikyou Gedou Last Boss Joou wa Tami no Tame ni Tsukushimasu.](https://lastame.com/)
 * [Horimiya: Piece](https://horimiya-anime.com/)
 * [Jidou Hanbaiki ni Umarekawatta Ore wa Meikyuu wo Samayou](https://jihanki-anime.com/)

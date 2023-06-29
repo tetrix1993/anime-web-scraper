@@ -6,6 +6,7 @@ import os
 
 # Dark Gathering https://darkgathering.jp/ #ダークギャザリング @DG_anime
 # Eiyuu Kyoushitsu https://eiyukyoushitsu-anime.com/ #英雄教室 #eiyu_anime @eiyu_anime
+# Helck https://www.helck-anime.com/ #Helck #ヘルク @Helck_anime
 # Higeki no Genkyou to Naru Saikyou Gedou Last Boss Joou wa Tami no Tame ni Tsukushimasu. https://lastame.com/ #ラス為 @lastame_pr
 # Horimiya: Piece https://horimiya-anime.com/ #ホリミヤ #horimiya @horimiya_anime
 # Jidou Hanbaiki ni Umarekawatta Ore wa Meikyuu wo Samayou https://jihanki-anime.com/ #俺自販機 @jihanki_anime
@@ -156,6 +157,53 @@ class EiyuKyoushitsuDownload(Summer2023AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+
+# Helck
+class HelckDownload(Summer2023AnimeDownload, NewsTemplate):
+    title = 'Helck'
+    keywords = [title]
+    website = 'https://www.helck-anime.com/'
+    twitter  = 'Helck_anime'
+    hashtags = ['Helck', 'ヘルク']
+    folder_name = 'helck'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='ul.wf li', title_select='.ttl',
+                                    date_select='.date', id_select='a', date_func=lambda x: x.strip()[0:10])
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('header img[src]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'][1:]
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'images/character_%s_img_f.png'
+        self.download_by_template(folder, template, 2, 1)
 
 
 # Higeki no Genkyou to Naru Saikyou Gedou Last Boss Joou wa Tami no Tame ni Tsukushimasu.
