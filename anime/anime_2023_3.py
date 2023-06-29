@@ -1,6 +1,7 @@
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsTemplate4
 from scan import AniverseMagazineScanner
 from datetime import datetime, timedelta
+from requests.exceptions import HTTPError
 import os
 
 
@@ -1767,18 +1768,47 @@ class YumemiruDanshiDownload(Summer2023AnimeDownload, NewsTemplate):
     folder_name = 'yumemirudanshi'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
 
     def __init__(self):
         super().__init__()
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_external()
         self.download_news()
         self.download_key_visual()
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        if self.is_image_exists(str(self.FINAL_EPISODE) + '_1') and self.is_image_exists('01_1'):
+            return
+
+        try:
+            objs = self.get_json(
+                'https://yumemirudanshi.com/news/wp-json/wp/v2/pages?orderby=date&order=asc&acf_format=standard&per_page=100&parent=85')
+            for obj in objs:
+                if 'acf' in obj:
+                    acf = obj['acf']
+                    if 'number' in acf and 'images' in acf and isinstance(acf['images'], list):
+                        try:
+                            episode = str(int(acf['number'].split('#')[1])).zfill(2)
+                        except:
+                            continue
+                        for i in range(len(acf['images'])):
+                            image_url = acf['images'][i]
+                            image_name = episode + '_' + str(i + 1)
+                            self.add_to_image_list(image_name, image_url)
+                        self.download_image_list(self.base_folder)
+        except HTTPError:
+            print(self.__class__.__name__ + ' - 403 Error when retrieving story API.')
+        except Exception as e:
+            self.print_exception(e)
+
+    def download_episode_preview_external(self):
+        keywords = ['夢見る男子は現実主義者']
+        AniverseMagazineScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                end_date='20230629', download_id=self.download_id).run()
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-list a',
