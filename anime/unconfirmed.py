@@ -15,7 +15,6 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Isekai de Mofumofu Nadenade suru Tame ni Ganbattemasu. https://mohunadeanime.com/ #もふなで @mohunade_anime
 # Keikenzumi na Kimi to, Keiken Zero na Ore ga, Otsukiai suru Hanashi. https://kimizero.com/ #キミゼロ @kimizero_anime
 # Kekkon Yubiwa Monogatari https://talesofweddingrings-anime.jp/ #結婚指輪物語 @weddingringsPR
-# Kimi no Koto ga Daidaidaidaidaisuki na 100-nin no Kanojo https://hyakkano.com/ @hyakkano_anime #100カノ
 # Kusuriya no Hitorigoto https://kusuriyanohitorigoto.jp/ #薬屋のひとりごと @kusuriya_PR
 # Saijaku Tamer wa Gomi Hiroi no Tabi wo Hajimemashita. https://saijakutamer-anime.com/
 # Seijo no Maryoku wa Bannou Desu S2 https://seijyonomaryoku.jp/ #seijyonoanime @seijyonoanime
@@ -611,54 +610,6 @@ class KekkonYubiwaDownload(UnconfirmedDownload):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'images/mob02/chara_%s.png'
         self.download_by_template(folder, template, 2, 1)
-
-
-# Kimi no Koto ga Daidaidaidaidaisuki na 100-nin no Kanojo
-class HyakkanoDownload(UnconfirmedDownload, NewsTemplate):
-    title = 'Kimi no Koto ga Daidaidaidaidaisuki na 100-nin no Kanojo'
-    keywords = [title, 'The 100 Girlfriends Who Really, Really, Really, Really, Really Love You']
-    website = 'https://hyakkano.com/'
-    twitter = 'hyakkano_anime'
-    hashtags = '100カノ'
-    folder_name = 'hyakkano'
-
-    PAGE_PREFIX = website
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        # self.download_news()
-        self.download_key_visual()
-        self.download_character()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_news(self):
-        pass
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('tz', self.PAGE_PREFIX + 'xUtUy1FY/wp-content/themes/hyakkano_v0/assets/images/common/index/img_mainvisual.png')
-        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FrGH-A3aUAA0dVE?format=jpg&name=medium')
-        self.download_image_list(folder)
-
-    def download_character(self):
-        folder = self.create_character_directory()
-        try:
-            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
-            images = soup.select('.character-Contents img[src]')
-            self.image_list = []
-            for image in images:
-                image_url = image['src']
-                image_name = self.extract_image_name_from_url(image_url)
-                self.add_to_image_list(image_name, image_url)
-            self.download_image_list(folder)
-        except Exception as e:
-            self.print_exception(e, 'Character')
 
 
 # Kusuriya no Hitorigoto

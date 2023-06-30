@@ -5,6 +5,7 @@ import os
 # Dekoboko Majo no Oyako Jijou https://dekoboko-majo-anime.jp/ @DEKOBOKO_anime #でこぼこ魔女の親子事情
 # Hametsu no Oukoku https://hametsu-anime.com/ #はめつのおうこく #はめつ @hametsu_anime
 # Hoshikuzu Telepath https://hoshitele-anime.com/ #星テレ #hoshitele @hoshitele_anime
+# Kimi no Koto ga Daidaidaidaidaisuki na 100-nin no Kanojo https://hyakkano.com/ @hyakkano_anime #100カノ
 # Konyaku Haki sareta Reijou wo Hirotta Ore ga, Ikenai koto wo Oshiekomu https://ikenaikyo.com/ #イケナイ教 @ikenaikyo_anime
 # Potion-danomi de Ikinobimasu! https://potion-anime.com/ #ポーション頼み @potion_APR
 # Shy https://shy-anime.com/ #SHY_hero @SHY_off
@@ -274,6 +275,84 @@ class HoshiteleDownload(Fall2023AnimeDownload, NewsTemplate):
                 processed.append(page_name)
         except Exception as e:
             self.print_exception(e, 'Key Visual News')
+        self.create_cache_file(cache_filepath, processed, num_processed)
+
+
+# Kimi no Koto ga Daidaidaidaidaisuki na 100-nin no Kanojo
+class HyakkanoDownload(Fall2023AnimeDownload, NewsTemplate):
+    title = 'Kimi no Koto ga Daidaidaidaidaisuki na 100-nin no Kanojo'
+    keywords = [title, 'The 100 Girlfriends Who Really, Really, Really, Really, Really Love You']
+    website = 'https://hyakkano.com/'
+    twitter = 'hyakkano_anime'
+    hashtags = '100カノ'
+    folder_name = 'hyakkano'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-List li',
+                                    date_select='.date', title_select='.title', id_select='a')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz', self.PAGE_PREFIX + 'xUtUy1FY/wp-content/themes/hyakkano_v0/assets/images/common/index/img_mainvisual.png')
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FrGH-A3aUAA0dVE?format=jpg&name=medium')
+        self.download_image_list(folder)
+
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            self.image_list = []
+            images = soup.select('.index-Mainvisual-Inner img[src]')
+            for image in images:
+                if '/images/' not in image['src']:
+                    continue
+                image_url = image['src']
+                image_name = self.generate_image_name_from_url(image_url, 'images')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            charas = soup.select('.chara-select-Btn a[href][class]')
+            for chara in charas:
+                if chara['href'].endswith('/'):
+                    page_url = chara['href'][:-1]
+                else:
+                    page_url = chara['href']
+                if 'current' in chara['class']:
+                    ep_soup = soup
+                else:
+                    ep_soup = self.get_soup(page_url)
+                if ep_soup is None:
+                    continue
+                images = ep_soup.select('.character-Item img[src]')
+                self.image_list = []
+                for image in images:
+                    image_url = image['src']
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
         self.create_cache_file(cache_filepath, processed, num_processed)
 
 
