@@ -338,6 +338,9 @@ class HyakkanoDownload(Fall2023AnimeDownload, NewsTemplate):
                     page_url = chara['href'][:-1]
                 else:
                     page_url = chara['href']
+                chara_name = page_url.split('/')[-1]
+                if chara_name in processed:
+                    continue
                 if 'current' in chara['class']:
                     ep_soup = soup
                 else:
@@ -351,6 +354,7 @@ class HyakkanoDownload(Fall2023AnimeDownload, NewsTemplate):
                     image_name = self.extract_image_name_from_url(image_url)
                     self.add_to_image_list(image_name, image_url)
                 self.download_image_list(folder)
+                processed.append(chara_name)
         except Exception as e:
             self.print_exception(e, 'Character')
         self.create_cache_file(cache_filepath, processed, num_processed)
