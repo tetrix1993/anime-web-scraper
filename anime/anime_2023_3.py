@@ -119,6 +119,7 @@ class EiyuKyoushitsuDownload(Summer2023AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
@@ -158,6 +159,47 @@ class EiyuKyoushitsuDownload(Summer2023AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        for page in ['tokuten', '01', '02', '03']:
+            try:
+                if page != 'tokuten' and page in processed:
+                    continue
+                page_url = self.PAGE_PREFIX + 'bd/'
+                if page != '01':
+                    if page.isnumeric():
+                        page_url += 'bd'
+                    page_url += page + '.html'
+                soup = self.get_soup(page_url)
+                images = soup.select('.longmob div[style*="adding-bottom"] img[src]')
+                self.image_list = []
+                for image in images:
+                    if image['src'].startswith('../'):
+                        image_url = self.PAGE_PREFIX + image['src'][3:]
+                    else:
+                        image_url = image['src']
+                    image_url = image_url.split('?')[0]
+                    if '/blu-ray/' in image_url:
+                        image_name = self.generate_image_name_from_url(image_url, 'blu-ray')
+                    else:
+                        image_name = self.extract_image_name_from_url(image_url)
+                    if 'nowprinting' in image_name:
+                        continue
+                    if self.is_image_exists(image_name, folder):
+                        continue
+                    self.add_to_image_list(image_name, image_url)
+                if page.isnumeric():
+                    if len(self.image_list) > 1:
+                        processed.append(page)
+                    elif len(self.image_list) == 0:
+                        break
+                self.download_image_list(folder)
+            except Exception as e:
+                self.print_exception(e, f'Blu-ray - {page}')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Helck
