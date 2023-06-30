@@ -2924,7 +2924,7 @@ class Yamada999Download(Spring2023AnimeDownload, NewsTemplate):
                 if page == '01':
                     images = soup.select('.p-bddvd img[src], .p-bddvd__shop img[src]')
                 else:
-                    images = soup.select('.p-bddvd img[src]')
+                    images = soup.select('.p-bddvd__maininfo img[src]')
                 self.image_list = []
                 for image in images:
                     image_url = self.PAGE_PREFIX + image['src'].replace('../', '').split('?')[0]
