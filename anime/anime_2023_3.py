@@ -1179,7 +1179,7 @@ class OkashinaTenseiDownload(Summer2023AnimeDownload, NewsTemplate4):
         self.download_key_visual()
         self.download_character()
 
-    def download_episode_preview(self):
+    def download_episode_preview(self, print_http_error=False):
         try:
             init_json = self.get_json(self.PAGE_PREFIX + 'wp-json/okashinatensei/init')
             for story in init_json['stories']:
@@ -1194,6 +1194,9 @@ class OkashinaTenseiDownload(Summer2023AnimeDownload, NewsTemplate4):
                     self.add_to_image_list(image_name, image_url)
                 self.download_image_list(self.base_folder)
             return init_json
+        except HTTPError:
+            if print_http_error:
+                print(self.__class__.__name__ + ' - 403 Error when retrieving story API.')
         except Exception as e:
             self.print_exception(e)
         return None
@@ -1910,7 +1913,7 @@ class YumemiruDanshiDownload(Summer2023AnimeDownload, NewsTemplate):
         self.download_key_visual()
         self.download_character()
 
-    def download_episode_preview(self):
+    def download_episode_preview(self, print_http_error=False):
         if self.is_image_exists(str(self.FINAL_EPISODE) + '_1') and self.is_image_exists('01_1'):
             return
 
@@ -1931,7 +1934,8 @@ class YumemiruDanshiDownload(Summer2023AnimeDownload, NewsTemplate):
                             self.add_to_image_list(image_name, image_url)
                         self.download_image_list(self.base_folder)
         except HTTPError:
-            print(self.__class__.__name__ + ' - 403 Error when retrieving story API.')
+            if print_http_error:
+                print(self.__class__.__name__ + ' - 403 Error when retrieving story API.')
         except Exception as e:
             self.print_exception(e)
 
