@@ -1323,6 +1323,36 @@ class AtelierRyzaDownload(Summer2023AnimeDownload, NewsTemplate):
 
     def download_media(self):
         folder = self.create_media_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        for page in ['special', '01', '02', '03', '04', '05', '06']:
+            try:
+                if page != 'special' and page in processed:
+                    continue
+                page_url = self.PAGE_PREFIX + 'bddvd/' + page + '.html'
+                soup = self.get_soup(page_url)
+                images = soup.select('.p-bddvd__content>section img[src]')
+                for image in images:
+                    image_url = self.PAGE_PREFIX + image['src'].replace('../', '').split('?')[0]
+                    if 'np.jpg' in image_url:
+                        continue
+                    if '/bddvd/' in image_url:
+                        image_name = self.generate_image_name_from_url(image_url, 'bddvd')
+                    else:
+                        continue
+                    if self.is_image_exists(image_name, folder):
+                        continue
+                    self.add_to_image_list(image_name, image_url)
+                if page.isnumeric():
+                    if len(self.image_list) == 0:
+                        break
+                    else:
+                        processed.append(page)
+                self.download_image_list(folder)
+            except Exception as e:
+                self.print_exception(e, f'Blu-ray - {page}')
+        self.create_cache_file(cache_filepath, processed, num_processed)
+
         special_folder = folder + '/special'
         if not os.path.exists(special_folder):
             os.makedirs(special_folder)
