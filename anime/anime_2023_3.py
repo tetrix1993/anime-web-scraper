@@ -932,6 +932,7 @@ class Masamunekun2Download(Summer2023AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -996,6 +997,32 @@ class Masamunekun2Download(Summer2023AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        for page in ['vol1', 'vol2']:
+            try:
+                if page in processed:
+                    continue
+                page_url = self.PAGE_PREFIX + 'bd/'
+                if page != 'vol1':
+                    page_url += page + '/'
+                soup = self.get_soup(page_url)
+                images = soup.select('#Bd img[src]')
+                for image in images:
+                    image_url = self.clear_resize_in_url(image['src'].replace('-scaled-1', '').replace('-scaled', ''))
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+                if len(self.image_list) == 0:
+                    break
+                else:
+                    processed.append(page)
+                self.download_image_list(folder)
+            except Exception as e:
+                self.print_exception(e, f'Blu-ray - {page}')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Mushoku Tensei II: Isekai Ittara Honki Dasu
