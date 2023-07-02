@@ -524,6 +524,7 @@ class JitsuoresaikyouDownload(Summer2023AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         story_url = self.PAGE_PREFIX + 'story/'
@@ -571,6 +572,28 @@ class JitsuoresaikyouDownload(Summer2023AnimeDownload, NewsTemplate):
         prefix = self.PAGE_PREFIX + 'assets/img/character/img_chara-'
         templates = [prefix + 'main_%s.png', prefix + 'face_%s.png']
         self.download_by_template(folder, templates, 2, 1)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            prefix = self.PAGE_PREFIX + 'bd-cd/detail/?id='
+            for page_id in ['1019830', '1019833']:
+                soup = self.get_soup(prefix + page_id)
+                if soup is None:
+                    continue
+                images = soup.select('.p-disco_content img[data-src]')
+                self.image_list = []
+                for image in images:
+                    image_url = self.PAGE_PREFIX + image['data-src'][1:]
+                    if 'nowprinting' in image_url:
+                        continue
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+                if len(self.image_list) == 0:
+                    break
+                self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e)
 
 
 # Kanojo, Okarishimasu 3rd Season
