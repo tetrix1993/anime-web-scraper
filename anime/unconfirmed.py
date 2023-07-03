@@ -8,7 +8,6 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # ATRI -My Dear Moments- https://atri-anime.com/ #ATRI @ATRI_anime
 # Buta no Liver wa Kanetsu Shiro https://butaliver-anime.com/ #豚レバ @butaliver_anime
 # Chiyu Mahou no Machigatta Tsukaikata https://chiyumahou-anime.com/ #治癒魔法 @chiyumahou_PR
-# Dosanko Gal wa Namara Menkoi https://dosankogal-pr.com/ #道産子ギャル #どさこい @dosankogal_pr
 # Giji Harem https://gijiharem.com/ #疑似ハーレム @GijiHarem
 # Goblin Slayer S2 http://www.goblinslayer.jp/ #ゴブスレ #いせれべ @GoblinSlayer_GA
 # Highspeed Etoile https://highspeed-etoile.com/ #ハイスピ @HSE_Project_PR
@@ -243,60 +242,6 @@ class ChiyuMahouDownload(UnconfirmedDownload, NewsTemplate):
         # self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FwP_QYPaQAMBkyd?format=jpg&name=medium')
         self.add_to_image_list('tz', self.PAGE_PREFIX + 'wp-content/themes/chiyumahou-anime_teaser/assets/images/pc/index/img_hero.jpg')
         self.download_image_list(folder)
-
-
-# Dosanko Gal wa Namara Menkoi
-class DosankoGalDownload(UnconfirmedDownload, NewsTemplate):
-    title = 'Dosanko Gal wa Namara Menkoi'
-    keywords = [title, 'Hokkaido Gals Are Super Adorable!', 'dosakoi']
-    website = 'https://dosankogal-pr.com/'
-    twitter = 'dosankogal_pr'
-    hashtags = ['道産子ギャル', 'どさこい']
-    folder_name = 'dosankogal'
-
-    PAGE_PREFIX = website
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_news()
-        self.download_key_visual()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_news(self):
-        # Paging logic not known
-        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.md-list__news li',
-                                    date_select='.txt--date', title_select='.txt--ttl', id_select='a')
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FkJnLbAVUAERF5S?format=jpg&name=4096x4096')
-        # self.add_to_image_list('tz_news', self.PAGE_PREFIX + 'wp/wp-content/uploads/2022/12/dosankogal_teaser_logoc-scaled-1.jpg')
-        self.download_image_list(folder)
-
-        try:
-            soup = self.get_soup(self.PAGE_PREFIX)
-            self.image_list = []
-            images = soup.select('.fv--v source[srcset], .fv--v img[src]')
-            for image in images:
-                if image.has_attr('srcset'):
-                    if image['srcset'].endswith('.webp'):
-                        continue
-                    image_url = self.PAGE_PREFIX + image['srcset'][1:]
-                else:
-                    image_url = self.PAGE_PREFIX + image['src'][1:]
-                if '/images/' not in image_url:
-                    continue
-                image_name = self.generate_image_name_from_url(image_url, 'images')
-                self.add_to_image_list(image_name, image_url)
-            self.download_image_list(folder)
-        except Exception as e:
-            self.print_exception(e, 'Key Visual')
 
 
 # Giji Harem

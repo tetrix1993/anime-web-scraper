@@ -1,5 +1,6 @@
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate4
 
+# Dosanko Gal wa Namara Menkoi https://dosankogal-pr.com/ #道産子ギャル #どさこい @dosankogal_pr
 # Dungeon Meshi https://delicious-in-dungeon.com/ #ダンジョン飯 #deliciousindungeon @dun_meshi_anime
 # Himesama "Goumon" no Jikan desu https://himesama-goumon.com/ #姫様拷問の時間です @himesama_goumon
 # Mato Seihei no Slave https://mabotai.jp/ #魔都精兵のスレイブ #まとスレ @mabotai_kohobu
@@ -15,6 +16,79 @@ class Winter2024AnimeDownload(MainDownload):
 
     def __init__(self):
         super().__init__()
+
+
+# Dosanko Gal wa Namara Menkoi
+class DosankoGalDownload(Winter2024AnimeDownload, NewsTemplate):
+    title = 'Dosanko Gal wa Namara Menkoi'
+    keywords = [title, 'Hokkaido Gals Are Super Adorable!', 'dosakoi']
+    website = 'https://dosankogal-pr.com/'
+    twitter = 'dosankogal_pr'
+    hashtags = ['道産子ギャル', 'どさこい']
+    folder_name = 'dosankogal'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        soup = self.download_key_visual()
+        self.download_character(soup)
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        # Paging logic not known
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.md-list__news li',
+                                    date_select='.txt--date', title_select='.txt--ttl', id_select='a')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        # self.image_list = []
+        # self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FkJnLbAVUAERF5S?format=jpg&name=4096x4096')
+        # self.add_to_image_list('tz_news', self.PAGE_PREFIX + 'wp/wp-content/uploads/2022/12/dosankogal_teaser_logoc-scaled-1.jpg')
+        # self.download_image_list(folder)
+
+        soup = None
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.fvslide source[srcset]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['srcset'][1:]
+                if '/images/' not in image_url:
+                    continue
+                image_name = self.generate_image_name_from_url(image_url, 'images')
+                if image_name.endswith('_sp'):
+                    continue
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+        return soup
+
+    def download_character(self, soup=None):
+        folder = self.create_character_directory()
+        try:
+            if soup is None:
+                soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.chardata--inner source[srcset]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['srcset'][1:]
+                if '/images/' not in image_url:
+                    continue
+                image_name = self.generate_image_name_from_url(image_url, 'images')
+                if image_name.endswith('_sp'):
+                    continue
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
 
 
 # Dungeon Meshi
