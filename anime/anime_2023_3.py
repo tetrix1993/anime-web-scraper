@@ -2023,6 +2023,7 @@ class YumemiruDanshiDownload(Summer2023AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self, print_http_error=False):
         if self.is_image_exists(str(self.FINAL_EPISODE) + '_1') and self.is_image_exists('01_1'):
@@ -2098,6 +2099,44 @@ class YumemiruDanshiDownload(Summer2023AnimeDownload, NewsTemplate):
         except Exception as e:
             self.print_exception(e, 'Character')
         self.download_image_list(folder)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        for page in ['1', '2', '3']:
+            try:
+                if page != '1' and page in processed:
+                    continue
+                page_url = self.PAGE_PREFIX + 'product/bd/bd_' + page + '/'
+                soup = self.get_soup(page_url)
+                selector = 'img.c-article-visual__image[src]'
+                if page != '1':
+                    selector += ',.c-card__thumb[data-bg]'
+                images = soup.select(selector)
+                self.image_list = []
+                for image in images:
+                    if image.has_attr('src'):
+                        image_url = image['src']
+                    else:
+                        image_url = image['data-bg']
+                    image_url = self.PAGE_PREFIX + image_url.replace('../', '').split('?')[0]
+                    if image_url.endswith('/np.png'):
+                        continue
+                    if '/img/' in image_url:
+                        image_name = self.generate_image_name_from_url(image_url, 'img')
+                    else:
+                        image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+                if page != '1':
+                    if len(self.image_list) > 1:
+                        processed.append(page)
+                    elif len(self.image_list) == 0:
+                        break
+                self.download_image_list(folder)
+            except Exception as e:
+                self.print_exception(e, f'Blu-ray - {page}')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Watashi no Shiawase na Kekkon
