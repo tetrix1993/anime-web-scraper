@@ -326,9 +326,19 @@ class GijiHaremDownload(UnconfirmedDownload, NewsTemplate2):
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('tz_kv', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv.jpg')
-        self.download_image_list(folder)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.kvSlide__img source[srcset]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['srcset']
+                if '/main/' not in image_url:
+                    continue
+                image_name = self.generate_image_name_from_url(image_url, 'main')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
 
 
 # Goblin Slayer 2nd Season
