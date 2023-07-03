@@ -13,11 +13,11 @@ def run():
     for subclass in Summer2023AnimeDownload.__subclasses__():
         if subclass.enabled:
             downloads.append(subclass())
-    downloads += [SugarAppleDownload(), SpyroomDownload(), AookeDownload(), Maohgakuin2Download(),
-                  AyakashiTriangleDownload(), HatarakuMaousama2Download(), NierAutomataDownload(),
-                  GundamWitchDownload(), BokuyabaDownload(), DeadMountDeathPlayDownload(), IseleveDownload(),
-                  OneKillSisterDownload(), KamikatsuDownload(), KimisomuDownload(), KumaBear2Download(),
-                  MegamiCafeDownload(), MashleDownload(), OshinokoDownload(), WatayuriDownload(),
+    downloads += [SugarAppleDownload(), SpyroomDownload(), AookeDownload(), MononogatariDownload(),
+                  Maohgakuin2Download(), AyakashiTriangleDownload(), HatarakuMaousama2Download(),
+                  NierAutomataDownload(), GundamWitchDownload(), BokuyabaDownload(), DeadMountDeathPlayDownload(),
+                  IseleveDownload(), OneKillSisterDownload(), KamikatsuDownload(), KimisomuDownload(),
+                  KumaBear2Download(), MegamiCafeDownload(), MashleDownload(), OshinokoDownload(), WatayuriDownload(),
                   Yamada999Download(), BuddyDaddiesDownload()]
     subclasses = Fall2023AnimeDownload.__subclasses__() \
         + Winter2024AnimeDownload.__subclasses__() \

@@ -2174,7 +2174,7 @@ class MononogatariDownload(Winter2023AnimeDownload):
     folder_name = 'mononogatari'
 
     PAGE_PREFIX = website
-    FINAL_EPISODE = 12
+    FINAL_EPISODE = 24
 
     def __init__(self):
         super().__init__()
