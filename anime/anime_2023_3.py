@@ -1670,6 +1670,7 @@ class SukimegaDownload(Summer2023AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -1717,7 +1718,6 @@ class SukimegaDownload(Summer2023AnimeDownload, NewsTemplate):
             soup = self.get_soup(self.PAGE_PREFIX)
             images = soup.select('.skmg_top_fv_kv_box_item_image img[src]')
             self.image_list = []
-            self.image_list = []
             for image in images:
                 image_url = image['src']
                 if '/images/' not in image_url:
@@ -1727,6 +1727,39 @@ class SukimegaDownload(Summer2023AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        for page in ['store_benefits', '1', '2', '3']:
+            try:
+                if page.isnumeric() and page in processed:
+                    continue
+                page_url = self.PAGE_PREFIX + 'blu-ray/'
+                if page.isnumeric():
+                    page_url += 'volume'
+                page_url += page
+                soup = self.get_soup(page_url)
+                if page.isnumeric():
+                    images = soup.select('.skmg_page_bluray_body_rl1_left img[src]')
+                else:
+                    images = soup.select('.skmg_page_bluray_body_rl2_left img[src],.bluray_multi_images_body img[src]')
+                self.image_list = []
+                for image in images:
+                    image_url = image['src'].split('?')[0]
+                    if image_url.endswith('sample02.png'):
+                        continue
+                    if '/images/' not in image_url:
+                        continue
+                    image_name = self.generate_image_name_from_url(image_url, 'images')
+                    self.add_to_image_list(image_name, image_url)
+                if page.isnumeric() and len(self.image_list) > 0:
+                    processed.append(page)
+                self.download_image_list(folder)
+            except Exception as e:
+                self.print_exception(e, f'Blu-ray - {page}')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Temple
