@@ -99,7 +99,6 @@ The premiere date for the anime listed here has not been announced.
 * [Seiken Gakuin no Makentsukai](https://seikengakuin.com/)
 * [Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita 2nd Season](https://slime300-anime.com/)
 * [Tensei Kizoku, Kantei Skill de Nariagaru](https://kanteiskill.com/)
-* [Tensei shitara Dainana Ouji Datta node, Kimama ni Majutsu wo Kiwamemasu](https://dainanaoji.com/)
 * [Tsuyokute New Saga](https://tsuyosaga-pr.com/)
 * [Unnamed Memory](https://unnamedmemory.com/)
 * [Yoru no Kurage wa Oyogenai](https://yorukura-anime.com/)
@@ -107,6 +106,7 @@ The premiere date for the anime listed here has not been announced.
 
 ### Spring 2024 Anime
 * [Kono Sekai wa Fukanzen Sugiru](https://konofuka.com/)
+* [Tensei shitara Dainana Ouji Datta node, Kimama ni Majutsu wo Kiwamemasu](https://dainanaoji.com/)
 
 ### Winter 2024 Anime
 * [Dosanko Gal wa Namara Menkoi](https://dosankogal-pr.com/)
