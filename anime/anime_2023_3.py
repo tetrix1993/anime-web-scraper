@@ -259,6 +259,8 @@ class LastameDownload(Summer2023AnimeDownload, NewsTemplate):
     folder_name = 'lastame'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 6
 
     def __init__(self):
         super().__init__()
@@ -266,6 +268,7 @@ class LastameDownload(Summer2023AnimeDownload, NewsTemplate):
     def run(self):
         self.download_episode_preview()
         self.download_news()
+        self.download_episode_preview_guess(download_valid=True)
         self.download_key_visual()
         self.download_character()
 
@@ -302,6 +305,41 @@ class LastameDownload(Summer2023AnimeDownload, NewsTemplate):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.newsBox li',
                                     date_select='small', title_select='p', id_select='a',
                                     date_func=lambda x: x.replace('年', '.').replace('月', '.').replace('日', ''))
+
+    def download_episode_preview_guess(self, print_invalid=False, download_valid=False):
+        if self.is_image_exists(str(self.FINAL_EPISODE).zfill(2) + '_1'):
+            return
+
+        folder = self.create_custom_directory('guess')
+        template = self.PAGE_PREFIX + 'wp/wp-content/uploads/%s/%s/MAINlastame_ep%s_%s.jpg'
+        current_date = datetime.now() + timedelta(hours=1)
+        year = current_date.strftime('%Y')
+        month = current_date.strftime('%m')
+        is_successful = False
+        for i in range(self.FINAL_EPISODE):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_1') or self.is_image_exists(episode + '_1', folder):
+                continue
+            episode_success = False
+            valid_urls = []
+            for j in range(self.IMAGES_PER_EPISODE):
+                image_url = template % (year, month, episode, str(j + 1))
+                if self.is_valid_url(image_url, is_image=True):
+                    print('VALID - ' + image_url)
+                    episode_success = True
+                    valid_urls.append(image_url)
+                elif print_invalid:
+                    print('INVALID - ' + image_url)
+            if download_valid and len(valid_urls) > 0:
+                for valid_url in valid_urls:
+                    image_name = self.extract_image_name_from_url(valid_url)
+                    self.download_image(valid_url, folder + '/' + image_name)
+            if not episode_success:
+                break
+            is_successful = True
+        if is_successful:
+            print(self.__class__.__name__ + ' - Guessed correctly!')
+        return is_successful
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
