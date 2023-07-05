@@ -1919,6 +1919,19 @@ class MegamiCafeDownload(Spring2023AnimeDownload, NewsTemplate):
         except Exception as e:
             self.print_exception(e, 'Blu-ray')
 
+        # Blu-ray Bonus
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'store')
+            self.image_list = []
+            images = soup.select('.store__list--img img[src]')
+            for image in images:
+                image_url = image['src']
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray Bonus')
+
 
 # Mashle
 class MashleDownload(Spring2023AnimeDownload, NewsTemplate):
