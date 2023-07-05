@@ -2195,7 +2195,7 @@ class YumemiruDanshiDownload(Summer2023AnimeDownload, NewsTemplate):
         is_successful = False
         for i in range(self.FINAL_EPISODE):
             episode = str(i + 1).zfill(2)
-            if self.is_image_exists(episode + '_1') or self.is_image_exists(episode + '_1', folder):
+            if self.is_image_exists(episode + '_1') or self.is_image_exists(episode + '_01', folder):
                 continue
             episode_success = False
             valid_urls = []
