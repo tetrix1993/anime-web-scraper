@@ -644,6 +644,9 @@ class Kanokari3Download(Summer2023AnimeDownload, NewsTemplate):
     folder_name = 'kanokari3'
 
     PAGE_PREFIX = website
+    FIRST_EPISODE = 25
+    FINAL_EPISODE = 36
+    IMAGES_PER_EPISODE = 6
 
     def __init__(self):
         super().__init__()
@@ -656,7 +659,27 @@ class Kanokari3Download(Summer2023AnimeDownload, NewsTemplate):
         self.download_media()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        template = self.PAGE_PREFIX + '3rd/wp-content/uploads/%s/%s/かのかり3_%s-%s.%s'
+        current_date = datetime.now() + timedelta(hours=1)
+        year = current_date.strftime('%Y')
+        month = current_date.strftime('%m')
+        for i in range(self.FIRST_EPISODE, self.FINAL_EPISODE + 1, 1):
+            episode = str(i).zfill(2)
+            if self.is_image_exists(episode + '_1'):
+                continue
+            is_success = False
+            for j in range(self.IMAGES_PER_EPISODE):
+                image_name = episode + '_' + str(j + 1)
+                for k in ['jpg', 'png']:
+                    image_url = template % (year, month, episode, str(j + 1).zfill(2), k)
+                    result = self.download_image(image_url, self.base_folder + '/' + image_name)
+                    if result != -1:
+                        is_success = True
+                        break
+                if not is_success:
+                    break
+            if not is_success:
+                break
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-item',
