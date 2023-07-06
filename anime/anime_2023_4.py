@@ -1,9 +1,11 @@
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 import os
+import string
 
 # Boukensha ni Naritai to Miyako ni Deteitta Musume ga S-Rank ni Natteta
 # Dekoboko Majo no Oyako Jijou https://dekoboko-majo-anime.jp/ @DEKOBOKO_anime #でこぼこ魔女の親子事情
 # Hametsu no Oukoku https://hametsu-anime.com/ #はめつのおうこく #はめつ @hametsu_anime
+# Hikikomari Kyuuketsuki no Monmon https://hikikomari.com/ #ひきこまり @komarin_PR
 # Hoshikuzu Telepath https://hoshitele-anime.com/ #星テレ #hoshitele @hoshitele_anime
 # Kimi no Koto ga Daidaidaidaidaisuki na 100-nin no Kanojo https://hyakkano.com/ @hyakkano_anime #100カノ
 # Konyaku Haki sareta Reijou wo Hirotta Ore ga, Ikenai koto wo Oshiekomu https://ikenaikyo.com/ #イケナイ教 @ikenaikyo_anime
@@ -195,6 +197,72 @@ class HametsuDownload(Fall2023AnimeDownload, NewsTemplate):
             self.PAGE_PREFIX + 'assets/character/%ss.webp'
         ]
         self.download_by_template(folder, templates, 1, 1)
+
+
+# Hikikomari Kyuuketsuki no Monmon
+class HikikomariDownload(Fall2023AnimeDownload, NewsTemplate):
+    title = 'Hikikomari Kyuuketsuki no Monmon'
+    keywords = [title]
+    website = 'https://hikikomari.com/'
+    twitter = 'komarin_PR'
+    hashtags = ['ひきこまり']
+    folder_name = 'hikikomari'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article.news-lineup__block',
+                                    date_select='dt', title_select='h2', id_select='a', a_tag_prefix=self.PAGE_PREFIX,
+                                    a_tag_start_text_to_remove='/')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.mv-pc.pc source[srcset]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['srcset'][1:]
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'assets/img/%s.png'
+        try:
+            for i in range(20):
+                img_num = str(i + 1).zfill(2)
+                is_successful = False
+                for j in string.ascii_uppercase:
+                    image_name = 'character-detail-img' + img_num + j
+                    if self.is_image_exists(image_name, folder):
+                        is_successful = True
+                        break
+                    image_url = template % image_name
+                    result = self.download_image(image_url, folder + '/' + image_name)
+                    if result != -1:
+                        is_successful = True
+                    else:
+                        break
+                if not is_successful:
+                    break
+        except Exception as e:
+            self.print_exception(e, 'Character')
 
 
 # Hoshikuzu Telepath

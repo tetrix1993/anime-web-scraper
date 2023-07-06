@@ -121,6 +121,7 @@ The premiere date for the anime listed here has not been announced.
 * [Boukensha ni Naritai to Miyako ni Deteitta Musume ga S-Rank ni Natteta](https://s-rank-musume.com/)
 * [Dekoboko Majo no Oyako Jijou](https://dekoboko-majo-anime.jp/)
 * [Hametsu no Oukoku](https://hametsu-anime.com/)
+* [Hikikomari Kyuuketsuki no Monmon](https://hikikomari.com/)
 * [Hoshikuzu Telepath](https://hoshitele-anime.com/)
 * [Kimi no Koto ga Daidaidaidaidaisuki na 100-nin no Kanojo](https://hyakkano.com/)
 * [Konyaku Haki sareta Reijou wo Hirotta Ore ga, Ikenai koto wo Oshiekomu](https://ikenaikyo.com/)
