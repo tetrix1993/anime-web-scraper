@@ -155,8 +155,8 @@ The premiere date for the anime listed here has not been announced.
 * [Suki na Ko ga Megane wo Wasureta](https://anime.shochiku.co.jp/sukimega/)
 * [Temple](https://temple-anime.com/)
 * [Uchi no Kaisha no Chiisai Senpai no Hanashi](https://chiisaisenpai.com/)
-* [Yumemiru Danshi wa Genjitsushugisha](https://yumemirudanshi.com/)
 * [Watashi no Shiawase na Kekkon](https://watakon-anime.com/)
+* [Yumemiru Danshi wa Genjitsushugisha](https://yumemirudanshi.com/)
 * [Zom 100: Zombie ni Naru made ni Shitai 100 no Koto](https://zom100.com/)
 
 ### Spring 2023 Anime
