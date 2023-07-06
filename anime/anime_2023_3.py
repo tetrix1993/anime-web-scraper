@@ -490,6 +490,8 @@ class JihankiDownload(Summer2023AnimeDownload, NewsTemplate):
     folder_name = 'jihanki'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 5
 
     def __init__(self):
         super().__init__()
@@ -497,11 +499,28 @@ class JihankiDownload(Summer2023AnimeDownload, NewsTemplate):
     def run(self):
         self.download_episode_preview()
         self.download_news()
-        self.download_key_visual()
+        soup = self.download_key_visual()
         self.download_character()
+        self.download_media(soup)
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            template = self.PAGE_PREFIX + 'assets/img/story/story%s_%s.jpg'
+            stop = False
+            for i in range(self.FINAL_EPISODE):
+                episode = str(i + 1).zfill(2)
+                if self.is_image_exists(episode + '_' + str(self.IMAGES_PER_EPISODE)):
+                    continue
+                for j in range(self.IMAGES_PER_EPISODE):
+                    image_url = template % (episode, str(j + 1).zfill(2))
+                    image_name = episode + '_' + str(j + 1)
+                    if self.download_image(image_url, self.base_folder + '/' + image_name) == -1:
+                        stop = True
+                        break
+                if stop:
+                    break
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         news_url = 'https://up-info.news/jihanki-anime/'
@@ -514,6 +533,7 @@ class JihankiDownload(Summer2023AnimeDownload, NewsTemplate):
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FqhSbfPaYAIYg4i?format=jpg&name=4096x4096')
         self.download_image_list(folder)
 
+        soup = None
         try:
             soup = self.get_soup(self.PAGE_PREFIX)
             self.image_list = []
@@ -536,11 +556,47 @@ class JihankiDownload(Summer2023AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Key Visual')
+        return soup
 
     def download_character(self):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'assets/img/chara/img_chara%s.png'
         self.download_by_template(folder, template, 1, 1)
+
+    def download_media(self, soup=None):
+        folder = self.create_media_directory()
+        try:
+            if soup is None:
+                soup = self.get_soup(self.PAGE_PREFIX)
+        except:
+            return
+
+        try:
+            images = soup.select('.p-jihanki-bd-visual__inner img[src]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'][2:]
+                if '/bd/' not in image_url:
+                    continue
+                image_name = self.generate_image_name_from_url(image_url, 'bd')
+                if self.is_image_exists(image_name, folder):
+                    continue
+                if self.is_not_matching_content_length(image_url, 341121):
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
+
+        try:
+            images = soup.select('.p-jihanki-bd-media__inner img[src]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'][2:]
+                image_name = self.generate_image_name_from_url(image_url, 'bd')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray Bonus')
 
 
 # Jitsu wa Ore, Saikyou deshita?
