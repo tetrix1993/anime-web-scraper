@@ -300,7 +300,7 @@ class HatarakuMaousama2Download(Summer2022AnimeDownload, NewsTemplate):
     folder_name = 'hataraku-maousama2'
 
     PAGE_PREFIX = website
-    FINAL_EPISODE = 12
+    FINAL_EPISODE = 24
 
     def __init__(self):
         super().__init__()
