@@ -13,7 +13,7 @@ import os
 # Jidou Hanbaiki ni Umarekawatta Ore wa Meikyuu wo Samayou https://jihanki-anime.com/ #俺自販機 @jihanki_anime
 # Jitsu wa Ore, Saikyou deshita? https://jitsuhaoresaikyo-anime.com/ @jitsuoresaikyo
 # Kanojo, Okarishimasu 3rd Season https://kanokari-official.com/ #かのかり #kanokari @kanokari_anime
-# Level 1 dakedo Unique Skill de Saikyou desu https://level1-anime.com/ #レベル1だけどアニメ化です @level1_anime
+# Level 1 dakedo Unique Skill de Saikyou desu https://level1-anime.com/ #level1_anime @level1_anime
 # Lv1 Maou to One Room Yuusha https://lv1room.com/ #lv1room @Lv1room
 # Liar Liar https://liar-liar-anime.com/ #ライアー・ライアー #ライアラ @liar2_official
 # Masamune-kun no Revenge R https://masamune-tv.com/ #MASA_A @masamune_tv
@@ -792,28 +792,51 @@ class Level1Download(Summer2023AnimeDownload, NewsTemplate):
     keywords = [title, 'My Unique Skill Makes Me OP Even at Level 1']
     website = 'https://level1-anime.com/'
     twitter = 'level1_anime'
-    hashtags = 'レベル1だけどアニメ化です'
+    hashtags = 'level1_anime'
     folder_name = 'level1'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
 
     def __init__(self):
         super().__init__()
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_external()
         self.download_news()
         self.download_key_visual()
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            stories = soup.select('.story-item')
+            for story in stories:
+                try:
+                    episode = str(int(story.select('.story-num')[0].text)).zfill(2)
+                except:
+                    continue
+                self.image_list = []
+                images = story.select('.story-ss-item img[src]')
+                for i in range(len(images)):
+                    image_url = images[i]['src'].split('?')[0]
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-item',
                                     date_select='.date', title_select='.title', id_select='a',
                                     next_page_select='div.pagination .page-numbers',
                                     next_page_eval_index_class='current', next_page_eval_index=-1)
+
+    def download_episode_preview_external(self):
+        keywords = ['レベル１だけどユニークスキルで最強です']
+        AniverseMagazineScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                end_date='20230706', download_id=self.download_id).run()
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
