@@ -27,8 +27,8 @@ import os
 # Suki na Ko ga Megane wo Wasureta https://anime.shochiku.co.jp/sukimega/ #好きめが @Sukimega
 # Temple https://temple-anime.com/ #てんぷる #Tenpuru_anime @temple_tvanime
 # Uchi no Kaisha no Chiisai Senpai no Hanashi https://chiisaisenpai.com/ #うちの会社の小さい先輩の話 @smallsenpai_pr
-# Yumemiru Danshi wa Genjitsushugisha https://yumemirudanshi.com/ #夢見る男子 @yumemiru_anime
 # Watashi no Shiawase na Kekkon https://watakon-anime.com/ #watakon #わたしの幸せな結婚
+# Yumemiru Danshi wa Genjitsushugisha https://yumemirudanshi.com/ #夢見る男子 @yumemiru_anime
 # Zom 100: Zombie ni Naru made ni Shitai 100 no Koto https://zom100.com/ #ゾン100 #Zom100 @Zom100_anime_JP
 
 
@@ -52,6 +52,7 @@ class DarkGatheringDownload(Summer2023AnimeDownload, NewsTemplate):
     folder_name = 'darkgathering'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 25
 
     def __init__(self):
         super().__init__()
@@ -62,8 +63,30 @@ class DarkGatheringDownload(Summer2023AnimeDownload, NewsTemplate):
         self.download_key_visual()
         self.download_character()
 
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+    def download_episode_preview(self, print_http_error=False):
+        if self.is_image_exists(str(self.FINAL_EPISODE) + '_1') and self.is_image_exists('01_1'):
+            return
+
+        try:
+            objs = self.get_json(self.PAGE_PREFIX + 'news/wp-json/wp/v2/pages?orderby=date&order=asc&acf_format=standard&per_page=100&parent=73')
+            for obj in objs:
+                if 'acf' in obj:
+                    acf = obj['acf']
+                    if 'number' in acf and 'images' in acf and isinstance(acf['images'], list):
+                        try:
+                            episode = str(int(acf['number'].split('第')[1].split('話')[0])).zfill(2)
+                        except:
+                            continue
+                        for i in range(len(acf['images'])):
+                            image_url = acf['images'][i]
+                            image_name = episode + '_' + str(i + 1)
+                            self.add_to_image_list(image_name, image_url)
+                        self.download_image_list(self.base_folder)
+        except HTTPError:
+            if print_http_error:
+                print(self.__class__.__name__ + ' - 403 Error when retrieving story API.')
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-item',
@@ -2247,6 +2270,135 @@ class ChiisaiSenpaiDownload(Summer2023AnimeDownload, NewsTemplate):
         self.create_cache_file(cache_filepath, processed, num_processed)
 
 
+# Watashi no Shiawase na Kekkon
+class WatakonDownload(Summer2023AnimeDownload, NewsTemplate):
+    title = 'Watashi no Shiawase na Kekkon'
+    keywords = [title, 'My Happy Marriage', 'watakon']
+    website = 'https://watakon-anime.com/'
+    twitter = 'watashino_info'
+    hashtags = ['watakon', 'わたしの幸せな結婚']
+    folder_name = 'watakon'
+
+    PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 6
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_episode_preview_guess(download_valid=True)
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            stories = soup.select('.index-Story_Content')
+            for story in stories:
+                try:
+                    episode = str(int(self.convert_kanji_to_number(
+                        story.select('span.num')[0].text.replace('第', '').replace('話', '')))).zfill(2)
+                except:
+                    continue
+                self.image_list = []
+                images = story.select('.swiper-slide img[src]')
+                for i in range(len(images)):
+                    image_url = self.PAGE_PREFIX + images[i]['src'][1:]
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news_List li.item',
+                                    date_select='span.time', title_select='.ttl', id_select='a',
+                                    date_func=lambda x: x[0:4] + '.' + x[4:6] + '.' + x[6:8],
+                                    next_page_select='.nextpostslink')
+
+    def download_episode_preview_guess(self, print_invalid=False, download_valid=False):
+        if self.is_image_exists(str(self.FINAL_EPISODE).zfill(2) + '_1'):
+            return
+
+        folder = self.create_custom_directory('guess')
+        template = self.PAGE_PREFIX + 'wp-content/uploads/%s/%s/img_story_%s_%s.jpg'
+        current_date = datetime.now() + timedelta(hours=1)
+        year = current_date.strftime('%Y')
+        month = current_date.strftime('%m')
+        is_successful = False
+        for i in range(self.FINAL_EPISODE):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_1') or self.is_image_exists(episode + '_1', folder):
+                continue
+            episode_success = False
+            valid_urls = []
+            for j in range(self.IMAGES_PER_EPISODE):
+                image_url = template % (year, month, episode, str(j + 1).zfill(2))
+                if self.is_valid_url(image_url, is_image=True):
+                    print('VALID - ' + image_url)
+                    episode_success = True
+                    valid_urls.append(image_url)
+                elif print_invalid:
+                    print('INVALID - ' + image_url)
+            if download_valid and len(valid_urls) > 0:
+                for valid_url in valid_urls:
+                    image_name = self.extract_image_name_from_url(valid_url)
+                    self.download_image(valid_url, folder + '/' + image_name)
+            if not episode_success:
+                break
+            is_successful = True
+        if is_successful:
+            print(self.__class__.__name__ + ' - Guessed correctly!')
+        return is_successful
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            self.image_list = []
+            images = soup.select('.modal-KV_Img img[src]')
+            for image in images:
+                if '/index/' in image['src']:
+                    image_url = image['src'].split('?')[0]
+                    image_name = self.generate_image_name_from_url(image_url, 'index')
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            a_tags = soup.select('.character-List li>a[href]')
+            for a_tag in a_tags:
+                chara_url = a_tag['href']
+                if chara_url.endswith('/'):
+                    chara_name = chara_url[:-1].split('/')[-1]
+                else:
+                    chara_name = chara_url.split('/')[-1]
+                if chara_name in processed:
+                    continue
+                chara_soup = self.get_soup(chara_url)
+                if chara_soup is not None:
+                    images = chara_soup.select('.character_Content .visual img[src]')
+                    for image in images:
+                        image_url = image['src']
+                        image_name = self.extract_image_name_from_url(image_url)
+                        self.add_to_image_list(image_name, image_url)
+                    if len(self.image_list) > 0:
+                        processed.append(chara_name)
+                    self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+        self.create_cache_file(cache_filepath, processed, num_processed)
+
+
 # Yumemiru Danshi wa Genjitsushugisha
 class YumemiruDanshiDownload(Summer2023AnimeDownload, NewsTemplate):
     title = 'Yumemiru Danshi wa Genjitsushugisha'
@@ -2278,7 +2430,7 @@ class YumemiruDanshiDownload(Summer2023AnimeDownload, NewsTemplate):
 
         try:
             objs = self.get_json(
-                'https://yumemirudanshi.com/news/wp-json/wp/v2/pages?orderby=date&order=asc&acf_format=standard&per_page=100&parent=85')
+                self.PAGE_PREFIX + 'news/wp-json/wp/v2/pages?orderby=date&order=asc&acf_format=standard&per_page=100&parent=85')
             for obj in objs:
                 if 'acf' in obj:
                     acf = obj['acf']
@@ -2418,135 +2570,6 @@ class YumemiruDanshiDownload(Summer2023AnimeDownload, NewsTemplate):
                 self.download_image_list(folder)
             except Exception as e:
                 self.print_exception(e, f'Blu-ray - {page}')
-        self.create_cache_file(cache_filepath, processed, num_processed)
-
-
-# Watashi no Shiawase na Kekkon
-class WatakonDownload(Summer2023AnimeDownload, NewsTemplate):
-    title = 'Watashi no Shiawase na Kekkon'
-    keywords = [title, 'My Happy Marriage', 'watakon']
-    website = 'https://watakon-anime.com/'
-    twitter = 'watashino_info'
-    hashtags = ['watakon', 'わたしの幸せな結婚']
-    folder_name = 'watakon'
-
-    PAGE_PREFIX = website
-    FINAL_EPISODE = 12
-    IMAGES_PER_EPISODE = 6
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_news()
-        self.download_episode_preview_guess(download_valid=True)
-        self.download_key_visual()
-        self.download_character()
-
-    def download_episode_preview(self):
-        try:
-            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
-            stories = soup.select('.index-Story_Content')
-            for story in stories:
-                try:
-                    episode = str(int(self.convert_kanji_to_number(
-                        story.select('span.num')[0].text.replace('第', '').replace('話', '')))).zfill(2)
-                except:
-                    continue
-                self.image_list = []
-                images = story.select('.swiper-slide img[src]')
-                for i in range(len(images)):
-                    image_url = self.PAGE_PREFIX + images[i]['src'][1:]
-                    image_name = episode + '_' + str(i + 1)
-                    self.add_to_image_list(image_name, image_url)
-                self.download_image_list(self.base_folder)
-        except Exception as e:
-            self.print_exception(e)
-
-    def download_news(self):
-        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news_List li.item',
-                                    date_select='span.time', title_select='.ttl', id_select='a',
-                                    date_func=lambda x: x[0:4] + '.' + x[4:6] + '.' + x[6:8],
-                                    next_page_select='.nextpostslink')
-
-    def download_episode_preview_guess(self, print_invalid=False, download_valid=False):
-        if self.is_image_exists(str(self.FINAL_EPISODE).zfill(2) + '_1'):
-            return
-
-        folder = self.create_custom_directory('guess')
-        template = self.PAGE_PREFIX + 'wp-content/uploads/%s/%s/img_story_%s_%s.jpg'
-        current_date = datetime.now() + timedelta(hours=1)
-        year = current_date.strftime('%Y')
-        month = current_date.strftime('%m')
-        is_successful = False
-        for i in range(self.FINAL_EPISODE):
-            episode = str(i + 1).zfill(2)
-            if self.is_image_exists(episode + '_1') or self.is_image_exists(episode + '_1', folder):
-                continue
-            episode_success = False
-            valid_urls = []
-            for j in range(self.IMAGES_PER_EPISODE):
-                image_url = template % (year, month, episode, str(j + 1).zfill(2))
-                if self.is_valid_url(image_url, is_image=True):
-                    print('VALID - ' + image_url)
-                    episode_success = True
-                    valid_urls.append(image_url)
-                elif print_invalid:
-                    print('INVALID - ' + image_url)
-            if download_valid and len(valid_urls) > 0:
-                for valid_url in valid_urls:
-                    image_name = self.extract_image_name_from_url(valid_url)
-                    self.download_image(valid_url, folder + '/' + image_name)
-            if not episode_success:
-                break
-            is_successful = True
-        if is_successful:
-            print(self.__class__.__name__ + ' - Guessed correctly!')
-        return is_successful
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        try:
-            soup = self.get_soup(self.PAGE_PREFIX)
-            self.image_list = []
-            images = soup.select('.modal-KV_Img img[src]')
-            for image in images:
-                if '/index/' in image['src']:
-                    image_url = image['src'].split('?')[0]
-                    image_name = self.generate_image_name_from_url(image_url, 'index')
-                    self.add_to_image_list(image_name, image_url)
-            self.download_image_list(folder)
-        except Exception as e:
-            self.print_exception(e, 'Key Visual')
-
-    def download_character(self):
-        folder = self.create_character_directory()
-        cache_filepath = folder + '/cache'
-        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
-        try:
-            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
-            a_tags = soup.select('.character-List li>a[href]')
-            for a_tag in a_tags:
-                chara_url = a_tag['href']
-                if chara_url.endswith('/'):
-                    chara_name = chara_url[:-1].split('/')[-1]
-                else:
-                    chara_name = chara_url.split('/')[-1]
-                if chara_name in processed:
-                    continue
-                chara_soup = self.get_soup(chara_url)
-                if chara_soup is not None:
-                    images = chara_soup.select('.character_Content .visual img[src]')
-                    for image in images:
-                        image_url = image['src']
-                        image_name = self.extract_image_name_from_url(image_url)
-                        self.add_to_image_list(image_name, image_url)
-                    if len(self.image_list) > 0:
-                        processed.append(chara_name)
-                    self.download_image_list(folder)
-        except Exception as e:
-            self.print_exception(e, 'Character')
         self.create_cache_file(cache_filepath, processed, num_processed)
 
 
