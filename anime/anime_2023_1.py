@@ -3591,19 +3591,30 @@ class SugarAppleDownload(Winter2023AnimeDownload, NewsTemplate):
 
     def download_media(self):
         folder = self.create_media_directory()
-        try:
-            soup = self.get_soup(self.PAGE_PREFIX + 'bluray/')
-            images = soup.select('.page_wrapper img[src]')
-            self.image_list = []
-            for image in images:
-                if '/bluray/' not in image['src'] or image['src'].endswith('img_cs_02.jpg'):
-                    continue
-                image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
-                image_name = self.generate_image_name_from_url(image_url, 'bluray')
-                self.add_to_image_list(image_name, image_url)
-            self.download_image_list(folder)
-        except Exception as e:
-            self.print_exception(e, 'Blu-ray')
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        for page in ['', 'season1']:
+            try:
+                page_url = self.PAGE_PREFIX + 'bluray/'
+                if len(page) > 0:
+                    if page in processed:
+                        continue
+                    page_url += page + '.html'
+                soup = self.get_soup(page_url)
+                images = soup.select('.page_wrapper img[src]')
+                self.image_list = []
+                for image in images:
+                    if '/bluray/' not in image['src'] or image['src'].endswith('img_cs_02.jpg'):
+                        continue
+                    image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                    image_name = self.generate_image_name_from_url(image_url, 'bluray')
+                    self.add_to_image_list(image_name, image_url)
+                if len(page) > 0 and len(self.image_list) > 0:
+                    processed.append(page)
+                self.download_image_list(folder)
+            except Exception as e:
+                self.print_exception(e, f'Blu-ray - {page}')
+            self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Tensei Oujo to Tensai Reijou no Mahou Kakumei
