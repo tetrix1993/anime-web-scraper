@@ -879,6 +879,34 @@ class Kanokari3Download(Summer2023AnimeDownload, NewsTemplate):
         except Exception as e:
             self.print_exception(e, 'Character')
 
+    def download_media(self):
+        folder = self.create_media_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        for page in ['store', 'vol1', 'vol2']:
+            try:
+                if page.startswith('vol') and page in processed:
+                    continue
+                page_url = self.PAGE_PREFIX + 'bd/' + page
+                soup = self.get_soup(page_url)
+                if page.startswith('vol'):
+                    images = soup.select('.bd-container img[src]')
+                else:
+                    images = soup.select('.store-item img[src]')
+                for image in images:
+                    image_url = image['src']
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+                if page.startswith('vol'):
+                    if len(self.image_list) == 0:
+                        break
+                    else:
+                        processed.append(page)
+                self.download_image_list(folder)
+            except Exception as e:
+                self.print_exception(e, f'Blu-ray - {page}')
+        self.create_cache_file(cache_filepath, processed, num_processed)
+
 
 # Level 1 dakedo Unique Skill de Saikyou desu
 class Level1Download(Summer2023AnimeDownload, NewsTemplate):
