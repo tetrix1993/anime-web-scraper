@@ -1510,6 +1510,7 @@ class NanatsumaDownload(Summer2023AnimeDownload, NewsTemplate4):
         self.download_news(init_json)
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self, print_http_error=False):
         try:
@@ -1584,6 +1585,29 @@ class NanatsumaDownload(Summer2023AnimeDownload, NewsTemplate4):
                 result2 = self.download_image(close_url, folder + '/' + close_name)
                 if result2 == -1:
                     break
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'blu-ray')
+            images = soup.select('div[class^="blu-ray__BoxImageArea"] img[src]' +
+                                 ',div[class^="blu-ray__StoreSection"] img[src]' +
+                                 ',div[class^="blu-ray__EarlyBookingBonusGrid"] img[src]')
+            self.image_list = []
+            for image in images:
+                if image['src'].startswith('/'):
+                    image_url = self.PAGE_PREFIX + image['src'][1:]
+                else:
+                    image_url = image['src']
+                if image_url.endswith('svg') or '/blu-ray/' not in image_url:
+                    continue
+                image_name = self.generate_image_name_from_url(image_url, 'blu-ray')
+                if 'now_printing' in image_name:
+                    continue
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
 
 # Okashi na Tensei
