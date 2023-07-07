@@ -312,6 +312,7 @@ class LastameDownload(Summer2023AnimeDownload, NewsTemplate):
         self.download_episode_preview_guess(download_valid=True)
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -413,6 +414,40 @@ class LastameDownload(Summer2023AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        for page in ['store', 'bluray']:
+            try:
+                page_url = self.PAGE_PREFIX + page
+                soup = self.get_soup(page_url)
+                if page == 'store':
+                    images = soup.select('.store__list--img img[src]')
+                else:
+                    images = soup.select('.bluray__cnt--area img[src]')
+                self.image_list = []
+                for image in images:
+                    if image['src'].startswith('/'):
+                        image_url = self.PAGE_PREFIX + image['src'][1:]
+                    else:
+                        image_url = image['src']
+                    image_url = self.clear_resize_in_url(image_url.split('?')[0])
+                    if 'bluray' in image_url:
+                        image_name = self.generate_image_name_from_url(image_url, 'bluray')
+                    else:
+                        image_name = self.extract_image_name_from_url(image_url)
+                    if 'nowprinting' in image_name:
+                        continue
+                    if self.is_image_exists(image_name, folder):
+                        continue
+                    if page == 'bluray':
+                        if self.is_not_matching_content_length(image_url, '631227'):
+                            self.add_to_image_list(image_name, image_url)
+                    else:
+                        self.add_to_image_list(image_name, image_url)
+                self.download_image_list(folder)
+            except Exception as e:
+                self.print_exception(e, f'Blu-ray - {page}')
 
 
 # Horimiya: Piece
