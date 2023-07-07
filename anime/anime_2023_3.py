@@ -248,7 +248,7 @@ class HelckDownload(Summer2023AnimeDownload, NewsTemplate):
     title = 'Helck'
     keywords = [title]
     website = 'https://www.helck-anime.com/'
-    twitter  = 'Helck_anime'
+    twitter = 'Helck_anime'
     hashtags = ['Helck', 'ヘルク']
     folder_name = 'helck'
 
@@ -285,17 +285,19 @@ class HelckDownload(Summer2023AnimeDownload, NewsTemplate):
             self.print_exception(e)
 
     def download_news(self):
-        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='ul.wf li', title_select='.ttl',
-                                    date_select='.date', id_select='a', date_func=lambda x: x.strip()[0:10])
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.l-news__list-item',
+                                    title_select='.p-in-head', date_select='.p-in-data-day',
+                                    id_select='a', next_page_select='.p-news_in__nav-item.--next',
+                                    next_page_eval_index_class='is-disable', next_page_eval_index=-1)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         try:
             soup = self.get_soup(self.PAGE_PREFIX)
-            images = soup.select('header img[src]')
+            images = soup.select('.p-kv__image-item.is-pc img[src]')
             self.image_list = []
             for image in images:
-                image_url = self.PAGE_PREFIX + image['src'][1:]
+                image_url = image['src']
                 image_name = self.extract_image_name_from_url(image_url)
                 self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)
@@ -304,8 +306,36 @@ class HelckDownload(Summer2023AnimeDownload, NewsTemplate):
 
     def download_character(self):
         folder = self.create_character_directory()
-        template = self.PAGE_PREFIX + 'images/character_%s_img_f.png'
-        self.download_by_template(folder, template, 2, 1)
+        # template = self.PAGE_PREFIX + 'images/character_%s_img_f.png'
+        # self.download_by_template(folder, template, 2, 1)
+
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        chara_url = self.PAGE_PREFIX + 'character/'
+        try:
+            soup = self.get_soup(chara_url)
+            charas = soup.select('.p-chara_in__content-main-list-item a[href]')
+            for chara in charas:
+                chara_name = chara['href'][2:].split('/')[0]
+                if chara_name in processed:
+                    continue
+                chara_soup = self.get_soup(chara_url + chara['href'][1:])
+                if chara_soup is None:
+                    continue
+                self.image_list = []
+                images = chara_soup.select('.p-in-item img[src], .p-in-face-item img[src]')
+                for image in images:
+                    if '/chara/' not in image['src']:
+                        continue
+                    image_url = image['src']
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+                if len(self.image_list) > 0:
+                    processed.append(chara_name)
+                self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Higeki no Genkyou to Naru Saikyou Gedou Last Boss Joou wa Tami no Tame ni Tsukushimasu.

@@ -3614,7 +3614,7 @@ class SugarAppleDownload(Winter2023AnimeDownload, NewsTemplate):
                 self.download_image_list(folder)
             except Exception as e:
                 self.print_exception(e, f'Blu-ray - {page}')
-            self.create_cache_file(cache_filepath, processed, num_processed)
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Tensei Oujo to Tensai Reijou no Mahou Kakumei
