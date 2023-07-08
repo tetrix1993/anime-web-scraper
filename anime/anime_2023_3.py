@@ -959,6 +959,7 @@ class Level1Download(Summer2023AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -1015,6 +1016,22 @@ class Level1Download(Summer2023AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'wp/wp-content/themes/level1_honban/images/chara-pic%s.png'
         self.download_by_template(folder, template, 1, 1)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'bluray/')
+            self.image_list = []
+            images = soup.select('.section-contents img[src]')
+            for image in images:
+                if '/images/' not in image['src']:
+                    continue
+                image_url = image['src']
+                image_name = self.generate_image_name_from_url(image_url, 'images')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
 
 # Lv1 Maou to One Room Yuusha
