@@ -1213,6 +1213,7 @@ class LiarLiarDownload(Summer2023AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -1269,6 +1270,29 @@ class LiarLiarDownload(Summer2023AnimeDownload, NewsTemplate):
         self.download_by_template(folder, templates, 2, 1)
         self.download_by_template(folder, templates2, 2, 1)
         self.download_by_template(folder, templates3, 2, 1)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'blu-ray')
+            elems = soup.select('#ll_contents_staffcast_music img[src],' +
+                                '#ll_contents_staffcast_music span[style^="background-image:url(\'"]')
+            self.image_list = []
+            for elem in elems:
+                if elem.name == 'img':
+                    image_url = elem['src']
+                else:
+                    try:
+                        image_url = elem['style'].split("background-image:url('")[1].split("'")[0]
+                    except:
+                        continue
+                if '/blu-ray/' not in image_url:
+                    continue
+                image_name = self.generate_image_name_from_url(image_url, 'blu-ray')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
 
 # Masamune-kun no Revenge R
