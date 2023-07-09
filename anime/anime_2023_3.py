@@ -1923,6 +1923,7 @@ class ShinigamiBocchan2Download(Summer2023AnimeDownload, NewsTemplate2):
     folder_name = 'shinigami-bocchan2'
 
     PAGE_PREFIX = website
+    FIRST_EPISODE = 13
 
     def __init__(self):
         super().__init__()
@@ -1933,7 +1934,29 @@ class ShinigamiBocchan2Download(Summer2023AnimeDownload, NewsTemplate2):
         self.download_key_visual()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            stories = soup.select('#ContentsListUnit01 a[href]')
+            for story in stories:
+                try:
+                    ep_num = int(story.text.replace('#', ''))
+                    if ep_num < self.FIRST_EPISODE:
+                        continue
+                    episode = str(ep_num).zfill(2)
+                except:
+                    continue
+                ep_soup = self.get_soup(self.PAGE_PREFIX + story['href'].replace('../', ''))
+                if ep_soup is None:
+                    continue
+                images = ep_soup.select('ul.tp5 img[src]')
+                self.image_list = []
+                for i in range(len(images)):
+                    image_url = self.PAGE_PREFIX + images[i]['src'].split('?')[0].replace('../', '').replace('sn_', '')
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(self.PAGE_PREFIX, stop_date='2022.05.13')
