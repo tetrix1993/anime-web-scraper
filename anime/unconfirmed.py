@@ -12,7 +12,6 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Goblin Slayer S2 http://www.goblinslayer.jp/ #ゴブスレ #いせれべ @GoblinSlayer_GA
 # Highspeed Etoile https://highspeed-etoile.com/ #ハイスピ @HSE_Project_PR
 # Isekai de Mofumofu Nadenade suru Tame ni Ganbattemasu. https://mohunadeanime.com/ #もふなで @mohunade_anime
-# Keikenzumi na Kimi to, Keiken Zero na Ore ga, Otsukiai suru Hanashi. https://kimizero.com/ #キミゼロ @kimizero_anime
 # Kekkon Yubiwa Monogatari https://talesofweddingrings-anime.jp/ #結婚指輪物語 @weddingringsPR
 # Saijaku Tamer wa Gomi Hiroi no Tabi wo Hajimemashita. https://saijakutamer-anime.com/
 # Seijo no Maryoku wa Bannou Desu S2 https://seijyonomaryoku.jp/ #seijyonoanime @seijyonoanime
@@ -433,97 +432,6 @@ class MofunadeDownload(UnconfirmedDownload, NewsTemplate):
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FrwZ2u4aQAMVhBo?format=jpg&name=4096x4096')
         self.add_to_image_list('tz', self.PAGE_PREFIX + 'dist/img/top/kv_img.webp')
         self.download_image_list(folder)
-
-
-# Keikenzumi na Kimi to, Keiken Zero na Ore ga, Otsukiai suru Hanashi.
-class KimizeroDownload(UnconfirmedDownload, NewsTemplate2):
-    title = 'Keikenzumi na Kimi to, Keiken Zero na Ore ga, Otsukiai suru Hanashi.'
-    keywords = [title, "Kimizero"]
-    website = 'https://kimizero.com/'
-    twitter = 'kimizero_anime'
-    hashtags = 'キミゼロ'
-    folder_name = 'kimizero'
-
-    PAGE_PREFIX = website
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_news()
-        self.download_key_visual()
-        self.download_character()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_news(self):
-        self.download_template_news(self.PAGE_PREFIX)
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FcM7PglaIAA_9Bd?format=jpg&name=4096x4096')
-        self.add_to_image_list('tz_kv', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv.jpg')
-        self.add_to_image_list('tz_loading_kv', self.PAGE_PREFIX + 'core_sys/images/main/tz/loading_kv.jpg')
-        self.download_image_list(folder)
-
-        sub_folder = self.create_custom_directory(folder.split('/')[-1] + '/news')
-        cache_filepath = sub_folder + '/cache'
-        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
-        try:
-            soup = self.get_soup(self.PAGE_PREFIX + 'news/')
-            while True:
-                stop = False
-                items = soup.select('#list_01 a[href]')
-                for item in items:
-                    if not item['href'].startswith('../') or '/news/' not in item['href'] \
-                            or not item['href'].endswith('.html'):
-                        continue
-                    page_name = item['href'].split('/')[-1].split('.html')[0]
-                    if page_name in processed:
-                        stop = True
-                        break
-                    title = item.text.strip()
-                    if 'ビジュアル' in title or 'イラスト' in title:
-                        news_soup = self.get_soup(self.PAGE_PREFIX + item['href'].replace('../', ''))
-                        if news_soup is not None:
-                            images = news_soup.select('#news_block img[src]')
-                            self.image_list = []
-                            for image in images:
-                                image_url = self.PAGE_PREFIX + image['src'].replace('../', '').split('?')[0]
-                                if '/news/' not in image_url:
-                                    continue
-                                image_name = self.generate_image_name_from_url(image_url, 'news') \
-                                    .replace('_block_', '_')
-                                self.add_to_image_list(image_name, image_url)
-                            self.download_image_list(sub_folder)
-                    processed.append(page_name)
-                if stop:
-                    break
-                next_page = soup.select('.nb_nex a[href]')
-                if len(next_page) == 0:
-                    break
-                soup = self.get_soup(self.PAGE_PREFIX + next_page[0]['href'].replace('../', ''))
-        except Exception as e:
-            self.print_exception(e, 'Key Visual News')
-        self.create_cache_file(cache_filepath, processed, num_processed)
-
-    def download_character(self):
-        folder = self.create_character_directory()
-        try:
-            soup = self.get_soup(self.PAGE_PREFIX)
-            self.image_list = []
-            images = soup.select('.chara__stand img[src]')
-            for image in images:
-                if '/chara/' in image['src']:
-                    image_url = self.PAGE_PREFIX + image['src']
-                    image_name = 'tz_' + self.generate_image_name_from_url(image_url, 'chara')
-                    self.add_to_image_list(image_name, image_url)
-            self.download_image_list(folder)
-        except Exception as e:
-            self.print_exception(e, 'Character')
 
 
 # Kekkon Yubiwa Monogatari
