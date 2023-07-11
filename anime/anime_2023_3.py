@@ -1555,7 +1555,7 @@ class NanatsumaDownload(Summer2023AnimeDownload, NewsTemplate4):
 
     def download_episode_preview(self, print_http_error=False):
         try:
-            init_json = self.get_json(self.PAGE_PREFIX + 'wp-json/ssd/init')
+            init_json = self.get_json(self.PAGE_PREFIX + 'wp-json/site-data/init')
             for story in init_json['stories']:
                 episode = story['episode']
                 if self.is_image_exists(episode + '_1'):
