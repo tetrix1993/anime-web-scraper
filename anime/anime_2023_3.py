@@ -839,6 +839,27 @@ class Kanokari3Download(Summer2023AnimeDownload, NewsTemplate):
         self.download_media()
 
     def download_episode_preview(self):
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            stories = soup.select('.story-item')
+            for story in stories:
+                try:
+                    episode = str(int(story.select('.num')[0].text)).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                self.image_list = []
+                images = story.select('.ss-item img[src]')
+                for i in range(len(images)):
+                    image_url = images[i]['src']
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url, to_jpg=True)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
+
+    def download_episode_preview_guess(self):
         template = self.PAGE_PREFIX + '3rd/wp-content/uploads/%s/%s/かのかり3_%s-%s.%s'
         current_date = datetime.now() + timedelta(hours=1)
         year = current_date.strftime('%Y')

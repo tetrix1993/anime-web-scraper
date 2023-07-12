@@ -12,6 +12,7 @@ import time
 import traceback
 import portalocker
 from PIL import Image
+from io import BytesIO
 
 
 class MainDownload:
@@ -283,7 +284,10 @@ class MainDownload:
                         if 'text' in content_type:
                             return -1
                         if 'image/png' in content_type:
-                            filepath = filepath_without_extension + ".png"
+                            if to_jpg:
+                                filepath = filepath_without_extension + ".jpg"
+                            else:
+                                filepath = filepath_without_extension + ".png"
                         elif 'image/jpeg' in content_type:
                             filepath = filepath_without_extension + ".jpg"
                         elif 'image/gif' in content_type:
@@ -314,8 +318,8 @@ class MainDownload:
                         if MainDownload.is_file_exists(temp_filepath):
                             os.remove(temp_filepath)
 
+                        r.raise_for_status()
                         if 'image/webp' in content_type:
-                            r.raise_for_status()
                             with open(temp_filepath, 'wb') as f:
                                 for chunk in r.iter_content(chunk_size=8192):
                                     if chunk:
@@ -347,7 +351,6 @@ class MainDownload:
                                 # Keep a copy
                                 os.rename(temp_filepath, filepath[0:len(filepath) - 3] + 'webp')
                         elif 'image/tiff' in content_type:
-                            r.raise_for_status()
                             with open(temp_filepath, 'wb') as f:
                                 for chunk in r.iter_content(chunk_size=8192):
                                     if chunk:
@@ -360,8 +363,11 @@ class MainDownload:
                                 os.remove(temp_filepath)
                             else:
                                 os.rename(temp_filepath, filepath)
+                        elif 'image/png' in content_type and to_jpg:
+                            im = Image.open(BytesIO(r.content)).convert('RGB')
+                            im.save(filepath, 'jpeg')
+                            im.close()
                         else:
-                            r.raise_for_status()
                             with open(filepath, 'wb') as f:
                                 for chunk in r.iter_content(chunk_size=8192):
                                     if chunk:
