@@ -2086,6 +2086,7 @@ class Maohgakuin2Download(Winter2023AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         story_url = self.PAGE_PREFIX + 'story/'
@@ -2139,13 +2140,24 @@ class Maohgakuin2Download(Winter2023AnimeDownload, NewsTemplate):
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
-        self.image_list = []
+        # self.image_list = []
         # self.add_to_image_list('teaser', self.PAGE_PREFIX + 'assets/img/img_main.jpg')
         # self.add_to_image_list('teaser_tw', 'https://pbs.twimg.com/media/EvylQFOVkAID_0B?format=jpg&name=medium')
-        self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/FdRkMFnaMAImkFJ?format=jpg&name=large')
-        self.add_to_image_list('kv1', self.PAGE_PREFIX + 'assets/img/img_main_fix.jpg')
-        self.add_to_image_list('kv2_tw', 'https://pbs.twimg.com/media/FsCeMyIaQAI_Vkk?format=jpg&name=4096x4096')
-        self.download_image_list(folder)
+        # self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/FdRkMFnaMAImkFJ?format=jpg&name=large')
+        # self.add_to_image_list('kv1', self.PAGE_PREFIX + 'assets/img/img_main_fix.jpg')
+        # self.add_to_image_list('kv2_tw', 'https://pbs.twimg.com/media/FsCeMyIaQAI_Vkk?format=jpg&name=4096x4096')
+        # self.download_image_list(folder)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.main_image .img_fixed img[src]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src']
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
 
     def download_character(self):
         folder = self.create_character_directory()
@@ -2162,6 +2174,59 @@ class Maohgakuin2Download(Winter2023AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        bd_url = self.PAGE_PREFIX + 'bddvd/'
+        try:
+            soup = self.get_soup(bd_url)
+            tabs = soup.select('.page_tab__item')
+            page_names = []
+            pages = []
+            current_page_name = None
+            for tab in tabs:
+                atag = tab.select('a[href]')
+                if len(atag) > 0 and '/?page=' in atag[0]['href']:
+                    page_name = atag[0]['href'].split('=')[-1]
+                    if 'is_current' in tab['class']:
+                        current_page_name = page_name
+                    if page_name.isnumeric() and page_name not in processed:
+                        page_names.append(page_name)
+                    else:  # Process Blu-ray Bonus page first
+                        pages.append(page_name)
+            for name in page_names:
+                pages.append(name)
+            for page in pages:
+                if current_page_name == page:
+                    bd_soup = soup
+                else:
+                    bd_soup = self.get_soup(bd_url + '?page=' + page)
+                    if bd_soup is None:
+                        continue
+                images = bd_soup.select('.image_jk img[src],.novelty_wrapper img[src]')
+                self.image_list = []
+                for image in images:
+                    if image['src'].startswith('../'):
+                        image_url = self.PAGE_PREFIX + image['src'].replace('../', '').split('?')[0]
+                    elif image['src'].startswith('/'):
+                        image_url = self.PAGE_PREFIX + image['src'][1:].split('?')[0]
+                    else:
+                        image_url = image['src'].split('?')[0]
+                    if 'img_np' in image_url or 'jk_np' in image_url or '/bddvd/' not in image_url:
+                        continue
+                    image_name = self.generate_image_name_from_url(image_url, 'bddvd')
+                    self.add_to_image_list(image_name, image_url)
+                if page.isnumeric():
+                    if len(self.image_list) > 0:
+                        processed.append(page)
+                    else:
+                        break
+                self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, f'Blu-ray')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Mononogatari
