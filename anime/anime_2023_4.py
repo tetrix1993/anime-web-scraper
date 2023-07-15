@@ -3,6 +3,7 @@ import os
 import string
 
 # Boukensha ni Naritai to Miyako ni Deteitta Musume ga S-Rank ni Natteta
+# Buta no Liver wa Kanetsu Shiro https://butaliver-anime.com/ #豚レバ @butaliver_anime
 # Dekoboko Majo no Oyako Jijou https://dekoboko-majo-anime.jp/ @DEKOBOKO_anime #でこぼこ魔女の親子事情
 # Hametsu no Oukoku https://hametsu-anime.com/ #はめつのおうこく #はめつ @hametsu_anime
 # Hikikomari Kyuuketsuki no Monmon https://hikikomari.com/ #ひきこまり @komarin_PR
@@ -81,6 +82,69 @@ class SRankMusumeDownload(Fall2023AnimeDownload, NewsTemplate):
             self.image_list = []
             for image in images:
                 image_url = self.clear_resize_in_url(self.PAGE_PREFIX + image['src'][1:])
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+
+
+# Buta no Liver wa Kanetsu Shiro
+class ButaLiverDownload(Fall2023AnimeDownload, NewsTemplate):
+    title = 'Buta no Liver wa Kanetsu Shiro'
+    keywords = [title, 'Heat the Pig Liver']
+    website = 'https://butaliver-anime.com/'
+    twitter = 'butaliver_anime'
+    hashtags = '豚レバ'
+    folder_name = 'butaliver'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.l-news__list-item',
+                                    date_select='.p-in-data', title_select='.p-in-text', id_select='a',
+                                    a_tag_prefix=news_url, next_page_select='ul.p-news_list__content-nav-list li',
+                                    next_page_eval_index_class='is__current', next_page_eval_index=-1,
+                                    paging_type=1)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        # self.add_to_image_list('tz', self.PAGE_PREFIX + 'assets/img/visual.png')
+        #self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FjefZkkVQAAq-_0?format=jpg&name=4096x4096')
+        # self.download_image_list(folder)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.p-kv__image-content-list-item-image img[src]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'][1:]
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            images = soup.select('.p-in-image img[src],.p-in-face img[src]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'][1:]
                 image_name = self.extract_image_name_from_url(image_url)
                 self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)

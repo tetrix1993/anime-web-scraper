@@ -6,7 +6,6 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Akuyaku Reijou Level 99 https://akuyakulv99-anime.com/ #akuyakuLV99 @akuyakuLV99
 # Anohana S2 https://10th.anohana.jp/ #あの花 #anohana @anohana_project
 # ATRI -My Dear Moments- https://atri-anime.com/ #ATRI @ATRI_anime
-# Buta no Liver wa Kanetsu Shiro https://butaliver-anime.com/ #豚レバ @butaliver_anime
 # Chiyu Mahou no Machigatta Tsukaikata https://chiyumahou-anime.com/ #治癒魔法 @chiyumahou_PR
 # Giji Harem https://gijiharem.com/ #疑似ハーレム @GijiHarem
 # Goblin Slayer S2 http://www.goblinslayer.jp/ #ゴブスレ #いせれべ @GoblinSlayer_GA
@@ -168,41 +167,6 @@ class AtriDownload(UnconfirmedDownload):
         self.image_list = []
         self.add_to_image_list('ATRI_visual', 'https://ogre.natalie.mu/media/news/comic/2022/0924/ATRI_visual.jpg')
         self.add_to_image_list('kv_kv_wide', self.PAGE_PREFIX + 'assets/img/kv/kv_wide.png')
-        self.download_image_list(folder)
-
-
-# Buta no Liver wa Kanetsu Shiro
-class ButaLiverDownload(UnconfirmedDownload, NewsTemplate):
-    title = 'Buta no Liver wa Kanetsu Shiro'
-    keywords = [title, 'Heat the Pig Liver']
-    website = 'https://butaliver-anime.com/'
-    twitter = 'butaliver_anime'
-    hashtags = '豚レバ'
-    folder_name = 'butaliver'
-
-    PAGE_PREFIX = website
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_news()
-        self.download_key_visual()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_news(self):
-        news_url = self.PAGE_PREFIX + 'news/'
-        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.l-news__list-item',
-                                    date_select='.p-in-data', title_select='.p-in-title', id_select='a',
-                                    a_tag_prefix=news_url)
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.add_to_image_list('tz', self.PAGE_PREFIX + 'assets/img/visual.png')
-        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FjefZkkVQAAq-_0?format=jpg&name=4096x4096')
         self.download_image_list(folder)
 
 
