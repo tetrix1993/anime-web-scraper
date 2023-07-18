@@ -2181,7 +2181,7 @@ class SukimegaDownload(Summer2023AnimeDownload, NewsTemplate):
             a_tags = soup.select('a.skmg_page_story_tabs_item[href]')
             for a_tag in a_tags:
                 try:
-                    episode = str(int(a_tag.text)).zfill(2)
+                    episode = str(int(a_tag['href'].split('episode')[1])).zfill(2)
                 except:
                     continue
                 if self.is_image_exists(episode + '_1'):
