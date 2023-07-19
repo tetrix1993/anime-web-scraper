@@ -1469,12 +1469,14 @@ class MushokuTensei2Download(Summer2023AnimeDownload, NewsTemplate):
         self.download_character()
 
     def download_episode_preview(self):
+        last_ep_num = 0
         try:
             soup = self.get_soup(self.PAGE_PREFIX + 'story/')
             stories = soup.select('#js_2nd a.storyarea[href]')
             for story in stories:
                 try:
-                    episode = str(int(story.select('.storyarea_ttl span')[0].text.replace('#', ''))).zfill(2)
+                    last_ep_num = int(story.select('.storyarea_ttl span')[0].text.replace('#', ''))
+                    episode = str(last_ep_num).zfill(2)
                 except:
                     continue
                 if self.is_image_exists(episode + '_1'):
@@ -1491,6 +1493,23 @@ class MushokuTensei2Download(Summer2023AnimeDownload, NewsTemplate):
                 self.download_image_list(self.base_folder)
         except Exception as e:
             self.print_exception(e)
+
+        # To handle case where the page exists but the navigation page has not been updated with the new page
+        try:
+            if 0 < last_ep_num < self.FINAL_EPISODE:
+                episode = str(last_ep_num + 1).zfill(2)
+                if not self.is_image_exists(episode + '_1'):
+                    ep_soup = self.get_soup(self.PAGE_PREFIX + f'story/2-{episode}/')
+                    if ep_soup is not None:
+                        self.image_list = []
+                        images = ep_soup.select('.storycontents_subimg_img[data-imgload]')
+                        for i in range(len(images)):
+                            image_url = images[i]['data-imgload']
+                            image_name = episode + '_' + str(i + 1)
+                            self.add_to_image_list(image_name, image_url)
+                        self.download_image_list(self.base_folder)
+        except Exception as e:
+            pass
 
     def download_episode_preview_guess(self, print_invalid=False, download_valid=False):
         if self.is_image_exists(str(self.FINAL_EPISODE).zfill(2) + '_1'):
