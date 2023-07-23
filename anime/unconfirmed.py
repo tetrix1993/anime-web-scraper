@@ -16,7 +16,6 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Saijaku Tamer wa Gomi Hiroi no Tabi wo Hajimemashita. https://saijakutamer-anime.com/ #最弱テイマー @saijakutamer
 # Sasaki to Pii-chan https://sasapi-anime.com/ #ささピー @sasaki_pichan
 # Seijo no Maryoku wa Bannou Desu S2 https://seijyonomaryoku.jp/ #seijyonoanime @seijyonoanime
-# Seiken Gakuin no Makentsukai https://seikengakuin.com/ #聖剣学院の魔剣使い #せまつか @SEIKEN_MAKEN
 # Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita 2nd Season https://slime300-anime.com/ #スライム倒して300年 @slime300_PR
 # Tensei Kizoku, Kantei Skill de Nariagaru https://kanteiskill.com/ #鑑定スキル @kanteiskill
 # Tsuyokute New Saga https://tsuyosaga-pr.com/ #つよサガ @tsuyosaga_pr
@@ -593,38 +592,6 @@ class SeijonoMaryoku2Download(UnconfirmedDownload, NewsTemplate2):
         self.image_list = []
         self.add_to_image_list('tz_kv', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv.jpg')
         self.add_to_image_list('tz_kv2', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv2.jpg')
-        self.download_image_list(folder)
-
-
-# Seiken Gakuin no Makentsukai
-class SeikenGakuinDownload(UnconfirmedDownload):
-    title = 'Seiken Gakuin no Makentsukai'
-    keywords = [title, 'The Demon Sword Master of Excalibur Academy']
-    website = 'https://seikengakuin.com/'
-    twitter = 'SEIKEN_MAKEN'
-    hashtags = ['聖剣学院の魔剣使い', 'せまつか']
-    folder_name = 'seikengakuin'
-
-    PAGE_PREFIX = website
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_news()
-        self.download_key_visual()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_news(self):
-        pass
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('tz', self.PAGE_PREFIX + 'assets/imgs/index/main_img.jpg')
         self.download_image_list(folder)
 
 

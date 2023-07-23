@@ -13,6 +13,7 @@ import string
 # Konyaku Haki sareta Reijou wo Hirotta Ore ga, Ikenai koto wo Oshiekomu https://ikenaikyo.com/ #イケナイ教 @ikenaikyo_anime
 # Kusuriya no Hitorigoto https://kusuriyanohitorigoto.jp/ #薬屋のひとりごと @kusuriya_PR
 # Potion-danomi de Ikinobimasu! https://potion-anime.com/ #ポーション頼み @potion_APR
+# Seiken Gakuin no Makentsukai https://seikengakuin.com/ #聖剣学院の魔剣使い #せまつか @SEIKEN_MAKEN
 # Shy https://shy-anime.com/ #SHY_hero @SHY_off
 # Sousou no Frieren https://frieren-anime.jp/ #フリーレン #frieren @Anime_Frieren
 # Tearmoon Teikoku Monogatari https://tearmoon-pr.com/ #ティアムーン @tearmoon_pr
@@ -763,6 +764,55 @@ class PotionDanomiDownload(Fall2023AnimeDownload, NewsTemplate):
         except Exception as e:
             self.print_exception(e, 'Character')
         self.download_image_list(folder)
+
+
+# Seiken Gakuin no Makentsukai
+class SeikenGakuinDownload(Fall2023AnimeDownload, NewsTemplate):
+    title = 'Seiken Gakuin no Makentsukai'
+    keywords = [title, 'The Demon Sword Master of Excalibur Academy']
+    website = 'https://seikengakuin.com/'
+    twitter = 'SEIKEN_MAKEN'
+    hashtags = ['聖剣学院の魔剣使い', 'せまつか']
+    folder_name = 'seikengakuin'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article.entry',
+                                    date_select='.entry-date', title_select='.entry-title', id_select='a')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            self.image_list = []
+            images = soup.select('.kv_img img[src]')
+            for image in images:
+                image_url = image['src']
+                if '/imgs/' not in image_url:
+                    continue
+                image_name = self.generate_image_name_from_url(image_url, 'imgs')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'sgwp/wp-content/themes/seikengakuin/assets/imgs/character/chara%s.png'
+        self.download_by_template(folder, template, 2, 1)
 
 
 # Shy
