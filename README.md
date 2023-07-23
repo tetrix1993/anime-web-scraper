@@ -92,6 +92,7 @@ The premiere date for the anime listed here has not been announced.
 * [Isekai de Mofumofu Nadenade suru Tame ni Ganbattemasu.](https://mohunadeanime.com/)
 * [Kekkon Yubiwa Monogatari](https://talesofweddingrings-anime.jp/)
 * [Saijaku Tamer wa Gomi Hiroi no Tabi wo Hajimemashita.](https://saijakutamer-anime.com/)
+* [Sasaki to Pii-chan](https://sasapi-anime.com/)
 * [Seijo no Maryoku wa Bannou Desu 2nd Season](https://seijyonomaryoku.jp/)
 * [Seiken Gakuin no Makentsukai](https://seikengakuin.com/)
 * [Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita 2nd Season](https://slime300-anime.com/)
