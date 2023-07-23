@@ -2753,6 +2753,31 @@ class YumemiruDanshiDownload(Summer2023AnimeDownload, NewsTemplate):
         except Exception as e:
             self.print_exception(e)
 
+        episode_template = self.PAGE_PREFIX + 'news/episode/%s-2/'
+        try:
+            for i in range(self.FINAL_EPISODE):
+                episode = str(i + 1).zfill(2)
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                episode_url = episode_template % str(i + 1)
+                soup = self.get_soup(episode_url)
+                if soup is None:
+                    continue
+                scripts = soup.select('script:not(*[defer])')
+                if len(scripts) == 0:
+                    break
+                for script in scripts:
+                    if 'window.episodeData' in script.string and 'images: ["' in script.string:
+                        items = script.string.split('images: ["')[1].split(']')[0].split(',')
+                        self.image_list = []
+                        for j in range(len(items)):
+                            image_url = items[i].replace('"', '')
+                            image_name = episode + '_' + str(j + 1)
+                            self.add_to_image_list(image_name, image_url)
+                        self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
+
     def download_episode_preview_external(self):
         keywords = ['夢見る男子は現実主義者']
         AniverseMagazineScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE,
