@@ -580,8 +580,12 @@ class Horimiya2Download(Summer2023AnimeDownload, NewsTemplate):
                 images = soup.select('.p-bddvd img[src]')
                 self.image_list = []
                 for image in images:
+                    if image['src'].endswith('.svg'):
+                        continue
                     if image['src'].startswith('/'):
                         image_url = self.PAGE_PREFIX + image['src'][1:]
+                    elif image['src'].startswith('../'):
+                        image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
                     else:
                         image_url = image['src']
                     image_url = image_url.split('?')[0]
