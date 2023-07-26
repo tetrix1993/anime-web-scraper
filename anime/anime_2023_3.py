@@ -1550,6 +1550,45 @@ class MushokuTensei2Download(Summer2023AnimeDownload, NewsTemplate):
             print(self.__class__.__name__ + ' - Guessed correctly!')
         return is_successful
 
+    def download_episode_preview_guess2(self, print_invalid=False, download_valid=False):
+        if self.is_image_exists(str(self.FINAL_EPISODE).zfill(2) + '_1'):
+            return
+
+        numbers = ['①メインカット_', '②', '③', '④', '⑤']
+
+        folder = self.create_custom_directory('guess')
+        template = self.PAGE_PREFIX + 'wp-content/uploads/%s/%s/%sMT2_ep%s_%s.jpg'
+        current_date = datetime.now() + timedelta(hours=1)
+        year = current_date.strftime('%Y')
+        month = current_date.strftime('%m')
+        is_successful = False
+        for i in range(self.FINAL_EPISODE):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_1') or self.is_image_exists(episode + '_1', folder):
+                continue
+            episode_success = False
+            valid_urls = []
+            for j in range(self.IMAGES_PER_EPISODE):
+                for k in range(100):
+                    image_url = template % (year, month, numbers[j], episode, str(k).zfill(4))
+                    if self.is_valid_url(image_url, is_image=True):
+                        print('VALID - ' + image_url)
+                        episode_success = True
+                        valid_urls.append(image_url)
+                        break
+                    elif print_invalid:
+                        print('INVALID - ' + image_url)
+            if download_valid and len(valid_urls) > 0:
+                for m in range(len(valid_urls)):
+                    image_name = episode + '_' + str(m + 1)
+                    self.download_image(valid_urls[m], folder + '/' + image_name)
+            if not episode_success:
+                break
+            is_successful = True
+        if is_successful:
+            print(self.__class__.__name__ + ' - Guessed correctly!')
+        return is_successful
+
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.l_news li',
                                     date_select='.news_date', title_select='.news_ttl',
