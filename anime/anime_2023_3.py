@@ -877,7 +877,7 @@ class Kanokari3Download(Summer2023AnimeDownload, NewsTemplate):
                 image_name = episode + '_' + str(j + 1)
                 for k in ['jpg', 'png']:
                     image_url = template % (year, month, episode, str(j + 1).zfill(2), k)
-                    result = self.download_image(image_url, self.base_folder + '/' + image_name)
+                    result = self.download_image(image_url, self.base_folder + '/' + image_name, to_jpg=True)
                     if result != -1:
                         is_success = True
                         break
@@ -885,6 +885,41 @@ class Kanokari3Download(Summer2023AnimeDownload, NewsTemplate):
                     break
             if not is_success:
                 break
+
+    def download_episode_preview_guess2(self, print_invalid=False, download_valid=False):
+        if self.is_image_exists(str(self.FINAL_EPISODE).zfill(2) + '_1'):
+            return
+
+        folder = self.create_custom_directory('guess')
+        template = self.PAGE_PREFIX + '3rd/wp-content/uploads/%s/%s/%s_0000_%s.png'
+        current_date = datetime.now() + timedelta(hours=1)
+        year = current_date.strftime('%Y')
+        month = current_date.strftime('%m')
+        is_successful = False
+        for i in range(self.FIRST_EPISODE, self.FINAL_EPISODE + 1, 1):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_1') or self.is_image_exists(episode + '_1', folder):
+                continue
+            episode_success = False
+            valid_urls = []
+            for k in range(100):
+                image_url = template % (year, month, episode, str(k).zfill(4))
+                if self.is_valid_url(image_url, is_image=True):
+                    print('VALID - ' + image_url)
+                    episode_success = True
+                    valid_urls.append(image_url)
+                elif print_invalid:
+                    print('INVALID - ' + image_url)
+            if download_valid and len(valid_urls) > 0:
+                for m in range(len(valid_urls)):
+                    image_name = episode + '_' + str(m + 1)
+                    self.download_image(valid_urls[m], folder + '/' + image_name, to_jpg=True)
+            if not episode_success:
+                break
+            is_successful = True
+        if is_successful:
+            print(self.__class__.__name__ + ' - Guessed correctly!')
+        return is_successful
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-item',
