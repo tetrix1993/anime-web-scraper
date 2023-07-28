@@ -267,20 +267,22 @@ class HelckDownload(Summer2023AnimeDownload, NewsTemplate):
 
     def download_episode_preview(self):
         try:
-            template = self.PAGE_PREFIX + 'wp/wp-content/themes/helck_v1.0.0/assets/img/story/story%s_%s.jpg'
-            stop = False
-            for i in range(self.FINAL_EPISODE):
-                episode = str(i + 1).zfill(2)
-                if self.is_image_exists(episode + '_' + str(self.IMAGES_PER_EPISODE)):
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            stories = soup.select('.p-story__content-block-list-item')
+            for story in stories:
+                try:
+                    episode = str(int(story.select('.p-in-num-item')[0].text.replace('#', ''))).zfill(2)
+                    if self.is_image_exists(episode + '_1'):
+                        continue
+                    self.image_list = []
+                    images = story.select('.p-in-list-item img[src]')
+                    for i in range(len(images)):
+                        image_name = episode + '_' + str(i + 1)
+                        image_url = images[i]['src']
+                        self.add_to_image_list(image_name, image_url)
+                    self.download_image_list(self.base_folder)
+                except:
                     continue
-                for j in range(self.IMAGES_PER_EPISODE):
-                    image_url = template % (episode, str(j + 1).zfill(2))
-                    image_name = episode + '_' + str(j + 1)
-                    if self.download_image(image_url, self.base_folder + '/' + image_name) == -1:
-                        stop = True
-                        break
-                if stop:
-                    break
         except Exception as e:
             self.print_exception(e)
 
