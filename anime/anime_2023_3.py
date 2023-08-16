@@ -1606,7 +1606,7 @@ class MushokuTensei2Download(Summer2023AnimeDownload, NewsTemplate):
             episode_success = False
             valid_urls = []
             for j in range(self.IMAGES_PER_EPISODE):
-                for k in range(100):
+                for k in range(200):
                     image_url = template % (year, month, numbers[j], episode, str(k).zfill(4))
                     if self.is_valid_url(image_url, is_image=True):
                         print('VALID - ' + image_url)
