@@ -350,6 +350,7 @@ class HoshiteleDownload(Fall2023AnimeDownload, NewsTemplate):
         self.download_episode_preview()
         self.download_news()
         self.download_key_visual()
+        self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
@@ -364,16 +365,16 @@ class HoshiteleDownload(Fall2023AnimeDownload, NewsTemplate):
         folder = self.create_key_visual_directory()
         try:
             soup = self.get_soup(self.PAGE_PREFIX)
-            images = soup.select('.tp_hero img[src]')
+            images = soup.select('picture.js_heroImg source[type][srcset]')
             self.image_list = []
             for image in images:
-                if '/top/' not in image['src']:
+                if '/top/' not in image['srcset']:
                     continue
-                image_name = self.extract_image_name_from_url(image['src'])
+                image_name = self.extract_image_name_from_url(image['srcset'])
                 if 'kv' not in image_name:
                     continue
-                image_name = self.generate_image_name_from_url(image['src'], 'top')
-                image_url = self.PAGE_PREFIX + image['src'].replace('./', '')
+                image_name = self.generate_image_name_from_url(image['srcset'], 'top')
+                image_url = self.PAGE_PREFIX + image['srcset'].split('?')[0].replace('./', '')
                 self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)
         except Exception as e:
@@ -395,7 +396,7 @@ class HoshiteleDownload(Fall2023AnimeDownload, NewsTemplate):
                 if page_name in processed:
                     break
                 title = item.text.strip()
-                if 'ビジュアル' in title:
+                if 'ビジュアル' in title or 'KV' in title.upper():
                     news_soup = self.get_soup(news_url + item['href'].replace('./', ''))
                     if news_soup is not None:
                         images = news_soup.select('.bl_news img[src]')
@@ -411,6 +412,21 @@ class HoshiteleDownload(Fall2023AnimeDownload, NewsTemplate):
         except Exception as e:
             self.print_exception(e, 'Key Visual News')
         self.create_cache_file(cache_filepath, processed, num_processed)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'dist/img/character/character%s/stand.webp'
+        try:
+            for i in range(20):
+                image_url = template % str(i + 1)
+                image_name = 'character' + str(i + 1) + '_stand'
+                if self.is_image_exists(image_name, folder):
+                    continue
+                result = self.download_image(image_url, folder + '/' + image_name)
+                if result == -1:
+                    break
+        except Exception as e:
+            self.print_exception(e, 'Character')
 
 
 # Keikenzumi na Kimi to, Keiken Zero na Ore ga, Otsukiai suru Hanashi.
