@@ -1508,6 +1508,7 @@ class MushokuTensei2Download(Summer2023AnimeDownload, NewsTemplate):
         self.download_episode_preview_guess(print_invalid=False, download_valid=True)
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         last_ep_num = 0
@@ -1650,6 +1651,41 @@ class MushokuTensei2Download(Summer2023AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        for page in ['bonus', '01', '02', '03', '04']:
+            try:
+                if page.isnumeric():
+                    if page in processed:
+                        continue
+                    soup = self.get_soup(self.PAGE_PREFIX + 'bluray/bluray-2nd-' + page + '/')
+                else:
+                    soup = self.get_soup(self.PAGE_PREFIX + 'bluray-bonus/')
+                self.image_list = []
+                if page.isnumeric():
+                    images = soup.select('.overview_img img[src]:not(.u_sp img[src])')
+                else:
+                    images = soup.select('.l_bonus div[data-imgload]')
+                for image in images:
+                    if page.isnumeric():
+                        image_url = image['src']
+                    else:
+                        image_url = image['data-imgload']
+                    if 'printing' in image_url:
+                        continue
+                    if image_url.startswith('/'):
+                        image_url = self.PAGE_PREFIX + image_url[1:]
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+                if page.isnumeric() and len(self.image_list) > 1:
+                    processed.append(page)
+                self.download_image_list(folder)
+            except Exception as e:
+                self.print_exception(e, 'Blu-ray ' + page)
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Nanatsu no Maken ga Shihai suru
