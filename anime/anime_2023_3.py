@@ -893,7 +893,7 @@ class Kanokari3Download(Summer2023AnimeDownload, NewsTemplate):
             return
 
         folder = self.create_custom_directory('guess')
-        template = self.PAGE_PREFIX + '3rd/wp-content/uploads/%s/%s/%s_0000_%s.png'
+        template = self.PAGE_PREFIX + '3rd/wp-content/uploads/%s/%s/%s_%s.png'
         current_date = datetime.now() + timedelta(hours=1)
         year = current_date.strftime('%Y')
         month = current_date.strftime('%m')
