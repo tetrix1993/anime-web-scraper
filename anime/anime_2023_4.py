@@ -245,7 +245,7 @@ class HametsuDownload(Fall2023AnimeDownload, NewsTemplate):
             images = soup.select('.vis source[srcset]')
             self.image_list = []
             for image in images:
-                image_url = self.PAGE_PREFIX + image['srcset'].replace('./', '')
+                image_url = self.PAGE_PREFIX + image['srcset'].replace('./', '').split('?')[0]
                 if '/assets/' not in image_url:
                     continue
                 image_name = self.generate_image_name_from_url(image_url, 'assets')
