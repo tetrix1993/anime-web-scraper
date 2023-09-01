@@ -295,7 +295,7 @@ class PonnoMichiDownload(Winter2024AnimeDownload, NewsTemplate4):
         try:
             soup = self.get_soup(self.PAGE_PREFIX)
             self.image_list = []
-            images = soup.select('div[class*="Visual"] img[srcset*="visual"]')
+            images = soup.select('div[class*="Visual"] img[srcSet*="kv_"]')
             for image in images:
                 image_url = image['srcset']
                 if '/static/' not in image_url:
@@ -310,16 +310,19 @@ class PonnoMichiDownload(Winter2024AnimeDownload, NewsTemplate4):
 
     def download_character(self):
         folder = self.create_character_directory()
-        template = self.PAGE_PREFIX + 'wp/wp-content/themes/ponnomichi/static/character/%s/image.webp'
         try:
-            for i in range(20):
-                image_name = str(i + 1).zfill(2)
-                if self.is_image_exists(image_name, folder):
+            soup = self.get_soup(self.PAGE_PREFIX + 'character')
+            self.image_list = []
+            images = soup.select('img[src][class*="CharacterImage"]')
+            for image in images:
+                image_url = image['src']
+                if '/static/' not in image_url:
                     continue
-                image_url = template % image_name
-                result = self.download_image(image_url, folder + '/' + image_name)
-                if result == -1:
-                    break
+                if image_url.startswith('/'):
+                    image_url = self.PAGE_PREFIX + image_url[1:]
+                image_name = self.generate_image_name_from_url(image_url, 'static')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
 
