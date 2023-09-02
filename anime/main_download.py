@@ -1321,12 +1321,13 @@ class MainDownload:
 # Generic template with paging
 class NewsTemplate:
     def download_template_news(self, page_prefix, article_select, date_select, title_select, id_select,
-                               paging_type=0, paging_suffix=None, decode_response=True, response_headers=None,
-                               id_has_id=False, id_attr='id', news_prefix=None, a_tag_prefix=None, stop_date=None,
-                               date_separator=None, date_attr=None, date_prefix=None, date_func=None,
-                               a_tag_replace_from=None, a_tag_replace_to='', a_tag_start_text_to_remove=None,
-                               next_page_select=None, next_page_eval_index_class=None, next_page_eval_index=0,
-                               next_page_eval_index_compare_page=False, reverse_article_list=False):
+                               paging_type=0, paging_suffix=None, paging_suffix_zfill=1, decode_response=True,
+                               response_headers=None, id_has_id=False, id_attr='id', news_prefix=None,
+                               a_tag_prefix=None, stop_date=None, date_separator=None, date_attr=None, date_prefix=None,
+                               date_func=None, a_tag_replace_from=None, a_tag_replace_to='',
+                               a_tag_start_text_to_remove=None, next_page_select=None, next_page_eval_index_class=None,
+                               next_page_eval_index=0, next_page_eval_index_compare_page=False,
+                               reverse_article_list=False):
         """
         :param page_prefix: Start of the page URL to evaluate
         :param article_select: Selects article item elements
@@ -1335,6 +1336,7 @@ class NewsTemplate:
         :param id_select: If None = article item element itself, else = the select
         :param paging_type: 0 = news/page/2  1 = news/?p=2  2 = /2  3 = [Custom]
         :param paging_suffix: For paging_type 3. E.g. ?paged=%s
+        :param paging_suffix_zfill: Apply zfill to the paging_suffix %s
         :param decode_response: Decode HTTP Response
         :param response_headers: Headers to be included in HTTP Request
         :param id_has_id: The element has 'id' attribute
@@ -1380,7 +1382,7 @@ class NewsTemplate:
                     elif paging_type == 2:
                         page_url = news_url + str(page)
                     elif paging_type == 3 and paging_suffix is not None:
-                        page_url = news_url + (paging_suffix % str(page))
+                        page_url = news_url + (paging_suffix % str(page).zfill(paging_suffix_zfill))
                     else:
                         page_url = news_url + 'page/' + str(page)
                 if response_headers:

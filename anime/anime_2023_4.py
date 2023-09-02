@@ -13,6 +13,7 @@ import string
 # Konyaku Haki sareta Reijou wo Hirotta Ore ga, Ikenai koto wo Oshiekomu https://ikenaikyo.com/ #イケナイ教 @ikenaikyo_anime
 # Kusuriya no Hitorigoto https://kusuriyanohitorigoto.jp/ #薬屋のひとりごと @kusuriya_PR
 # Potion-danomi de Ikinobimasu! https://potion-anime.com/ #ポーション頼み @potion_APR
+# Ragna Crimson https://ragna-crimson.com/ @ragnacrimson_PR #ラグナクリムゾン #RagnaCrimson
 # Seiken Gakuin no Makentsukai https://seikengakuin.com/ #聖剣学院の魔剣使い #せまつか @SEIKEN_MAKEN
 # Shy https://shy-anime.com/ #SHY_hero @SHY_off
 # Sousou no Frieren https://frieren-anime.jp/ #フリーレン #frieren @Anime_Frieren
@@ -780,6 +781,81 @@ class PotionDanomiDownload(Fall2023AnimeDownload, NewsTemplate):
         except Exception as e:
             self.print_exception(e, 'Character')
         self.download_image_list(folder)
+
+
+# Ragna Crimson
+class RagnaCrimsonDownload(Fall2023AnimeDownload, NewsTemplate):
+    title = 'Ragna Crimson'
+    keywords = [title]
+    website = 'https://ragna-crimson.com/'
+    twitter = 'ragnacrimson_PR'
+    hashtags = ['ラグナクリムゾン', 'RagnaCrimson']
+    folder_name = 'ragnacrimson'
+
+    PAGE_PREFIX = website
+    FINAL_EPISODE = 24
+    IMAGES_PER_EPISODE = 8
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        try:
+            template = self.PAGE_PREFIX + 'assets/images/story/%s_%s.jpg'
+            stop = False
+            for i in range(self.FINAL_EPISODE):
+                episode = str(i + 1).zfill(2)
+                if self.is_image_exists(episode + '_' + str(self.IMAGES_PER_EPISODE)):
+                    continue
+                for j in range(self.IMAGES_PER_EPISODE):
+                    image_url = template % (episode, str(j + 1).zfill(2))
+                    image_name = episode + '_' + str(j + 1)
+                    if self.download_image(image_url, self.base_folder + '/' + image_name) == -1:
+                        stop = True
+                        break
+                if stop:
+                    break
+        except Exception as e:
+            self.print_exception(e)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.list li',
+                                    date_select='time', title_select='a', id_select='a',
+                                    date_func=lambda x: x[0:10], a_tag_start_text_to_remove='../',
+                                    a_tag_prefix=self.PAGE_PREFIX, paging_type=3, paging_suffix='/page%s.html',
+                                    paging_suffix_zfill=2, next_page_select='a.next')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            self.image_list = []
+            images = soup.select('.mainimg img[src]')
+            for image in images:
+                image_url = image['src']
+                if image_url.startswith('./'):
+                    image_url = self.PAGE_PREFIX + image_url[2:]
+                if '/images/' not in image_url:
+                    continue
+                image_name = self.generate_image_name_from_url(image_url, 'images')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        templates = [
+            self.PAGE_PREFIX + 'assets/images/character/img_%s.png',
+            self.PAGE_PREFIX + 'assets/images/character/face_%s.png'
+        ]
+        self.download_by_template(folder, templates, 2, 1)
 
 
 # Seiken Gakuin no Makentsukai

@@ -126,6 +126,7 @@ The premiere date for the anime listed here has not been announced.
 * [Konyaku Haki sareta Reijou wo Hirotta Ore ga, Ikenai koto wo Oshiekomu](https://ikenaikyo.com/)
 * [Kusuriya no Hitorigoto](https://kusuriyanohitorigoto.jp/)
 * [Potion-danomi de Ikinobimasu!](https://potion-anime.com/)
+* [Ragna Crimson](https://ragna-crimson.com/)
 * [Seiken Gakuin no Makentsukai](https://seikengakuin.com/)
 * [Shy](https://shy-anime.com/)
 * [Sousou no Frieren](https://frieren-anime.jp/)
