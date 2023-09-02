@@ -696,6 +696,7 @@ class KusuriyaDownload(Fall2023AnimeDownload, NewsTemplate):
         self.download_episode_preview()
         self.download_news()
         self.download_key_visual()
+        self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
@@ -709,10 +710,15 @@ class KusuriyaDownload(Fall2023AnimeDownload, NewsTemplate):
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         self.image_list = []
-        self.add_to_image_list('tz', self.PAGE_PREFIX + 'assets/img/top/main/main_visual.jpg')
+        self.add_to_image_list('main_visual', self.PAGE_PREFIX + 'assets/img/top/main/main_visual.jpg')
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/Fo_spzaaIAI3CpS?format=jpg&name=4096x4096')
         self.add_to_image_list('kv', 'https://pbs.twimg.com/media/F0Z-4uZaUAArQ7_?format=jpg&name=4096x4096')
         self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'assets/img/top/chara/chara%s_img.png'
+        self.download_by_template(folder, template, 1, 1)
 
 
 # Potion-danomi de Ikinobimasu!
