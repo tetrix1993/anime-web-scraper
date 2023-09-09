@@ -1,5 +1,6 @@
-from anime.main_download import MainDownload, NewsTemplate, NewsTemplate4
+from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsTemplate4
 
+# Akuyaku Reijou Level 99 https://akuyakulv99-anime.com/ #akuyakuLV99 @akuyakuLV99
 # Dosanko Gal wa Namara Menkoi https://dosankogal-pr.com/ #道産子ギャル #どさこい @dosankogal_pr
 # Dungeon Meshi https://delicious-in-dungeon.com/ #ダンジョン飯 #deliciousindungeon @dun_meshi_anime
 # Himesama "Goumon" no Jikan desu https://himesama-goumon.com/ #姫様拷問の時間です @himesama_goumon
@@ -16,6 +17,73 @@ class Winter2024AnimeDownload(MainDownload):
 
     def __init__(self):
         super().__init__()
+
+
+# Akuyaku Reijou Level 99
+class AkuyakuLv99Download(Winter2024AnimeDownload, NewsTemplate2):
+    title = 'Akuyaku Reijou Level 99'
+    keywords = [title, 'Villainess Level 99']
+    website = 'https://akuyakulv99-anime.com/'
+    twitter = 'akuyakuLV99'
+    hashtags = 'akuyakuLV99'
+    folder_name = 'akuyakulv99'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/Fr-S3r0aQAAH2xA?format=jpg&name=medium')
+        self.add_to_image_list('tzkv', self.PAGE_PREFIX + 'core_sys/images/main/home/tzkv.png')
+        self.download_image_list(folder)
+
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.mainImg__kv source[type][srcset]')
+            self.image_list = []
+            for image in images:
+                if '/main/' not in image['srcset']:
+                    continue
+                image_name = self.extract_image_name_from_url(image['srcset'])
+                if 'kv' not in image_name:
+                    continue
+                image_name = self.generate_image_name_from_url(image['srcset'], 'main')
+                image_url = self.PAGE_PREFIX + image['srcset'].split('?')[0].replace('./', '')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.charaStand source[type][srcset], .charaFace source[type][srcset]')
+            self.image_list = []
+            for image in images:
+                if '/chara/' not in image['srcset']:
+                    continue
+                image_name = self.generate_image_name_from_url(image['srcset'], 'chara')
+                image_url = self.PAGE_PREFIX + image['srcset'].split('?')[0].replace('./', '')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
 
 
 # Dosanko Gal wa Namara Menkoi

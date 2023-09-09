@@ -83,7 +83,6 @@ pip install -r requirements.txt
 
 ### New Anime
 The premiere date for the anime listed here has not been announced.
-* [Akuyaku Reijou Level 99](https://akuyakulv99-anime.com/)
 * [ATRI -My Dear Moments-](https://atri-anime.com/)
 * [Chiyu Mahou no Machigatta Tsukaikata](https://chiyumahou-anime.com/)
 * [Giji Harem](https://gijiharem.com/)
@@ -106,6 +105,7 @@ The premiere date for the anime listed here has not been announced.
 * [Tensei shitara Dainana Ouji Datta node, Kimama ni Majutsu wo Kiwamemasu](https://dainanaoji.com/)
 
 ### Winter 2024 Anime
+* [Akuyaku Reijou Level 99](https://akuyakulv99-anime.com/)
 * [Dosanko Gal wa Namara Menkoi](https://dosankogal-pr.com/)
 * [Dungeon Meshi](https://delicious-in-dungeon.com/)
 * [Himesama "Goumon" no Jikan desu](https://himesama-goumon.com/)
