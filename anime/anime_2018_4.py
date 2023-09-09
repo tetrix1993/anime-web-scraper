@@ -166,8 +166,8 @@ class GoblinSlayerDownload(Fall2018AnimeDownload):
     keywords = ["Goblin Slayer"]
     folder_name = 'goblin-slayer'
 
-    PAGE_PREFIX = "http://goblinslayer.jp/"
-    STORY_PAGE = "http://goblinslayer.jp/story/"
+    PAGE_PREFIX = "http://goblinslayer.jp/1st/"
+    STORY_PAGE = "http://goblinslayer.jp/1st/story/"
     
     def __init__(self):
         super().__init__()

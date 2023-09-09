@@ -5,6 +5,7 @@ import string
 # Boukensha ni Naritai to Miyako ni Deteitta Musume ga S-Rank ni Natteta
 # Buta no Liver wa Kanetsu Shiro https://butaliver-anime.com/ #豚レバ @butaliver_anime
 # Dekoboko Majo no Oyako Jijou https://dekoboko-majo-anime.jp/ @DEKOBOKO_anime #でこぼこ魔女の親子事情
+# Goblin Slayer S2 http://www.goblinslayer.jp/ #ゴブスレ #いせれべ @GoblinSlayer_GA
 # Hametsu no Oukoku https://hametsu-anime.com/ #はめつのおうこく #はめつ @hametsu_anime
 # Hikikomari Kyuuketsuki no Monmon https://hikikomari.com/ #ひきこまり @komarin_PR
 # Hoshikuzu Telepath https://hoshitele-anime.com/ #星テレ #hoshitele @hoshitele_anime
@@ -205,6 +206,43 @@ class DekobokoMajoDownload(Fall2023AnimeDownload, NewsTemplate):
         prefix = self.PAGE_PREFIX + 'assets/images/character/'
         template = [prefix + 'img_%s.png', prefix + 'face_%s.png']
         self.download_by_template(folder, template, 2, 1)
+
+
+# Goblin Slayer 2nd Season
+class GoblinSlayer2Download(Fall2023AnimeDownload, NewsTemplate):
+    title = "Goblin Slayer 2nd Season"
+    keywords = [title]
+    website = 'http://www.goblinslayer.jp/'
+    twitter = 'GoblinSlayer_GA'
+    hashtags = 'ゴブスレ'
+    folder_name = 'goblin-slayer2'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.newsliste li',
+                                    date_select='.newstime', title_select='.newstitle', id_select='a',
+                                    paging_type=3, paging_suffix='/?pg=%s', next_page_select='.ban_pgnext')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('teaser', 'https://pbs.twimg.com/media/EtDYBThUYAEBIWI?format=jpg&name=4096x4096')
+        self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/FsCxEnRaMAEQ9US?format=jpg&name=4096x4096')
+        self.add_to_image_list('kv1', self.PAGE_PREFIX + 'images/top-img.jpg')
+        self.add_to_image_list('kv2_tw', 'https://pbs.twimg.com/media/F5feM8EawAAXTEY?format=jpg&name=large')
+        self.download_image_list(folder)
 
 
 # Hametsu no Oukoku

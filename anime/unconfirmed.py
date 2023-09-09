@@ -8,7 +8,6 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # ATRI -My Dear Moments- https://atri-anime.com/ #ATRI @ATRI_anime
 # Chiyu Mahou no Machigatta Tsukaikata https://chiyumahou-anime.com/ #治癒魔法 @chiyumahou_PR
 # Giji Harem https://gijiharem.com/ #疑似ハーレム @GijiHarem
-# Goblin Slayer S2 http://www.goblinslayer.jp/ #ゴブスレ #いせれべ @GoblinSlayer_GA
 # Highspeed Etoile https://highspeed-etoile.com/ #ハイスピ @HSE_Project_PR
 # Isekai de Mofumofu Nadenade suru Tame ni Ganbattemasu. https://mohunadeanime.com/ #もふなで @mohunade_anime
 # Kekkon Yubiwa Monogatari https://talesofweddingrings-anime.jp/ #結婚指輪物語 @weddingringsPR
@@ -216,67 +215,6 @@ class GijiHaremDownload(UnconfirmedDownload, NewsTemplate2):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Key Visual')
-
-
-# Goblin Slayer 2nd Season
-class GoblinSlayer2Download(UnconfirmedDownload):
-    title = "Goblin Slayer 2nd Season"
-    keywords = [title]
-    website = 'http://www.goblinslayer.jp/'
-    twitter = 'GoblinSlayer_GA'
-    hashtags = 'ゴブスレ'
-    folder_name = 'goblin-slayer2'
-
-    PAGE_PREFIX = website
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_news()
-        self.download_key_visual()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_news(self):
-        news_url = self.PAGE_PREFIX + 'news/'
-        try:
-            soup = self.get_soup(news_url, decode=True)
-            articles = soup.select('div.newsbox dl.news')
-            news_obj = self.get_last_news_log_object()
-            results = []
-            for article in articles:
-                tag_date = article.find('dt')
-                a_tag = article.find('a')
-                if tag_date and a_tag and a_tag.has_attr('href'):
-                    article_id = a_tag['href']
-                    date = self.format_news_date(tag_date.text.strip().replace('/', '.'))
-                    if len(date) == 0:
-                        continue
-                    title = a_tag.text.strip()
-                    if date.startswith('2020') or (news_obj and
-                                                   (news_obj['id'] == article_id or date < news_obj['date'])):
-                        break
-                    results.append(self.create_news_log_object(date, title, article_id))
-            success_count = 0
-            for result in reversed(results):
-                process_result = self.create_news_log_from_news_log_object(result)
-                if process_result == 0:
-                    success_count += 1
-            if len(results) > 0:
-                self.create_news_log_cache(success_count, results[0])
-        except Exception as e:
-            self.print_exception(e, 'News')
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('teaser', 'https://pbs.twimg.com/media/EtDYBThUYAEBIWI?format=jpg&name=4096x4096')
-        self.add_to_image_list('kv1_tw', 'https://pbs.twimg.com/media/FsCxEnRaMAEQ9US?format=jpg&name=4096x4096')
-        self.add_to_image_list('kv1', self.PAGE_PREFIX + 'images/top-img.jpg')
-        self.download_image_list(folder)
 
 
 # Highspeed Etoile
