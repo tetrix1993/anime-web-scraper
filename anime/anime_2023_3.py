@@ -891,9 +891,9 @@ class Kanokari3Download(Summer2023AnimeDownload, NewsTemplate):
     def download_episode_preview_guess2(self, print_invalid=False, download_valid=False):
         if self.is_image_exists(str(self.FINAL_EPISODE).zfill(2) + '_1'):
             return
-
+        # https://kanokari-official.com/3rd/wp-content/uploads/2023/09/かのかり3_33-01.jpg
         folder = self.create_custom_directory('guess')
-        template = self.PAGE_PREFIX + '3rd/wp-content/uploads/%s/%s/%s_%s.png'
+        template = self.PAGE_PREFIX + '3rd/wp-content/uploads/%s/%s/かのかり3_%s-%s.jpg'
         current_date = datetime.now() + timedelta(hours=1)
         year = current_date.strftime('%Y')
         month = current_date.strftime('%m')
@@ -904,8 +904,8 @@ class Kanokari3Download(Summer2023AnimeDownload, NewsTemplate):
                 continue
             episode_success = False
             valid_urls = []
-            for k in range(100):
-                image_url = template % (year, month, episode, str(k).zfill(4))
+            for k in range(1, 7, 1):
+                image_url = template % (year, month, episode, str(k).zfill(2))
                 if self.is_valid_url(image_url, is_image=True):
                     print('VALID - ' + image_url)
                     episode_success = True
