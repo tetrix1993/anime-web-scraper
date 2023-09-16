@@ -113,6 +113,7 @@ The premiere date for the anime listed here has not been announced.
 * [Jaku-Chara Tomozaki-kun 2nd Stage](http://tomozaki-koushiki.com/)
 
 ### Fall 2023 Anime
+* [16bit Sensation: Another Layer](https://16bitsensation-al.com/)
 * [Boukensha ni Naritai to Miyako ni Deteitta Musume ga S-Rank ni Natteta](https://s-rank-musume.com/)
 * [Boushoku no Berserk](https://bousyoku-anime.com/)
 * [Buta no Liver wa Kanetsu Shiro](https://butaliver-anime.com/)

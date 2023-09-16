@@ -2,7 +2,8 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 import os
 import string
 
-# Boukensha ni Naritai to Miyako ni Deteitta Musume ga S-Rank ni Natteta #Sランク娘 @s_rank_musume
+# 16bit Sensation: Another Layer https://16bitsensation-al.com/ #16bitAL #16bitセンセーション @16bit_anime
+# Boukensha ni Naritai to Miyako ni Deteitta Musume ga S-Rank ni Natteta https://s-rank-musume.com/ #Sランク娘 @s_rank_musume
 # Boushoku no Berserk https://bousyoku-anime.com/ #暴食 #暴食のベルセルク @bousyoku_anime
 # Buta no Liver wa Kanetsu Shiro https://butaliver-anime.com/ #豚レバ @butaliver_anime
 # Dekoboko Majo no Oyako Jijou https://dekoboko-majo-anime.jp/ @DEKOBOKO_anime #でこぼこ魔女の親子事情
@@ -35,6 +36,60 @@ class Fall2023AnimeDownload(MainDownload):
 
     def __init__(self):
         super().__init__()
+
+
+# 16bit Sensation: Another Layer
+class SixteenBitSensationDownload(Fall2023AnimeDownload, NewsTemplate):
+    title = '16bit Sensation: Another Layer'
+    keywords = [title]
+    website = 'https://16bitsensation-al.com/'
+    twitter = '16bit_anime'
+    hashtags = ['16bitAL', '16bitセンセーション']
+    folder_name = '16bitsensation'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        news_prefix = self.PAGE_PREFIX + 'news/'
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news_list__item',
+                                    date_select='.news_list__item-date', title_select='.news_list__item-title',
+                                    id_select='a', a_tag_start_text_to_remove='./', a_tag_prefix=news_prefix,
+                                    paging_type=1, next_page_select='.news_pager_list__item',
+                                    next_page_eval_index_class='is_current', next_page_eval_index=-1,
+                                    date_func=lambda x: x[0:4] + '.' + x[5:])
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('top_kv', self.PAGE_PREFIX + 'assets/img/top/kv.jpg')
+        self.add_to_image_list('top_kv_pc', self.PAGE_PREFIX + 'assets/img/top/kv_pc.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            images = soup.select('.character_image-image img[src]')
+            self.image_list = []
+            for image in images:
+                image_url = self.clear_resize_in_url(self.PAGE_PREFIX + image['src'][1:])
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
 
 
 # Boukensha ni Naritai to Miyako ni Deteitta Musume ga S-Rank ni Natteta
