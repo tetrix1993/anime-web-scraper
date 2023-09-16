@@ -23,6 +23,7 @@ import string
 # Shangri-La Frontier: Kusoge Hunter, Kamige ni Idoman to su https://anime.shangrilafrontier.com/ #シャンフロ @ShanFro_Comic
 # Shy https://shy-anime.com/ #SHY_hero @SHY_off
 # Sousou no Frieren https://frieren-anime.jp/ #フリーレン #frieren @Anime_Frieren
+# Tate no Yuusha no Nariagari Season 3 http://shieldhero-anime.jp/ #shieldhero #盾の勇者の成り上がり @shieldheroanime
 # Tearmoon Teikoku Monogatari https://tearmoon-pr.com/ #ティアムーン @tearmoon_pr
 # Toaru Ossan no VRMMO Katsudouki https://toaru-ossan.com/ #とあるおっさん @toaru_ossan_pr
 # Under Ninja https://under-ninja.jp/ #アンダーニンジャ @UNDERNINJAanime
@@ -1450,6 +1451,106 @@ class FrierenDownload(Fall2023AnimeDownload, NewsTemplate):
             prefix + '%s_face1.jpg', prefix + '%s_face2.jpg', prefix + '%s_face.jpg'
         ]
         self.download_by_template(folder, templates, 1, 1)
+
+
+# Tate no Yuusha no Nariagari Season 3
+class TateNoYuusha3Download(Fall2023AnimeDownload):
+    title = "Tate no Yuusha no Nariagari Season 3"
+    keywords = [title, "The Rising of the Shield Hero", "3rd"]
+    website = "http://shieldhero-anime.jp/"
+    twitter = 'shieldheroanime'
+    hashtags = ['shieldhero', '盾の勇者の成り上がり']
+    folder_name = 'tate-no-yuusha3'
+
+    PAGE_PREFIX = website
+    FINAL_EPISODE = 13
+    IMAGES_PER_EPISODE = 6
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        soup = self.download_episode_preview()
+        self.download_news()
+        soup = self.download_key_visual(soup)
+        self.download_character(soup)
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        soup = None
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+        except:
+            pass
+        return soup
+
+    def download_news(self):
+        news_url = self.website + 'news/'
+        try:
+            soup = self.get_soup(news_url, decode=True)
+            articles = soup.select('article.p-newspage_item')
+            news_obj = self.get_last_news_log_object()
+            results = []
+            for article in articles:
+                tag_date = article.find('span', class_='a')
+                tag_title = article.find('h2', class_='txt')
+                if tag_date and tag_title and tag_title.has_attr('id'):
+                    article_id = tag_title['id'].strip()
+                    date = self.format_news_date(tag_date.text.strip())
+                    if len(date) == 0:
+                        continue
+                    title = tag_title.text.strip()
+                    if date.startswith('2022.07') or (news_obj
+                                                      and (news_obj['id'] == article_id or date < news_obj['date'])):
+                        break
+                    results.append(self.create_news_log_object(date, title, article_id))
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log_from_news_log_object(result)
+                if process_result == 0:
+                    success_count += 1
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
+        except Exception as e:
+            self.print_exception(e, 'News')
+
+    def download_key_visual(self, soup=None):
+        folder = self.create_key_visual_directory()
+        soup = None
+        try:
+            if soup is None:
+                soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.fvimgslide source[srcset]')
+            self.image_list = []
+            for image in images:
+                if '/fv/' not in image['srcset']:
+                    continue
+                image_name = self.generate_image_name_from_url(image['srcset'], 'fv')
+                image_url = self.PAGE_PREFIX + image['srcset'].split('?')[0][1:]
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+        return soup
+
+    def download_character(self, soup=None):
+        folder = self.create_character_directory()
+        soup = None
+        try:
+            if soup is None:
+                soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.chardata--inner source[srcset]')
+            self.image_list = []
+            for image in images:
+                if '/webp/' not in image['srcset']:
+                    continue
+                image_name = self.generate_image_name_from_url(image['srcset'], 'webp')
+                image_url = self.PAGE_PREFIX + image['srcset'].split('?')[0][1:]
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+        return soup
 
 
 # Tearmoon Teikoku Monogatari

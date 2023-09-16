@@ -27,7 +27,7 @@ from datetime import datetime
 # Shokei Shoujo no Virgin Road http://virgin-road.com/ #処刑少女 #shokei_anime @VirginroadAnime
 # Spy x Family https://spy-family.net/ #SPY_FAMILY #スパイファミリー @spyfamily_anime
 # Summertime Render https://summertime-anime.com/ #サマータイムレンダ #サマレン @summertime_PR
-# Tate no Yuusha S2 http://shieldhero-anime.jp/ #shieldhero #盾の勇者の成り上がり @shieldheroanime
+# Tate no Yuusha S2 http://shieldhero-anime.jp/2nd/ #shieldhero #盾の勇者の成り上がり @shieldheroanime
 # Yuusha, Yamemasu https://yuuyame.com/ #yuuyame #勇やめ @yuuyame_anime
 
 
@@ -2610,7 +2610,7 @@ class TateNoYuusha2Download(Spring2022AnimeDownload):
     hashtags = ['shieldhero', '盾の勇者の成り上がり']
     folder_name = 'tate-no-yuusha2'
 
-    PAGE_PREFIX = website
+    PAGE_PREFIX = website + '/2nd'
     FINAL_EPISODE = 13
     IMAGES_PER_EPISODE = 6
 
@@ -2668,7 +2668,7 @@ class TateNoYuusha2Download(Spring2022AnimeDownload):
         return is_success
 
     def download_news(self):
-        news_url = self.PAGE_PREFIX + '/news/'
+        news_url = self.website + '/news/'
         try:
             soup = self.get_soup(news_url, decode=True)
             articles = soup.select('article.p-newspage_item')

@@ -134,6 +134,7 @@ The premiere date for the anime listed here has not been announced.
 * [Shangri-La Frontier: Kusoge Hunter, Kamige ni Idoman to su](https://anime.shangrilafrontier.com/)
 * [Shy](https://shy-anime.com/)
 * [Sousou no Frieren](https://frieren-anime.jp/)
+* [Tate no Yuusha no Nariagari Season 3](http://shieldhero-anime.jp/)
 * [Tearmoon Teikoku Monogatari](https://tearmoon-pr.com/)
 * [Toaru Ossan no VRMMO Katsudouki](https://toaru-ossan.com/)
 * [Under Ninja](https://under-ninja.jp/)
@@ -306,7 +307,7 @@ The premiere date for the anime listed here has not been announced.
 * [Shokei Shoujo no Virgin Road](http://virgin-road.com/)
 * [Spy x Family](https://spy-family.net/)
 * [Summertime Render](https://summertime-anime.com/)
-* [Tate no Yuusha no Nariagari Season 2](http://shieldhero-anime.jp)
+* [Tate no Yuusha no Nariagari Season 2](http://shieldhero-anime.jp/2nd/)
 * [Yuusha, Yamemasu](https://yuuyame.com/)
 
 ### Winter 2022 Anime
