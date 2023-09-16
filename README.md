@@ -115,6 +115,7 @@ The premiere date for the anime listed here has not been announced.
 
 ### Fall 2023 Anime
 * [Boukensha ni Naritai to Miyako ni Deteitta Musume ga S-Rank ni Natteta](https://s-rank-musume.com/)
+* [Boushoku no Berserk](https://bousyoku-anime.com/)
 * [Buta no Liver wa Kanetsu Shiro](https://butaliver-anime.com/)
 * [Dekoboko Majo no Oyako Jijou](https://dekoboko-majo-anime.jp/)
 * [Goblin Slayer 2nd Season](http://www.goblinslayer.jp/)

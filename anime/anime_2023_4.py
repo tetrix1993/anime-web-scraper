@@ -2,7 +2,8 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 import os
 import string
 
-# Boukensha ni Naritai to Miyako ni Deteitta Musume ga S-Rank ni Natteta
+# Boukensha ni Naritai to Miyako ni Deteitta Musume ga S-Rank ni Natteta #Sランク娘 @s_rank_musume
+# Boushoku no Berserk https://bousyoku-anime.com/ #暴食 #暴食のベルセルク @bousyoku_anime
 # Buta no Liver wa Kanetsu Shiro https://butaliver-anime.com/ #豚レバ @butaliver_anime
 # Dekoboko Majo no Oyako Jijou https://dekoboko-majo-anime.jp/ @DEKOBOKO_anime #でこぼこ魔女の親子事情
 # Goblin Slayer S2 http://www.goblinslayer.jp/ #ゴブスレ #いせれべ @GoblinSlayer_GA
@@ -86,6 +87,63 @@ class SRankMusumeDownload(Fall2023AnimeDownload, NewsTemplate):
             self.image_list = []
             for image in images:
                 image_url = self.clear_resize_in_url(self.PAGE_PREFIX + image['src'][1:])
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+
+
+# Boushoku no Berserk
+class BoushokunoBerserkDownload(Fall2023AnimeDownload, NewsTemplate):
+    title = 'Boushoku no Berserk'
+    keywords = [title, 'Berserk of Gluttony']
+    website = 'https://bousyoku-anime.com/'
+    twitter = 'bousyoku_anime'
+    hashtags = ['暴食', '暴食のベルセルク']
+    folder_name = 'boushokunoberserk'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-list li',
+                                    date_select='.news-list-ymd', title_select='.news-list-title', id_select='a',
+                                    next_page_select='.nav-links a.next.page-numbers', paging_type=3,
+                                    paging_suffix='?paged=%s', date_separator='-')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        index_css = self.PAGE_PREFIX + 'assets/css/index.css'
+        try:
+            content = self.get_response(index_css)
+            image_url = self.PAGE_PREFIX + content.split('.main-visual-inner{background:url(')[1]\
+                .split(')')[0].replace('../', '')
+            image_name = self.extract_image_name_from_url(image_url)
+            self.download_image(image_url, folder + '/' + image_name)
+        except Exception as e:
+            pass
+            # self.print_exception(e)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            images = soup.select('.character-main img[src].character-thumbnail')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'][1:]
                 image_name = self.extract_image_name_from_url(image_url)
                 self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)
