@@ -26,6 +26,7 @@ import string
 # Tate no Yuusha no Nariagari Season 3 http://shieldhero-anime.jp/ #shieldhero #盾の勇者の成り上がり @shieldheroanime
 # Tearmoon Teikoku Monogatari https://tearmoon-pr.com/ #ティアムーン @tearmoon_pr
 # Toaru Ossan no VRMMO Katsudouki https://toaru-ossan.com/ #とあるおっさん @toaru_ossan_pr
+# Undead Unluck https://undead-unluck.net/ #アンデラ @undeadunluck_an
 # Under Ninja https://under-ninja.jp/ #アンダーニンジャ @UNDERNINJAanime
 # Watashi no Oshi wa Akuyaku Reijou. https://wataoshi-anime.com/ #わたおし #wataoshi #ILTV @wataoshi_anime
 
@@ -1642,6 +1643,55 @@ class ToaruOssanDownload(Fall2023AnimeDownload, NewsTemplate):
         prefix = self.PAGE_PREFIX + 'assets/images/character/'
         templates = [prefix + 'img_%s.png', prefix + 'face_%s.png']
         self.download_by_template(folder, templates, 2, 1)
+
+
+# Undead Unluck
+class UndeadUnluckDownload(Fall2023AnimeDownload, NewsTemplate):
+    title = 'Undead Unluck'
+    keywords = [title]
+    website = 'https://undead-unluck.net/'
+    twitter = 'undeadunluck_an'
+    hashtags = ['アンデラ']
+    folder_name = 'undeadunluck'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.newsList',
+                                    date_select='.newsList_date', title_select='.newsList_title', id_select='a',
+                                    a_tag_start_text_to_remove='./', a_tag_prefix=news_url)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.visualLists img[src]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'].replace('./', '').split('?')[0]
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'assets/img/top/character/character%s_main.png'
+        self.download_by_template(folder, template, 1, 1)
 
 
 # Under Ninja

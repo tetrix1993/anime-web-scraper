@@ -137,6 +137,7 @@ The premiere date for the anime listed here has not been announced.
 * [Tate no Yuusha no Nariagari Season 3](http://shieldhero-anime.jp/)
 * [Tearmoon Teikoku Monogatari](https://tearmoon-pr.com/)
 * [Toaru Ossan no VRMMO Katsudouki](https://toaru-ossan.com/)
+* [Undead Unluck](https://undead-unluck.net/)
 * [Under Ninja](https://under-ninja.jp/)
 * [Watashi no Oshi wa Akuyaku Reijou.](https://wataoshi-anime.com/)
 
