@@ -763,6 +763,7 @@ class IkenaikyoDownload(Fall2023AnimeDownload, NewsTemplate):
         folder = self.create_key_visual_directory()
         self.image_list = []
         self.add_to_image_list('tz', self.PAGE_PREFIX + 'manage/wp-content/uploads/2023/04/KV.jpg')
+        self.add_to_image_list('main_visual2', self.PAGE_PREFIX + 'manage/wp-content/uploads/2023/08/main_visual2.jpg')
         self.download_image_list(folder)
 
     def download_character(self):
