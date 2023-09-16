@@ -16,6 +16,7 @@ import string
 # Potion-danomi de Ikinobimasu! https://potion-anime.com/ #ポーション頼み @potion_APR
 # Ragna Crimson https://ragna-crimson.com/ @ragnacrimson_PR #ラグナクリムゾン #RagnaCrimson
 # Seiken Gakuin no Makentsukai https://seikengakuin.com/ #聖剣学院の魔剣使い #せまつか @SEIKEN_MAKEN
+# Shangri-La Frontier: Kusoge Hunter, Kamige ni Idoman to su https://anime.shangrilafrontier.com/ #シャンフロ @ShanFro_Comic
 # Shy https://shy-anime.com/ #SHY_hero @SHY_off
 # Sousou no Frieren https://frieren-anime.jp/ #フリーレン #frieren @Anime_Frieren
 # Tearmoon Teikoku Monogatari https://tearmoon-pr.com/ #ティアムーン @tearmoon_pr
@@ -949,6 +950,74 @@ class SeikenGakuinDownload(Fall2023AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'sgwp/wp-content/themes/seikengakuin/assets/imgs/character/chara%s.png'
         self.download_by_template(folder, template, 2, 1)
+
+
+# Shangri-La Frontier: Kusoge Hunter, Kamige ni Idoman to su
+class ShangriLaFrontierDownload(Fall2023AnimeDownload, NewsTemplate):
+    title = 'Shangri-La Frontier: Kusoge Hunter, Kamige ni Idoman to su'
+    keywords = [title]
+    website = 'https://anime.shangrilafrontier.com/'
+    twitter = 'ShanFro_Comic'
+    hashtags = ['シャンフロ']
+    folder_name = 'shangrilafrontier'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.topics li',
+                                    title_select='.ttl', date_select='.date', id_select='a', news_prefix='topics/',
+                                    paging_type=0, next_page_select='.pagenation-list li', next_page_eval_index=-1,
+                                    next_page_eval_index_class='is__current')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            self.image_list = []
+            images = soup.select('.fv .visual source[srcset]')
+            for image in images:
+                image_url = image['srcset']
+                if '/images/' not in image_url:
+                    continue
+                if image_url.startswith('/'):
+                    image_url = self.PAGE_PREFIX + image_url[1:]
+                image_name = self.generate_image_name_from_url(image_url, 'images')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            self.image_list = []
+            images = soup.select('.chardata--inner source[srcset]')
+            for image in images:
+                image_url = image['srcset']
+                if '/webp/' not in image_url:
+                    continue
+                if image_url.startswith('/'):
+                    image_url = self.PAGE_PREFIX + image_url[1:]
+                image_name = self.generate_image_name_from_url(image_url, 'webp')
+                if not image_name.endswith('_sp'):
+                    continue
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
 
 
 # Shy

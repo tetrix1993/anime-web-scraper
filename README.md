@@ -128,6 +128,7 @@ The premiere date for the anime listed here has not been announced.
 * [Potion-danomi de Ikinobimasu!](https://potion-anime.com/)
 * [Ragna Crimson](https://ragna-crimson.com/)
 * [Seiken Gakuin no Makentsukai](https://seikengakuin.com/)
+* [Shangri-La Frontier: Kusoge Hunter, Kamige ni Idoman to su](https://anime.shangrilafrontier.com/)
 * [Shy](https://shy-anime.com/)
 * [Sousou no Frieren](https://frieren-anime.jp/)
 * [Tearmoon Teikoku Monogatari](https://tearmoon-pr.com/)
