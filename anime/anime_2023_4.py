@@ -1474,7 +1474,8 @@ class TateNoYuusha3Download(Fall2023AnimeDownload):
         soup = self.download_episode_preview()
         self.download_news()
         soup = self.download_key_visual(soup)
-        self.download_character(soup)
+        soup = self.download_character(soup)
+        self.download_media(soup)
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
@@ -1517,7 +1518,6 @@ class TateNoYuusha3Download(Fall2023AnimeDownload):
 
     def download_key_visual(self, soup=None):
         folder = self.create_key_visual_directory()
-        soup = None
         try:
             if soup is None:
                 soup = self.get_soup(self.PAGE_PREFIX)
@@ -1536,7 +1536,6 @@ class TateNoYuusha3Download(Fall2023AnimeDownload):
 
     def download_character(self, soup=None):
         folder = self.create_character_directory()
-        soup = None
         try:
             if soup is None:
                 soup = self.get_soup(self.PAGE_PREFIX)
@@ -1551,6 +1550,26 @@ class TateNoYuusha3Download(Fall2023AnimeDownload):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+        return soup
+
+    def download_media(self, soup=None):
+        folder = self.create_media_directory()
+        try:
+            if soup is None:
+                soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.bddata source[srcset]')
+            self.image_list = []
+            for image in images:
+                if '/bd/webp/' not in image['srcset']:
+                    continue
+                image_name = self.generate_image_name_from_url(image['srcset'], 'webp')
+                if image_name in ['np_wide', 'np_slim']:
+                    continue
+                image_url = self.PAGE_PREFIX + image['srcset'].split('?')[0][1:]
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
         return soup
 
 
