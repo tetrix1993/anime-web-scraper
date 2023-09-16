@@ -1326,50 +1326,37 @@ class WataoshiDownload(Fall2023AnimeDownload, NewsTemplate):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
 
     def download_news(self):
-        self.download_template_news(page_prefix=self.PAGE_PREFIX, news_prefix='', article_select='#news li',
-                                    date_select='time', title_select='p', id_select='a', a_tag_prefix=self.PAGE_PREFIX)
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.inner.list li',
+                                    date_select='time', title_select='p', id_select='a', a_tag_prefix=self.PAGE_PREFIX,
+                                    a_tag_start_text_to_remove='../')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         self.image_list = []
-        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/Fj120y9VIAAx9Jp?format=jpg&name=medium')
-        self.add_to_image_list('kv1', 'https://pbs.twimg.com/media/Fv6DLpYaQAACtjt?format=jpg&name=large')
-        self.add_to_image_list('img_visual1.jpg', self.PAGE_PREFIX + 'images/img_visual1.jpg')
-        self.download_image_list(folder)
+        # self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/Fj120y9VIAAx9Jp?format=jpg&name=medium')
+        # self.add_to_image_list('kv1', 'https://pbs.twimg.com/media/Fv6DLpYaQAACtjt?format=jpg&name=large')
+        # self.add_to_image_list('img_visual1.jpg', self.PAGE_PREFIX + 'images/img_visual1.jpg')
+        # self.download_image_list(folder)
 
-        css_url = self.PAGE_PREFIX + 'css/style.min.css'
         try:
             soup = self.get_soup(self.PAGE_PREFIX)
-            mainslides = soup.select('.mainimg .mainslide[class]')
-            _classes = []
-            for slide in mainslides:
-                for _class in slide['class']:
-                    if _class not in ['mainslide', 'swiper-slide']:
-                        _classes.append(_class)
-                        break
-            if len(_classes) > 0:
-                self.image_list = []
-                css_page = self.get_response(css_url)
-                for _class in _classes:
-                    search_text = '.mainslide.' + _class + '{background:url('
-                    idx = css_page.find(search_text)
-                    if idx > 0:
-                        right_idx = css_page[idx + len(search_text):].find(')')
-                        if right_idx > 0:
-                            start_idx = idx + len(search_text)
-                            image_url = css_page[start_idx:start_idx + right_idx]
-                            if image_url.startswith('../'):
-                                image_url = self.PAGE_PREFIX + image_url[3:]
-                            image_name = self.extract_image_name_from_url(image_url)
-                            self.add_to_image_list(image_name, image_url)
-                self.download_image_list(folder)
+            images = soup.select('.mainimg .swiper-slide img[src]')
+            for image in images:
+                if '/top/' not in image['src']:
+                    continue
+                image_url = self.PAGE_PREFIX + image['src'][1:]
+                image_name = self.generate_image_name_from_url(image_url, 'top')
+                if 'img' not in image_name:
+                    continue
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Key Visual')
 
     def download_character(self):
         folder = self.create_character_directory()
-        prefix = self.PAGE_PREFIX + 'images/img_chara_'
-        templates = [prefix + '%s.png', prefix + 'face_%s.png']
+        prefix = self.PAGE_PREFIX + 'assets/images/character/'
+        templates = [prefix + 'chara_%s.png', prefix + 'face_%s.png']
         self.download_by_template(folder, templates, 2, 1)
 
     def download_media(self):
@@ -1381,7 +1368,7 @@ class WataoshiDownload(Fall2023AnimeDownload, NewsTemplate):
             os.makedirs(voice_folder)
         for i in range(99):
             audio_name = f'chara_{str(i + 1).zfill(2)}.mp3'
-            audio_url = self.PAGE_PREFIX + 'mp3/' + audio_name
+            audio_url = self.PAGE_PREFIX + 'assets/mp3/' + audio_name
             result = self.download_content(audio_url, voice_folder + '/' + audio_name)
             if result == -1:
                 break
