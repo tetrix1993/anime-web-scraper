@@ -25,6 +25,7 @@ import string
 # Sousou no Frieren https://frieren-anime.jp/ #フリーレン #frieren @Anime_Frieren
 # Tearmoon Teikoku Monogatari https://tearmoon-pr.com/ #ティアムーン @tearmoon_pr
 # Toaru Ossan no VRMMO Katsudouki https://toaru-ossan.com/ #とあるおっさん @toaru_ossan_pr
+# Under Ninja https://under-ninja.jp/ #アンダーニンジャ @UNDERNINJAanime
 # Watashi no Oshi wa Akuyaku Reijou. https://wataoshi-anime.com/ #わたおし #wataoshi #ILTV @wataoshi_anime
 
 
@@ -1542,6 +1543,71 @@ class ToaruOssanDownload(Fall2023AnimeDownload, NewsTemplate):
         self.download_by_template(folder, templates, 2, 1)
 
 
+# Under Ninja
+class UnderNinjaDownload(Fall2023AnimeDownload, NewsTemplate):
+    title = 'Under Ninja'
+    keywords = [title]
+    website = 'https://under-ninja.jp/'
+    twitter = 'UNDERNINJAanime'
+    hashtags = ['アンダーニンジャ']
+    folder_name = 'underninja'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-list li',
+                                    date_select='.news-date', title_select='.news-title', id_select='a',
+                                    next_page_select='.pagination-btn.next')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('kv', self.PAGE_PREFIX + 'wp-content/uploads/2023/08/UNkeycopy0817-scaled.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            pages = soup.select('.character-list-item a[href]')
+            for page in pages:
+                chara_url = page['href']
+                if chara_url.endswith('/'):
+                    chara_url = chara_url[:-1]
+                name = chara_url.split('/')[-1]
+                if name in processed:
+                    continue
+                chara_soup = self.get_soup(chara_url)
+                images = chara_soup.select('.character-detail__inner img[src]')
+                self.image_list = []
+                for image in images:
+                    image_url = image['src']
+                    image_name = self.extract_image_name_from_url(image_url)
+                    if 'shadow' in image_name:
+                        continue
+                    self.add_to_image_list(image_name, image_url)
+                if len(self.image_list) > 0:
+                    processed.append(name)
+                self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+        self.create_cache_file(cache_filepath, processed, num_processed)
+
+
 # Watashi no Oshi wa Akuyaku Reijou.
 class WataoshiDownload(Fall2023AnimeDownload, NewsTemplate):
     title = 'Watashi no Oshi wa Akuyaku Reijou.'
@@ -1573,7 +1639,7 @@ class WataoshiDownload(Fall2023AnimeDownload, NewsTemplate):
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
-        self.image_list = []
+        # self.image_list = []
         # self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/Fj120y9VIAAx9Jp?format=jpg&name=medium')
         # self.add_to_image_list('kv1', 'https://pbs.twimg.com/media/Fv6DLpYaQAACtjt?format=jpg&name=large')
         # self.add_to_image_list('img_visual1.jpg', self.PAGE_PREFIX + 'images/img_visual1.jpg')
