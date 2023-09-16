@@ -1289,10 +1289,8 @@ class ToaruOssanDownload(Fall2023AnimeDownload, NewsTemplate):
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('img_teaser', self.PAGE_PREFIX + 'assets/images/top/img_teaser.jpg')
-        self.add_to_image_list('mainimg', self.PAGE_PREFIX + 'assets/images/top/mainimg.jpg')
-        self.download_image_list(folder)
+        template = self.PAGE_PREFIX + 'assets/images/top/mainimg_%s.jpg'
+        self.download_by_template(folder, template, 2, 0)
 
     def download_character(self):
         folder = self.create_character_directory()
