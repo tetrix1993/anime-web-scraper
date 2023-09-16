@@ -11,7 +11,7 @@ from scan import AnimeRecorderScanner, AniverseMagazineScanner, MocaNewsScanner,
 # Genjitsu Shugi Yuusha no Oukoku Saikenki https://genkoku-anime.com/ #現国アニメ @genkoku_info
 # Higurashi no Naku Koro ni Sotsu https://higurashianime.com/ #ひぐらし @higu_anime
 # Jahy-sama wa Kujikenai! https://jahysama-anime.com/ #ジャヒー様はくじけない @jahysama_anime
-# Kanojo mo Kanojo https://kanokano-anime.com/ #kanokano #カノジョも彼女 @kanokano_anime
+# Kanojo mo Kanojo https://kanokano-anime.com/1st/ #kanokano #カノジョも彼女 @kanokano_anime
 # Kobayashi-san Chi no Maid Dragon S https://maidragon.jp/2nd/ #maidragon @maidragon_anime
 # Mahouka Koukou no Yuutousei https://mahouka-yuutousei.jp/ #mahouka @mahouka_anime
 # Megami-ryou no Ryoubo-kun. https://megamiryou.com/ #女神寮 @megamiryou
@@ -950,7 +950,7 @@ class JahysamaDownload(Summer2021AnimeDownload, NewsTemplate):
 class KanokanoDownload(Summer2021AnimeDownload, NewsTemplate):
     title = 'Kanojo mo Kanojo'
     keywords = [title, 'Kanokano']
-    website = 'https://kanokano-anime.com'
+    website = 'https://kanokano-anime.com/1st'
     twitter = 'kanokano_anime'
     hashtags = ['kanokano', 'カノジョも彼女']
     folder_name = 'kanokano'

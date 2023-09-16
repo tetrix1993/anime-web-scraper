@@ -12,6 +12,7 @@ import string
 # Hikikomari Kyuuketsuki no Monmon https://hikikomari.com/ #ひきこまり @komarin_PR
 # Hoshikuzu Telepath https://hoshitele-anime.com/ #星テレ #hoshitele @hoshitele_anime
 # Kage no Jitsuryokusha ni Naritakute! 2nd Season https://shadow-garden.jp/ #陰の実力者 @Shadowgarden_PR
+# Kanojo mo Kanojo Season 2 https://kanokano-anime.com/ #kanokano #カノジョも彼女 @kanokano_anime
 # Keikenzumi na Kimi to, Keiken Zero na Ore ga, Otsukiai suru Hanashi. https://kimizero.com/ #キミゼロ @kimizero_anime
 # Kimi no Koto ga Daidaidaidaidaisuki na 100-nin no Kanojo https://hyakkano.com/ @hyakkano_anime #100カノ
 # Konyaku Haki sareta Reijou wo Hirotta Ore ga, Ikenai koto wo Oshiekomu https://ikenaikyo.com/ #イケナイ教 @ikenaikyo_anime
@@ -660,6 +661,50 @@ class KagenoJitsuryokusha2Download(Fall2023AnimeDownload, NewsTemplate):
         except Exception as e:
             self.print_exception(e, 'Character')
         self.create_cache_file(cache_filepath, processed, num_processed)
+
+
+# Kanojo mo Kanojo Season 2
+class Kanokano2Download(Fall2023AnimeDownload, NewsTemplate):
+    title = 'Kanojo mo Kanojo Season 2'
+    keywords = [title, 'Kanokano']
+    website = 'https://kanokano-anime.com/'
+    twitter = 'kanokano_anime'
+    hashtags = ['kanokano', 'カノジョも彼女']
+    folder_name = 'kanokano'
+
+    PAGE_PREFIX = website
+    IMAGES_PER_EPISODE = 6
+    FINAL_EPISODE = 12
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+        self.download_media()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article.news-lineup__block',
+                                    date_select='dt', title_select='h2', id_select='a', a_tag_prefix=self.PAGE_PREFIX,
+                                    a_tag_start_text_to_remove='/')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('mv-img@2x', self.PAGE_PREFIX + 'assets/img/mv-img@2x.png')
+        self.add_to_image_list('kv_tw', 'https://pbs.twimg.com/media/F05yoojaEAIdFgG?format=jpg&name=medium')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'assets/img/character-detail-img%s@2x.png'
+        self.download_by_template(folder, template, 2)
 
 
 # Keikenzumi na Kimi to, Keiken Zero na Ore ga, Otsukiai suru Hanashi.
