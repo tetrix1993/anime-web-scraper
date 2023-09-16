@@ -10,6 +10,7 @@ import string
 # Hametsu no Oukoku https://hametsu-anime.com/ #はめつのおうこく #はめつ @hametsu_anime
 # Hikikomari Kyuuketsuki no Monmon https://hikikomari.com/ #ひきこまり @komarin_PR
 # Hoshikuzu Telepath https://hoshitele-anime.com/ #星テレ #hoshitele @hoshitele_anime
+# Kage no Jitsuryokusha ni Naritakute! 2nd Season https://shadow-garden.jp/ #陰の実力者 @Shadowgarden_PR
 # Keikenzumi na Kimi to, Keiken Zero na Ore ga, Otsukiai suru Hanashi. https://kimizero.com/ #キミゼロ @kimizero_anime
 # Kimi no Koto ga Daidaidaidaidaisuki na 100-nin no Kanojo https://hyakkano.com/ @hyakkano_anime #100カノ
 # Konyaku Haki sareta Reijou wo Hirotta Ore ga, Ikenai koto wo Oshiekomu https://ikenaikyo.com/ #イケナイ教 @ikenaikyo_anime
@@ -526,6 +527,81 @@ class HoshiteleDownload(Fall2023AnimeDownload, NewsTemplate):
                     break
         except Exception as e:
             self.print_exception(e, 'Character')
+
+
+# Kage no Jitsuryokusha ni Naritakute!
+class KagenoJitsuryokusha2Download(Fall2023AnimeDownload, NewsTemplate):
+    title = 'Kage no Jitsuryokusha ni Naritakute! 2nd Season'
+    keywords = [title, 'The Eminence in Shadow']
+    website = 'https://shadow-garden.jp/'
+    twitter = 'Shadowgarden_PR'
+    hashtags = '陰の実力者'
+    folder_name = 'kagenojitsuryoku2'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.newsLists__item',
+                                    date_select='time', title_select='.newsLists__title', id_select='a',
+                                    next_page_select='.nextpostslink', paging_type=3, paging_suffix='?paged=%s',
+                                    stop_date='2023.02.16')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            self.image_list = []
+            images = soup.select('.fvTitleArea__visualLists img[src]')
+            for image in images:
+                if '/common/' not in image['src']:
+                    continue
+                image_url = self.PAGE_PREFIX + image['src'].replace('./', '')
+                image_name = self.generate_image_name_from_url(image_url, 'common')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        chara_php = self.PAGE_PREFIX + 'character/data/%s.php'
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            self.image_list = []
+            a_tags = soup.select('.charaLists__item a[href]')
+            for a_tag in a_tags:
+                name = a_tag['href'][1:]
+                if name in processed:
+                    continue
+                chara_soup = self.get_soup(chara_php % name)
+                if chara_soup is None:
+                    continue
+                images = chara_soup.select('.charaModal__imgWrap img[src]')
+                self.image_list = []
+                for image in images:
+                    image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+                if len(self.image_list) > 0:
+                    processed.append(name)
+                self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Keikenzumi na Kimi to, Keiken Zero na Ore ga, Otsukiai suru Hanashi.

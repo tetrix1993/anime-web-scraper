@@ -15,7 +15,7 @@ from scan import AniverseMagazineScanner, EeoMediaScanner
 # Futoku no Guild https://futoku-no-anime.com/ #futoku_anime #不徳のギルド @futoku_anime
 # Fuufu Ijou, Koibito Miman. https://fuukoi-anime.com/ #ふうこいアニメ @fuukoi_anime
 # Golden Kamuy S4 https://www.kamuy-anime.com/ #ゴールデンカムイ @kamuy_official
-# Kage no Jitsuryokusha ni Naritakute! https://shadow-garden.jp/ #陰の実力者 @Shadowgarden_PR
+# Kage no Jitsuryokusha ni Naritakute! https://shadow-garden.jp/1st/ #陰の実力者 @Shadowgarden_PR
 # KanColle: Itsuka Ano Umi de https://kancolle-itsuumi.com/ #艦これ #いつかあの海で @anime_KanColle
 # Kidou Senshi Gundam: Suisei no Majo https://g-witch.net/ #水星の魔女 #G_Witch @g_witch_m
 # Koukyuu no Karasu https://kokyu-anime.com/ #後宮の烏 @kokyu_anime
@@ -1180,7 +1180,7 @@ class GoldenKamuy4Download(Fall2022AnimeDownload, NewsTemplate2):
 class KagenoJitsuryokushaDownload(Fall2022AnimeDownload, NewsTemplate):
     title = 'Kage no Jitsuryokusha ni Naritakute!'
     keywords = [title, 'The Eminence in Shadow']
-    website = 'https://shadow-garden.jp/'
+    website = 'https://shadow-garden.jp/1st/'
     twitter = 'Shadowgarden_PR'
     hashtags = '陰の実力者'
     folder_name = 'kagenojitsuryoku'
