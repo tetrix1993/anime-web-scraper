@@ -19,6 +19,7 @@ import string
 # Kusuriya no Hitorigoto https://kusuriyanohitorigoto.jp/ #薬屋のひとりごと @kusuriya_PR
 # Potion-danomi de Ikinobimasu! https://potion-anime.com/ #ポーション頼み @potion_APR
 # Ragna Crimson https://ragna-crimson.com/ @ragnacrimson_PR #ラグナクリムゾン #RagnaCrimson
+# Saihate no Paladin: Tetsusabi no Yama no Ou https://farawaypaladin.com/ #最果てのパラディン #faraway_paladin @faraway_paladin
 # Seijo no Maryoku wa Bannou Desu S2 https://seijyonomaryoku.jp/ #seijyonoanime @seijyonoanime
 # Seiken Gakuin no Makentsukai https://seikengakuin.com/ #聖剣学院の魔剣使い #せまつか @SEIKEN_MAKEN
 # Shangri-La Frontier: Kusoge Hunter, Kamige ni Idoman to su https://anime.shangrilafrontier.com/ #シャンフロ @ShanFro_Comic
@@ -423,6 +424,56 @@ class HametsuDownload(Fall2023AnimeDownload, NewsTemplate):
             self.PAGE_PREFIX + 'assets/character/%ss.webp'
         ]
         self.download_by_template(folder, templates, 1, 1)
+
+
+# Saihate no Paladin: Tetsusabi no Yama no Ou
+class SaihatenoPaladin2Download(Fall2023AnimeDownload, NewsTemplate):
+    title = 'Saihate no Paladin: Tetsusabi no Yama no Ou'
+    keywords = [title, 'The Faraway Paladin', '2nd Season']
+    website = 'https://farawaypaladin.com/'
+    twitter = 'faraway_paladin'
+    hashtags = ['faraway_paladin', '最果てのパラディン']
+    folder_name = 'saihate-no-paladin2'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='#news dd', date_select='i',
+                                    title_select='span', id_select='a', stop_date='2022',
+                                    date_func=lambda x: x.replace('年', '.').replace('月', '.').replace('日', ''),
+                                    next_page_select='.wp-pagenavi *', next_page_eval_index_class='current',
+                                    next_page_eval_index=-1)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.js_subImg img[src]')
+            self.image_list = []
+            for image in images:
+                image_url = image['src']
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'wp/wp-content/themes/farawaypaladin_v5/img/cara%s.png'
+        self.download_by_template(folder, template, 1)
 
 
 # Hikikomari Kyuuketsuki no Monmon
