@@ -784,7 +784,7 @@ class Kanokano2Download(Fall2023AnimeDownload, NewsTemplate):
     website = 'https://kanokano-anime.com/'
     twitter = 'kanokano_anime'
     hashtags = ['kanokano', 'カノジョも彼女']
-    folder_name = 'kanokano'
+    folder_name = 'kanokano2'
 
     PAGE_PREFIX = website
     IMAGES_PER_EPISODE = 6
