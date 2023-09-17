@@ -3,6 +3,7 @@ import os
 import string
 
 # 16bit Sensation: Another Layer https://16bitsensation-al.com/ #16bitAL #16bitセンセーション @16bit_anime
+# Bokura no Ameiro Protocol https://bokuame.com/ #ボクアメ #僕らの雨いろプロトコル @bokuame_anime
 # Boukensha ni Naritai to Miyako ni Deteitta Musume ga S-Rank ni Natteta https://s-rank-musume.com/ #Sランク娘 @s_rank_musume
 # Boushoku no Berserk https://bousyoku-anime.com/ #暴食 #暴食のベルセルク @bousyoku_anime
 # Buta no Liver wa Kanetsu Shiro https://butaliver-anime.com/ #豚レバ @butaliver_anime
@@ -92,6 +93,66 @@ class SixteenBitSensationDownload(Fall2023AnimeDownload, NewsTemplate):
             self.image_list = []
             for image in images:
                 image_url = self.clear_resize_in_url(self.PAGE_PREFIX + image['src'][1:])
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+
+
+# Bokura no Ameiro Protocol
+class BokuameDownload(Fall2023AnimeDownload, NewsTemplate):
+    title = 'Bokura no Ameiro Protocol'
+    keywords = [title, 'Our Rainy Protocol']
+    website = 'https://bokuame.com/'
+    twitter = 'bokuame_anime'
+    hashtags = ['ボクアメ', '僕らの雨いろプロトコル']
+    folder_name = 'bokuame'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.md-li__article',
+                                    date_select='time', title_select='.ttl', id_select='a', news_prefix='topics/')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.fv--v source[srcset][type]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['srcset'][1:]
+                if not image_url.endswith('.webp') or image_url.endswith('_sp.webp'):
+                    continue
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.chardata source[srcset][type]')
+            self.image_list = []
+            for image in images:
+                image_url = self.clear_resize_in_url(self.PAGE_PREFIX + image['srcset'][1:])
+                if not image_url.endswith('.webp') or image_url.endswith('_sp.webp'):
+                    continue
                 image_name = self.extract_image_name_from_url(image_url)
                 self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)
