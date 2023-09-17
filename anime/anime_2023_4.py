@@ -25,6 +25,7 @@ import string
 # Shangri-La Frontier: Kusoge Hunter, Kamige ni Idoman to su https://anime.shangrilafrontier.com/ #シャンフロ @ShanFro_Comic
 # Shy https://shy-anime.com/ #SHY_hero @SHY_off
 # Sousou no Frieren https://frieren-anime.jp/ #フリーレン #frieren @Anime_Frieren
+# Spy x Family Season 2 https://spy-family.net/ #SPY_FAMILY #スパイファミリー @spyfamily_anime
 # Tate no Yuusha no Nariagari Season 3 http://shieldhero-anime.jp/ #shieldhero #盾の勇者の成り上がり @shieldheroanime
 # Tearmoon Teikoku Monogatari https://tearmoon-pr.com/ #ティアムーン @tearmoon_pr
 # Toaru Ossan no VRMMO Katsudouki https://toaru-ossan.com/ #とあるおっさん @toaru_ossan_pr
@@ -1548,6 +1549,44 @@ class FrierenDownload(Fall2023AnimeDownload, NewsTemplate):
             prefix + '%s_face1.jpg', prefix + '%s_face2.jpg', prefix + '%s_face.jpg'
         ]
         self.download_by_template(folder, templates, 1, 1)
+
+
+# Spy x Family Season 2
+class SpyFamily2Download(Fall2023AnimeDownload, NewsTemplate):
+    title = 'Spy x Family Season 2'
+    keywords = [title]
+    website = 'https://spy-family.net/'
+    twitter = 'spyfamily_anime'
+    hashtags = ['SPY_FAMILY', 'スパイファミリー']
+    folder_name = 'spy-family2'
+
+    PAGE_PREFIX = website + 'tvseries/'
+    FINAL_EPISODE = 25
+    IMAGES_PER_EPISODE = 6
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.website, article_select='li.newsLists__item',
+                                    date_select='time', title_select='.newsLists--title', id_select='a',
+                                    paging_type=3, paging_suffix='?paged=%s', next_page_select='.wp-pagenavi *',
+                                    next_page_eval_index_class='current', next_page_eval_index=-1,
+                                    stop_date='2022.12.17')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('top_mv_p_s2', self.PAGE_PREFIX + 'assets/img/top/mv_p_s2.jpg')
+        self.download_image_list(folder)
 
 
 # Tate no Yuusha no Nariagari Season 3

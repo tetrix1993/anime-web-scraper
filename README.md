@@ -136,6 +136,7 @@ The premiere date for the anime listed here has not been announced.
 * [Shangri-La Frontier: Kusoge Hunter, Kamige ni Idoman to su](https://anime.shangrilafrontier.com/)
 * [Shy](https://shy-anime.com/)
 * [Sousou no Frieren](https://frieren-anime.jp/)
+* [Spy x Family Season 2](https://spy-family.net/)
 * [Tate no Yuusha no Nariagari Season 3](http://shieldhero-anime.jp/)
 * [Tearmoon Teikoku Monogatari](https://tearmoon-pr.com/)
 * [Toaru Ossan no VRMMO Katsudouki](https://toaru-ossan.com/)
