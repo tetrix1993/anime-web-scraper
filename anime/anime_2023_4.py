@@ -14,6 +14,7 @@ import string
 # Kage no Jitsuryokusha ni Naritakute! 2nd Season https://shadow-garden.jp/ #陰の実力者 @Shadowgarden_PR
 # Kanojo mo Kanojo Season 2 https://kanokano-anime.com/ #kanokano #カノジョも彼女 @kanokano_anime
 # Keikenzumi na Kimi to, Keiken Zero na Ore ga, Otsukiai suru Hanashi. https://kimizero.com/ #キミゼロ @kimizero_anime
+# Kikansha no Mahou wa Tokubetsu desu https://returners-magic.com/ #帰還者 #returnersmagic @returners_magic
 # Kimi no Koto ga Daidaidaidaidaisuki na 100-nin no Kanojo https://hyakkano.com/ @hyakkano_anime #100カノ
 # Konyaku Haki sareta Reijou wo Hirotta Ore ga, Ikenai koto wo Oshiekomu https://ikenaikyo.com/ #イケナイ教 @ikenaikyo_anime
 # Kusuriya no Hitorigoto https://kusuriyanohitorigoto.jp/ #薬屋のひとりごと @kusuriya_PR
@@ -879,6 +880,66 @@ class KimizeroDownload(Fall2023AnimeDownload, NewsTemplate2):
         except Exception as e:
             self.print_exception(e, 'Character')
         self.create_cache_file(cache_filepath, processed, num_processed)
+
+
+# Kikansha no Mahou wa Tokubetsu desu  #帰還者 #returnersmagic @returners_magic
+class KikanshaDownload(Fall2023AnimeDownload, NewsTemplate):
+    title = 'Kikansha no Mahou wa Tokubetsu desu'
+    keywords = [title, "A Returner's Magic Should Be Special"]
+    website = 'https://returners-magic.com/'
+    twitter = 'hyakkano_anime'
+    hashtags = ['帰還者', 'returnersmagic']
+    folder_name = 'kikansha'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news_list__item',
+                                    date_select='.-date', title_select='.-title', id_select='a',
+                                    a_tag_prefix=news_url, a_tag_start_text_to_remove='./', paging_type=1,
+                                    next_page_select='.pager_list__item',
+                                    next_page_eval_index_class='is_current', next_page_eval_index=-1,
+                                    date_func=lambda x: x[0:4] + '.' + str(self.convert_month_string_to_number(x[5:8])).zfill(2) + '.' + x[9:])
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('kv_news', self.PAGE_PREFIX + 'news/detail/SYS/CONTENTS/be86859e-0fcc-4d49-a781-f58b64303713')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            charas = soup.select('.chara_detail__item')
+            for chara in charas:
+                has_change = len(chara.select('.chara_detail__change')) > 0
+                images = chara.select('.chara_detail__image img[src]')
+                self.image_list = []
+                for image in images:
+                    image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+                    if has_change:
+                        new_image_url = image_url.replace('_1.', '_2.')
+                        new_image_name = self.extract_image_name_from_url(image_url)
+                        self.add_to_image_list(new_image_name, new_image_url)
+                self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
 
 
 # Kimi no Koto ga Daidaidaidaidaisuki na 100-nin no Kanojo

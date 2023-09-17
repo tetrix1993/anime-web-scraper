@@ -1133,6 +1133,31 @@ class MainDownload:
             return eval[0] * 10 + eval[2]
         return None
 
+    @staticmethod
+    def convert_month_string_to_number(month):
+        if month is None or len(month) == 0:
+            return 0
+
+        month_str = month.lower().strip()
+        months = {
+            'jan': 1, 'january': 1,
+            'feb': 2, 'february': 2,
+            'mar': 3, 'march': 3,
+            'apr': 4, 'april': 4,
+            'may': 5,
+            'jun': 6, 'june': 6,
+            'jul': 7, 'july': 7,
+            'aug': 8, 'august': 8,
+            'sep': 9, 'september': 9,
+            'oct': 10, 'october': 10,
+            'nov': 11, 'november': 11,
+            'dec': 12, 'december': 12
+        }
+        if month_str in months:
+            return months[month_str]
+        else:
+            return 0
+
     def add_to_image_list(self, name, url, to_jpg=False, is_mocanews=False):
         if len(name) == 0 or len(url) == 0:
             return

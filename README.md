@@ -125,6 +125,7 @@ The premiere date for the anime listed here has not been announced.
 * [Kage no Jitsuryokusha ni Naritakute! 2nd Season](https://shadow-garden.jp/)
 * [Kanojo mo Kanojo Season 2](https://kanokano-anime.com/)
 * [Keikenzumi na Kimi to, Keiken Zero na Ore ga, Otsukiai suru Hanashi.](https://kimizero.com/)
+* [Kikansha no Mahou wa Tokubetsu desu](https://returners-magic.com/)
 * [Kimi no Koto ga Daidaidaidaidaisuki na 100-nin no Kanojo](https://hyakkano.com/)
 * [Konyaku Haki sareta Reijou wo Hirotta Ore ga, Ikenai koto wo Oshiekomu](https://ikenaikyo.com/)
 * [Kusuriya no Hitorigoto](https://kusuriyanohitorigoto.jp/)
