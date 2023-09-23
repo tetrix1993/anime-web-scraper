@@ -1949,6 +1949,7 @@ class TearmoonDownload(Fall2023AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
@@ -1979,6 +1980,38 @@ class TearmoonDownload(Fall2023AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        for page in ['store1', 'store2', 'bd1', 'bd2', 'bd3', 'bd4']:
+            try:
+                if page != 'store1' and page in processed:
+                    continue
+                soup = self.get_soup(self.PAGE_PREFIX + 'bd/' + page + '/')
+                images = soup.select('.bd img[src]')
+                self.image_list = []
+                for image in images:
+                    image_url = image['src']
+                    if not image_url.startswith('http'):
+                        if image_url.startswith('/'):
+                            image_url = self.PAGE_PREFIX + image_url[1:]
+                        else:
+                            continue
+                    image_name = self.extract_image_name_from_url(image_url)
+                    if image_name.startswith('np_'):
+                        continue
+                    self.add_to_image_list(image_name, image_url)
+                if page != 'store1':
+                    if len(self.image_list) > 0:
+                        processed.append(page)
+                    else:
+                        break
+                self.download_image_list(folder)
+            except Exception as e:
+                self.print_exception(e, f'Blu-ray - {page}')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Toaru Ossan no VRMMO Katsudouki
