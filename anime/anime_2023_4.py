@@ -28,7 +28,7 @@ import string
 # Shangri-La Frontier: Kusoge Hunter, Kamige ni Idoman to su https://anime.shangrilafrontier.com/ #シャンフロ @ShanFro_Comic
 # Shy https://shy-anime.com/ #SHY_hero @SHY_off
 # Sousou no Frieren https://frieren-anime.jp/ #フリーレン #frieren @Anime_Frieren
-# Spy x Family Season 2 https://spy-family.net/ #SPY_FAMILY #スパイファミリー @spyfamily_anime
+# Spy x Family Season 2 https://spy-family.net/tvseries/ #SPY_FAMILY #スパイファミリー @spyfamily_anime
 # Tate no Yuusha no Nariagari Season 3 http://shieldhero-anime.jp/ #shieldhero #盾の勇者の成り上がり @shieldheroanime
 # Tearmoon Teikoku Monogatari https://tearmoon-pr.com/ #ティアムーン @tearmoon_pr
 # Toaru Ossan no VRMMO Katsudouki https://toaru-ossan.com/ #とあるおっさん @toaru_ossan_pr
@@ -1776,12 +1776,13 @@ class FrierenDownload(Fall2023AnimeDownload, NewsTemplate):
 class SpyFamily2Download(Fall2023AnimeDownload, NewsTemplate):
     title = 'Spy x Family Season 2'
     keywords = [title]
-    website = 'https://spy-family.net/'
+    website = 'https://spy-family.net/tvseries/'
     twitter = 'spyfamily_anime'
     hashtags = ['SPY_FAMILY', 'スパイファミリー']
     folder_name = 'spy-family2'
 
-    PAGE_PREFIX = website + 'tvseries/'
+    website_domain = 'https://spy-family.net/'
+    PAGE_PREFIX = website
     FINAL_EPISODE = 25
     IMAGES_PER_EPISODE = 6
 
@@ -1797,7 +1798,7 @@ class SpyFamily2Download(Fall2023AnimeDownload, NewsTemplate):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
 
     def download_news(self):
-        self.download_template_news(page_prefix=self.website, article_select='li.newsLists__item',
+        self.download_template_news(page_prefix=self.website_domain, article_select='li.newsLists__item',
                                     date_select='time', title_select='.newsLists--title', id_select='a',
                                     paging_type=3, paging_suffix='?paged=%s', next_page_select='.wp-pagenavi *',
                                     next_page_eval_index_class='current', next_page_eval_index=-1,
