@@ -577,6 +577,7 @@ class HikikomariDownload(Fall2023AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
@@ -622,6 +623,38 @@ class HikikomariDownload(Fall2023AnimeDownload, NewsTemplate):
                     break
         except Exception as e:
             self.print_exception(e, 'Character')
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        for page in ['tokuten', '01', '02', '03']:
+            try:
+                if page.isnumeric() and page in processed:
+                    continue
+                soup = self.get_soup(self.PAGE_PREFIX + 'blu-ray/' + page + '.html')
+                images = soup.select('.bluray-main img[src]')
+                self.image_list = []
+                for image in images:
+                    image_url = image['src']
+                    if not image_url.startswith('http'):
+                        if image_url.startswith('/'):
+                            image_url = self.PAGE_PREFIX + image_url[1:]
+                        else:
+                            continue
+                    image_name = self.extract_image_name_from_url(image_url)
+                    if '-demo' in image_name:
+                        continue
+                    self.add_to_image_list(image_name, image_url)
+                if page.isnumeric():
+                    if len(self.image_list) > 0:
+                        processed.append(page)
+                    else:
+                        break
+                self.download_image_list(folder)
+            except Exception as e:
+                self.print_exception(e, f'Blu-ray - {page}')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Hoshikuzu Telepath
