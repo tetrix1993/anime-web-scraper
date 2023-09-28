@@ -1,4 +1,5 @@
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
+from scan import AniverseMagazineScanner
 from datetime import datetime, timedelta
 import os
 import string
@@ -1000,7 +1001,7 @@ class KikanshaDownload(Fall2023AnimeDownload, NewsTemplate):
     title = 'Kikansha no Mahou wa Tokubetsu desu'
     keywords = [title, "A Returner's Magic Should Be Special"]
     website = 'https://returners-magic.com/'
-    twitter = 'hyakkano_anime'
+    twitter = 'returners_magic'
     hashtags = ['帰還者', 'returnersmagic']
     folder_name = 'kikansha'
 
@@ -1065,18 +1066,43 @@ class HyakkanoDownload(Fall2023AnimeDownload, NewsTemplate):
     folder_name = 'hyakkano'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 24
 
     def __init__(self):
         super().__init__()
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_external()
         self.download_news()
         self.download_key_visual()
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            stories = soup.select('.story-Wrapper[id]')
+            for story in stories:
+                try:
+                    episode = str(story['id'].replace('ep', '')).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                self.image_list = []
+                images = story.select('.swiper-slide img[src]')
+                for i in range(len(images)):
+                    image_url = images[i]['src']
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url, to_jpg=True)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
+
+    def download_episode_preview_external(self):
+        keywords = ['君のことが大大大大大好きな100人の彼女']
+        AniverseMagazineScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                end_date='20230928', download_id=self.download_id).run()
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-List li',
