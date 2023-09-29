@@ -809,9 +809,29 @@ class KagenoJitsuryokusha2Download(Fall2023AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            self.image_list = []
+            stories = soup.select('.storyImgListsWrap[id]')
+            for story in stories:
+                try:
+                    episode = str(int(story['id'].replace('st', ''))).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                self.image_list = []
+                images = story.select('img[src]')
+                for i in range(len(images)):
+                    image_url = self.PAGE_PREFIX + images[i]['src'].replace('../', '')
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.newsLists__item',
@@ -863,6 +883,22 @@ class KagenoJitsuryokusha2Download(Fall2023AnimeDownload, NewsTemplate):
         except Exception as e:
             self.print_exception(e, 'Character')
         self.create_cache_file(cache_filepath, processed, num_processed)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'bddvd/')
+            images = soup.select('#bddvdContWrap img[src]')
+            self.image_list = []
+            for image in images:
+                if '/bddvd/' not in image['src'] or 'np_l.jpg' in image['src']:
+                    continue
+                image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                image_name = 'bddvd_' + self.generate_image_name_from_url(image_url, 'bddvd')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
 
 # Kanojo mo Kanojo Season 2
