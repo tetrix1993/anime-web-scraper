@@ -10,7 +10,6 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Giji Harem https://gijiharem.com/ #疑似ハーレム @GijiHarem
 # Highspeed Etoile https://highspeed-etoile.com/ #ハイスピ @HSE_Project_PR
 # Isekai de Mofumofu Nadenade suru Tame ni Ganbattemasu. https://mohunadeanime.com/ #もふなで @mohunade_anime
-# Kekkon Yubiwa Monogatari https://talesofweddingrings-anime.jp/ #結婚指輪物語 @weddingringsPR
 # Saijaku Tamer wa Gomi Hiroi no Tabi wo Hajimemashita. https://saijakutamer-anime.com/ #最弱テイマー @saijakutamer
 # Sasaki to Pii-chan https://sasapi-anime.com/ #ささピー @sasaki_pichan
 # Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita 2nd Season https://slime300-anime.com/ #スライム倒して300年 @slime300_PR
@@ -304,46 +303,6 @@ class MofunadeDownload(UnconfirmedDownload, NewsTemplate):
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FrwZ2u4aQAMVhBo?format=jpg&name=4096x4096')
         self.add_to_image_list('tz', self.PAGE_PREFIX + 'dist/img/top/kv_img.webp')
         self.download_image_list(folder)
-
-
-# Kekkon Yubiwa Monogatari
-class KekkonYubiwaDownload(UnconfirmedDownload):
-    title = 'Kekkon Yubiwa Monogatari'
-    keywords = [title, 'Tales of Wedding Rings']
-    website = 'https://talesofweddingrings-anime.jp/'
-    twitter = 'weddingringsPR'
-    hashtags = '結婚指輪物語'
-    folder_name = 'kekkonyubiwa'
-
-    PAGE_PREFIX = website
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        # self.download_news()
-        self.download_key_visual()
-        self.download_character()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_news(self):
-        pass
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('tz', self.PAGE_PREFIX + 'images/mob02/per_bg.png')
-        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FsCGtvQaMAEldYZ?format=jpg&name=large')
-        self.download_image_list(folder)
-
-    def download_character(self):
-        folder = self.create_character_directory()
-        template = self.PAGE_PREFIX + 'images/mob02/chara_%s.png'
-        self.download_by_template(folder, template, 2, 1)
-
 
 # Saijaku Tamer wa Gomi Hiroi no Tabi wo Hajimemashita.
 class SaijakuTamerDownload(UnconfirmedDownload, NewsTemplate):

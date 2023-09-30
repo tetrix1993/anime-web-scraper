@@ -4,6 +4,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Dosanko Gal wa Namara Menkoi https://dosankogal-pr.com/ #道産子ギャル #どさこい @dosankogal_pr
 # Dungeon Meshi https://delicious-in-dungeon.com/ #ダンジョン飯 #deliciousindungeon @dun_meshi_anime
 # Himesama "Goumon" no Jikan desu https://himesama-goumon.com/ #姫様拷問の時間です @himesama_goumon
+# Kekkon Yubiwa Monogatari https://talesofweddingrings-anime.jp/ #結婚指輪物語 @weddingringsPR
 # Mato Seihei no Slave https://mabotai.jp/ #魔都精兵のスレイブ #まとスレ @mabotai_kohobu
 # Pon no Michi https://ponnomichi-pr.com/ #ぽんのみち @ponnomichi_pr
 # Sasayaku You ni Koi wo Utau https://sasakoi-anime.com/ #ささこい @sasakoi_anime
@@ -258,6 +259,73 @@ class HimesamaGoumonDownload(Winter2024AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Key Visual')
+
+
+# Kekkon Yubiwa Monogatari
+class KekkonYubiwaDownload(Winter2024AnimeDownload, NewsTemplate):
+    title = 'Kekkon Yubiwa Monogatari'
+    keywords = [title, 'Tales of Wedding Rings']
+    website = 'https://talesofweddingrings-anime.jp/'
+    twitter = 'weddingringsPR'
+    hashtags = '結婚指輪物語'
+    folder_name = 'kekkonyubiwa'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, news_prefix='', article_select='.newsinlist li',
+                                    date_select='.newstime', title_select='a', id_select='a', id_has_id=True,
+                                    id_attr='data-cl')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz', self.PAGE_PREFIX + 'images/mob02/per_bg.png')
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FsCGtvQaMAEldYZ?format=jpg&name=large')
+        self.download_image_list(folder)
+
+        sub_folder = self.create_custom_directory(folder.split('/')[-1] + '/news')
+        cache_filepath = sub_folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX, decode=True)
+            items = soup.select('.newsinlist li a[data-cl]')
+            for item in items:
+                page_name = item['data-cl']
+                if page_name in processed:
+                    break
+                title = item.text.strip()
+                if 'ビジュアル' in title or 'イラスト' in title:
+                    images = soup.select(f'.lbox_com.{page_name} img[src]')
+                    self.image_list = []
+                    for image in images:
+                        image_url = self.PAGE_PREFIX + image['src'].replace('./', '').split('?')[0]
+                        if '/news/' not in image_url or image_url.endswith('.svg'):
+                            continue
+                        image_name = self.generate_image_name_from_url(image_url, 'news')
+                        self.add_to_image_list(image_name, image_url)
+                    self.download_image_list(sub_folder)
+                processed.append(page_name)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual News')
+        self.create_cache_file(cache_filepath, processed, num_processed)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'images/mob02/chara_%s.png'
+        self.download_by_template(folder, template, 2, 1)
 
 
 # Mato Seihei no Slave
