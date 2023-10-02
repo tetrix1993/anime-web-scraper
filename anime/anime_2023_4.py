@@ -2158,20 +2158,30 @@ class TateNoYuusha3Download(Fall2023AnimeDownload):
         super().__init__()
 
     def run(self):
-        soup = self.download_episode_preview()
+        self.download_episode_preview()
         self.download_news()
-        soup = self.download_key_visual(soup)
+        soup = self.download_key_visual()
         soup = self.download_character(soup)
         self.download_media(soup)
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-        soup = None
         try:
-            soup = self.get_soup(self.PAGE_PREFIX)
-        except:
-            pass
-        return soup
+            template = self.PAGE_PREFIX + 'assets/img/3rd/story/ss/ep%s/%s.jpg'
+            stop = False
+            for i in range(self.FINAL_EPISODE):
+                episode = str(i + 1).zfill(2)
+                if self.is_image_exists(episode + '_' + str(self.IMAGES_PER_EPISODE)):
+                    continue
+                for j in range(self.IMAGES_PER_EPISODE):
+                    image_url = template % (episode, str(j + 1))
+                    image_name = episode + '_' + str(j + 1)
+                    if self.download_image(image_url, self.base_folder + '/' + image_name) == -1:
+                        stop = True
+                        break
+                if stop:
+                    break
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         news_url = self.website + 'news/'
