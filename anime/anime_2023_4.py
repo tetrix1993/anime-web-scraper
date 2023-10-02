@@ -1004,6 +1004,8 @@ class KimizeroDownload(Fall2023AnimeDownload, NewsTemplate2):
     folder_name = 'kimizero'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 6
 
     def __init__(self):
         super().__init__()
@@ -1011,14 +1013,44 @@ class KimizeroDownload(Fall2023AnimeDownload, NewsTemplate2):
     def run(self):
         self.download_episode_preview()
         self.download_news()
+        self.download_episode_preview_external()
         self.download_key_visual()
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/01.html')
+            a_tags = soup.select('#ContentsListUnit03 a[href]')
+            for a_tag in a_tags:
+                try:
+                    episode = str(int(a_tag.text.replace('#', ''))).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                if episode == '01':
+                    ep_soup = soup
+                else:
+                    ep_soup = self.get_soup(self.PAGE_PREFIX + a_tag['href'].replace('../', ''))
+                if ep_soup is None:
+                    continue
+                self.image_list = []
+                images = ep_soup.select('.tp5 img[src]')
+                for i in range(len(images)):
+                    image_url = self.PAGE_PREFIX + images[i]['src'].split('?')[0].replace('../', '').replace('sn_', '')
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(self.PAGE_PREFIX)
+
+    def download_episode_preview_external(self):
+        keywords = ['経験済みなキミと']
+        AniverseMagazineScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                end_date='20231002', download_id=self.download_id).run()
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
