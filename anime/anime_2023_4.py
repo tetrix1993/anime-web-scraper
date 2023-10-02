@@ -2747,6 +2747,19 @@ class WataoshiDownload(Fall2023AnimeDownload, NewsTemplate):
 
     def download_media(self):
         folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'blu-ray')
+            self.image_list = []
+            images = soup.select('.inner img[src]')
+            for image in images:
+                if '/blu-ray/' not in image['src']:
+                    continue
+                image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                image_name = self.generate_image_name_from_url(image_url, 'blu-ray')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
         # Voices
         voice_folder = folder + '/voice'
