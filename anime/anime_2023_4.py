@@ -2438,6 +2438,7 @@ class ToaruOssanDownload(Fall2023AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -2474,6 +2475,22 @@ class ToaruOssanDownload(Fall2023AnimeDownload, NewsTemplate):
         prefix = self.PAGE_PREFIX + 'assets/images/character/'
         templates = [prefix + 'img_%s.png', prefix + 'face_%s.png']
         self.download_by_template(folder, templates, 2, 1)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'blu-ray')
+            self.image_list = []
+            images = soup.select('.inner img[src]')
+            for image in images:
+                if '/blu-ray/' not in image['src'] or 'nowprinting' in image['src']:
+                    continue
+                image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                image_name = self.generate_image_name_from_url(image_url, 'blu-ray')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
 
 # Undead Unluck
