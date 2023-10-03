@@ -626,6 +626,7 @@ class HametsuDownload(Fall2023AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -681,6 +682,22 @@ class HametsuDownload(Fall2023AnimeDownload, NewsTemplate):
             self.PAGE_PREFIX + 'assets/character/%ss.webp'
         ]
         self.download_by_template(folder, templates, 1, 1)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'bluray.html')
+            self.image_list = []
+            images = soup.select('.sub-content-container img[src]')
+            for image in images:
+                if '/bluray/' not in image['src'] or 'np-bnf' in image['src']:
+                    continue
+                image_url = self.PAGE_PREFIX + image['src'].replace('./', '').split('?')[0]
+                image_name = self.generate_image_name_from_url(image_url, 'bluray')
+                self.add_to_image_list(image_name, image_url, to_jpg=True)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
 
 # Saihate no Paladin: Tetsusabi no Yama no Ou
