@@ -1892,6 +1892,7 @@ class SeikenGakuinDownload(Fall2023AnimeDownload, NewsTemplate):
         self.download_episode_preview_guess(print_invalid=False, download_valid=True)
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -1979,6 +1980,20 @@ class SeikenGakuinDownload(Fall2023AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'sgwp/wp-content/themes/seikengakuin/assets/imgs/character/chara%s.png'
         self.download_by_template(folder, template, 2, 1)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'goods/blu-ray/')
+            images = soup.select('article.entry img[src]')
+            self.image_list = []
+            for image in images:
+                image_url = image['src']
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
 
 # Shangri-La Frontier: Kusoge Hunter, Kamige ni Idoman to su
