@@ -1,6 +1,7 @@
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 from scan import AniverseMagazineScanner
 from datetime import datetime, timedelta
+from requests.exceptions import HTTPError
 import os
 import string
 
@@ -143,6 +144,8 @@ class BokuameDownload(Fall2023AnimeDownload, NewsTemplate):
     folder_name = 'bokuame'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 6
 
     def __init__(self):
         super().__init__()
@@ -150,15 +153,79 @@ class BokuameDownload(Fall2023AnimeDownload, NewsTemplate):
     def run(self):
         self.download_episode_preview()
         self.download_news()
+        self.download_episode_preview_guess(print_invalid=False, download_valid=True)
         self.download_key_visual()
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            story_prefix = self.PAGE_PREFIX + 'episodes/'
+            soup = self.get_soup(story_prefix)
+            stories = soup.select('nav[data-type="archive"] a[href]')
+            for story in stories:
+                try:
+                    episode = str(int(story.text)).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                ep_soup = self.get_soup(story['href'])
+                if ep_soup is None:
+                    continue
+                self.image_list = []
+                images = ep_soup.select('.mainss img[src],.subss img[src]')
+                for i in range(len(images)):
+                    image_name = episode + '_' + str(i + 1)
+                    image_url = images[i]['src']
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.md-li__article',
                                     date_select='time', title_select='.ttl', id_select='a', news_prefix='topics/')
+
+    def download_episode_preview_guess(self, print_invalid=False, download_valid=False):
+        if self.is_image_exists(str(self.FINAL_EPISODE).zfill(2) + '_' + str(self.IMAGES_PER_EPISODE)):
+            return
+
+        folder = self.create_custom_directory('guess')
+        template = self.PAGE_PREFIX + 'wp/wp-content/uploads/%s/%s/%s.jpg'
+        current_date = datetime.now() + timedelta(hours=1)
+        year = current_date.strftime('%Y')
+        month = current_date.strftime('%m')
+        is_successful = False
+        valid_urls = []
+        for j in range(self.IMAGES_PER_EPISODE):
+            k = 0
+            while k < 20:
+                if k == 0:
+                    append = ''
+                else:
+                    append = '-' + str(k)
+                image_folder = folder + '/' + year + '/' + month
+                image_name = str(j + 1).zfill(2) + append
+                if not self.is_image_exists(image_name, image_folder):
+                    image_url = template % (year, month, str(j + 1).zfill(2) + append)
+                    if self.is_valid_url(image_url, is_image=True):
+                        print('VALID - ' + image_url)
+                        is_successful = True
+                        valid_urls.append({'name': image_name, 'url': image_url, 'folder': image_folder})
+                    elif print_invalid:
+                        print('INVALID - ' + image_url)
+                        break
+                k += 1
+        if download_valid and len(valid_urls) > 0:
+            for valid_url in valid_urls:
+                image_name = valid_url['name']
+                image_folder = valid_url['folder']
+                if not os.path.exists(image_folder):
+                    os.makedirs(image_folder)
+                self.download_image(valid_url['url'], image_folder + '/' + image_name)
+        if is_successful:
+            print(self.__class__.__name__ + ' - Guessed correctly!')
+        return is_successful
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -1587,6 +1654,7 @@ class PotionDanomiDownload(Fall2023AnimeDownload, NewsTemplate):
     folder_name = 'potiondanomi'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
 
     def __init__(self):
         super().__init__()
@@ -1597,8 +1665,31 @@ class PotionDanomiDownload(Fall2023AnimeDownload, NewsTemplate):
         self.download_key_visual()
         self.download_character()
 
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+    def download_episode_preview(self, print_http_error=False):
+        if self.is_image_exists(str(self.FINAL_EPISODE) + '_1') and self.is_image_exists('01_1'):
+            return
+
+        try:
+            objs = self.get_json(
+                self.PAGE_PREFIX + 'news/wp-json/wp/v2/pages?orderby=date&order=asc&acf_format=standard&per_page=100&parent=83')
+            for obj in objs:
+                if 'acf' in obj:
+                    acf = obj['acf']
+                    if 'number' in acf and 'images' in acf and isinstance(acf['images'], list):
+                        try:
+                            episode = str(int(acf['number'].split('第')[1].split('話')[0])).zfill(2)
+                        except:
+                            continue
+                        for i in range(len(acf['images'])):
+                            image_url = acf['images'][i]
+                            image_name = episode + '_' + str(i + 1)
+                            self.add_to_image_list(image_name, image_url)
+                        self.download_image_list(self.base_folder)
+        except HTTPError:
+            if print_http_error:
+                print(self.__class__.__name__ + ' - 403 Error when retrieving story API.')
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-list a',
