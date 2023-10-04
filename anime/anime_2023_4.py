@@ -1559,6 +1559,7 @@ class IkenaikyoDownload(Fall2023AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -1599,6 +1600,24 @@ class IkenaikyoDownload(Fall2023AnimeDownload, NewsTemplate):
             chara_prefix + '%s-2.png'
         ]
         self.download_by_template(folder, templates, 2, 1)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'bd-dvd/')
+            images = soup.select('.group0 img[src],.group1 img[src]')
+            self.image_list = []
+            for image in images:
+                image_url = image['src']
+                if '/bd-dvd/' not in image_url or 'nowprinting' in image_url:
+                    continue
+                if image_url.startswith('/'):
+                    image_url = self.PAGE_PREFIX + image_url[1:]
+                image_name = self.generate_image_name_from_url(image_url, 'bd-dvd')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
 
 # Kusuriya no Hitorigoto
