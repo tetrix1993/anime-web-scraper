@@ -86,6 +86,7 @@ The premiere date for the anime listed here has not been announced.
 * [ATRI -My Dear Moments-](https://atri-anime.com/)
 * [Chiyu Mahou no Machigatta Tsukaikata](https://chiyumahou-anime.com/)
 * [Giji Harem](https://gijiharem.com/)
+* [Henjin no Salad Bowl](https://www.tbs.co.jp/anime/hensara/)
 * [Highspeed Etoile](https://highspeed-etoile.com/)
 * [Isekai de Mofumofu Nadenade suru Tame ni Ganbattemasu.](https://mohunadeanime.com/)
 * [Saijaku Tamer wa Gomi Hiroi no Tabi wo Hajimemashita.](https://saijakutamer-anime.com/)
