@@ -816,7 +816,28 @@ class SaihatenoPaladin2Download(Fall2023AnimeDownload, NewsTemplate):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'storys')
+            posts = soup.select('div.post')
+            for post in posts:
+                h1_tag = post.find('h1')
+                try:
+                    episode = str(int(h1_tag.text.strip().replace('第', '').split('話')[0])).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                ul = post.find('ul')  # Get first ul tag
+                if ul:
+                    images = ul.select('img[src]')
+                    self.image_list = []
+                    for i in range(len(images)):
+                        image_url = self.clear_resize_in_url(images[i]['src'])
+                        image_name = episode + '_' + str(i + 1)
+                        self.add_to_image_list(image_name, image_url)
+                    self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='#news dd', date_select='i',
