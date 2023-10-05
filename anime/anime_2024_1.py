@@ -5,8 +5,10 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Dungeon Meshi https://delicious-in-dungeon.com/ #ダンジョン飯 #deliciousindungeon @dun_meshi_anime
 # Himesama "Goumon" no Jikan desu https://himesama-goumon.com/ #姫様拷問の時間です @himesama_goumon
 # Kekkon Yubiwa Monogatari https://talesofweddingrings-anime.jp/ #結婚指輪物語 @weddingringsPR
+# Jaku-Chara Tomozaki-kun 2nd Stage http://tomozaki-koushiki.com/ #友崎くん @tomozakikoshiki
 # Mato Seihei no Slave https://mabotai.jp/ #魔都精兵のスレイブ #まとスレ @mabotai_kohobu
 # Pon no Michi https://ponnomichi-pr.com/ #ぽんのみち @ponnomichi_pr
+# Saikyou Tank no Meikyuu Kouryaku https://saikyo-tank.com/ #最強タンク @saikyo_tank
 # Sasayaku You ni Koi wo Utau https://sasakoi-anime.com/ #ささこい @sasakoi_anime
 
 
@@ -328,6 +330,39 @@ class KekkonYubiwaDownload(Winter2024AnimeDownload, NewsTemplate):
         self.download_by_template(folder, template, 2, 1)
 
 
+# Jaku-Chara Tomozaki-kun 2nd Stage
+class TomozakiKun2Download(Winter2024AnimeDownload, NewsTemplate):
+    title = "Jaku-Chara Tomozaki-kun 2nd Stage"
+    keywords = [title, 'The Low Tier Character "Tomozaki-kun"', 'Tomozaki-kun']
+    website = 'http://tomozaki-koushiki.com/'
+    twitter = 'tomozakikoshiki'
+    hashtags = '友崎くん'
+    folder_name = 'tomozakikun2'
+
+    PAGE_PREFIX = website
+    FINAL_EPISODE = 13
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.box_main',
+                                    date_select='time', title_select='.box_title', id_select='nothing')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        template = self.PAGE_PREFIX + 'img/index/vis_img%s.jpg'
+        self.download_by_template(folder, template, 1, 1)
+
+
 # Mato Seihei no Slave
 class MatoSlaveDownload(Winter2024AnimeDownload, NewsTemplate):
     title = 'Mato Seihei no Slave'
@@ -521,17 +556,16 @@ class SasakoiDownload(Winter2024AnimeDownload, NewsTemplate):
         self.download_by_template(folder, template, 2, 1, prefix='tz_')
 
 
-# Jaku-Chara Tomozaki-kun 2nd Stage
-class TomozakiKun2Download(Winter2024AnimeDownload, NewsTemplate):
-    title = "Jaku-Chara Tomozaki-kun 2nd Stage"
-    keywords = [title, 'The Low Tier Character "Tomozaki-kun"', 'Tomozaki-kun']
-    website = 'http://tomozaki-koushiki.com/'
-    twitter = 'tomozakikoshiki'
-    hashtags = '友崎くん'
-    folder_name = 'tomozakikun2'
+# Saikyou Tank no Meikyuu Kouryaku
+class SaikyoTankDownload(Winter2024AnimeDownload, NewsTemplate):
+    title = 'Saikyou Tank no Meikyuu Kouryaku'
+    keywords = [title, "The Strongest Tank's Labyrinth Raids"]
+    website = 'https://saikyo-tank.com/'
+    twitter = 'saikyo_tank'
+    hashtags = ['最強タンク']
+    folder_name = 'saikyotank'
 
     PAGE_PREFIX = website
-    FINAL_EPISODE = 13
 
     def __init__(self):
         super().__init__()
@@ -540,15 +574,35 @@ class TomozakiKun2Download(Winter2024AnimeDownload, NewsTemplate):
         self.download_episode_preview()
         self.download_news()
         self.download_key_visual()
+        self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
 
     def download_news(self):
-        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.box_main',
-                                    date_select='time', title_select='.box_title', id_select='nothing')
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.p-News__postList a',
+                                    date_select='.c-Post__date', title_select='.c-Post__title', id_select=None,
+                                    date_func=lambda x: x[0:4] + '.' + x[5:])
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
-        template = self.PAGE_PREFIX + 'img/index/vis_img%s.jpg'
-        self.download_by_template(folder, template, 1, 1)
+        self.image_list = []
+        self.add_to_image_list('tz_kv', self.PAGE_PREFIX + 'news/wp-content/uploads/2023/10/STM_01_ティザービジュアル_1@0.3x.png')
+        self.add_to_image_list('fv_kv_1', self.PAGE_PREFIX + 'dist/img/top/fv/kv_1.webp')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.p-Chara__charMain source[type][srcset]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['srcset']
+                if '/chara/' not in image_url:
+                    continue
+                image_name = self.generate_image_name_from_url(image_url, 'chara')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')

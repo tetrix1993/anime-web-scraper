@@ -107,11 +107,12 @@ The premiere date for the anime listed here has not been announced.
 * [Dosanko Gal wa Namara Menkoi](https://dosankogal-pr.com/)
 * [Dungeon Meshi](https://delicious-in-dungeon.com/)
 * [Himesama "Goumon" no Jikan desu](https://himesama-goumon.com/)
+* [Jaku-Chara Tomozaki-kun 2nd Stage](http://tomozaki-koushiki.com/)
 * [Kekkon Yubiwa Monogatari](https://talesofweddingrings-anime.jp/)
 * [Mato Seihei no Slave](https://mabotai.jp/)
 * [Pon no Michi](https://ponnomichi-pr.com/)
+* [Saikyou Tank no Meikyuu Kouryaku](https://saikyo-tank.com/)
 * [Sasayaku You ni Koi wo Utau](https://sasakoi-anime.com/)
-* [Jaku-Chara Tomozaki-kun 2nd Stage](http://tomozaki-koushiki.com/)
 
 ### Fall 2023 Anime
 * [16bit Sensation: Another Layer](https://16bitsensation-al.com/)
