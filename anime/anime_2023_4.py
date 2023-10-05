@@ -2419,7 +2419,7 @@ class FrierenDownload(Fall2023AnimeDownload, NewsTemplate):
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.newsLists__item',
                                     date_select='.newsLists__time', title_select='.newsLists__title', id_select='a',
-                                    a_tag_start_text_to_remove='./', a_tag_prefix=self.PAGE_PREFIX + 'news/')
+                                    a_tag_start_text_to_remove='/', a_tag_prefix=self.PAGE_PREFIX)
 
     def download_episode_preview_guess(self, print_invalid=False, download_valid=False):
         if self.is_image_exists(str(self.FINAL_EPISODE).zfill(2) + '_' + str(self.IMAGES_PER_EPISODE)):
