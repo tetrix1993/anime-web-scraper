@@ -2506,7 +2506,8 @@ class SpyFamily2Download(Fall2023AnimeDownload, NewsTemplate):
 
     website_domain = 'https://spy-family.net/'
     PAGE_PREFIX = website
-    FINAL_EPISODE = 25
+    FIRST_EPISODE = 26
+    FINAL_EPISODE = 37  # 25 + 12
     IMAGES_PER_EPISODE = 6
 
     def __init__(self):
@@ -2518,7 +2519,15 @@ class SpyFamily2Download(Fall2023AnimeDownload, NewsTemplate):
         self.download_key_visual()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        image_url_template = self.PAGE_PREFIX + 'assets/img/episodes/episode%s_%s.jpg'
+        for i in range(self.FIRST_EPISODE, self.FINAL_EPISODE + 1, 1):
+            for j in range(self.IMAGES_PER_EPISODE):
+                image_name = str(i).zfill(2) + '_' + str(j + 1)
+                if not self.is_image_exists(image_name):
+                    image_url = image_url_template % (str(i), str(j + 1))
+                    result = self.download_image(image_url, self.base_folder + '/' + image_name)
+                    if result == -1:
+                        return
 
     def download_news(self):
         self.download_template_news(page_prefix=self.website_domain, article_select='li.newsLists__item',
