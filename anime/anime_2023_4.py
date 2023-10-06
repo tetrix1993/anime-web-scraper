@@ -2507,7 +2507,7 @@ class FrierenDownload(Fall2023AnimeDownload, NewsTemplate):
                     episode = str(int(story['href'].split('/')[-1].replace('ep', ''))).zfill(2)
                 except:
                     continue
-                if self.is_image_exists(episode + '_1'):
+                if self.is_image_exists(episode + '_01'):
                     continue
                 ep_url = story['href']
                 if ep_url.startswith('/'):
