@@ -1215,7 +1215,27 @@ class Kanokano2Download(Fall2023AnimeDownload, NewsTemplate):
         self.download_media()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + '/story/')
+            blocks = soup.select('.story-main__detail__block')
+            for block in blocks:
+                if block.has_attr('id') and block['id'].startswith('StoryBlock'):
+                    try:
+                        episode = str(int(block['id'].split('StoryBlock')[1].strip())).zfill(2)
+                    except:
+                        continue
+                    if self.is_image_exists(episode + '_1'):
+                        continue
+                    images = block.select('div.swiper-slide img')
+                    self.image_list = []
+                    for i in range(len(images)):
+                        image_url = self.PAGE_PREFIX + images[i]['src'][1:]
+                        image_name = episode + '_' + str(i + 1)
+                        self.add_to_image_list(image_name, image_url)
+                    self.download_image_list(self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article.news-lineup__block',
@@ -1233,6 +1253,22 @@ class Kanokano2Download(Fall2023AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'assets/img/character-detail-img%s@2x.png'
         self.download_by_template(folder, template, 2)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + '/bluraydvd/')
+            images = soup.select('.bluraydvd-wrap img[src]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'][1:]
+                image_name = self.extract_image_name_from_url(image_url)
+                if not image_url.endswith('-np.png'):
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__ + ' - Blu-ray')
+            print(e)
 
 
 # Keikenzumi na Kimi to, Keiken Zero na Ore ga, Otsukiai suru Hanashi.
