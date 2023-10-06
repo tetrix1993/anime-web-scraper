@@ -1712,20 +1712,29 @@ class IkenaikyoDownload(Fall2023AnimeDownload, NewsTemplate):
 
     def download_episode_preview(self):
         try:
-            template = self.PAGE_PREFIX + 'images/story/%s/img%s.jpg'
-            stop = False
-            for i in range(self.FINAL_EPISODE):
-                episode = str(i + 1).zfill(2)
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            btns = soup.select('.infoTag a[class]')
+            for btn in btns:
+                try:
+                    episode = str(int(btn.text.replace('第', '').replace('話', ''))).zfill(2)
+                except:
+                    continue
                 if self.is_image_exists(episode + '_' + str(self.IMAGES_PER_EPISODE)):
                     continue
-                for j in range(self.IMAGES_PER_EPISODE):
-                    image_url = template % (str(i + 1).zfill(3), str(j + 1))
-                    image_name = episode + '_' + str(j + 1)
-                    if self.download_image(image_url, self.base_folder + '/' + image_name) == -1:
-                        stop = True
+                class__ = None
+                for class_ in btn['class']:
+                    if class_.startswith('group'):
+                        class__ = class_
                         break
-                if stop:
-                    break
+                if class__ is None:
+                    continue
+                self.image_list = []
+                images = soup.select(f'.{class__} img[src]:not(.main img[src])')
+                for i in range(len(images)):
+                    image_url = images[i]['src']
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
         except Exception as e:
             self.print_exception(e)
 
