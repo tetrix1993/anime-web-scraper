@@ -690,6 +690,7 @@ class GoblinSlayer2Download(Fall2023AnimeDownload, NewsTemplate):
         self.download_episode_preview()
         self.download_news()
         self.download_key_visual()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -729,6 +730,38 @@ class GoblinSlayer2Download(Fall2023AnimeDownload, NewsTemplate):
         self.add_to_image_list('kv1', self.PAGE_PREFIX + 'images/top-img.jpg')
         self.add_to_image_list('kv2_tw', 'https://pbs.twimg.com/media/F5feM8EawAAXTEY?format=jpg&name=large')
         self.download_image_list(folder)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        for page in ['tokuten', 'campaign', '01', '02', '03']:
+            try:
+                if page in processed:
+                    continue
+                page_url = self.PAGE_PREFIX + 'bd/'
+                if page != '01':
+                    page_url += page + '.html'
+                soup = self.get_soup(page_url)
+                images = soup.select('.mobinner img[src]')
+                self.image_list = []
+                for image in images:
+                    image_url = self.PAGE_PREFIX + image['src'].replace('../', '').split('?')[0]
+                    if '/bd/' in image_url:
+                        image_name = self.generate_image_name_from_url(image_url, 'bd')
+                    else:
+                        image_name = self.extract_image_name_from_url(image_url)
+                    if image_name == 'keyart':
+                        continue
+                    self.add_to_image_list(image_name, image_url)
+                if (page.isnumeric() or page == 'campaign') and len(self.image_list) > 0:
+                    processed.append(page)
+                elif page.isnumeric():
+                    break
+                self.download_image_list(folder)
+            except Exception as e:
+                self.print_exception(e, f'Blu-ray - {page}')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Hametsu no Oukoku
@@ -1539,6 +1572,8 @@ class KimizeroDownload(Fall2023AnimeDownload, NewsTemplate2):
                     self.add_to_image_list(image_name, image_url)
                 if (page.isnumeric() or page == 'campaign') and len(self.image_list) > 0:
                     processed.append(page)
+                elif page.isnumeric():
+                    break
                 self.download_image_list(folder)
             except Exception as e:
                 self.print_exception(e, f'Blu-ray - {page}')
