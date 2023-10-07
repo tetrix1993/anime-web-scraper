@@ -907,6 +907,8 @@ class HikikomariDownload(Fall2023AnimeDownload, NewsTemplate):
     folder_name = 'hikikomari'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 6
 
     def __init__(self):
         super().__init__()
@@ -914,17 +916,71 @@ class HikikomariDownload(Fall2023AnimeDownload, NewsTemplate):
     def run(self):
         self.download_episode_preview()
         self.download_news()
+        self.download_episode_preview_guess()
         self.download_key_visual()
         self.download_character()
         self.download_media()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            stories = soup.select('.story-nav__list .story-nav__list-item a[href]')
+            for story in stories:
+                try:
+                    ahref = story['href']
+                    if ahref.endswith('/'):
+                        ahref = ahref[:-1]
+                    episode = str(int(ahref.split('/')[-1])).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                ep_url = story['href']
+                if ep_url.startswith('/'):
+                    ep_url = self.PAGE_PREFIX + ep_url[1:]
+                ep_soup = self.get_soup(ep_url)
+                if ep_soup is None:
+                    continue
+                self.image_list = []
+                images = ep_soup.select('.imglist img[src]')
+                for i in range(len(images)):
+                    image_url = self.PAGE_PREFIX + images[i]['src'][1:]
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article.news-lineup__block',
                                     date_select='dt', title_select='h2', id_select='a', a_tag_prefix=self.PAGE_PREFIX,
                                     a_tag_start_text_to_remove='/')
+
+    def download_episode_preview_guess(self):
+        template = self.PAGE_PREFIX + 'assets/img/story/%s/pic%s.jpg'
+        folder = self.create_custom_directory('guess')
+        is_successful = False
+        stop = False
+        try:
+            for i in range(self.FINAL_EPISODE):
+                episode = str(i + 1).zfill(2)
+                if self.is_image_exists(episode + '_1') or self.is_image_exists(episode + '_1', folder):
+                    continue
+                for j in range(self.IMAGES_PER_EPISODE):
+                    image_url = template % (episode, str(j + 1).zfill(2))
+                    if not self.is_content_length_in_range(image_url, more_than_amount=3000):
+                        stop = True
+                        break
+                    image_name = episode + '_' + str(j + 1)
+                    result = self.download_image(image_url, folder + '/' + image_name)
+                    if result != -1:
+                        is_successful = True
+                if stop:
+                    break
+        except:
+            pass
+        if is_successful:
+            print(self.__class__.__name__ + ' - Guessed correctly!')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
