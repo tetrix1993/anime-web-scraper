@@ -460,7 +460,7 @@ class BoushokunoBerserkDownload(Fall2023AnimeDownload, NewsTemplate):
 
     def download_episode_preview(self):
         try:
-            template = self.PAGE_PREFIX + 'assets/images/story/ep%s/ep%s_%s.jpg'
+            template = self.PAGE_PREFIX + 'assets/images/story/ep%s/ep%s_%s.webp'
             stop = False
             for i in range(self.FINAL_EPISODE):
                 episode = str(i + 1).zfill(2)
@@ -469,7 +469,7 @@ class BoushokunoBerserkDownload(Fall2023AnimeDownload, NewsTemplate):
                 for j in range(self.IMAGES_PER_EPISODE):
                     image_url = template % (episode, episode, str(j + 1).zfill(2))
                     image_name = episode + '_' + str(j + 1)
-                    if self.download_image(image_url, self.base_folder + '/' + image_name) == -1:
+                    if self.download_image(image_url, self.base_folder + '/' + image_name, to_jpg=True) == -1:
                         stop = True
                         break
                 if stop:

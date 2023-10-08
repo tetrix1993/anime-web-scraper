@@ -341,15 +341,16 @@ class MainDownload:
                                     im.save(filepath, 'gif', save_all=True)
                                     im.close()
                                     os.remove(temp_filepath)
-                                else: #webp
+                                else:  #webp
                                     os.rename(temp_filepath, filepath)
                             elif to_jpg:
                                 im = Image.open(temp_filepath).convert('RGB')
                                 im.save(filepath, 'jpeg')
                                 im.close()
-                                #os.remove(temp_filepath)
+                                if os.path.exists(filepath) and os.path.exists(temp_filepath):
+                                    os.remove(temp_filepath)
                                 # Keep a copy
-                                os.rename(temp_filepath, filepath[0:len(filepath) - 3] + 'webp')
+                                # os.rename(temp_filepath, filepath[0:len(filepath) - 3] + 'webp')
                         elif 'image/tiff' in content_type:
                             with open(temp_filepath, 'wb') as f:
                                 for chunk in r.iter_content(chunk_size=8192):
