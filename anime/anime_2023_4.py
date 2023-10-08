@@ -2015,6 +2015,7 @@ class PotionDanomiDownload(Fall2023AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self, print_http_error=False):
         if self.is_image_exists(str(self.FINAL_EPISODE) + '_1') and self.is_image_exists('01_1'):
@@ -2085,6 +2086,49 @@ class PotionDanomiDownload(Fall2023AnimeDownload, NewsTemplate):
         except Exception as e:
             self.print_exception(e, 'Character')
         self.download_image_list(folder)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        for page in range(1, 4, 1):
+            try:
+                if page != 1 and str(page) in processed:
+                    continue
+                page_url = self.PAGE_PREFIX + f'product/bd/bd_{page}/'
+                soup = self.get_soup(page_url)
+                images = soup.select('.c-article-visual__item img[src], .c-card__thumb[data-bg]')
+                image_count = 0
+                self.image_list = []
+                for image in images:
+                    if image.has_attr('src'):
+                        image_url = image['src']
+                        if 'nowprinting' in image_url:
+                            continue
+                        image_count += 1
+                    elif page != 1:
+                        continue
+                    else:
+                        image_url = image['data-bg']
+                        if '/bd/' not in image_url or 'nowprinting' in image_url:
+                            continue
+                    if image_url.startswith('./'):
+                        image_url = page_url + image_url[1:]
+                    elif image_url.startswith('/'):
+                        image_url = self.PAGE_PREFIX + image_url[1:]
+                    elif image_url.startswith('../'):
+                        image_url = self.PAGE_PREFIX + image_url.replace('../', '')
+                    image_name = self.generate_image_name_from_url(image_url, 'bd')
+                    self.add_to_image_list(image_name, image_url)
+                if page != 1:
+                    if image_count > 0:
+                        processed.append(str(page))
+                    else:
+                        break
+                self.download_image_list(folder)
+            except Exception as e:
+                self.print_exception(e, f'Blu-ray - {page}')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Ragna Crimson
