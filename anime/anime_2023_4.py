@@ -924,6 +924,8 @@ class SaihatenoPaladin2Download(Fall2023AnimeDownload, NewsTemplate):
     folder_name = 'saihate-no-paladin2'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 6
 
     def __init__(self):
         super().__init__()
@@ -964,6 +966,70 @@ class SaihatenoPaladin2Download(Fall2023AnimeDownload, NewsTemplate):
                                     date_func=lambda x: x.replace('年', '.').replace('月', '.').replace('日', ''),
                                     next_page_select='.wp-pagenavi *', next_page_eval_index_class='current',
                                     next_page_eval_index=-1)
+
+    def download_episode_preview_guess(self):
+        if self.is_image_exists(str(self.FINAL_EPISODE).zfill(2) + '_1'):
+            return
+        folder = self.create_custom_directory('guess')
+        cache_filepath = folder + '/cache'
+        month = 10
+        ep_num = 1
+        episode = '01'
+        while ep_num <= self.FINAL_EPISODE:
+            if self.is_image_exists(episode + '_1'):
+                ep_num += 1
+                episode = str(ep_num).zfill(2)
+            else:
+                break
+        ep_num_to_save = ep_num
+        try:
+            if os.path.exists(cache_filepath):
+                with open(cache_filepath, 'r') as f:
+                    items = f.read().split(',')
+                    month = int(items[0])
+                    last_ep_num = int(items[1]) + 1
+                    if ep_num < last_ep_num:
+                        ep_num = last_ep_num
+                        ep_num_to_save = last_ep_num - 1
+        except:
+            pass
+
+        jp_nums = '０１２３４５６７８９'
+        template = self.PAGE_PREFIX + 'wp/wp-content/uploads/2023/%s/%s話先行カット-%s.jpg'
+        month_to_save = month
+        is_successful = False
+        try:
+            while ep_num <= self.FINAL_EPISODE:
+                stop = False
+                jp_num = jp_nums[ep_num % 10]
+                if ep_num > 9:
+                    jp_num = jp_nums[1] + jp_num
+                for j in range(self.IMAGES_PER_EPISODE):
+                    image_url = template % (str(month).zfill(2), jp_num, str(j + 1))
+                    image_name = str(ep_num).zfill(2) + '_' + str(j + 1)
+                    result = self.download_image(image_url, folder + '/' + image_name)
+                    if result == -1:
+                        if month == month_to_save:
+                            month += 1
+                            ep_num -= 1
+                        else:
+                            stop = True
+                        break
+                    else:
+                        if month_to_save != month or ep_num_to_save != ep_num:
+                            is_successful = True
+                        month_to_save = month
+                        ep_num_to_save = ep_num
+                if stop:
+                    break
+                ep_num += 1
+
+            with open(cache_filepath, 'w+') as f:
+                f.write(str(month_to_save) + ',' + str(ep_num_to_save))
+        except Exception as e:
+            self.print_exception(e, 'Guess')
+        if is_successful:
+            print(self.__class__.__name__ + ' - Guessed correctly!')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
