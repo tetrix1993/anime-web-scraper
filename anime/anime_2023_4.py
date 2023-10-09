@@ -2863,7 +2863,7 @@ class FrierenDownload(Fall2023AnimeDownload, NewsTemplate):
         is_successful = False
         for i in range(self.FINAL_EPISODE):
             episode = str(i + 1).zfill(2)
-            existing_image_name = episode + '_' + str(self.IMAGES_PER_EPISODE).zfill(2)
+            existing_image_name = episode + '_01'
             if self.is_image_exists(existing_image_name) or self.is_image_exists(existing_image_name, folder):
                 continue
             episode_success = False
