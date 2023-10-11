@@ -347,7 +347,7 @@ class SRankMusumeDownload(Fall2023AnimeDownload, NewsTemplate):
                 self.image_list = []
                 images = section.select('.storyImgLists img[src]')
                 for i in range(len(images)):
-                    image_url = self.PAGE_PREFIX + images[i]['src'][1:]
+                    image_url = self.clear_resize_in_url(self.PAGE_PREFIX + images[i]['src'][1:])
                     image_name = episode + '_' + str(i + 1)
                     self.add_to_image_list(image_name, image_url)
                 self.download_image_list(self.base_folder)
@@ -365,38 +365,33 @@ class SRankMusumeDownload(Fall2023AnimeDownload, NewsTemplate):
             return
 
         folder = self.create_custom_directory('guess')
-        template = self.PAGE_PREFIX + 'wordpress/wp-content/uploads/%s/%s/%s.jpg'
+        template = self.PAGE_PREFIX + 'wordpress/wp-content/uploads/%s/%s/%s_%s.jpg'
         current_date = datetime.now() + timedelta(hours=1)
         year = current_date.strftime('%Y')
         month = current_date.strftime('%m')
         is_successful = False
-        valid_urls = []
-        for j in range(self.IMAGES_PER_EPISODE):
-            k = 0
-            while k < 20:
-                if k == 0:
-                    append = ''
-                else:
-                    append = '-' + str(k)
-                image_folder = folder + '/' + year + '/' + month
-                image_name = str(j + 1).zfill(2) + append
-                if not self.is_image_exists(image_name, image_folder):
-                    image_url = template % (year, month, str(j + 1).zfill(2) + append)
-                    if self.is_valid_url(image_url, is_image=True):
-                        print('VALID - ' + image_url)
-                        is_successful = True
-                        valid_urls.append({'name': image_name, 'url': image_url, 'folder': image_folder})
-                    elif print_invalid:
-                        print('INVALID - ' + image_url)
-                        break
-                k += 1
-        if download_valid and len(valid_urls) > 0:
-            for valid_url in valid_urls:
-                image_name = valid_url['name']
-                image_folder = valid_url['folder']
-                if not os.path.exists(image_folder):
-                    os.makedirs(image_folder)
-                self.download_image(valid_url['url'], image_folder + '/' + image_name)
+        for i in range(self.FINAL_EPISODE):
+            episode = str(i + 1).zfill(2)
+            existing_image_name = episode + '_' + str(self.IMAGES_PER_EPISODE)
+            if self.is_image_exists(existing_image_name) or self.is_image_exists(existing_image_name, folder):
+                continue
+            episode_success = False
+            valid_urls = []
+            for j in range(self.IMAGES_PER_EPISODE):
+                image_url = template % (year, month, episode, str(j + 1).zfill(2))
+                if self.is_valid_url(image_url, is_image=True):
+                    print('VALID - ' + image_url)
+                    episode_success = True
+                    valid_urls.append({'num': str(j + 1), 'url': image_url})
+                elif print_invalid:
+                    print('INVALID - ' + image_url)
+            if download_valid and len(valid_urls) > 0:
+                for valid_url in valid_urls:
+                    image_name = episode + '_' + valid_url['num']
+                    self.download_image(valid_url['url'], folder + '/' + image_name)
+            if not episode_success:
+                break
+            is_successful = True
         if is_successful:
             print(self.__class__.__name__ + ' - Guessed correctly!')
         return is_successful
