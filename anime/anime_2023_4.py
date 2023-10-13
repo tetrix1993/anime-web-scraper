@@ -2813,6 +2813,7 @@ class FrierenDownload(Fall2023AnimeDownload, NewsTemplate):
         self.download_episode_preview_guess(print_invalid=False, download_valid=True)
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -2918,6 +2919,40 @@ class FrierenDownload(Fall2023AnimeDownload, NewsTemplate):
             prefix + '%s_face1.jpg', prefix + '%s_face2.jpg', prefix + '%s_face.jpg'
         ]
         self.download_by_template(folder, templates, 1, 1)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        for page in ['benefit', '1', '2', '3', '4', '5', '6', '7']:
+            try:
+                if page.isnumeric():
+                    if page in processed:
+                        continue
+                    page_url = self.PAGE_PREFIX + 'bddvd/vol' + page + '/'
+                else:
+                    page_url = self.PAGE_PREFIX + 'bddvd/' + page + '/'
+                soup = self.get_soup(page_url)
+                images = soup.select('.bddvdContent img[src]')
+                self.image_list = []
+                for image in images:
+                    image_url = self.PAGE_PREFIX + image['src'][1:].split('?')[0]
+                    if '/bddvd/' not in image_url:
+                        continue
+                    image_name = self.extract_image_name_from_url(image_url)
+                    if 'np_' in image_name:
+                        continue
+                    image_name = self.generate_image_name_from_url(image_url, 'bddvd')
+                    self.add_to_image_list(image_name, image_url)
+                if page.isnumeric():
+                    if len(self.image_list) > 0:
+                        processed.append(page)
+                    else:
+                        break
+                self.download_image_list(folder)
+            except Exception as e:
+                self.print_exception(e, f'Blu-ray - {page}')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Spy x Family Season 2
