@@ -3025,7 +3025,7 @@ class YumemiruDanshiDownload(Summer2023AnimeDownload, NewsTemplate):
                 page_url = self.PAGE_PREFIX + 'product/bd/bd_' + page + '/'
                 soup = self.get_soup(page_url)
                 selector = 'img.c-article-visual__image[src]'
-                if page != '1':
+                if page == '1':
                     selector += ',.c-card__thumb[data-bg]'
                 images = soup.select(selector)
                 self.image_list = []
@@ -3034,7 +3034,10 @@ class YumemiruDanshiDownload(Summer2023AnimeDownload, NewsTemplate):
                         image_url = image['src']
                     else:
                         image_url = image['data-bg']
-                    image_url = self.PAGE_PREFIX + image_url.replace('../', '').split('?')[0]
+                    if image_url.startswith('../'):
+                        image_url = self.PAGE_PREFIX + image_url.replace('../', '').split('?')[0]
+                    elif not image_url.startswith('http:'):
+                        image_url = page_url + image_url.split('?')[0]
                     if image_url.endswith('/np.png'):
                         continue
                     if '/img/' in image_url:
