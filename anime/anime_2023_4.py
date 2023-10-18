@@ -2842,6 +2842,7 @@ class FrierenDownload(Fall2023AnimeDownload, NewsTemplate):
     def run(self):
         self.download_episode_preview()
         self.download_news()
+        self.download_episode_preview_external()
         self.download_episode_preview_guess(print_invalid=False, download_valid=True)
         self.download_key_visual()
         self.download_character()
@@ -2878,6 +2879,11 @@ class FrierenDownload(Fall2023AnimeDownload, NewsTemplate):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.newsLists__item',
                                     date_select='.newsLists__time', title_select='.newsLists__title', id_select='a',
                                     a_tag_start_text_to_remove='/', a_tag_prefix=self.PAGE_PREFIX)
+
+    def download_episode_preview_external(self):
+        keywords = ['葬送のフリーレン']
+        AniverseMagazineScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                end_date='20231010', download_id=self.download_id).run()
 
     def download_episode_preview_guess(self, print_invalid=False, download_valid=False):
         if self.is_image_exists(str(self.FINAL_EPISODE).zfill(2) + '_' + str(self.IMAGES_PER_EPISODE)):
