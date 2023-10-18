@@ -2854,7 +2854,10 @@ class FrierenDownload(Fall2023AnimeDownload, NewsTemplate):
             stories = soup.select('.storyLists__item a[href]')
             for story in stories:
                 try:
-                    episode = str(int(story['href'].split('/')[-1].replace('ep', ''))).zfill(2)
+                    href = story['href']
+                    if href.endswith('/'):
+                        href = story['href'][:-1]
+                    episode = str(int(href.split('/')[-1].replace('ep', ''))).zfill(2)
                 except:
                     continue
                 if self.is_image_exists(episode + '_01'):
