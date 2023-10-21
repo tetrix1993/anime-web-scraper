@@ -2056,7 +2056,7 @@ class KusuriyaDownload(Fall2023AnimeDownload, NewsTemplate):
     folder_name = 'kusuriya'
 
     PAGE_PREFIX = website
-    FINAL_EPISODE = 12
+    FINAL_EPISODE = 24
     IMAGES_PER_EPISODE = 6
 
     def __init__(self):
@@ -2067,6 +2067,7 @@ class KusuriyaDownload(Fall2023AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -2105,6 +2106,36 @@ class KusuriyaDownload(Fall2023AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'assets/img/top/chara/chara%s_img.png'
         self.download_by_template(folder, template, 1, 1)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        bd_prefix = self.PAGE_PREFIX + 'blu-ray/'
+        for page in ['benefit', '1', '2', '3', '4']:
+            try:
+                if page in processed:
+                    continue
+                soup = self.get_soup(bd_prefix + page + '.html')
+                images = soup.select('.subContOne img[src]')
+                self.image_list = []
+                for image in images:
+                    image_url = image['src'].split('?')[0]
+                    if image_url.startswith('./'):
+                        image_url = bd_prefix + image_url[2:]
+                    image_name = self.extract_image_name_from_url(image_url)
+                    if image_name.startswith('np_'):
+                        continue
+                    self.add_to_image_list(image_name, image_url)
+                if page.isnumeric():
+                    if len(self.image_list) > 0:
+                        processed.append(page)
+                    else:
+                        break
+                self.download_image_list(folder)
+            except Exception as e:
+                self.print_exception(e, f'Blu-ray - {page}')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Potion-danomi de Ikinobimasu!
