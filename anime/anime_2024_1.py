@@ -10,6 +10,7 @@ from datetime import datetime, timedelta
 # Himesama "Goumon" no Jikan desu https://himesama-goumon.com/ #姫様拷問の時間です @himesama_goumon
 # Kekkon Yubiwa Monogatari https://talesofweddingrings-anime.jp/ #結婚指輪物語 @weddingringsPR
 # Jaku-Chara Tomozaki-kun 2nd Stage http://tomozaki-koushiki.com/ #友崎くん @tomozakikoshiki
+# Loop 7-kaime no Akuyaku Reijou wa, Moto Tekikoku de Jiyuu Kimama na Hanayome Seikatsu wo Mankitsu suru https://7th-timeloop.com/ #ルプなな @7th_timeloop
 # Mato Seihei no Slave https://mabotai.jp/ #魔都精兵のスレイブ #まとスレ @mabotai_kohobu
 # Oroka na Tenshi wa Akuma to Odoru https://kanaten-anime.com/ #かな天 #kanaten @kanaten_PR
 # Pon no Michi https://ponnomichi-pr.com/ #ぽんのみち @ponnomichi_pr
@@ -562,6 +563,56 @@ class TomozakiKun2Download(Winter2024AnimeDownload, NewsTemplate):
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         template = self.PAGE_PREFIX + 'img/index/vis_img%s.jpg'
+        self.download_by_template(folder, template, 1, 1)
+
+
+# Loop 7-kaime no Akuyaku Reijou wa, Moto Tekikoku de Jiyuu Kimama na Hanayome Seikatsu wo Mankitsu suru
+class Loop7KaimeDownload(Winter2024AnimeDownload, NewsTemplate):
+    title = 'Loop 7-kaime no Akuyaku Reijou wa, Moto Tekikoku de Jiyuu Kimama na Hanayome Seikatsu wo Mankitsu suru'
+    keywords = [title, '7th Time Loop: The Villainess Enjoys a Carefree Life Married to Her Worst Enemy!']
+    website = 'https://7th-timeloop.com/'
+    twitter = '7th_timeloop'
+    hashtags = ['ルプなな']
+    folder_name = 'loop7kaime'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.ef',
+                                    date_select='.article__listsTime', title_select='.article__listsFullTitle',
+                                    id_select='a[a]')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.kv__imgList img[src]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'].split('?')[0][1:]
+                if '/img/' not in image_url:
+                    continue
+                image_name = self.generate_image_name_from_url(image_url, 'img')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'wordpress/wp-content/themes/7th-timeloop/assets/img/character/c%s_main.png'
         self.download_by_template(folder, template, 1, 1)
 
 
