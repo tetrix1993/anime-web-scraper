@@ -14,6 +14,7 @@ from datetime import datetime, timedelta
 # Saijaku Tamer wa Gomi Hiroi no Tabi wo Hajimemashita. https://saijakutamer-anime.com/ #最弱テイマー @saijakutamer
 # Saikyou Tank no Meikyuu Kouryaku https://saikyo-tank.com/ #最強タンク @saikyo_tank
 # Sasayaku You ni Koi wo Utau https://sasakoi-anime.com/ #ささこい @sasakoi_anime
+# Sokushi Cheat ga Saikyou sugite, Isekai no Yatsura ga Marude Aite ni Naranai n desu ga. https://sokushicheat-pr.com/ #即死チート @sokushicheat_pr
 # Tsuki ga Michibiku Isekai Douchuu 2nd Season https://tsukimichi.com/ #ツキミチ @tsukimichi_PR
 
 
@@ -841,6 +842,44 @@ class SaikyoTankDownload(Winter2024AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+
+# Sokushi Cheat ga Saikyou sugite, Isekai no Yatsura ga Marude Aite ni Naranai n desu ga.
+class SokushiCheatDownload(Winter2024AnimeDownload, NewsTemplate):
+    title = "Sokushi Cheat ga Saikyou sugite, Isekai no Yatsura ga Marude Aite ni Naranai n desu ga."
+    keywords = [title, "My Instant Death Ability Is So Overpowered, No One in This Other World Stands a Chance Against Me!"]
+    website = 'https://sokushicheat-pr.com/'
+    twitter = '即死チート'
+    hashtags = 'ツキミチ'
+    folder_name = 'sokushicheat'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-item',
+                                    date_select='.date', title_select='.title', id_select='a')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        template = self.PAGE_PREFIX + 'wp/wp-content/themes/sokushicheat_teaser/images/kv%s.jpg'
+        self.download_by_template(folder, template, 1, 1)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'wp/wp-content/themes/sokushicheat_teaser/images/chara-pic%s.png'
+        self.download_by_template(folder, template, 2, 1)
 
 
 # Tsuki ga Michibiku Isekai Douchuu 2nd Season
