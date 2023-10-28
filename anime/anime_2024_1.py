@@ -16,6 +16,7 @@ from datetime import datetime, timedelta
 # Sasayaku You ni Koi wo Utau https://sasakoi-anime.com/ #ささこい @sasakoi_anime
 # Sokushi Cheat ga Saikyou sugite, Isekai no Yatsura ga Marude Aite ni Naranai n desu ga. https://sokushicheat-pr.com/ #即死チート @sokushicheat_pr
 # Tsuki ga Michibiku Isekai Douchuu 2nd Season https://tsukimichi.com/ #ツキミチ @tsukimichi_PR
+# Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e S3 http://you-zitsu.com/ #you_zitsu #よう実 @youkosozitsu
 
 
 # Winter 2024 Anime
@@ -883,7 +884,7 @@ class SokushiCheatDownload(Winter2024AnimeDownload, NewsTemplate):
 
 
 # Tsuki ga Michibiku Isekai Douchuu 2nd Season
-class TsukimichiDownload(Winter2024AnimeDownload, NewsTemplate):
+class Tsukimichi2Download(Winter2024AnimeDownload, NewsTemplate):
     title = "Tsuki ga Michibiku Isekai Douchuu 2nd Season"
     keywords = [title, "Tsukimichi", "Moonlit Fantasy"]
     website = 'https://tsukimichi.com/'
@@ -941,3 +942,48 @@ class TsukimichiDownload(Winter2024AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+
+# Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e S3
+class Youzitsu3Download(Winter2024AnimeDownload, NewsTemplate):
+    title = "Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e 3rd Season"
+    keywords = ["Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e", "Youzitsu", "Youjitsu",
+                "Classroom of the Elite"]
+    website = 'http://you-zitsu.com/'
+    twitter = 'youkosozitsu'
+    hashtags = ['you_zitsu', 'よう実', 'ClassroomOfTheElite']
+    folder_name = 'youzitsu3'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article.content-entry',
+                                    title_select='h2.entry-title span', date_select='div.entry-date span',
+                                    id_select=None, id_has_id=True, news_prefix='news.html')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.vis img[src]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'].replace('./', '').split('?')[0]
+                if not image_url.endswith('.webp') or '/top/' not in image_url:
+                    continue
+                image_name = self.generate_image_name_from_url(image_url, 'top')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')

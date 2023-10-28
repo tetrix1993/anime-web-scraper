@@ -116,6 +116,7 @@ The premiere date for the anime listed here has not been announced.
 * [Sasayaku You ni Koi wo Utau](https://sasakoi-anime.com/)
 * [Sokushi Cheat ga Saikyou sugite, Isekai no Yatsura ga Marude Aite ni Naranai n desu ga.](https://sokushicheat-pr.com/)
 * [Tsuki ga Michibiku Isekai Douchuu](https://tsukimichi.com/)
+* [Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e 3rd Season](http://you-zitsu.com/)
 
 ### Fall 2023 Anime
 * [16bit Sensation: Another Layer](https://16bitsensation-al.com/)
@@ -293,7 +294,7 @@ The premiere date for the anime listed here has not been announced.
 * [Utawarerumono: Futari no Hakuoro](https://utawarerumono.jp/)
 * [Warau Arsnotoria Sun!](https://www.arsnotoria-anime.com/)
 * [Yofukashi no Uta](https://yofukashi-no-uta.com/)
-* [Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e 2nd Season](http://you-zitsu.com/)
+* [Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e 2nd Season](http://you-zitsu.com/2nd/)
 
 ### Spring 2022 Anime
 * [Aharen-san wa Hakarenai](https://aharen-pr.com/)

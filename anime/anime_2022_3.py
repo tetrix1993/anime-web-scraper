@@ -29,7 +29,7 @@ from datetime import datetime
 # Utawarerumono: Futari no Hakuoro https://utawarerumono.jp/ #うたわれ @UtawareAnime
 # Warau Arsnotoria Sun! https://www.arsnotoria-anime.com/ #アルスノ @arsno_anime
 # Yofukashi no Uta https://yofukashi-no-uta.com/ #よふかしのうた @yofukashi_pr
-# Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e S2 http://you-zitsu.com/ #you_zitsu #よう実 @youkosozitsu
+# Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e S2 http://you-zitsu.com/2nd/ #you_zitsu #よう実 @youkosozitsu
 
 
 # Summer 2022 Anime
@@ -2603,7 +2603,7 @@ class Youzitsu2Download(Summer2022AnimeDownload, NewsTemplate):
     title = "Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e 2nd Season"
     keywords = ["Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e", "Youzitsu", "Youjitsu",
                 "Classroom of the Elite"]
-    website = 'http://you-zitsu.com/'
+    website = 'http://you-zitsu.com/2nd/'
     twitter = 'youkosozitsu'
     hashtags = ['you_zitsu', 'よう実', 'ClassroomOfTheElite']
     folder_name = 'youzitsu2'
