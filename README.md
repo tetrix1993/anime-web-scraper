@@ -111,6 +111,7 @@ The premiere date for the anime listed here has not been announced.
 * [Jaku-Chara Tomozaki-kun 2nd Stage](http://tomozaki-koushiki.com/)
 * [Kekkon Yubiwa Monogatari](https://talesofweddingrings-anime.jp/)
 * [Mato Seihei no Slave](https://mabotai.jp/)
+* [Oroka na Tenshi wa Akuma to Odoru](https://kanaten-anime.com/)
 * [Pon no Michi](https://ponnomichi-pr.com/)
 * [Saijaku Tamer wa Gomi Hiroi no Tabi wo Hajimemashita.](https://saijakutamer-anime.com/)
 * [Saikyou Tank no Meikyuu Kouryaku](https://saikyo-tank.com/)
