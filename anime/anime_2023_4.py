@@ -1223,6 +1223,7 @@ class HoshiteleDownload(Fall2023AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -1315,6 +1316,25 @@ class HoshiteleDownload(Fall2023AnimeDownload, NewsTemplate):
                     break
         except Exception as e:
             self.print_exception(e, 'Character')
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.tp_bd_media img[src],.tp_bd_media source[srcset]')
+            self.image_list = []
+            for image in images:
+                srcset = 'srcset'
+                if image.has_attr('src'):
+                    srcset = 'src'
+                if '/bd/' not in image[srcset]:
+                    continue
+                image_url = self.PAGE_PREFIX + image[srcset].replace('./', '').split('?')[0]
+                image_name = self.generate_image_name_from_url(image_url, 'bd')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
 
 # Kage no Jitsuryokusha ni Naritakute!
