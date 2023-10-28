@@ -9,6 +9,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Jaku-Chara Tomozaki-kun 2nd Stage http://tomozaki-koushiki.com/ #友崎くん @tomozakikoshiki
 # Mato Seihei no Slave https://mabotai.jp/ #魔都精兵のスレイブ #まとスレ @mabotai_kohobu
 # Pon no Michi https://ponnomichi-pr.com/ #ぽんのみち @ponnomichi_pr
+# Saijaku Tamer wa Gomi Hiroi no Tabi wo Hajimemashita. https://saijakutamer-anime.com/ #最弱テイマー @saijakutamer
 # Saikyou Tank no Meikyuu Kouryaku https://saikyo-tank.com/ #最強タンク @saikyo_tank
 # Sasayaku You ni Koi wo Utau https://sasakoi-anime.com/ #ささこい @sasakoi_anime
 
@@ -636,6 +637,44 @@ class SasakoiDownload(Winter2024AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'core_sys/images/main/tz/chara/c%s_face.jpg'
         self.download_by_template(folder, template, 2, 1, prefix='tz_')
+
+# Saijaku Tamer wa Gomi Hiroi no Tabi wo Hajimemashita.
+class SaijakuTamerDownload(Winter2024AnimeDownload, NewsTemplate):
+    title = 'Saijaku Tamer wa Gomi Hiroi no Tabi wo Hajimemashita.'
+    keywords = [title, "The Weakest Tamer Began a Journey to Pick Up Trash"]
+    website = 'https://saijakutamer-anime.com/'
+    twitter = 'saijakutamer'
+    hashtags = ['最弱テイマー']
+    folder_name = 'saijakutamer'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.c-Post__list',
+                                    title_select='.c-Post__title', date_select='.c-Post__date',
+                                    id_select='.c-Post__link')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        template = self.PAGE_PREFIX + 'dist/img/top/KV_visual_%s.jpg'
+        self.download_by_template(folder, template, 1, 1)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'dist/img/top/visual_chara_%s.webp'
+        self.download_by_template(folder, template, 1, 1)
 
 
 # Saikyou Tank no Meikyuu Kouryaku

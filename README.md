@@ -88,7 +88,6 @@ The premiere date for the anime listed here has not been announced.
 * [Henjin no Salad Bowl](https://www.tbs.co.jp/anime/hensara/)
 * [Highspeed Etoile](https://highspeed-etoile.com/)
 * [Isekai de Mofumofu Nadenade suru Tame ni Ganbattemasu.](https://mohunadeanime.com/)
-* [Saijaku Tamer wa Gomi Hiroi no Tabi wo Hajimemashita.](https://saijakutamer-anime.com/)
 * [Sasaki to Pii-chan](https://sasapi-anime.com/)
 * [Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita 2nd Season](https://slime300-anime.com/)
 * [Tensei Kizoku, Kantei Skill de Nariagaru](https://kanteiskill.com/)
@@ -111,6 +110,7 @@ The premiere date for the anime listed here has not been announced.
 * [Kekkon Yubiwa Monogatari](https://talesofweddingrings-anime.jp/)
 * [Mato Seihei no Slave](https://mabotai.jp/)
 * [Pon no Michi](https://ponnomichi-pr.com/)
+* [Saijaku Tamer wa Gomi Hiroi no Tabi wo Hajimemashita.](https://saijakutamer-anime.com/)
 * [Saikyou Tank no Meikyuu Kouryaku](https://saikyo-tank.com/)
 * [Sasayaku You ni Koi wo Utau](https://sasakoi-anime.com/)
 

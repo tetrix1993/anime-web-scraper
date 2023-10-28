@@ -10,7 +10,6 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Henjin no Salad Bowl https://www.tbs.co.jp/anime/hensara/ #変サラ @hensara_anime
 # Highspeed Etoile https://highspeed-etoile.com/ #ハイスピ @HSE_Project_PR
 # Isekai de Mofumofu Nadenade suru Tame ni Ganbattemasu. https://mohunadeanime.com/ #もふなで @mohunade_anime
-# Saijaku Tamer wa Gomi Hiroi no Tabi wo Hajimemashita. https://saijakutamer-anime.com/ #最弱テイマー @saijakutamer
 # Sasaki to Pii-chan https://sasapi-anime.com/ #ささピー @sasaki_pichan
 # Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita 2nd Season https://slime300-anime.com/ #スライム倒して300年 @slime300_PR
 # Tensei Kizoku, Kantei Skill de Nariagaru https://kanteiskill.com/ #鑑定スキル @kanteiskill
@@ -303,46 +302,6 @@ class MofunadeDownload(UnconfirmedDownload, NewsTemplate):
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FrwZ2u4aQAMVhBo?format=jpg&name=4096x4096')
         self.add_to_image_list('tz', self.PAGE_PREFIX + 'dist/img/top/kv_img.webp')
         self.download_image_list(folder)
-
-# Saijaku Tamer wa Gomi Hiroi no Tabi wo Hajimemashita.
-class SaijakuTamerDownload(UnconfirmedDownload, NewsTemplate):
-    title = 'Saijaku Tamer wa Gomi Hiroi no Tabi wo Hajimemashita.'
-    keywords = [title, "The Weakest Tamer Began a Journey to Pick Up Trash"]
-    website = 'https://saijakutamer-anime.com/'
-    twitter = 'saijakutamer'
-    hashtags = ['最弱テイマー']
-    folder_name = 'saijakutamer'
-
-    PAGE_PREFIX = website
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_news()
-        self.download_key_visual()
-        self.download_character()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_news(self):
-        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.c-Post__list',
-                                    title_select='.c-Post__title', date_select='.c-Post__date',
-                                    id_select='.c-Post__link')
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('tz_announce', 'https://pbs.twimg.com/media/Fv6p1KHacAAuqU6?format=jpg&name=large')
-        self.add_to_image_list('tz_natalie', 'https://ogre.natalie.mu/media/news/comic/2023/0503/saijakutamaer_teaser.jpg')
-        self.download_image_list(folder)
-
-    def download_character(self):
-        folder = self.create_character_directory()
-        template = self.PAGE_PREFIX + 'dist/img/top/visual_chara_%s.webp'
-        self.download_by_template(folder, template, 1, 1)
 
 
 # Sasaki to Pii-chan  #ささピー @sasaki_pichan
