@@ -11,6 +11,7 @@ from datetime import datetime, timedelta
 # Kekkon Yubiwa Monogatari https://talesofweddingrings-anime.jp/ #結婚指輪物語 @weddingringsPR
 # Jaku-Chara Tomozaki-kun 2nd Stage http://tomozaki-koushiki.com/ #友崎くん @tomozakikoshiki
 # Loop 7-kaime no Akuyaku Reijou wa, Moto Tekikoku de Jiyuu Kimama na Hanayome Seikatsu wo Mankitsu suru https://7th-timeloop.com/ #ルプなな @7th_timeloop
+# Mahou Shoujo ni Akogarete https://mahoako-anime.com/ #まほあこ #まほあこアニメ @mahoako_anime
 # Mato Seihei no Slave https://mabotai.jp/ #魔都精兵のスレイブ #まとスレ @mabotai_kohobu
 # Nozomanu Fushi no Boukensha https://nozomanufushi-anime.jp/ #望まぬ不死 #TUUA @nozomanufushiPR
 # Oroka na Tenshi wa Akuma to Odoru https://kanaten-anime.com/ #かな天 #kanaten @kanaten_PR
@@ -615,6 +616,56 @@ class Loop7KaimeDownload(Winter2024AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'wordpress/wp-content/themes/7th-timeloop/assets/img/character/c%s_main.png'
         self.download_by_template(folder, template, 1, 1)
+
+
+# Mahou Shoujo ni Akogarete
+class MahoakoDownload(Winter2024AnimeDownload, NewsTemplate):
+    title = 'Mahou Shoujo ni Akogarete'
+    keywords = [title, 'Gushing over Magical Girls', 'mahoako']
+    website = 'https://mahoako-anime.com/'
+    twitter = 'mahoako_anime'
+    hashtags = ['まほあこ' ,'まほあこアニメ']
+    folder_name = 'mahoako'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='#Entries article',
+                                    title_select='.entry-title span', date_select='.entry-date span',
+                                    id_select=None, id_has_id=True, news_prefix='news.html', date_separator='-')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.vis source[srcset]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['srcset'].replace('./', '').split('?')[0]
+                if not image_url.endswith('.webp') or '/top/' not in image_url:
+                    continue
+                image_name = self.generate_image_name_from_url(image_url, 'top')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'assets/character/%sc.webp'
+        self.download_by_template(folder, template, 1, 1, prefix='chara_')
 
 
 # Mato Seihei no Slave

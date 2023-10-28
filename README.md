@@ -111,6 +111,7 @@ The premiere date for the anime listed here has not been announced.
 * [Jaku-Chara Tomozaki-kun 2nd Stage](http://tomozaki-koushiki.com/)
 * [Kekkon Yubiwa Monogatari](https://talesofweddingrings-anime.jp/)
 * [Loop 7-kaime no Akuyaku Reijou wa, Moto Tekikoku de Jiyuu Kimama na Hanayome Seikatsu wo Mankitsu suru](https://7th-timeloop.com/)
+* [Mahou Shoujo ni Akogarete](https://mahoako-anime.com/)
 * [Mato Seihei no Slave](https://mabotai.jp/)
 * [Nozomanu Fushi no Boukensha](https://nozomanufushi-anime.jp/)
 * [Oroka na Tenshi wa Akuma to Odoru](https://kanaten-anime.com/)
