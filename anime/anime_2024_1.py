@@ -12,6 +12,7 @@ from datetime import datetime, timedelta
 # Jaku-Chara Tomozaki-kun 2nd Stage http://tomozaki-koushiki.com/ #友崎くん @tomozakikoshiki
 # Loop 7-kaime no Akuyaku Reijou wa, Moto Tekikoku de Jiyuu Kimama na Hanayome Seikatsu wo Mankitsu suru https://7th-timeloop.com/ #ルプなな @7th_timeloop
 # Mato Seihei no Slave https://mabotai.jp/ #魔都精兵のスレイブ #まとスレ @mabotai_kohobu
+# Nozomanu Fushi no Boukensha https://nozomanufushi-anime.jp/ #望まぬ不死 #TUUA @nozomanufushiPR
 # Oroka na Tenshi wa Akuma to Odoru https://kanaten-anime.com/ #かな天 #kanaten @kanaten_PR
 # Pon no Michi https://ponnomichi-pr.com/ #ぽんのみち @ponnomichi_pr
 # Saijaku Tamer wa Gomi Hiroi no Tabi wo Hajimemashita. https://saijakutamer-anime.com/ #最弱テイマー @saijakutamer
@@ -684,11 +685,86 @@ class MatoSlaveDownload(Winter2024AnimeDownload, NewsTemplate):
         self.download_image_list(folder)
 
 
+# Nozomanu Fushi no Boukensha #望まぬ不死 #TUUA @nozomanufushiPR
+class NozomanuFushiDownload(Winter2024AnimeDownload, NewsTemplate2):
+    title = 'Nozomanu Fushi no Boukensha'
+    keywords = [title, 'The Unwanted Undead Adventurer']
+    twitter = 'nozomanufushiPR'
+    website = 'https://nozomanufushi-anime.jp/'
+    hashtags = ['望まぬ不死', 'TUUA']
+    folder_name = 'nozomanufushi'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.mainImg__kv source[srcset]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['srcset'].split('?')[0]
+                if '/images/' not in image_url or not image_url.endswith('.webp'):
+                    continue
+                image_name = self.generate_image_name_from_url(image_url, 'images')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            pages = soup.select('#list_06 .title a[href]')
+            for page in pages:
+                if not page['href'].endswith('.html') or not page['href'].startswith('../'):
+                    continue
+                page_url = self.PAGE_PREFIX + page['href'].replace('../', '')
+                page_name = page_url.split('/')[-1].split('.html')[0]
+                if page_name in processed:
+                    continue
+                ep_soup = self.get_soup(page_url)
+                if ep_soup is None:
+                    continue
+                images = ep_soup.select('.chara__stand img[src],.chara__face img[src]')
+                self.image_list = []
+                for image in images:
+                    image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                    if '/chara/' not in image_url:
+                        continue
+                    image_name = self.generate_image_name_from_url(image_url, 'chara')
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(folder)
+                processed.append(page_name)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+        self.create_cache_file(cache_filepath, processed, num_processed)
+
+
 # Oroka na Tenshi wa Akuma to Odoru
 class KanatenDownload(Winter2024AnimeDownload, NewsTemplate2):
     title = 'Oroka na Tenshi wa Akuma to Odoru'
-    keywords = ['The Foolish Angel Dances with the Devil', 'kanaten']
+    keywords = [title, 'The Foolish Angel Dances with the Devil', 'kanaten']
     website = 'https://kanaten-anime.com/'
+    twitter = 'kanaten_PR'
     hashtags = ['かな天', 'kanaten']
     folder_name = 'kanaten'
 
