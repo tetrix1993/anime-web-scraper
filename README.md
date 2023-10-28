@@ -90,6 +90,7 @@ The premiere date for the anime listed here has not been announced.
 * [Sasaki to Pii-chan](https://sasapi-anime.com/)
 * [Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita 2nd Season](https://slime300-anime.com/)
 * [Tensei Kizoku, Kantei Skill de Nariagaru](https://kanteiskill.com/)
+* [Tokidoki Bosotto Russia-go de Dereru Tonari no Alya-san](https://roshidere.com/)
 * [Tsuyokute New Saga](https://tsuyosaga-pr.com/)
 * [Unnamed Memory](https://unnamedmemory.com/)
 * [Yoru no Kurage wa Oyogenai](https://yorukura-anime.com/)
