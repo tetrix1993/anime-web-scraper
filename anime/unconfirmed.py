@@ -266,44 +266,6 @@ class HighspeedEtoileDownload(UnconfirmedDownload, NewsTemplate):
         self.download_by_template(folder, template, 2, 1, prefix='tz_')
 
 
-# Isekai de Mofumofu Nadenade suru Tame ni Ganbattemasu.
-class MofunadeDownload(UnconfirmedDownload, NewsTemplate):
-    title = 'Isekai de Mofumofu Nadenade suru Tame ni Ganbattemasu.'
-    keywords = [title]
-    website = 'https://mohunadeanime.com/'
-    twitter = 'mohunade_anime'
-    hashtags = 'もふなで'
-    folder_name = 'mofunade'
-
-    PAGE_PREFIX = website
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_news()
-        self.download_key_visual()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_news(self):
-        news_url = self.PAGE_PREFIX + 'news/'
-        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.c-news__item',
-                                    date_select='.c-news__date', title_select='.c-news__ttl',
-                                    id_select='.c-news__link', a_tag_prefix=news_url, paging_type=1,
-                                    a_tag_start_text_to_remove='./', next_page_select='.c-Pager__item',
-                                    next_page_eval_index_class='-current', next_page_eval_index=-1)
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FrwZ2u4aQAMVhBo?format=jpg&name=4096x4096')
-        self.add_to_image_list('tz', self.PAGE_PREFIX + 'dist/img/top/kv_img.webp')
-        self.download_image_list(folder)
-
-
 # Sasaki to Pii-chan  #ささピー @sasaki_pichan
 class SasapiDownload(UnconfirmedDownload, NewsTemplate):
     title = 'Sasaki to Pii-chan'
