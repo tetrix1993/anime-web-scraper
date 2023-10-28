@@ -22,7 +22,7 @@ from scan import AnimeRecorderScanner, AniverseMagazineScanner, MocaNewsScanner,
 # Shinigami Bocchan to Kuro Maid https://bocchan-anime.com/ #死神坊ちゃん @bocchan_anime
 # Shiroi Suna no Aquatope https://aquatope-anime.com/ #白い砂のアクアトープ @aquatope_anime
 # Tantei wa Mou, Shindeiru. https://tanmoshi-anime.jp/ #たんもし @tanteiwamou_
-# Tsuki ga Michibiku Isekai Douchuu #ツキミチ @tsukimichi_PR
+# Tsuki ga Michibiku Isekai Douchuu https://tsukimichi.com/1st/ #ツキミチ @tsukimichi_PR
 
 
 # Summer 2021 Anime
@@ -2435,7 +2435,7 @@ class TanmoshiDownload(Summer2021AnimeDownload, NewsTemplate2):
 class TsukimichiDownload(Summer2021AnimeDownload, NewsTemplate):
     title = "Tsuki ga Michibiku Isekai Douchuu"
     keywords = [title, "Tsukimichi", "Moonlit Fantasy"]
-    website = 'https://tsukimichi.com/'
+    website = 'https://tsukimichi.com/1st/'
     twitter = 'tsukimichi_PR'
     hashtags = 'ツキミチ'
     folder_name = 'tsukimichi'

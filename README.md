@@ -114,6 +114,7 @@ The premiere date for the anime listed here has not been announced.
 * [Saijaku Tamer wa Gomi Hiroi no Tabi wo Hajimemashita.](https://saijakutamer-anime.com/)
 * [Saikyou Tank no Meikyuu Kouryaku](https://saikyo-tank.com/)
 * [Sasayaku You ni Koi wo Utau](https://sasakoi-anime.com/)
+* [Tsuki ga Michibiku Isekai Douchuu](https://tsukimichi.com/)
 
 ### Fall 2023 Anime
 * [16bit Sensation: Another Layer](https://16bitsensation-al.com/)
@@ -377,7 +378,7 @@ The premiere date for the anime listed here has not been announced.
 * [Shinigami Bocchan to Kuro Maid](https://bocchan-anime.com/)
 * [Shiroi Suna no Aquatope](https://aquatope-anime.com/)
 * [Tantei wa Mou, Shindeiru.](https://tanmoshi-anime.jp/)
-* [Tsuki ga Michibiku Isekai Douchuu](https://tsukimichi.com/)
+* [Tsuki ga Michibiku Isekai Douchuu](https://tsukimichi.com/1st/)
 
 ### Spring 2021 Anime
 * [86](https://anime-86.com/)

@@ -14,6 +14,7 @@ from datetime import datetime, timedelta
 # Saijaku Tamer wa Gomi Hiroi no Tabi wo Hajimemashita. https://saijakutamer-anime.com/ #最弱テイマー @saijakutamer
 # Saikyou Tank no Meikyuu Kouryaku https://saikyo-tank.com/ #最強タンク @saikyo_tank
 # Sasayaku You ni Koi wo Utau https://sasakoi-anime.com/ #ささこい @sasakoi_anime
+# Tsuki ga Michibiku Isekai Douchuu 2nd Season https://tsukimichi.com/ #ツキミチ @tsukimichi_PR
 
 
 # Winter 2024 Anime
@@ -836,6 +837,67 @@ class SaikyoTankDownload(Winter2024AnimeDownload, NewsTemplate):
                 if '/chara/' not in image_url:
                     continue
                 image_name = self.generate_image_name_from_url(image_url, 'chara')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+
+
+# Tsuki ga Michibiku Isekai Douchuu 2nd Season
+class TsukimichiDownload(Winter2024AnimeDownload, NewsTemplate):
+    title = "Tsuki ga Michibiku Isekai Douchuu 2nd Season"
+    keywords = [title, "Tsukimichi", "Moonlit Fantasy"]
+    website = 'https://tsukimichi.com/'
+    twitter = 'tsukimichi_PR'
+    hashtags = 'ツキミチ'
+    folder_name = 'tsukimichi2'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        # Paging logic unknown
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news article',
+                                    date_select='.date', title_select='.ttl', id_select='a')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.fvslide source[srcset][type]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['srcset'][1:]
+                if not image_url.endswith('.webp') or image_url.endswith('_sp.webp'):
+                    continue
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            images = soup.select('.chardata--inner .v source[srcset]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['srcset'][1:]
+                if not image_url.endswith('.webp'):
+                    continue
+                image_name = self.extract_image_name_from_url(image_url)
                 self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)
         except Exception as e:
