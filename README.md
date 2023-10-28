@@ -117,6 +117,7 @@ The premiere date for the anime listed here has not been announced.
 * [Sokushi Cheat ga Saikyou sugite, Isekai no Yatsura ga Marude Aite ni Naranai n desu ga.](https://sokushicheat-pr.com/)
 * [Tsuki ga Michibiku Isekai Douchuu](https://tsukimichi.com/)
 * [Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e 3rd Season](http://you-zitsu.com/)
+* [Yubisaki to Renren](https://yubisaki-pr.com/)
 
 ### Fall 2023 Anime
 * [16bit Sensation: Another Layer](https://16bitsensation-al.com/)
