@@ -105,6 +105,7 @@ The premiere date for the anime listed here has not been announced.
 * [Chiyu Mahou no Machigatta Tsukaikata](https://chiyumahou-anime.com/)
 * [Dosanko Gal wa Namara Menkoi](https://dosankogal-pr.com/)
 * [Dungeon Meshi](https://delicious-in-dungeon.com/)
+* [Gekai Elise](https://surgeon-elise.com/)
 * [Himesama "Goumon" no Jikan desu](https://himesama-goumon.com/)
 * [Jaku-Chara Tomozaki-kun 2nd Stage](http://tomozaki-koushiki.com/)
 * [Kekkon Yubiwa Monogatari](https://talesofweddingrings-anime.jp/)
