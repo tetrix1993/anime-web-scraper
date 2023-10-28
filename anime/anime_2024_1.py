@@ -1,3 +1,4 @@
+import os
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsTemplate4
 from datetime import datetime, timedelta
 
@@ -963,6 +964,7 @@ class Youzitsu3Download(Winter2024AnimeDownload, NewsTemplate):
         self.download_episode_preview()
         self.download_news()
         self.download_key_visual()
+        self.download_media()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
@@ -987,3 +989,28 @@ class Youzitsu3Download(Winter2024AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Key Visual')
+
+    def download_media(self):
+        folder = self.create_media_directory()
+
+        # Calendar project
+        calendar_folder = folder + '/calendar'
+        if not os.path.exists(calendar_folder):
+            os.makedirs(calendar_folder)
+        template = self.PAGE_PREFIX + 'assets/special-calendar/%s.jpg'
+        year = 2022
+        month = 12
+        stop = False
+        while year < 2025 and not stop:
+            while month <= 12 and not stop:
+                image_name = str(year) + str(month).zfill(2)
+                month += 1
+                if self.is_image_exists(image_name, calendar_folder):
+                    continue
+                image_url = template % image_name
+                result = self.download_image(image_url, calendar_folder + '/' + image_name)
+                if result == -1:
+                    stop = True
+                    break
+            month = 1
+            year += 1
