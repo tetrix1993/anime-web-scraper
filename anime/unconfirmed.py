@@ -6,7 +6,6 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 
 # Anohana S2 https://10th.anohana.jp/ #あの花 #anohana @anohana_project
 # ATRI -My Dear Moments- https://atri-anime.com/ #ATRI @ATRI_anime
-# Chiyu Mahou no Machigatta Tsukaikata https://chiyumahou-anime.com/ #治癒魔法 @chiyumahou_PR
 # Giji Harem https://gijiharem.com/ #疑似ハーレム @GijiHarem
 # Henjin no Salad Bowl https://www.tbs.co.jp/anime/hensara/ #変サラ @hensara_anime
 # Highspeed Etoile https://highspeed-etoile.com/ #ハイスピ @HSE_Project_PR
@@ -136,41 +135,6 @@ class AtriDownload(UnconfirmedDownload):
         self.image_list = []
         self.add_to_image_list('ATRI_visual', 'https://ogre.natalie.mu/media/news/comic/2022/0924/ATRI_visual.jpg')
         self.add_to_image_list('kv_kv_wide', self.PAGE_PREFIX + 'assets/img/kv/kv_wide.png')
-        self.download_image_list(folder)
-
-
-# Chiyu Mahou no Machigatta Tsukaikata
-class ChiyuMahouDownload(UnconfirmedDownload, NewsTemplate):
-    title = 'Chiyu Mahou no Machigatta Tsukaikata'
-    keywords = [title, 'The Wrong Way to Use Healing Magic']
-    website = 'https://chiyumahou-anime.com/'
-    twitter = 'chiyumahou_PR'
-    hashtags = ['治癒魔法']
-    folder_name = 'chiyumahou'
-
-    PAGE_PREFIX = website
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_news()
-        self.download_key_visual()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index', diff=150)
-
-    def download_news(self):
-        # Paging logic not known
-        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.newsArchive-Item',
-                                    date_select='.date', title_select='.title', id_select='a')
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        # self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FwP_QYPaQAMBkyd?format=jpg&name=medium')
-        self.add_to_image_list('tz', self.PAGE_PREFIX + 'wp-content/themes/chiyumahou-anime_teaser/assets/images/pc/index/img_hero.jpg')
         self.download_image_list(folder)
 
 

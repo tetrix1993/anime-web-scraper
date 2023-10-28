@@ -84,7 +84,6 @@ pip install -r requirements.txt
 ### New Anime
 The premiere date for the anime listed here has not been announced.
 * [ATRI -My Dear Moments-](https://atri-anime.com/)
-* [Chiyu Mahou no Machigatta Tsukaikata](https://chiyumahou-anime.com/)
 * [Giji Harem](https://gijiharem.com/)
 * [Henjin no Salad Bowl](https://www.tbs.co.jp/anime/hensara/)
 * [Highspeed Etoile](https://highspeed-etoile.com/)
@@ -104,6 +103,7 @@ The premiere date for the anime listed here has not been announced.
 
 ### Winter 2024 Anime
 * [Akuyaku Reijou Level 99](https://akuyakulv99-anime.com/)
+* [Chiyu Mahou no Machigatta Tsukaikata](https://chiyumahou-anime.com/)
 * [Dosanko Gal wa Namara Menkoi](https://dosankogal-pr.com/)
 * [Dungeon Meshi](https://delicious-in-dungeon.com/)
 * [Himesama "Goumon" no Jikan desu](https://himesama-goumon.com/)

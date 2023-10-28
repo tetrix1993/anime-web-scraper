@@ -1,6 +1,7 @@
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsTemplate4
 
 # Akuyaku Reijou Level 99 https://akuyakulv99-anime.com/ #akuyakuLV99 @akuyakuLV99
+# Chiyu Mahou no Machigatta Tsukaikata https://chiyumahou-anime.com/ #治癒魔法 @chiyumahou_PR
 # Dosanko Gal wa Namara Menkoi https://dosankogal-pr.com/ #道産子ギャル #どさこい @dosankogal_pr
 # Dungeon Meshi https://delicious-in-dungeon.com/ #ダンジョン飯 #deliciousindungeon @dun_meshi_anime
 # Himesama "Goumon" no Jikan desu https://himesama-goumon.com/ #姫様拷問の時間です @himesama_goumon
@@ -87,6 +88,87 @@ class AkuyakuLv99Download(Winter2024AnimeDownload, NewsTemplate2):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+
+# Chiyu Mahou no Machigatta Tsukaikata
+class ChiyuMahouDownload(Winter2024AnimeDownload, NewsTemplate):
+    title = 'Chiyu Mahou no Machigatta Tsukaikata'
+    keywords = [title, 'The Wrong Way to Use Healing Magic']
+    website = 'https://chiyumahou-anime.com/'
+    twitter = 'chiyumahou_PR'
+    hashtags = ['治癒魔法']
+    folder_name = 'chiyumahou'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index', diff=150)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.newsArchive-Item',
+                                    date_select='.date', title_select='.title', id_select='a',
+                                    next_page_select='.nextpostslink')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        # self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FwP_QYPaQAMBkyd?format=jpg&name=medium')
+        self.add_to_image_list('tz', self.PAGE_PREFIX + 'wp-content/themes/chiyumahou-anime_teaser/assets/images/pc/index/img_hero.jpg')
+        self.download_image_list(folder)
+
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.visual img[src]')
+            self.image_list = []
+            for image in images:
+                if '/pc/' not in image['src']:
+                    continue
+                image_url = image['src'].split('?')[0]
+                image_name = self.generate_image_name_from_url(image_url, 'pc')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            a_tags = soup.select('.character-List li>a[href]')
+            for a_tag in a_tags:
+                chara_url = a_tag['href']
+                if chara_url.endswith('/'):
+                    chara_name = chara_url[:-1].split('/')[-1]
+                else:
+                    chara_name = chara_url.split('/')[-1]
+                if chara_name in processed:
+                    continue
+                chara_soup = self.get_soup(self.PAGE_PREFIX + chara_url[1:])
+                if chara_soup is not None:
+                    images = chara_soup.select('.character-Detail img[src]')
+                    for image in images:
+                        image_url = image['src']
+                        if '/character/' not in image_url:
+                            continue
+                        image_name = self.generate_image_name_from_url(image_url, 'character')
+                        self.add_to_image_list(image_name, image_url)
+                    if len(self.image_list) > 0:
+                        processed.append(chara_name)
+                    self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Dosanko Gal wa Namara Menkoi
