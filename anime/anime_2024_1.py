@@ -633,15 +633,18 @@ class MatoSlaveDownload(Winter2024AnimeDownload, NewsTemplate):
 
     def run(self):
         self.download_episode_preview()
-        # self.download_news()
+        self.download_news()
         self.download_key_visual()
         self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
 
-    # def download_news(self):
-    #    self.download_template_news(self.PAGE_PREFIX)
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-list-item',
+                                    date_select='.news-list-item__date', title_select='.news-list-item__title',
+                                    id_select='a', a_tag_start_text_to_remove='/', a_tag_prefix=self.PAGE_PREFIX,
+                                    date_func=lambda x: x.replace('年', '.').replace('月', '.').replace('日', ''))
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
