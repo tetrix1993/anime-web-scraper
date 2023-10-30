@@ -401,33 +401,54 @@ class HimesamaGoumonDownload(Winter2024AnimeDownload, NewsTemplate):
     def run(self):
         self.download_episode_preview()
         self.download_news()
-        self.download_key_visual()
-        self.download_character()
+        soup = self.download_key_visual()
+        self.download_character(soup)
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
 
     def download_news(self):
-        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.md-li__post article',
-                                    date_select='time', title_select='.ttl', id_select='a')
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.md-li__news li',
+                                    date_select='.date', title_select='.ttl', id_select='a')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
+        soup = None
         try:
             soup = self.get_soup(self.PAGE_PREFIX)
             self.image_list = []
-            images = soup.select('.fvimg source[srcset]')
+            images = soup.select('.fv--visual source[srcset]')
             for image in images:
                 image_url = self.PAGE_PREFIX + image['srcset'][1:]
-                if '/top/' not in image_url:
+                if '/webp/' not in image_url:
                     continue
-                image_name = self.generate_image_name_from_url(image_url, 'top')
+                image_name = self.extract_image_name_from_url(image_url)
                 if image_name.endswith('_sp'):
                     continue
                 self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Key Visual')
+        return soup
+
+    def download_character(self, soup=None):
+        folder = self.create_character_directory()
+        try:
+            if soup is None:
+                soup = self.get_soup(self.PAGE_PREFIX)
+            self.image_list = []
+            images = soup.select('.chardata--inner .visual source[srcset]')
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['srcset'][1:]
+                if '/webp/' not in image_url:
+                    continue
+                image_name = self.extract_image_name_from_url(image_url)
+                if image_name.endswith('_sp'):
+                    continue
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
 
 
 # Kekkon Yubiwa Monogatari
