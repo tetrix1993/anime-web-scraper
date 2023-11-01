@@ -10,6 +10,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Henjin no Salad Bowl https://www.tbs.co.jp/anime/hensara/ #変サラ @hensara_anime
 # Highspeed Etoile https://highspeed-etoile.com/ #ハイスピ @HSE_Project_PR
 # Isekai de Mofumofu Nadenade suru Tame ni Ganbattemasu. https://mohunadeanime.com/ #もふなで @mohunade_anime
+# Ookami to Koushinryou https://spice-and-wolf.com/
 # Sasaki to Pii-chan https://sasapi-anime.com/ #ささピー @sasaki_pichan
 # Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita 2nd Season https://slime300-anime.com/ #スライム倒して300年 @slime300_PR
 # Tensei Kizoku, Kantei Skill de Nariagaru https://kanteiskill.com/ #鑑定スキル @kanteiskill
@@ -265,6 +266,123 @@ class HighspeedEtoileDownload(UnconfirmedDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'teaser/images/character_%s.png'
         self.download_by_template(folder, template, 2, 1, prefix='tz_')
+
+
+# Ookami to Koushinryou
+class OokamitoKoushinryou(UnconfirmedDownload, NewsTemplate):
+    title = 'Ookami to Koushinryou'
+    keywords = [title, 'Spice and Wolf']
+    website = 'https://spice-and-wolf.com/'
+    twitter = 'Spicy_Wolf_Prj'
+    hashtags = ['狼と香辛料', 'spice_and_wolf']
+    folder_name = 'spicewolf'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        news_soup = self.download_news()
+        self.download_key_visual(news_soup)
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        xml_page = self.PAGE_PREFIX + '_inc/page/newslists.news.xml'
+        soup = None
+        try:
+            results = []
+            news_obj = self.get_last_news_log_object()
+            soup = self.get_soup(xml_page, decode=True)
+            items = soup.select('item')
+            for item in items:
+                title_tags = item.select('title')
+                date_y_tags = item.select('date_y')
+                date_m_tags = item.select('date_m')
+                date_d_tags = item.select('date_d')
+                permalink_tags = item.select('permalink')
+                if len(date_y_tags) > 0 and len(date_m_tags) > 0 and len(date_d_tags) > 0 and len(title_tags) > 0\
+                        and len(permalink_tags) > 0:
+                    date = date_y_tags[0].text.strip() + '.'\
+                           + date_m_tags[0].text.strip() + '.'\
+                           + date_d_tags[0].text.strip()
+                    title = title_tags[0].text.strip()
+                    url = self.PAGE_PREFIX + 'news/' + permalink_tags[0].text.strip()
+                    if news_obj is not None and (news_obj['id'] == url or news_obj['title'] == title
+                                                 or date < news_obj['date']):
+                        break
+                    results.append(self.create_news_log_object(date, title, url))
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log_from_news_log_object(result)
+                if process_result == 0:
+                    success_count += 1
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
+        except Exception as e:
+            self.print_exception(e, 'News')
+        return soup
+
+    def download_key_visual(self, news_soup=None):
+        folder = self.create_key_visual_directory()
+        sub_folder = self.create_custom_directory(folder.split('/')[-1] + '/news')
+        cache_filepath = sub_folder + '/cache'
+        news_url = self.PAGE_PREFIX + 'news/'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        xml_page = self.PAGE_PREFIX + '_inc/page/newslists.news.xml'
+        try:
+            if news_soup is None:
+                news_soup = self.get_soup(xml_page, decode=True)
+            items = news_soup.select('item')
+            for item in items:
+                permalink_tag = item.select('permalink')
+                if len(permalink_tag) == 0:
+                    continue
+                permalink = permalink_tag[0].text
+                page_name = permalink.replace('.html', '')
+                if page_name in processed:
+                    break
+                title_tag = item.select('title')
+                if len(title_tag) == 0:
+                    continue
+                title = title_tag[0].text.strip()
+                if 'ビジュアル' in title or 'イラスト' in title:
+                    page_soup = self.get_soup(news_url + permalink)
+                    if page_soup is not None:
+                        images = page_soup.select('.newsArticle img[src]')
+                        self.image_list = []
+                        for image in images:
+                            if not image['src'].startswith('img/'):
+                                continue
+                            image_url = news_url + image['src'].split('?')[0]
+                            image_name = self.generate_image_name_from_url(image_url, 'img')
+                            self.add_to_image_list(image_name, image_url)
+                        self.download_image_list(sub_folder)
+                processed.append(page_name)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual News')
+        self.create_cache_file(cache_filepath, processed, num_processed)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.characterDetailList img[src]')
+            self.image_list = []
+            for image in images:
+                image_url = image['src']
+                if image_url.startswith('./'):
+                    image_url = self.PAGE_PREFIX + image_url[2:]
+                if '/character/' in image_url:
+                    image_name = self.generate_image_name_from_url(image_url, 'character')
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
 
 
 # Sasaki to Pii-chan  #ささピー @sasaki_pichan
