@@ -2636,7 +2636,7 @@ class SeikenGakuinDownload(Fall2023AnimeDownload, NewsTemplate):
     def run(self):
         self.download_episode_preview()
         self.download_news()
-        self.download_episode_preview_guess(print_invalid=False, download_valid=True)
+        # self.download_episode_preview_guess(print_invalid=False, download_valid=True)
         self.download_key_visual()
         self.download_character()
         self.download_media()
@@ -2672,7 +2672,7 @@ class SeikenGakuinDownload(Fall2023AnimeDownload, NewsTemplate):
             return
 
         folder = self.create_custom_directory('guess')
-        template = self.PAGE_PREFIX + 'sgwp/wp-content/uploads/%s/%s/story-ep%s-img%s.jpg'
+        template = self.PAGE_PREFIX + 'sgwp/wp-content/uploads/%s/%s/HP使用%s_SK%s_%s.jpg'
         current_date = datetime.now() + timedelta(hours=1)
         year = current_date.strftime('%Y')
         month = current_date.strftime('%m')
@@ -2685,13 +2685,17 @@ class SeikenGakuinDownload(Fall2023AnimeDownload, NewsTemplate):
             episode_success = False
             valid_urls = []
             for j in range(self.IMAGES_PER_EPISODE):
-                image_url = template % (year, month, episode, str(j + 1).zfill(2))
-                if self.is_valid_url(image_url, is_image=True):
-                    print('VALID - ' + image_url)
-                    episode_success = True
-                    valid_urls.append({'num': str(j + 1), 'url': image_url})
-                elif print_invalid:
-                    print('INVALID - ' + image_url)
+                for k in range(400):
+                    image_url = template % (year, month, str(j + 1).zfill(2), episode, str(k).zfill(3))
+                    if self.is_valid_url(image_url, is_image=True):
+                        print('VALID - ' + image_url)
+                        episode_success = True
+                        valid_urls.append({'num': str(j + 1), 'url': image_url})
+                        break
+                    elif print_invalid:
+                        print('INVALID - ' + image_url)
+                if not episode_success:
+                    break
             if download_valid and len(valid_urls) > 0:
                 for valid_url in valid_urls:
                     image_name = episode + '_' + valid_url['num']
