@@ -521,7 +521,7 @@ class KekkonYubiwaDownload(Winter2024AnimeDownload, NewsTemplate):
 # Isekai de Mofumofu Nadenade suru Tame ni Ganbattemasu.
 class MofunadeDownload(Winter2024AnimeDownload, NewsTemplate):
     title = 'Isekai de Mofumofu Nadenade suru Tame ni Ganbattemasu.'
-    keywords = [title]
+    keywords = [title, 'Fluffy Paradise']
     website = 'https://mohunadeanime.com/'
     twitter = 'mohunade_anime'
     hashtags = 'もふなで'
@@ -559,7 +559,7 @@ class MofunadeDownload(Winter2024AnimeDownload, NewsTemplate):
 # Jaku-Chara Tomozaki-kun 2nd Stage
 class TomozakiKun2Download(Winter2024AnimeDownload, NewsTemplate):
     title = "Jaku-Chara Tomozaki-kun 2nd Stage"
-    keywords = [title, 'The Low Tier Character "Tomozaki-kun"', 'Tomozaki-kun']
+    keywords = [title, 'Bottom-Tier Character Tomozaki', 'Tomozaki-kun']
     website = 'http://tomozaki-koushiki.com/'
     twitter = 'tomozakikoshiki'
     hashtags = '友崎くん'
@@ -912,7 +912,7 @@ class KanatenDownload(Winter2024AnimeDownload, NewsTemplate2):
 # Pon no Michi
 class PonnoMichiDownload(Winter2024AnimeDownload, NewsTemplate4):
     title = 'Pon no Michi'
-    keywords = [title, "Whisper Me a Love Song"]
+    keywords = [title, "Pon no Michi"]
     website = 'https://ponnomichi-pr.com/'
     twitter = 'ponnomichi_pr'
     hashtags = ['ぽんのみち', 'ponnomichi']
@@ -1032,6 +1032,7 @@ class SasakoiDownload(Winter2024AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'core_sys/images/main/tz/chara/c%s_face.jpg'
         self.download_by_template(folder, template, 2, 1, prefix='tz_')
+
 
 # Saijaku Tamer wa Gomi Hiroi no Tabi wo Hajimemashita.
 class SaijakuTamerDownload(Winter2024AnimeDownload, NewsTemplate):

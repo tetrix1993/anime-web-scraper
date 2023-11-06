@@ -561,7 +561,7 @@ class HorimiyaDownload(Winter2021AnimeDownload):
 # Jaku-Chara Tomozaki-kun
 class TomozakiKunDownload(Winter2021AnimeDownload):
     title = "Jaku-Chara Tomozaki-kun"
-    keywords = [title, 'The Low Tier Character "Tomozaki-kun"', 'Tomozaki-kun']
+    keywords = [title, 'Bottom-Tier Character Tomozaki', 'Tomozaki-kun']
     website = 'http://tomozaki-koushiki.com/'
     twitter = 'tomozakikoshiki'
     hashtags = '友崎くん'
