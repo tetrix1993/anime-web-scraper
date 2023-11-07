@@ -14,7 +14,6 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Sasaki to Pii-chan https://sasapi-anime.com/ #ささピー @sasaki_pichan
 # Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita 2nd Season https://slime300-anime.com/ #スライム倒して300年 @slime300_PR
 # Tensei Kizoku, Kantei Skill de Nariagaru https://kanteiskill.com/ #鑑定スキル @kanteiskill
-# Tokidoki Bosotto Russia-go de Dereru Tonari no Alya-san https://roshidere.com/ #ロシデレ @roshidere
 # Tsuyokute New Saga https://tsuyosaga-pr.com/ #つよサガ @tsuyosaga_pr
 # Unnamed Memory https://unnamedmemory.com/ #UnnamedMemory #アンメモ @Project_UM
 # Vlad Love https://www.vladlove.com/index.html #ぶらどらぶ #vladlove @VLADLOVE_ANIME
@@ -574,54 +573,6 @@ class KanteiSkillDownload(UnconfirmedDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
-
-
-# Tokidoki Bosotto Russia-go de Dereru Tonari no Alya-san
-class RoshidereDownload(UnconfirmedDownload, NewsTemplate):
-    title = 'Tokidoki Bosotto Russia-go de Dereru Tonari no Alya-san'
-    keywords = [title, 'Alya Sometimes Hides Her Feelings in Russian', 'Aalya', 'roshidere']
-    website = 'https://roshidere.com/'
-    twitter = 'roshidere'
-    hashtags = ['ロシデレ', 'roshidere']
-    folder_name = 'roshidere'
-
-    PAGE_PREFIX = website
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        # self.download_news()
-        self.download_key_visual()
-        self.download_character()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
-
-    def download_news(self):
-        pass
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        try:
-            soup = self.get_soup(self.PAGE_PREFIX)
-            images = soup.select('.kv__img source[srcset]')
-            self.image_list = []
-            for image in images:
-                image_url = self.PAGE_PREFIX + image['srcset'].split('?')[0]
-                if '/images/' not in image_url or not image_url.endswith('.webp'):
-                    continue
-                image_name = self.generate_image_name_from_url(image_url, 'images')
-                self.add_to_image_list(image_name, image_url)
-            self.download_image_list(folder)
-        except Exception as e:
-            self.print_exception(e, 'Key Visual')
-
-    def download_character(self):
-        folder = self.create_character_directory()
-        template = self.PAGE_PREFIX + 'core_sys/images/main/home/chara%s.png'
-        self.download_by_template(folder, template, 2, 1, prefix='tz_')
 
 
 # Tsuyokute New Saga

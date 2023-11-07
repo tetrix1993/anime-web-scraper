@@ -1,7 +1,8 @@
-from anime.main_download import MainDownload, NewsTemplate
+from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 
 # Kono Sekai wa Fukanzen Sugiru https://konofuka.com/ #このふか @konofuka_QA
 # Tensei shitara Dainana Ouji Datta node, Kimama ni Majutsu wo Kiwamemasu https://dainanaoji.com/ #第七王子 @dainanaoji_pro
+# Tokidoki Bosotto Russia-go de Dereru Tonari no Alya-san https://roshidere.com/ #ロシデレ @roshidere
 
 
 # Spring 2024 Anime
@@ -104,3 +105,51 @@ class DainanaojiDownload(Spring2024AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+
+# Tokidoki Bosotto Russia-go de Dereru Tonari no Alya-san
+class RoshidereDownload(Spring2024AnimeDownload, NewsTemplate2):
+    title = 'Tokidoki Bosotto Russia-go de Dereru Tonari no Alya-san'
+    keywords = [title, 'Alya Sometimes Hides Her Feelings in Russian', 'Aalya', 'roshidere']
+    website = 'https://roshidere.com/'
+    twitter = 'roshidere'
+    hashtags = ['ロシデレ', 'roshidere']
+    folder_name = 'roshidere'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.kv__img source[srcset]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['srcset'].split('?')[0]
+                if '/images/' not in image_url or not image_url.endswith('.webp'):
+                    continue
+                image_name = self.generate_image_name_from_url(image_url, 'images')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'core_sys/images/main/home/chara%s.png'
+        self.download_by_template(folder, template, 2, 1, prefix='tz_')
