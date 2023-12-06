@@ -11,7 +11,6 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Highspeed Etoile https://highspeed-etoile.com/ #ハイスピ @HSE_Project_PR
 # Isekai de Mofumofu Nadenade suru Tame ni Ganbattemasu. https://mohunadeanime.com/ #もふなで @mohunade_anime
 # Ookami to Koushinryou https://spice-and-wolf.com/
-# Sasaki to Pii-chan https://sasapi-anime.com/ #ささピー @sasaki_pichan
 # Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita 2nd Season https://slime300-anime.com/ #スライム倒して300年 @slime300_PR
 # Tensei Kizoku, Kantei Skill de Nariagaru https://kanteiskill.com/ #鑑定スキル @kanteiskill
 # Tsuyokute New Saga https://tsuyosaga-pr.com/ #つよサガ @tsuyosaga_pr
@@ -378,89 +377,6 @@ class OokamitoKoushinryou(UnconfirmedDownload, NewsTemplate):
                     image_url = self.PAGE_PREFIX + image_url[2:]
                 if '/character/' in image_url:
                     image_name = self.generate_image_name_from_url(image_url, 'character')
-                    self.add_to_image_list(image_name, image_url)
-            self.download_image_list(folder)
-        except Exception as e:
-            self.print_exception(e, 'Character')
-
-
-# Sasaki to Pii-chan  #ささピー @sasaki_pichan
-class SasapiDownload(UnconfirmedDownload, NewsTemplate):
-    title = 'Sasaki to Pii-chan'
-    keywords = [title, 'Sasaki and Peeps', 'Sasapi']
-    website = 'https://sasapi-anime.com/'
-    twitter = 'sasaki_pichan'
-    hashtags = ['ささピー']
-    folder_name = 'sasapi'
-
-    PAGE_PREFIX = website
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_news()
-        self.download_key_visual()
-        self.download_character()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_news(self):
-        try:
-            results = []
-            news_obj = self.get_last_news_log_object()
-            json_obj = self.get_json(self.PAGE_PREFIX + 'news.json')
-            for item in json_obj:
-                if 'day' in item and 'url' in item and 'title' in item:
-                    try:
-                        date = datetime.datetime.strptime(item['day'], "%Y/%m/%d").strftime("%Y.%m.%d")
-                    except:
-                        continue
-                    title = item['title']
-                    url = self.PAGE_PREFIX + item['url']
-                    if news_obj is not None and (news_obj['id'] == url or news_obj['title'] == title
-                                                 or date < news_obj['date']):
-                        break
-                    results.append(self.create_news_log_object(date, title, url))
-            success_count = 0
-            for result in reversed(results):
-                process_result = self.create_news_log_from_news_log_object(result)
-                if process_result == 0:
-                    success_count += 1
-            if len(results) > 0:
-                self.create_news_log_cache(success_count, results[0])
-        except Exception as e:
-            self.print_exception(e, 'News')
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        try:
-            soup = self.get_soup(self.PAGE_PREFIX)
-            images = soup.select('.visual_wrap .style_pc img[src]')
-            self.image_list = []
-            for image in images:
-                image_url = self.PAGE_PREFIX + image['src']
-                if '/images/' in image_url:
-                    image_name = self.generate_image_name_from_url(image_url, 'images')
-                    self.add_to_image_list(image_name, image_url)
-            self.download_image_list(folder)
-        except Exception as e:
-            self.print_exception(e, 'Key Visual')
-
-    def download_character(self, soup=None):
-        folder = self.create_character_directory()
-        try:
-            if soup is None:
-                soup = self.get_soup(self.PAGE_PREFIX)
-            images = soup.select('div[class^="chara_a_"] img[src],' + 'div[class^="chara_b_"] img[src],' +
-                                 'div[class^="chara_d_"] img[src]')
-            self.image_list = []
-            for image in images:
-                image_url = self.PAGE_PREFIX + image['src']
-                if '/chara/' in image_url:
-                    image_name = self.generate_image_name_from_url(image_url, 'chara')
                     self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)
         except Exception as e:

@@ -18,6 +18,7 @@ from datetime import datetime, timedelta
 # Pon no Michi https://ponnomichi-pr.com/ #ぽんのみち @ponnomichi_pr
 # Saijaku Tamer wa Gomi Hiroi no Tabi wo Hajimemashita. https://saijakutamer-anime.com/ #最弱テイマー @saijakutamer
 # Saikyou Tank no Meikyuu Kouryaku https://saikyo-tank.com/ #最強タンク @saikyo_tank
+# Sasaki to Pii-chan https://sasapi-anime.com/ #ささピー @sasaki_pichan
 # Sokushi Cheat ga Saikyou sugite, Isekai no Yatsura ga Marude Aite ni Naranai n desu ga. https://sokushicheat-pr.com/ #即死チート @sokushicheat_pr
 # Tsuki ga Michibiku Isekai Douchuu 2nd Season https://tsukimichi.com/ #ツキミチ @tsukimichi_PR
 # Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e S3 http://you-zitsu.com/ #you_zitsu #よう実 @youkosozitsu
@@ -1064,6 +1065,80 @@ class SaikyoTankDownload(Winter2024AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+
+# Sasaki to Pii-chan
+class SasapiDownload(Winter2024AnimeDownload, NewsTemplate):
+    title = 'Sasaki to Pii-chan'
+    keywords = [title, 'Sasaki and Peeps', 'Sasapi']
+    website = 'https://sasapi-anime.com/'
+    twitter = 'sasaki_pichan'
+    hashtags = ['ささピー']
+    folder_name = 'sasapi'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        try:
+            results = []
+            news_obj = self.get_last_news_log_object()
+            json_obj = self.get_json(self.PAGE_PREFIX + 'news.json')
+            for item in json_obj:
+                if 'day' in item and 'url' in item and 'title' in item:
+                    try:
+                        date = datetime.strptime(item['day'], "%Y/%m/%d").strftime("%Y.%m.%d")
+                    except:
+                        continue
+                    title = item['title']
+                    url = self.PAGE_PREFIX + item['url']
+                    if news_obj is not None and (news_obj['id'] == url or news_obj['title'] == title
+                                                 or date < news_obj['date']):
+                        break
+                    results.append(self.create_news_log_object(date, title, url))
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log_from_news_log_object(result)
+                if process_result == 0:
+                    success_count += 1
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
+        except Exception as e:
+            self.print_exception(e, 'News')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.visual_wrap .style_pc img[src]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src']
+                if '/images/' in image_url:
+                    image_name = self.generate_image_name_from_url(image_url, 'images')
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self, soup=None):
+        folder = self.create_character_directory()
+        prefix = self.PAGE_PREFIX + 'images/chara/'
+        templates = [prefix + 'list_%s.png', prefix + 'a_%s.png']
+        self.download_by_template(folder, templates, 3, 1)
+        templates = [prefix + 'd_%s_01.png', prefix + 'd_%s_02.png', prefix + 'd_%s_03.png']
+        self.download_by_template(folder, templates, 2, 1)
 
 
 # Sokushi Cheat ga Saikyou sugite, Isekai no Yatsura ga Marude Aite ni Naranai n desu ga.
