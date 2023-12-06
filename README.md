@@ -98,6 +98,7 @@ The premiere date for the anime listed here has not been announced.
 
 ### Spring 2024 Anime
 * [Kono Sekai wa Fukanzen Sugiru](https://konofuka.com/)
+* [Sasayaku You ni Koi wo Utau](https://sasakoi-anime.com/)
 * [Tensei shitara Dainana Ouji Datta node, Kimama ni Majutsu wo Kiwamemasu](https://dainanaoji.com/)
 * [Tokidoki Bosotto Russia-go de Dereru Tonari no Alya-san](https://roshidere.com/)
 
@@ -119,7 +120,6 @@ The premiere date for the anime listed here has not been announced.
 * [Pon no Michi](https://ponnomichi-pr.com/)
 * [Saijaku Tamer wa Gomi Hiroi no Tabi wo Hajimemashita.](https://saijakutamer-anime.com/)
 * [Saikyou Tank no Meikyuu Kouryaku](https://saikyo-tank.com/)
-* [Sasayaku You ni Koi wo Utau](https://sasakoi-anime.com/)
 * [Sokushi Cheat ga Saikyou sugite, Isekai no Yatsura ga Marude Aite ni Naranai n desu ga.](https://sokushicheat-pr.com/)
 * [Tsuki ga Michibiku Isekai Douchuu](https://tsukimichi.com/)
 * [Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e 3rd Season](http://you-zitsu.com/)

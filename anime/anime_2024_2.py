@@ -1,6 +1,7 @@
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 
 # Kono Sekai wa Fukanzen Sugiru https://konofuka.com/ #このふか @konofuka_QA
+# Sasayaku You ni Koi wo Utau https://sasakoi-anime.com/ #ささこい @sasakoi_anime
 # Tensei shitara Dainana Ouji Datta node, Kimama ni Majutsu wo Kiwamemasu https://dainanaoji.com/ #第七王子 @dainanaoji_pro
 # Tokidoki Bosotto Russia-go de Dereru Tonari no Alya-san https://roshidere.com/ #ロシデレ @roshidere
 
@@ -50,6 +51,64 @@ class KonofukaDownload(Spring2024AnimeDownload, NewsTemplate):
         self.add_to_image_list('tz', self.PAGE_PREFIX + 'pDK2yjkH/wp-content/themes/konofuka_v0.1/assets/img/top/mv.png')
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/Fr85Cb4aAAAgWlS?format=jpg&name=4096x4096')
         self.download_image_list(folder)
+
+
+# Sasayaku You ni Koi wo Utau
+class SasakoiDownload(Spring2024AnimeDownload, NewsTemplate):
+    title = 'Sasayaku You ni Koi wo Utau'
+    keywords = [title, "Whisper Me a Love Song"]
+    website = 'https://sasakoi-anime.com/'
+    twitter = 'sasakoi_anime'
+    hashtags = ['ささこい', 'sasakoi']
+    folder_name = 'sasakoi'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news__list tr', news_prefix='',
+                                    date_select='.day', title_select='.title', id_select='a', date_separator='/',
+                                    a_tag_prefix=self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_kv', self.PAGE_PREFIX + 'core_sys/images/main/tz/kv.webp')
+        self.add_to_image_list('tz_teaser', self.PAGE_PREFIX + 'core_sys/images/main/tz/teaser.jpg')
+        self.download_image_list(folder)
+
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.kv__img source[srcset]')
+            self.image_list = []
+            for image in images:
+                if '/main/' not in image['srcset']:
+                    continue
+                image_name = self.extract_image_name_from_url(image['srcset'])
+                if 'kv' not in image_name:
+                    continue
+                image_name = self.generate_image_name_from_url(image['srcset'], 'main')
+                image_url = self.PAGE_PREFIX + image['srcset']
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'core_sys/images/main/tz/chara/c%s_face.jpg'
+        self.download_by_template(folder, template, 2, 1, prefix='tz_')
 
 
 # Tensei shitara Dainana Ouji Datta node, Kimama ni Majutsu wo Kiwamemasu
