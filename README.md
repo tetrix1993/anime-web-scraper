@@ -94,6 +94,9 @@ The premiere date for the anime listed here has not been announced.
 * [Unnamed Memory](https://unnamedmemory.com/)
 * [Yoru no Kurage wa Oyogenai](https://yorukura-anime.com/)
 
+### Summer 2024 Anime
+* [Koi wa Futago de Warikirenai](https://futakire.com/)
+
 ### Spring 2024 Anime
 * [Kono Sekai wa Fukanzen Sugiru](https://konofuka.com/)
 * [Sasayaku You ni Koi wo Utau](https://sasakoi-anime.com/)
