@@ -14,7 +14,6 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita 2nd Season https://slime300-anime.com/ #スライム倒して300年 @slime300_PR
 # Tensei Kizoku, Kantei Skill de Nariagaru https://kanteiskill.com/ #鑑定スキル @kanteiskill
 # Tsuyokute New Saga https://tsuyosaga-pr.com/ #つよサガ @tsuyosaga_pr
-# Unnamed Memory https://unnamedmemory.com/ #UnnamedMemory #アンメモ @Project_UM
 # Vlad Love https://www.vladlove.com/index.html #ぶらどらぶ #vladlove @VLADLOVE_ANIME
 # Yoru no Kurage wa Oyogenai https://yorukura-anime.com/ #ヨルクラ #yorukura_anime @yorukura_anime
 
@@ -534,59 +533,6 @@ class TsuyosagaDownload(UnconfirmedDownload, NewsTemplate):
             result = self.download_image(image_url, folder + '/' + image_name)
             if result == -1:
                 break
-
-
-# Unnamed Memory
-class UnnamedMemoryDownload(UnconfirmedDownload, NewsTemplate):
-    title = 'Unnamed Memory'
-    keywords = [title]
-    website = 'https://unnamedmemory.com/'
-    twitter = 'Project_UM'
-    hashtags = ['UnnamedMemory', 'アンメモ']
-    folder_name = 'unnamedmemory'
-
-    PAGE_PREFIX = website
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_news()
-        self.download_key_visual()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_news(self):
-        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.content-entry',
-                                    title_select='.entry-title span', date_select='.entry-date span',
-                                    id_select=None, id_has_id=True, news_prefix='news.html')
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/Fj2aPSZVIAEC9LY?format=jpg&name=4096x4096')
-        self.download_image_list(folder)
-
-        try:
-            soup = self.get_soup(self.PAGE_PREFIX)
-            images = soup.select('.vis source[srcset], .vis img[src]')
-            self.image_list = []
-            for image in images:
-                if image.has_attr('srcset'):
-                    image_url = image['srcset']
-                else:
-                    image_url = image['src']
-                if image_url.startswith('./'):
-                    image_url = self.PAGE_PREFIX + image_url[2:]
-                if '/assets/' not in image_url:
-                    continue
-                image_name = self.generate_image_name_from_url(image_url, 'assets')
-                self.add_to_image_list(image_name, image_url)
-            self.download_image_list(folder)
-        except Exception as e:
-            self.print_exception(e, 'Key Visual')
 
 
 # Vlad Love

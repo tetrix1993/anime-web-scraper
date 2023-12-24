@@ -4,6 +4,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Sasayaku You ni Koi wo Utau https://sasakoi-anime.com/ #ささこい @sasakoi_anime
 # Tensei shitara Dainana Ouji Datta node, Kimama ni Majutsu wo Kiwamemasu https://dainanaoji.com/ #第七王子 @dainanaoji_pro
 # Tokidoki Bosotto Russia-go de Dereru Tonari no Alya-san https://roshidere.com/ #ロシデレ @roshidere
+# Unnamed Memory https://unnamedmemory.com/ #UnnamedMemory #アンメモ @Project_UM
 # Yozakura-san Chi no Daisakusen https://mission-yozakura-family.com/ #夜桜さんちの大作戦 #MissionYozakuraFamily @OfficialHitsuji
 
 
@@ -213,6 +214,93 @@ class RoshidereDownload(Spring2024AnimeDownload, NewsTemplate2):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'core_sys/images/main/home/chara%s.png'
         self.download_by_template(folder, template, 2, 1, prefix='tz_')
+
+
+# Unnamed Memory
+class UnnamedMemoryDownload(Spring2024AnimeDownload, NewsTemplate):
+    title = 'Unnamed Memory'
+    keywords = [title]
+    website = 'https://unnamedmemory.com/'
+    twitter = 'Project_UM'
+    hashtags = ['UnnamedMemory', 'アンメモ']
+    folder_name = 'unnamedmemory'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.content-entry',
+                                    title_select='.entry-title span', date_select='.entry-date span',
+                                    id_select=None, id_has_id=True, news_prefix='news.html')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/Fj2aPSZVIAEC9LY?format=jpg&name=4096x4096')
+        self.download_image_list(folder)
+
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.vis source[srcset], .vis img[src]')
+            self.image_list = []
+            for image in images:
+                if image.has_attr('srcset'):
+                    image_url = image['srcset']
+                else:
+                    image_url = image['src']
+                if image_url.startswith('./'):
+                    image_url = self.PAGE_PREFIX + image_url[2:]
+                if '/assets/' not in image_url:
+                    continue
+                image_name = self.generate_image_name_from_url(image_url, 'assets')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+        sub_folder = self.create_custom_directory(folder.split('/')[-1] + '/news')
+        cache_filepath = sub_folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        temp_processed = set()  # Some of the id is not unique
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'news.html')
+            items = soup.select('article article')
+            for item in items:
+                page_name = item['id']
+                if page_name in processed:
+                    break
+                title = item.select('.entry-title span')[0].text.strip()
+                if 'ビジュアル' in title or 'イラスト' in title:
+                    images = item.select('img[data-src]')
+                    self.image_list = []
+                    for image in images:
+                        image_url = self.PAGE_PREFIX + image['data-src'].replace('./', '').split('?')[0]
+                        if '/news/' not in image_url:
+                            continue
+                        image_name = self.generate_image_name_from_url(image_url, 'news')
+                        self.add_to_image_list(image_name, image_url)
+                    self.download_image_list(sub_folder)
+                temp_processed.add(page_name)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual News')
+        for page_name in temp_processed:
+            processed.append(page_name)
+        self.create_cache_file(cache_filepath, processed, num_processed)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'assets/character/1.webp'
+        self.download_by_template(folder, template, 1, 1)
 
 
 # Yozakura-san Chi no Daisakusen
