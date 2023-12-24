@@ -234,6 +234,7 @@ class UnnamedMemoryDownload(Spring2024AnimeDownload, NewsTemplate):
         self.download_episode_preview()
         self.download_news()
         self.download_key_visual()
+        self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
@@ -299,7 +300,7 @@ class UnnamedMemoryDownload(Spring2024AnimeDownload, NewsTemplate):
 
     def download_character(self):
         folder = self.create_character_directory()
-        template = self.PAGE_PREFIX + 'assets/character/1.webp'
+        template = self.PAGE_PREFIX + 'assets/character/%s.webp'
         self.download_by_template(folder, template, 1, 1)
 
 
