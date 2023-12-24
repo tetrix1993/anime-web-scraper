@@ -19,6 +19,7 @@ from datetime import datetime, timedelta
 # Saijaku Tamer wa Gomi Hiroi no Tabi wo Hajimemashita. https://saijakutamer-anime.com/ #最弱テイマー @saijakutamer
 # Saikyou Tank no Meikyuu Kouryaku https://saikyo-tank.com/ #最強タンク @saikyo_tank
 # Sasaki to Pii-chan https://sasapi-anime.com/ #ささピー @sasaki_pichan
+# Shin no Nakama ja Nai to Yuusha no Party wo Oidasareta node, Henkyou de Slow Life suru Koto ni Shimashita 2nd https://shinnonakama.com/ #真の仲間 @shinnonakama_tv
 # Sokushi Cheat ga Saikyou sugite, Isekai no Yatsura ga Marude Aite ni Naranai n desu ga. https://sokushicheat-pr.com/ #即死チート @sokushicheat_pr
 # Tsuki ga Michibiku Isekai Douchuu 2nd Season https://tsukimichi.com/ #ツキミチ @tsukimichi_PR
 # Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e S3 http://you-zitsu.com/ #you_zitsu #よう実 @youkosozitsu
@@ -1220,6 +1221,82 @@ class SasapiDownload(Winter2024AnimeDownload, NewsTemplate):
         self.download_by_template(folder, templates, 3, 1)
         templates = [prefix + 'd_%s_01.png', prefix + 'd_%s_02.png', prefix + 'd_%s_03.png']
         self.download_by_template(folder, templates, 2, 1)
+
+
+# Shin no Nakama ja Nai to Yuusha no Party wo Oidasareta node, Henkyou de Slow Life suru Koto ni Shimashita 2nd
+class ShinnoNakama2Download(Winter2024AnimeDownload, NewsTemplate):
+    title = 'Shin no Nakama ja Nai to Yuusha no Party wo Oidasareta node, Henkyou de Slow Life suru Koto ni Shimashita 2nd'
+    keywords = [title, 'Shinnonakama', "Banished From The Heroes' Party"]
+    website = 'https://shinnonakama.com/'
+    twitter = 'shinnonakama_tv'
+    hashtags = '真の仲間'
+    folder_name = 'shinnonakama2'
+
+    PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 6
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='ul.newsListsWrap li',
+                                    date_select='p.update_time', title_select='p.update_ttl',
+                                    id_select='a', a_tag_prefix=news_url, a_tag_start_text_to_remove='./',
+                                    stop_date='2022.03')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('kv_2nd_2', self.PAGE_PREFIX + 'assets/img/top/visual/kv_2nd_2.jpg')
+        self.download_image_list(folder)
+
+        sub_folder = self.create_custom_directory(folder.split('/')[-1] + '/news')
+        cache_filepath = sub_folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        news_url = self.PAGE_PREFIX + 'news/'
+        try:
+            soup = self.get_soup(news_url)
+            items = soup.select('ul.newsListsWrap li')
+            for item in items:
+                date = item.select('p.update_time')
+                if len(date) == 0 or date[0].text.startswith('2022.3') or date[0].text.startswith('2022.03'):
+                    break
+                a_tag = item.select('a[href]')
+                if len(a_tag) == 0:
+                    continue
+                if not a_tag[0]['href'].startswith('./') or not a_tag[0]['href'].endswith('.html'):
+                    continue
+                page_name = a_tag[0]['href'].split('/')[-1].split('.html')[0]
+                if page_name in processed:
+                    break
+                title = a_tag[0].text.strip()
+                if 'ビジュアル' in title:
+                    news_soup = self.get_soup(news_url + a_tag[0]['href'].replace('./', ''))
+                    if news_soup is not None:
+                        images = news_soup.select('.newsDetailWrap img[src]')
+                        self.image_list = []
+                        for image in images:
+                            image_url = news_url + image['src'].replace('./', '').split('?')[0]
+                            image_name = self.generate_image_name_from_url(image_url, 'news')
+                            self.add_to_image_list(image_name, image_url)
+                        self.download_image_list(sub_folder)
+                processed.append(page_name)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual News')
+        self.create_cache_file(cache_filepath, processed, num_processed)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'assets/img/top/character/chara2nd_%s.png'
+        self.download_by_template(folder, template, 1, 1)
 
 
 # Sokushi Cheat ga Saikyou sugite, Isekai no Yatsura ga Marude Aite ni Naranai n desu ga.

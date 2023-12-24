@@ -120,6 +120,7 @@ The premiere date for the anime listed here has not been announced.
 * [Saijaku Tamer wa Gomi Hiroi no Tabi wo Hajimemashita.](https://saijakutamer-anime.com/)
 * [Saikyou Tank no Meikyuu Kouryaku](https://saikyo-tank.com/)
 * [Sasaki to Pii-chan](https://sasapi-anime.com/)
+* [Shin no Nakama ja Nai to Yuusha no Party wo Oidasareta node, Henkyou de Slow Life suru Koto ni Shimashita 2nd](https://shinnonakama.com/)
 * [Sokushi Cheat ga Saikyou sugite, Isekai no Yatsura ga Marude Aite ni Naranai n desu ga.](https://sokushicheat-pr.com/)
 * [Tsuki ga Michibiku Isekai Douchuu](https://tsukimichi.com/)
 * [Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e 3rd Season](http://you-zitsu.com/)
