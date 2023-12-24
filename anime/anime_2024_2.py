@@ -4,6 +4,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 # Sasayaku You ni Koi wo Utau https://sasakoi-anime.com/ #ささこい @sasakoi_anime
 # Tensei shitara Dainana Ouji Datta node, Kimama ni Majutsu wo Kiwamemasu https://dainanaoji.com/ #第七王子 @dainanaoji_pro
 # Tokidoki Bosotto Russia-go de Dereru Tonari no Alya-san https://roshidere.com/ #ロシデレ @roshidere
+# Yozakura-san Chi no Daisakusen https://mission-yozakura-family.com/ #夜桜さんちの大作戦 #MissionYozakuraFamily @OfficialHitsuji
 
 
 # Spring 2024 Anime
@@ -212,3 +213,81 @@ class RoshidereDownload(Spring2024AnimeDownload, NewsTemplate2):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'core_sys/images/main/home/chara%s.png'
         self.download_by_template(folder, template, 2, 1, prefix='tz_')
+
+
+# Yozakura-san Chi no Daisakusen
+class YozakurasanDownload(Spring2024AnimeDownload, NewsTemplate2):
+    title = 'Yozakura-san Chi no Daisakusen'
+    keywords = [title, 'Mission: Yozakura Family']
+    website = 'https://mission-yozakura-family.com/'
+    twitter = 'OfficialHitsuji'
+    hashtags = ['夜桜さんちの大作戦', 'MissionYozakuraFamily']
+    folder_name = 'yozakurasan'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FkJB8aSVEAA5Xd1?format=jpg&name=medium')
+        self.download_image_list(folder)
+
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.kv__img img[src]')
+            self.image_list = []
+            for image in images:
+                if '/images/' in image['src']:
+                    image_url = self.PAGE_PREFIX + image['src']
+                    image_name = self.generate_image_name_from_url(image_url, 'images')
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/taiyo.html')
+            pages = soup.select('#ContentsListUnit01 a[href]')
+            for page in pages:
+                if not page['href'].endswith('.html') or not page['href'].startswith('../'):
+                    continue
+                page_url = self.PAGE_PREFIX + page['href'].replace('../', '')
+                page_name = page_url.split('/')[-1].split('.html')[0]
+                if page_name in processed:
+                    continue
+                if page_name == 'taiyo':
+                    ep_soup = soup
+                else:
+                    ep_soup = self.get_soup(page_url)
+                if ep_soup is None:
+                    continue
+                images = ep_soup.select('.charaVisual__img source[srcset]')
+                self.image_list = []
+                for image in images:
+                    image_url = self.PAGE_PREFIX + image['srcset'].replace('../', '')
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(folder)
+                processed.append(page_name)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+        self.create_cache_file(cache_filepath, processed, num_processed)

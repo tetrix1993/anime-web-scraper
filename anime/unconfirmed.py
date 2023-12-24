@@ -17,7 +17,6 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Unnamed Memory https://unnamedmemory.com/ #UnnamedMemory #アンメモ @Project_UM
 # Vlad Love https://www.vladlove.com/index.html #ぶらどらぶ #vladlove @VLADLOVE_ANIME
 # Yoru no Kurage wa Oyogenai https://yorukura-anime.com/ #ヨルクラ #yorukura_anime @yorukura_anime
-# Yozakura-san Chi no Daisakusen https://mission-yozakura-family.com/ #夜桜さんちの大作戦 #MissionYozakuraFamily @OfficialHitsuji
 
 
 # Unconfirmed Season Anime
@@ -658,6 +657,7 @@ class YorukuraDownload(UnconfirmedDownload, NewsTemplate):
         self.download_episode_preview()
         self.download_news()
         self.download_key_visual()
+        self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
@@ -702,47 +702,5 @@ class YorukuraDownload(UnconfirmedDownload, NewsTemplate):
         except Exception as e:
             self.print_exception(e, 'Key Visual')
 
-
-# Yozakura-san Chi no Daisakusen
-class YozakurasanDownload(UnconfirmedDownload, NewsTemplate2):
-    title = 'Yozakura-san Chi no Daisakusen'
-    keywords = [title, 'Mission: Yozakura Family']
-    website = 'https://mission-yozakura-family.com/'
-    twitter = 'OfficialHitsuji'
-    hashtags = ['夜桜さんちの大作戦', 'MissionYozakuraFamily']
-    folder_name = 'yozakurasan'
-
-    PAGE_PREFIX = website
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_news()
-        self.download_key_visual()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_news(self):
-        self.download_template_news(self.PAGE_PREFIX)
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FkJB8aSVEAA5Xd1?format=jpg&name=medium')
-        self.download_image_list(folder)
-
-        try:
-            soup = self.get_soup(self.PAGE_PREFIX)
-            images = soup.select('.kv__img img[src]')
-            self.image_list = []
-            for image in images:
-                if '/images/' in image['src']:
-                    image_url = self.PAGE_PREFIX + image['src']
-                    image_name = self.generate_image_name_from_url(image_url, 'images')
-                    self.add_to_image_list(image_name, image_url)
-            self.download_image_list(folder)
-        except Exception as e:
-            self.print_exception(e, 'Key Visual')
+    def download_character(self):
+        pass
