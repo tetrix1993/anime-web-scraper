@@ -16,6 +16,7 @@ from datetime import datetime, timedelta
 # Mahou Shoujo ni Akogarete https://mahoako-anime.com/ #まほあこ #まほあこアニメ @mahoako_anime
 # Mato Seihei no Slave https://mabotai.jp/ #魔都精兵のスレイブ #まとスレ @mabotai_kohobu
 # Nozomanu Fushi no Boukensha https://nozomanufushi-anime.jp/ #望まぬ不死 #TUUA @nozomanufushiPR
+# Ore dake Level Up na Ken https://sololeveling-anime.net/ #俺レベ #SoloLeveling @sololeveling_pr
 # Oroka na Tenshi wa Akuma to Odoru https://kanaten-anime.com/ #かな天 #kanaten @kanaten_PR
 # Pon no Michi https://ponnomichi-pr.com/ #ぽんのみち @ponnomichi_pr
 # Saijaku Tamer wa Gomi Hiroi no Tabi wo Hajimemashita. https://saijakutamer-anime.com/ #最弱テイマー @saijakutamer
@@ -1160,6 +1161,46 @@ class NozomanuFushiDownload(Winter2024AnimeDownload, NewsTemplate2):
         except Exception as e:
             self.print_exception(e, 'Character')
         self.create_cache_file(cache_filepath, processed, num_processed)
+
+
+# Ore dake Level Up na Ken
+class SoloLeveling(Winter2024AnimeDownload, NewsTemplate):
+    title = 'Ore dake Level Up na Ken'
+    keywords = [title, 'Solo Leveling']
+    website = 'https://sololeveling-anime.net/'
+    twitter = 'sololeveling_pr'
+    hashtags = ['俺レベ', 'SoloLeveling']
+    folder_name = 'sololeveling'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news__lists li',
+                                    title_select='p', date_select='time', id_select='a',
+                                    a_tag_prefix=news_url, paging_type=1, next_page_select='.paging__nav--next')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        template = self.PAGE_PREFIX + 'assets/img/top/visual%s.jpg'
+        self.download_by_template(folder, template, 1, 1)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'assets/img/character/c%s_main1.png'
+        self.download_by_template(folder, template, 1, 1)
 
 
 # Oroka na Tenshi wa Akuma to Odoru

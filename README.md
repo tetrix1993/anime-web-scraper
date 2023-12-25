@@ -121,6 +121,7 @@ The premiere date for the anime listed here has not been announced.
 * [Mahou Shoujo ni Akogarete](https://mahoako-anime.com/)
 * [Mato Seihei no Slave](https://mabotai.jp/)
 * [Nozomanu Fushi no Boukensha](https://nozomanufushi-anime.jp/)
+* [Ore dake Level Up na Ken](https://sololeveling-anime.net/)
 * [Oroka na Tenshi wa Akuma to Odoru](https://kanaten-anime.com/)
 * [Pon no Michi](https://ponnomichi-pr.com/)
 * [Saijaku Tamer wa Gomi Hiroi no Tabi wo Hajimemashita.](https://saijakutamer-anime.com/)
