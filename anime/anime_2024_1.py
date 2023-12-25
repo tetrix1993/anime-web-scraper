@@ -926,6 +926,7 @@ class MahoakoDownload(Winter2024AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
@@ -951,10 +952,69 @@ class MahoakoDownload(Winter2024AnimeDownload, NewsTemplate):
         except Exception as e:
             self.print_exception(e, 'Key Visual')
 
+        sub_folder = self.create_custom_directory(folder.split('/')[-1] + '/news')
+        cache_filepath = sub_folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        temp_processed = set()  # Some of the id is not unique
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'news.html')
+            items = soup.select('#Entries article')
+            for item in items:
+                date = item.select('.entry-date span')
+                if len(date) == 0:
+                    continue
+                page_name = item['id']
+                if page_name in processed:
+                    break
+                title = item.select('.entry-title span')
+                if len(title) == 0:
+                    continue
+                if ('ビジュアル' in title[0].text or 'イラスト' in title[0].text)\
+                        and 'キャラクタービジュアル' not in title[0].text:
+                    images = item.select('img[data-src*="/news/"]')
+                    self.image_list = []
+                    for image in images:
+                        image_url = self.PAGE_PREFIX + image['data-src'].replace('./', '').split('?')[0]
+                        image_name = self.generate_image_name_from_url(image_url, 'news')
+                        self.add_to_image_list(image_name, image_url)
+                    self.download_image_list(sub_folder)
+                temp_processed.add(page_name)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual News')
+        for page_name in temp_processed:
+            processed.append(page_name)
+        self.create_cache_file(cache_filepath, processed, num_processed)
+
     def download_character(self):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'assets/character/%sc.webp'
         self.download_by_template(folder, template, 1, 1, prefix='chara_')
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'bddvd.html')
+            images = soup.select('.sub-bddvd-container img[src*="/bddvd/"]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'].replace('./', '').split('?')[0]
+                image_name = self.generate_image_name_from_url(image_url, 'bddvd')
+                if 'np' == image_name:
+                    continue
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
+
+        sub_folder = self.create_custom_directory(folder.split('/')[-1] + '/blockgame')
+        template = self.PAGE_PREFIX + 'blockgame/img/%s.jpg'
+        self.image_list = []
+        for i in ['M', 'L']:
+            for j in ['a', 'b']:
+                for k in ['1', '2']:
+                    image_name = i + '_' + j + k
+                    self.add_to_image_list(image_name, template % image_name)
+        self.download_image_list(sub_folder)
 
 
 # Mato Seihei no Slave
