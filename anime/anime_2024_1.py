@@ -751,6 +751,7 @@ class MofunadeDownload(Winter2024AnimeDownload, NewsTemplate):
         self.image_list = []
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FrwZ2u4aQAMVhBo?format=jpg&name=4096x4096')
         self.add_to_image_list('tz', self.PAGE_PREFIX + 'dist/img/top/kv_img.webp')
+        self.add_to_image_list('kv', self.PAGE_PREFIX + 'dist/img/news/article/article7/img01.jpg')
         self.download_image_list(folder)
 
 
