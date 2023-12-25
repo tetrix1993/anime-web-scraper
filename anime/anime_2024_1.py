@@ -1481,6 +1481,20 @@ class Youzitsu3Download(Winter2024AnimeDownload, NewsTemplate):
     def download_media(self):
         folder = self.create_media_directory()
 
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'bddvd.html')
+            images = soup.select('img[src*="/bddvd/"]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'].split('?')[0].replace('./', '')
+                if 'np.png' in image_url:
+                    continue
+                image_name = self.generate_image_name_from_url(image_url, 'bddvd')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
+
         # Calendar project
         calendar_folder = folder + '/calendar'
         if not os.path.exists(calendar_folder):
