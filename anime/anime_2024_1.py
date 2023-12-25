@@ -1614,8 +1614,14 @@ class SokushiCheatDownload(Winter2024AnimeDownload, NewsTemplate):
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('vizyuaru', self.PAGE_PREFIX + 'wp/wp-content/uploads/2023/11/vizyuaru.jpg')
+        self.download_image_list(folder)
+
         template = self.PAGE_PREFIX + 'wp/wp-content/themes/sokushicheat_teaser/images/kv%s.jpg'
-        self.download_by_template(folder, template, 1, 1)
+        self.download_by_template(folder, template, 1, 1, prefix='teaser_')
+        template = self.PAGE_PREFIX + 'wp/wp-content/themes/sokushicheat_honban/images/kv%s.jpg'
+        self.download_by_template(folder, template, 1, 1, prefix='honban_')
 
     def download_character(self):
         folder = self.create_character_directory()
