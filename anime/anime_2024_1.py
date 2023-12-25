@@ -1339,7 +1339,7 @@ class SaijakuTamerDownload(Winter2024AnimeDownload, NewsTemplate):
 
     def download_character(self):
         folder = self.create_character_directory()
-        template = self.PAGE_PREFIX + 'dist/img/top/visual_chara_%s.webp'
+        template = self.PAGE_PREFIX + 'dist/img/top/chara/visual_chara_%s.webp'
         self.download_by_template(folder, template, 1, 1)
 
 
