@@ -3,6 +3,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 from datetime import datetime, timedelta
 
 # Akuyaku Reijou Level 99 https://akuyakulv99-anime.com/ #akuyakuLV99 @akuyakuLV99
+# Ao no Exorcist: Shimane Illuminati-hen https://ao-ex.com/ #青エク #aoex @aoex_anime
 # Chiyu Mahou no Machigatta Tsukaikata https://chiyumahou-anime.com/ #治癒魔法 @chiyumahou_PR
 # Dosanko Gal wa Namara Menkoi https://dosankogal-pr.com/ #道産子ギャル #どさこい @dosankogal_pr
 # Dungeon Meshi https://delicious-in-dungeon.com/ #ダンジョン飯 #deliciousindungeon @dun_meshi_anime
@@ -125,6 +126,58 @@ class AkuyakuLv99Download(Winter2024AnimeDownload, NewsTemplate2):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+
+# Ao no Exorcist: Shimane Illuminati-hen
+class Aoex3Download(Winter2024AnimeDownload, NewsTemplate):
+    title = 'Ao no Exorcist: Shimane Illuminati-hen'
+    keywords = ['aoex', 'Blue Exorcist: Shimane Illuminati Saga']
+    website = 'https://ao-ex.com/'
+    twitter = 'aoex_anime'
+    hashtags = ['青エク', 'aoex']
+    folder_name = 'aoex3'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.newsList',
+                                    date_select='.newsList__date', title_select='.newsList__title', id_select='a',
+                                    a_tag_prefix=self.PAGE_PREFIX + 'news/', paging_type=1,
+                                    next_page_select='.pagerList a', next_page_eval_index=-1,
+                                    next_page_eval_index_class='current')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.visualImage img[src*="/visual/"]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'].replace('./', '').split('?')[0]
+                if 'visual1_layer' in image_url:
+                    continue
+                image_name = self.generate_image_name_from_url(image_url, 'visual')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'assets/img/top/character/chara%s_main.png'
+        self.download_by_template(folder, template, 1, 1)
 
 
 # Chiyu Mahou no Machigatta Tsukaikata

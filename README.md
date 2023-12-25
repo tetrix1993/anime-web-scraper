@@ -106,6 +106,7 @@ The premiere date for the anime listed here has not been announced.
 
 ### Winter 2024 Anime
 * [Akuyaku Reijou Level 99](https://akuyakulv99-anime.com/)
+* [Ao no Exorcist: Shimane Illuminati-hen](https://ao-ex.com/)
 * [Chiyu Mahou no Machigatta Tsukaikata](https://chiyumahou-anime.com/)
 * [Dosanko Gal wa Namara Menkoi](https://dosankogal-pr.com/)
 * [Dungeon Meshi](https://delicious-in-dungeon.com/)
