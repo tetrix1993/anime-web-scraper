@@ -10,6 +10,7 @@ from datetime import datetime, timedelta
 # Gekai Elise https://surgeon-elise.com/ #外科医エリーゼ #surgeon_elise @surgeon_elise
 # Himesama "Goumon" no Jikan desu https://himesama-goumon.com/ #姫様拷問の時間です @himesama_goumon
 # Kekkon Yubiwa Monogatari https://talesofweddingrings-anime.jp/ #結婚指輪物語 @weddingringsPR
+# Ishura https://ishura-anime.com/ #異修羅 @ishura_anime
 # Jaku-Chara Tomozaki-kun 2nd Stage http://tomozaki-koushiki.com/ #友崎くん @tomozakikoshiki
 # Loop 7-kaime no Akuyaku Reijou wa, Moto Tekikoku de Jiyuu Kimama na Hanayome Seikatsu wo Mankitsu suru https://7th-timeloop.com/ #ルプなな @7th_timeloop
 # Mahou Shoujo ni Akogarete https://mahoako-anime.com/ #まほあこ #まほあこアニメ @mahoako_anime
@@ -131,7 +132,7 @@ class AkuyakuLv99Download(Winter2024AnimeDownload, NewsTemplate2):
 # Ao no Exorcist: Shimane Illuminati-hen
 class Aoex3Download(Winter2024AnimeDownload, NewsTemplate):
     title = 'Ao no Exorcist: Shimane Illuminati-hen'
-    keywords = ['aoex', 'Blue Exorcist: Shimane Illuminati Saga']
+    keywords = [title, 'aoex', 'Blue Exorcist: Shimane Illuminati Saga']
     website = 'https://ao-ex.com/'
     twitter = 'aoex_anime'
     hashtags = ['青エク', 'aoex']
@@ -753,6 +754,57 @@ class MofunadeDownload(Winter2024AnimeDownload, NewsTemplate):
         self.add_to_image_list('tz', self.PAGE_PREFIX + 'dist/img/top/kv_img.webp')
         self.add_to_image_list('kv', self.PAGE_PREFIX + 'dist/img/news/article/article7/img01.jpg')
         self.download_image_list(folder)
+
+
+# Ishura https://ishura-anime.com/ #異修羅 @ishura_anime
+class IshuraDownload(Winter2024AnimeDownload, NewsTemplate):
+    title = 'Ishura'
+    keywords = [title]
+    website = 'https://ishura-anime.com/'
+    twitter = 'ishura_anime'
+    hashtags = '異修羅'
+    folder_name = 'ishura'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='#Entries article',
+                                    title_select='.entry-title span', date_select='.entry-date span',
+                                    id_select=None, id_has_id=True, news_prefix='news.html')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.vis-grp .vis source[srcset],.vis-grp .mono source[srcset]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['srcset'].replace('./', '').split('?')[0]
+                image_name = self.extract_image_name_from_url(image_url)
+                if '-sp' in image_name:
+                    continue
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        prefix = self.PAGE_PREFIX + 'assets/character/c'
+        templates = [prefix + '%sr.webp', prefix + 'f%s.webp']
+        self.download_by_template(folder, templates, 1, 1)
 
 
 # Jaku-Chara Tomozaki-kun 2nd Stage
