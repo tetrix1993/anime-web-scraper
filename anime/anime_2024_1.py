@@ -1398,6 +1398,7 @@ class SaikyoTankDownload(Winter2024AnimeDownload, NewsTemplate):
         self.image_list = []
         self.add_to_image_list('tz_kv', self.PAGE_PREFIX + 'news/wp-content/uploads/2023/10/STM_01_ティザービジュアル_1@0.3x.png')
         self.add_to_image_list('fv_kv_1', self.PAGE_PREFIX + 'dist/img/top/fv/kv_1.webp')
+        self.add_to_image_list('fv_kv_1_v2', self.PAGE_PREFIX + 'dist/img/top/fv/kv_1_v2.webp')
         self.download_image_list(folder)
 
     def download_character(self):
