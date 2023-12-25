@@ -1168,6 +1168,7 @@ class SasapiDownload(Winter2024AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
@@ -1221,6 +1222,22 @@ class SasapiDownload(Winter2024AnimeDownload, NewsTemplate):
         self.download_by_template(folder, templates, 3, 1)
         templates = [prefix + 'd_%s_01.png', prefix + 'd_%s_02.png', prefix + 'd_%s_03.png']
         self.download_by_template(folder, templates, 2, 1)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'package.html')
+            images = soup.select('.right_wrap img[src*="/package/"]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'].split('?')[0]
+                image_name = self.generate_image_name_from_url(image_url, 'package')
+                if 'nowpri' in image_name:
+                    continue
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
 
 # Shin no Nakama ja Nai to Yuusha no Party wo Oidasareta node, Henkyou de Slow Life suru Koto ni Shimashita 2nd
