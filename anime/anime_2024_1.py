@@ -497,7 +497,30 @@ class KekkonYubiwaDownload(Winter2024AnimeDownload, NewsTemplate):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/episode1/')
+            eps = soup.select('.pagenav a[href*="/story/"]')
+            for ep in eps:
+                try:
+                    episode = str(int(ep.text)).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                if episode == '01':
+                    ep_soup = soup
+                else:
+                    ep_soup = self.get_soup(ep['href'])
+                if ep_soup is not None:
+                    images = ep_soup.select('.sto_inimg img[src]')
+                    self.image_list = []
+                    for i in range(len(images)):
+                        image_url = images[i]['src'].split('?')[0]
+                        image_name = episode + '_' + str(i + 1)
+                        self.add_to_image_list(image_name, image_url)
+                    self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, news_prefix='', article_select='.newsinlist li',
