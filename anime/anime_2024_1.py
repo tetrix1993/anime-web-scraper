@@ -180,6 +180,85 @@ class Aoex3Download(Winter2024AnimeDownload, NewsTemplate):
         self.download_by_template(folder, template, 1, 1)
 
 
+# Boku no Kokoro no Yabai Yatsu Season 2
+class Bokuyaba2Download(Winter2024AnimeDownload, NewsTemplate):
+    title = 'Boku no Kokoro no Yabai Yatsu Season 2'
+    keywords = [title, 'The Dangers in My Heart', 'Bokuyaba', '2nd']
+    website = 'https://bokuyaba-anime.com/'
+    twitter = 'bokuyaba_anime'
+    hashtags = ['僕ヤバ', '僕の心のヤバイやつ']
+    folder_name = 'bokuyaba2'
+
+    PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        story_url = self.PAGE_PREFIX + 'story/'
+        yt_folder, yt_episodes = self.init_youtube_thumbnail_variables()
+        try:
+            soup = self.get_soup(story_url)
+            stories = soup.select('a[href].p-story_card')
+            for story in stories:
+                if 'detail' not in story['href']:
+                    continue
+                title = story.select('.p-story_card__title')
+                if len(title) == 0:
+                    continue
+                try:
+                    episode = str(int(re.sub('\D', '', title[0].text.split('】')[0]))).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1') and episode in yt_episodes:
+                    continue
+                ep_soup = self.get_soup(story_url + story['href'])
+                if ep_soup is None:
+                    continue
+                self.image_list = []
+                images = ep_soup.select('.p-story_in__inner img[src]')
+                for i in range(len(images)):
+                    image_url = images[i]['src']
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+                yt_tags = ep_soup.select('iframe[src]')
+                for yt_tag in yt_tags:
+                    if 'youtube' in yt_tag['src']:
+                        yt_id = yt_tag['src'].split('/')[-1]
+                        self.download_youtube_thumbnail_by_id(yt_id, yt_folder, episode)
+        except Exception as e:
+            self.print_exception(e)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.p-news__list-item',
+                                    date_select='.p-news_data__date', title_select='.p-news_data__title',
+                                    id_select='a', a_tag_start_text_to_remove='/', a_tag_prefix=self.PAGE_PREFIX,
+                                    date_func=lambda x: x[0:4] + '.' + x[5:], stop_date='2023.06.16')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            self.image_list = []
+            images = soup.select('.p-hero_kv_visual__main img[src]')
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'].replace('./', '')
+                image_name = self.extract_image_name_from_url(image_url)
+                if image_name in ['kv01', 'kv02', 'kv03', 'kv04']:
+                    continue
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+
 # Chiyu Mahou no Machigatta Tsukaikata
 class ChiyuMahouDownload(Winter2024AnimeDownload, NewsTemplate):
     title = 'Chiyu Mahou no Machigatta Tsukaikata'
