@@ -1,4 +1,5 @@
 import os
+import re
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsTemplate4
 from datetime import datetime, timedelta
 
@@ -203,40 +204,7 @@ class Bokuyaba2Download(Winter2024AnimeDownload, NewsTemplate):
         self.download_key_visual()
 
     def download_episode_preview(self):
-        story_url = self.PAGE_PREFIX + 'story/'
-        yt_folder, yt_episodes = self.init_youtube_thumbnail_variables()
-        try:
-            soup = self.get_soup(story_url)
-            stories = soup.select('a[href].p-story_card')
-            for story in stories:
-                if 'detail' not in story['href']:
-                    continue
-                title = story.select('.p-story_card__title')
-                if len(title) == 0:
-                    continue
-                try:
-                    episode = str(int(re.sub('\D', '', title[0].text.split('】')[0]))).zfill(2)
-                except:
-                    continue
-                if self.is_image_exists(episode + '_1') and episode in yt_episodes:
-                    continue
-                ep_soup = self.get_soup(story_url + story['href'])
-                if ep_soup is None:
-                    continue
-                self.image_list = []
-                images = ep_soup.select('.p-story_in__inner img[src]')
-                for i in range(len(images)):
-                    image_url = images[i]['src']
-                    image_name = episode + '_' + str(i + 1)
-                    self.add_to_image_list(image_name, image_url)
-                self.download_image_list(self.base_folder)
-                yt_tags = ep_soup.select('iframe[src]')
-                for yt_tag in yt_tags:
-                    if 'youtube' in yt_tag['src']:
-                        yt_id = yt_tag['src'].split('/')[-1]
-                        self.download_youtube_thumbnail_by_id(yt_id, yt_folder, episode)
-        except Exception as e:
-            self.print_exception(e)
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.p-news__list-item',
@@ -271,6 +239,8 @@ class ChiyuMahouDownload(Winter2024AnimeDownload, NewsTemplate):
     folder_name = 'chiyumahou'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 6
 
     def __init__(self):
         super().__init__()
@@ -278,16 +248,78 @@ class ChiyuMahouDownload(Winter2024AnimeDownload, NewsTemplate):
     def run(self):
         self.download_episode_preview()
         self.download_news()
+        self.download_episode_preview_guess(print_invalid=False, download_valid=True)
         self.download_key_visual()
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index', diff=150)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            eps = soup.select('ul.story-TabList a[href]')
+            for ep in eps:
+                try:
+                    episode = str(int(ep.text.replace('#', ''))).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                if ep.has_attr('class') and 'is-current' in ep['class']:
+                    ep_soup = soup
+                else:
+                    ep_soup = self.get_soup(self.PAGE_PREFIX + ep['href'][1:])
+                if ep_soup is None:
+                    continue
+                images = ep_soup.select('#gallery-main img[src]')
+                self.image_list = []
+                for i in range(len(images)):
+                    image_url = images[i]['src'].split('?')[0]
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.newsArchive-Item',
                                     date_select='.date', title_select='.title', id_select='a',
                                     next_page_select='.nextpostslink')
+
+    def download_episode_preview_guess(self, print_invalid=False, download_valid=False):
+        if self.is_image_exists(str(self.FINAL_EPISODE).zfill(2) + '_' + str(self.IMAGES_PER_EPISODE)):
+            return
+
+        folder = self.create_custom_directory('guess')
+        template = self.PAGE_PREFIX + 'wp-content/uploads/%s/%s/%s'
+        current_date = datetime.now() + timedelta(hours=1)
+        year = current_date.strftime('%Y')
+        month = current_date.strftime('%m')
+        image_folder = folder + '/' + year + '/' + month
+        is_successful = False
+        valid_urls = []
+
+        for i in range(self.FINAL_EPISODE):
+            ep_num = i + 1
+            episode = str(ep_num).zfill(2)
+            if not self.is_image_exists(episode + '_1'):
+                image_name = 'img_story_ep%s-%s' % (str(ep_num), '1')
+                image_url = template % (year, month, image_name + '.jpg')
+                if self.is_valid_url(image_url, is_image=True):
+                    print('VALID - ' + image_url)
+                    is_successful = True
+                    valid_urls.append({'name': image_name, 'url': image_url, 'folder': image_folder})
+                elif print_invalid:
+                    print('INVALID - ' + image_url)
+                    break
+        if download_valid and len(valid_urls) > 0:
+            for valid_url in valid_urls:
+                image_name = valid_url['name']
+                image_folder = valid_url['folder']
+                if not os.path.exists(image_folder):
+                    os.makedirs(image_folder)
+                self.download_image(valid_url['url'], image_folder + '/' + image_name)
+        if is_successful:
+            print(self.__class__.__name__ + ' - Guessed correctly!')
+        return is_successful
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
@@ -1760,7 +1792,7 @@ class Youzitsu3Download(Winter2024AnimeDownload, NewsTemplate):
     folder_name = 'youzitsu3'
 
     PAGE_PREFIX = website
-    FINAL_EPISODE = 12
+    FINAL_EPISODE = 13
     IMAGES_PER_EPISODE = 6
 
     def __init__(self):
