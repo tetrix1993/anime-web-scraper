@@ -1251,7 +1251,7 @@ class ShinnoNakamaDownload(Fall2021AnimeDownload, NewsTemplate):
     folder_name = 'shinnonakama'
 
     PAGE_PREFIX = website
-    FINAL_EPISODE = 12
+    FINAL_EPISODE = 13
     IMAGES_PER_EPISODE = 6
 
     def run(self):
@@ -1265,24 +1265,22 @@ class ShinnoNakamaDownload(Fall2021AnimeDownload, NewsTemplate):
 
     def download_episode_preview(self):
         try:
-            soup = self.get_soup(self.PAGE_PREFIX + '/story/')
-            a_tags = soup.select('li.story_tabList a')
-            for index in range(len(a_tags)):
+            soup = self.get_soup(self.PAGE_PREFIX + '/story/1st.html')
+            sections = soup.select('section[data-ep]')
+            for section in sections:
                 try:
-                    episode = str(int(a_tags[index].text.replace('第', '').replace('話', '').strip())).zfill(2)
+                    episode = str(int(section['data-ep'])).zfill(2)
                 except:
                     continue
                 if self.is_image_exists(episode + '_1'):
                     continue
-                if a_tags[index].has_attr('data-tab'):
-                    images = soup.select(f'li.story_tabDetail.{a_tags[index]["data-tab"]} img')
-                    self.image_list = []
-                    for i in range(len(images)):
-                        if images[i].has_attr('src'):
-                            image_url = self.PAGE_PREFIX + images[i]['src'].replace('../', '')
-                            image_name = f'{episode}_{i + 1}'
-                            self.add_to_image_list(image_name, image_url)
-                    self.download_image_list(self.base_folder)
+                images = soup.select('.storyImageList img[src]')
+                self.image_list = []
+                for i in range(len(images)):
+                    image_url = self.PAGE_PREFIX + images[i]['src'].replace('../', '')
+                    image_name = f'{episode}_{i + 1}'
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
         except Exception as e:
             self.print_exception(e)
 
