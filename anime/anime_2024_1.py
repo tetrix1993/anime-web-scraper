@@ -2,6 +2,7 @@ import os
 import re
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsTemplate4
 from datetime import datetime, timedelta
+from scan import AniverseMagazineScanner
 
 # Akuyaku Reijou Level 99 https://akuyakulv99-anime.com/ #akuyakuLV99 @akuyakuLV99
 # Ao no Exorcist: Shimane Illuminati-hen https://ao-ex.com/ #青エク #aoex @aoex_anime
@@ -1686,18 +1687,25 @@ class SokushiCheatDownload(Winter2024AnimeDownload, NewsTemplate):
     folder_name = 'sokushicheat'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
 
     def __init__(self):
         super().__init__()
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_external()
         self.download_news()
         self.download_key_visual()
         self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_episode_preview_external(self):
+        keywords = ['即死チートが最強すぎて']
+        AniverseMagazineScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                end_date='20231228', download_id=self.download_id).run()
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-item',
