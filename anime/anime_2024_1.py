@@ -17,6 +17,7 @@ from scan import AniverseMagazineScanner
 # Loop 7-kaime no Akuyaku Reijou wa, Moto Tekikoku de Jiyuu Kimama na Hanayome Seikatsu wo Mankitsu suru https://7th-timeloop.com/ #ルプなな @7th_timeloop
 # Mahou Shoujo ni Akogarete https://mahoako-anime.com/ #まほあこ #まほあこアニメ @mahoako_anime
 # Mato Seihei no Slave https://mabotai.jp/ #魔都精兵のスレイブ #まとスレ @mabotai_kohobu
+# Metallic Rogue https://metallicrouge.jp/ #メタリックルージュ @MetallicRouge
 # Nozomanu Fushi no Boukensha https://nozomanufushi-anime.jp/ #望まぬ不死 #TUUA @nozomanufushiPR
 # Ore dake Level Up na Ken https://sololeveling-anime.net/ #俺レベ #SoloLeveling @sololeveling_pr
 # Oroka na Tenshi wa Akuma to Odoru https://kanaten-anime.com/ #かな天 #kanaten @kanaten_PR
@@ -814,7 +815,7 @@ class MofunadeDownload(Winter2024AnimeDownload, NewsTemplate):
         self.download_image_list(folder)
 
 
-# Ishura https://ishura-anime.com/ #異修羅 @ishura_anime
+# Ishura
 class IshuraDownload(Winter2024AnimeDownload, NewsTemplate):
     title = 'Ishura'
     keywords = [title]
@@ -1162,6 +1163,84 @@ class MatoSlaveDownload(Winter2024AnimeDownload, NewsTemplate):
         except Exception as e:
             self.print_exception(e, 'Character')
         self.download_image_list(folder)
+
+
+# Metallic Rouge
+class MetallicRougeDownload(Winter2024AnimeDownload, NewsTemplate):
+    title = 'Metallic Rouge'
+    keywords = [title]
+    twitter = 'MetallicRouge'
+    website = 'https://metallicrouge.jp/'
+    hashtags = ['メタリックルージュ']
+    folder_name = 'metallicrouge'
+
+    PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 8
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        soup = self.download_key_visual()
+        self.download_character(soup)
+
+    def download_episode_preview(self):
+        try:
+            template = self.PAGE_PREFIX + 'assets/img/episodes/%s/episodes%s.jpg'
+            stop = False
+            for i in range(self.FINAL_EPISODE):
+                episode = str(i + 1).zfill(2)
+                if self.is_image_exists(episode + '_' + str(self.IMAGES_PER_EPISODE)):
+                    continue
+                for j in range(self.IMAGES_PER_EPISODE):
+                    image_name = episode + '_' + str(j + 1)
+                    image_url = template % (episode, str(j + 1))
+                    if self.download_image(image_url, self.base_folder + '/' + image_name) == -1:
+                        stop = True
+                        break
+                if stop:
+                    break
+        except Exception as e:
+            self.print_exception(e)
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news__lists-item',
+                                    date_select='time', title_select='p', id_select='a', a_tag_prefix=news_url)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        soup = None
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.mv__visual img[src*="/img/"]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'].replace('./', '')
+                image_name = self.generate_image_name_from_url(image_url, 'img')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+        return soup
+
+    def download_character(self, soup=None):
+        folder = self.create_character_directory()
+        try:
+            if soup is None:
+                soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.character__img img[src*="/character/"]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'].replace('./', '')
+                image_name = self.generate_image_name_from_url(image_url, 'character')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
 
 
 # Nozomanu Fushi no Boukensha #望まぬ不死 #TUUA @nozomanufushiPR
