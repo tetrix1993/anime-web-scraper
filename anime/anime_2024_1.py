@@ -154,7 +154,38 @@ class Aoex3Download(Winter2024AnimeDownload, NewsTemplate):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            story_prefix = self.PAGE_PREFIX + 'story/'
+            soup = self.get_soup(story_prefix)
+            stories = soup.select('.storyNavList')
+            for story in stories:
+                try:
+                    episode = str(int(story.select('.storyNavList__linktxt')[0].text)).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_5'):
+                    continue
+                if '--is-current' in story['class']:
+                    ep_soup = soup
+                else:
+                    a_tag = story.select('a[href]')
+                    if len(a_tag) == 0:
+                        continue
+                    story_url = a_tag[0]['href']
+                    if story_url.startswith('./'):
+                        story_url = story_prefix + story_url[2:]
+                    ep_soup = self.get_soup(story_url)
+                if ep_soup is None:
+                    continue
+                self.image_list = []
+                images = ep_soup.select('.storyImageList img[src]')
+                for i in range(len(images)):
+                    image_name = episode + '_' + str(i + 1)
+                    image_url = story_prefix + images[i]['src']
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.newsList',
