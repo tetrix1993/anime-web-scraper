@@ -1149,7 +1149,7 @@ class MahoakoDownload(Winter2024AnimeDownload, NewsTemplate):
     folder_name = 'mahoako'
 
     PAGE_PREFIX = website
-    FINAL_EPISODE = 12
+    FINAL_EPISODE = 13
     IMAGES_PER_EPISODE = 6
 
     def __init__(self):
@@ -2392,12 +2392,14 @@ class YubisakitoRenrenDownload(Winter2024AnimeDownload, NewsTemplate):
     folder_name = 'yubisakitorenren'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
 
     def __init__(self):
         super().__init__()
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_external()
         self.download_news()
         self.download_key_visual()
         self.download_character()
@@ -2408,6 +2410,11 @@ class YubisakitoRenrenDownload(Winter2024AnimeDownload, NewsTemplate):
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-item',
                                     date_select='.date', title_select='.title', id_select='a')
+
+    def download_episode_preview_external(self):
+        keywords = ['ゆびさきと恋々']
+        AniverseMagazineScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                end_date='20240104', download_id=self.download_id, prefix='Sign.', suffix='').run()
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
