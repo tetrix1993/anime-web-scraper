@@ -1720,21 +1720,84 @@ class PonnoMichiDownload(Winter2024AnimeDownload, NewsTemplate4):
     folder_name = 'ponnomichi'
 
     PAGE_PREFIX = website
+    IMAGES_PER_EPISODE = 6
+    FINAL_EPISODE = 12
 
     def __init__(self):
         super().__init__()
 
     def run(self):
-        self.download_episode_preview()
-        self.download_news()
+        init_json = self.download_episode_preview()
+        self.download_news(init_json)
         self.download_key_visual()
+        self.download_episode_preview_guess(print_invalid=False, download_valid=True)
         self.download_character()
 
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+    def download_episode_preview(self, print_http_error=False):
+        try:
+            init_json = self.get_json(self.PAGE_PREFIX + 'wp-json/site-data/init')
+            for story in init_json['story']:
+                episode = story['episode']
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                self.image_list = []
+                for i in range(len(story['images'])):
+                    image = story['images'][i]
+                    image_url = image['image_path']
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+            return init_json
+        except HTTPError:
+            if print_http_error:
+                print(self.__class__.__name__ + ' - 403 Error when retrieving story API.')
+        except Exception as e:
+            self.print_exception(e)
+        return None
 
-    def download_news(self):
-        self.download_template_news('ponnomichi')
+    def download_news(self, json_obj=None):
+        self.download_template_news('site-data', json_obj=json_obj)
+
+    def download_episode_preview_guess(self, print_invalid=False, download_valid=False):
+        if self.is_image_exists(str(self.FINAL_EPISODE).zfill(2) + '_' + str(self.IMAGES_PER_EPISODE)):
+            return
+
+        folder = self.create_custom_directory('guess')
+        template = self.PAGE_PREFIX + '2ndwp/wp-content/uploads/%s/%s/%s.jpg'
+        current_date = datetime.now() + timedelta(hours=1)
+        year = current_date.strftime('%Y')
+        month = current_date.strftime('%m')
+        is_successful = False
+        valid_urls = []
+        for j in range(self.IMAGES_PER_EPISODE):
+            k = 0
+            while k < 20:
+                if k == 0:
+                    append = ''
+                else:
+                    append = '-' + str(k)
+                image_folder = folder + '/' + year + '/' + month
+                image_name = str(j + 1).zfill(2) + append
+                if not self.is_image_exists(image_name, image_folder):
+                    image_url = template % (year, month, str(j + 1).zfill(2) + append)
+                    if self.is_valid_url(image_url, is_image=True):
+                        print('VALID - ' + image_url)
+                        is_successful = True
+                        valid_urls.append({'name': image_name, 'url': image_url, 'folder': image_folder})
+                    elif print_invalid:
+                        print('INVALID - ' + image_url)
+                        break
+                k += 1
+        if download_valid and len(valid_urls) > 0:
+            for valid_url in valid_urls:
+                image_name = valid_url['name']
+                image_folder = valid_url['folder']
+                if not os.path.exists(image_folder):
+                    os.makedirs(image_folder)
+                self.download_image(valid_url['url'], image_folder + '/' + image_name)
+        if is_successful:
+            print(self.__class__.__name__ + ' - Guessed correctly!')
+        return is_successful
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
