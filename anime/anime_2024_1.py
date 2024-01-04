@@ -228,12 +228,14 @@ class Bokuyaba2Download(Winter2024AnimeDownload, NewsTemplate):
 
     PAGE_PREFIX = website
     FIRST_EPISODE = 13
+    FINAL_EPISODE = 24
 
     def __init__(self):
         super().__init__()
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_external()
         self.download_news()
         self.download_key_visual()
 
@@ -275,6 +277,11 @@ class Bokuyaba2Download(Winter2024AnimeDownload, NewsTemplate):
                         self.download_youtube_thumbnail_by_id(yt_id, yt_folder, episode)
         except Exception as e:
             self.print_exception(e)
+
+    def download_episode_preview_external(self):
+        keywords = ['僕の心のヤバイやつ']
+        AniverseMagazineScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                end_date='20240104', download_id=self.download_id).run()
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.p-news__list-item',
