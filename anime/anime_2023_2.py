@@ -210,7 +210,7 @@ class BokuyabaDownload(Spring2023AnimeDownload, NewsTemplate):
 
     def run(self):
         self.download_episode_preview()
-        self.download_episode_preview_external()
+        # self.download_episode_preview_external()
         self.download_news()
         self.download_key_visual()
         self.download_character()
@@ -229,8 +229,11 @@ class BokuyabaDownload(Spring2023AnimeDownload, NewsTemplate):
                 if len(title) == 0:
                     continue
                 try:
-                    episode = str(int(re.sub('\D', '', title[0].text.split('】')[0]))).zfill(2)
+                    ep_num = int(re.sub('\D', '', title[0].text.split('】')[0]))
+                    episode = str(ep_num).zfill(2)
                 except:
+                    continue
+                if ep_num > self.FINAL_EPISODE:
                     continue
                 if self.is_image_exists(episode + '_1') and episode in yt_episodes:
                     continue
