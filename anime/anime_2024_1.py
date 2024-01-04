@@ -15,6 +15,7 @@ from requests.exceptions import HTTPError
 # Kekkon Yubiwa Monogatari https://talesofweddingrings-anime.jp/ #結婚指輪物語 @weddingringsPR
 # Ishura https://ishura-anime.com/ #異修羅 @ishura_anime
 # Jaku-Chara Tomozaki-kun 2nd Stage http://tomozaki-koushiki.com/ #友崎くん @tomozakikoshiki
+# Kingdom 5th Season https://kingdom-anime.com/story/ #キングダム @kingdom_animePR
 # Loop 7-kaime no Akuyaku Reijou wa, Moto Tekikoku de Jiyuu Kimama na Hanayome Seikatsu wo Mankitsu suru https://7th-timeloop.com/ #ルプなな @7th_timeloop
 # Mahou Shoujo ni Akogarete https://mahoako-anime.com/ #まほあこ #まほあこアニメ @mahoako_anime
 # Mato Seihei no Slave https://mabotai.jp/ #魔都精兵のスレイブ #まとスレ @mabotai_kohobu
@@ -1031,6 +1032,61 @@ class TomozakiKun2Download(Winter2024AnimeDownload, NewsTemplate):
         folder = self.create_key_visual_directory()
         template = self.PAGE_PREFIX + 'img/index/vis_img%s.jpg'
         self.download_by_template(folder, template, 1, 1)
+
+
+# Kingdom 5th Season
+class Kingdom5Download(Winter2024AnimeDownload):
+    title = "Kingdom 5th Season"
+    keywords = [title]
+    website = 'https://kingdom-anime.com/'
+    twitter = 'kingdom_animePR'
+    hashtags = 'キングダム'
+    folder_name = 'kingdom5'
+
+    STORY_PAGE = "https://kingdom-anime.com/story/"
+    FINAL_EPISODE = 26
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_episode_preview_external()
+
+    def download_episode_preview(self):
+        try:
+            soup = self.get_soup(self.STORY_PAGE)
+            ep_list = soup.find('ul', id='ep_list').find_all('li')
+            for ep in ep_list:
+                try:
+                    episode = self.get_episode_number(ep.find('span', class_='hd').text)
+                    if episode is None:
+                        continue
+                    if self.is_file_exists(self.base_folder + "/" + episode + "_0.jpg") or self.is_file_exists(
+                            self.base_folder + "/" + episode + "_0.png"):
+                        continue
+                    a_tag = ep.find('a')
+                    try:
+                        thumb_image_url = a_tag.find('div', class_='ep_thumb')['style'].split('(')[1].split(')')[0]
+                        self.download_image(thumb_image_url, self.base_folder + '/' + episode + '_0')
+                    except:
+                        continue
+                    ep_url = self.STORY_PAGE + a_tag['href']
+                    ep_soup = self.get_soup(ep_url)
+                    images = ep_soup.find('div', id='episodeCont').find_all('img')
+                    for j in range(len(images)):
+                        image_url = images[j]['src']
+                        file_path_without_extension = self.base_folder + '/' + episode + '_' + str(j + 1)
+                        self.download_image(image_url, file_path_without_extension)
+                except:
+                    continue
+        except Exception as e:
+            self.print_exception(e)
+
+    def download_episode_preview_external(self):
+        jp_title = 'キングダム'
+        AniverseMagazineScanner(jp_title, self.base_folder, last_episode=self.FINAL_EPISODE, prefix='',
+                                end_date='20240104', download_id=self.download_id).run()
 
 
 # Loop 7-kaime no Akuyaku Reijou wa, Moto Tekikoku de Jiyuu Kimama na Hanayome Seikatsu wo Mankitsu suru

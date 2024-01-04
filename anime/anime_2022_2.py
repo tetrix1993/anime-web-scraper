@@ -931,7 +931,7 @@ class Kingdom4Download(Spring2022AnimeDownload):
     hashtags = 'キングダム'
     folder_name = 'kingdom4'
 
-    STORY_PAGE = "https://kingdom-anime.com/story/"
+    STORY_PAGE = "https://kingdom-anime.com/story/?season=4"
     FINAL_EPISODE = 26
 
     def __init__(self):
