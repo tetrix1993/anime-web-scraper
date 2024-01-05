@@ -329,6 +329,7 @@ class ChiyuMahouDownload(Winter2024AnimeDownload, NewsTemplate):
         self.download_episode_preview_guess(print_invalid=False, download_valid=True)
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -450,6 +451,22 @@ class ChiyuMahouDownload(Winter2024AnimeDownload, NewsTemplate):
         except Exception as e:
             self.print_exception(e, 'Character')
         self.create_cache_file(cache_filepath, processed, num_processed)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'product/')
+            images = soup.select('.products-Index img[src*="/products/"]')
+            self.image_list = []
+            for image in images:
+                image_url = image['src'].split('?')[0]
+                image_name = self.generate_image_name_from_url(image_url, 'products')
+                if 'nowprinting' in image_name:
+                    continue
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
 
 # Dosanko Gal wa Namara Menkoi
