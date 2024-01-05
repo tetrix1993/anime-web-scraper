@@ -1872,6 +1872,7 @@ class PonnoMichiDownload(Winter2024AnimeDownload, NewsTemplate4):
         self.download_key_visual()
         self.download_episode_preview_guess(print_invalid=False, download_valid=True)
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self, print_http_error=False):
         try:
@@ -1978,6 +1979,23 @@ class PonnoMichiDownload(Winter2024AnimeDownload, NewsTemplate4):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            for i in ['store', '']:
+                soup = self.get_soup(self.PAGE_PREFIX + 'bd/' + i)
+                images = soup.select('main img[src*="/bd/"]')
+                self.image_list = []
+                for image in images:
+                    if image['src'].endswith('.svg'):
+                        continue
+                    image_url = self.PAGE_PREFIX + image['src'][1:].split('?')[0]
+                    image_name = self.generate_image_name_from_url(image_url, 'bd')
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
 
 # Saijaku Tamer wa Gomi Hiroi no Tabi wo Hajimemashita.
