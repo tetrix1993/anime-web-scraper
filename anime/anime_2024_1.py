@@ -2205,6 +2205,7 @@ class ShinnoNakama2Download(Winter2024AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -2284,6 +2285,22 @@ class ShinnoNakama2Download(Winter2024AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'assets/img/top/character/chara2nd_%s.png'
         self.download_by_template(folder, template, 1, 1)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        # Blu-ray
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'bddvd/')
+            images = soup.select('#season2 img[src*="/bddvd/"]')
+            self.image_list = []
+            for image in images:
+                if not image['src'].endswith('/now.jpg'):
+                    image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                    image_name = self.generate_image_name_from_url(image_url, 'bddvd')
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
 
 # Sokushi Cheat ga Saikyou sugite, Isekai no Yatsura ga Marude Aite ni Naranai n desu ga.

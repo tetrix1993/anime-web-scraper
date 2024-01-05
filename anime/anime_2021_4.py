@@ -1333,10 +1333,10 @@ class ShinnoNakamaDownload(Fall2021AnimeDownload, NewsTemplate):
         # Blu-ray
         try:
             soup = self.get_soup(self.PAGE_PREFIX + 'bddvd/')
-            images = soup.select('.inPageContent img')
+            images = soup.select('#season1 img[src]')
             self.image_list = []
             for image in images:
-                if image.has_attr('src') and not image['src'].endswith('/now.jpg'):
+                if not image['src'].endswith('/now.jpg'):
                     image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
                     image_name = self.extract_image_name_from_url(image_url)
                     self.add_to_image_list(image_name, image_url)
