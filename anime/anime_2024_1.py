@@ -379,7 +379,8 @@ class ChiyuMahouDownload(Winter2024AnimeDownload, NewsTemplate):
         for i in range(self.FINAL_EPISODE):
             ep_num = i + 1
             episode = str(ep_num).zfill(2)
-            if self.is_image_exists(episode + '_1'):
+            if self.is_image_exists(episode + '_1')\
+                    or self.is_image_exists('img_story_ep' + str(ep_num) + '-1', image_folder):
                 continue
             is_success = False
             for j in range(self.IMAGES_PER_EPISODE):
