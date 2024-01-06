@@ -379,16 +379,22 @@ class ChiyuMahouDownload(Winter2024AnimeDownload, NewsTemplate):
         for i in range(self.FINAL_EPISODE):
             ep_num = i + 1
             episode = str(ep_num).zfill(2)
-            if not self.is_image_exists(episode + '_1'):
-                image_name = 'img_story_ep%s-%s' % (str(ep_num), '1')
+            if self.is_image_exists(episode + '_1'):
+                continue
+            is_success = False
+            for j in range(self.IMAGES_PER_EPISODE):
+                image_name = 'img_story_ep%s-%s' % (str(ep_num), str(j + 1))
                 image_url = template % (year, month, image_name + '.jpg')
                 if self.is_valid_url(image_url, is_image=True):
                     print('VALID - ' + image_url)
                     is_successful = True
+                    is_success = True
                     valid_urls.append({'name': image_name, 'url': image_url, 'folder': image_folder})
                 elif print_invalid:
                     print('INVALID - ' + image_url)
                     break
+            if not is_success:
+                break
         if download_valid and len(valid_urls) > 0:
             for valid_url in valid_urls:
                 image_name = valid_url['name']
