@@ -27,6 +27,7 @@ from requests.exceptions import HTTPError
 # Saijaku Tamer wa Gomi Hiroi no Tabi wo Hajimemashita. https://saijakutamer-anime.com/ #最弱テイマー @saijakutamer
 # Saikyou Tank no Meikyuu Kouryaku https://saikyo-tank.com/ #最強タンク @saikyo_tank
 # Sasaki to Pii-chan https://sasapi-anime.com/ #ささピー @sasaki_pichan
+# Sengoku Youko https://sengoku-youko.com/ #戦国妖狐 @sengoku_youko
 # Shin no Nakama ja Nai to Yuusha no Party wo Oidasareta node, Henkyou de Slow Life suru Koto ni Shimashita 2nd https://shinnonakama.com/ #真の仲間 @shinnonakama_tv
 # Sokushi Cheat ga Saikyou sugite, Isekai no Yatsura ga Marude Aite ni Naranai n desu ga. https://sokushicheat-pr.com/ #即死チート @sokushicheat_pr
 # Tsuki ga Michibiku Isekai Douchuu 2nd Season https://tsukimichi.com/ #ツキミチ @tsukimichi_PR
@@ -2496,6 +2497,52 @@ class SasapiDownload(Winter2024AnimeDownload, NewsTemplate):
             self.print_exception(e, 'Blu-ray')
 
 
+# Sengoku Youko
+class SengokuYoukoDownload(Winter2024AnimeDownload, NewsTemplate):
+    title = 'Sengoku Youko'
+    keywords = [title]
+    website = 'https://sengoku-youko.com/'
+    twitter = 'sengoku_youko'
+    hashtags = '戦国妖狐'
+    folder_name = 'sengokuyouko'
+
+    PAGE_PREFIX = website
+    FINAL_EPISODE = 37
+    IMAGES_PER_EPISODE = 4
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        try:
+            template = self.PAGE_PREFIX + 'dist/img/story/ep%s/img%s.webp'
+            stop = False
+            for i in range(self.FINAL_EPISODE):
+                episode = str(i + 1).zfill(2)
+                if self.is_image_exists(episode + '_' + str(self.IMAGES_PER_EPISODE)):
+                    continue
+                for j in range(self.IMAGES_PER_EPISODE):
+                    image_name = episode + '_' + str(j + 1)
+                    image_url = template % (str(i + 1), str(j + 1).zfill(2))
+                    if self.download_image(image_url, self.base_folder + '/' + image_name, to_jpg=True) == -1:
+                        stop = True
+                        break
+                if stop:
+                    break
+        except Exception as e:
+            self.print_exception(e)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.bl_horizPosts_item',
+                                    date_select='.bl_horizPosts_date', title_select='.bl_horizPosts_txt',
+                                    id_select='a', paging_type=3, paging_suffix='?page=%s',
+                                    next_page_select='.l_pager_next[href*="page"]')
+
+
 # Shin no Nakama ja Nai to Yuusha no Party wo Oidasareta node, Henkyou de Slow Life suru Koto ni Shimashita 2nd
 class ShinnoNakama2Download(Winter2024AnimeDownload, NewsTemplate):
     title = 'Shin no Nakama ja Nai to Yuusha no Party wo Oidasareta node, Henkyou de Slow Life suru Koto ni Shimashita 2nd'
@@ -2508,6 +2555,9 @@ class ShinnoNakama2Download(Winter2024AnimeDownload, NewsTemplate):
     PAGE_PREFIX = website
     FINAL_EPISODE = 12
     IMAGES_PER_EPISODE = 6
+
+    def __init__(self):
+        super().__init__()
 
     def run(self):
         self.download_episode_preview()
