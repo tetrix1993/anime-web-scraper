@@ -18,6 +18,7 @@ from requests.exceptions import HTTPError
 # Kingdom 5th Season https://kingdom-anime.com/story/ #キングダム @kingdom_animePR
 # Loop 7-kaime no Akuyaku Reijou wa, Moto Tekikoku de Jiyuu Kimama na Hanayome Seikatsu wo Mankitsu suru https://7th-timeloop.com/ #ルプなな @7th_timeloop
 # Mahou Shoujo ni Akogarete https://mahoako-anime.com/ #まほあこ #まほあこアニメ @mahoako_anime
+# Majo to Yajuu https://www.tbs.co.jp/anime/majo/ #魔女と野獣 @majo_yajuu
 # Mato Seihei no Slave https://mabotai.jp/ #魔都精兵のスレイブ #まとスレ @mabotai_kohobu
 # Metallic Rogue https://metallicrouge.jp/ #メタリックルージュ @MetallicRouge
 # Nozomanu Fushi no Boukensha https://nozomanufushi-anime.jp/ #望まぬ不死 #TUUA @nozomanufushiPR
@@ -1630,6 +1631,41 @@ class Mashle2Download(Winter2024AnimeDownload, NewsTemplate):
             except Exception as e:
                 self.print_exception(e, f'Blu-ray - {page}')
         self.create_cache_file(cache_filepath, processed, num_processed)
+
+
+# Majo to Yajuu
+class MajotoYajuuDownload(Winter2024AnimeDownload, NewsTemplate):
+    title = 'Majo to Yajuu'
+    keywords = [title, 'The Witch and the Beast']
+    website = 'https://www.tbs.co.jp/anime/majo/'
+    twitter = 'majo_yajuu'
+    hashtags = ['魔女と野獣']
+    folder_name = 'majotoyajuu'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.newsall-block',
+                                    date_select='.newsall-date', title_select='.newsall-title',
+                                    id_select='a', a_tag_prefix=news_url)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('visual_key@2x', self.PAGE_PREFIX + 'img/visual_key@2x.jpg')
+        self.download_image_list(folder)
 
 
 # Mato Seihei no Slave
