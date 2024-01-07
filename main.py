@@ -13,7 +13,7 @@ def run():
     for subclass in Winter2024AnimeDownload.__subclasses__():
         if subclass.enabled:
             downloads.append(subclass())
-    downloads += [KusuriyaDownload, FrierenDownload(), RagnaCrimsonDownload(), UndeadUnluckDownload(),
+    downloads += [KusuriyaDownload(), FrierenDownload(), RagnaCrimsonDownload(), UndeadUnluckDownload(),
                   ShangriLaFrontierDownload(), ButaLiverDownload(), SixteenBitSensationDownload(), BokuameDownload(),
                   GoblinSlayer2Download(), HikikomariDownload(), KagenoJitsuryokusha2Download(), KimizeroDownload(),
                   KikanshaDownload(), HyakkanoDownload(), SeijonoMaryoku2Download(), ShyDownload(),
