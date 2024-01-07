@@ -1306,6 +1306,7 @@ class Loop7KaimeDownload(Winter2024AnimeDownload, NewsTemplate):
         self.download_episode_preview_guess(print_invalid=False, download_valid=True)
         self.download_key_visual(soup)
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         soup = None
@@ -1403,6 +1404,22 @@ class Loop7KaimeDownload(Winter2024AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'wordpress/wp-content/themes/7th-timeloop/assets/img/character/c%s_main.png'
         self.download_by_template(folder, template, 1, 1)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'bdbox/')
+            self.image_list = []
+            images = soup.select('#music img[src]')
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'][1:]
+                if 'nowpri' in image_url:
+                    continue
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
 
 # Mahou Shoujo ni Akogarete
