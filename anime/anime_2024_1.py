@@ -1306,6 +1306,7 @@ class Loop7KaimeDownload(Winter2024AnimeDownload, NewsTemplate):
         self.download_character()
 
     def download_episode_preview(self):
+        soup = None
         try:
             soup = self.get_soup(self.PAGE_PREFIX)
             nums = soup.select('.story_epnumList a[href]')
@@ -1326,10 +1327,9 @@ class Loop7KaimeDownload(Winter2024AnimeDownload, NewsTemplate):
                     image_name = episode + '_' + str(i + 1)
                     self.add_to_image_list(image_name, image_url)
                 self.download_image_list(self.base_folder)
-            return soup
         except Exception as e:
             self.print_exception(e)
-        return None
+        return soup
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.ef',
@@ -1383,7 +1383,8 @@ class Loop7KaimeDownload(Winter2024AnimeDownload, NewsTemplate):
     def download_key_visual(self, soup=None):
         folder = self.create_key_visual_directory()
         try:
-            soup = self.get_soup(self.PAGE_PREFIX)
+            if soup is None:
+                soup = self.get_soup(self.PAGE_PREFIX)
             images = soup.select('.kv__imgList img[src]')
             self.image_list = []
             for image in images:
@@ -2315,7 +2316,8 @@ class SaikyoTankDownload(Winter2024AnimeDownload, NewsTemplate):
         self.download_episode_preview()
         self.download_news()
         self.download_key_visual()
-        self.download_character()
+        soup = self.download_character()
+        self.download_media(soup)
 
     def download_episode_preview(self):
         try:
@@ -2355,19 +2357,34 @@ class SaikyoTankDownload(Winter2024AnimeDownload, NewsTemplate):
 
     def download_character(self):
         folder = self.create_character_directory()
+        soup = None
         try:
             soup = self.get_soup(self.PAGE_PREFIX)
-            images = soup.select('.p-Chara__charMain source[type][srcset]')
+            images = soup.select('.p-Chara__charMain source[type][srcset*="/chara/"]')
             self.image_list = []
             for image in images:
                 image_url = self.PAGE_PREFIX + image['srcset']
-                if '/chara/' not in image_url:
-                    continue
                 image_name = self.generate_image_name_from_url(image_url, 'chara')
                 self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+        return soup
+
+    def download_media(self, soup=None):
+        folder = self.create_media_directory()
+        try:
+            if soup is None:
+                soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.p-Bd__main img[src*="/bd/"]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src']
+                image_name = self.generate_image_name_from_url(image_url, 'bd')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
 
 # Sasaki to Pii-chan
