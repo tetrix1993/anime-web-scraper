@@ -333,7 +333,6 @@ class Bokuyaba2Download(Winter2024AnimeDownload, NewsTemplate):
                     image_name = self.extract_image_name_from_url(image_url)
                     self.add_to_image_list(image_name, image_url)
                 if len(self.image_list) > 0:
-                    print(self.image_list)
                     processed.append(str(i))
                 self.download_image_list(folder)
             except Exception as e:
@@ -1245,25 +1244,95 @@ class Loop7KaimeDownload(Winter2024AnimeDownload, NewsTemplate):
     folder_name = 'loop7kaime'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 6
 
     def __init__(self):
         super().__init__()
 
     def run(self):
-        self.download_episode_preview()
+        soup = self.download_episode_preview()
         self.download_news()
-        self.download_key_visual()
+        self.download_episode_preview_guess(print_invalid=False, download_valid=True)
+        self.download_key_visual(soup)
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            nums = soup.select('.story_epnumList a[href]')
+            for num in nums:
+                if not num['href'].startswith('#'):
+                    continue
+                try:
+                    episode = str(int(num.select('.storyNum_txt')[0].text.replace('#', ''))).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                post_num = num['href'][1:]
+                self.image_list = []
+                images = soup.select(f'#{post_num} .storyImageList img[src]')
+                for i in range(len(images)):
+                    image_url = self.clear_resize_in_url(self.PAGE_PREFIX + images[i]['src'][1:])
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+            return soup
+        except Exception as e:
+            self.print_exception(e)
+        return None
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.ef',
                                     date_select='.article__listsTime', title_select='.article__listsFullTitle',
                                     id_select='a[a]')
 
-    def download_key_visual(self):
+    def download_episode_preview_guess(self, print_invalid=False, download_valid=False):
+        if self.is_image_exists(str(self.FINAL_EPISODE).zfill(2) + '_' + str(self.IMAGES_PER_EPISODE)):
+            return
+
+        folder = self.create_custom_directory('guess')
+        template = self.PAGE_PREFIX + 'wordpress/wp-content/uploads/%s/%s/%s'
+        current_date = datetime.now() + timedelta(hours=1)
+        year = current_date.strftime('%Y')
+        month = current_date.strftime('%m')
+        image_folder = folder + '/' + year + '/' + month
+        is_successful = False
+        valid_urls = []
+
+        for i in range(self.FINAL_EPISODE):
+            ep_num = i + 1
+            episode = str(ep_num).zfill(2)
+            if self.is_image_exists(episode + '_1')\
+                    or self.is_image_exists('story' + episode + '_1', image_folder):
+                continue
+            is_success = False
+            for j in range(self.IMAGES_PER_EPISODE):
+                image_name = 'story%s_%s' % (episode, str(j + 1))
+                image_url = template % (year, month, image_name + '.jpg')
+                if self.is_valid_url(image_url, is_image=True):
+                    print('VALID - ' + image_url)
+                    is_successful = True
+                    is_success = True
+                    valid_urls.append({'name': image_name, 'url': image_url, 'folder': image_folder})
+                elif print_invalid:
+                    print('INVALID - ' + image_url)
+                    break
+            if not is_success:
+                break
+        if download_valid and len(valid_urls) > 0:
+            for valid_url in valid_urls:
+                image_name = valid_url['name']
+                image_folder = valid_url['folder']
+                if not os.path.exists(image_folder):
+                    os.makedirs(image_folder)
+                self.download_image(valid_url['url'], image_folder + '/' + image_name)
+        if is_successful:
+            print(self.__class__.__name__ + ' - Guessed correctly!')
+        return is_successful
+
+    def download_key_visual(self, soup=None):
         folder = self.create_key_visual_directory()
         try:
             soup = self.get_soup(self.PAGE_PREFIX)
