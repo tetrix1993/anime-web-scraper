@@ -62,6 +62,7 @@ class DarkGatheringDownload(Summer2023AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self, print_http_error=False):
         if self.is_image_exists(str(self.FINAL_EPISODE) + '_1') and self.is_image_exists('01_1'):
@@ -121,6 +122,42 @@ class DarkGatheringDownload(Summer2023AnimeDownload, NewsTemplate):
         except Exception as e:
             self.print_exception(e, 'Character')
         self.download_image_list(folder)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        try:
+            bd_prefix = self.PAGE_PREFIX + 'product/bd/'
+            soup = self.get_soup(self.PAGE_PREFIX + 'product/')
+            bds = soup.select('a[href*="/bd/"].c-card')
+            for bd in bds:
+                page = bd['href'].split('/')[-1]
+                if page in processed:
+                    continue
+                if len(bd.select('.c-card__thumb img[src*=".svg"]')) > 0:
+                    continue
+                bd_url = self.PAGE_PREFIX + bd['href'].replace('../', '')
+                if not bd_url.endswith('/'):
+                    bd_url += '/'
+                bd_soup = self.get_soup(bd_url)
+                if bd_soup is None:
+                    continue
+                self.image_list = []
+                images = bd_soup.select('.c-article-visual__item img[src], .c-bgimg[data-bg]')
+                for image in images:
+                    if image.has_attr('src'):
+                        image_url = bd_url + image['src']
+                    else:
+                        image_url = bd_prefix + image['data-bg'].replace('../', '')
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+                if len(self.image_list) > 0:
+                    processed.append(page)
+                self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Eiyuu Kyoushitsu
