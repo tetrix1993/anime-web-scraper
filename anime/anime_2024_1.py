@@ -1073,6 +1073,8 @@ class MofunadeDownload(Winter2024AnimeDownload, NewsTemplate):
         self.download_episode_preview()
         self.download_news()
         self.download_key_visual()
+        self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -1108,6 +1110,37 @@ class MofunadeDownload(Winter2024AnimeDownload, NewsTemplate):
         self.add_to_image_list('tz', self.PAGE_PREFIX + 'dist/img/top/kv_img.webp')
         self.add_to_image_list('kv', self.PAGE_PREFIX + 'dist/img/news/article/article7/img01.jpg')
         self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'dist/img/character/character%s/img2.webp'
+        try:
+            for i in range(20):
+                image_url = template % str(i + 1)
+                image_name = str(i + 1).zfill(2)
+                if self.is_image_exists(image_name, folder):
+                    continue
+                result = self.download_image(image_url, folder + '/' + image_name)
+                if result == -1:
+                    break
+        except Exception as e:
+            self.print_exception(e, 'Character')
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            self.image_list = []
+            images = soup.select('.tab-bd_container img[src]')
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'].replace('./', '')
+                if '_smaple' in image_url:
+                    continue
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
 
 # Ishura
