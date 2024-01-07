@@ -13,10 +13,12 @@ def run():
     for subclass in Winter2024AnimeDownload.__subclasses__():
         if subclass.enabled:
             downloads.append(subclass())
-    for subclass in Fall2023AnimeDownload.__subclasses__():
-        if subclass.enabled:
-            downloads.append(subclass())
-    downloads += [DeadMountDeathPlayDownload(), Horimiya2Download(), MushokuTensei2Download(), AtelierRyzaDownload(),
+    downloads += [KusuriyaDownload, FrierenDownload(), RagnaCrimsonDownload(), UndeadUnluckDownload(),
+                  ShangriLaFrontierDownload(), ButaLiverDownload(), SixteenBitSensationDownload(), BokuameDownload(),
+                  GoblinSlayer2Download(), HikikomariDownload(), KagenoJitsuryokusha2Download(), KimizeroDownload(),
+                  KikanshaDownload(), HyakkanoDownload(), SeijonoMaryoku2Download(), ShyDownload(),
+                  SpyFamily2Download(), TateNoYuusha3Download(), TearmoonDownload(),
+                  DeadMountDeathPlayDownload(), Horimiya2Download(), MushokuTensei2Download(), AtelierRyzaDownload(),
                   YumemiruDanshiDownload(), AyakashiTriangleDownload(), DarkGatheringDownload()]
     subclasses = Summer2024AnimeDownload.__subclasses__() \
         + Spring2024AnimeDownload.__subclasses__() \
