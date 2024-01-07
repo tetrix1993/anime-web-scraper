@@ -1878,7 +1878,7 @@ class HyakkanoDownload(Fall2023AnimeDownload, NewsTemplate):
     folder_name = 'hyakkano'
 
     PAGE_PREFIX = website
-    FINAL_EPISODE = 24
+    FINAL_EPISODE = 12
     IMAGES_PER_EPISODE = 6
 
     def __init__(self):
@@ -1891,6 +1891,7 @@ class HyakkanoDownload(Fall2023AnimeDownload, NewsTemplate):
         self.download_episode_preview_guess(print_invalid=False, download_valid=True)
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -2016,6 +2017,51 @@ class HyakkanoDownload(Fall2023AnimeDownload, NewsTemplate):
                 processed.append(chara_name)
         except Exception as e:
             self.print_exception(e, 'Character')
+        self.create_cache_file(cache_filepath, processed, num_processed)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'blu-ray/')
+            # Bonus
+            self.image_list = []
+            images = soup.select('.bonus-Images img[src]')
+            for image in images:
+                image_url = self.clear_resize_in_url(image['src'])
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+
+            # Blu-ray
+            bds = soup.select('.blu-ray-List li')
+            for bd in reversed(bds):
+                a_tags = bd.select('a[href]')
+                if len(a_tags) == 0:
+                    continue
+                bd_url = a_tags[0]['href']
+                if bd_url.endswith('/'):
+                    bd_url = bd_url[:-1]
+                page = bd_url.split('/')[-1]
+                if page in processed:
+                    continue
+                if len(bd.select('img[src*="nowprinting"]')) > 0:
+                    continue
+                bd_soup = self.get_soup(bd_url)
+                if bd_soup is None:
+                    continue
+                self.image_list = []
+                images = bd_soup.select('.bluray-Images img[src]')
+                for image in images:
+                    image_url = self.clear_resize_in_url(image['src'])
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+                if len(self.image_list) > 0:
+                    processed.append(page)
+                self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
         self.create_cache_file(cache_filepath, processed, num_processed)
 
 
