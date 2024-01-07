@@ -932,6 +932,7 @@ class KekkonYubiwaDownload(Winter2024AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -1001,6 +1002,22 @@ class KekkonYubiwaDownload(Winter2024AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'images/mob02/chara_%s.png'
         self.download_by_template(folder, template, 2, 1)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'product/bd/')
+            self.image_list = []
+            images = soup.select('.pgincontent img[src*="/images/"]')
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'].replace('../', '').split('?')[0]
+                if 'nowprinting' in image_url:
+                    continue
+                image_name = self.generate_image_name_from_url(image_url, 'images')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
 
 # Isekai de Mofumofu Nadenade suru Tame ni Ganbattemasu.
