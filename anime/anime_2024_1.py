@@ -239,6 +239,7 @@ class Bokuyaba2Download(Winter2024AnimeDownload, NewsTemplate):
         self.download_episode_preview_external()
         self.download_news()
         self.download_key_visual()
+        self.download_media()
 
     def download_episode_preview(self):
         story_url = self.PAGE_PREFIX + 'story/'
@@ -305,6 +306,39 @@ class Bokuyaba2Download(Winter2024AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Key Visual')
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        bd_url = self.PAGE_PREFIX + 'blu-ray/'
+        pages = ['novelty2', '1020118', '1020119', '1020120']
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        for i in range(len(pages)):
+            if str(i) in processed:
+                continue
+            try:
+                if i == 0:
+                    soup = self.get_soup(bd_url + pages[0] + '/')
+                else:
+                    soup = self.get_soup(bd_url + 'detail/?id=' + pages[i])
+                self.image_list = []
+                images = soup.select(".l-in__container img[src], .l-in__container img[data-src]")
+                for image in images:
+                    if image.has_attr('src'):
+                        image_url = image['src']
+                    else:
+                        image_url = image['data-src']
+                    if not image_url.startswith('http') or '/shop/' in image_url:
+                        continue
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+                if len(self.image_list) > 0:
+                    print(self.image_list)
+                    processed.append(str(i))
+                self.download_image_list(folder)
+            except Exception as e:
+                self.print_exception(e, 'Blu-ray')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Chiyu Mahou no Machigatta Tsukaikata
