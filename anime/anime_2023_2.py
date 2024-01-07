@@ -1958,7 +1958,7 @@ class MashleDownload(Spring2023AnimeDownload, NewsTemplate):
         self.download_media()
 
     def download_episode_preview(self):
-        story_url = self.PAGE_PREFIX + 'episode/'
+        story_url = self.PAGE_PREFIX + 'episode/1st/'
         try:
             soup = self.get_soup(story_url, decode=True)
             lis = soup.select('.localnav__list li')

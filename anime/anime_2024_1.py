@@ -1530,6 +1530,106 @@ class MahoakoDownload(Winter2024AnimeDownload, NewsTemplate):
         self.download_image_list(sub_folder)
 
 
+# Mashle 2nd Season
+class Mashle2Download(Winter2024AnimeDownload, NewsTemplate):
+    title = 'Mashle 2nd Season'
+    keywords = [title, 'Magic and Muscles']
+    website = 'https://mashle.pw/'
+    twitter = 'mashle_official'
+    hashtags = ['マッシュル', 'mashle']
+    folder_name = 'mashle2'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_media()
+
+    def download_episode_preview(self):
+        story_url = self.PAGE_PREFIX + 'episode/'
+        try:
+            soup = self.get_soup(story_url, decode=True)
+            lis = soup.select('.localnav__list li')
+            for li in lis:
+                span_tag = li.select('span')
+                try:
+                    ep_num = int(span_tag[0].text)
+                    if ep_num is None or ep_num < 1:
+                        continue
+                    episode = str(ep_num).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                if li.has_attr('class') and 'is--current' in li['class']:
+                    ep_soup = soup
+                else:
+                    a_tag = li.select('a[href]')
+                    if len(a_tag) == 0:
+                        continue
+                    ep_soup = self.get_soup(story_url + a_tag[0]['href'].replace('./', ''))
+                if ep_soup is not None:
+                    images = ep_soup.select('.swiper-wrapper img[src]')
+                    self.image_list = []
+                    for i in range(len(images)):
+                        image_url = story_url + images[i]['src']
+                        image_name = episode + '_' + str(i + 1)
+                        self.add_to_image_list(image_name, image_url)
+                    self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news__list li',
+                                    date_select='.list--date', title_select='.list--text',
+                                    id_select='a', a_tag_prefix=news_url, a_tag_start_text_to_remove='./',
+                                    paging_type=1, next_page_select='.news__pager__next',
+                                    next_page_eval_index_class='is--last', next_page_eval_index=-1,
+                                    stop_date='2023.11.03')
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        for page in ['special', '01', '02', '03', '04']:
+            try:
+                if page != 'special' and page in processed:
+                    continue
+                page_url = self.PAGE_PREFIX + 'bddvd/2nd-' + page + '.html'
+                soup = self.get_soup(page_url)
+                sections = soup.select('#bddvd-page>section')
+                for section in sections:
+                    if section.has_attr('class') and 'headline' in section['class']:
+                        continue
+                    images = section.select('img[src]')
+                    self.image_list = []
+                    for image in images:
+                        image_url = self.PAGE_PREFIX + image['src'].replace('../', '').split('?')[0]
+                        if 'np02.jpg' in image_url or 'np.jpg' in image_url:
+                            continue
+                        if '/bddvd/' in image_url:
+                            image_name = self.generate_image_name_from_url(image_url, 'bddvd')
+                        else:
+                            continue
+                        if self.is_image_exists(image_name, folder):
+                            continue
+                        self.add_to_image_list(image_name, image_url)
+                if page.isnumeric():
+                    if len(self.image_list) == 0:
+                        break
+                    else:
+                        processed.append(page)
+                self.download_image_list(folder)
+            except Exception as e:
+                self.print_exception(e, f'Blu-ray - {page}')
+        self.create_cache_file(cache_filepath, processed, num_processed)
+
+
 # Mato Seihei no Slave
 class MatoSlaveDownload(Winter2024AnimeDownload, NewsTemplate):
     title = 'Mato Seihei no Slave'
