@@ -672,13 +672,13 @@ class DosankoGalDownload(Winter2024AnimeDownload, NewsTemplate):
                     page_url += 'vol'
                 page_url += page
                 soup = self.get_soup(page_url)
-                images = soup.select('.bd img[src*="/bd/"]')
+                images = soup.select('.bd img[src]')
                 self.image_list = []
                 for image in images:
                     image_url = self.PAGE_PREFIX + image['src'][1:]
                     if '/np_' in image_url:
                         continue
-                    image_name = self.generate_image_name_from_url(image_url, 'bd')
+                    image_name = self.extract_image_name_from_url(image_url)
                     self.add_to_image_list(image_name, image_url)
                 if page.isnumeric() and len(self.image_list) > 0:
                     processed.append(page)
@@ -2896,6 +2896,7 @@ class Tsukimichi2Download(Winter2024AnimeDownload, NewsTemplate):
         self.download_episode_preview_guess(print_invalid=False, download_valid=True)
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -3000,6 +3001,36 @@ class Tsukimichi2Download(Winter2024AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        for page in ['store', '1', '2', '3']:
+            try:
+                if page in processed:
+                    continue
+                page_url = self.PAGE_PREFIX + 'bd/'
+                if page.isnumeric():
+                    page_url += 'vol'
+                page_url += page
+                soup = self.get_soup(page_url)
+                images = soup.select('.bd img[src]')
+                self.image_list = []
+                for image in images:
+                    image_url = image['src']
+                    if 'jacket_sample' in image_url or 'sample_square' in image_url:
+                        continue
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+                if page.isnumeric() and len(self.image_list) > 0:
+                    processed.append(page)
+                elif page.isnumeric():
+                    break
+                self.download_image_list(folder)
+            except Exception as e:
+                self.print_exception(e, f'Blu-ray - {page}')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e S3
