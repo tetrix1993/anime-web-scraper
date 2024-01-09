@@ -2866,7 +2866,23 @@ class SokushiCheatDownload(Winter2024AnimeDownload, NewsTemplate):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            stories = soup.select('.story-box')
+            for story in reversed(stories):
+                try:
+                    episode = str(int(story.select('.num span')[0].text)).zfill(2)
+                except:
+                    continue
+                self.image_list = []
+                images = story.select('.ss-pic-item img[src]')
+                for i in range(len(images)):
+                    image_url = images[i]['src']
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_episode_preview_external(self):
         keywords = ['即死チートが最強すぎて']
@@ -2882,7 +2898,7 @@ class SokushiCheatDownload(Winter2024AnimeDownload, NewsTemplate):
             return
 
         folder = self.create_custom_directory('guess')
-        template = self.PAGE_PREFIX + 'wp/wp-content/uploads/%s/%s/ss%s.jpg'
+        template = self.PAGE_PREFIX + 'wp/wp-content/uploads/%s/%s/%s.jpg'
         current_date = datetime.now() + timedelta(hours=1)
         year = current_date.strftime('%Y')
         month = current_date.strftime('%m')
@@ -2896,9 +2912,9 @@ class SokushiCheatDownload(Winter2024AnimeDownload, NewsTemplate):
                 else:
                     append = '-' + str(k)
                 image_folder = folder + '/' + year + '/' + month
-                image_name = str(j + 1) + append
+                image_name = str(j + 1).zfill(2) + append
                 if not self.is_image_exists(image_name, image_folder):
-                    image_url = template % (year, month, str(j + 1) + append)
+                    image_url = template % (year, month, str(j + 1).zfill(2) + append)
                     if self.is_valid_url(image_url, is_image=True):
                         print('VALID - ' + image_url)
                         is_successful = True
