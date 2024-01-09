@@ -1936,6 +1936,7 @@ class NozomanuFushiDownload(Winter2024AnimeDownload, NewsTemplate2):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -2012,6 +2013,33 @@ class NozomanuFushiDownload(Winter2024AnimeDownload, NewsTemplate2):
                 processed.append(page_name)
         except Exception as e:
             self.print_exception(e, 'Character')
+        self.create_cache_file(cache_filepath, processed, num_processed)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        for page in ['tokuten', '01', '02', '03']:
+            try:
+                if page in processed:
+                    continue
+                page_url = self.PAGE_PREFIX + 'bddvd/' + page + '.html'
+                soup = self.get_soup(page_url)
+                images = soup.select('#cms_block img[src*="/block/"]')
+                self.image_list = []
+                for image in images:
+                    image_url = self.PAGE_PREFIX + image['src'].split('?')[0].replace('../', '').replace('sn_', '')
+                    if not self.is_content_length_in_range(image_url, more_than_amount=39000):
+                        continue
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+                if page.isnumeric() and len(self.image_list) > 0:
+                    processed.append(page)
+                elif page.isnumeric():
+                    break
+                self.download_image_list(folder)
+            except Exception as e:
+                self.print_exception(e, f'Blu-ray - {page}')
         self.create_cache_file(cache_filepath, processed, num_processed)
 
 
