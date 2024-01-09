@@ -2604,7 +2604,7 @@ class UruseiYatsuraDownload(Fall2022AnimeDownload, NewsTemplate):
                     episode = str(int(a_tag.text)).zfill(2)
                 except:
                     continue
-                if self.is_image_exists(episode + '_1'):
+                if int(episode) > 23 or self.is_image_exists(episode + '_1'):
                     continue
                 story_num = soup.select('.story--num')
                 ep_soup = None

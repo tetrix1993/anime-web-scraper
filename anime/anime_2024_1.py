@@ -32,6 +32,7 @@ from requests.exceptions import HTTPError
 # Shin no Nakama ja Nai to Yuusha no Party wo Oidasareta node, Henkyou de Slow Life suru Koto ni Shimashita 2nd https://shinnonakama.com/ #真の仲間 @shinnonakama_tv
 # Sokushi Cheat ga Saikyou sugite, Isekai no Yatsura ga Marude Aite ni Naranai n desu ga. https://sokushicheat-pr.com/ #即死チート @sokushicheat_pr
 # Tsuki ga Michibiku Isekai Douchuu 2nd Season https://tsukimichi.com/ #ツキミチ @tsukimichi_PR
+# Urusei Yatsura (2022) 2nd Season https://uy-allstars.com/ #うる星やつら @uy_allstars
 # Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e S3 http://you-zitsu.com/ #you_zitsu #よう実 @youkosozitsu
 # Yubisaki to Renren https://yubisaki-pr.com/ #ゆびさきと恋々 @yubisaki_pr
 
@@ -3126,6 +3127,58 @@ class Tsukimichi2Download(Winter2024AnimeDownload, NewsTemplate):
             except Exception as e:
                 self.print_exception(e, f'Blu-ray - {page}')
         self.create_cache_file(cache_filepath, processed, num_processed)
+
+
+# Urusei Yatsura (2022) 2nd Season
+class UruseiYatsura2Download(Winter2024AnimeDownload, NewsTemplate):
+    title = 'Urusei Yatsura (2022) 2nd Season'
+    keywords = [title]
+    website = 'https://uy-allstars.com/'
+    twitter = 'uy_allstars'
+    hashtags = 'うる星やつら'
+    folder_name = 'uruseiyatsura2'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+
+    def download_episode_preview(self):
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            a_tags = soup.select('.story--nav a[href]')
+            for a_tag in a_tags:
+                try:
+                    episode = str(int(a_tag.text)).zfill(2)
+                except:
+                    continue
+                if int(episode) < 24 or self.is_image_exists(episode + '_1'):
+                    continue
+                story_num = soup.select('.story--num')
+                ep_soup = None
+                if len(story_num) > 0:
+                    try:
+                        episode_num = str(int(story_num[0].text)).zfill(2)
+                        if episode == episode_num:
+                            ep_soup = soup
+                    except:
+                        pass
+                if ep_soup is None:
+                    ep_soup = self.get_soup(a_tag['href'])
+                    if ep_soup is None:
+                        continue
+                self.image_list = []
+                images = ep_soup.select('.ss img[src]')
+                for i in range(len(images)):
+                    image_url = images[i]['src'].split('?')[0]
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
 
 # Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e S3
