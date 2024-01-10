@@ -3234,12 +3234,16 @@ class UruseiYatsura2Download(Winter2024AnimeDownload, NewsTemplate):
     folder_name = 'uruseiyatsura2'
 
     PAGE_PREFIX = website
+    FIRST_EPISODE = 24
+    FINAL_EPISODE = 46
+    IMAGES_PER_EPISODE = 6
 
     def __init__(self):
         super().__init__()
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_guess(print_invalid=False, download_valid=True)
 
     def download_episode_preview(self):
         try:
@@ -3250,7 +3254,7 @@ class UruseiYatsura2Download(Winter2024AnimeDownload, NewsTemplate):
                     episode = str(int(a_tag.text)).zfill(2)
                 except:
                     continue
-                if int(episode) < 24 or self.is_image_exists(episode + '_1'):
+                if int(episode) < self.FIRST_EPISODE or self.is_image_exists(episode + '_1'):
                     continue
                 story_num = soup.select('.story--num')
                 ep_soup = None
@@ -3274,6 +3278,46 @@ class UruseiYatsura2Download(Winter2024AnimeDownload, NewsTemplate):
                 self.download_image_list(self.base_folder)
         except Exception as e:
             self.print_exception(e)
+
+    def download_episode_preview_guess(self, print_invalid=False, download_valid=False):
+        if self.is_image_exists(str(self.FINAL_EPISODE).zfill(2) + '_' + str(self.IMAGES_PER_EPISODE)):
+            return
+
+        folder = self.create_custom_directory('guess')
+        template = self.PAGE_PREFIX + 'wp/wp-content/uploads/%s/%s/UY_ep%s_cap-%s.jpg'
+        current_date = datetime.now() + timedelta(hours=1)
+        year = current_date.strftime('%Y')
+        month = current_date.strftime('%m')
+        is_successful = False
+        valid_urls = []
+        for i in range(self.FIRST_EPISODE, self.FINAL_EPISODE + 1, 1):
+            episode = str(i).zfill(2)
+            episode_image_name = episode + '_' + str(self.IMAGES_PER_EPISODE)
+            if self.is_image_exists(episode_image_name) or self.is_image_exists(episode_image_name, folder):
+                continue
+            image_count = 0
+            j = 0
+            while j < 100:
+                image_url = template % (year, month, episode, str(j).zfill(3))
+                if self.is_valid_url(image_url, is_image=True):
+                    print('VALID - ' + image_url)
+                    image_count += 1
+                    valid_urls.append({'num': str(image_count), 'url': image_url})
+                elif print_invalid:
+                    print('INVALID - ' + image_url)
+                if image_count == self.IMAGES_PER_EPISODE:
+                    break
+                j += 1
+            if image_count == 0:
+                break
+            if download_valid and len(valid_urls) > 0:
+                for valid_url in valid_urls:
+                    image_name = episode + '_' + valid_url['num']
+                    self.download_image(valid_url['url'], folder + '/' + image_name)
+            is_successful = True
+        if is_successful:
+            print(self.__class__.__name__ + ' - Guessed correctly!')
+        return is_successful
 
 
 # Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e S3
