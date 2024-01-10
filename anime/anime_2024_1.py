@@ -3305,7 +3305,7 @@ class UruseiYatsura2Download(Winter2024AnimeDownload, NewsTemplate):
                     valid_urls.append({'num': str(image_count), 'url': image_url})
                 elif print_invalid:
                     print('INVALID - ' + image_url)
-                if image_count == self.IMAGES_PER_EPISODE:
+                if image_count == self.IMAGES_PER_EPISODE or (image_count == 0 and j > 20):
                     break
                 j += 1
             if image_count == 0:
