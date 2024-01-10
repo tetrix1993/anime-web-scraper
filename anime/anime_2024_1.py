@@ -2429,7 +2429,7 @@ class PonnoMichiDownload(Winter2024AnimeDownload, NewsTemplate4):
             return
 
         folder = self.create_custom_directory('guess')
-        template = self.PAGE_PREFIX + '2ndwp/wp-content/uploads/%s/%s/%s.jpg'
+        template = self.PAGE_PREFIX + 'wp/wp-content/uploads/%s/%s/%s.jpg'
         current_date = datetime.now() + timedelta(hours=1)
         year = current_date.strftime('%Y')
         month = current_date.strftime('%m')
