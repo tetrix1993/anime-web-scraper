@@ -2499,6 +2499,8 @@ class SaijakuTamerDownload(Winter2024AnimeDownload, NewsTemplate):
     folder_name = 'saijakutamer'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 6
 
     def __init__(self):
         super().__init__()
@@ -2510,7 +2512,32 @@ class SaijakuTamerDownload(Winter2024AnimeDownload, NewsTemplate):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        jpg_len = [485587, 487372, 487813, 486853, 487229, 487643]
+        webp_len = [128224, 129102, 129304, 128692, 128942, 129192]
+        try:
+            template = self.PAGE_PREFIX + 'dist/img/story/ep%s/img%s.'
+            stop = False
+            for i in range(self.FINAL_EPISODE):
+                episode = str(i + 1).zfill(2)
+                if self.is_image_exists(episode + '_' + str(self.IMAGES_PER_EPISODE)):
+                    continue
+                for j in range(self.IMAGES_PER_EPISODE):
+                    image_name = episode + '_' + str(j + 1)
+                    template_url = template % (str(i + 1), str(j + 1))
+                    image_url = template_url + 'jpg'
+                    if not self.is_not_matching_content_length(image_url, jpg_len[j])\
+                            or self.download_image(image_url, self.base_folder + '/' + image_name,
+                                                   min_width=1000) == -1:
+                        image_url = template_url + 'webp'
+                        if not self.is_not_matching_content_length(image_url, webp_len[j])\
+                                or self.download_image(image_url, self.base_folder + '/' + image_name,
+                                                       to_jpg=True, min_width=1000) == -1:
+                            stop = True
+                            break
+                if stop:
+                    break
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.c-Post__list',
