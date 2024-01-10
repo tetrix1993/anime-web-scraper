@@ -825,6 +825,7 @@ class GekaiEliseDownload(Winter2024AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -898,6 +899,22 @@ class GekaiEliseDownload(Winter2024AnimeDownload, NewsTemplate):
         prefix = self.PAGE_PREFIX + 'images/chara/'
         templates = [prefix + 'a_%s.png', prefix + 'b_%s.png']
         self.download_by_template(folder, templates, 3, 1)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'package.html')
+            self.image_list = []
+            images = soup.select('article img[src*="/package/"]')
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'].split('?')[0]
+                if 'nowpri' in image_url or 'tokuten/p_000.jpg' in image_url:
+                    continue
+                image_name = self.generate_image_name_from_url(image_url, 'package')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
 
 # Himesama "Goumon" no Jikan desu
