@@ -2870,7 +2870,7 @@ class ShinnoNakama2Download(Winter2024AnimeDownload, NewsTemplate):
                     continue
                 if self.is_image_exists(episode + '_1'):
                     continue
-                images = soup.select('.storyThumbList img[src]')
+                images = section.select('.storyThumbList img[src]')
                 self.image_list = []
                 for i in range(len(images)):
                     image_url = self.PAGE_PREFIX + images[i]['src'].replace('../', '')
