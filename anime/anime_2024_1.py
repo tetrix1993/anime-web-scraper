@@ -3443,7 +3443,7 @@ class YubisakitoRenrenDownload(Winter2024AnimeDownload, NewsTemplate):
         self.download_episode_preview()
         self.download_episode_preview_external()
         self.download_news()
-        self.download_episode_preview_guess(print_invalid=False, download_valid=True)
+        # self.download_episode_preview_guess(print_invalid=False, download_valid=True)
         self.download_key_visual()
         self.download_character()
         self.download_media()
