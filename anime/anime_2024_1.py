@@ -3279,7 +3279,7 @@ class UruseiYatsura2Download(Winter2024AnimeDownload, NewsTemplate):
         except Exception as e:
             self.print_exception(e)
 
-    def download_episode_preview_guess(self, print_invalid=False, download_valid=False):
+    def download_episode_preview_guess(self, print_invalid=False, download_valid=False, min_limit=20, max_limit=100):
         if self.is_image_exists(str(self.FINAL_EPISODE).zfill(2) + '_' + str(self.IMAGES_PER_EPISODE)):
             return
 
@@ -3297,7 +3297,7 @@ class UruseiYatsura2Download(Winter2024AnimeDownload, NewsTemplate):
                 continue
             image_count = 0
             j = 0
-            while j < 100:
+            while j < max_limit:
                 image_url = template % (year, month, episode, str(j).zfill(3))
                 if self.is_valid_url(image_url, is_image=True):
                     print('VALID - ' + image_url)
@@ -3305,7 +3305,7 @@ class UruseiYatsura2Download(Winter2024AnimeDownload, NewsTemplate):
                     valid_urls.append({'num': str(image_count), 'url': image_url})
                 elif print_invalid:
                     print('INVALID - ' + image_url)
-                if image_count == self.IMAGES_PER_EPISODE or (image_count == 0 and j > 20):
+                if image_count == self.IMAGES_PER_EPISODE or (image_count == 0 and j > min_limit):
                     break
                 j += 1
             if image_count == 0:
