@@ -968,14 +968,44 @@ class HimesamaGoumonDownload(Winter2024AnimeDownload, NewsTemplate):
         super().__init__()
 
     def run(self):
-        self.download_episode_preview()
+        soup = self.download_episode_preview()
         self.download_news()
-        self.download_episode_preview_guess(print_invalid=False, download_valid=True)
-        soup = self.download_key_visual()
+        # self.download_episode_preview_guess(print_invalid=False, download_valid=True)
+        soup = self.download_key_visual(soup)
         self.download_character(soup)
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        soup = None
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            script = soup.select('style[type="text/css"]')[0].text
+            split1 = script.split('#js-epwrap[data-ep="')
+            for s in split1:
+                if '#js-ep-thumb' not in s:
+                    continue
+                try:
+                    episode = str(int(s.split('"')[0])).zfill(2)
+                except:
+                    continue
+                split2 = s.split('{')
+                if len(split2) < 2:
+                    continue
+                try:
+                    pic_num = str(int(s.split('#js-ep-thumb')[1].split('{')[0]))
+                except:
+                    continue
+                image_name = episode + '_' + pic_num
+                if self.is_image_exists(image_name):
+                    continue
+                if 'background-image: url(' in split2[1] and ');' in split2[1]\
+                        and split2[1].index('background-image: url(') < split2[1].index(');'):
+                    image_url = split2[1].split('background-image: url(')[1].split(');')[0]
+                    image_name = episode + '_' + pic_num
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
+        return soup
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.md-li__news li',
@@ -1022,11 +1052,11 @@ class HimesamaGoumonDownload(Winter2024AnimeDownload, NewsTemplate):
             print(self.__class__.__name__ + ' - Guessed correctly!')
         return is_successful
 
-    def download_key_visual(self):
+    def download_key_visual(self, soup=None):
         folder = self.create_key_visual_directory()
-        soup = None
         try:
-            soup = self.get_soup(self.PAGE_PREFIX)
+            if soup is None:
+                soup = self.get_soup(self.PAGE_PREFIX)
             self.image_list = []
             images = soup.select('.fv--visual source[srcset]')
             for image in images:
