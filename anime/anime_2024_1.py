@@ -2583,7 +2583,7 @@ class SaijakuTamerDownload(Winter2024AnimeDownload, NewsTemplate):
             stop = False
             for i in range(self.FINAL_EPISODE):
                 episode = str(i + 1).zfill(2)
-                if self.is_image_exists(episode + '_' + str(self.IMAGES_PER_EPISODE)):
+                if self.is_image_exists(episode + '_1'):
                     continue
                 for j in range(self.IMAGES_PER_EPISODE):
                     image_name = episode + '_' + str(j + 1)
