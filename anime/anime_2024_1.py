@@ -1198,6 +1198,13 @@ class KekkonYubiwaDownload(Winter2024AnimeDownload, NewsTemplate):
         except Exception as e:
             self.print_exception(e, 'Blu-ray')
 
+        # Story Visuals
+        special_folder = folder + '/special'
+        if not os.path.exists(special_folder):
+            os.makedirs(special_folder)
+        template = self.PAGE_PREFIX + 'images/special/p%s.jpg'
+        self.download_by_template(special_folder, template, 2, 1)
+
 
 # Isekai de Mofumofu Nadenade suru Tame ni Ganbattemasu.
 class MofunadeDownload(Winter2024AnimeDownload, NewsTemplate):
