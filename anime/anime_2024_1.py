@@ -3510,7 +3510,7 @@ class YubisakitoRenrenDownload(Winter2024AnimeDownload, NewsTemplate):
         self.download_episode_preview()
         self.download_episode_preview_external()
         self.download_news()
-        # self.download_episode_preview_guess(print_invalid=False, download_valid=True)
+        self.download_episode_preview_guess(print_invalid=False, download_valid=True)
         self.download_key_visual()
         self.download_character()
         self.download_media()
@@ -3543,36 +3543,59 @@ class YubisakitoRenrenDownload(Winter2024AnimeDownload, NewsTemplate):
         AniverseMagazineScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE,
                                 end_date='20240104', download_id=self.download_id, prefix='Sign.', suffix='').run()
 
-    def download_episode_preview_guess(self, print_invalid=False, download_valid=False):
+    def download_episode_preview_guess(self, print_invalid=False, download_valid=False, min_limit=20, max_limit=100):
         if self.is_image_exists(str(self.FINAL_EPISODE).zfill(2) + '_' + str(self.IMAGES_PER_EPISODE)):
             return
 
         folder = self.create_custom_directory('guess')
-        template = self.PAGE_PREFIX + 'wp/wp-content/uploads/%s/%s/ss%s.jpg'
+        template = self.PAGE_PREFIX + 'wp/wp-content/uploads/%s/%s/%sYubisakiToRenren_ep%s_still_%s.jpg'
         current_date = datetime.now() + timedelta(hours=1)
         year = current_date.strftime('%Y')
         month = current_date.strftime('%m')
         is_successful = False
         valid_urls = []
-        for j in range(self.IMAGES_PER_EPISODE):
-            k = 0
-            while k < 20:
-                if k == 0:
-                    append = ''
-                else:
-                    append = '-' + str(k)
-                image_folder = folder + '/' + year + '/' + month
-                image_name = str(j + 1) + append
-                if not self.is_image_exists(image_name, image_folder):
-                    image_url = template % (year, month, str(j + 1) + append)
+        image_folder = folder + '/' + year + '/' + month
+        for i in range(self.FINAL_EPISODE):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_1') or self.is_image_exists(episode + '_1', image_folder):
+                continue
+            j = 0
+            image_count = 0
+            valid_nums = []
+            while j < max_limit:
+                image_url = template % (year, month, '', episode, str(j).zfill(4))
+                image_name = episode + '_' + str(image_count + 2)
+                if self.is_valid_url(image_url, is_image=True):
+                    print('VALID - ' + image_url)
+                    is_successful = True
+                    valid_urls.append({'name': image_name, 'url': image_url, 'folder': image_folder})
+                    image_count += 1
+                    valid_nums.append(j)
+                elif print_invalid:
+                    print('INVALID - ' + image_url)
+                j += 1
+                if image_count >= self.IMAGES_PER_EPISODE:
+                    break
+                if j > min_limit and image_count == 0:
+                    break
+            if image_count == 0:
+                break
+            elif image_count == 5:
+                j = 0
+                while j < max_limit:
+                    if j in valid_nums:
+                        j += 1
+                        continue
+                    image_url = template % (year, month, '【MAIN】', episode, str(j).zfill(4))
+                    image_name = episode + '_1'
                     if self.is_valid_url(image_url, is_image=True):
                         print('VALID - ' + image_url)
-                        is_successful = True
                         valid_urls.append({'name': image_name, 'url': image_url, 'folder': image_folder})
+                        break
                     elif print_invalid:
                         print('INVALID - ' + image_url)
-                        break
-                k += 1
+                    j += 1
+
         if download_valid and len(valid_urls) > 0:
             for valid_url in valid_urls:
                 image_name = valid_url['name']
