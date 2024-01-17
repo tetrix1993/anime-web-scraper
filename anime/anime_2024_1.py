@@ -116,6 +116,8 @@ class AkuyakuLv99Download(Winter2024AnimeDownload, NewsTemplate2):
             for j in range(self.IMAGES_PER_EPISODE):
                 image_url = template % (str(first).zfill(8), str(second).zfill(8), str(third + j).zfill(8))
                 image_name = episode + '_' + str(j + 1)
+                if not self.is_content_length_in_range(image_url, more_than_amount=13000):
+                    break
                 result = self.download_image(image_url, folder + '/' + image_name)
                 if result == 0:
                     is_success = True
