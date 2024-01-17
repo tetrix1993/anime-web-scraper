@@ -2116,6 +2116,8 @@ class NozomanuFushiDownload(Winter2024AnimeDownload, NewsTemplate2):
     folder_name = 'nozomanufushi'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 6
 
     def __init__(self):
         super().__init__()
@@ -2123,6 +2125,7 @@ class NozomanuFushiDownload(Winter2024AnimeDownload, NewsTemplate2):
     def run(self):
         self.download_episode_preview()
         self.download_news()
+        self.download_episode_preview_guess()
         self.download_key_visual()
         self.download_character()
         self.download_media()
@@ -2156,6 +2159,39 @@ class NozomanuFushiDownload(Winter2024AnimeDownload, NewsTemplate2):
 
     def download_news(self):
         self.download_template_news(self.PAGE_PREFIX)
+
+    def download_episode_preview_guess(self):
+        folder = self.create_custom_directory('guess')
+        template = self.PAGE_PREFIX + 'core_sys/images/contents/%s/block/%s/%s.jpg'
+        is_successful = False
+        for i in range(self.FINAL_EPISODE):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_1'):
+                continue
+            is_success = False
+            first = 17 + i
+            second = 44 + 4 * i
+            third = 74 + 6 * i
+            for j in range(self.IMAGES_PER_EPISODE):
+                image_url = template % (str(first).zfill(8), str(second).zfill(8), str(third + j).zfill(8))
+                image_name = episode + '_' + str(j + 1)
+                # if not self.is_content_length_in_range(image_url, more_than_amount=13000):
+                #     break
+                result = self.download_image(image_url, folder + '/' + image_name)
+                if result == 0:
+                    is_success = True
+                    is_successful = True
+                elif result == -1:
+                    break
+            if is_success:
+                print(self.__class__.__name__ + ' - Guessed successfully!')
+            else:
+                if len(os.listdir(folder)) == 0:
+                    os.rmdir(folder)
+                return
+        if len(os.listdir(folder)) == 0:
+            os.rmdir(folder)
+        return is_successful
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
