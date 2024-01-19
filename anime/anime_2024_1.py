@@ -1002,7 +1002,7 @@ class HimesamaGoumonDownload(Winter2024AnimeDownload, NewsTemplate):
     def run(self):
         soup = self.download_episode_preview()
         self.download_news()
-        # self.download_episode_preview_guess(print_invalid=False, download_valid=True)
+        self.download_episode_preview_guess(print_invalid=False, download_valid=True)
         soup = self.download_key_visual(soup)
         self.download_character(soup)
 
