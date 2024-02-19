@@ -775,7 +775,7 @@ class DosankoGalDownload(Winter2024AnimeDownload, NewsTemplate):
                 images = soup.select('.bd img[src]')
                 self.image_list = []
                 for image in images:
-                    image_url = self.PAGE_PREFIX + image['src'][1:]
+                    image_url = self.clear_resize_in_url(image['src'])
                     if '/np_' in image_url:
                         continue
                     image_name = self.extract_image_name_from_url(image_url)
