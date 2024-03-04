@@ -6,6 +6,7 @@ from datetime import datetime
 # Kami wa Game ni Ueteiru. https://godsgame-anime.com/ #神飢え #神飢えアニメ #kamiue @kami_to_game
 # Kono Sekai wa Fukanzen Sugiru https://konofuka.com/ #このふか @konofuka_QA
 # Ookami to Koushinryou https://spice-and-wolf.com/ #狼と香辛料 #spice_and_wolf @Spicy_Wolf_Prj
+# Re:Monster https://re-monster.com/ #remonster_anime @ReMonster_anime
 # Sasayaku You ni Koi wo Utau https://sasakoi-anime.com/ #ささこい @sasakoi_anime
 # Tensei Kizoku, Kantei Skill de Nariagaru https://kanteiskill.com/ #鑑定スキル @kanteiskill
 # Tensei shitara Dainana Ouji Datta node, Kimama ni Majutsu wo Kiwamemasu https://dainanaoji.com/ #第七王子 @dainanaoji_pro
@@ -355,6 +356,67 @@ class OokamitoKoushinryou(Spring2024AnimeDownload, NewsTemplate):
                 if '/character/' in image_url:
                     image_name = self.generate_image_name_from_url(image_url, 'character')
                     self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+
+
+# Re:Monster
+class ReMonsterDownload(Spring2024AnimeDownload, NewsTemplate):
+    title = 'Re:Monster'
+    keyword = [title]
+    website = 'https://re-monster.com/'
+    twitter = 'ReMonster_anime'
+    hashtags = 'remonster_anime'
+    folder_name = 'remonster'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        soup = self.download_key_visual()
+        self.download_character(soup)
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.newsList',
+                                    date_select='.news__date', title_select='.newsTitle', id_select='a')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        soup = None
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.visualList source[srcset*="/top/"][type="image/webp"]')
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['srcset'].replace('./', '').split('?')[0]
+                image_name = self.extract_image_name_from_url(image_url)
+                if image_name.endswith('-s') or 'catch' in image_name:
+                    continue
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+        return soup
+
+    def download_character(self, soup=None):
+        folder = self.create_character_directory()
+        self.image_list = []
+        try:
+            if soup is None:
+                soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.characterList img[src*="/character/"]')
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'].replace('./', '').split('?')[0]
+                image_name = self.generate_image_name_from_url(image_url, 'character')
+                self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
