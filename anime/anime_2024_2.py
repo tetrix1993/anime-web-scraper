@@ -1,6 +1,7 @@
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 from datetime import datetime
 
+# Dekisokonai to Yobareta Motoeiyuu wa Jikka kara Tsuihou sareta node Sukikatte ni Ikiru Koto ni Shita https://dekisoko-anime.com/ #できそこ @dekisoko_pr
 # Kami wa Game ni Ueteiru. https://godsgame-anime.com/ #神飢え #神飢えアニメ #kamiue @kami_to_game
 # Kono Sekai wa Fukanzen Sugiru https://konofuka.com/ #このふか @konofuka_QA
 # Sasayaku You ni Koi wo Utau https://sasakoi-anime.com/ #ささこい @sasakoi_anime
@@ -17,6 +18,58 @@ class Spring2024AnimeDownload(MainDownload):
 
     def __init__(self):
         super().__init__()
+
+
+# Dekisokonai to Yobareta Motoeiyuu wa Jikka kara Tsuihou sareta node Sukikatte ni Ikiru Koto ni Shita
+class DekisokoDownload(Spring2024AnimeDownload, NewsTemplate):
+    title = 'Dekisokonai to Yobareta Motoeiyuu wa Jikka kara Tsuihou sareta node Sukikatte ni Ikiru Koto ni Shita'
+    keywords = [title, 'The Banished Former Hero Lives as He Pleases']
+    website = 'https://dekisoko-anime.com/'
+    twitter = 'dekisoko_pr'
+    hashtags = 'できそこ'
+    folder_name = 'dekisoko'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news_item',
+                                    title_select='.ttl', date_select='.year,.day', date_tag_count=2,
+                                    id_select='a', a_tag_start_text_to_remove='../', a_tag_prefix=self.PAGE_PREFIX,
+                                    date_func=lambda x: x[0:4] + '.' + x[4:6] + '.' + x[7:])
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        prefix = self.PAGE_PREFIX + 'dist/img/news/detail/'
+        self.image_list = []
+        self.add_to_image_list('tz', prefix + 'news0620-1.jpg')
+        self.add_to_image_list('kv1', prefix + 'news0124-1.jpg')
+        self.add_to_image_list('kv2', prefix + 'news0301-1.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'dist/img/character/chara%s/stand.webp'
+        try:
+            for i in range(1, 20, 1):
+                image_url = template % i
+                image_name = 'chara' + str(i)
+                result = self.download_image(image_url, folder + '/' + image_name)
+                if result == -1:
+                    break
+        except Exception as e:
+            self.print_exception(e, 'Character')
 
 
 # Kami wa Game ni Ueteiru.

@@ -1353,7 +1353,7 @@ class NewsTemplate:
                                date_func=None, a_tag_replace_from=None, a_tag_replace_to='',
                                a_tag_start_text_to_remove=None, next_page_select=None, next_page_eval_index_class=None,
                                next_page_eval_index=0, next_page_eval_index_compare_page=False,
-                               reverse_article_list=False):
+                               reverse_article_list=False, date_tag_count=1):
         """
         :param page_prefix: Start of the page URL to evaluate
         :param article_select: Selects article item elements
@@ -1382,6 +1382,7 @@ class NewsTemplate:
         :param next_page_eval_index: Index number of the elements selected in next_page_select
         :param next_page_eval_index_compare_page: Terminates if the next_page_select's text = current page number
         :param reverse_article_list: Reverse the processing of the articles being scraped. Only works on first page.
+        :param date_tag_count: Number of tags in date select to concatenate
         """
 
         if not issubclass(self.__class__, MainDownload):
@@ -1452,7 +1453,15 @@ class NewsTemplate:
                                 continue
                         else:
                             article_id = ''
-                        if date_attr is None:
+                        if date_tag_count > 1:
+                            tag_count = 0
+                            unformatted_date = ''
+                            for tag_date in tag_dates:
+                                unformatted_date += ' '.join(tag_date.text.strip().split())
+                                tag_count += 1
+                                if tag_count == date_tag_count:
+                                    break
+                        elif date_attr is None:
                             unformatted_date = ' '.join(tag_dates[0].text.strip().split())
                         else:
                             if tag_dates[0].has_attr(date_attr):
