@@ -85,7 +85,6 @@ pip install -r requirements.txt
 The premiere date for the anime listed here has not been announced.
 * [ATRI -My Dear Moments-](https://atri-anime.com/)
 * [Giji Harem](https://gijiharem.com/)
-* [Henjin no Salad Bowl](https://www.tbs.co.jp/anime/hensara/)
 * [Highspeed Etoile](https://highspeed-etoile.com/)
 * [Ookami to Koushinryou](https://spice-and-wolf.com/)
 * [Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita 2nd Season](https://slime300-anime.com/)
@@ -99,6 +98,7 @@ The premiere date for the anime listed here has not been announced.
 
 ### Spring 2024 Anime
 * [Dekisokonai to Yobareta Motoeiyuu wa Jikka kara Tsuihou sareta node Sukikatte ni Ikiru Koto ni Shita](https://dekisoko-anime.com/)
+* [Henjin no Salad Bowl](https://www.tbs.co.jp/anime/hensara/)
 * [Kami wa Game ni Ueteiru.](https://godsgame-anime.com/)
 * [Kono Sekai wa Fukanzen Sugiru](https://konofuka.com/)
 * [Sasayaku You ni Koi wo Utau](https://sasakoi-anime.com/)

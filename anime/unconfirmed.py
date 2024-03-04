@@ -7,7 +7,6 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Anohana S2 https://10th.anohana.jp/ #あの花 #anohana @anohana_project
 # ATRI -My Dear Moments- https://atri-anime.com/ #ATRI @ATRI_anime
 # Giji Harem https://gijiharem.com/ #疑似ハーレム @GijiHarem
-# Henjin no Salad Bowl https://www.tbs.co.jp/anime/hensara/ #変サラ @hensara_anime
 # Highspeed Etoile https://highspeed-etoile.com/ #ハイスピ @HSE_Project_PR
 # Isekai de Mofumofu Nadenade suru Tame ni Ganbattemasu. https://mohunadeanime.com/ #もふなで @mohunade_anime
 # Ookami to Koushinryou https://spice-and-wolf.com/
@@ -175,41 +174,6 @@ class GijiHaremDownload(UnconfirmedDownload, NewsTemplate2):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Key Visual')
-
-
-# Henjin no Salad Bowl
-class HensaraDownload(UnconfirmedDownload, NewsTemplate):
-    title = 'Henjin no Salad Bowl'
-    keywords = [title, 'Salad Bowl of Eccentrics']
-    website = 'https://www.tbs.co.jp/anime/hensara/'
-    twitter = 'hensara_anime'
-    hashtags = '変サラ'
-    folder_name = 'hensara'
-
-    PAGE_PREFIX = website
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_news()
-        self.download_key_visual()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_news(self):
-        news_url = self.PAGE_PREFIX + 'news/'
-        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='#nw-ind-list li',
-                                    date_select='.date', title_select='.txt', id_select='a', a_tag_prefix=news_url)
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/F7lu7ArboAAFbIl?format=jpg&name=large')
-        self.add_to_image_list('teaser_hero', self.PAGE_PREFIX + 'img/teaser/hero.jpg')
-        self.download_image_list(folder)
 
 
 # Highspeed Etoile

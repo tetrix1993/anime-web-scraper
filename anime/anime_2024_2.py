@@ -2,6 +2,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 from datetime import datetime
 
 # Dekisokonai to Yobareta Motoeiyuu wa Jikka kara Tsuihou sareta node Sukikatte ni Ikiru Koto ni Shita https://dekisoko-anime.com/ #できそこ @dekisoko_pr
+# Henjin no Salad Bowl https://www.tbs.co.jp/anime/hensara/ #変サラ @hensara_anime
 # Kami wa Game ni Ueteiru. https://godsgame-anime.com/ #神飢え #神飢えアニメ #kamiue @kami_to_game
 # Kono Sekai wa Fukanzen Sugiru https://konofuka.com/ #このふか @konofuka_QA
 # Sasayaku You ni Koi wo Utau https://sasakoi-anime.com/ #ささこい @sasakoi_anime
@@ -70,6 +71,48 @@ class DekisokoDownload(Spring2024AnimeDownload, NewsTemplate):
                     break
         except Exception as e:
             self.print_exception(e, 'Character')
+
+
+# Henjin no Salad Bowl
+class HensaraDownload(Spring2024AnimeDownload, NewsTemplate):
+    title = 'Henjin no Salad Bowl'
+    keywords = [title, 'Salad Bowl of Eccentrics']
+    website = 'https://www.tbs.co.jp/anime/hensara/'
+    twitter = 'hensara_anime'
+    hashtags = '変サラ'
+    folder_name = 'hensara'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='#nw-ind-list li',
+                                    date_select='.date', title_select='.txt', id_select='a', a_tag_prefix=news_url)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        # self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/F7lu7ArboAAFbIl?format=jpg&name=large')
+        # self.add_to_image_list('teaser_hero', self.PAGE_PREFIX + 'img/teaser/hero.jpg')
+        self.add_to_image_list('top_hero', self.PAGE_PREFIX + 'img/top/hero.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'img/character/chara%s_st.png'
+        self.download_by_template(folder, template, 1, 1)
 
 
 # Kami wa Game ni Ueteiru.
