@@ -95,12 +95,12 @@ The premiere date for the anime listed here has not been announced.
 
 ### Summer 2024 Anime
 * [Koi wa Futago de Warikirenai](https://futakire.com/)
+* [Tokidoki Bosotto Russia-go de Dereru Tonari no Alya-san](https://roshidere.com/)
 
 ### Spring 2024 Anime
 * [Kono Sekai wa Fukanzen Sugiru](https://konofuka.com/)
 * [Sasayaku You ni Koi wo Utau](https://sasakoi-anime.com/)
 * [Tensei shitara Dainana Ouji Datta node, Kimama ni Majutsu wo Kiwamemasu](https://dainanaoji.com/)
-* [Tokidoki Bosotto Russia-go de Dereru Tonari no Alya-san](https://roshidere.com/)
 * [Unnamed Memory](https://unnamedmemory.com/)
 * [Yozakura-san Chi no Daisakusen](https://mission-yozakura-family.com/)
 
