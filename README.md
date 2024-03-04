@@ -87,9 +87,7 @@ The premiere date for the anime listed here has not been announced.
 * [Giji Harem](https://gijiharem.com/)
 * [Highspeed Etoile](https://highspeed-etoile.com/)
 * [Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita 2nd Season](https://slime300-anime.com/)
-* [Tensei Kizoku, Kantei Skill de Nariagaru](https://kanteiskill.com/)
 * [Tsuyokute New Saga](https://tsuyosaga-pr.com/)
-* [Yoru no Kurage wa Oyogenai](https://yorukura-anime.com/)
 
 ### Summer 2024 Anime
 * [Koi wa Futago de Warikirenai](https://futakire.com/)
@@ -102,8 +100,10 @@ The premiere date for the anime listed here has not been announced.
 * [Kono Sekai wa Fukanzen Sugiru](https://konofuka.com/)
 * [Ookami to Koushinryou](https://spice-and-wolf.com/)
 * [Sasayaku You ni Koi wo Utau](https://sasakoi-anime.com/)
+* [Tensei Kizoku, Kantei Skill de Nariagaru](https://kanteiskill.com/)
 * [Tensei shitara Dainana Ouji Datta node, Kimama ni Majutsu wo Kiwamemasu](https://dainanaoji.com/)
 * [Unnamed Memory](https://unnamedmemory.com/)
+* [Yoru no Kurage wa Oyogenai](https://yorukura-anime.com/)
 * [Yozakura-san Chi no Daisakusen](https://mission-yozakura-family.com/)
 
 ### Winter 2024 Anime

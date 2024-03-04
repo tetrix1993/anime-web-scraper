@@ -10,6 +10,7 @@ from datetime import datetime
 # Tensei Kizoku, Kantei Skill de Nariagaru https://kanteiskill.com/ #鑑定スキル @kanteiskill
 # Tensei shitara Dainana Ouji Datta node, Kimama ni Majutsu wo Kiwamemasu https://dainanaoji.com/ #第七王子 @dainanaoji_pro
 # Unnamed Memory https://unnamedmemory.com/ #UnnamedMemory #アンメモ @Project_UM
+# Yoru no Kurage wa Oyogenai https://yorukura-anime.com/ #ヨルクラ #yorukura_anime @yorukura_anime
 # Yozakura-san Chi no Daisakusen https://mission-yozakura-family.com/ #夜桜さんちの大作戦 #MissionYozakuraFamily @OfficialHitsuji
 
 
@@ -623,6 +624,77 @@ class UnnamedMemoryDownload(Spring2024AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'assets/character/%s.webp'
         self.download_by_template(folder, template, 1, 1)
+
+
+# Yoru no Kurage wa Oyogenai
+class YorukuraDownload(Spring2024AnimeDownload, NewsTemplate):
+    title = 'Yoru no Kurage wa Oyogenai'
+    keywords = [title, 'Jellyfish Can’t Swim in the Night']
+    website = 'https://yorukura-anime.com/'
+    twitter = 'yorukura_anime'
+    hashtags = ['ヨルクラ', 'yorukura_anime']
+    folder_name = 'yorukura'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, news_prefix='', article_select='#news article',
+                                    date_select='time', title_select='h3', id_select=None, id_has_id=True)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        # self.image_list = []
+        # self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/Fr6oNgXaIAIDcgR?format=jpg&name=large')
+        # self.add_to_image_list('tz', self.PAGE_PREFIX + 'images/mainimg.jpg')
+        # self.download_image_list(folder)
+
+        css_url = self.PAGE_PREFIX + 'css/style.min.css'
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            mainslides = soup.select('.mainimg .mainslide[class]')
+            _classes = []
+            for slide in mainslides:
+                for _class in slide['class']:
+                    if _class not in ['mainslide', 'swiper-slide']:
+                        _classes.append(_class)
+                        break
+            if len(_classes) > 0:
+                self.image_list = []
+                css_page = self.get_response(css_url)
+                for _class in _classes:
+                    search_text = '.mainslide.' + _class + '{background:url('
+                    idx = css_page.find(search_text)
+                    if idx > 0:
+                        right_idx = css_page[idx + len(search_text):].find(')')
+                        if right_idx > 0:
+                            start_idx = idx + len(search_text)
+                            image_url = css_page[start_idx:start_idx + right_idx]
+                            if image_url.startswith('../'):
+                                image_url = self.PAGE_PREFIX + image_url[3:]
+                            image_name = self.extract_image_name_from_url(image_url)
+                            self.add_to_image_list(image_name, image_url)
+                self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        prefix = self.PAGE_PREFIX + 'images/character/'
+        templates = [prefix + 'img_%s.png', prefix + 'face_%s.png']
+        self.download_by_template(folder, templates, 2, 1)
 
 
 # Yozakura-san Chi no Daisakusen
