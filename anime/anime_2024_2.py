@@ -3,6 +3,7 @@ from datetime import datetime
 
 # Dekisokonai to Yobareta Motoeiyuu wa Jikka kara Tsuihou sareta node Sukikatte ni Ikiru Koto ni Shita https://dekisoko-anime.com/ #できそこ @dekisoko_pr
 # Henjin no Salad Bowl https://www.tbs.co.jp/anime/hensara/ #変サラ @hensara_anime
+# Jii-san Baa-san Wakagaeru https://jisanbasan.com/ #じいさんばあさん若返る @jisanbasan_prj
 # Kami wa Game ni Ueteiru. https://godsgame-anime.com/ #神飢え #神飢えアニメ #kamiue @kami_to_game
 # Kono Sekai wa Fukanzen Sugiru https://konofuka.com/ #このふか @konofuka_QA
 # Ookami to Koushinryou https://spice-and-wolf.com/ #狼と香辛料 #spice_and_wolf @Spicy_Wolf_Prj
@@ -117,6 +118,67 @@ class HensaraDownload(Spring2024AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'img/character/chara%s_st.png'
         self.download_by_template(folder, template, 1, 1)
+
+
+# Jii-san Baa-san Wakagaeru
+class JisanBasanDownload(Spring2024AnimeDownload, NewsTemplate):
+    title = 'Jii-san Baa-san Wakagaeru'
+    keywords = [title, 'jiisanbaasan']
+    website = 'https://jisanbasan.com/'
+    twitter = 'jisanbasan_prj'
+    hashtags = ['じいさんばあさん若返る']
+    folder_name = 'jisanbasan'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        soup = self.download_key_visual()
+        self.download_character(soup)
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.content-entry',
+                                    title_select='.entry-title span', date_select='.entry-date',
+                                    id_select=None, id_has_id=True, news_prefix='news.html',
+                                    date_func=lambda x: x.replace('年', '.').replace('月', '.').replace('日', ''))
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        soup = None
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.vis img[src*="/top/"]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'].replace('./', '')
+                image_name = self.generate_image_name_from_url(image_url, 'top')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+        return soup
+
+    def download_character(self, soup=None):
+        folder = self.create_character_directory()
+        try:
+            if soup is None:
+                soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.chr-img img[data-src*="/character/"]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['data-src'].replace('./', '')
+                image_name = self.generate_image_name_from_url(image_url, 'character')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
 
 
 # Kami wa Game ni Ueteiru.
