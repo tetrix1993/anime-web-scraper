@@ -7,6 +7,7 @@ from datetime import datetime
 # Kono Sekai wa Fukanzen Sugiru https://konofuka.com/ #このふか @konofuka_QA
 # Ookami to Koushinryou https://spice-and-wolf.com/ #狼と香辛料 #spice_and_wolf @Spicy_Wolf_Prj
 # Sasayaku You ni Koi wo Utau https://sasakoi-anime.com/ #ささこい @sasakoi_anime
+# Tensei Kizoku, Kantei Skill de Nariagaru https://kanteiskill.com/ #鑑定スキル @kanteiskill
 # Tensei shitara Dainana Ouji Datta node, Kimama ni Majutsu wo Kiwamemasu https://dainanaoji.com/ #第七王子 @dainanaoji_pro
 # Unnamed Memory https://unnamedmemory.com/ #UnnamedMemory #アンメモ @Project_UM
 # Yozakura-san Chi no Daisakusen https://mission-yozakura-family.com/ #夜桜さんちの大作戦 #MissionYozakuraFamily @OfficialHitsuji
@@ -414,6 +415,71 @@ class SasakoiDownload(Spring2024AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'core_sys/images/main/tz/chara/c%s_face.jpg'
         self.download_by_template(folder, template, 2, 1, prefix='tz_')
+
+
+# Tensei Kizoku, Kantei Skill de Nariagaru
+class KanteiSkillDownload(Spring2024AnimeDownload, NewsTemplate):
+    title = 'Tensei Kizoku, Kantei Skill de Nariagaru'
+    keywords = [title, 'kanteiskill', "As a Reincarnated Aristocrat, I’ll Use My Appraisal Skill to Rise in the World"]
+    website = 'https://kanteiskill.com/'
+    twitter = 'kanteiskill'
+    hashtags = '鑑定スキル'
+    folder_name = 'kanteiskill'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.c-news-item',
+                                    title_select='.c-news-item__title', date_select='.c-news-item__date',
+                                    id_select=None, a_tag_start_text_to_remove='/', a_tag_prefix=self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/FvmXW8HakAAhiY6?format=jpg&name=large')
+        self.add_to_image_list('home_visual_1_pc', self.PAGE_PREFIX + 'wordpress/wp-content/themes/kanteiskill_20231110/img/home/visual_1_pc.webp')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        json_url = self.PAGE_PREFIX + 'chara_data'
+        self.image_list = []
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            if soup is None:
+                return
+            prefix = soup.select('body[data-theme-url]')[0]['data-theme-url']
+
+            json_obj = self.get_json(json_url)
+            if 'charas' in json_obj and isinstance(json_obj['charas'], list):
+                for chara in json_obj['charas']:
+                    if 'images' in chara:
+                        if 'visuals' in chara['images'] and isinstance(chara['images']['visuals'], list):
+                            for visual in chara['images']['visuals']:
+                                if 'image' in visual:
+                                    image_url = prefix + visual['image'].split('?')[0]
+                                    image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                                    self.add_to_image_list(image_name, image_url)
+                        if 'faces' in chara['images'] and isinstance(chara['images']['faces'], list):
+                            for face in chara['images']['faces']:
+                                image_url = prefix + face.split('?')[0]
+                                image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                                self.add_to_image_list(image_name, image_url)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+        self.download_image_list(folder)
 
 
 # Tensei shitara Dainana Ouji Datta node, Kimama ni Majutsu wo Kiwamemasu
