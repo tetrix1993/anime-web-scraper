@@ -1,5 +1,7 @@
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
+from datetime import datetime
 
+# Kami wa Game ni Ueteiru. https://godsgame-anime.com/ #神飢え #神飢えアニメ #kamiue @kami_to_game
 # Kono Sekai wa Fukanzen Sugiru https://konofuka.com/ #このふか @konofuka_QA
 # Sasayaku You ni Koi wo Utau https://sasakoi-anime.com/ #ささこい @sasakoi_anime
 # Tensei shitara Dainana Ouji Datta node, Kimama ni Majutsu wo Kiwamemasu https://dainanaoji.com/ #第七王子 @dainanaoji_pro
@@ -15,6 +17,94 @@ class Spring2024AnimeDownload(MainDownload):
 
     def __init__(self):
         super().__init__()
+
+
+# Kami wa Game ni Ueteiru.
+class KamiueDownload(Spring2024AnimeDownload, NewsTemplate):
+    title = 'Kami wa Game ni Ueteiru.'
+    keywords = [title, "Gods' Game We Play"]
+    website = 'https://godsgame-anime.com/'
+    twitter = 'kami_to_game'
+    hashtags = ['神飢え', '神飢えアニメ', 'kamiue']
+    folder_name = 'kamiue'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+        self.download_media()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        try:
+            results = []
+            news_obj = self.get_last_news_log_object()
+            json_obj = self.get_json(self.PAGE_PREFIX + 'news.json')
+            for item in json_obj:
+                if 'day' in item and 'url' in item and 'title' in item:
+                    try:
+                        date = datetime.strptime(item['day'], "%Y/%m/%d").strftime("%Y.%m.%d")
+                    except:
+                        continue
+                    title = item['title']
+                    url = self.PAGE_PREFIX + item['url']
+                    if news_obj is not None and (news_obj['id'] == url or news_obj['title'] == title
+                                                 or date < news_obj['date']):
+                        break
+                    results.append(self.create_news_log_object(date, title, url))
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log_from_news_log_object(result)
+                if process_result == 0:
+                    success_count += 1
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
+        except Exception as e:
+            self.print_exception(e, 'News')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.visual_wrap .img_100 img[src*="/visual/"]')
+            self.image_list = []
+            for image in images:
+                image_name = self.extract_image_name_from_url(image['src'])
+                image_url = self.PAGE_PREFIX + image['src']
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        prefix = self.PAGE_PREFIX + 'images/chara/'
+        template = prefix + 'c_%s.png'
+        self.download_by_template(folder, template, 3, 1)
+        templates = [prefix + 'a%s_left.png', prefix + 'a%s_center.png', prefix + 'a%s_right.png']
+        self.download_by_template(folder, templates, 2, 1)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        special_folder = self.create_custom_directory(folder.split('/')[-1] + '/special')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'special.html?cat=visual')
+            images = soup.select('article.visual a[href^="images/"]')
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['href']
+                image_name = self.generate_image_name_from_url(image_url, 'images')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(special_folder)
+        except Exception as e:
+            self.print_exception(e, 'Special')
 
 
 # Kono Sekai wa Fukanzen Sugiru
