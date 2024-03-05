@@ -623,7 +623,7 @@ class DainanaojiDownload(Spring2024AnimeDownload, NewsTemplate):
 
     def run(self):
         self.download_episode_preview()
-        # self.download_news()
+        self.download_news()
         self.download_key_visual()
         self.download_character()
 
@@ -633,8 +633,7 @@ class DainanaojiDownload(Spring2024AnimeDownload, NewsTemplate):
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='#news-container article',
                                     date_select='.news-box-date', title_select='.news-txt-box', id_select='a',
-                                    next_page_select='.pagination .page-numbers',
-                                    next_page_eval_index_class='current', next_page_eval_index=-1)
+                                    date_func=lambda x: x.replace('-Date', '').strip())
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
