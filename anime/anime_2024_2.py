@@ -9,6 +9,7 @@ from datetime import datetime
 # Kono Subarashii Sekai ni Shukufuku wo! 3 http://konosuba.com/3rd/ #konosuba #このすば @konosubaanime
 # Lv2 kara Cheat datta Motoyuusha Kouho no Mattari Isekai Life https://lv2-cheat.com/ #Lv2チート @Lv2cheat_anime
 # Mahouka Koukou no Rettousei S3 https://mahouka.jp/3rd/ #mahouka @mahouka_anime
+# Maou no Ore ga Dorei Elf wo Yome ni Shitanda ga, Dou Medereba Ii? https://madome-anime.com/ #まどめ #madome @madome_PR
 # One Room, Hiatari Futsuu, Tenshi-tsuki. https://tenshitsuki.com/ #天使つき @tenshitsuki_off
 # Ookami to Koushinryou https://spice-and-wolf.com/ #狼と香辛料 #spice_and_wolf @Spicy_Wolf_Prj
 # Re:Monster https://re-monster.com/ #remonster_anime @ReMonster_anime
@@ -445,6 +446,74 @@ class Mahouka3Download(Spring2024AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'assets/img/character/c_%s.png'
         self.download_by_template(folder, template, 2, 1)
+
+
+# Maou no Ore ga Dorei Elf wo Yome ni Shitanda ga, Dou Medereba Ii?
+class MadomeDownload(Spring2024AnimeDownload, NewsTemplate):
+    title = 'Maou no Ore ga Dorei Elf wo Yome ni Shitanda ga, Dou Medereba Ii?'
+    keywords = [title, "An Archdemon's Dilemma: How to Love Your Elf Bride"]
+    website = 'https://madome-anime.com/'
+    twitter = 'madome_PR'
+    hashtags = ['まどめ', 'madome']
+    folder_name = 'madome'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.list article',
+                                    date_select='time', title_select='h2', id_select='a', a_tag_prefix=news_url)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('top_kv', self.PAGE_PREFIX + 'assets/images/top/kv.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        chara_url = self.PAGE_PREFIX + 'character/'
+        try:
+            soup = self.get_soup(chara_url + 'zagan.html')
+            pages = soup.select('.thumb a[href]')
+            for page in pages:
+                if not page['href'].endswith('.html'):
+                    continue
+                page_url = chara_url + page['href']
+                page_name = page['href'].split('.html')[0]
+                if page_name in processed:
+                    continue
+                if page_name == 'zagan':
+                    ep_soup = soup
+                else:
+                    ep_soup = self.get_soup(page_url)
+                if ep_soup is None:
+                    continue
+                images = ep_soup.select('section picture img[src*="/character/"]')
+                self.image_list = []
+                for image in images:
+                    image_url = self.PAGE_PREFIX + image['src'][1:]
+                    image_name = self.generate_image_name_from_url(image_url, 'character')
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(folder)
+                processed.append(page_name)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # One Room, Hiatari Futsuu, Tenshi-tsuki.
