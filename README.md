@@ -101,6 +101,7 @@ The premiere date for the anime listed here has not been announced.
 * [Kono Sekai wa Fukanzen Sugiru](https://konofuka.com/)
 * [Kono Subarashii Sekai ni Shukufuku wo! 3](http://konosuba.com/3rd/)
 * [Lv2 kara Cheat datta Motoyuusha Kouho no Mattari Isekai Life](https://lv2-cheat.com/)
+* [Mahouka Koukou no Rettousei 3rd Season](https://mahouka.jp/3rd/)
 * [One Room, Hiatari Futsuu, Tenshi-tsuki.](https://tenshitsuki.com/)
 * [Ookami to Koushinryou](https://spice-and-wolf.com/)
 * [Re:Monster](https://re-monster.com/)

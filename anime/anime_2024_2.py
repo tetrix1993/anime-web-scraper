@@ -8,6 +8,7 @@ from datetime import datetime
 # Kono Sekai wa Fukanzen Sugiru https://konofuka.com/ #このふか @konofuka_QA
 # Kono Subarashii Sekai ni Shukufuku wo! 3 http://konosuba.com/3rd/ #konosuba #このすば @konosubaanime
 # Lv2 kara Cheat datta Motoyuusha Kouho no Mattari Isekai Life https://lv2-cheat.com/ #Lv2チート @Lv2cheat_anime
+# Mahouka Koukou no Rettousei S3 https://mahouka.jp/3rd/ #mahouka @mahouka_anime
 # One Room, Hiatari Futsuu, Tenshi-tsuki. https://tenshitsuki.com/ #天使つき @tenshitsuki_off
 # Ookami to Koushinryou https://spice-and-wolf.com/ #狼と香辛料 #spice_and_wolf @Spicy_Wolf_Prj
 # Re:Monster https://re-monster.com/ #remonster_anime @ReMonster_anime
@@ -401,6 +402,48 @@ class Lv2CheatDownload(Spring2024AnimeDownload, NewsTemplate):
     def download_character(self):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'wp/wp-content/themes/lv2cheat-v2/img/%s.png'
+        self.download_by_template(folder, template, 2, 1)
+
+
+# Mahouka Koukou no Rettousei S3
+class Mahouka3Download(Spring2024AnimeDownload, NewsTemplate):
+    title = 'Mahouka Koukou no Rettousei 3rd Season'
+    keywords = [title, "The Irregular at Magic High School: Visitor Arc"]
+    website = 'https://mahouka.jp/3rd/'
+    twitter = 'mahouka_anime'
+    hashtags = 'mahouka'
+    folder_name = 'mahouka3'
+
+    BASE_PREFIX = 'https://mahouka.jp/'
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.p-news__list-item',
+                                    date_select='.p-news_article__date', title_select='.p-news_article__title',
+                                    id_select='a', a_tag_start_text_to_remove='/', a_tag_prefix=self.BASE_PREFIX,
+                                    next_page_select='.--next', paging_type=1)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('main_kv', self.PAGE_PREFIX + 'assets/img/main_kv.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'assets/img/character/c_%s.png'
         self.download_by_template(folder, template, 2, 1)
 
 
@@ -1197,13 +1240,12 @@ class YozakurasanDownload(Spring2024AnimeDownload, NewsTemplate2):
 class YuruCamp3Download(Spring2024AnimeDownload, NewsTemplate):
     title = "Yuru Camp 3rd Season"
     keywords = [title, 'Yurucamp']
-    website = 'https://yurucamp.jp/'
+    website = 'https://yurucamp.jp/third/'
     twitter = 'yurucamp_anime'
     hashtags = ['ゆるキャン', 'yurucamp']
     folder_name = 'yurucamp3'
 
-    BASE_PREFIX = website
-    PAGE_PREFIX = BASE_PREFIX + 'third/'
+    PAGE_PREFIX = website
 
     def __init__(self):
         super().__init__()
