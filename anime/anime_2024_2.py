@@ -1100,6 +1100,7 @@ class TheNewGateDownload(Spring2024AnimeDownload, NewsTemplate):
         folder = self.create_key_visual_directory()
         self.image_list = []
         self.add_to_image_list('tz', self.PAGE_PREFIX + 'wp/wp-content/themes/tng-honban/images/kv-pc.jpg')
+        self.add_to_image_list('kv2-pc', self.PAGE_PREFIX + 'wp/wp-content/themes/tng-honban/images/kv2-pc.jpg')
         self.download_image_list(folder)
 
     def download_character(self):
