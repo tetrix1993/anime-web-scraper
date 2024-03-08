@@ -2,6 +2,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 from datetime import datetime
 
 # Dekisokonai to Yobareta Motoeiyuu wa Jikka kara Tsuihou sareta node Sukikatte ni Ikiru Koto ni Shita https://dekisoko-anime.com/ #できそこ @dekisoko_pr
+# Hananoi-kun to Koi no Yamai https://hananoikun-pr.com/ #花野井くんと恋の病 @hananoikun_pr
 # Henjin no Salad Bowl https://www.tbs.co.jp/anime/hensara/ #変サラ @hensara_anime
 # Jii-san Baa-san Wakagaeru https://jisanbasan.com/ #じいさんばあさん若返る @jisanbasan_prj
 # Kami wa Game ni Ueteiru. https://godsgame-anime.com/ #神飢え #神飢えアニメ #kamiue @kami_to_game
@@ -85,6 +86,45 @@ class DekisokoDownload(Spring2024AnimeDownload, NewsTemplate):
                     break
         except Exception as e:
             self.print_exception(e, 'Character')
+
+
+# Hananoi-kun to Koi no Yamai #花野井くんと恋の病
+class HananoikunDownload(Spring2024AnimeDownload, NewsTemplate):
+    title = 'Hananoi-kun to Koi no Yamai'
+    keywords = [title, 'A Condition Called Love']
+    website = 'https://hananoikun-pr.com/'
+    twitter = 'hananoikun_pr'
+    hashtags = '花野井くんと恋の病'
+    folder_name = 'hananoikun'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-item',
+                                    title_select='.title', date_select='.date', id_select='a')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('kv1', self.PAGE_PREFIX + 'wp/wp-content/themes/hananoi-honban/images/kv1.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'wp/wp-content/themes/hananoi-honban/images/chara-pic%s.png'
+        self.download_by_template(folder, template, 1, 1)
 
 
 # Henjin no Salad Bowl
@@ -1059,12 +1099,12 @@ class TheNewGateDownload(Spring2024AnimeDownload, NewsTemplate):
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         self.image_list = []
-        self.add_to_image_list('tz', self.PAGE_PREFIX + 'wp/wp-content/themes/tng-teaser/images/kv-pc.jpg')
+        self.add_to_image_list('tz', self.PAGE_PREFIX + 'wp/wp-content/themes/tng-honban/images/kv-pc.jpg')
         self.download_image_list(folder)
 
     def download_character(self):
         folder = self.create_character_directory()
-        template = self.PAGE_PREFIX + 'wp/wp-content/themes/tng-teaser/images/chara-pic%s.png'
+        template = self.PAGE_PREFIX + 'wp/wp-content/themes/tng-honban/images/chara-pic%s.png'
         self.download_by_template(folder, template, 1, 1)
 
 
