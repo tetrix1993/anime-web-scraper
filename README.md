@@ -108,6 +108,7 @@ The premiere date for the anime listed here has not been announced.
 * [Shinigami Bocchan to Kuro Maid 3rd Season](https://bocchan-anime.com/)
 * [Tensei Kizoku, Kantei Skill de Nariagaru](https://kanteiskill.com/)
 * [Tensei shitara Dainana Ouji Datta node, Kimama ni Majutsu wo Kiwamemasu](https://dainanaoji.com/)
+* [The New Gate](https://the-new-gate-pr.com/)
 * [Unnamed Memory](https://unnamedmemory.com/)
 * [Yoru no Kurage wa Oyogenai](https://yorukura-anime.com/)
 * [Yozakura-san Chi no Daisakusen](https://mission-yozakura-family.com/)

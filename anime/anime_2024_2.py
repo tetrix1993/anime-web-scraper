@@ -15,6 +15,7 @@ from datetime import datetime
 # Shinigami Bocchan to Kuro Maid S3 https://bocchan-anime.com/ #死神坊ちゃん @bocchan_anime
 # Tensei Kizoku, Kantei Skill de Nariagaru https://kanteiskill.com/ #鑑定スキル @kanteiskill
 # Tensei shitara Dainana Ouji Datta node, Kimama ni Majutsu wo Kiwamemasu https://dainanaoji.com/ #第七王子 @dainanaoji_pro
+# The New Gate https://the-new-gate-pr.com/ #THENEWGATE @thenewgateanime
 # Unnamed Memory https://unnamedmemory.com/ #UnnamedMemory #アンメモ @Project_UM
 # Yoru no Kurage wa Oyogenai https://yorukura-anime.com/ #ヨルクラ #yorukura_anime @yorukura_anime
 # Yozakura-san Chi no Daisakusen https://mission-yozakura-family.com/ #夜桜さんちの大作戦 #MissionYozakuraFamily @OfficialHitsuji
@@ -861,6 +862,45 @@ class DainanaojiDownload(Spring2024AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+
+# The New Gate
+class TheNewGateDownload(Spring2024AnimeDownload, NewsTemplate):
+    title = 'The New Gate'
+    keywords = [title]
+    website = 'https://the-new-gate-pr.com/'
+    twitter = 'thenewgateanime'
+    hashtags = ['THENEWGATE']
+    folder_name = 'thenewgate'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-item',
+                                    title_select='.title', date_select='.date', id_select='a')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz', self.PAGE_PREFIX + 'wp/wp-content/themes/tng-teaser/images/kv-pc.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'wp/wp-content/themes/tng-teaser/images/chara-pic%s.png'
+        self.download_by_template(folder, template, 1, 1)
 
 
 # Unnamed Memory
