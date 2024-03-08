@@ -6,6 +6,7 @@ from datetime import datetime
 # Jii-san Baa-san Wakagaeru https://jisanbasan.com/ #じいさんばあさん若返る @jisanbasan_prj
 # Kami wa Game ni Ueteiru. https://godsgame-anime.com/ #神飢え #神飢えアニメ #kamiue @kami_to_game
 # Kono Sekai wa Fukanzen Sugiru https://konofuka.com/ #このふか @konofuka_QA
+# Lv2 kara Cheat datta Motoyuusha Kouho no Mattari Isekai Life https://lv2-cheat.com/ #Lv2チート @Lv2cheat_anime
 # Ookami to Koushinryou https://spice-and-wolf.com/ #狼と香辛料 #spice_and_wolf @Spicy_Wolf_Prj
 # Re:Monster https://re-monster.com/ #remonster_anime @ReMonster_anime
 # Sasayaku You ni Koi wo Utau https://sasakoi-anime.com/ #ささこい @sasakoi_anime
@@ -307,6 +308,54 @@ class KonofukaDownload(Spring2024AnimeDownload, NewsTemplate):
         self.download_image_list(folder)
 
 
+# Lv2 kara Cheat datta Motoyuusha Kouho no Mattari Isekai Life
+class Lv2CheatDownload(Spring2024AnimeDownload, NewsTemplate):
+    title = 'Lv2 kara Cheat datta Motoyuusha Kouho no Mattari Isekai Life'
+    keywords = [title, "Chillin' in Another World with Level 2 Super Cheat Powers"]
+    website = 'https://lv2-cheat.com/'
+    twitter = 'Lv2cheat_anime'
+    hashtags = 'Lv2チート'
+    folder_name = 'lv2cheat'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.newslist',
+                                    date_select='.date', title_select='.title', id_select='a',
+                                    date_func=lambda x: x[0:4] + '.' + x[4:6] + '.' + x[7:9])
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            self.image_list = []
+            images = soup.select('.mainvisual .slide img[src*="/img/"]')
+            for image in images:
+                image_url = image['src']
+                image_name = self.generate_image_name_from_url(image_url, 'img')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'wp/wp-content/themes/lv2cheat-v2/img/%s.png'
+        self.download_by_template(folder, template, 2, 1)
+
+
 # Ookami to Koushinryou
 class OokamitoKoushinryou(Spring2024AnimeDownload, NewsTemplate):
     title = 'Ookami to Koushinryou'
@@ -563,7 +612,6 @@ class ShinigamiBocchan3Download(Spring2024AnimeDownload, NewsTemplate2):
     def run(self):
         self.download_episode_preview()
         self.download_news()
-        self.download_key_visual()
 
     def download_episode_preview(self):
         try:
