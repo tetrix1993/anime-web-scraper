@@ -6,6 +6,7 @@ from datetime import datetime
 # Jii-san Baa-san Wakagaeru https://jisanbasan.com/ #じいさんばあさん若返る @jisanbasan_prj
 # Kami wa Game ni Ueteiru. https://godsgame-anime.com/ #神飢え #神飢えアニメ #kamiue @kami_to_game
 # Kono Sekai wa Fukanzen Sugiru https://konofuka.com/ #このふか @konofuka_QA
+# Kono Subarashii Sekai ni Shukufuku wo! 3 http://konosuba.com/3rd/ #konosuba #このすば @konosubaanime
 # Lv2 kara Cheat datta Motoyuusha Kouho no Mattari Isekai Life https://lv2-cheat.com/ #Lv2チート @Lv2cheat_anime
 # Ookami to Koushinryou https://spice-and-wolf.com/ #狼と香辛料 #spice_and_wolf @Spicy_Wolf_Prj
 # Re:Monster https://re-monster.com/ #remonster_anime @ReMonster_anime
@@ -306,6 +307,49 @@ class KonofukaDownload(Spring2024AnimeDownload, NewsTemplate):
         self.add_to_image_list('tz', self.PAGE_PREFIX + 'pDK2yjkH/wp-content/themes/konofuka_v0.1/assets/img/top/mv.png')
         self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/Fr85Cb4aAAAgWlS?format=jpg&name=4096x4096')
         self.download_image_list(folder)
+
+
+# Kono Subarashii Sekai ni Shukufuku wo! 3
+class Konosuba3Download(Spring2024AnimeDownload, NewsTemplate):
+    title = 'Kono Subarashii Sekai ni Shukufuku wo! 3'
+    keywords = [title, 'konosuba', 'KonoSuba: God’s Blessing on This Wonderful World! 3', '3rd']
+    website = 'http://konosuba.com/3rd/'
+    twitter = 'konosubaanime'
+    hashtags = ['konosuba', 'このすば']
+    folder_name = 'konosuba3'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-list__item',
+                                    date_select='.news-list__date', title_select='.news-list__title',
+                                    id_select='a', a_tag_prefix=news_url)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.top-main__mv img[src]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src']
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
 
 
 # Lv2 kara Cheat datta Motoyuusha Kouho no Mattari Isekai Life

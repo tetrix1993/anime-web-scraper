@@ -99,6 +99,7 @@ The premiere date for the anime listed here has not been announced.
 * [Jii-san Baa-san Wakagaeru](https://jisanbasan.com/)
 * [Kami wa Game ni Ueteiru.](https://godsgame-anime.com/)
 * [Kono Sekai wa Fukanzen Sugiru](https://konofuka.com/)
+* [Kono Subarashii Sekai ni Shukufuku wo! 3](http://konosuba.com/3rd/)
 * [Lv2 kara Cheat datta Motoyuusha Kouho no Mattari Isekai Life](https://lv2-cheat.com/)
 * [Ookami to Koushinryou](https://spice-and-wolf.com/)
 * [Re:Monster](https://re-monster.com/)
