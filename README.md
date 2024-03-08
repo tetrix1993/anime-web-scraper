@@ -104,6 +104,7 @@ The premiere date for the anime listed here has not been announced.
 * [Ookami to Koushinryou](https://spice-and-wolf.com/)
 * [Re:Monster](https://re-monster.com/)
 * [Sasayaku You ni Koi wo Utau](https://sasakoi-anime.com/)
+* [Seiyuu Radio no Uraomote](https://seiyuradio-anime.com/)
 * [Shinigami Bocchan to Kuro Maid 3rd Season](https://bocchan-anime.com/)
 * [Tensei Kizoku, Kantei Skill de Nariagaru](https://kanteiskill.com/)
 * [Tensei shitara Dainana Ouji Datta node, Kimama ni Majutsu wo Kiwamemasu](https://dainanaoji.com/)

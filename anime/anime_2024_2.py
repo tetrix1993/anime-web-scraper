@@ -11,6 +11,7 @@ from datetime import datetime
 # Ookami to Koushinryou https://spice-and-wolf.com/ #狼と香辛料 #spice_and_wolf @Spicy_Wolf_Prj
 # Re:Monster https://re-monster.com/ #remonster_anime @ReMonster_anime
 # Sasayaku You ni Koi wo Utau https://sasakoi-anime.com/ #ささこい @sasakoi_anime
+# Seiyuu Radio no Uraomote https://seiyuradio-anime.com/ #声優ラジオのウラオモテ @sayyouradio_prj
 # Shinigami Bocchan to Kuro Maid S3 https://bocchan-anime.com/ #死神坊ちゃん @bocchan_anime
 # Tensei Kizoku, Kantei Skill de Nariagaru https://kanteiskill.com/ #鑑定スキル @kanteiskill
 # Tensei shitara Dainana Ouji Datta node, Kimama ni Majutsu wo Kiwamemasu https://dainanaoji.com/ #第七王子 @dainanaoji_pro
@@ -634,6 +635,63 @@ class SasakoiDownload(Spring2024AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'core_sys/images/main/tz/chara/c%s_face.jpg'
         self.download_by_template(folder, template, 2, 1, prefix='tz_')
+
+
+# Seiyuu Radio no Uraomote  #
+class SeiyuRadioDownload(Spring2024AnimeDownload, NewsTemplate):
+    title = 'Seiyuu Radio no Uraomote'
+    keywords = [title]
+    website = 'https://seiyuradio-anime.com/'
+    twitter = 'sayyouradio_prj'
+    hashtags = '声優ラジオのウラオモテ'
+    folder_name = 'seiyuradio'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.c-article__item',
+                                    date_select='time', title_select='h3', id_select='a', a_tag_prefix=news_url,
+                                    a_tag_start_text_to_remove='./', date_func=lambda x: x[0:4] + '.' + x[4:])
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('top_kv', self.PAGE_PREFIX + 'dist/img/top/kv.webp')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'dist/img/character/character%s/chara%s.webp'
+        try:
+            for i in range(1, 21, 1):
+                stop = False
+                for j in range(1, 3, 1):
+                    image_name = 'chara' + str(i) + '_' + str(j).zfill(2)
+                    if self.is_image_exists(image_name, folder):
+                        break
+                    image_url = template % (str(i), str(j).zfill(2))
+                    result = self.download_image(image_url, folder + '/' + image_name)
+                    if result == -1 and j == 1:
+                        stop = True
+                        break
+                if stop:
+                    break
+        except Exception as e:
+            self.print_exception(e, 'Character')
+
 
 
 # Shinigami Bocchan to Kuro Maid S3
