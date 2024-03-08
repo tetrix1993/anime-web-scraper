@@ -9,6 +9,7 @@ from datetime import datetime
 # Ookami to Koushinryou https://spice-and-wolf.com/ #狼と香辛料 #spice_and_wolf @Spicy_Wolf_Prj
 # Re:Monster https://re-monster.com/ #remonster_anime @ReMonster_anime
 # Sasayaku You ni Koi wo Utau https://sasakoi-anime.com/ #ささこい @sasakoi_anime
+# Shinigami Bocchan to Kuro Maid S3 https://bocchan-anime.com/ #死神坊ちゃん @bocchan_anime
 # Tensei Kizoku, Kantei Skill de Nariagaru https://kanteiskill.com/ #鑑定スキル @kanteiskill
 # Tensei shitara Dainana Ouji Datta node, Kimama ni Majutsu wo Kiwamemasu https://dainanaoji.com/ #第七王子 @dainanaoji_pro
 # Unnamed Memory https://unnamedmemory.com/ #UnnamedMemory #アンメモ @Project_UM
@@ -540,6 +541,57 @@ class SasakoiDownload(Spring2024AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'core_sys/images/main/tz/chara/c%s_face.jpg'
         self.download_by_template(folder, template, 2, 1, prefix='tz_')
+
+
+# Shinigami Bocchan to Kuro Maid S3
+class ShinigamiBocchan3Download(Spring2024AnimeDownload, NewsTemplate2):
+    title = 'Shinigami Bocchan to Kuro Maid 3rd Season'
+    keywords = [title, 'The Duke of Death and His Maid']
+    website = 'https://bocchan-anime.com/'
+    twitter = 'bocchan_anime'
+    hashtags = '死神坊ちゃん'
+    folder_name = 'shinigami-bocchan3'
+
+    PAGE_PREFIX = website
+    FIRST_EPISODE = 25
+    FINAL_EPISODE = 36
+    IMAGES_PER_EPISODE = 6
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            stories = soup.select('#ContentsListUnit01 a[href]')
+            for story in stories:
+                try:
+                    ep_num = int(story.text.replace('#', ''))
+                    if ep_num < self.FIRST_EPISODE:
+                        continue
+                    episode = str(ep_num).zfill(2)
+                except:
+                    continue
+                ep_soup = self.get_soup(self.PAGE_PREFIX + story['href'].replace('../', ''))
+                if ep_soup is None:
+                    continue
+                images = ep_soup.select('ul.tp5 img[src]')
+                self.image_list = []
+                for i in range(len(images)):
+                    image_url = self.PAGE_PREFIX + images[i]['src'].split('?')[0].replace('../', '').replace('sn_', '')
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
+
+    def download_news(self):
+        self.download_template_news(self.PAGE_PREFIX, stop_date='2023.09.20')
 
 
 # Tensei Kizoku, Kantei Skill de Nariagaru
