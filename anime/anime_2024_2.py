@@ -20,6 +20,7 @@ from datetime import datetime
 # Unnamed Memory https://unnamedmemory.com/ #UnnamedMemory #アンメモ @Project_UM
 # Yoru no Kurage wa Oyogenai https://yorukura-anime.com/ #ヨルクラ #yorukura_anime @yorukura_anime
 # Yozakura-san Chi no Daisakusen https://mission-yozakura-family.com/ #夜桜さんちの大作戦 #MissionYozakuraFamily @OfficialHitsuji
+# Yuru Camp S3 https://yurucamp.jp/third/ #ゆるキャン @yurucamp_anime
 
 
 # Spring 2024 Anime
@@ -1190,3 +1191,44 @@ class YozakurasanDownload(Spring2024AnimeDownload, NewsTemplate2):
         except Exception as e:
             self.print_exception(e, 'Character')
         self.create_cache_file(cache_filepath, processed, num_processed)
+
+
+# Yuru Camp S3
+class YuruCamp3Download(Spring2024AnimeDownload, NewsTemplate):
+    title = "Yuru Camp 3rd Season"
+    keywords = [title, 'Yurucamp']
+    website = 'https://yurucamp.jp/'
+    twitter = 'yurucamp_anime'
+    hashtags = ['ゆるキャン', 'yurucamp']
+    folder_name = 'yurucamp3'
+
+    BASE_PREFIX = website
+    PAGE_PREFIX = BASE_PREFIX + 'third/'
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_media()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_media(self):
+        folder = self.create_media_directory()
+
+        # Gallery
+        gallery_folder = self.create_custom_directory(folder.split('/')[-1] + '/gallery')
+        gallery_url = self.PAGE_PREFIX + 'gallery/'
+        template = self.PAGE_PREFIX + 'assets/img/gallery/%s.jpg'
+        try:
+            soup = self.get_soup(gallery_url)
+            images = soup.select('.gallery__lists a[data-imgname]')
+            for image in images:
+                image_name = image['data-imgname']
+                image_url = template % image_name
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(gallery_folder)
+        except Exception as e:
+            self.print_exception(e, 'Gallery')

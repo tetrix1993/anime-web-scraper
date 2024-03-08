@@ -113,6 +113,7 @@ The premiere date for the anime listed here has not been announced.
 * [Unnamed Memory](https://unnamedmemory.com/)
 * [Yoru no Kurage wa Oyogenai](https://yorukura-anime.com/)
 * [Yozakura-san Chi no Daisakusen](https://mission-yozakura-family.com/)
+* [Yuru Camp△ 3rd Season](https://yurucamp.jp/third/)
 
 ### Winter 2024 Anime
 * [Akuyaku Reijou Level 99](https://akuyakulv99-anime.com/)
