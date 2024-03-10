@@ -229,7 +229,7 @@ class HighspeedEtoileDownload(UnconfirmedDownload, NewsTemplate):
 class Slime3002Download(UnconfirmedDownload, NewsTemplate):
     title = "Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita 2nd Season"
     keywords = [title, "I've Been Killing Slimes for 300 Years and Maxed Out My Level", "Slime 300", "slime300", '2nd']
-    website = 'https://slime300-anime.com'
+    website = 'https://slime300-anime.com/'
     twitter = 'slime300_PR'
     hashtags = 'スライム倒して300年'
     folder_name = 'slime300-2'
@@ -248,40 +248,26 @@ class Slime3002Download(UnconfirmedDownload, NewsTemplate):
         pass
 
     def download_news(self):
-        json_url = self.PAGE_PREFIX + '/page-data/news/page-data.json'
-        news_obj = self.get_last_news_log_object()
-        try:
-            json_obj = self.get_json(json_url)
-            results = []
-            nodes = json_obj['result']['data']['allContentfulNews']['nodes']
-            for node in nodes:
-                try:
-                    date = node['date']
-                    if date < '2022.01.04':
-                        continue
-                    title = node['title']
-                    article_id = self.PAGE_PREFIX + '/news/' + node['slug']
-                    if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
-                        break
-                    results.append(self.create_news_log_object(date, title, article_id))
-                except:
-                    continue
-            success_count = 0
-            for result in reversed(results):
-                process_result = self.create_news_log_from_news_log_object(result)
-                if process_result == 0:
-                    success_count += 1
-            if len(results) > 0:
-                self.create_news_log_cache(success_count, results[0])
-        except Exception as e:
-            print("Error in running " + self.__class__.__name__ + " - News")
-            print(e)
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-list li',
+                                    date_select='.date', title_select='p:nth-child(2)', id_select='a')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('announce', self.PAGE_PREFIX + '/static/944a17585cc6d3dccaf125c0201aab71/99383/promo.png')
-        self.download_image_list(folder)
+        # self.image_list = []
+        # self.add_to_image_list('announce', self.PAGE_PREFIX + '/static/944a17585cc6d3dccaf125c0201aab71/99383/promo.png')
+        # self.download_image_list(folder)
+
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.slider img[src*="/images/"]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'].replace('./', '')
+                image_name = self.generate_image_name_from_url(image_url, 'images')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
 
 
 # Tsuyokute New Saga

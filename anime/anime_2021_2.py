@@ -19,7 +19,7 @@ from scan import AniverseMagazineScanner, MocaNewsScanner, WebNewtypeScanner, Na
 # Seijo no Maryoku wa Bannou Desu https://seijyonomaryoku.jp/ #seijyonoanime @seijyonoanime [FRI]
 # Sentouin, Hakenshimasu! https://kisaragi-co.jp/ #sentoin @sentoin_anime [THU]
 # Shadows House https://shadowshouse-anime.com/1st/ #シャドーハウス @shadowshouse_yj [SAT]
-# Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita https://slime300-anime.com/ #スライム倒して300年 @slime300_PR [THU]
+# Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita https://1st.slime300-anime.com/ #スライム倒して300年 @slime300_PR [THU]
 # SSSS.Dynazenon https://dynazenon.net/ #SSSS_DYNAZENON @SSSS_PROJECT [SUN]
 # Super Cub https://supercub-anime.com/ #スーパーカブ @supercub_anime [FRI]
 # Vivy: Fluroite Eye's Song https://vivy-portal.com/ #ヴィヴィ @vivy_portal [FRI]
@@ -1793,7 +1793,7 @@ class ShadowsHouseDownload(Spring2021AnimeDownload, NewsTemplate):
 class Slime300Download(Spring2021AnimeDownload):
     title = "Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita"
     keywords = [title, "I've Been Killing Slimes for 300 Years and Maxed Out My Level", "Slime 300", "slime300"]
-    website = 'https://slime300-anime.com'
+    website = 'https://1st.slime300-anime.com'
     twitter = 'slime300_PR'
     hashtags = 'スライム倒して300年'
     folder_name = 'slime300'

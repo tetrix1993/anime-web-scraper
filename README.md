@@ -433,7 +433,7 @@ The premiere date for the anime listed here has not been announced.
 * [Seijo no Maryoku wa Bannou Desu](https://seijyonomaryoku.jp/1st/)
 * [Sentouin, Hakenshimasu!](https://kisaragi-co.jp/)
 * [Shadows House](https://shadowshouse-anime.com/1st/)
-* [Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita](https://slime300-anime.com/)
+* [Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita](https://1st.slime300-anime.com/)
 * [SSSS.Dynazenon](https://dynazenon.net/)
 * [Super Cub](https://supercub-anime.com/)
 * [Vivy: Fluorite Eye's Song](https://vivy-portal.com/)
