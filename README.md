@@ -97,6 +97,7 @@ The premiere date for the anime listed here has not been announced.
 * [Dekisokonai to Yobareta Motoeiyuu wa Jikka kara Tsuihou sareta node Sukikatte ni Ikiru Koto ni Shita](https://dekisoko-anime.com/)
 * [Hananoi-kun to Koi no Yamai](https://hananoikun-pr.com/)
 * [Henjin no Salad Bowl](https://www.tbs.co.jp/anime/hensara/)
+* [Hibike! Euphonium 3](https://anime-eupho.com/)
 * [Jii-san Baa-san Wakagaeru](https://jisanbasan.com/)
 * [Kami wa Game ni Ueteiru.](https://godsgame-anime.com/)
 * [Kono Sekai wa Fukanzen Sugiru](https://konofuka.com/)

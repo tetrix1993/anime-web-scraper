@@ -4,6 +4,7 @@ from datetime import datetime
 # Dekisokonai to Yobareta Motoeiyuu wa Jikka kara Tsuihou sareta node Sukikatte ni Ikiru Koto ni Shita https://dekisoko-anime.com/ #できそこ @dekisoko_pr
 # Hananoi-kun to Koi no Yamai https://hananoikun-pr.com/ #花野井くんと恋の病 @hananoikun_pr
 # Henjin no Salad Bowl https://www.tbs.co.jp/anime/hensara/ #変サラ @hensara_anime
+# Hibike! Euphonium 3 https://anime-eupho.com/ #anime_eupho @anime_eupho
 # Jii-san Baa-san Wakagaeru https://jisanbasan.com/ #じいさんばあさん若返る @jisanbasan_prj
 # Kami wa Game ni Ueteiru. https://godsgame-anime.com/ #神飢え #神飢えアニメ #kamiue @kami_to_game
 # Kono Sekai wa Fukanzen Sugiru https://konofuka.com/ #このふか @konofuka_QA
@@ -167,6 +168,57 @@ class HensaraDownload(Spring2024AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'img/character/chara%s_st.png'
         self.download_by_template(folder, template, 1, 1)
+
+
+# Hibike! Euphonium 3
+class HibikiEuphonium3Download(Spring2024AnimeDownload, NewsTemplate):
+    title = 'Hibike! Euphonium 3'
+    keywords = [title, 'Sound! Euphonium 3']
+    website = 'https://anime-eupho.com/'
+    twitter = 'anime_eupho'
+    hashtags = ['anime_eupho']
+    folder_name = 'eupho3'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.newsEntryList li',
+                                    title_select='.entryTitle', date_select='.entryDate', id_select='a',
+                                    a_tag_start_text_to_remove='/', a_tag_prefix=self.PAGE_PREFIX,
+                                    paging_type=3, paging_suffix='index.php?pageID=%s',
+                                    next_page_select='#pager a[title^="next"]', stop_date='2023.08.03')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('top_keyvisual02', self.PAGE_PREFIX + 'img/top/keyvisual02.webp')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            self.image_list = []
+            images = soup.select('.character-item-img img[src*="/character/"]')
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'][1:]
+                image_name = self.generate_image_name_from_url(image_url, 'character')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
 
 
 # Jii-san Baa-san Wakagaeru
