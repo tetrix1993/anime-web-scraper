@@ -99,6 +99,7 @@ The premiere date for the anime listed here has not been announced.
 * [Henjin no Salad Bowl](https://www.tbs.co.jp/anime/hensara/)
 * [Hibike! Euphonium 3](https://anime-eupho.com/)
 * [Jii-san Baa-san Wakagaeru](https://jisanbasan.com/)
+* [Kaijuu 8-gou](https://kaiju-no8.net/)
 * [Kami wa Game ni Ueteiru.](https://godsgame-anime.com/)
 * [Kono Sekai wa Fukanzen Sugiru](https://konofuka.com/)
 * [Kono Subarashii Sekai ni Shukufuku wo! 3](http://konosuba.com/3rd/)

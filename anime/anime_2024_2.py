@@ -1,11 +1,13 @@
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 from datetime import datetime
+import json
 
 # Dekisokonai to Yobareta Motoeiyuu wa Jikka kara Tsuihou sareta node Sukikatte ni Ikiru Koto ni Shita https://dekisoko-anime.com/ #できそこ @dekisoko_pr
 # Hananoi-kun to Koi no Yamai https://hananoikun-pr.com/ #花野井くんと恋の病 @hananoikun_pr
 # Henjin no Salad Bowl https://www.tbs.co.jp/anime/hensara/ #変サラ @hensara_anime
 # Hibike! Euphonium 3 https://anime-eupho.com/ #anime_eupho @anime_eupho
 # Jii-san Baa-san Wakagaeru https://jisanbasan.com/ #じいさんばあさん若返る @jisanbasan_prj
+# Kaijuu 8-gou https://kaiju-no8.net/ #怪獣８号 #KaijuNo8 @KaijuNo8_O
 # Kami wa Game ni Ueteiru. https://godsgame-anime.com/ #神飢え #神飢えアニメ #kamiue @kami_to_game
 # Kono Sekai wa Fukanzen Sugiru https://konofuka.com/ #このふか @konofuka_QA
 # Kono Subarashii Sekai ni Shukufuku wo! 3 http://konosuba.com/3rd/ #konosuba #このすば @konosubaanime
@@ -224,7 +226,7 @@ class HibikiEuphonium3Download(Spring2024AnimeDownload, NewsTemplate):
 # Jii-san Baa-san Wakagaeru
 class JisanBasanDownload(Spring2024AnimeDownload, NewsTemplate):
     title = 'Jii-san Baa-san Wakagaeru'
-    keywords = [title, 'jiisanbaasan']
+    keywords = [title, 'jiisanbaasan', 'Grandpa and Grandma Turn Young Again']
     website = 'https://jisanbasan.com/'
     twitter = 'jisanbasan_prj'
     hashtags = ['じいさんばあさん若返る']
@@ -280,6 +282,84 @@ class JisanBasanDownload(Spring2024AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+
+# Kaijuu 8-gou
+class Kaiju8Download(Spring2024AnimeDownload, NewsTemplate):
+    title = 'Kaijuu 8-gou'
+    keywords = [title, "Kaiju No. 8"]
+    website = 'https://kaiju-no8.net/'
+    twitter = 'KaijuNo8_O'
+    hashtags = ['KaijuNo8', '怪獣８号']
+    folder_name = 'kaiju8'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        try:
+            a = self.get_response(news_url + 'news.js', decode=True)
+            b = a.split('Array(')[1].replace('\r\n', '').replace('\t', '')
+            c = '[' + b[:b.rfind('}') + 1] + ']'
+            json_obj = json.loads(c)
+
+            results = []
+            news_obj = self.get_last_news_log_object()
+            for item in json_obj:
+                if 'date' in item and 'name' in item and 'title' in item:
+                    date = item['date']
+                    title = item['title']
+                    url = news_url + item['name'] + '.html'
+                    if news_obj is not None and (news_obj['id'] == url or news_obj['title'] == title
+                                                 or date < news_obj['date']):
+                        break
+                    results.append(self.create_news_log_object(date, title, url))
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log_from_news_log_object(result)
+                if process_result == 0:
+                    success_count += 1
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
+        except Exception as e:
+            self.print_exception(e, 'News')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        template = self.PAGE_PREFIX + 'assets/img/top/kv%s.jpg'
+        i = 0
+        try:
+            while i < 20:
+                i += 1
+                number = ''
+                if i > 1:
+                    number = str(i)
+                image_url = template % number
+                image_name = 'top_kv' + number
+                if self.is_image_exists(image_name, folder):
+                    continue
+                result = self.download_image(image_url, folder + '/' + image_name)
+                if result == -1:
+                    break
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'assets/img/character/c%s_main.png'
+        self.download_by_template(folder, template, 1, 0)
 
 
 # Kami wa Game ni Ueteiru.
