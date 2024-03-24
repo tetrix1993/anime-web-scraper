@@ -758,7 +758,7 @@ class TenshitsukiDownload(Spring2024AnimeDownload, NewsTemplate):
 
 
 # Ookami to Koushinryou
-class OokamitoKoushinryou(Spring2024AnimeDownload, NewsTemplate):
+class OokamitoKoushinryouDownload(Spring2024AnimeDownload, NewsTemplate):
     title = 'Ookami to Koushinryou'
     keywords = [title, 'Spice and Wolf']
     website = 'https://spice-and-wolf.com/'
@@ -773,74 +773,41 @@ class OokamitoKoushinryou(Spring2024AnimeDownload, NewsTemplate):
 
     def run(self):
         self.download_episode_preview()
-        news_soup = self.download_news()
-        self.download_key_visual(news_soup)
+        self.download_news()
+        self.download_key_visual()
         self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
 
     def download_news(self):
-        xml_page = self.PAGE_PREFIX + '_inc/page/newslists.news.xml'
-        soup = None
-        try:
-            results = []
-            news_obj = self.get_last_news_log_object()
-            soup = self.get_soup(xml_page, decode=True)
-            items = soup.select('item')
-            for item in items:
-                title_tags = item.select('title')
-                date_y_tags = item.select('date_y')
-                date_m_tags = item.select('date_m')
-                date_d_tags = item.select('date_d')
-                permalink_tags = item.select('permalink')
-                if len(date_y_tags) > 0 and len(date_m_tags) > 0 and len(date_d_tags) > 0 and len(title_tags) > 0\
-                        and len(permalink_tags) > 0:
-                    date = date_y_tags[0].text.strip() + '.'\
-                           + date_m_tags[0].text.strip() + '.'\
-                           + date_d_tags[0].text.strip()
-                    title = title_tags[0].text.strip()
-                    url = self.PAGE_PREFIX + 'news/' + permalink_tags[0].text.strip()
-                    if news_obj is not None and (news_obj['id'] == url or news_obj['title'] == title
-                                                 or date < news_obj['date']):
-                        break
-                    results.append(self.create_news_log_object(date, title, url))
-            success_count = 0
-            for result in reversed(results):
-                process_result = self.create_news_log_from_news_log_object(result)
-                if process_result == 0:
-                    success_count += 1
-            if len(results) > 0:
-                self.create_news_log_cache(success_count, results[0])
-        except Exception as e:
-            self.print_exception(e, 'News')
-        return soup
+        news_url = self.PAGE_PREFIX + 'news/'
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.newsList',
+                                    title_select='.newsList__title', date_select='.newsList__date',
+                                    id_select='a', a_tag_prefix=news_url)
 
-    def download_key_visual(self, news_soup=None):
+    def download_key_visual(self):
         folder = self.create_key_visual_directory()
         sub_folder = self.create_custom_directory(folder.split('/')[-1] + '/news')
         cache_filepath = sub_folder + '/cache'
         news_url = self.PAGE_PREFIX + 'news/'
         processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
-        xml_page = self.PAGE_PREFIX + '_inc/page/newslists.news.xml'
         try:
-            if news_soup is None:
-                news_soup = self.get_soup(xml_page, decode=True)
-            items = news_soup.select('item')
+            soup = self.get_soup(news_url, decode=True)
+            items = soup.select('.newsList')
             for item in items:
-                permalink_tag = item.select('permalink')
-                if len(permalink_tag) == 0:
+                a_tag = item.select('a[href]')
+                if len(a_tag) == 0:
                     continue
-                permalink = permalink_tag[0].text
-                page_name = permalink.replace('.html', '')
+                page_name = a_tag[0]['href'].split('.html')[0]
                 if page_name in processed:
                     break
-                title_tag = item.select('title')
+                title_tag = item.select('.newsList__title')
                 if len(title_tag) == 0:
                     continue
                 title = title_tag[0].text.strip()
                 if 'ビジュアル' in title or 'イラスト' in title:
-                    page_soup = self.get_soup(news_url + permalink)
+                    page_soup = self.get_soup(news_url + a_tag[0]['href'])
                     if page_soup is not None:
                         images = page_soup.select('.newsArticle img[src]')
                         self.image_list = []
