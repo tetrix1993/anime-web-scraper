@@ -190,8 +190,8 @@ class AkuyakuLv99Download(Winter2024AnimeDownload, NewsTemplate2):
                 self.image_list = []
                 for image in images:
                     image_url = self.PAGE_PREFIX + image['src'].replace('../', '').split('?')[0]
-                    if '/bd/' in image_url:
-                        image_name = self.generate_image_name_from_url(image_url, 'bd')
+                    if '/bddvd/' in image_url:
+                        image_name = self.generate_image_name_from_url(image_url, 'bddvd')
                     else:
                         image_name = self.extract_image_name_from_url(image_url)
                     if not self.is_content_length_in_range(image_url, more_than_amount=13500):
