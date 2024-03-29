@@ -660,7 +660,29 @@ class MadomeDownload(Spring2024AnimeDownload, NewsTemplate):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            story_url = self.PAGE_PREFIX + 'story/'
+            soup = self.get_soup(story_url)
+            stories = soup.select('section.list a[href]')
+            for story in stories:
+                try:
+                    episode = str(int(story['href'].split('.html')[0])).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                ep_soup = self.get_soup(story_url + story['href'])
+                if ep_soup is None:
+                    continue
+                self.image_list = []
+                images = ep_soup.select('.scene .thumb img[src]')
+                for i in range(len(images)):
+                    image_url = self.PAGE_PREFIX + images[i]['src'].replace('../', '')
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + 'news/'
