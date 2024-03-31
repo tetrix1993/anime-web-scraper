@@ -800,6 +800,7 @@ class TenshitsukiDownload(Spring2024AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -846,6 +847,24 @@ class TenshitsukiDownload(Spring2024AnimeDownload, NewsTemplate):
         prefix = self.PAGE_PREFIX + 'assets/character/%s'
         templates = [prefix + 'c.webp', prefix + 'f.webp']
         self.download_by_template(folder, templates, 1, 1)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'bluray.html')
+            images = soup.select('article img[src*="/bluray/"]')
+            self.image_list = []
+            for image in images:
+                image_url = image['src']
+                if '/np.' in image_url:
+                    continue
+                if image_url.startswith('./'):
+                    image_url = self.PAGE_PREFIX + image_url[2:]
+                image_name = self.generate_image_name_from_url(image_url, 'bluray')
+                self.add_to_image_list(image_name, image_url, to_jpg=True)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
 
 
 # Ookami to Koushinryou
