@@ -543,6 +543,7 @@ class Konosuba3Download(Spring2024AnimeDownload, NewsTemplate):
         self.download_episode_preview()
         self.download_news()
         self.download_key_visual()
+        self.download_media()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
@@ -566,6 +567,33 @@ class Konosuba3Download(Spring2024AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Key Visual')
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        bd_url = self.PAGE_PREFIX + 'bd/'
+        for page in ['cmp', 'shop', 'bd_box', 'bd1', 'bd2', 'bd3', 'bd4']:
+            try:
+                if page in processed:
+                    continue
+                soup = self.get_soup(bd_url + '?mode=' + page)
+                images = soup.select('.cts_area img[src^="img/"]')
+                self.image_list = []
+                for image in images:
+                    image_url = bd_url + image['src'].split('?')[0]
+                    image_name = self.generate_image_name_from_url(image_url, 'img')
+                    if self.is_image_exists(image_name, folder):
+                        continue
+                    self.add_to_image_list(image_name, image_url)
+                if len(self.image_list) == 0:
+                    break
+                else:
+                    processed.append(page)
+                self.download_image_list(folder)
+            except Exception as e:
+                self.print_exception(e, f'Blu-ray - {page}')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Lv2 kara Cheat datta Motoyuusha Kouho no Mattari Isekai Life
