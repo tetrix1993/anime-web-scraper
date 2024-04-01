@@ -392,7 +392,7 @@ class KamiueDownload(Spring2024AnimeDownload, NewsTemplate):
     folder_name = 'kamiue'
 
     PAGE_PREFIX = website
-    FINAL_EPISODE = 12
+    FINAL_EPISODE = 13
     IMAGES_PER_EPISODE = 6
 
     def __init__(self):
@@ -475,6 +475,20 @@ class KamiueDownload(Spring2024AnimeDownload, NewsTemplate):
 
     def download_media(self):
         folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'package.html')
+            images = soup.select('img[src*="/package/"]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'].split('?')[0]
+                image_name = self.generate_image_name_from_url(image_url, 'package')
+                if 'nowpri' in image_name:
+                    continue
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
+
         special_folder = self.create_custom_directory(folder.split('/')[-1] + '/special')
         try:
             soup = self.get_soup(self.PAGE_PREFIX + 'special.html?cat=visual')
