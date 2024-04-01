@@ -984,7 +984,7 @@ class OokamitoKoushinryouDownload(Spring2024AnimeDownload, NewsTemplate):
     folder_name = 'spicewolf'
 
     PAGE_PREFIX = website
-    FINAL_EPISODE = 24
+    FINAL_EPISODE = 25
     IMAGES_PER_EPISODE = 6
 
     def __init__(self):
@@ -995,6 +995,7 @@ class OokamitoKoushinryouDownload(Spring2024AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -1074,6 +1075,37 @@ class OokamitoKoushinryouDownload(Spring2024AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        bd_prefix = self.PAGE_PREFIX + 'bd/'
+        for page in ['tokuten', '1', '2', '3', '4']:
+            try:
+                if page in processed:
+                    continue
+                page_url = bd_prefix
+                if page.isnumeric():
+                    page_url += 'vol'
+                page_url += page + '.html'
+                soup = self.get_soup(page_url)
+                images = soup.select('.newsArticleIn img[src]')
+                self.image_list = []
+                for image in images:
+                    image_url = bd_prefix + image['src'].replace('./', '').split('?')[0]
+                    if 'nowprinting' in image_url:
+                        continue
+                    image_name = self.generate_image_name_from_url(image_url, 'bd')
+                    self.add_to_image_list(image_name, image_url)
+                if page.isnumeric() and len(self.image_list) > 0:
+                    processed.append(page)
+                elif page.isnumeric():
+                    break
+                self.download_image_list(folder)
+            except Exception as e:
+                self.print_exception(e, f'Blu-ray - {page}')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Re:Monster
