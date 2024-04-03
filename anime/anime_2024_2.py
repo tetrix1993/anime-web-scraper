@@ -763,7 +763,34 @@ class Mahouka3Download(Spring2024AnimeDownload, NewsTemplate):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            story_url = self.PAGE_PREFIX + 'story/'
+            soup = self.get_soup(story_url, decode=True)
+            lis = soup.select('.p-story__nav-item')
+            for li in lis:
+                a_tag = li.find('a')
+                if a_tag and a_tag.has_attr('href'):
+                    try:
+                        episode = str(int(a_tag.text)).zfill(2)
+                    except Exception:
+                        continue
+                    if self.is_image_exists(episode + '_1'):
+                        continue
+                    if li.has_attr('class') and 'is-active' in li['class']:
+                        ep_soup = soup
+                    else:
+                        ep_soup = self.get_soup(story_url + a_tag['href'].replace('./', ''))
+                    if ep_soup:
+                        images = ep_soup.select('.p-story__cut-imglist img[src]')
+                        self.image_list = []
+                        for i in range(len(images)):
+                            image_url = story_url + images[i]['src']
+                            image_name = episode + '_' + str(i + 1)
+                            self.add_to_image_list(image_name, image_url)
+                        self.download_image_list(self.base_folder)
+        except Exception as e:
+            print("Error in running " + self.__class__.__name__)
+            print(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.p-news__list-item',
