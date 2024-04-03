@@ -1496,6 +1496,8 @@ class DainanaojiDownload(Spring2024AnimeDownload, NewsTemplate):
     folder_name = 'dainanaoji'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 7
 
     def __init__(self):
         super().__init__()
@@ -1503,6 +1505,7 @@ class DainanaojiDownload(Spring2024AnimeDownload, NewsTemplate):
     def run(self):
         self.download_episode_preview()
         self.download_news()
+        self.download_episode_preview_guess(print_invalid=False, download_valid=True)
         self.download_key_visual()
         self.download_character()
 
@@ -1529,6 +1532,72 @@ class DainanaojiDownload(Spring2024AnimeDownload, NewsTemplate):
                 self.download_image_list(self.base_folder)
         except Exception as e:
             self.print_exception(e)
+
+    def download_episode_preview_guess(self, print_invalid=False, download_valid=False, min_limit=20, max_limit=200):
+        if self.is_image_exists(str(self.FINAL_EPISODE).zfill(2) + '_' + str(self.IMAGES_PER_EPISODE)):
+            return
+
+        'https://dainanaoji.com/d81Ft6ye/wp-content/uploads/2024/03/★main_Dai7_ep01_cap-015.jpg'
+
+        folder = self.create_custom_directory('guess')
+        template = self.PAGE_PREFIX + 'd81Ft6ye/wp-content/uploads/%s/%s/%sDai7_ep%s_cap-%s.jpg'
+        current_date = datetime.now() + timedelta(hours=1)
+        year = current_date.strftime('%Y')
+        month = current_date.strftime('%m')
+        is_successful = False
+        valid_urls = []
+        image_folder = folder + '/' + year + '/' + month
+        for i in range(self.FINAL_EPISODE):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_1') or self.is_image_exists(episode + '_1', image_folder):
+                continue
+            j = 0
+            image_count = 0
+            valid_nums = []
+            while j < max_limit:
+                image_url = template % (year, month, '', episode, str(j).zfill(3))
+                image_name = episode + '_' + str(image_count + 2)
+                if self.is_valid_url(image_url, is_image=True):
+                    print('VALID - ' + image_url)
+                    is_successful = True
+                    valid_urls.append({'name': image_name, 'url': image_url, 'folder': image_folder})
+                    image_count += 1
+                    valid_nums.append(j)
+                elif print_invalid:
+                    print('INVALID - ' + image_url)
+                j += 1
+                if image_count >= self.IMAGES_PER_EPISODE:
+                    break
+                if j > min_limit and image_count == 0:
+                    break
+            if image_count == 0:
+                break
+            elif image_count == self.IMAGES_PER_EPISODE - 1:
+                j = 0
+                while j < max_limit:
+                    if j in valid_nums:
+                        j += 1
+                        continue
+                    image_url = template % (year, month, '★main_', episode, str(j).zfill(3))
+                    image_name = episode + '_1'
+                    if self.is_valid_url(image_url, is_image=True):
+                        print('VALID - ' + image_url)
+                        valid_urls.append({'name': image_name, 'url': image_url, 'folder': image_folder})
+                        break
+                    elif print_invalid:
+                        print('INVALID - ' + image_url)
+                    j += 1
+
+        if download_valid and len(valid_urls) > 0:
+            for valid_url in valid_urls:
+                image_name = valid_url['name']
+                image_folder = valid_url['folder']
+                if not os.path.exists(image_folder):
+                    os.makedirs(image_folder)
+                self.download_image(valid_url['url'], image_folder + '/' + image_name)
+        if is_successful:
+            print(self.__class__.__name__ + ' - Guessed correctly!')
+        return is_successful
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='#news-container article',
