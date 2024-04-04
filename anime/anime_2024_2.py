@@ -850,6 +850,7 @@ class MadomeDownload(Spring2024AnimeDownload, NewsTemplate):
         self.download_episode_preview_guess()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -947,6 +948,27 @@ class MadomeDownload(Spring2024AnimeDownload, NewsTemplate):
         except Exception as e:
             self.print_exception(e, 'Character')
         self.create_cache_file(cache_filepath, processed, num_processed)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        bd_url = self.PAGE_PREFIX + 'blu-ray/'
+        for i in range(1, 4, 1):
+            page = str(i).zfill(3)
+            try:
+                soup = self.get_soup(bd_url + page + '.html')
+                images = soup.select('.detail img[src*="/blu-ray/"]')
+                self.image_list = []
+                for image in images:
+                    image_url = self.PAGE_PREFIX + image['src'].split('?')[0].replace('../', '')
+                    if image_url.endswith('/item.png'):
+                        continue
+                    image_name = self.generate_image_name_from_url(image_url, 'blu-ray')
+                    if self.is_image_exists(image_name, folder):
+                        continue
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(folder)
+            except Exception as e:
+                self.print_exception(e, f'Blu-ray - {page}')
 
 
 # One Room, Hiatari Futsuu, Tenshi-tsuki.
