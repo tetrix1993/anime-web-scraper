@@ -2051,6 +2051,24 @@ class YuruCamp3Download(Spring2024AnimeDownload, NewsTemplate):
 
     def download_media(self):
         folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'bddvd/')
+            images = soup.select('img[src*="/bddvd/"]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                image_name = self.generate_image_name_from_url(image_url, 'bddvd')
+                if self.is_image_exists(image_name, folder):
+                    continue
+                if image_name == 'tokuten_nowprinting':
+                    continue
+                elif image_name in ['nowprinting_2', 'nowprinting_3']:
+                    if not self.is_content_length_in_range(image_url, more_than_amount=39000):
+                        continue
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception('Blu-ray')
 
         # Gallery
         gallery_folder = self.create_custom_directory(folder.split('/')[-1] + '/gallery')
