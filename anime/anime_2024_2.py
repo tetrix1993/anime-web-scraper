@@ -1596,7 +1596,7 @@ class DainanaojiDownload(Spring2024AnimeDownload, NewsTemplate):
             valid_nums = []
             while j < max_limit:
                 image_url = template % (year, month, '', episode, str(j).zfill(3))
-                image_name = episode + '_' + str(image_count + 2)
+                image_name = episode + '_' + str(image_count + 1)
                 if self.is_valid_url(image_url, is_image=True):
                     print('VALID - ' + image_url)
                     is_successful = True
@@ -1612,21 +1612,21 @@ class DainanaojiDownload(Spring2024AnimeDownload, NewsTemplate):
                     break
             if image_count == 0:
                 break
-            elif image_count == self.IMAGES_PER_EPISODE - 1:
-                j = 0
-                while j < max_limit:
-                    if j in valid_nums:
-                        j += 1
-                        continue
-                    image_url = template % (year, month, '★main_', episode, str(j).zfill(3))
-                    image_name = episode + '_1'
-                    if self.is_valid_url(image_url, is_image=True):
-                        print('VALID - ' + image_url)
-                        valid_urls.append({'name': image_name, 'url': image_url, 'folder': image_folder})
-                        break
-                    elif print_invalid:
-                        print('INVALID - ' + image_url)
-                    j += 1
+            # elif image_count == self.IMAGES_PER_EPISODE - 1:
+            #     j = 0
+            #     while j < max_limit:
+            #         if j in valid_nums:
+            #             j += 1
+            #             continue
+            #         image_url = template % (year, month, '★main_', episode, str(j).zfill(3))
+            #         image_name = episode + '_1'
+            #         if self.is_valid_url(image_url, is_image=True):
+            #             print('VALID - ' + image_url)
+            #             valid_urls.append({'name': image_name, 'url': image_url, 'folder': image_folder})
+            #             break
+            #         elif print_invalid:
+            #             print('INVALID - ' + image_url)
+            #         j += 1
 
         if download_valid and len(valid_urls) > 0:
             for valid_url in valid_urls:
