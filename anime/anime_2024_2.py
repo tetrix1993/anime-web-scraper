@@ -136,6 +136,7 @@ class HananoikunDownload(Spring2024AnimeDownload, NewsTemplate):
         self.download_episode_preview_guess(print_invalid=False, download_valid=True)
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -216,6 +217,22 @@ class HananoikunDownload(Spring2024AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'wp/wp-content/themes/hananoi-honban/images/chara-pic%s.png'
         self.download_by_template(folder, template, 1, 1)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'package/')
+            images = soup.select('.section-contents img[src*="/images/"]')
+            self.image_list = []
+            for image in images:
+                image_url = image['src']
+                image_name = self.generate_image_name_from_url(image_url, 'images')
+                if image_name in ['privilege-pic-sample', 'package-pic-sample', 'package-pic-event']:
+                    continue
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
 
 # Henjin no Salad Bowl
