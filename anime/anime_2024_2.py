@@ -294,6 +294,23 @@ class HensaraDownload(Spring2024AnimeDownload, NewsTemplate):
         template = self.PAGE_PREFIX + 'img/character/chara%s_st.png'
         self.download_by_template(folder, template, 1, 1)
 
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            bd_url = self.PAGE_PREFIX + 'disc/'
+            soup = self.get_soup(bd_url)
+            images = soup.select('section img[src]')
+            self.image_list = []
+            for image in images:
+                if image['src'].startswith('/'):
+                    continue
+                image_url = bd_url + image['src'].split('?')[0]
+                image_name = self.generate_image_name_from_url(image_url, 'disc')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
+
 
 # Hibike! Euphonium 3
 class HibikiEuphonium3Download(Spring2024AnimeDownload, NewsTemplate):
