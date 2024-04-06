@@ -1235,6 +1235,7 @@ class ReMonsterDownload(Spring2024AnimeDownload, NewsTemplate):
         self.download_news()
         soup = self.download_key_visual()
         self.download_character(soup)
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -1296,6 +1297,37 @@ class ReMonsterDownload(Spring2024AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        for num in range(4):
+            page = str(num + 1)
+            try:
+                if num > 0 and page in processed:
+                    continue
+                soup = self.get_soup(self.PAGE_PREFIX + 'bd/vol' + page + '.php')
+                if num > 0:
+                    images = soup.select('.bdHeadContent img[src*="/bd/"]')
+                else:
+                    images = soup.select('img[src*="/bd/"]')
+                self.image_list = []
+                for image in images:
+                    image_url = self.PAGE_PREFIX + image['src'].replace('../', '').split('?')[0]
+                    image_name = self.generate_image_name_from_url(image_url, 'bd')
+                    if image_name == 'bd_tokuten_visual':
+                        continue
+                    self.add_to_image_list(image_name, image_url)
+                if num > 0:
+                    if len(self.image_list) > 0:
+                        processed.append(page)
+                    else:
+                        break
+                self.download_image_list(folder)
+            except Exception as e:
+                self.print_exception(e, f'Blu-ray - {page}')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Sasayaku You ni Koi wo Utau
