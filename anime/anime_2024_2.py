@@ -1496,7 +1496,6 @@ class SeiyuRadioDownload(Spring2024AnimeDownload, NewsTemplate):
             self.print_exception(e, 'Character')
 
 
-
 # Shinigami Bocchan to Kuro Maid S3
 class ShinigamiBocchan3Download(Spring2024AnimeDownload, NewsTemplate2):
     title = 'Shinigami Bocchan to Kuro Maid 3rd Season'
@@ -1681,8 +1680,6 @@ class DainanaojiDownload(Spring2024AnimeDownload, NewsTemplate):
     def download_episode_preview_guess(self, print_invalid=False, download_valid=False, min_limit=20, max_limit=200):
         if self.is_image_exists(str(self.FINAL_EPISODE).zfill(2) + '_' + str(self.IMAGES_PER_EPISODE)):
             return
-
-        'https://dainanaoji.com/d81Ft6ye/wp-content/uploads/2024/03/★main_Dai7_ep01_cap-015.jpg'
 
         folder = self.create_custom_directory('guess')
         template = self.PAGE_PREFIX + 'd81Ft6ye/wp-content/uploads/%s/%s/%sDai7_ep%s_cap-%s.jpg'
@@ -2030,7 +2027,32 @@ class YozakurasanDownload(Spring2024AnimeDownload, NewsTemplate2):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/01.html')
+            stories = soup.select('table[summary="List_Type01"] a[href]')
+            for story in stories:
+                story_url = self.PAGE_PREFIX + story['href'].replace('../', '')
+                try:
+                    episode = str(int(story_url.split('/')[-1].split('.html')[0])).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                if episode == '01':
+                    ep_soup = soup
+                else:
+                    ep_soup = self.get_soup(story_url)
+                if ep_soup is not None:
+                    images = ep_soup.select('ul.tp5 img[src]')
+                    self.image_list = []
+                    for i in range(len(images)):
+                        image_url = self.PAGE_PREFIX + images[i]['src'].split('?')[0]
+                        image_url = self.remove_string(image_url, ['../', 'sn_'])
+                        image_name = episode + '_' + str(i + 1)
+                        self.add_to_image_list(image_name, image_url)
+                    self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(self.PAGE_PREFIX)
