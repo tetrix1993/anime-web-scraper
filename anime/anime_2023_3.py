@@ -1542,7 +1542,7 @@ class MushokuTensei2Download(Summer2023AnimeDownload, NewsTemplate):
     def run(self):
         self.download_episode_preview()
         self.download_news()
-        self.download_episode_preview_guess(print_invalid=False, download_valid=True)
+        # self.download_episode_preview_guess(print_invalid=False, download_valid=True)
         self.download_key_visual()
         self.download_character()
         self.download_media()
@@ -1595,7 +1595,7 @@ class MushokuTensei2Download(Summer2023AnimeDownload, NewsTemplate):
             return
 
         folder = self.create_custom_directory('guess')
-        template = self.PAGE_PREFIX + 'wp-content/uploads/%s/%s/ep%s_%s.jpg'
+        template = self.PAGE_PREFIX + 'wp-content/uploads/%s/%s/%s_MT2_ep%s_%s.jpg'
         current_date = datetime.now() + timedelta(hours=1)
         year = current_date.strftime('%Y')
         month = current_date.strftime('%m')
@@ -1607,13 +1607,17 @@ class MushokuTensei2Download(Summer2023AnimeDownload, NewsTemplate):
             episode_success = False
             valid_urls = []
             for j in range(self.IMAGES_PER_EPISODE):
-                image_url = template % (year, month, episode, str(j + 1))
-                if self.is_valid_url(image_url, is_image=True):
-                    print('VALID - ' + image_url)
-                    episode_success = True
-                    valid_urls.append(image_url)
-                elif print_invalid:
-                    print('INVALID - ' + image_url)
+                for k in range(200):
+                    image_url = template % (year, month, str(j + 1), episode, str(k).zfill(4))
+                    if self.is_valid_url(image_url, is_image=True):
+                        print('VALID - ' + image_url)
+                        episode_success = True
+                        valid_urls.append(image_url)
+                        break
+                    elif print_invalid:
+                        print('INVALID - ' + image_url)
+                if len(valid_urls) == 0:
+                    break
             if download_valid and len(valid_urls) > 0:
                 for valid_url in valid_urls:
                     image_name = self.extract_image_name_from_url(valid_url)
