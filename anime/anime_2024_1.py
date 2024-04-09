@@ -2320,6 +2320,7 @@ class SoloLevelingDownload(Winter2024AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -2370,6 +2371,36 @@ class SoloLevelingDownload(Winter2024AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'assets/img/character/c%s_main1.png'
         self.download_by_template(folder, template, 1, 1)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        for page in ['tokuten', '1', '2', '3', '4']:
+            try:
+                if page in processed:
+                    continue
+                page_url = self.PAGE_PREFIX + 'bddvd/'
+                if page.isnumeric():
+                    page_url += 'vol'
+                page_url += page + '.html'
+                soup = self.get_soup(page_url)
+                images = soup.select('.bddvdArticle img[src*="/bddvd/"]')
+                self.image_list = []
+                for image in images:
+                    image_url = self.PAGE_PREFIX + image['src'].replace('../', '').split('?')[0]
+                    if '_noimg' in image_url:
+                        continue
+                    image_name = self.generate_image_name_from_url(image_url, 'bddvd')
+                    self.add_to_image_list(image_name, image_url)
+                if page.isnumeric() and len(self.image_list) > 0:
+                    processed.append(page)
+                elif page.isnumeric():
+                    break
+                self.download_image_list(folder)
+            except Exception as e:
+                self.print_exception(e, f'Blu-ray - {page}')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Oroka na Tenshi wa Akuma to Odoru
@@ -2717,6 +2748,7 @@ class SaijakuTamerDownload(Winter2024AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         jpg_len = [485587, 487372, 487813, 486853, 487229, 487643]
@@ -2760,6 +2792,21 @@ class SaijakuTamerDownload(Winter2024AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'dist/img/top/chara/visual_chara_%s.webp'
         self.download_by_template(folder, template, 1, 1)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'map.php')
+            images = soup.select('section.bd img[src*="/bd/"]')
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'].split('?')[0]
+                if not self.is_content_length_in_range(image_url, more_than_amount=16800):
+                    continue
+                image_name = self.generate_image_name_from_url(image_url, 'bd')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
 
 # Saikyou Tank no Meikyuu Kouryaku
@@ -3370,7 +3417,7 @@ class Tsukimichi2Download(Winter2024AnimeDownload, NewsTemplate):
         folder = self.create_media_directory()
         cache_filepath = folder + '/cache'
         processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
-        for page in ['store', '1', '2', '3']:
+        for page in ['store', '1', '2', '3', '4']:
             try:
                 if page in processed:
                     continue

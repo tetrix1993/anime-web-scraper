@@ -10,22 +10,22 @@ def run():
         os.makedirs(constants.FOLDER_OUTPUT)
 
     downloads = []
-    for subclass in Winter2024AnimeDownload.__subclasses__():
+    for subclass in Spring2024AnimeDownload.__subclasses__():
         if subclass.enabled:
             downloads.append(subclass())
-    downloads += [KusuriyaDownload(), FrierenDownload(), RagnaCrimsonDownload(), UndeadUnluckDownload(),
-                  ShangriLaFrontierDownload(), ButaLiverDownload(), SixteenBitSensationDownload(), BokuameDownload(),
-                  GoblinSlayer2Download(), HikikomariDownload(), KagenoJitsuryokusha2Download(), KimizeroDownload(),
-                  KikanshaDownload(), HyakkanoDownload(), SeijonoMaryoku2Download(), ShyDownload(),
-                  SpyFamily2Download(), TateNoYuusha3Download(), TearmoonDownload(),
-                  DeadMountDeathPlayDownload(), Horimiya2Download(), MushokuTensei2Download(), AtelierRyzaDownload(),
-                  YumemiruDanshiDownload(), AyakashiTriangleDownload(), DarkGatheringDownload()]
+    downloads += [DungeonMeshiDownload(), Tsukimichi2Download(), UruseiYatsura2Download()]
     subclasses = Summer2024AnimeDownload.__subclasses__() \
-        + Spring2024AnimeDownload.__subclasses__() \
         + UnconfirmedDownload.__subclasses__()
     for subclass in subclasses:
         if subclass.enabled:
             downloads.append(subclass())
+    downloads += [
+        AkuyakuLv99Download(), Aoex3Download(), Bokuyaba2Download(), DosankoGalDownload(), GekaiEliseDownload(),
+        KanatenDownload(), KekkonYubiwaDownload(), MahoakoDownload(), Mashle2Download(), MatoSlaveDownload(),
+        NozomanuFushiDownload(), SaijakuTamerDownload(), SaikyoTankDownload(), SasapiDownload(),
+        ShinnoNakama2Download(), SoloLevelingDownload(), Youzitsu3Download(), YubisakitoRenrenDownload(),
+        KusuriyaDownload(), FrierenDownload(), ButaLiverDownload(), SixteenBitSensationDownload(),
+        KikanshaDownload(), HyakkanoDownload(), MushokuTensei2Download(), AtelierRyzaDownload()]
     process_download(downloads)
 
     #downloads = []

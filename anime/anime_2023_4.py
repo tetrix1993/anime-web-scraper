@@ -138,7 +138,7 @@ class SixteenBitSensationDownload(Fall2023AnimeDownload, NewsTemplate):
         folder = self.create_media_directory()
         cache_filepath = folder + '/cache'
         processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
-        for page in ['shop', '01', '02', '03', '04', '05']:
+        for page in ['shop', '01', '02', '03', '04', '05', '06']:
             try:
                 if page in processed:
                     continue
@@ -1844,7 +1844,7 @@ class KikanshaDownload(Fall2023AnimeDownload, NewsTemplate):
         folder = self.create_media_directory()
         cache_filepath = folder + '/cache'
         processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
-        for page in ['shop', '01', '02', '03', '04', '05']:
+        for page in ['shop', '01', '02', '03', '04', '05', '06']:
             try:
                 if page in processed:
                     continue
@@ -3180,7 +3180,7 @@ class FrierenDownload(Fall2023AnimeDownload, NewsTemplate):
                     image_name = self.generate_image_name_from_url(image_url, 'bddvd')
                     self.add_to_image_list(image_name, image_url)
                 if page.isnumeric():
-                    if len(self.image_list) > 0:
+                    if len(self.image_list) > 1:
                         processed.append(page)
                     else:
                         break
