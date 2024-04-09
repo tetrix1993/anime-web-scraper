@@ -259,14 +259,14 @@ class HensaraDownload(Spring2024AnimeDownload, NewsTemplate):
 
     def download_episode_preview(self):
         try:
-            template = self.PAGE_PREFIX + 'story/img/v%s/%s.jpg'
+            template = self.PAGE_PREFIX + 'story/img/v%s_%s.jpg'
             stop = False
             for i in range(self.FINAL_EPISODE):
                 episode = str(i + 1).zfill(2)
                 if self.is_image_exists(episode + '_' + str(self.IMAGES_PER_EPISODE)):
                     continue
                 for j in range(self.IMAGES_PER_EPISODE):
-                    image_url = template % (str(i + 1), str(j + 1).zfill(2))
+                    image_url = template % (str(i + 1), str(j + 1))
                     image_name = episode + '_' + str(j + 1)
                     if self.download_image(image_url, self.base_folder + '/' + image_name) == -1:
                         stop = True
