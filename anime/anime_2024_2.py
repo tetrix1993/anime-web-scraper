@@ -1950,6 +1950,7 @@ class UnnamedMemoryDownload(Spring2024AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -2033,6 +2034,20 @@ class UnnamedMemoryDownload(Spring2024AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'assets/character/%s.webp'
         self.download_by_template(folder, template, 1, 1)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'bddvd.html')
+            images = soup.select('img[src*="/bddvd/"]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'].split('?')[0].replace('./', '').split('?')[0]
+                image_name = self.generate_image_name_from_url(image_url, 'bddvd')
+                self.add_to_image_list(image_name, image_url, to_jpg=True)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
 
 # Yoru no Kurage wa Oyogenai
