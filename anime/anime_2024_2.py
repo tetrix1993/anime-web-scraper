@@ -1621,7 +1621,6 @@ class SeiyuRadioDownload(Spring2024AnimeDownload, NewsTemplate):
             self.image_list = []
             for image in images:
                 image_url = self.PAGE_PREFIX + image['src'].split('?')[0].replace('./', '')
-                print(image_url)
                 image_name = self.generate_image_name_from_url(image_url, 'img')
                 if self.is_image_exists(image_name, folder):
                     continue
