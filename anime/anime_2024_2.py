@@ -1064,9 +1064,9 @@ class MadomeDownload(Spring2024AnimeDownload, NewsTemplate):
         except Exception as e:
             self.print_exception(e)
 
-    def download_episode_preview_guess(self):
+    def download_episode_preview_guess(self, print_invalid=False):
         folder = self.create_custom_directory('guess')
-        template = self.PAGE_PREFIX + 'assets/images/story/vol1/1-%s-%s.jpg'
+        template = self.PAGE_PREFIX + 'assets/images/story/vol%s/%s-%s-%s.jpg'
         is_successful = False
         for i in range(self.FINAL_EPISODE):
             episode = str(i + 1).zfill(2)
@@ -1074,13 +1074,15 @@ class MadomeDownload(Spring2024AnimeDownload, NewsTemplate):
                 continue
             is_success = False
             for j in range(self.IMAGES_PER_EPISODE):
-                image_url = template % (episode, str(j + 1))
+                image_url = template % (str(i + 1), str(i + 1), episode, str(j + 1))
                 image_name = episode + '_' + str(j + 1)
                 result = self.download_image(image_url, folder + '/' + image_name)
                 if result == 0:
                     is_success = True
                     is_successful = True
                 elif result == -1:
+                    if print_invalid:
+                        print('INVALID - ' + image_url)
                     break
             if is_success:
                 print(self.__class__.__name__ + ' - Guessed successfully!')
@@ -1088,7 +1090,7 @@ class MadomeDownload(Spring2024AnimeDownload, NewsTemplate):
                 if len(os.listdir(folder)) == 0:
                     os.rmdir(folder)
                 break
-        if len(os.listdir(folder)) == 0:
+        if os.path.exists(folder) and len(os.listdir(folder)) == 0:
             os.rmdir(folder)
         return is_successful
 
