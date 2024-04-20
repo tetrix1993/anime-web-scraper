@@ -1538,6 +1538,7 @@ class SasakoiDownload(Spring2024AnimeDownload, NewsTemplate):
     def run(self):
         self.download_episode_preview()
         self.download_news()
+        self.download_episode_preview_guess()
         self.download_key_visual()
         self.download_character()
         self.download_media()
@@ -1573,6 +1574,39 @@ class SasakoiDownload(Spring2024AnimeDownload, NewsTemplate):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news__list tr', news_prefix='',
                                     date_select='.day', title_select='.title', id_select='a', date_separator='/',
                                     a_tag_prefix=self.PAGE_PREFIX)
+
+    def download_episode_preview_guess(self, print_url=False):
+        folder = self.create_custom_directory('guess')
+        template = self.PAGE_PREFIX + 'core_sys/images/contents/%s/block/%s/%s.jpg'
+        is_successful = False
+        for i in range(self.FINAL_EPISODE):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_1'):
+                continue
+            is_success = False
+            first = 3 + i
+            second = 15 + 3 * i
+            third = 30 + 8 * i
+            for j in range(self.IMAGES_PER_EPISODE):
+                image_url = template % (str(first).zfill(8), str(second).zfill(8), str(third + j).zfill(8))
+                if print_url:
+                    print(image_url)
+                image_name = episode + '_' + str(j + 1)
+                result = self.download_image(image_url, folder + '/' + image_name)
+                if result == 0:
+                    is_success = True
+                    is_successful = True
+                elif result == -1:
+                    break
+            if is_success:
+                print(self.__class__.__name__ + ' - Guessed successfully!')
+            else:
+                if len(os.listdir(folder)) == 0:
+                    os.rmdir(folder)
+                return
+        if len(os.listdir(folder)) == 0:
+            os.rmdir(folder)
+        return is_successful
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
