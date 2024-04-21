@@ -11,7 +11,7 @@ def run():
 
     downloads = []
     for subclass in Spring2024AnimeDownload.__subclasses__():
-        if subclass.enabled:
+        if subclass.enabled and subclass != HananoikunDownload:
             downloads.append(subclass())
     downloads += [Maohgakuin2Download(), DungeonMeshiDownload(), Tsukimichi2Download(), UruseiYatsura2Download()]
     subclasses = Summer2024AnimeDownload.__subclasses__() \
