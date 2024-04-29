@@ -753,21 +753,27 @@ class Konosuba3Download(Spring2024AnimeDownload, NewsTemplate):
         self.download_media()
 
     def download_episode_preview(self):
+        prefix = self.PAGE_PREFIX + 'story/'
         try:
-            template = self.PAGE_PREFIX + 'story/img/%s/%s.jpg'
-            stop = False
-            for i in range(self.FINAL_EPISODE):
-                episode = str(i + 1).zfill(2)
-                if self.is_image_exists(episode + '_' + str(self.IMAGES_PER_EPISODE)):
+            soup = self.get_soup(prefix)
+            stories = soup.select('.thumb-list__item a[href]')
+            for story in reversed(stories):
+                story_url = prefix + story['href']
+                try:
+                    episode = str(int(story_url[-2:])).zfill(2)
+                except:
                     continue
-                for j in range(self.IMAGES_PER_EPISODE):
-                    image_url = template % (episode, str(j + 1).zfill(2))
-                    image_name = episode + '_' + str(j + 1)
-                    if self.download_image(image_url, self.base_folder + '/' + image_name) == -1:
-                        stop = True
-                        break
-                if stop:
-                    break
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                ep_soup = self.get_soup(story_url)
+                if ep_soup is None:
+                    continue
+                images = ep_soup.select('.swiper-wrapper img[src]')
+                for i in range(len(images)):
+                    image_url = prefix + images[i]['src']
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
         except Exception as e:
             self.print_exception(e)
 
