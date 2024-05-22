@@ -1595,7 +1595,7 @@ class MushokuTensei2Download(Summer2023AnimeDownload, NewsTemplate):
             return
 
         folder = self.create_custom_directory('guess')
-        template = self.PAGE_PREFIX + 'wp-content/uploads/%s/%s/%s_MT2_ep%s_%s.jpg'
+        template = self.PAGE_PREFIX + 'wp-content/uploads/%s/%s/%s_MT2_%s_%s.jpg'
         current_date = datetime.now() + timedelta(hours=1)
         year = current_date.strftime('%Y')
         month = current_date.strftime('%m')
