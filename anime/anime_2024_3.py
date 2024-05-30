@@ -153,5 +153,35 @@ class RoshidereDownload(Summer2024AnimeDownload, NewsTemplate2):
 
     def download_character(self):
         folder = self.create_character_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'chara/index.html')
+            pages = soup.select('#ContentsListUnit01 a[href]')
+            for page in pages:
+                if not page['href'].endswith('.html') or not page['href'].startswith('../'):
+                    continue
+                page_url = self.PAGE_PREFIX + page['href'].replace('../', '')
+                page_name = page_url.split('/')[-1].split('.html')[0]
+                if page_name in processed:
+                    continue
+                if page_name == 'index':
+                    ep_soup = soup
+                else:
+                    ep_soup = self.get_soup(page_url)
+                if ep_soup is None:
+                    continue
+                images = ep_soup.select('.charaMain__stand img[src]')
+                self.image_list = []
+                for image in images:
+                    image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                    image_name = self.extract_image_name_from_url(image_url)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(folder)
+                processed.append(page_name)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+        self.create_cache_file(cache_filepath, processed, num_processed)
+
         template = self.PAGE_PREFIX + 'core_sys/images/main/home/chara%s.png'
         self.download_by_template(folder, template, 2, 1, prefix='tz_')
