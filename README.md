@@ -83,12 +83,12 @@ pip install -r requirements.txt
 
 ### New Anime
 The premiere date for the anime listed here has not been announced.
-* [ATRI -My Dear Moments-](https://atri-anime.com/)
 * [Giji Harem](https://gijiharem.com/)
 * [Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita 2nd Season](https://slime300-anime.com/)
 * [Tsuyokute New Saga](https://tsuyosaga-pr.com/)
 
 ### Summer 2024 Anime
+* [Atri: My Dear Moments](https://atri-anime.com/)
 * [Koi wa Futago de Warikirenai](https://futakire.com/)
 * [Kono Sekai wa Fukanzen Sugiru](https://konofuka.com/)
 * [Tokidoki Bosotto Russia-go de Dereru Tonari no Alya-san](https://roshidere.com/)

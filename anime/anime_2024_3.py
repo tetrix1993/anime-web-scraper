@@ -1,6 +1,7 @@
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 from datetime import datetime
 
+# Atri: My Dear Moments https://atri-anime.com/ #ATRI @ATRI_anime
 # Koi wa Futago de Warikirenai https://futakire.com/ #ふたきれ @futakire
 # Kono Sekai wa Fukanzen Sugiru https://konofuka.com/ #このふか @konofuka_QA
 # Tokidoki Bosotto Russia-go de Dereru Tonari no Alya-san https://roshidere.com/ #ロシデレ @roshidere
@@ -14,6 +15,59 @@ class Summer2024AnimeDownload(MainDownload):
 
     def __init__(self):
         super().__init__()
+
+
+# Atri: My Dear Moments
+class AtriDownload(Summer2024AnimeDownload, NewsTemplate):
+    title = 'Atri: My Dear Moments'
+    keywords = [title]
+    website = 'https://atri-anime.com/'
+    twitter = 'ATRI_anime'
+    hashtags = 'ATRI'
+    folder_name = 'atri'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news_cont__item',
+                                    title_select='.title', date_select='.date', id_select='a', paging_type=1,
+                                    a_tag_start_text_to_remove='./', a_tag_prefix=self.PAGE_PREFIX + 'news/',
+                                    next_page_select='.news_cont__paging__item.-next',
+                                    next_page_eval_index_class='-disable', next_page_eval_index=-1)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('ATRI_visual', 'https://ogre.natalie.mu/media/news/comic/2022/0924/ATRI_visual.jpg')
+        self.add_to_image_list('kv_kv_wide', self.PAGE_PREFIX + 'assets/img/kv/kv_wide.png')
+        self.add_to_image_list('top_mainvisual_mv', self.PAGE_PREFIX + 'assets/img/top/mainvisual/mv.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        self.image_list = []
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.character__ph__main img[src*="/character/"]')
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'].replace('./', '')
+                image_name = self.generate_image_name_from_url(image_url, 'character')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
 
 
 # Koi wa Futago de Warikirenai
