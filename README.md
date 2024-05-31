@@ -85,7 +85,6 @@ pip install -r requirements.txt
 The premiere date for the anime listed here has not been announced.
 * [ATRI -My Dear Moments-](https://atri-anime.com/)
 * [Giji Harem](https://gijiharem.com/)
-* [Highspeed Etoile](https://highspeed-etoile.com/)
 * [Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita 2nd Season](https://slime300-anime.com/)
 * [Tsuyokute New Saga](https://tsuyosaga-pr.com/)
 
@@ -98,6 +97,7 @@ The premiere date for the anime listed here has not been announced.
 * [Hananoi-kun to Koi no Yamai](https://hananoikun-pr.com/)
 * [Henjin no Salad Bowl](https://www.tbs.co.jp/anime/hensara/)
 * [Hibike! Euphonium 3](https://anime-eupho.com/)
+* [Highspeed Etoile](https://highspeed-etoile.com/)
 * [Jii-san Baa-san Wakagaeru](https://jisanbasan.com/)
 * [Kaijuu 8-gou](https://kaiju-no8.net/)
 * [Kami wa Game ni Ueteiru.](https://godsgame-anime.com/)

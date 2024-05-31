@@ -11,6 +11,7 @@ import math
 # Hananoi-kun to Koi no Yamai https://hananoikun-pr.com/ #花野井くんと恋の病 @hananoikun_pr
 # Henjin no Salad Bowl https://www.tbs.co.jp/anime/hensara/ #変サラ @hensara_anime
 # Hibike! Euphonium 3 https://anime-eupho.com/ #anime_eupho @anime_eupho
+# Highspeed Etoile https://highspeed-etoile.com/ #ハイスピ @HSE_Project_PR
 # Jii-san Baa-san Wakagaeru https://jisanbasan.com/ #じいさんばあさん若返る @jisanbasan_prj
 # Kaijuu 8-gou https://kaiju-no8.net/ #怪獣８号 #KaijuNo8 @KaijuNo8_O
 # Kami wa Game ni Ueteiru. https://godsgame-anime.com/ #神飢え #神飢えアニメ #kamiue @kami_to_game
@@ -379,6 +380,59 @@ class HibikiEuphonium3Download(Spring2024AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+
+# Highspeed Etoile
+class HighspeedEtoileDownload(Spring2024AnimeDownload, NewsTemplate):
+    title = 'Highspeed Etoile'
+    keywords = [title]
+    website = 'https://highspeed-etoile.com/'
+    twitter = 'HSE_Project_PR'
+    hashtags = 'ハイスピ'
+    folder_name = 'highspeed-etoile'
+
+    PAGE_PREFIX = website
+    enabled = False
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, news_prefix='', article_select='section.news article',
+                                    date_select='time', title_select='h3', id_select=None, id_has_id=True)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/Fponcz0agAs6iMv?format=jpg&name=small')
+        self.add_to_image_list('tz2_tw', 'https://pbs.twimg.com/media/FptyYY9aQAIvlvo?format=jpg&name=medium')
+        self.download_image_list(folder)
+
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            self.image_list = []
+            images = soup.select('section.introduction div.visual img[src]')
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src']
+                image_name = self.generate_image_name_from_url(image['src'], None)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'teaser/images/character_%s.png'
+        self.download_by_template(folder, template, 2, 1, prefix='tz_')
 
 
 # Jii-san Baa-san Wakagaeru

@@ -7,7 +7,6 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 # Anohana S2 https://10th.anohana.jp/ #あの花 #anohana @anohana_project
 # ATRI -My Dear Moments- https://atri-anime.com/ #ATRI @ATRI_anime
 # Giji Harem https://gijiharem.com/ #疑似ハーレム @GijiHarem
-# Highspeed Etoile https://highspeed-etoile.com/ #ハイスピ @HSE_Project_PR
 # Isekai de Mofumofu Nadenade suru Tame ni Ganbattemasu. https://mohunadeanime.com/ #もふなで @mohunade_anime
 # Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita 2nd Season https://slime300-anime.com/ #スライム倒して300年 @slime300_PR
 # Tsuyokute New Saga https://tsuyosaga-pr.com/ #つよサガ @tsuyosaga_pr
@@ -171,58 +170,6 @@ class GijiHaremDownload(UnconfirmedDownload, NewsTemplate2):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Key Visual')
-
-
-# Highspeed Etoile
-class HighspeedEtoileDownload(UnconfirmedDownload, NewsTemplate):
-    title = 'Highspeed Etoile'
-    keywords = [title]
-    website = 'https://highspeed-etoile.com/'
-    twitter = 'HSE_Project_PR'
-    hashtags = 'ハイスピ'
-    folder_name = 'highspeed-etoile'
-
-    PAGE_PREFIX = website
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_news()
-        self.download_key_visual()
-        self.download_character()
-
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-
-    def download_news(self):
-        self.download_template_news(page_prefix=self.PAGE_PREFIX, news_prefix='', article_select='section.news article',
-                                    date_select='time', title_select='h3', id_select=None, id_has_id=True)
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        self.image_list = []
-        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/Fponcz0agAs6iMv?format=jpg&name=small')
-        self.add_to_image_list('tz2_tw', 'https://pbs.twimg.com/media/FptyYY9aQAIvlvo?format=jpg&name=medium')
-        self.download_image_list(folder)
-
-        try:
-            soup = self.get_soup(self.PAGE_PREFIX)
-            self.image_list = []
-            images = soup.select('section.introduction div.visual img[src]')
-            for image in images:
-                image_url = self.PAGE_PREFIX + image['src']
-                image_name = self.generate_image_name_from_url(image['src'], None)
-                self.add_to_image_list(image_name, image_url)
-            self.download_image_list(folder)
-        except Exception as e:
-            self.print_exception(e, 'Key Visual')
-
-    def download_character(self):
-        folder = self.create_character_directory()
-        template = self.PAGE_PREFIX + 'teaser/images/character_%s.png'
-        self.download_by_template(folder, template, 2, 1, prefix='tz_')
 
 
 # Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita 2nd Season
