@@ -2,6 +2,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 from datetime import datetime
 
 # Koi wa Futago de Warikirenai https://futakire.com/ #ふたきれ @futakire
+# Kono Sekai wa Fukanzen Sugiru https://konofuka.com/ #このふか @konofuka_QA
 # Tokidoki Bosotto Russia-go de Dereru Tonari no Alya-san https://roshidere.com/ #ロシデレ @roshidere
 
 
@@ -114,6 +115,66 @@ class FutakireDownload(Summer2024AnimeDownload, NewsTemplate):
         prefix = self.PAGE_PREFIX + 'images/chara/p_%s.png'
         templates = [prefix % '%s_01', prefix % '%s_02_001', prefix % '%s_02_002', prefix % '%s_02_003']
         self.download_by_template(folder, templates, 3, 1)
+
+
+# Kono Sekai wa Fukanzen Sugiru
+class KonofukaDownload(Summer2024AnimeDownload, NewsTemplate):
+    title = 'Kono Sekai wa Fukanzen Sugiru'
+    keywords = [title, "Quality Assurance in Another World"]
+    website = 'https://konofuka.com/'
+    twitter = 'konofuka_QA'
+    hashtags = ['このふか', 'konofuka']
+    folder_name = 'konofuka'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-box',
+                                    title_select='.news-txt-box', date_select='.news-box-date', id_select='.news-link',
+                                    next_page_select='.next', unescape_title=True)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('#kv>img[src*="/themes/"]')
+            for image in images:
+                image_url = image['src']
+                image_name = self.generate_image_name_from_url(image_url, 'themes')
+                if 'assets_img_top_' in image_name:
+                    image_name = image_name.replace('assets_img_top_', '')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+        self.image_list = []
+        self.add_to_image_list('tz', self.PAGE_PREFIX + 'pDK2yjkH/wp-content/themes/konofuka_v0.1/assets/img/top/mv.png')
+        self.add_to_image_list('tz_tw', 'https://pbs.twimg.com/media/Fr85Cb4aAAAgWlS?format=jpg&name=4096x4096')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        prefix = self.PAGE_PREFIX + 'pDK2yjkH/wp-content/uploads/2024/05/%s.png'
+        self.image_list = []
+        self.add_to_image_list('img', prefix % 'img')
+        self.add_to_image_list('face', prefix % 'face')
+        self.download_image_list(folder)
+        templates = [prefix % 'img-%s', prefix % 'face-%s']
+        self.download_by_template(folder, templates, 1, 1)
 
 
 # Tokidoki Bosotto Russia-go de Dereru Tonari no Alya-san

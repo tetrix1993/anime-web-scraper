@@ -90,6 +90,7 @@ The premiere date for the anime listed here has not been announced.
 
 ### Summer 2024 Anime
 * [Koi wa Futago de Warikirenai](https://futakire.com/)
+* [Kono Sekai wa Fukanzen Sugiru](https://konofuka.com/)
 * [Tokidoki Bosotto Russia-go de Dereru Tonari no Alya-san](https://roshidere.com/)
 
 ### Spring 2024 Anime
@@ -101,7 +102,6 @@ The premiere date for the anime listed here has not been announced.
 * [Jii-san Baa-san Wakagaeru](https://jisanbasan.com/)
 * [Kaijuu 8-gou](https://kaiju-no8.net/)
 * [Kami wa Game ni Ueteiru.](https://godsgame-anime.com/)
-* [Kono Sekai wa Fukanzen Sugiru](https://konofuka.com/)
 * [Kono Subarashii Sekai ni Shukufuku wo! 3](http://konosuba.com/3rd/)
 * [Lv2 kara Cheat datta Motoyuusha Kouho no Mattari Isekai Life](https://lv2-cheat.com/)
 * [Mahouka Koukou no Rettousei 3rd Season](https://mahouka.jp/3rd/)

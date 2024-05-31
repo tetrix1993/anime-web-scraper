@@ -13,6 +13,7 @@ import traceback
 import portalocker
 from PIL import Image
 from io import BytesIO
+from html import unescape
 
 
 class MainDownload:
@@ -753,7 +754,7 @@ class MainDownload:
             return split1
 
     @staticmethod
-    def generate_image_name_from_url(url, stop_text):
+    def generate_image_name_from_url(url, stop_text, separator='_'):
         period_index = url.split('?')[0].rfind('.')
         if period_index >= 0:
             name = url[0:period_index]
@@ -768,7 +769,7 @@ class MainDownload:
             if name_split[i] == stop_text:
                 return image_name
             else:
-                image_name = name_split[i] + '_' + image_name
+                image_name = name_split[i] + separator + image_name
         return image_name
 
     @staticmethod
@@ -1352,7 +1353,7 @@ class NewsTemplate:
                                a_tag_prefix=None, stop_date=None, date_separator=None, date_attr=None, date_prefix=None,
                                date_func=None, a_tag_replace_from=None, a_tag_replace_to='',
                                a_tag_start_text_to_remove=None, next_page_select=None, next_page_eval_index_class=None,
-                               next_page_eval_index=0, next_page_eval_index_compare_page=False,
+                               next_page_eval_index=0, next_page_eval_index_compare_page=False, unescape_title=False,
                                reverse_article_list=False, date_tag_count=1):
         """
         :param page_prefix: Start of the page URL to evaluate
@@ -1381,6 +1382,7 @@ class NewsTemplate:
         :param next_page_eval_index_class: Terminates if next_page_select contains the class
         :param next_page_eval_index: Index number of the elements selected in next_page_select
         :param next_page_eval_index_compare_page: Terminates if the next_page_select's text = current page number
+        :param unescape_title: Unescape HTML characters from title
         :param reverse_article_list: Reverse the processing of the articles being scraped. Only works on first page.
         :param date_tag_count: Number of tags in date select to concatenate
         """
@@ -1478,6 +1480,8 @@ class NewsTemplate:
                         if len(date) == 0:
                             continue
                         title = ' '.join(tag_titles[0].text.strip().split())
+                        if unescape_title:
+                            title = unescape(title)
                         if (stop_date is not None and date.startswith(stop_date)) or\
                                 (news_obj and ((has_tag_ids and news_obj['id'] == article_id) or
                                                (not has_tag_ids and title == news_obj['title']) or
