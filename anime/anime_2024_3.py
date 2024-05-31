@@ -23,13 +23,13 @@ class Summer2024AnimeDownload(MainDownload):
 
 
 # 2.5-jigen no Ririsa
-class RirisaDownload(Summer2024AnimeDownload, NewsTemplate):
+class NigoririDownload(Summer2024AnimeDownload, NewsTemplate):
     title = '2.5-jigen no Ririsa'
     keywords = [title, '2.5 Dimensional Seduction']
     website = 'https://ririsa-official.com/'
     twitter = 'ririsa_official'
     hashtags = ['にごリリ', 'nigoriri']
-    folder_name = 'ririsa'
+    folder_name = 'nigoriri'
 
     PAGE_PREFIX = website
 
