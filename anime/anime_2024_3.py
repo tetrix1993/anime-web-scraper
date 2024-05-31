@@ -3,6 +3,7 @@ from datetime import datetime
 
 # Atri: My Dear Moments https://atri-anime.com/ #ATRI @ATRI_anime
 # Giji Harem https://gijiharem.com/ #疑似ハーレム @GijiHarem
+# Kimi to Boku no Saigo no Senjou, Aruiwa Sekai ga Hajimaru Seisen Season II https://kimisentv.com/ #キミ戦 #kimisen #OurLastCrusade
 # Koi wa Futago de Warikirenai https://futakire.com/ #ふたきれ @futakire
 # Kono Sekai wa Fukanzen Sugiru https://konofuka.com/ #このふか @konofuka_QA
 # Tokidoki Bosotto Russia-go de Dereru Tonari no Alya-san https://roshidere.com/ #ロシデレ @roshidere
@@ -144,6 +145,54 @@ class GijiHaremDownload(Summer2024AnimeDownload, NewsTemplate2):
         except Exception as e:
             self.print_exception(e, 'Character')
         self.create_cache_file(cache_filepath, processed, num_processed)
+
+
+# Kimi to Boku no Saigo no Senjou, Aruiwa Sekai ga Hajimaru Seisen Season II
+class Kimisen2Download(Summer2024AnimeDownload, NewsTemplate):
+    title = 'Kimi to Boku no Saigo no Senjou, Aruiwa Sekai ga Hajimaru Seisen Season II'
+    keywords = [title, "Our Last Crusade or the Rise of a New World Season 2"]
+    website = 'https://kimisentv.com/'
+    twitter = 'kimisen_project'
+    hashtags = ['キミ戦', 'kimisen', 'OurLastCrusade']
+    folder_name = 'kimisen2'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.content-entry',
+                                    title_select='.entry-title span', date_select='.entry-date',
+                                    id_select=None, id_has_id=True, stop_date='2021.03')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            self.image_list = []
+            images = soup.select('.vis source[srcset*="/top/"]')
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['srcset'].replace('./', '')
+                image_name = self.generate_image_name_from_url(image_url, 'top')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'assets/character/s2/c%s.webp'
+        self.download_by_template(folder, template, 1, 1)
 
 
 # Koi wa Futago de Warikirenai
