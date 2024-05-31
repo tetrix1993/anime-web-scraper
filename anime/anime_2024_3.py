@@ -33,6 +33,7 @@ class FutakireDownload(Summer2024AnimeDownload, NewsTemplate):
         self.download_episode_preview()
         self.download_news()
         self.download_key_visual()
+        self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
@@ -107,6 +108,12 @@ class FutakireDownload(Summer2024AnimeDownload, NewsTemplate):
         except Exception as e:
             self.print_exception(e, 'Key Visual News')
         self.create_cache_file(cache_filepath, processed, num_processed)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        prefix = self.PAGE_PREFIX + 'images/chara/p_%s.png'
+        templates = [prefix % '%s_01', prefix % '%s_02_001', prefix % '%s_02_002', prefix % '%s_02_003']
+        self.download_by_template(folder, templates, 3, 1)
 
 
 # Tokidoki Bosotto Russia-go de Dereru Tonari no Alya-san
