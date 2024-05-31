@@ -22,7 +22,7 @@ import re
 # Kono Subarashii Sekai ni Bakuen wo! http://konosuba.com/bakuen/ #konosuba #このすば @konosubaanime
 # Kanojo ga Koushaku-tei ni Itta Riyuu https://koshakutei.com/ #公爵邸 @koshakutei
 # Kuma Kuma Kuma Bear Punch! https://kumakumakumabear.com/ #くまクマ熊ベアー #kumabear @kumabear_anime
-# Megami no Cafe Terrace https://goddess-cafe.com/ #女神のカフェテラス @goddess_cafe_PR
+# Megami no Cafe Terrace https://1st.goddess-cafe.com/ #女神のカフェテラス @goddess_cafe_PR
 # Mashle https://mashle.pw/ #マッシュル @mashle_official
 # My Home Hero https://myhomehero-anime.com/ #マイホームヒーロー @myhomehero_pr
 # Oshi no Ko https://ichigoproduction.com/Season1/ #推しの子 @anime_oshinoko
@@ -1780,7 +1780,7 @@ class KumaBear2Download(Spring2023AnimeDownload, NewsTemplate2):
 class MegamiCafeDownload(Spring2023AnimeDownload, NewsTemplate):
     title = 'Megami no Café Terrace'
     keywords = [title, 'Cafe', 'The Cafe Terrace and its Goddesses']
-    website = 'https://goddess-cafe.com/'
+    website = 'https://1st.goddess-cafe.com/'
     twitter = 'goddess_cafe_PR'
     hashtags = '女神のカフェテラス'
     folder_name = 'megami-cafe'

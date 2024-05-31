@@ -94,6 +94,7 @@ The premiere date for the anime listed here has not been announced.
 * [Kimi to Boku no Saigo no Senjou, Aruiwa Sekai ga Hajimaru Seisen Season II](https://kimisentv.com/)
 * [Koi wa Futago de Warikirenai](https://futakire.com/)
 * [Kono Sekai wa Fukanzen Sugiru](https://konofuka.com/)
+* [Megami no Café Terrace Season 2](https://goddess-cafe.com/)
 * [Oshi no Ko Season 2](https://ichigoproduction.com/Season2/)
 * [Tokidoki Bosotto Russia-go de Dereru Tonari no Alya-san](https://roshidere.com/)
 
@@ -238,7 +239,7 @@ The premiere date for the anime listed here has not been announced.
 * [Kono Subarashii Sekai ni Bakuen wo!](http://konosuba.com/bakuen/)
 * [Kuma Kuma Kuma Bear Punch!](https://kumakumakumabear.com/)
 * [Mashle](https://mashle.pw/)
-* [Megami no Café Terrace](https://goddess-cafe.com/)
+* [Megami no Café Terrace](https://1st.goddess-cafe.com/)
 * [My Home Hero](https://myhomehero-anime.com/)
 * [Oshi no Ko](https://ichigoproduction.com/Season1/)
 * [Otonari ni Ginga](https://otonari-anime.com/)

@@ -1,5 +1,6 @@
-from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
+from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsTemplate4
 from datetime import datetime
+from requests.exceptions import HTTPError
 
 # 2.5-jigen no Ririsa https://ririsa-official.com/ @ririsa_official #にごリリ #nigoriri
 # Atri: My Dear Moments https://atri-anime.com/ #ATRI @ATRI_anime
@@ -484,6 +485,91 @@ class KonofukaDownload(Summer2024AnimeDownload, NewsTemplate):
         self.download_image_list(folder)
         templates = [prefix % 'img-%s', prefix % 'face-%s']
         self.download_by_template(folder, templates, 1, 1)
+
+
+# Megami no Café Terrace Season 2
+class MegamiCafe2Download(Summer2024AnimeDownload, NewsTemplate4):
+    title = 'Megami no Café Terrace Season 2'
+    keywords = [title, 'Cafe', 'The Cafe Terrace and its Goddesses Season 2']
+    website = 'https://goddess-cafe.com/'
+    twitter = 'goddess_cafe_PR'
+    hashtags = '女神のカフェテラス'
+    folder_name = 'megamicafe2'
+
+    PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 6
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        init_json = self.download_episode_preview()
+        self.download_news(init_json)
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self, print_http_error=False):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        return None
+
+        # try:
+        #     init_json = self.get_json(self.PAGE_PREFIX + 'wp-json/site-data/init')
+        #     for story in init_json['story']:
+        #         episode = story['episode']
+        #         if self.is_image_exists(episode + '_1'):
+        #             continue
+        #         self.image_list = []
+        #         for i in range(len(story['images'])):
+        #             image = story['images'][i]
+        #             image_url = image['image_path']
+        #             image_name = episode + '_' + str(i + 1)
+        #             self.add_to_image_list(image_name, image_url)
+        #         self.download_image_list(self.base_folder)
+        #     return init_json
+        # except HTTPError:
+        #     if print_http_error:
+        #         print(self.__class__.__name__ + ' - 403 Error when retrieving story API.')
+        # except Exception as e:
+        #     self.print_exception(e)
+        # return None
+
+    def download_news(self, json_obj=None):
+        self.download_template_news('site-data', json_obj=json_obj)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            self.image_list = []
+            images = soup.select('div[class*="Visual"] img[src*="kv"][src*="/static/"]')
+            for image in images:
+                image_url = image['src']
+                if image_url.startswith('/'):
+                    image_url = self.PAGE_PREFIX + image_url[1:]
+                image_name = self.generate_image_name_from_url(image_url, 'static')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character')
+            self.image_list = []
+            images = soup.select('img[src*="/character/"][class*="Character__CharaImage"]')
+            for image in images:
+                image_url = image['src']
+                if '/character/' not in image_url:
+                    continue
+                if image_url.startswith('/'):
+                    image_url = self.PAGE_PREFIX + image_url[1:]
+                image_name = self.generate_image_name_from_url(image_url, 'character')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
 
 
 # Oshi no Ko Season 2
