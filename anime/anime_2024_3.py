@@ -1,6 +1,7 @@
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 from datetime import datetime
 
+# 2.5-jigen no Ririsa https://ririsa-official.com/ @ririsa_official #にごリリ #nigoriri
 # Atri: My Dear Moments https://atri-anime.com/ #ATRI @ATRI_anime
 # Giji Harem https://gijiharem.com/ #疑似ハーレム @GijiHarem
 # Gimai Seikatsu https://gimaiseikatsu-anime.com/ #義妹生活 @gimaiseikatsu
@@ -19,6 +20,63 @@ class Summer2024AnimeDownload(MainDownload):
 
     def __init__(self):
         super().__init__()
+
+
+# 2.5-jigen no Ririsa
+class RirisaDownload(Summer2024AnimeDownload, NewsTemplate):
+    title = '2.5-jigen no Ririsa'
+    keywords = [title, '2.5 Dimensional Seduction']
+    website = 'https://ririsa-official.com/'
+    twitter = 'ririsa_official'
+    hashtags = ['にごリリ', 'nigoriri']
+    folder_name = 'ririsa'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article',
+                                    title_select='.ttl', date_select='.date', id_select='a',
+                                    next_page_select='.item-next__link')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            self.image_list = []
+            images = soup.select('.fvslide source[srcset*="_pc"][srcset*="/webp/"]')
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['srcset'][1:].split('?')[0]
+                image_name = self.generate_image_name_from_url(image_url, 'webp')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            self.image_list = []
+            images = soup.select('.visual source[srcset*="_pc"][srcset*="/webp/"]')
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['srcset'][1:].split('?')[0]
+                image_name = self.generate_image_name_from_url(image_url, 'webp')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
 
 
 # Atri: My Dear Moments

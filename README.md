@@ -87,6 +87,7 @@ The premiere date for the anime listed here has not been announced.
 * [Tsuyokute New Saga](https://tsuyosaga-pr.com/)
 
 ### Summer 2024 Anime
+* [2.5-jigen no Ririsa](https://ririsa-official.com/)
 * [Atri: My Dear Moments](https://atri-anime.com/)
 * [Giji Harem](https://gijiharem.com/)
 * [Gimai Seiktsu](https://gimaiseikatsu-anime.com/)
