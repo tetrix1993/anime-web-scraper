@@ -6,6 +6,7 @@ from datetime import datetime
 # Kimi to Boku no Saigo no Senjou, Aruiwa Sekai ga Hajimaru Seisen Season II https://kimisentv.com/ #キミ戦 #kimisen #OurLastCrusade
 # Koi wa Futago de Warikirenai https://futakire.com/ #ふたきれ @futakire
 # Kono Sekai wa Fukanzen Sugiru https://konofuka.com/ #このふか @konofuka_QA
+# Oshi no Ko Season 2 https://ichigoproduction.com/Season2/ #推しの子 @anime_oshinoko
 # Tokidoki Bosotto Russia-go de Dereru Tonari no Alya-san https://roshidere.com/ #ロシデレ @roshidere
 
 
@@ -354,6 +355,77 @@ class KonofukaDownload(Summer2024AnimeDownload, NewsTemplate):
         self.download_image_list(folder)
         templates = [prefix % 'img-%s', prefix % 'face-%s']
         self.download_by_template(folder, templates, 1, 1)
+
+
+# Oshi no Ko Season 2
+class Oshinoko2Download(Summer2024AnimeDownload, NewsTemplate2):
+    title = 'Oshi no Ko Season 2'
+    keywords = [title, 'oshinoko']
+    website = 'https://ichigoproduction.com/Season2/'
+    twitter = 'anime_oshinoko'
+    hashtags = '推しの子'
+    folder_name = 'oshinoko2'
+
+    PAGE_PREFIX = website
+    IMAGES_PER_EPISODE = 6
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            self.image_list = []
+            images = soup.select('.kv__img source[srcset*="/main/"]')
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['srcset']
+                image_name = self.generate_image_name_from_url(image_url, 'main')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'chara/')
+            a_tags = soup.select('#ContentsListUnit01 a[href]')
+            for a_tag in a_tags:
+                chara_url = self.PAGE_PREFIX + a_tag['href'].replace('../', '')
+                chara_name = chara_url.split('/')[-1].replace('.html', '')
+                if chara_name in processed:
+                    continue
+                if chara_name == 'index':
+                    chara_soup = soup
+                else:
+                    chara_soup = self.get_soup(chara_url)
+                if chara_soup is not None:
+                    images = chara_soup.select('.ph img[src]')
+                    for image in images:
+                        image_url = self.PAGE_PREFIX + image['src'].replace('../', '').split('?')[0]
+                        image_name = self.extract_image_name_from_url(image_url)
+                        self.add_to_image_list(image_name, image_url)
+                    if len(self.image_list) > 0:
+                        processed.append(chara_name)
+                    self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+        self.create_cache_file(cache_filepath, processed, num_processed)
 
 
 # Tokidoki Bosotto Russia-go de Dereru Tonari no Alya-san

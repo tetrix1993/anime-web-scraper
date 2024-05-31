@@ -25,7 +25,7 @@ import re
 # Megami no Cafe Terrace https://goddess-cafe.com/ #女神のカフェテラス @goddess_cafe_PR
 # Mashle https://mashle.pw/ #マッシュル @mashle_official
 # My Home Hero https://myhomehero-anime.com/ #マイホームヒーロー @myhomehero_pr
-# Oshi no Ko https://ichigoproduction.com/ #推しの子 @anime_oshinoko
+# Oshi no Ko https://ichigoproduction.com/Season1/ #推しの子 @anime_oshinoko
 # Otonari ni Ginga https://otonari-anime.com/ #おとなりに銀河 @otonariniginga
 # Skip to Loafer https://skip-and-loafer.com/ #スキップとローファー #スキロー @skip_and_loafer
 # Tensei Kizoku no Isekai Boukenroku https://www.tensei-kizoku.jp/ #転生貴族 @tenseikizoku
@@ -2148,7 +2148,7 @@ class MyHomeHeroDownload(Spring2023AnimeDownload, NewsTemplate):
 class OshinokoDownload(Spring2023AnimeDownload, NewsTemplate2):
     title = 'Oshi no Ko'
     keywords = [title, 'oshinoko']
-    website = 'https://ichigoproduction.com/'
+    website = 'https://ichigoproduction.com/Season1/'
     twitter = 'anime_oshinoko'
     hashtags = '推しの子'
     folder_name = 'oshinoko'
