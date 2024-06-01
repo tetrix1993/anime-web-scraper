@@ -7,6 +7,7 @@ from requests.exceptions import HTTPError
 # Giji Harem https://gijiharem.com/ #疑似ハーレム @GijiHarem
 # Gimai Seikatsu https://gimaiseikatsu-anime.com/ #義妹生活 @gimaiseikatsu
 # Isekai Shikkaku https://isekaishikkaku.com/ #異世界失格 #isekaishikkaku @isekaishikkaku
+# Katsute Mahou Shoujo to Aku wa Tekitai shiteita. https://mahoaku-anime.com/ #まほあく #まほあくアニメ @mahoaku_anime
 # Kimi to Boku no Saigo no Senjou, Aruiwa Sekai ga Hajimaru Seisen Season II https://kimisentv.com/ #キミ戦 #kimisen #OurLastCrusade
 # Koi wa Futago de Warikirenai https://futakire.com/ #ふたきれ @futakire
 # Kono Sekai wa Fukanzen Sugiru https://konofuka.com/ #このふか @konofuka_QA
@@ -332,6 +333,57 @@ class IsekaiShikkakuDownload(Summer2024AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'assets/character/%s.webp'
         self.download_by_template(folder, [template % '%sc', template % '%sf'], 1, 1)
+
+
+# Katsute Mahou Shoujo to Aku wa Tekitai shiteita.
+class MahoakuDownload(Summer2024AnimeDownload, NewsTemplate):
+    title = 'Katsute Mahou Shoujo to Aku wa Tekitai shiteita.'
+    keywords = [title, "The Magical Girl and the Evil Lieutenant Used to Be Archenemies"]
+    website = 'https://mahoaku-anime.com/'
+    twitter = 'mahoaku_anime'
+    hashtags = ['まほあく', 'まほあくアニメ']
+    folder_name = 'mahoaku'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.p-news__list-item',
+                                    title_select='.p-news__list-detail', date_select='.p-news__list-date',
+                                    id_select='a', a_tag_prefix=news_url, date_separator='/', paging_type=3,
+                                    paging_suffix='?page=%s', next_page_select='.c-pagination__list-item',
+                                    next_page_eval_index_class='is-current', next_page_eval_index=-1)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            self.image_list = []
+            images = soup.select('.p-hero__kv-img img[src*="/assets/"]')
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'].replace('./', '')
+                image_name = self.generate_image_name_from_url(image_url, 'assets')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'assets/img/character/img_chara_stand%s.png'
+        self.download_by_template(folder, template, 1, 1)
 
 
 # Kimi to Boku no Saigo no Senjou, Aruiwa Sekai ga Hajimaru Seisen Season II
