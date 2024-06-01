@@ -96,6 +96,7 @@ The premiere date for the anime listed here has not been announced.
 * [Koi wa Futago de Warikirenai](https://futakire.com/)
 * [Kono Sekai wa Fukanzen Sugiru](https://konofuka.com/)
 * [Megami no Café Terrace Season 2](https://goddess-cafe.com/)
+* [Naze Boku no Sekai wo Daremo Oboeteinai no ka?](https://www.nazeboku.com/)
 * [Oshi no Ko Season 2](https://ichigoproduction.com/Season2/)
 * [Senpai wa Otokonoko](https://senpaiha-otokonoko.com/)
 * [Shikanoko Nokonoko Koshitantan](https://www.anime-shikanoko.jp/)

@@ -10,6 +10,8 @@ from requests.exceptions import HTTPError
 # Kimi to Boku no Saigo no Senjou, Aruiwa Sekai ga Hajimaru Seisen Season II https://kimisentv.com/ #キミ戦 #kimisen #OurLastCrusade
 # Koi wa Futago de Warikirenai https://futakire.com/ #ふたきれ @futakire
 # Kono Sekai wa Fukanzen Sugiru https://konofuka.com/ #このふか @konofuka_QA
+# Megami no Café Terrace Season 2 https://1st.goddess-cafe.com/ #女神のカフェテラス @goddess_cafe_PR
+# Naze Boku no Sekai wo Daremo Oboeteinai no ka? https://www.nazeboku.com/ #なぜ僕 #nazeboku @nazeboku_pr
 # Oshi no Ko Season 2 https://ichigoproduction.com/Season2/ #推しの子 @anime_oshinoko
 # Senpai wa Otokonoko https://senpaiha-otokonoko.com/ #ぱいのこアニメ #先輩はおとこのこ @painoko_anime
 # Shikanoko Nokonoko Koshitantan https://www.anime-shikanoko.jp/ #しかのこ @shikanoko_PR
@@ -625,6 +627,64 @@ class MegamiCafe2Download(Summer2024AnimeDownload, NewsTemplate4):
             self.print_exception(e, 'Character')
 
 
+# Naze Boku no Sekai wo Daremo Oboeteinai no ka?
+class NazebokuDownload(Summer2024AnimeDownload, NewsTemplate):
+    title = 'Naze Boku no Sekai wo Daremo Oboeteinai no ka?'
+    keywords = [title, 'nazeboku', 'Why Nobody Remembers My World?']
+    website = 'https://www.nazeboku.com/'
+    twitter = 'nazeboku_pr'
+    hashtags = ['なぜ僕', 'nazeboku']
+    folder_name = 'nazeboku'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news_item',
+                                    title_select='.ttl', date_select='.day', id_select='a',
+                                    paging_type=3, paging_suffix='?page=%s', next_page_select='.next.page-numbers')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.p-kv__img source[srcset*="/img/"]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['srcset'].split('?')[0].replace('./', '')
+                image_name = self.generate_image_name_from_url(image_url, 'img')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'dist/img/character/chara%s/stand.webp'
+        try:
+            for i in range(20):
+                image_name = f'chara{i + 1}_stand'
+                if self.is_image_exists(image_name, folder):
+                    continue
+                image_url = template % str(i + 1)
+                result = self.download_image(image_url, folder + '/' + image_name)
+                if result == -1:
+                    break
+        except Exception as e:
+            self.print_exception(e, 'Character')
+
+
 # Oshi no Ko Season 2
 class Oshinoko2Download(Summer2024AnimeDownload, NewsTemplate2):
     title = 'Oshi no Ko Season 2'
@@ -739,7 +799,7 @@ class PainokoDownload(Summer2024AnimeDownload, NewsTemplate):
 
 
 # Shikanoko Nokonoko Koshitantan
-class ShikanokoDownload(Summer2024AnimeDownload, NewsTemplate):
+class ShikanokoDownload(Summer2024AnimeDownload):
     title = 'Shikanoko Nokonoko Koshitantan'
     keywords = [title, 'My Deer Friend Nokotan', 'shikanoko']
     website = 'https://www.anime-shikanoko.jp/'
@@ -810,7 +870,7 @@ class ShikanokoDownload(Summer2024AnimeDownload, NewsTemplate):
         self.download_by_template(folder, [prefix % '%smain.png', prefix % '%sface1.jpg', prefix % '%sface2.jpg'], 1, 0)
 
 
-# Shoushimin Series https://shoshimin-anime.com/ #小市民 @shoshimin_pr
+# Shoushimin Series
 class ShoshiminDownload(Summer2024AnimeDownload, NewsTemplate2):
     title = 'Shoushimin Series'
     keywords = [title, 'Shoshimin', 'How to Become Ordinary']
@@ -867,7 +927,7 @@ class ShoshiminDownload(Summer2024AnimeDownload, NewsTemplate2):
                 self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)
         except Exception as e:
-            self.print_exception(e, 'Key Visual')
+            self.print_exception(e, 'Character')
 
 
 # Tokidoki Bosotto Russia-go de Dereru Tonari no Alya-san
