@@ -11,6 +11,7 @@ from requests.exceptions import HTTPError
 # Koi wa Futago de Warikirenai https://futakire.com/ #ふたきれ @futakire
 # Kono Sekai wa Fukanzen Sugiru https://konofuka.com/ #このふか @konofuka_QA
 # Oshi no Ko Season 2 https://ichigoproduction.com/Season2/ #推しの子 @anime_oshinoko
+# Senpai wa Otokonoko https://senpaiha-otokonoko.com/ #ぱいのこアニメ #先輩はおとこのこ @painoko_anime
 # Tokidoki Bosotto Russia-go de Dereru Tonari no Alya-san https://roshidere.com/ #ロシデレ @roshidere
 
 
@@ -691,6 +692,48 @@ class Oshinoko2Download(Summer2024AnimeDownload, NewsTemplate2):
         except Exception as e:
             self.print_exception(e, 'Character')
         self.create_cache_file(cache_filepath, processed, num_processed)
+
+
+# Senpai wa Otokonoko
+class PainokoDownload(Summer2024AnimeDownload, NewsTemplate):
+    title = 'Senpai wa Otokonoko'
+    keywords = [title, 'Senpai Is an Otokonoko']
+    website = 'https://senpaiha-otokonoko.com/'
+    twitter = 'painoko_anime'
+    hashtags = ['ぱいのこアニメ', '先輩はおとこのこ']
+    folder_name = 'painoko'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.p-news__list-item',
+                                    title_select='.p-news_data__title', date_select='.p-news_data__date',
+                                    id_select='a', a_tag_prefix=self.PAGE_PREFIX, a_tag_start_text_to_remove='/',
+                                    next_page_select='.-next', paging_type=1, date_separator=' ')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('tz1', self.PAGE_PREFIX + 'teaser/img/top/main.jpg')
+        self.add_to_image_list('tz2', self.PAGE_PREFIX + 'teaser/img/top/main2.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'teaser/img/top/chara_%s.png'
+        self.download_by_template(folder, template, 2, 1, prefix='tz_')
 
 
 # Tokidoki Bosotto Russia-go de Dereru Tonari no Alya-san

@@ -97,6 +97,7 @@ The premiere date for the anime listed here has not been announced.
 * [Kono Sekai wa Fukanzen Sugiru](https://konofuka.com/)
 * [Megami no Café Terrace Season 2](https://goddess-cafe.com/)
 * [Oshi no Ko Season 2](https://ichigoproduction.com/Season2/)
+* [Senpai wa Otokonoko](https://senpaiha-otokonoko.com/)
 * [Tokidoki Bosotto Russia-go de Dereru Tonari no Alya-san](https://roshidere.com/)
 
 ### Spring 2024 Anime
