@@ -17,6 +17,7 @@ from requests.exceptions import HTTPError
 # Shikanoko Nokonoko Koshitantan https://www.anime-shikanoko.jp/ #しかのこ @shikanoko_PR
 # Shoushimin Series https://shoshimin-anime.com/ #小市民 @shoshimin_pr
 # Tokidoki Bosotto Russia-go de Dereru Tonari no Alya-san https://roshidere.com/ #ロシデレ @roshidere
+# Tsue to Tsurugi no Wistoria https://wistoria-anime.com/ #ウィストリア #うぃす #Wistoria @Wistoria_PR
 
 
 # Summer 2024 Anime
@@ -907,9 +908,9 @@ class ShoshiminDownload(Summer2024AnimeDownload, NewsTemplate2):
                     image_url = self.PAGE_PREFIX + image['srcset'].split('?')[0]
                 else:
                     image_url = self.PAGE_PREFIX + image['src'].split('?')[0]
+                if not image_url.endswith('.webp'):
+                    continue
                 image_name = self.generate_image_name_from_url(image_url, 'main')
-                if image_url.endswith('.webp'):
-                    image_name += '_'
                 self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)
         except Exception as e:
@@ -1006,3 +1007,56 @@ class RoshidereDownload(Summer2024AnimeDownload, NewsTemplate2):
 
         template = self.PAGE_PREFIX + 'core_sys/images/main/home/chara%s.png'
         self.download_by_template(folder, template, 2, 1, prefix='tz_')
+
+
+# Tsue to Tsurugi no Wistoria
+class WistoriaDownload(Summer2024AnimeDownload, NewsTemplate):
+    title = 'Tsue to Tsurugi no Wistoria'
+    keywords = [title, "Wistoria's Wand and Sword"]
+    website = 'https://wistoria-anime.com/'
+    twitter = 'Wistoria_PR'
+    hashtags = ['ウィストリア', 'うぃす', 'Wistoria']
+    folder_name = 'wistoria'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.newsList',
+                                    title_select='.newsTitle__txt', date_select='.newsTitle__date', id_select='a',
+                                    next_page_select='.nextpostslink')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.visualIn source[srcset*="/img/"],.visualIn img[src*="/img/"]')
+            self.image_list = []
+            for image in images:
+                if image.has_attr('srcset'):
+                    image_url = image['srcset'].split('?')[0]
+                else:
+                    image_url = image['src'].split('?')[0]
+                if not image_url.endswith('.webp'):
+                    continue
+                image_name = self.generate_image_name_from_url(image_url, 'img')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        t = self.PAGE_PREFIX + 'jrepgmrf/wp-content/themes/wistoria-anime/assets/img/character/character_%s_main.png'
+        self.download_by_template(folder, t, 1, 1)

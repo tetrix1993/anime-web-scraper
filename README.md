@@ -102,6 +102,7 @@ The premiere date for the anime listed here has not been announced.
 * [Shikanoko Nokonoko Koshitantan](https://www.anime-shikanoko.jp/)
 * [Shoushimin Series](https://shoshimin-anime.com/)
 * [Tokidoki Bosotto Russia-go de Dereru Tonari no Alya-san](https://roshidere.com/)
+* [Tsue to Tsurugi no Wistoria](https://wistoria-anime.com/)
 
 ### Spring 2024 Anime
 * [Dekisokonai to Yobareta Motoeiyuu wa Jikka kara Tsuihou sareta node Sukikatte ni Ikiru Koto ni Shita](https://dekisoko-anime.com/)
