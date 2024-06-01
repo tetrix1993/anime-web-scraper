@@ -91,6 +91,7 @@ The premiere date for the anime listed here has not been announced.
 * [Atri: My Dear Moments](https://atri-anime.com/)
 * [Giji Harem](https://gijiharem.com/)
 * [Gimai Seiktsu](https://gimaiseikatsu-anime.com/)
+* [Isekai Shikkaku](https://isekaishikkaku.com/)
 * [Kimi to Boku no Saigo no Senjou, Aruiwa Sekai ga Hajimaru Seisen Season II](https://kimisentv.com/)
 * [Koi wa Futago de Warikirenai](https://futakire.com/)
 * [Kono Sekai wa Fukanzen Sugiru](https://konofuka.com/)
