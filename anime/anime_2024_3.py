@@ -12,6 +12,7 @@ from requests.exceptions import HTTPError
 # Kono Sekai wa Fukanzen Sugiru https://konofuka.com/ #このふか @konofuka_QA
 # Oshi no Ko Season 2 https://ichigoproduction.com/Season2/ #推しの子 @anime_oshinoko
 # Senpai wa Otokonoko https://senpaiha-otokonoko.com/ #ぱいのこアニメ #先輩はおとこのこ @painoko_anime
+# Shikanoko Nokonoko Koshitantan https://www.anime-shikanoko.jp/ #しかのこ @shikanoko_PR
 # Tokidoki Bosotto Russia-go de Dereru Tonari no Alya-san https://roshidere.com/ #ロシデレ @roshidere
 
 
@@ -734,6 +735,78 @@ class PainokoDownload(Summer2024AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'teaser/img/top/chara_%s.png'
         self.download_by_template(folder, template, 2, 1, prefix='tz_')
+
+
+# Shikanoko Nokonoko Koshitantan
+class ShikanokoDownload(Summer2024AnimeDownload, NewsTemplate):
+    title = 'Shikanoko Nokonoko Koshitantan'
+    keywords = [title, 'My Deer Friend Nokotan', 'shikanoko']
+    website = 'https://www.anime-shikanoko.jp/'
+    twitter = 'shikanoko_PR'
+    hashtags = ['しかのこ', 'shikanoko']
+    folder_name = 'shikanoko'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self, print_http_error=False):
+        news_url = self.PAGE_PREFIX + 'news/detail.html?id='
+        api_url = 'https://www.news.anime-shikanoko.jp/wp-json/wp/v2/posts?acf_format=standard&per_page=20&page='
+        try:
+            page = 1
+            page_url = api_url + str(page)
+            json_obj = self.get_json(page_url)
+            news_obj = self.get_last_news_log_object()
+            results = []
+            for item in json_obj:
+                article_id = news_url + str(item['id'])
+                date = item['date'][0:10].replace('-', '.')
+                title = item['title']['rendered']
+                if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
+                    break
+                results.append(self.create_news_log_object(date, title, article_id))
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log_from_news_log_object(result)
+                if process_result == 0:
+                    success_count += 1
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
+        except HTTPError as e:
+            if print_http_error:
+                print(self.__class__.__name__ + ' - 403 Error when retrieving news API.')
+        except Exception as e:
+            self.print_exception(e, 'News')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.kv__rightSwiperNav img[src*="/top/"]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'].split('?')[0].replace('./', '')
+                image_name = self.generate_image_name_from_url(image_url, 'top')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        prefix = self.PAGE_PREFIX + 'assets/img/character/%s'
+        self.download_by_template(folder, [prefix % '%smain.png', prefix % '%sface1.jpg', prefix % '%sface2.jpg'], 1, 0)
 
 
 # Tokidoki Bosotto Russia-go de Dereru Tonari no Alya-san
