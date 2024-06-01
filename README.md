@@ -97,6 +97,7 @@ The premiere date for the anime listed here has not been announced.
 * [Kimi to Boku no Saigo no Senjou, Aruiwa Sekai ga Hajimaru Seisen Season II](https://kimisentv.com/)
 * [Koi wa Futago de Warikirenai](https://futakire.com/)
 * [Kono Sekai wa Fukanzen Sugiru](https://konofuka.com/)
+* [Make Heroine ga Oosugiru!](https://makeine-anime.com/)
 * [Maougun Saikyou no Majutsushi wa Ningen datta](https://maougun-anime.com/)
 * [Megami no Café Terrace Season 2](https://goddess-cafe.com/)
 * [Naze Boku no Sekai wo Daremo Oboeteinai no ka?](https://www.nazeboku.com/)
