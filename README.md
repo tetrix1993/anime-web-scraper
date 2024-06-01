@@ -91,6 +91,7 @@ The premiere date for the anime listed here has not been announced.
 * [Atri: My Dear Moments](https://atri-anime.com/)
 * [Giji Harem](https://gijiharem.com/)
 * [Gimai Seiktsu](https://gimaiseikatsu-anime.com/)
+* [Hazurewaku no "Joutai Ijou Skill" de Saikyou ni Natta Ore ga Subete wo Juurin suru made](https://hazurewaku-anime.com/)
 * [Isekai Shikkaku](https://isekaishikkaku.com/)
 * [Katsute Mahou Shoujo to Aku wa Tekitai shiteita.](https://mahoaku-anime.com/)
 * [Kimi to Boku no Saigo no Senjou, Aruiwa Sekai ga Hajimaru Seisen Season II](https://kimisentv.com/)

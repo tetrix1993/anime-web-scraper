@@ -6,6 +6,7 @@ from requests.exceptions import HTTPError
 # Atri: My Dear Moments https://atri-anime.com/ #ATRI @ATRI_anime
 # Giji Harem https://gijiharem.com/ #疑似ハーレム @GijiHarem
 # Gimai Seikatsu https://gimaiseikatsu-anime.com/ #義妹生活 @gimaiseikatsu
+# Hazurewaku no "Joutai Ijou Skill" de Saikyou ni Natta Ore ga Subete wo Juurin suru made https://hazurewaku-anime.com/ #ハズレ枠 @hazurewaku_info
 # Isekai Shikkaku https://isekaishikkaku.com/ #異世界失格 #isekaishikkaku @isekaishikkaku
 # Katsute Mahou Shoujo to Aku wa Tekitai shiteita. https://mahoaku-anime.com/ #まほあく #まほあくアニメ @mahoaku_anime
 # Kimi to Boku no Saigo no Senjou, Aruiwa Sekai ga Hajimaru Seisen Season II https://kimisentv.com/ #キミ戦 #kimisen #OurLastCrusade
@@ -277,6 +278,78 @@ class GimaiSeikatsuDownload(Summer2024AnimeDownload, NewsTemplate2):
                     images = chara_soup.select('.chara__img img[src],.charaface img[src]')
                     for image in images:
                         image_url = self.PAGE_PREFIX + image['src'].replace('../', '').split('?')[0]
+                        image_name = self.extract_image_name_from_url(image_url)
+                        self.add_to_image_list(image_name, image_url)
+                    if len(self.image_list) > 0:
+                        processed.append(chara_name)
+                    self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+        self.create_cache_file(cache_filepath, processed, num_processed)
+
+
+# Hazurewaku no "Joutai Ijou Skill" de Saikyou ni Natta Ore ga Subete wo Juurin suru made https://hazurewaku-anime.com/ #ハズレ枠
+class HazurewakuDownload(Summer2024AnimeDownload, NewsTemplate):
+    title = 'Hazurewaku no "Joutai Ijou Skill" de Saikyou ni Natta Ore ga Subete wo Juurin suru made'
+    keywords = [title, 'hazurewaku', 'Failure Frame: I Became the Strongest and Annihilated Everything With Low-Level Spells']
+    website = 'https://hazurewaku-anime.com/'
+    twitter = 'hazurewaku_info'
+    hashtags = ['ハズレ枠']
+    folder_name = 'hazurewaku'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-list__scroll li',
+                                    title_select='.title', date_select='.news-date', id_select='a', news_prefix='',
+                                    date_func=lambda x: x[0:4] + '.' + x[4:])
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            self.image_list = []
+            images = soup.select('.hero-image img[src*="/top/"]')
+            for image in images:
+                image_url = image['src']
+                image_name = self.generate_image_name_from_url(image_url, 'top')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            a_tags = soup.select('a[href].btn-character-list')
+            for a_tag in a_tags:
+                chara_url = a_tag['href']
+                if chara_url.endswith('/'):
+                    chara_name = chara_url[:-1].split('/')[-1]
+                else:
+                    chara_name = chara_url.split('/')[-1]
+                if chara_name in processed:
+                    continue
+                chara_soup = self.get_soup(chara_url)
+                if chara_soup is not None:
+                    images = chara_soup.select('.chara img[src],.face img[src]')
+                    for image in images:
+                        image_url = image['src'].split('?')[0]
                         image_name = self.extract_image_name_from_url(image_url)
                         self.add_to_image_list(image_name, image_url)
                     if len(self.image_list) > 0:
