@@ -11,6 +11,7 @@ from requests.exceptions import HTTPError
 # Kimi to Boku no Saigo no Senjou, Aruiwa Sekai ga Hajimaru Seisen Season II https://kimisentv.com/ #キミ戦 #kimisen #OurLastCrusade
 # Koi wa Futago de Warikirenai https://futakire.com/ #ふたきれ @futakire
 # Kono Sekai wa Fukanzen Sugiru https://konofuka.com/ #このふか @konofuka_QA
+# Maougun Saikyou no Majutsushi wa Ningen datta https://maougun-anime.com/ #魔王軍アニメ @maougun_pr
 # Megami no Café Terrace Season 2 https://1st.goddess-cafe.com/ #女神のカフェテラス @goddess_cafe_PR
 # Naze Boku no Sekai wo Daremo Oboeteinai no ka? https://www.nazeboku.com/ #なぜ僕 #nazeboku @nazeboku_pr
 # Oshi no Ko Season 2 https://ichigoproduction.com/Season2/ #推しの子 @anime_oshinoko
@@ -593,6 +594,65 @@ class KonofukaDownload(Summer2024AnimeDownload, NewsTemplate):
         self.download_image_list(folder)
         templates = [prefix % 'img-%s', prefix % 'face-%s']
         self.download_by_template(folder, templates, 1, 1)
+
+
+# Maougun Saikyou no Majutsushi wa Ningen datta
+class MaougunDownload(Summer2024AnimeDownload, NewsTemplate):
+    title = 'Maougun Saikyou no Majutsushi wa Ningen datta'
+    keywords = [title, "The Strongest Magician in the Demon Lord's Army Was a Human"]
+    website = 'https://maougun-anime.com/'
+    twitter = 'maougun_pr'
+    hashtags = ['魔王軍アニメ']
+    folder_name = 'maougun'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        soup = self.download_key_visual()
+        self.download_character(soup)
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.c-Post__link',
+                                    title_select='.c-Post__textHover', date_select='.c-Post__date p', id_select=None)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        soup = None
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.p-Fv__kv img[src*="/top/"]')
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'].split('?')[0]
+                image_name = self.generate_image_name_from_url(image_url, 'top')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+        return soup
+
+    def download_character(self, soup=None):
+        folder = self.create_character_directory()
+        self.image_list = []
+        try:
+            if soup is None:
+                soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.p-Chara__imgSlide img[src*="/chara/"],.p-Chara__profFace img[src*="/chara/"]')
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'].split('?')[0]
+                image_name = self.generate_image_name_from_url(image_url, 'chara')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
 
 
 # Megami no Café Terrace Season 2
