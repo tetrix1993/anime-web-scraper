@@ -99,6 +99,7 @@ The premiere date for the anime listed here has not been announced.
 * [Oshi no Ko Season 2](https://ichigoproduction.com/Season2/)
 * [Senpai wa Otokonoko](https://senpaiha-otokonoko.com/)
 * [Shikanoko Nokonoko Koshitantan](https://www.anime-shikanoko.jp/)
+* [Shoushimin Series](https://shoshimin-anime.com/)
 * [Tokidoki Bosotto Russia-go de Dereru Tonari no Alya-san](https://roshidere.com/)
 
 ### Spring 2024 Anime

@@ -13,6 +13,7 @@ from requests.exceptions import HTTPError
 # Oshi no Ko Season 2 https://ichigoproduction.com/Season2/ #推しの子 @anime_oshinoko
 # Senpai wa Otokonoko https://senpaiha-otokonoko.com/ #ぱいのこアニメ #先輩はおとこのこ @painoko_anime
 # Shikanoko Nokonoko Koshitantan https://www.anime-shikanoko.jp/ #しかのこ @shikanoko_PR
+# Shoushimin Series https://shoshimin-anime.com/ #小市民 @shoshimin_pr
 # Tokidoki Bosotto Russia-go de Dereru Tonari no Alya-san https://roshidere.com/ #ロシデレ @roshidere
 
 
@@ -807,6 +808,66 @@ class ShikanokoDownload(Summer2024AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         prefix = self.PAGE_PREFIX + 'assets/img/character/%s'
         self.download_by_template(folder, [prefix % '%smain.png', prefix % '%sface1.jpg', prefix % '%sface2.jpg'], 1, 0)
+
+
+# Shoushimin Series https://shoshimin-anime.com/ #小市民 @shoshimin_pr
+class ShoshiminDownload(Summer2024AnimeDownload, NewsTemplate2):
+    title = 'Shoushimin Series'
+    keywords = [title, 'Shoshimin', 'How to Become Ordinary']
+    website = 'https://shoshimin-anime.com/'
+    twitter = 'shoshimin'
+    hashtags = ['小市民']
+    folder_name = 'shoshimin'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.hero__img source[srcset*="/main/"],.hero__img img[src*="/main/"]')
+            self.image_list = []
+            for image in images:
+                if image.has_attr('srcset'):
+                    image_url = self.PAGE_PREFIX + image['srcset'].split('?')[0]
+                else:
+                    image_url = self.PAGE_PREFIX + image['src'].split('?')[0]
+                image_name = self.generate_image_name_from_url(image_url, 'main')
+                if image_url.endswith('.webp'):
+                    image_name += '_'
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('#character .chara__img img[src*="/main/"],#character .chInfo__img img[src*="/main/"]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'].split('?')[0]
+                image_name = self.generate_image_name_from_url(image_url, 'main')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
 
 
 # Tokidoki Bosotto Russia-go de Dereru Tonari no Alya-san
