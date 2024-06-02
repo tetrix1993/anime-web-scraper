@@ -17,6 +17,7 @@ from requests.exceptions import HTTPError
 # Madougushi Dahliya wa Utsumukanai https://dahliya-anime.com/ #魔導具師ダリヤ @dahliya_anime
 # Make Heroine ga Oosugiru! https://makeine-anime.com/ #マケイン @makeine_anime
 # Maougun Saikyou no Majutsushi wa Ningen datta https://maougun-anime.com/ #魔王軍アニメ @maougun_pr
+# Mob kara Hajimaru Tansaku Eiyuutan https://mobkara.com/ #モブから @mobkara_PR
 # Megami no Café Terrace Season 2 https://1st.goddess-cafe.com/ #女神のカフェテラス @goddess_cafe_PR
 # Naze Boku no Sekai wo Daremo Oboeteinai no ka? https://www.nazeboku.com/ #なぜ僕 #nazeboku @nazeboku_pr
 # Ore wa Subete wo "Parry" suru: Gyaku Kanchigai no Sekai Saikyou wa Boukensha ni Naritai https://parry-anime.com/ #パリイする @parry_anime_pr
@@ -982,6 +983,58 @@ class MaougunDownload(Summer2024AnimeDownload, NewsTemplate):
             self.print_exception(e, 'Character')
 
 
+# Mob kara Hajimaru Tansaku Eiyuutan
+class MobkaraDownload(Summer2024AnimeDownload, NewsTemplate):
+    title = 'Mob kara Hajimaru Tansaku Eiyuutan'
+    keywords = [title, "A Nobody's Way Up to an Exploration Hero LV"]
+    website = 'https://mobkara.com/'
+    twitter = 'mobkara_PR'
+    hashtags = ['モブから']
+    folder_name = 'mobkara'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.newsList',
+                                    title_select='.newsList_ttl', date_select='.news_day', id_select='a',
+                                    a_tag_prefix=self.PAGE_PREFIX, a_tag_start_text_to_remove='/',
+                                    next_page_select='.wp-pagenavi *', next_page_eval_index_class='current',
+                                    next_page_eval_index=-1)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        soup = None
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.mainvisalBox img[src*="/top/"]')
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'].split('?')[0][1:]
+                image_name = self.generate_image_name_from_url(image_url, 'top')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+        return soup
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        prefix = self.PAGE_PREFIX + 'wordpress/wp-content/themes/mobkara/assets/img/character/chara_chara%s.png'
+        self.download_by_template(folder, [prefix % '%s_img', prefix % '%s_face'], 1, 1)
+
+
 # Megami no Café Terrace Season 2
 class MegamiCafe2Download(Summer2024AnimeDownload, NewsTemplate4):
     title = 'Megami no Café Terrace Season 2'
@@ -1125,7 +1178,7 @@ class NazebokuDownload(Summer2024AnimeDownload, NewsTemplate):
             self.print_exception(e, 'Character')
 
 
-# Ore wa Subete wo "Parry" suru: Gyaku Kanchigai no Sekai Saikyou wa Boukensha ni Naritai https://parry-anime.com/ #パリイする @parry_anime_pr
+# Ore wa Subete wo "Parry" suru: Gyaku Kanchigai no Sekai Saikyou wa Boukensha ni Naritai
 class ParrySuruDownload(Summer2024AnimeDownload, NewsTemplate4):
     title = 'Ore wa Subete wo "Parry" suru: Gyaku Kanchigai no Sekai Saikyou wa Boukensha ni Naritai'
     keywords = [title, 'parrysuru', 'I Parry Everything']
