@@ -24,6 +24,7 @@ from requests.exceptions import HTTPError
 # Shoushimin Series https://shoshimin-anime.com/ #小市民 @shoshimin_pr
 # Tokidoki Bosotto Russia-go de Dereru Tonari no Alya-san https://roshidere.com/ #ロシデレ @roshidere
 # Tsue to Tsurugi no Wistoria https://wistoria-anime.com/ #ウィストリア #うぃす #Wistoria @Wistoria_PR
+# VTuber Nandaga Haishin Kiri Wasuretara Densetsu ni Natteta https://vden.jp/ #ぶいでんアニメ #vden @vden_anime
 
 
 # Summer 2024 Anime
@@ -1435,3 +1436,57 @@ class WistoriaDownload(Summer2024AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         t = self.PAGE_PREFIX + 'jrepgmrf/wp-content/themes/wistoria-anime/assets/img/character/character_%s_main.png'
         self.download_by_template(folder, t, 1, 1)
+
+
+# VTuber Nandaga Haishin Kiri Wasuretara Densetsu ni Natteta
+class VdenDownload(Summer2024AnimeDownload, NewsTemplate2):
+    title = 'VTuber Nandaga Haishin Kiri Wasuretara Densetsu ni Natteta'
+    keywords = [title, "VTuber Legend: How I Went Viral after Forgetting to Turn Off My Stream", 'vden']
+    website = 'https://vden.jp/'
+    twitter = 'vden_anime'
+    hashtags = ['ぶいでんアニメ', 'vden']
+    folder_name = 'vden'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.kvImg__slide source[srcset*="/main/"],.kvImg__slide img[src*="/main/"]')
+            self.image_list = []
+            names = set()
+            for image in images:
+                if image.has_attr('srcset'):
+                    image_url = self.PAGE_PREFIX + image['srcset'].split('?')[0]
+                else:
+                    image_url = self.PAGE_PREFIX + image['src'].split('?')[0]
+                image_name = self.generate_image_name_from_url(image_url, 'main')
+                if image_name in names:
+                    continue
+                else:
+                    names.add(image_name)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        t = self.PAGE_PREFIX + 'core_sys/images/main/tz/cahara/chara%s_full.png'
+        self.download_by_template(folder, t, 2, 1, prefix='tz_')
