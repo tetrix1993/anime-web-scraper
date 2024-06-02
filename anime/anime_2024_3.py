@@ -12,6 +12,7 @@ from requests.exceptions import HTTPError
 # Kimi to Boku no Saigo no Senjou, Aruiwa Sekai ga Hajimaru Seisen Season II https://kimisentv.com/ #キミ戦 #kimisen #OurLastCrusade
 # Koi wa Futago de Warikirenai https://futakire.com/ #ふたきれ @futakire
 # Kono Sekai wa Fukanzen Sugiru https://konofuka.com/ #このふか @konofuka_QA
+# Madougushi Dahliya wa Utsumukanai https://dahliya-anime.com/ #魔導具師ダリヤ @dahliya_anime
 # Make Heroine ga Oosugiru! https://makeine-anime.com/ #マケイン @makeine_anime
 # Maougun Saikyou no Majutsushi wa Ningen datta https://maougun-anime.com/ #魔王軍アニメ @maougun_pr
 # Megami no Café Terrace Season 2 https://1st.goddess-cafe.com/ #女神のカフェテラス @goddess_cafe_PR
@@ -668,6 +669,68 @@ class KonofukaDownload(Summer2024AnimeDownload, NewsTemplate):
         self.download_image_list(folder)
         templates = [prefix % 'img-%s', prefix % 'face-%s']
         self.download_by_template(folder, templates, 1, 1)
+
+
+# Madougushi Dahliya wa Utsumukanai
+class DahliyaDownload(Summer2024AnimeDownload, NewsTemplate):
+    title = 'Madougushi Dahliya wa Utsumukanai'
+    keywords = [title, "Dahliya in Bloom"]
+    website = 'https://dahliya-anime.com/'
+    twitter = 'dahliya_anime'
+    hashtags = ['魔導具師ダリヤ']
+    folder_name = 'dahliya'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-item',
+                                    title_select='.news-item__title', date_select='.news-item__date',
+                                    id_select=None, a_tag_prefix=self.PAGE_PREFIX, a_tag_start_text_to_remove='/')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.home-visual__image img[src*="/img/"]')
+            for image in images:
+                image_url = image['src'].split('?')[0]
+                image_name = self.generate_image_name_from_url(image_url, 'img')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        json_url = self.PAGE_PREFIX + 'chara_data'
+        self.image_list = []
+        try:
+            json_obj = self.get_json(json_url)
+            if 'charas' in json_obj and isinstance(json_obj['charas'], list):
+                for chara in json_obj['charas']:
+                    if 'images' in chara:
+                        if 'visuals' in chara['images'] and isinstance(chara['images']['visuals'], list):
+                            for visual in chara['images']['visuals']:
+                                if 'image' in visual:
+                                    image_url = visual['image'].split('?')[0]
+                                    image_name = self.extract_image_name_from_url(image_url, with_extension=False)
+                                    self.add_to_image_list(image_name, image_url)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+        self.download_image_list(folder)
 
 
 # Make Heroine ga Oosugiru!
