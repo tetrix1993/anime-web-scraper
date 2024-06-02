@@ -102,6 +102,7 @@ The premiere date for the anime listed here has not been announced.
 * [Madougushi Dahliya wa Utsumukanai](https://dahliya-anime.com/)
 * [Make Heroine ga Oosugiru!](https://makeine-anime.com/)
 * [Maougun Saikyou no Majutsushi wa Ningen datta](https://maougun-anime.com/)
+* [Mayonaka Punch](https://mayopan.jp/)
 * [Megami no Café Terrace Season 2](https://goddess-cafe.com/)
 * [Mob kara Hajimaru Tansaku Eiyuutan](https://mobkara.com/)
 * [Naze Boku no Sekai wo Daremo Oboeteinai no ka?](https://www.nazeboku.com/)

@@ -17,6 +17,7 @@ from requests.exceptions import HTTPError
 # Madougushi Dahliya wa Utsumukanai https://dahliya-anime.com/ #魔導具師ダリヤ @dahliya_anime
 # Make Heroine ga Oosugiru! https://makeine-anime.com/ #マケイン @makeine_anime
 # Maougun Saikyou no Majutsushi wa Ningen datta https://maougun-anime.com/ #魔王軍アニメ @maougun_pr
+# Mayonaka Punch https://mayopan.jp/ #マヨぱん @mayopan_anime
 # Mob kara Hajimaru Tansaku Eiyuutan https://mobkara.com/ #モブから @mobkara_PR
 # Megami no Café Terrace Season 2 https://1st.goddess-cafe.com/ #女神のカフェテラス @goddess_cafe_PR
 # Naze Boku no Sekai wo Daremo Oboeteinai no ka? https://www.nazeboku.com/ #なぜ僕 #nazeboku @nazeboku_pr
@@ -978,6 +979,68 @@ class MaougunDownload(Summer2024AnimeDownload, NewsTemplate):
             for image in images:
                 image_url = self.PAGE_PREFIX + image['src'].split('?')[0]
                 image_name = self.generate_image_name_from_url(image_url, 'chara')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+
+
+# Mayonaka Punch
+class MayopanDownload(Summer2024AnimeDownload, NewsTemplate):
+    title = 'Mayonaka Punch'
+    keywords = [title, 'mayopan']
+    website = 'https://mayopan.jp/'
+    twitter = 'mayopan_anime'
+    hashtags = ['マヨぱん']
+    folder_name = 'mayopan'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.newsList',
+                                    title_select='.newsTitle__txt', date_select='.newsTitle__date', id_select='a',
+                                    a_tag_prefix=news_url, a_tag_start_text_to_remove='./')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        selector = '.visualImage source[srcset*="/top/"]:not(source[srcset*="_bg"])'\
+                   + ':not(source[srcset*="-s"]):not(source[srcset*="_chara"]):not(source[srcset*="_catch"])'
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select(selector)
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['srcset'].split('?')[0].replace('./', '')
+                image_name = self.generate_image_name_from_url(image_url, 'top')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        self.image_list = []
+        selector = '.characterMain__image img[src*="/character/"],'\
+                   + '.characterMain__faceImageList img[src*="/character/"]'
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            images = soup.select(selector)
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'].split('?')[0].replace('../', '')
+                image_name = self.generate_image_name_from_url(image_url, 'character')
                 self.add_to_image_list(image_name, image_url)
             self.download_image_list(folder)
         except Exception as e:
