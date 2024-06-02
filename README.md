@@ -89,6 +89,7 @@ The premiere date for the anime listed here has not been announced.
 ### Summer 2024 Anime
 * [2.5-jigen no Ririsa](https://ririsa-official.com/)
 * [Atri: My Dear Moments](https://atri-anime.com/)
+* [Boku no Tsuma wa Kanjou ga Nai](https://bokutsuma-anime.com/)
 * [Giji Harem](https://gijiharem.com/)
 * [Gimai Seiktsu](https://gimaiseikatsu-anime.com/)
 * [Hazurewaku no "Joutai Ijou Skill" de Saikyou ni Natta Ore ga Subete wo Juurin suru made](https://hazurewaku-anime.com/)
