@@ -24,6 +24,7 @@ from requests.exceptions import HTTPError
 # Oshi no Ko Season 2 https://ichigoproduction.com/Season2/ #推しの子 @anime_oshinoko
 # Senpai wa Otokonoko https://senpaiha-otokonoko.com/ #ぱいのこアニメ #先輩はおとこのこ @painoko_anime
 # Shikanoko Nokonoko Koshitantan https://www.anime-shikanoko.jp/ #しかのこ @shikanoko_PR
+# Shinmai Ossan Boukensha, Saikyou Party ni Shinu hodo Kitaerarete Muteki ni Naru. https://shinmaiossan-anime.com/ #新米オッサン @shinmaiossan
 # Shoushimin Series https://shoshimin-anime.com/ #小市民 @shoshimin_pr
 # Tokidoki Bosotto Russia-go de Dereru Tonari no Alya-san https://roshidere.com/ #ロシデレ @roshidere
 # Tsue to Tsurugi no Wistoria https://wistoria-anime.com/ #ウィストリア #うぃす #Wistoria @Wistoria_PR
@@ -1420,6 +1421,55 @@ class ShikanokoDownload(Summer2024AnimeDownload):
         folder = self.create_character_directory()
         prefix = self.PAGE_PREFIX + 'assets/img/character/%s'
         self.download_by_template(folder, [prefix % '%smain.png', prefix % '%sface1.jpg', prefix % '%sface2.jpg'], 1, 0)
+
+
+# Shinmai Ossan Boukensha, Saikyou Party ni Shinu hodo Kitaerarete Muteki ni Naru.
+class ShinmaiOssanDownload(Summer2024AnimeDownload, NewsTemplate):
+    title = 'Shinmai Ossan Boukensha, Saikyou Party ni Shinu hodo Kitaerarete Muteki ni Naru.'
+    keywords = [title, 'shinmaiossan']
+    website = 'https://shinmaiossan-anime.com/'
+    twitter = 'shinmaiossan'
+    hashtags = ['新米オッサン']
+    folder_name = 'shinmaiossan'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-item', title_select='.title',
+                                    date_select='.date', id_select='a', a_tag_prefix=self.PAGE_PREFIX,
+                                    next_page_select='.next-button', next_page_eval_index_class='off',
+                                    next_page_eval_index=-1)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.kv img[src*="/themes/"]')
+            self.image_list = []
+            for image in images:
+                image_url = image['src'].split('?')[0]
+                image_name = self.generate_image_name_from_url(image_url, 'themes').replace('_images_', '_')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        t = self.PAGE_PREFIX + 'wp/wp-content/themes/sinmaiossan_teaser/images/chara-%s.png'
+        self.download_by_template(folder, [t % 'pic%s', t % 'face%s'], 1, 1)
 
 
 # Shoushimin Series
