@@ -5,6 +5,7 @@ from requests.exceptions import HTTPError
 # 2.5-jigen no Ririsa https://ririsa-official.com/ @ririsa_official #にごリリ #nigoriri
 # Atri: My Dear Moments https://atri-anime.com/ #ATRI @ATRI_anime
 # Boku no Tsuma wa Kanjou ga Nai https://bokutsuma-anime.com/ #僕妻アニメ @bokutsuma_anime
+# Dungeon no Naka no Hito https://dungeon-people.com/ #ダンジョンの中のひと @dungeon_people
 # Giji Harem https://gijiharem.com/ #疑似ハーレム @GijiHarem
 # Gimai Seikatsu https://gimaiseikatsu-anime.com/ #義妹生活 @gimaiseikatsu
 # Hazurewaku no "Joutai Ijou Skill" de Saikyou ni Natta Ore ga Subete wo Juurin suru made https://hazurewaku-anime.com/ #ハズレ枠 @hazurewaku_info
@@ -217,6 +218,84 @@ class BokutsumaDownload(Summer2024AnimeDownload, NewsTemplate):
                 self.image_list = []
                 for image in images:
                     image_url = self.PAGE_PREFIX + image['src'].replace('../', '')
+                    image_name = self.generate_image_name_from_url(image_url, 'character')
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(folder)
+                processed.append(page_name)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+        self.create_cache_file(cache_filepath, processed, num_processed)
+
+
+# Dungeon no Naka no Hito
+class DungeonPeopleDownload(Summer2024AnimeDownload, NewsTemplate):
+    title = 'Dungeon no Naka no Hito'
+    keywords = [title, 'Dungeon People']
+    website = 'https://dungeon-people.com/'
+    twitter = 'dungeon_people'
+    hashtags = 'ダンジョンの中のひと'
+    folder_name = 'dungeonpeople'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-index--list-item',
+                                    title_select='.news-index--list-item__detail-text',
+                                    date_select='.news-index--list-item__detail-date',
+                                    id_select='a', date_separator='/', next_page_select='.next[href*="/page/"]')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.top-mv--slide__item img[src*="/top/"]')
+            self.image_list = []
+            for image in images:
+                image_url = image['src']
+                image_name = self.generate_image_name_from_url(image_url, 'top')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/clay')
+            pages = soup.select('.chara-subnavi--slide-item a[href]')
+            for page in pages:
+                page_url = page['href']
+                if page_url.endswith('/'):
+                    page_name = page_url[:-1].split('/')[-1]
+                else:
+                    page_name = page_url.split('/')[-1]
+                if page_name in processed:
+                    continue
+                if page_name == 'clay':
+                    c_soup = soup
+                else:
+                    c_soup = self.get_soup(page_url)
+                if c_soup is None:
+                    continue
+                images = c_soup.select('.chara-detail--img img[src*="/character/"],'\
+                                       + '.chara-detail--face img[src*="/character/"]')
+                self.image_list = []
+                for image in images:
+                    image_url = image['src']
                     image_name = self.generate_image_name_from_url(image_url, 'character')
                     self.add_to_image_list(image_name, image_url)
                 self.download_image_list(folder)
