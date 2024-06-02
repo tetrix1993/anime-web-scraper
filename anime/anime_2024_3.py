@@ -19,6 +19,7 @@ from requests.exceptions import HTTPError
 # Maougun Saikyou no Majutsushi wa Ningen datta https://maougun-anime.com/ #魔王軍アニメ @maougun_pr
 # Megami no Café Terrace Season 2 https://1st.goddess-cafe.com/ #女神のカフェテラス @goddess_cafe_PR
 # Naze Boku no Sekai wo Daremo Oboeteinai no ka? https://www.nazeboku.com/ #なぜ僕 #nazeboku @nazeboku_pr
+# Ore wa Subete wo "Parry" suru: Gyaku Kanchigai no Sekai Saikyou wa Boukensha ni Naritai https://parry-anime.com/ #パリイする @parry_anime_pr
 # Oshi no Ko Season 2 https://ichigoproduction.com/Season2/ #推しの子 @anime_oshinoko
 # Senpai wa Otokonoko https://senpaiha-otokonoko.com/ #ぱいのこアニメ #先輩はおとこのこ @painoko_anime
 # Shikanoko Nokonoko Koshitantan https://www.anime-shikanoko.jp/ #しかのこ @shikanoko_PR
@@ -1117,6 +1118,65 @@ class NazebokuDownload(Summer2024AnimeDownload, NewsTemplate):
                 if self.is_image_exists(image_name, folder):
                     continue
                 image_url = template % str(i + 1)
+                result = self.download_image(image_url, folder + '/' + image_name)
+                if result == -1:
+                    break
+        except Exception as e:
+            self.print_exception(e, 'Character')
+
+
+# Ore wa Subete wo "Parry" suru: Gyaku Kanchigai no Sekai Saikyou wa Boukensha ni Naritai https://parry-anime.com/ #パリイする @parry_anime_pr
+class ParrySuruDownload(Summer2024AnimeDownload, NewsTemplate4):
+    title = 'Ore wa Subete wo "Parry" suru: Gyaku Kanchigai no Sekai Saikyou wa Boukensha ni Naritai'
+    keywords = [title, 'parrysuru', 'I Parry Everything']
+    website = 'https://parry-anime.com/'
+    twitter = 'parry_anime_pr'
+    hashtags = 'パリイする'
+    folder_name = 'parrysuru'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(json_url=self.PAGE_PREFIX + 'api/site-data/init')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            self.image_list = []
+            images = soup.select('div[class*="Visual"] img[src*="kv"][src*="/static/"]')
+            for image in images:
+                image_url = image['src']
+                if image_url.startswith('/'):
+                    image_url = self.PAGE_PREFIX + image_url[1:]
+                image_name = self.generate_image_name_from_url(image_url, 'static')
+                if 'icon' in image_name or 'logo' in image_name:
+                    continue
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'wp/wp-content/themes/b5ffe5fce0e1/static/character/%s/main.webp'
+        try:
+            for i in range(20):
+                num = str(i + 1).zfill(2)
+                image_url = template % num
+                image_name = num + '_main'
                 result = self.download_image(image_url, folder + '/' + image_name)
                 if result == -1:
                     break

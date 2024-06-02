@@ -1629,11 +1629,14 @@ class NewsTemplate3:
 
 
 class NewsTemplate4:
-    def download_template_news(self, name, print_http_error=False, json_obj=None):
+    def download_template_news(self, name='', print_http_error=False, json_obj=None, json_url=None):
         news_url = self.PAGE_PREFIX + 'news/'
         try:
             if json_obj is None:
-                json_obj = self.get_json(self.PAGE_PREFIX + f'wp-json/{name}/init')
+                if json_url is None:
+                    json_obj = self.get_json(self.PAGE_PREFIX + f'wp-json/{name}/init')
+                else:
+                    json_obj = self.get_json(json_url)
             news_obj = self.get_last_news_log_object()
             results = []
             for item in json_obj['news']:
