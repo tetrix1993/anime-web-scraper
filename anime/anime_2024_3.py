@@ -9,6 +9,7 @@ from requests.exceptions import HTTPError
 # Gimai Seikatsu https://gimaiseikatsu-anime.com/ #義妹生活 @gimaiseikatsu
 # Hazurewaku no "Joutai Ijou Skill" de Saikyou ni Natta Ore ga Subete wo Juurin suru made https://hazurewaku-anime.com/ #ハズレ枠 @hazurewaku_info
 # Isekai Shikkaku https://isekaishikkaku.com/ #異世界失格 #isekaishikkaku @isekaishikkaku
+# Isekai Yururi Kikou: Kosodateshinagara Boukensha Shimasu https://isekai-yururi-anime.jp/ #異世界ゆるり紀行 @iseyuruanime
 # Katsute Mahou Shoujo to Aku wa Tekitai shiteita. https://mahoaku-anime.com/ #まほあく #まほあくアニメ @mahoaku_anime
 # Kimi to Boku no Saigo no Senjou, Aruiwa Sekai ga Hajimaru Seisen Season II https://kimisentv.com/ #キミ戦 #kimisen #OurLastCrusade
 # Koi wa Futago de Warikirenai https://futakire.com/ #ふたきれ @futakire
@@ -485,6 +486,67 @@ class IsekaiShikkakuDownload(Summer2024AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'assets/character/%s.webp'
         self.download_by_template(folder, [template % '%sc', template % '%sf'], 1, 1)
+
+
+# Isekai Yururi Kikou: Kosodateshinagara Boukensha Shimasu
+class IseyuruDownload(Summer2024AnimeDownload, NewsTemplate):
+    title = 'Isekai Yururi Kikou: Kosodateshinagara Boukensha Shimasu'
+    keywords = [title, 'iseyuru', "A Journey Through Another World: Raising Kids While Adventuring"]
+    website = 'https://isekai-yururi-anime.jp/'
+    twitter = 'iseyuruanime'
+    hashtags = ['異世界ゆるり紀行']
+    folder_name = 'iseyuru'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        soup = self.download_key_visual()
+        self.download_character(soup)
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.c-Post__link',
+                                    title_select='.c-Post__textHover', date_select='.c-Post__dateBox', id_select=None,
+                                    date_func=lambda x: x[0:4] + '.' + str(self.convert_month_string_to_number(x.split(' ')[1])) + '.' + x.split(' ')[2])
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        soup = None
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.p-Fv__kv img[src*="/top/"]')
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'].split('?')[0]
+                image_name = self.generate_image_name_from_url(image_url, 'top')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+        return soup
+
+    def download_character(self, soup=None):
+        folder = self.create_character_directory()
+        self.image_list = []
+        template = self.PAGE_PREFIX + 'dist/img/top/chara/art/%s.png'
+        try:
+            if soup is None:
+                soup = self.get_soup(self.PAGE_PREFIX)
+            lis = soup.select('.p-Chara__listItem[data-modal-path]')
+            for li in lis:
+                image_name = li['data-modal-path'].split('/')[-1].replace('.html', '')
+                image_url = template % image_name
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
 
 
 # Katsute Mahou Shoujo to Aku wa Tekitai shiteita.
