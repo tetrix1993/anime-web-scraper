@@ -133,10 +133,16 @@ class AtriDownload(Summer2024AnimeDownload, NewsTemplate):
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         self.image_list = []
-        self.add_to_image_list('ATRI_visual', 'https://ogre.natalie.mu/media/news/comic/2022/0924/ATRI_visual.jpg')
-        self.add_to_image_list('kv_kv_wide', self.PAGE_PREFIX + 'assets/img/kv/kv_wide.png')
-        self.add_to_image_list('top_mainvisual_mv', self.PAGE_PREFIX + 'assets/img/top/mainvisual/mv.jpg')
+        self.add_to_image_list('kv', self.PAGE_PREFIX + 'assets/img/top/mainvisual/mv.jpg')
         self.download_image_list(folder)
+
+        template = self.PAGE_PREFIX + 'assets/img/top/mainvisual/archive/ph_%s.png'
+        self.download_by_template(folder, template, 1, 1, prefix='archive_')
+
+        # self.add_to_image_list('ATRI_visual', 'https://ogre.natalie.mu/media/news/comic/2022/0924/ATRI_visual.jpg')
+        # self.add_to_image_list('kv_kv_wide', self.PAGE_PREFIX + 'assets/img/kv/kv_wide.png')
+        # self.add_to_image_list('top_mainvisual_mv', self.PAGE_PREFIX + 'assets/img/top/mainvisual/mv.jpg')
+        # self.download_image_list(folder)
 
     def download_character(self):
         folder = self.create_character_directory()
