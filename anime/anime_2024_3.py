@@ -1735,6 +1735,7 @@ class RoshidereDownload(Summer2024AnimeDownload, NewsTemplate2):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX)
@@ -1792,6 +1793,55 @@ class RoshidereDownload(Summer2024AnimeDownload, NewsTemplate2):
 
         template = self.PAGE_PREFIX + 'core_sys/images/main/home/chara%s.png'
         self.download_by_template(folder, template, 2, 1, prefix='tz_')
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        cache_filepath = folder + '/cache'
+        processed, num_processed = self.get_processed_items_from_cache_file(cache_filepath)
+        for page in ['privilege', 'campaign', '01', '02', '03']:
+            try:
+                if page in processed:
+                    continue
+                page_url = self.PAGE_PREFIX + 'bd/'
+                if page != '01':
+                    page_url += page + '.html'
+                soup = self.get_soup(page_url)
+                images = soup.select('.block_inner img[src]')
+                self.image_list = []
+                for image in images:
+                    image_url = self.PAGE_PREFIX + image['src'].replace('../', '').split('?')[0]
+                    if '/bd/' in image_url:
+                        image_name = self.generate_image_name_from_url(image_url, 'bd')
+                    else:
+                        image_name = self.extract_image_name_from_url(image_url)
+                    if not self.is_content_length_in_range(image_url, more_than_amount=32000):
+                        continue
+                    self.add_to_image_list(image_name, image_url)
+                if page.isnumeric() and len(self.image_list) > 0:
+                    processed.append(page)
+                elif page.isnumeric():
+                    break
+                self.download_image_list(folder)
+            except Exception as e:
+                self.print_exception(e, f'Blu-ray - {page}')
+        self.create_cache_file(cache_filepath, processed, num_processed)
+
+        prefix = self.PAGE_PREFIX + 'core_sys/images/contents/%s/block/%s/%s.jpg'
+        self.image_list = []
+        imgs = [(19, 30, 51), (22, 44, 59), (20, 35, 54), (23, 48, 60), (21, 40, 57), (24, 52, 61)]
+        try:
+            for img in imgs:
+                image_name = str(img[2]).zfill(8)
+                if self.is_image_exists(folder, image_name):
+                    continue
+                image_url = prefix % (str(img[0]).zfill(8), str(img[1]).zfill(8), str(img[2]).zfill(8))
+                print(image_url)
+                if not self.is_content_length_in_range(image_url, more_than_amount=32000):
+                    continue
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
 
 # Tsue to Tsurugi no Wistoria
