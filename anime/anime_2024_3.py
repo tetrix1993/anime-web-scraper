@@ -1661,7 +1661,7 @@ class ShoshiminDownload(Summer2024AnimeDownload, NewsTemplate2):
     title = 'Shoushimin Series'
     keywords = [title, 'Shoshimin', 'How to Become Ordinary']
     website = 'https://shoshimin-anime.com/'
-    twitter = 'shoshimin'
+    twitter = 'shoshimin_pr'
     hashtags = ['小市民']
     folder_name = 'shoshimin'
 
