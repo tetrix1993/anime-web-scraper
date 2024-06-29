@@ -1,6 +1,7 @@
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsTemplate4
 from datetime import datetime
 from requests.exceptions import HTTPError
+from scan import AniverseMagazineScanner
 
 # 2.5-jigen no Ririsa https://ririsa-official.com/ @ririsa_official #にごリリ #nigoriri
 # Atri: My Dear Moments https://atri-anime.com/ #ATRI @ATRI_anime
@@ -1760,19 +1761,51 @@ class RoshidereDownload(Summer2024AnimeDownload, NewsTemplate2):
     folder_name = 'roshidere'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
 
     def __init__(self):
         super().__init__()
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_external()
         self.download_news()
         self.download_key_visual()
         self.download_character()
         self.download_media()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/01.html')
+            stories = soup.select('table[summary="List_Type01"] a[href]')
+            for story in stories:
+                story_url = self.PAGE_PREFIX + story['href'].replace('../', '')
+                try:
+                    episode = str(int(story_url.split('/')[-1].split('.html')[0])).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                if episode == '01':
+                    ep_soup = soup
+                else:
+                    ep_soup = self.get_soup(story_url)
+                if ep_soup is not None:
+                    images = ep_soup.select('ul.tp5 img[src]')
+                    self.image_list = []
+                    for i in range(len(images)):
+                        image_url = self.PAGE_PREFIX + images[i]['src'].split('?')[0]
+                        image_url = self.remove_string(image_url, ['../', 'sn_'])
+                        image_name = episode + '_' + str(i + 1)
+                        self.add_to_image_list(image_name, image_url)
+                    self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
+
+    def download_episode_preview_external(self):
+        keywords = ['時々ボソッとロシア語でデレる隣のアーリャさん']
+        AniverseMagazineScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                end_date='20240628', download_id=self.download_id).run()
 
     def download_news(self):
         self.download_template_news(self.PAGE_PREFIX)
