@@ -2,7 +2,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 from datetime import datetime, timedelta
 from requests.exceptions import HTTPError
 from scan import AniverseMagazineScanner
-import os
+import os, math, time
 
 # 2.5-jigen no Ririsa https://ririsa-official.com/ @ririsa_official #にごリリ #nigoriri
 # Atri: My Dear Moments https://atri-anime.com/ #ATRI @ATRI_anime
@@ -1635,8 +1635,33 @@ class ShikanokoDownload(Summer2024AnimeDownload):
         self.download_key_visual()
         self.download_character()
 
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+    def download_episode_preview(self, print_http_error=False):
+        prefix = 'https://www.news.anime-shikanoko.jp/'
+        try:
+            objs = self.get_json(prefix + 'wp-json/wp/v2/story?acf_format=standard&per_page=100&page=1&_='
+                                 + str(math.floor(time.time() * 1000)))
+            for obj in objs:
+                if 'acf' in obj:
+                    acf = obj['acf']
+                    if 'story_num' in acf and 'story_imgs' in acf and isinstance(acf['story_imgs'], list):
+                        try:
+                            episode = str(int(acf['story_num'].replace('#', ''))).zfill(2)
+                        except:
+                            continue
+                        for i in range(len(acf['story_imgs'])):
+                            story_img = acf['story_imgs'][i]
+                            if 'story_img' in story_img and 'url' in story_img['story_img']:
+                                image_url = story_img['story_img']['url']
+                                image_name = episode + '_' + str(i + 1)
+                                self.add_to_image_list(image_name, image_url)
+                            else:
+                                continue
+                        self.download_image_list(self.base_folder)
+        except HTTPError:
+            if print_http_error:
+                print(self.__class__.__name__ + ' - 403 Error when retrieving story API.')
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self, print_http_error=False):
         news_url = self.PAGE_PREFIX + 'news/detail.html?id='
