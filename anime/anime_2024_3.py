@@ -1039,8 +1039,27 @@ class DahliyaDownload(Summer2024AnimeDownload, NewsTemplate):
         self.download_key_visual()
         self.download_character()
 
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+    def download_episode_preview(self, print_http_error=False):
+        try:
+            objs = self.get_json(self.PAGE_PREFIX + 'story_data?_=' + str(math.floor(time.time() * 1000)))
+            for obj in objs:
+                if 'acf' in obj:
+                    acf = obj['acf']
+                    if 'number' in acf and 'images' in acf and isinstance(acf['images'], list):
+                        try:
+                            episode = str(int(acf['number'].replace('第', '').replace('話', ''))).zfill(2)
+                        except:
+                            continue
+                        for i in range(len(acf['images'])):
+                            image_url = acf['images'][i]
+                            image_name = episode + '_' + str(i + 1)
+                            self.add_to_image_list(image_name, image_url)
+                        self.download_image_list(self.base_folder)
+        except HTTPError:
+            if print_http_error:
+                print(self.__class__.__name__ + ' - 403 Error when retrieving story API.')
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-item',
