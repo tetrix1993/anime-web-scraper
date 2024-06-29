@@ -29,6 +29,7 @@ from scan import AniverseMagazineScanner
 # Shikanoko Nokonoko Koshitantan https://www.anime-shikanoko.jp/ #しかのこ @shikanoko_PR
 # Shinmai Ossan Boukensha, Saikyou Party ni Shinu hodo Kitaerarete Muteki ni Naru. https://shinmaiossan-anime.com/ #新米オッサン @shinmaiossan
 # Shoushimin Series https://shoshimin-anime.com/ #小市民 @shoshimin_pr
+# Shy Season 2 https://shy-anime.com/ #SHY_hero @SHY_off
 # Tokidoki Bosotto Russia-go de Dereru Tonari no Alya-san https://roshidere.com/ #ロシデレ @roshidere
 # Tsue to Tsurugi no Wistoria https://wistoria-anime.com/ #ウィストリア #うぃす #Wistoria @Wistoria_PR
 # VTuber Nandaga Haishin Kiri Wasuretara Densetsu ni Natteta https://vden.jp/ #ぶいでんアニメ #vden @vden_anime
@@ -1765,6 +1766,58 @@ class ShoshiminDownload(Summer2024AnimeDownload, NewsTemplate2):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+
+# Shy Season 2
+class ShyDownload(Summer2024AnimeDownload, NewsTemplate):
+    title = 'Shy Season 2'
+    keywords = [title]
+    website = 'https://shy-anime.com/'
+    twitter = 'SHY_off'
+    hashtags = 'SHY_hero'
+    folder_name = 'shy2'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/2nd')
+            stories = soup.select('.story-episode-item a[href]')
+            for story in stories:
+                story_url = story['href']
+                if story_url.endswith('/'):
+                    story_url = story_url[:-1]
+                try:
+                    episode = str(int(story_url.split('/')[-1])).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                ep_soup = self.get_soup(story['href'])
+                if ep_soup is None:
+                    continue
+                self.image_list = []
+                images = ep_soup.select('.story-thumb-item img[src]')
+                for i in range(len(images)):
+                    image_url = images[i]['src'].split('?')[0]
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url, to_jpg=True)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-box',
+                                    title_select='.news-txt-box', date_select='.news-box-date', id_select='a',
+                                    paging_type=0, next_page_select='span.page-numbers', next_page_eval_index=-1,
+                                    next_page_eval_index_class='current', stop_date='2023.12.04')
 
 
 # Tokidoki Bosotto Russia-go de Dereru Tonari no Alya-san

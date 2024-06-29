@@ -113,6 +113,7 @@ The premiere date for the anime listed here has not been announced.
 * [Shikanoko Nokonoko Koshitantan](https://www.anime-shikanoko.jp/)
 * [Shinmai Ossan Boukensha, Saikyou Party ni Shinu hodo Kitaerarete Muteki ni Naru.](https://shinmaiossan-anime.com/)
 * [Shoushimin Series](https://shoshimin-anime.com/)
+* [Shy Season 2](https://shy-anime.com/)
 * [Tokidoki Bosotto Russia-go de Dereru Tonari no Alya-san](https://roshidere.com/)
 * [Tsue to Tsurugi no Wistoria](https://wistoria-anime.com/)
 * [VTuber Nandaga Haishin Kiri Wasuretara Densetsu ni Natteta](https://vden.jp/)
