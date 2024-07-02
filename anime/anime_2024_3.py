@@ -1567,7 +1567,18 @@ class ParrySuruDownload(Summer2024AnimeDownload, NewsTemplate4):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            json_obj = self.get_json(self.PAGE_PREFIX + 'api/site-data/init')
+            for story in json_obj['stories']:
+                episode = story['episode'].zfill(2)
+                self.image_list = []
+                for i in range(len(story['images'])):
+                    image_name = episode + '_' + str(i + 1)
+                    image_url = story['images'][i]['image_path']
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(json_url=self.PAGE_PREFIX + 'api/site-data/init')
