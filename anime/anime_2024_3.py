@@ -1408,29 +1408,27 @@ class MegamiCafe2Download(Summer2024AnimeDownload, NewsTemplate4):
         self.download_character()
 
     def download_episode_preview(self, print_http_error=False):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
-        return None
-
-        # try:
-        #     init_json = self.get_json(self.PAGE_PREFIX + 'wp-json/site-data/init')
-        #     for story in init_json['story']:
-        #         episode = story['episode']
-        #         if self.is_image_exists(episode + '_1'):
-        #             continue
-        #         self.image_list = []
-        #         for i in range(len(story['images'])):
-        #             image = story['images'][i]
-        #             image_url = image['image_path']
-        #             image_name = episode + '_' + str(i + 1)
-        #             self.add_to_image_list(image_name, image_url)
-        #         self.download_image_list(self.base_folder)
-        #     return init_json
-        # except HTTPError:
-        #     if print_http_error:
-        #         print(self.__class__.__name__ + ' - 403 Error when retrieving story API.')
-        # except Exception as e:
-        #     self.print_exception(e)
-        # return None
+        json_obj = None
+        try:
+            json_obj = self.get_json(self.PAGE_PREFIX + 'wp-json/site-data/init')
+            for story in json_obj['story']:
+                episode = story['episode']
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                self.image_list = []
+                for i in range(len(story['images'])):
+                    image = story['images'][i]
+                    image_url = image['image_path']
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+            return json_obj
+        except HTTPError:
+            if print_http_error:
+                print(self.__class__.__name__ + ' - 403 Error when retrieving story API.')
+        except Exception as e:
+            self.print_exception(e)
+        return json_obj
 
     def download_news(self, json_obj=None):
         self.download_template_news('site-data', json_obj=json_obj)
@@ -1561,12 +1559,13 @@ class ParrySuruDownload(Summer2024AnimeDownload, NewsTemplate4):
         super().__init__()
 
     def run(self):
-        self.download_episode_preview()
-        self.download_news()
+        json_obj = self.download_episode_preview()
+        self.download_news(json_obj)
         self.download_key_visual()
         self.download_character()
 
     def download_episode_preview(self):
+        json_obj = None
         try:
             json_obj = self.get_json(self.PAGE_PREFIX + 'api/site-data/init')
             for story in json_obj['stories']:
@@ -1579,9 +1578,10 @@ class ParrySuruDownload(Summer2024AnimeDownload, NewsTemplate4):
                 self.download_image_list(self.base_folder)
         except Exception as e:
             self.print_exception(e)
+        return json_obj
 
-    def download_news(self):
-        self.download_template_news(json_url=self.PAGE_PREFIX + 'api/site-data/init')
+    def download_news(self, json_obj=None):
+        self.download_template_news(json_url=self.PAGE_PREFIX + 'api/site-data/init', json_obj=json_obj)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
