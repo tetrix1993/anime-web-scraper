@@ -67,7 +67,41 @@ class NigoririDownload(Summer2024AnimeDownload, NewsTemplate):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            curr_ep_tag = soup.select('.story--header__epnum')
+            curr_ep = None
+            if len(curr_ep_tag) > 0:
+                try:
+                    curr_ep = str(int(curr_ep_tag[0].text.strip())).zfill(2)
+                except:
+                    pass
+            stories = soup.select('#js-epnumber option[value]')
+            for story in stories:
+                try:
+                    ep_num = str(int(story.text.replace('EPISODE ', ''))).zfill(2)
+                    if ep_num is None:
+                        continue
+                    episode = str(ep_num).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                if curr_ep is not None and curr_ep == ep_num:
+                    ep_soup = soup
+                else:
+                    ep_soup = self.get_soup(story['value'])
+                if ep_soup is None:
+                    continue
+                self.image_list = []
+                images = ep_soup.select('#js-story-slider img[src]')
+                for i in range(len(images)):
+                    image_url = images[i]['src'].split('?')[0]
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url, to_jpg=True)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article',
