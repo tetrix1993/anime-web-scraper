@@ -10,22 +10,18 @@ def run():
         os.makedirs(constants.FOLDER_OUTPUT)
 
     downloads = []
-    for subclass in Spring2024AnimeDownload.__subclasses__():
-        if subclass.enabled and subclass != HananoikunDownload:
+    for subclass in Summer2024AnimeDownload.__subclasses__():
+        if subclass.enabled:
             downloads.append(subclass())
-    downloads += [Maohgakuin2Download(), DungeonMeshiDownload(), Tsukimichi2Download(), UruseiYatsura2Download()]
-    subclasses = Summer2024AnimeDownload.__subclasses__() \
-        + UnconfirmedDownload.__subclasses__()
+    downloads += [OokamitoKoushinryouDownload(), YozakurasanDownload(), NierAutomataDownload(), Maohgakuin2Download(),
+                  KanteiSkillDownload(), Konosuba3Download(), TenshitsukiDownload(), UnnamedMemoryDownload(),
+                  YorukuraDownload()]
+    subclasses = UnconfirmedDownload.__subclasses__()
     for subclass in subclasses:
         if subclass.enabled:
             downloads.append(subclass())
     downloads += [
-        AkuyakuLv99Download(), Aoex3Download(), Bokuyaba2Download(), DosankoGalDownload(), GekaiEliseDownload(),
-        KanatenDownload(), KekkonYubiwaDownload(), MahoakoDownload(), Mashle2Download(), MatoSlaveDownload(),
-        NozomanuFushiDownload(), SaijakuTamerDownload(), SaikyoTankDownload(), SasapiDownload(),
-        ShinnoNakama2Download(), SoloLevelingDownload(), Youzitsu3Download(), YubisakitoRenrenDownload(),
-        KusuriyaDownload(), FrierenDownload(), ButaLiverDownload(), SixteenBitSensationDownload(),
-        KikanshaDownload(), HyakkanoDownload(), MushokuTensei2Download(), AtelierRyzaDownload()]
+        NozomanuFushiDownload(), Youzitsu3Download(), HyakkanoDownload(), MushokuTensei2Download()]
     process_download(downloads)
 
     #downloads = []
