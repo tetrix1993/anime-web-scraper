@@ -2181,7 +2181,7 @@ class ShoshiminDownload(Summer2024AnimeDownload, NewsTemplate2):
 
 
 # Shy Season 2
-class ShyDownload(Summer2024AnimeDownload, NewsTemplate):
+class Shy2Download(Summer2024AnimeDownload, NewsTemplate):
     title = 'Shy Season 2'
     keywords = [title]
     website = 'https://shy-anime.com/'
