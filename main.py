@@ -11,7 +11,7 @@ def run():
 
     downloads = []
     for subclass in Summer2024AnimeDownload.__subclasses__():
-        if subclass.enabled:
+        if subclass.enabled and subclass.__name__ != BokutsumaDownload.__name__:
             downloads.append(subclass())
     downloads += [OokamitoKoushinryouDownload(), YozakurasanDownload(), NierAutomataDownload(), Maohgakuin2Download(),
                   KanteiSkillDownload(), Konosuba3Download(), TenshitsukiDownload(), UnnamedMemoryDownload(),
