@@ -1984,7 +1984,7 @@ class ShikanokoDownload(Summer2024AnimeDownload):
                             if 'story_img' in story_img and 'url' in story_img['story_img']:
                                 image_url = story_img['story_img']['url']
                                 image_name = episode + '_' + str(i + 1)
-                                self.add_to_image_list(image_name, image_url)
+                                self.add_to_image_list(image_name, image_url, to_jpg=True)
                             else:
                                 continue
                         self.download_image_list(self.base_folder)
