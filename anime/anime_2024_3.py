@@ -547,6 +547,7 @@ class GimaiSeikatsuDownload(Summer2024AnimeDownload, NewsTemplate2):
 
     PAGE_PREFIX = website
     FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 5
 
     def __init__(self):
         super().__init__()
@@ -555,6 +556,7 @@ class GimaiSeikatsuDownload(Summer2024AnimeDownload, NewsTemplate2):
         self.download_episode_preview()
         self.download_news()
         self.download_episode_preview_external()
+        self.download_episode_preview_guess()
         self.download_key_visual()
         self.download_character()
         self.download_media()
@@ -591,6 +593,39 @@ class GimaiSeikatsuDownload(Summer2024AnimeDownload, NewsTemplate2):
         keywords = ['義妹生活']
         AniverseMagazineScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE,
                                 end_date='20240708', download_id=self.download_id).run()
+
+    def download_episode_preview_guess(self, print_url=False):
+        folder = self.create_custom_directory('guess')
+        template = self.PAGE_PREFIX + 'core_sys/images/contents/%s/block/%s/%s.jpg'
+        is_successful = False
+        for i in range(self.FINAL_EPISODE):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_1'):
+                continue
+            is_success = False
+            first = 22 + i
+            second = 73 + 6 * i
+            third = 54 + 6 * i
+            for j in range(self.IMAGES_PER_EPISODE):
+                image_url = template % (str(first).zfill(8), str(second).zfill(8), str(third + j).zfill(8))
+                if print_url:
+                    print(image_url)
+                image_name = episode + '_' + str(j + 1)
+                result = self.download_image(image_url, folder + '/' + image_name)
+                if result == 0:
+                    is_success = True
+                    is_successful = True
+                elif result == -1:
+                    break
+            if is_success:
+                print(self.__class__.__name__ + ' - Guessed successfully!')
+            else:
+                if len(os.listdir(folder)) == 0:
+                    os.rmdir(folder)
+                return
+        if len(os.listdir(folder)) == 0:
+            os.rmdir(folder)
+        return is_successful
 
     def download_news(self):
         self.download_template_news(self.PAGE_PREFIX)
