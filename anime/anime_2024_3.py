@@ -1208,7 +1208,7 @@ class KonofukaDownload(Summer2024AnimeDownload, NewsTemplate):
                 for i in range(len(images)):
                     image_url = images[i]['src']
                     image_name = episode + '_' + str(i + 1)
-                    self.add_to_image_list(image_name, image_url)
+                    self.add_to_image_list(image_name, image_url, to_jpg=True)
                 self.download_image_list(self.base_folder)
         except Exception as e:
             self.print_exception(e)
@@ -1218,7 +1218,7 @@ class KonofukaDownload(Summer2024AnimeDownload, NewsTemplate):
             return
 
         folder = self.create_custom_directory('guess')
-        template = self.PAGE_PREFIX + 'pDK2yjkH/wp-content/uploads/%s/%s/%s_このふか%s_%s.jpg'
+        template = self.PAGE_PREFIX + 'pDK2yjkH/wp-content/uploads/%s/%s/%s_このふか%s_%s.png'
         current_date = datetime.now() + timedelta(hours=1)
         year = current_date.strftime('%Y')
         month = current_date.strftime('%m')
@@ -1236,7 +1236,7 @@ class KonofukaDownload(Summer2024AnimeDownload, NewsTemplate):
                         print('VALID - ' + image_url)
                         episode_success = True
                         if download_valid:
-                            self.download_image(image_url, folder + '/' + episode + '_' + str(j + 1))
+                            self.download_image(image_url, folder + '/' + episode + '_' + str(j + 1), to_jpg=True)
                         break
                     elif print_invalid:
                         print('INVALID - ' + image_url)
