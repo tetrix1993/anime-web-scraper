@@ -1585,6 +1585,8 @@ class MayopanDownload(Summer2024AnimeDownload, NewsTemplate):
     folder_name = 'mayopan'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 8
 
     def __init__(self):
         super().__init__()
@@ -1597,30 +1599,20 @@ class MayopanDownload(Summer2024AnimeDownload, NewsTemplate):
 
     def download_episode_preview(self):
         try:
-            story_prefix = self.PAGE_PREFIX + 'story/'
-            soup = self.get_soup(story_prefix, decode=True)
-            stories = soup.select('.storyList a[href]')
-            for story in stories:
-                try:
-                    episode = str(int(story.select('.storyList__link_txt__num')[0].text.replace('#', ''))).zfill(2)
-                except:
+            template = self.PAGE_PREFIX + 'story/img/ep%s/%s_%s.jpg'
+            stop = False
+            for i in range(self.FINAL_EPISODE):
+                episode = str(i + 1).zfill(2)
+                if self.is_image_exists(episode + '_' + str(self.IMAGES_PER_EPISODE)):
                     continue
-                if self.is_image_exists(episode + '_1'):
-                    continue
-                if '--is-active' in story['class']:
-                    ep_soup = soup
-                else:
-                    story_url = story_prefix + story['href']
-                    ep_soup = self.get_soup(story_url)
-                if ep_soup is None:
-                    continue
-                self.image_list = []
-                images = ep_soup.select('.storyImageList__img img[src]')
-                for i in range(len(images)):
-                    image_name = episode + '_' + str(i + 1)
-                    image_url = story_prefix + images[i]['src'].replace('./', '')
-                    self.add_to_image_list(image_name, image_url)
-                self.download_image_list(self.base_folder)
+                for j in range(self.IMAGES_PER_EPISODE):
+                    image_url = template % (episode, episode, str(j + 1))
+                    image_name = episode + '_' + str(j + 1)
+                    if self.download_image(image_url, self.base_folder + '/' + image_name) == -1:
+                        stop = True
+                        break
+                if stop:
+                    break
         except Exception as e:
             self.print_exception(e)
 
