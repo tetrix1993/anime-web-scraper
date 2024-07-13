@@ -1665,6 +1665,8 @@ class MobkaraDownload(Summer2024AnimeDownload, NewsTemplate):
     folder_name = 'mobkara'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 5
 
     def __init__(self):
         super().__init__()
@@ -1695,6 +1697,41 @@ class MobkaraDownload(Summer2024AnimeDownload, NewsTemplate):
                 self.download_image_list(self.base_folder)
         except Exception as e:
             self.print_exception(e)
+
+    def download_episode_preview_guess(self, print_invalid=False, download_valid=False):
+        if self.is_image_exists(str(self.FINAL_EPISODE).zfill(2) + '_1'):
+            return
+
+        folder = self.create_custom_directory('guess')
+        template = self.PAGE_PREFIX + 'wordpress/wp-content/uploads/%s/%s/mbkr%s_%s.png'
+        current_date = datetime.now() + timedelta(hours=1)
+        year = current_date.strftime('%Y')
+        month = current_date.strftime('%m')
+        is_successful = False
+        for i in range(self.FINAL_EPISODE):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_1') or self.is_image_exists(episode + '_1', folder):
+                continue
+            episode_success = False
+            for j in range(self.IMAGES_PER_EPISODE):
+                for k in range(300):
+                    image_url = template % (year, month, episode, str(k))
+                    if self.is_valid_url(image_url, is_image=True):
+                        print('VALID - ' + image_url)
+                        episode_success = True
+                        if download_valid:
+                            self.download_image(image_url, folder + '/' + episode + '_' + str(j + 1), to_jpg=True)
+                        break
+                    elif print_invalid:
+                        print('INVALID - ' + image_url)
+                if not episode_success:
+                    break
+            if not episode_success:
+                break
+            is_successful = True
+        if is_successful:
+            print(self.__class__.__name__ + ' - Guessed correctly!')
+        return is_successful
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.newsList',
