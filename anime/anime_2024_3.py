@@ -1509,7 +1509,7 @@ class MaougunDownload(Summer2024AnimeDownload, NewsTemplate):
 
     PAGE_PREFIX = website
     FINAL_EPISODE = 12
-    IMAGES_PER_EPISODE = 6
+    IMAGES_PER_EPISODE = 5
 
     def __init__(self):
         super().__init__()
