@@ -2194,7 +2194,7 @@ class SengokuYouko2Download(Summer2024AnimeDownload, NewsTemplate):
     folder_name = 'sengokuyouko2'
 
     PAGE_PREFIX = website
-    FINAL_EPISODE = 24
+    FINAL_EPISODE = 22
     IMAGES_PER_EPISODE = 4
 
     def __init__(self):
