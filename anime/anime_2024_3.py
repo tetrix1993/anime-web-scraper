@@ -26,6 +26,7 @@ import os, math, time
 # Naze Boku no Sekai wo Daremo Oboeteinai no ka? https://www.nazeboku.com/ #なぜ僕 #nazeboku @nazeboku_pr
 # Ore wa Subete wo "Parry" suru: Gyaku Kanchigai no Sekai Saikyou wa Boukensha ni Naritai https://parry-anime.com/ #パリイする @parry_anime_pr
 # Oshi no Ko Season 2 https://ichigoproduction.com/Season2/ #推しの子 @anime_oshinoko
+# Sengoku Youko: Senma Konton-hen https://sengoku-youko.com/ #戦国妖狐 @sengoku_youko
 # Senpai wa Otokonoko https://senpaiha-otokonoko.com/ #ぱいのこアニメ #先輩はおとこのこ @painoko_anime
 # Shikanoko Nokonoko Koshitantan https://www.anime-shikanoko.jp/ #しかのこ @shikanoko_PR
 # Shinmai Ossan Boukensha, Saikyou Party ni Shinu hodo Kitaerarete Muteki ni Naru. https://shinmaiossan-anime.com/ #新米オッサン @shinmaiossan
@@ -2181,6 +2182,45 @@ class Oshinoko2Download(Summer2024AnimeDownload, NewsTemplate2):
         except Exception as e:
             self.print_exception(e, 'Character')
         self.create_cache_file(cache_filepath, processed, num_processed)
+
+
+# Sengoku Youko: Senma Konton-hen
+class SengokuYouko2Download(Summer2024AnimeDownload, NewsTemplate):
+    title = 'Sengoku Youko: Senma Konton-hen'
+    keywords = [title, '2nd', 'The Thousandfold Chaos Arc']
+    website = 'https://sengoku-youko.com/'
+    twitter = 'sengoku_youko'
+    hashtags = '戦国妖狐'
+    folder_name = 'sengokuyouko2'
+
+    PAGE_PREFIX = website
+    FINAL_EPISODE = 24
+    IMAGES_PER_EPISODE = 4
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+
+    def download_episode_preview(self):
+        try:
+            template = self.PAGE_PREFIX + 'dist/img/story2/ep%s/img%s.webp'
+            stop = False
+            for i in range(self.FINAL_EPISODE):
+                episode = str(i + 1).zfill(2)
+                if self.is_image_exists(episode + '_' + str(self.IMAGES_PER_EPISODE)):
+                    continue
+                for j in range(self.IMAGES_PER_EPISODE):
+                    image_name = episode + '_' + str(j + 1)
+                    image_url = template % (str(i + 1), str(j + 1).zfill(2))
+                    if self.download_image(image_url, self.base_folder + '/' + image_name, to_jpg=True) == -1:
+                        stop = True
+                        break
+                if stop:
+                    break
+        except Exception as e:
+            self.print_exception(e)
 
 
 # Senpai wa Otokonoko
