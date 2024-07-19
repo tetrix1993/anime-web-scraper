@@ -2156,6 +2156,8 @@ class Oshinoko2Download(Summer2024AnimeDownload, NewsTemplate2):
                 if print_url:
                     print(image_url)
                 image_name = episode + '_' + str(j + 1)
+                if not self.is_content_length_in_range(image_url, more_than_amount=10000):
+                    break
                 result = self.download_image(image_url, folder + '/' + image_name)
                 if result == 0:
                     is_success = True
