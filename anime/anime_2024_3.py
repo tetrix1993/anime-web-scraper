@@ -983,18 +983,25 @@ class MahoakuDownload(Summer2024AnimeDownload, NewsTemplate):
     folder_name = 'mahoaku'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
 
     def __init__(self):
         super().__init__()
 
     def run(self):
-        self.download_episode_preview()
+        # self.download_episode_preview()
+        self.download_episode_preview_external()
         self.download_news()
         self.download_key_visual()
         self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_episode_preview_external(self):
+        keywords = ['かつて魔法少女と悪は敵対していた']
+        AniverseMagazineScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE, suffix='回',
+                                end_date='20240708', download_id=self.download_id).run()
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + 'news/'
