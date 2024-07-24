@@ -620,7 +620,7 @@ class GimaiSeikatsuDownload(Summer2024AnimeDownload, NewsTemplate2):
                     self.download_image_list(self.base_folder)
         except Exception as e:
             self.print_exception(e)
-    
+
     def download_episode_preview_external(self):
         keywords = ['義妹生活']
         AniverseMagazineScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE,
@@ -1282,18 +1282,26 @@ class KonofukaDownload(Summer2024AnimeDownload, NewsTemplate):
         is_successful = False
         for i in range(self.FINAL_EPISODE):
             episode = str(i + 1).zfill(2)
-            if self.is_image_exists(episode + '_1') or self.is_image_exists(episode + '_1', folder):
+            if self.is_image_exists(episode + '_1') or (self.is_image_exists(episode + '_1', folder)
+                                                        and self.is_image_exists(episode + '_2', folder)
+                                                        and self.is_image_exists(episode + '_3', folder)
+                                                        and self.is_image_exists(episode + '_4', folder)
+                                                        and self.is_image_exists(episode + '_5', folder)
+                                                        and self.is_image_exists(episode + '_6', folder)):
                 continue
             episode_success = False
             for j in range(self.IMAGES_PER_EPISODE):
                 prefix = '00_メイン' if j == 0 else str(j).zfill(2)
+                image_name = episode + '_' + str(j + 1)
+                if self.is_image_exists(image_name, folder):
+                    continue
                 for k in range(350):
-                    image_url = template % (year, month, prefix, episode, str(k).zfill(4))
+                    image_url = template % (year, month, prefix, episode, str(k).zfill(3))
                     if self.is_valid_url(image_url, is_image=True):
                         print('VALID - ' + image_url)
                         episode_success = True
                         if download_valid:
-                            self.download_image(image_url, folder + '/' + episode + '_' + str(j + 1), to_jpg=True)
+                            self.download_image(image_url, folder + '/' + image_name, to_jpg=True)
                         break
                     elif print_invalid:
                         print('INVALID - ' + image_url)

@@ -92,7 +92,7 @@ The premiere date for the anime listed here has not been announced.
 * [Boku no Tsuma wa Kanjou ga Nai](https://bokutsuma-anime.com/)
 * [Dungeon no Naka no Hito](https://dungeon-people.com/)
 * [Giji Harem](https://gijiharem.com/)
-* [Gimai Seiktsu](https://gimaiseikatsu-anime.com/)
+* [Gimai Seikatsu](https://gimaiseikatsu-anime.com/)
 * [Hazurewaku no "Joutai Ijou Skill" de Saikyou ni Natta Ore ga Subete wo Juurin suru made](https://hazurewaku-anime.com/)
 * [Isekai Shikkaku](https://isekaishikkaku.com/)
 * [Isekai Yururi Kikou: Kosodateshinagara Boukensha Shimasu](https://isekai-yururi-anime.jp/)
