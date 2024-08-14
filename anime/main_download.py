@@ -15,6 +15,9 @@ from PIL import Image
 from io import BytesIO
 from html import unescape
 
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
 
 class MainDownload:
     title = ""
@@ -205,11 +208,11 @@ class MainDownload:
         return False
 
     @staticmethod
-    def get_soup(url, headers=None, decode=False):
+    def get_soup(url, headers=None, decode=False, verify=True):
         if headers is None:
             headers = constants.HTTP_HEADER_USER_AGENT
         try:
-            result = requests.get(url, headers=headers)
+            result = requests.get(url, headers=headers, verify=verify)
             if decode:
                 return bs(result.content.decode(), 'html.parser')
             else:
@@ -239,7 +242,7 @@ class MainDownload:
         return response
 
     def download_image(self, url, filepath_without_extension, headers=None, to_jpg=False, is_mocanews=False,
-                       min_width=None):
+                       min_width=None, verify=True):
         """
         Download image to the filepath
         :param url:
@@ -277,7 +280,7 @@ class MainDownload:
                         headers['Cookie'] = 'imgkey' + img_id + '=' + cookie
 
                     filepath = ''
-                    with requests.get(url, stream=True, headers=headers) as r:
+                    with requests.get(url, stream=True, headers=headers, verify=verify, ) as r:
                         # File not found or redirected to main page
                         if r.status_code >= 400:
                             return -1
@@ -821,7 +824,7 @@ class MainDownload:
             os.makedirs(filepath)
         return filepath
 
-    def download_image_objects(self, image_objs, filepath, min_width=None):
+    def download_image_objects(self, image_objs, filepath, min_width=None, verify=True):
         is_successful = True
         for image_obj in image_objs:
             if not isinstance(image_obj, dict) or 'name' not in image_obj.keys() or 'url' not in image_obj.keys():
@@ -835,11 +838,11 @@ class MainDownload:
 
             if 'is_mocanews' in image_obj.keys() and isinstance(image_obj['is_mocanews'], bool) \
                     and image_obj['is_mocanews']:
-                result = self.download_image(image_obj['url'], filename, is_mocanews=True, min_width=min_width)
+                result = self.download_image(image_obj['url'], filename, is_mocanews=True, min_width=min_width, verify=verify)
             elif 'to_jpg' in image_obj.keys() and isinstance(image_obj['to_jpg'], bool) and image_obj['to_jpg']:
-                result = self.download_image(image_obj['url'], filename, to_jpg=True, min_width=min_width)
+                result = self.download_image(image_obj['url'], filename, to_jpg=True, min_width=min_width, verify=verify)
             else:
-                result = self.download_image(image_obj['url'], filename, min_width=min_width)
+                result = self.download_image(image_obj['url'], filename, min_width=min_width, verify=verify)
             if result == -1:
                 is_successful = False
         return is_successful
@@ -1170,10 +1173,10 @@ class MainDownload:
             image_obj['is_mocanews'] = True
         self.image_list.append(image_obj)
 
-    def download_image_list(self, folder, clear=True):
+    def download_image_list(self, folder, clear=True, verify=True):
         if len(self.image_list) == 0:
             return
-        self.download_image_objects(self.image_list, folder)
+        self.download_image_objects(self.image_list, folder, verify=verify)
         if clear:
             self.image_list.clear()
 
@@ -1354,7 +1357,7 @@ class NewsTemplate:
                                date_func=None, a_tag_replace_from=None, a_tag_replace_to='',
                                a_tag_start_text_to_remove=None, next_page_select=None, next_page_eval_index_class=None,
                                next_page_eval_index=0, next_page_eval_index_compare_page=False, unescape_title=False,
-                               reverse_article_list=False, date_tag_count=1):
+                               reverse_article_list=False, date_tag_count=1, verify=True):
         """
         :param page_prefix: Start of the page URL to evaluate
         :param article_select: Selects article item elements
@@ -1385,6 +1388,7 @@ class NewsTemplate:
         :param unescape_title: Unescape HTML characters from title
         :param reverse_article_list: Reverse the processing of the articles being scraped. Only works on first page.
         :param date_tag_count: Number of tags in date select to concatenate
+        :param verify: Set False to ignore SSLError
         """
 
         if not issubclass(self.__class__, MainDownload):
@@ -1415,9 +1419,9 @@ class NewsTemplate:
                     else:
                         page_url = news_url + 'page/' + str(page)
                 if response_headers:
-                    soup = self.get_soup(page_url, headers=response_headers, decode=decode_response)
+                    soup = self.get_soup(page_url, headers=response_headers, decode=decode_response, verify=verify)
                 else:
-                    soup = self.get_soup(page_url, decode=decode_response)
+                    soup = self.get_soup(page_url, decode=decode_response, verify=verify)
                 articles = soup.select(article_select)
                 if reverse_article_list:
                     articles = reversed(articles)

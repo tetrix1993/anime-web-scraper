@@ -1937,7 +1937,7 @@ class NazebokuDownload(Summer2024AnimeDownload, NewsTemplate):
                 for j in range(self.IMAGES_PER_EPISODE):
                     image_url = template % (str(i + 1), str(j + 1).zfill(2))
                     image_name = episode + '_' + str(j + 1)
-                    if self.download_image(image_url, self.base_folder + '/' + image_name) == -1:
+                    if self.download_image(image_url, self.base_folder + '/' + image_name, verify=False) == -1:
                         stop = True
                         break
                 if stop:
@@ -1948,19 +1948,20 @@ class NazebokuDownload(Summer2024AnimeDownload, NewsTemplate):
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news_item',
                                     title_select='.ttl', date_select='.day', id_select='a',
-                                    paging_type=3, paging_suffix='?page=%s', next_page_select='.next.page-numbers')
+                                    paging_type=3, paging_suffix='?page=%s', next_page_select='.next.page-numbers',
+                                    verify=False)
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         try:
-            soup = self.get_soup(self.PAGE_PREFIX)
+            soup = self.get_soup(self.PAGE_PREFIX, verify=False)
             images = soup.select('.p-kv__img source[srcset*="/img/"]')
             self.image_list = []
             for image in images:
                 image_url = self.PAGE_PREFIX + image['srcset'].split('?')[0].replace('./', '')
                 image_name = self.generate_image_name_from_url(image_url, 'img')
                 self.add_to_image_list(image_name, image_url)
-            self.download_image_list(folder)
+            self.download_image_list(folder, verify=False)
         except Exception as e:
             self.print_exception(e, 'Key Visual')
 
@@ -1973,7 +1974,7 @@ class NazebokuDownload(Summer2024AnimeDownload, NewsTemplate):
                 if self.is_image_exists(image_name, folder):
                     continue
                 image_url = template % str(i + 1)
-                result = self.download_image(image_url, folder + '/' + image_name)
+                result = self.download_image(image_url, folder + '/' + image_name, verify=False)
                 if result == -1:
                     break
         except Exception as e:
