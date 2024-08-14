@@ -1275,7 +1275,7 @@ class KonofukaDownload(Summer2024AnimeDownload, NewsTemplate):
             return
 
         folder = self.create_custom_directory('guess')
-        template = self.PAGE_PREFIX + 'pDK2yjkH/wp-content/uploads/%s/%s/%s_このふか%s_%s.png'
+        template = self.PAGE_PREFIX + 'pDK2yjkH/wp-content/uploads/%s/%s/%sこのふか%s_%s.png'
         current_date = datetime.now() + timedelta(hours=1)
         year = current_date.strftime('%Y')
         month = current_date.strftime('%m')
@@ -1291,7 +1291,7 @@ class KonofukaDownload(Summer2024AnimeDownload, NewsTemplate):
                 continue
             episode_success = False
             for j in range(self.IMAGES_PER_EPISODE):
-                prefix = '00_メイン' if j == 0 else str(j).zfill(2)
+                prefix = '00_' if j == 0 else ''
                 image_name = episode + '_' + str(j + 1)
                 if self.is_image_exists(image_name, folder):
                     continue
