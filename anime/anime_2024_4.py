@@ -12,6 +12,100 @@ class Fall2024AnimeDownload(MainDownload):
         super().__init__()
 
 
+# Acro Trip
+class AcroTripDownload(Fall2024AnimeDownload, NewsTemplate):
+    title = 'Acro Trip'
+    keywords = [title]
+    website = 'https://acrotrip-anime.com/'
+    twitter = 'acrotrip_anime'
+    hashtags = ['アクロトリップ']
+    folder_name = 'acrotrip'
+
+    PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 5
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        try:
+            template = self.PAGE_PREFIX + 'dist/img/story/ep%s/img%s.jpg'
+            stop = False
+            for i in range(self.FINAL_EPISODE):
+                episode = str(i + 1).zfill(2)
+                if self.is_image_exists(episode + '_' + str(self.IMAGES_PER_EPISODE)):
+                    continue
+                for j in range(self.IMAGES_PER_EPISODE):
+                    image_url = template % (str(i + 1), str(j + 1))
+                    image_name = episode + '_' + str(j + 1)
+                    if self.download_image(image_url, self.base_folder + '/' + image_name) == -1:
+                        stop = True
+                        break
+                if stop:
+                    break
+            # soup = self.get_soup(self.PAGE_PREFIX)
+            # btns = soup.select('.tp_story__tab_item[data-tab-target]')
+            # for btn in btns:
+            #     try:
+            #         episode = str(int(btn.select('span')[0].text.replace('#', ''))).zfill(2)
+            #         target = btn['data-tab-target']
+            #     except:
+            #         continue
+            #     images = soup.select(f'#{target} .tp_story__imgMain_item img[src]')
+            #     self.image_list = []
+            #     for i in range(len(images)):
+            #         image_url = self.PAGE_PREFIX + images[i]['src']
+            #         image_name = episode + '_' + str(i + 1)
+            #         self.add_to_image_list(image_name, image_url)
+            #     self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news_item', title_select='.ttl',
+                                    date_select='.p-news__list-date', id_select='a', paging_type=3,
+                                    paging_suffix='?page=%s', next_page_select='.page-numbers',
+                                    next_page_eval_index_class='current', next_page_eval_index=-1,
+                                    date_func=lambda x: x[0:4] + '.' + str(self.convert_month_string_to_number(x[5:8])).zfill(2) + '.' + x[9:])
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.kv_image source[type="image/webp"][srcset]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['srcset']
+                if not image_url.endswith('_sp.webp'):
+                    continue
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'dist/img/character/character%s/stand.webp'
+        try:
+            for i in range(20):
+                image_name = 'character' + str(i + 1)
+                if self.is_image_exists(image_name, folder):
+                    continue
+                image_url = template % str(i + 1)
+                if self.download_image(image_url, folder + '/' + image_name) == -1:
+                    break
+        except Exception as e:
+            self.print_exception(e, 'Character')
+
+
 # Amagami-san Chi no Enmusubi
 class AmagamiDownload(Fall2024AnimeDownload, NewsTemplate):
     title = 'Amagami-san Chi no Enmusubi'
