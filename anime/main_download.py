@@ -1357,7 +1357,7 @@ class NewsTemplate:
                                date_func=None, a_tag_replace_from=None, a_tag_replace_to='',
                                a_tag_start_text_to_remove=None, next_page_select=None, next_page_eval_index_class=None,
                                next_page_eval_index=0, next_page_eval_index_compare_page=False, unescape_title=False,
-                               reverse_article_list=False, date_tag_count=1, verify=True):
+                               reverse_article_list=False, date_tag_count=1, verify=True, skip_first_page_num=True):
         """
         :param page_prefix: Start of the page URL to evaluate
         :param article_select: Selects article item elements
@@ -1389,6 +1389,7 @@ class NewsTemplate:
         :param reverse_article_list: Reverse the processing of the articles being scraped. Only works on first page.
         :param date_tag_count: Number of tags in date select to concatenate
         :param verify: Set False to ignore SSLError
+        :param skip_first_page_num: If False, include the first page number "1" in the page URL
         """
 
         if not issubclass(self.__class__, MainDownload):
@@ -1409,7 +1410,7 @@ class NewsTemplate:
             news_obj = self.get_last_news_log_object()
             for page in range(1, 100, 1):
                 page_url = news_url
-                if page > 1:
+                if not skip_first_page_num or page > 1:
                     if paging_type == 1:
                         page_url = news_url + '?p=' + str(page)
                     elif paging_type == 2:
