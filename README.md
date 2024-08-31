@@ -92,6 +92,7 @@ The premiere date for the anime listed here has not been announced.
 * [Hitoribocchi no Isekai Kouryaku](https://bocchi-kouryaku.com/)
 * [Kabushikigaisha Magi-Lumière](https://magilumiere-pr.com/)
 * [Kekkon suru tte, Hontou desu ka](https://365-wedding-anime.com/)
+* [Kimi wa Meido-sama.](https://kimihameidosama-anime.com/)
 * [Maou 2099](https://2099.world/)
 * [Maou-sama, Retry! R](https://maousama-anime.com/)
 * [Nageki no Bourei wa Intai shitai](https://nageki-anime.com/)

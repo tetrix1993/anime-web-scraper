@@ -265,6 +265,56 @@ class KekkonDesukaDownload(Fall2024AnimeDownload, NewsTemplate):
                                     id_select=None, a_tag_prefix=self.PAGE_PREFIX, a_tag_start_text_to_remove='/')
 
 
+# Kimi wa Meido-sama.
+class MeidosamaDownload(Fall2024AnimeDownload, NewsTemplate):
+    title = 'Kimi wa Meido-sama.'
+    keywords = [title, 'You Are Ms. Servant.']
+    website = 'https://kimihameidosama-anime.com/'
+    twitter = 'meidosama_anime'
+    hashtags = ['君は冥土様']
+    folder_name = 'meidosama'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news_item', title_select='.news_ttl',
+                                    date_select='.news_date', id_select='a', a_tag_prefix=news_url, paging_type=1,
+                                    next_page_select='.pagerList .linkBox', next_page_eval_index=-1,
+                                    next_page_eval_index_class='is-active')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('#js-imgModal img[src*="/img/"]')
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'].split('?')[0][1:]
+                image_name = self.generate_image_name_from_url(image_url, 'img')
+                self.add_to_image_list(image_name, image_url)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'assets/img/character/chara%s_full.png'
+        self.download_by_template(folder, template, 1, 1)
+
+
 # Maou 2099
 class Maou2099Download(Fall2024AnimeDownload, NewsTemplate):
     title = 'Maou 2099'
