@@ -1,4 +1,4 @@
-from anime.main_download import MainDownload, NewsTemplate
+from anime.main_download import MainDownload, NewsTemplate, NewsTemplate4
 import json
 
 
@@ -212,6 +212,31 @@ class BocchiKouryakuDownload(Fall2024AnimeDownload, NewsTemplate):
                 self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+
+# Kabushikigaisha Magi-Lumière
+class MagilumiereDownload(Fall2024AnimeDownload, NewsTemplate4):
+    title = 'Kabushikigaisha Magi-Lumière'
+    keywords = [title, 'Magilumiere Magical Girls Inc.']
+    website = 'https://magilumiere-pr.com/'
+    twitter = 'MagilumiereLtd'
+    hashtags = 'マジルミエ'
+    folder_name = 'magilumiere'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self, json_obj=None):
+        self.download_template_news(json_url=self.PAGE_PREFIX + 'api/site-data/init')
 
 
 # Kekkon suru tte, Hontou desu ka
