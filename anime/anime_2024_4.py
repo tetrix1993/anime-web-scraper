@@ -577,6 +577,68 @@ class WajutsushiDownload(Fall2024AnimeDownload, NewsTemplate):
             self.print_exception(e, 'Character')
 
 
+# Sayounara Ryuusei, Konnichiwa Jinsei
+class SayounaraRyuuseiDownload(Fall2024AnimeDownload, NewsTemplate):
+    title = "Sayounara Ryuusei, Konnichiwa Jinsei"
+    keywords = [title, 'Good Bye, Dragon Life.']
+    website = "https://dragonlife-anime.com/"
+    twitter = 'dragonlife_PR'
+    hashtags = '竜生'
+    folder_name = 'sayounararyuusei'
+
+    PAGE_PREFIX = website
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.icihran dl',
+                                    title_select='a', date_select='dt', id_select='a', a_tag_prefix=news_url,
+                                    news_prefix='news/index.html')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.main_ph img[src*="/images/"],.main_ph source[srcset*="/images/"]')
+            self.image_list = []
+            for image in images:
+                if image.has_attr('src'):
+                    image_url = image['src'].split('?')[0]
+                else:
+                    image_url = image['srcset'].split('?')[0]
+                if image_url.startswith('./'):
+                    image_url = self.PAGE_PREFIX + image_url[2:]
+                image_name = self.generate_image_name_from_url(image_url, 'images')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.chara02 img[src*="/images/"]')
+            self.image_list = []
+            for image in images:
+                image_url = image['src'].split('?')[0]
+                if image_url.startswith('./'):
+                    image_url = self.PAGE_PREFIX + image_url[2:]
+                image_name = self.generate_image_name_from_url(image_url, 'images')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+
+
 # Seirei Gensouki 2
 class SeireiGensouki2Download(Fall2024AnimeDownload, NewsTemplate):
     title = "Seirei Gensouki 2"

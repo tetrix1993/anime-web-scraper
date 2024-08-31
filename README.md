@@ -98,6 +98,7 @@ The premiere date for the anime listed here has not been announced.
 * [Party kara Tsuihou sareta Sono Chiyushi, Jitsu wa Saikyou ni Tsuki](https://sonochiyushi.com/)
 * [Rekishi ni Nokoru Akujo ni Naru zo](https://rekiaku-anime.com/)
 * [Saikyou no Shienshoku "Wajutsushi" de Aru Ore wa Sekai Saikyou Clan wo Shitagaeru](https://wajutsushi-anime.com/)
+* [Sayounara Ryuusei, Konnichiwa Jinsei](https://dragonlife-anime.com/)
 * [Seirei Gensouki 2](https://seireigensouki.com/)
 * [Yarinaoshi Reijou wa Ryuutei Heika wo Kouryakuchuu](https://yarinaoshi-reijyou.com/)
 
