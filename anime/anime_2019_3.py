@@ -494,7 +494,7 @@ class MaousamaRetryDownload(Summer2019AnimeDownload):
     keywords = ["Maou-sama, Retry!", "Maousama", "Demon Lord, Retry!"]
     folder_name = 'maousama-retry'
 
-    PAGE_PREFIX = "http://maousama-anime.com/story/"
+    PAGE_PREFIX = "http://maousama-anime.com/2019/story/"
     FINAL_EPISODE = 13
     NUM_OF_PICTURES_PER_PAGE = 6
 

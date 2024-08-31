@@ -267,6 +267,63 @@ class KekkonDesukaDownload(Fall2024AnimeDownload, NewsTemplate):
                                     id_select=None, a_tag_prefix=self.PAGE_PREFIX, a_tag_start_text_to_remove='/')
 
 
+# Maou-sama, Retry! R
+class MaousamaRetry2Download(Fall2024AnimeDownload, NewsTemplate):
+    title = 'Maou-sama, Retry! R'
+    keywords = [title, 'Demon Lord, Retry! R', '2nd']
+    website = 'https://maousama-anime.com/2024/'
+    twitter = 'maousama_anime'
+    hashtags = ['魔王様リトライ']
+    folder_name = 'maousamaretry2'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news__link',
+                                    title_select='.news__txt', date_select='.news__dateWrap',
+                                    id_select=None, date_func=lambda x: x[0:4] + '.' + x[4:])
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.kv__container img[src*="/kv/"]')
+            for image in images:
+                image_url = image['src'].split('?')[0]
+                image_name = self.generate_image_name_from_url(image_url, 'kv')
+                self.add_to_image_list(image_name, image_url)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        self.image_list = []
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character/')
+            images = soup.select('.character__img[src*="/character/"]')
+            for image in images:
+                image_url = image['src'].split('?')[0]
+                image_name = self.generate_image_name_from_url(image_url, 'character')
+                self.add_to_image_list(image_name, image_url)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+        self.download_image_list(folder)
+
+
 # Nageki no Bourei wa Intai shitai
 class NagekiDownload(Fall2024AnimeDownload, NewsTemplate):
     title = 'Nageki no Bourei wa Intai shitai'
@@ -404,8 +461,6 @@ class ReikiakuDownload(Fall2024AnimeDownload, NewsTemplate):
     def run(self):
         self.download_episode_preview()
         self.download_news()
-        self.download_key_visual()
-        self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
