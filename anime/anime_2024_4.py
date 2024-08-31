@@ -267,6 +267,57 @@ class KekkonDesukaDownload(Fall2024AnimeDownload, NewsTemplate):
                                     id_select=None, a_tag_prefix=self.PAGE_PREFIX, a_tag_start_text_to_remove='/')
 
 
+# Maou 2099
+class Maou2099Download(Fall2024AnimeDownload, NewsTemplate):
+    title = 'Maou 2099'
+    keywords = [title, 'Demon Lord 2099']
+    website = 'https://2099.world/'
+    twitter = '2099_anime'
+    hashtags = ['魔王2099']
+    folder_name = 'maou2099'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.p-news__list-item',
+                                    title_select='.p-news_data__title', date_select='.p-news_data__date',
+                                    id_select='a', a_tag_prefix=self.PAGE_PREFIX, a_tag_start_text_to_remove='/',
+                                    date_func=lambda x: x[0:4] + '.' + x[5:7] + '.' + x[7:9], paging_type=1,
+                                    next_page_select='.c-pagination__list-item', next_page_eval_index=-1,
+                                    next_page_eval_index_class='is-current')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.p-hero_kv__main-img img[src*="/main/"]')
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'].split('?')[0][1:]
+                image_name = self.generate_image_name_from_url(image_url, 'main')
+                self.add_to_image_list(image_name, image_url)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'teaser/img/character/img_chara%s.png'
+        self.download_by_template(folder, template, 2, 1)
+
+
 # Maou-sama, Retry! R
 class MaousamaRetry2Download(Fall2024AnimeDownload, NewsTemplate):
     title = 'Maou-sama, Retry! R'
