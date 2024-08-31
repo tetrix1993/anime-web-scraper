@@ -193,8 +193,6 @@ class BocchiKouryakuDownload(Fall2024AnimeDownload, NewsTemplate):
 
     def download_character(self):
         folder = self.create_character_directory()
-        template = self.PAGE_PREFIX + 'assets/character/%s/whole-body_PC.png'
-        face_template = self.PAGE_PREFIX + 'assets/character/%s/face%s.png'
         try:
             soup = self.get_soup(self.PAGE_PREFIX + 'character')
             content = soup.select('#__NEXT_DATA__')
@@ -520,6 +518,63 @@ class ReikiakuDownload(Fall2024AnimeDownload, NewsTemplate):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.newsList li',
                                     title_select='.text', date_select='.days', id_select='a',
                                     a_tag_prefix=self.PAGE_PREFIX, a_tag_start_text_to_remove='/')
+
+
+# Saikyou no Shienshoku "Wajutsushi" de Aru Ore wa Sekai Saikyou Clan wo Shitagaeru
+class WajutsushiDownload(Fall2024AnimeDownload, NewsTemplate):
+    title = 'Saikyou no Shienshoku "Wajutsushi" de Aru Ore wa Sekai Saikyou Clan wo Shitagaeru'
+    keywords = [title, 'The Most Notorious "Talker" Runs the World\'s Greatest Clan']
+    website = 'https://wajutsushi-anime.com/'
+    twitter = 'wajutsushi_PR'
+    hashtags = ['話術士', 'wajutsushi']
+    folder_name = 'wajutsushi'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.c-jhOyWv',
+                                    skip_first_page_num=False, title_select='.c-canASN',
+                                    date_select='.c-cmzDjZ p', id_select=None, paging_type=2,
+                                    a_tag_prefix=self.PAGE_PREFIX, a_tag_start_text_to_remove='/',
+                                    next_page_select='.c-guJmrn-enMdry-variant-next')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('kv_pc', self.PAGE_PREFIX + 'assets/kv/pc.jpg')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'assets/character/%s/main.png'
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character')
+            content = soup.select('#__NEXT_DATA__')
+            json_obj = json.loads(content[0].contents[0])
+            self.image_list = []
+            for character in json_obj['props']['pageProps']['characterList']:
+                if character is None or 'id' not in character:
+                    continue
+                name = character['id']
+                image_name = name + '_main'
+                if self.is_image_exists(image_name, folder):
+                    continue
+                self.add_to_image_list(image_name, template % name)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
 
 
 # Seirei Gensouki 2
