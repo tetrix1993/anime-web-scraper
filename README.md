@@ -93,6 +93,7 @@ The premiere date for the anime listed here has not been announced.
 * [Kabushikigaisha Magi-Lumière](https://magilumiere-pr.com/)
 * [Kekkon suru tte, Hontou desu ka](https://365-wedding-anime.com/)
 * [Nageki no Bourei wa Intai shitai](https://nageki-anime.com/)
+* [Party kara Tsuihou sareta Sono Chiyushi, Jitsu wa Saikyou ni Tsuki](https://sonochiyushi.com/)
 * [Rekishi ni Nokoru Akujo ni Naru zo](https://rekiaku-anime.com/)
 
 

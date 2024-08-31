@@ -1,4 +1,4 @@
-from anime.main_download import MainDownload, NewsTemplate, NewsTemplate4
+from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsTemplate4
 import json
 
 
@@ -334,6 +334,56 @@ class NagekiDownload(Fall2024AnimeDownload, NewsTemplate):
                 self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+
+# Party kara Tsuihou sareta Sono Chiyushi, Jitsu wa Saikyou ni Tsuki
+class SonoChiyushiDownload(Fall2024AnimeDownload, NewsTemplate2):
+    title = 'Party kara Tsuihou sareta Sono Chiyushi, Jitsu wa Saikyou ni Tsuki'
+    keywords = [title, 'The Healer Who Was Banished From His Party, Is, in Fact, the Strongest']
+    website = 'https://sonochiyushi.com/'
+    twitter = 'sonochiyushi'
+    hashtags = ['その治癒師']
+    folder_name = 'sonochiyushi'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(self.PAGE_PREFIX)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.hero__img source[srcset]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['srcset']
+                if '/main/' not in image_url:
+                    continue
+                image_name = self.generate_image_name_from_url(image_url, 'main')
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        prefix = self.PAGE_PREFIX + 'core_sys/images/main/chara/chara'
+        templates = [prefix + '%s.webp', prefix + '%s_face.webp',
+                     prefix + '%s.png', prefix + '%s_face.png']
+        self.download_by_template(folder, templates, 2, 1, max_skip=1)
 
 
 # Rekishi ni Nokoru Akujo ni Naru zo
