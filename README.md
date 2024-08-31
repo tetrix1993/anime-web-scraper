@@ -96,6 +96,7 @@ The premiere date for the anime listed here has not been announced.
 * [Nageki no Bourei wa Intai shitai](https://nageki-anime.com/)
 * [Party kara Tsuihou sareta Sono Chiyushi, Jitsu wa Saikyou ni Tsuki](https://sonochiyushi.com/)
 * [Rekishi ni Nokoru Akujo ni Naru zo](https://rekiaku-anime.com/)
+* [Seirei Gensouki 2](https://seireigensouki.com/)
 * [Yarinaoshi Reijou wa Ryuutei Heika wo Kouryakuchuu](https://yarinaoshi-reijyou.com/)
 
 ### Summer 2024 Anime
@@ -451,7 +452,7 @@ The premiere date for the anime listed here has not been announced.
 * [Meikyuu Black Company](https://meikyubc-anime.com/)
 * [Otome Game no Hametsu Flag shika Nai Akuyaku Reijou ni Tensei shiteshimatta... X](https://hamehura-anime.com/)
 * [Peach Boy Riverside](https://peachboyriverside.com/)
-* [Seirei Gensouki](https://seireigensouki.com/)
+* [Seirei Gensouki](https://seireigensouki.com/1st/)
 * [Shinigami Bocchan to Kuro Maid](https://bocchan-anime.com/)
 * [Shiroi Suna no Aquatope](https://aquatope-anime.com/)
 * [Tantei wa Mou, Shindeiru.](https://tanmoshi-anime.jp/)

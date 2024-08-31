@@ -18,7 +18,7 @@ from scan import AnimeRecorderScanner, AniverseMagazineScanner, MocaNewsScanner,
 # Meikyuu Black Company https://meikyubc-anime.com/ #迷宮ブラックカンパニー @meikyubc_anime
 # Otome Game https://hamehura-anime.com/story/ #はめふら #hamehura @hamehura
 # Peach Boy Riverside https://peachboyriverside.com/ #ピーチボーイリバーサイド @peachboy_anime
-# Seirei Gensouki https://seireigensouki.com/ #精霊幻想記 @seireigensouki
+# Seirei Gensouki https://seireigensouki.com/1st/ #精霊幻想記 @seireigensouki
 # Shinigami Bocchan to Kuro Maid https://bocchan-anime.com/ #死神坊ちゃん @bocchan_anime
 # Shiroi Suna no Aquatope https://aquatope-anime.com/ #白い砂のアクアトープ @aquatope_anime
 # Tantei wa Mou, Shindeiru. https://tanmoshi-anime.jp/ #たんもし @tanteiwamou_
@@ -1799,7 +1799,7 @@ class PeachBoyRiversideDownload(Summer2021AnimeDownload, NewsTemplate):
 class SeireiGensoukiDownload(Summer2021AnimeDownload, NewsTemplate):
     title = "Seirei Gensouki"
     keywords = [title, "Spirit Chronicles"]
-    website = "https://seireigensouki.com/"
+    website = "https://seireigensouki.com/1st/"
     twitter = 'seireigensouki'
     hashtags = '精霊幻想記'
     folder_name = 'seirei-gensouki'

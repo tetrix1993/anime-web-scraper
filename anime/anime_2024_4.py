@@ -471,6 +471,54 @@ class ReikiakuDownload(Fall2024AnimeDownload, NewsTemplate):
                                     a_tag_prefix=self.PAGE_PREFIX, a_tag_start_text_to_remove='/')
 
 
+# Seirei Gensouki 2
+class SeireiGensouki2Download(Fall2024AnimeDownload, NewsTemplate):
+    title = "Seirei Gensouki 2"
+    keywords = [title, "Spirit Chronicles", '2nd']
+    website = "https://seireigensouki.com/"
+    twitter = 'seireigensouki'
+    hashtags = '精霊幻想記'
+    folder_name = 'seireigensouki2'
+
+    PAGE_PREFIX = website
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-item',
+                                    title_select='.title', date_select='.date', id_select='a')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.kv-container img[src]')
+            self.image_list = []
+            for image in images:
+                image_url = image['src'].split('?')[0]
+                if '/images/' not in image_url:
+                    continue
+                image_name = self.generate_image_name_from_url(image_url, 'images')
+                if image_name.endswith('-sp'):
+                    continue
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = 'https://seireigensouki.com/2ndwp/wp-content/themes/seirei2-teaser/images/chara-pic%s.png'
+        self.download_by_template(folder, template, 2, 1)
+
+
 # Yarinaoshi Reijou wa Ryuutei Heika wo Kouryakuchuu
 class YariryuDownload(Fall2024AnimeDownload):
     title = 'Yarinaoshi Reijou wa Ryuutei Heika wo Kouryakuchuu'
