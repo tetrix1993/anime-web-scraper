@@ -17,7 +17,7 @@ def run():
     downloads += [OokamitoKoushinryouDownload(), NierAutomataDownload(), Maohgakuin2Download(),
                   KanteiSkillDownload(), Konosuba3Download(), TenshitsukiDownload(), UnnamedMemoryDownload(),
                   YorukuraDownload()]
-    subclasses = UnconfirmedDownload.__subclasses__()
+    subclasses = UnconfirmedDownload.__subclasses__() + Fall2024AnimeDownload.__subclasses__()
     for subclass in subclasses:
         if subclass.enabled:
             downloads.append(subclass())

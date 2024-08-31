@@ -86,6 +86,10 @@ The premiere date for the anime listed here has not been announced.
 * [Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita 2nd Season](https://slime300-anime.com/)
 * [Tsuyokute New Saga](https://tsuyosaga-pr.com/)
 
+### Fall 2024 Anime
+* [Rekishi ni Nokoru Akujo ni Naru zo](https://rekiaku-anime.com/)
+
+
 ### Summer 2024 Anime
 * [2.5-jigen no Ririsa](https://ririsa-official.com/)
 * [Atri: My Dear Moments](https://atri-anime.com/)
