@@ -153,6 +153,33 @@ class AmagamiDownload(Fall2024AnimeDownload, NewsTemplate):
         self.download_by_template(folder, template, 2, 1)
 
 
+# Kekkon suru tte, Hontou desu ka
+class KekkonDesukaDownload(Fall2024AnimeDownload, NewsTemplate):
+    title = 'Kekkon suru tte, Hontou desu ka'
+    keywords = [title, '365 Days to the Wedding']
+    website = 'https://365-wedding-anime.com/'
+    twitter = 'kekkon_anime'
+    hashtags = ['kekkon_anime', '結婚ですか']
+    folder_name = 'kekkondesuka'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-item',
+                                    title_select='.news-item__title', date_select='.news-item__date',
+                                    id_select=None, a_tag_prefix=self.PAGE_PREFIX, a_tag_start_text_to_remove='/')
+
+
 # Nageki no Bourei wa Intai shitai
 class NagekiDownload(Fall2024AnimeDownload, NewsTemplate):
     title = 'Nageki no Bourei wa Intai shitai'
