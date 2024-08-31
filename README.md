@@ -95,7 +95,7 @@ The premiere date for the anime listed here has not been announced.
 * [Nageki no Bourei wa Intai shitai](https://nageki-anime.com/)
 * [Party kara Tsuihou sareta Sono Chiyushi, Jitsu wa Saikyou ni Tsuki](https://sonochiyushi.com/)
 * [Rekishi ni Nokoru Akujo ni Naru zo](https://rekiaku-anime.com/)
-
+* [Yarinaoshi Reijou wa Ryuutei Heika wo Kouryakuchuu](https://yarinaoshi-reijyou.com/)
 
 ### Summer 2024 Anime
 * [2.5-jigen no Ririsa](https://ririsa-official.com/)

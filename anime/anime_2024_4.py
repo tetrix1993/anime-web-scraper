@@ -1,4 +1,5 @@
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsTemplate4
+from datetime import datetime
 import json
 
 
@@ -403,6 +404,8 @@ class ReikiakuDownload(Fall2024AnimeDownload, NewsTemplate):
     def run(self):
         self.download_episode_preview()
         self.download_news()
+        self.download_key_visual()
+        self.download_character()
 
     def download_episode_preview(self):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
@@ -411,3 +414,73 @@ class ReikiakuDownload(Fall2024AnimeDownload, NewsTemplate):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.newsList li',
                                     title_select='.text', date_select='.days', id_select='a',
                                     a_tag_prefix=self.PAGE_PREFIX, a_tag_start_text_to_remove='/')
+
+
+# Yarinaoshi Reijou wa Ryuutei Heika wo Kouryakuchuu
+class YariryuDownload(Fall2024AnimeDownload):
+    title = 'Yarinaoshi Reijou wa Ryuutei Heika wo Kouryakuchuu'
+    keywords = [title, 'The Do-Over Damsel Conquers The Dragon Emperor', 'yariryu']
+    website = 'https://yarinaoshi-reijyou.com/'
+    twitter = 'yarinaoshi_pr'
+    hashtags = ['やり竜']
+    folder_name = 'yariryu'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        try:
+            results = []
+            news_obj = self.get_last_news_log_object()
+            json_obj = self.get_json(self.PAGE_PREFIX + 'news.json')
+            for item in json_obj:
+                if 'day' in item and 'url' in item and 'title' in item:
+                    try:
+                        date = datetime.strptime(item['day'], "%Y/%m/%d").strftime("%Y.%m.%d")
+                    except:
+                        continue
+                    title = item['title']
+                    url = self.PAGE_PREFIX + item['url']
+                    if news_obj is not None and (news_obj['id'] == url or news_obj['title'] == title
+                                                 or date < news_obj['date']):
+                        break
+                    results.append(self.create_news_log_object(date, title, url))
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log_from_news_log_object(result)
+                if process_result == 0:
+                    success_count += 1
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
+        except Exception as e:
+            self.print_exception(e, 'News')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.visual_wrap img[src*="/visual/"]')
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src'].split('?')[0]
+                image_name = self.generate_image_name_from_url(image_url, 'visual')
+                self.add_to_image_list(image_name, image_url)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'images/chara/p_01_%s.png'
+        self.download_by_template(folder, template, 2, 1)
