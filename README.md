@@ -89,6 +89,7 @@ The premiere date for the anime listed here has not been announced.
 ### Fall 2024 Anime
 * [Acro Trip](https://acrotrip-anime.com/)
 * [Amagami-san Chi no Enmusubi](https://amagami-anime.com/)
+* [Hitoribocchi no Isekai Kouryaku](https://bocchi-kouryaku.com/)
 * [Kekkon suru tte, Hontou desu ka](https://365-wedding-anime.com/)
 * [Nageki no Bourei wa Intai shitai](https://nageki-anime.com/)
 * [Rekishi ni Nokoru Akujo ni Naru zo](https://rekiaku-anime.com/)

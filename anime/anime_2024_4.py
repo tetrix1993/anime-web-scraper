@@ -153,6 +153,67 @@ class AmagamiDownload(Fall2024AnimeDownload, NewsTemplate):
         self.download_by_template(folder, template, 2, 1)
 
 
+# Hitoribocchi no Isekai Kouryaku
+class BocchiKouryakuDownload(Fall2024AnimeDownload, NewsTemplate):
+    title = 'Hitoribocchi no Isekai Kouryaku'
+    keywords = [title, 'Loner Life in Another World']
+    website = 'https://bocchi-kouryaku.com/'
+    twitter = 'bocchi_PR'
+    hashtags = 'ぼっち攻略'
+    folder_name = 'bocchikouryaku'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.c-fGHEql', paging_type=2,
+                                    skip_first_page_num=False, title_select='.c-gKRVtX p',
+                                    date_select='.c-jrhcXL p', id_select=None,
+                                    a_tag_prefix=self.PAGE_PREFIX, a_tag_start_text_to_remove='/',
+                                    next_page_select='.c-igANRe button.c-gulvcB', next_page_eval_index=-1,
+                                    next_page_eval_index_class='c-gulvcB-kCOsjz-hidden-true')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        self.image_list = []
+        self.add_to_image_list('kv_pc', self.PAGE_PREFIX + 'assets/image/kv/pc.png')
+        self.download_image_list(folder)
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'assets/character/%s/whole-body_PC.png'
+        face_template = self.PAGE_PREFIX + 'assets/character/%s/face%s.png'
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'character')
+            content = soup.select('#__NEXT_DATA__')
+            json_obj = json.loads(content[0].contents[0])
+            for chara in json_obj['props']['pageProps']['characterCastList']:
+                if chara is None or 'character' not in chara and 'images' not in chara['character']:
+                    continue
+                image_urls = chara['character']['images']
+                self.image_list = []
+                if 'main' in image_urls:
+                    image_name = self.generate_image_name_from_url(image_urls['main'], 'character')
+                    self.add_to_image_list(image_name, self.PAGE_PREFIX + image_urls['main'][1:])
+                if 'facies' in image_urls:
+                    image_name = self.generate_image_name_from_url(image_urls['facies'], 'character')
+                    self.add_to_image_list(image_name, self.PAGE_PREFIX + image_urls['facies'][1:])
+                self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Character')
+
+
 # Kekkon suru tte, Hontou desu ka
 class KekkonDesukaDownload(Fall2024AnimeDownload, NewsTemplate):
     title = 'Kekkon suru tte, Hontou desu ka'
