@@ -12,6 +12,53 @@ class Fall2024AnimeDownload(MainDownload):
         super().__init__()
 
 
+# Amagami-san Chi no Enmusubi
+class AmagamiDownload(Fall2024AnimeDownload, NewsTemplate):
+    title = 'Amagami-san Chi no Enmusubi'
+    keywords = [title, 'Tying the Knot with an Amagami Sister']
+    website = 'https://amagami-anime.com/'
+    twitter = 'amagami_anime'
+    hashtags = ['甘神さんちの縁結び']
+    folder_name = 'amagami'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+        self.download_character()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.accordion_one', title_select='p',
+                                    date_select='time', id_select=None, id_has_id=True)
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.fv__contents .fv__left .swiper-slide img[src]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src']
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+    def download_character(self):
+        folder = self.create_character_directory()
+        template = self.PAGE_PREFIX + 'img/character-%s.png'
+        self.download_by_template(folder, template, 2, 1)
+
+
 # Nageki no Bourei wa Intai shitai
 class NagekiDownload(Fall2024AnimeDownload, NewsTemplate):
     title = 'Nageki no Bourei wa Intai shitai'

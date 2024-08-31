@@ -87,6 +87,7 @@ The premiere date for the anime listed here has not been announced.
 * [Tsuyokute New Saga](https://tsuyosaga-pr.com/)
 
 ### Fall 2024 Anime
+* [Amagami-san Chi no Enmusubi](https://amagami-anime.com/)
 * [Nageki no Bourei wa Intai shitai](https://nageki-anime.com/)
 * [Rekishi ni Nokoru Akujo ni Naru zo](https://rekiaku-anime.com/)
 
