@@ -1240,7 +1240,7 @@ class KonofukaDownload(Summer2024AnimeDownload, NewsTemplate):
 
     def run(self):
         self.download_episode_preview()
-        self.download_news()
+        # self.download_news()
         # self.download_episode_preview_guess()
         self.download_key_visual()
         self.download_character()
