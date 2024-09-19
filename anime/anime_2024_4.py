@@ -493,6 +493,71 @@ class NagekiDownload(Fall2024AnimeDownload, NewsTemplate):
             self.print_exception(e, 'Character')
 
 
+# NegiPosi Angler
+class NegaguraDownload(Fall2024AnimeDownload):
+    title = 'NegaPosi Angler'
+    keywords = [title, 'Negative Positive Angler']
+    website = 'https://np-angler.com/'
+    twitter = 'np_angler'
+    hashtags = ['ネガグラ']
+    folder_name = 'negagura'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_key_visual()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        try:
+            results = []
+            news_obj = self.get_last_news_log_object()
+            json_obj = self.get_json(self.PAGE_PREFIX + 'news.json')
+            for item in json_obj:
+                if 'day' in item and 'url' in item and 'title' in item:
+                    try:
+                        date = datetime.strptime(item['day'], "%Y.%m.%d").strftime("%Y.%m.%d")
+                    except:
+                        continue
+                    title = item['title']
+                    url = self.PAGE_PREFIX + item['url']
+                    if news_obj is not None and (news_obj['id'] == url or news_obj['title'] == title
+                                                 or date < news_obj['date']):
+                        break
+                    results.append(self.create_news_log_object(date, title, url))
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log_from_news_log_object(result)
+                if process_result == 0:
+                    success_count += 1
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
+        except Exception as e:
+            self.print_exception(e, 'News')
+
+    def download_key_visual(self):
+        folder = self.create_key_visual_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            images = soup.select('.visual_wrap img[src*="/top/"]')
+            self.image_list = []
+            for image in images:
+                image_url = self.PAGE_PREFIX + image['src']
+                if '/visual/' in image_url:
+                    image_name = self.generate_image_name_from_url(image_url, 'top')
+                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
+
+
 # Party kara Tsuihou sareta Sono Chiyushi, Jitsu wa Saikyou ni Tsuki
 class SonoChiyushiDownload(Fall2024AnimeDownload, NewsTemplate2):
     title = 'Party kara Tsuihou sareta Sono Chiyushi, Jitsu wa Saikyou ni Tsuki'
