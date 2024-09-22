@@ -188,7 +188,7 @@ class BocchiKouryakuDownload(Fall2024AnimeDownload, NewsTemplate):
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
         self.image_list = []
-        self.add_to_image_list('kv_pc', self.PAGE_PREFIX + 'assets/image/kv/pc.png')
+        self.add_to_image_list('kv_20240917_pc', self.PAGE_PREFIX + 'assets/image/kv/20240917/pc.png')
         self.download_image_list(folder)
 
     def download_character(self):
