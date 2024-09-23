@@ -98,6 +98,7 @@ The premiere date for the anime listed here has not been announced.
 * [Nageki no Bourei wa Intai shitai](https://nageki-anime.com/)
 * [NegiPosi Angler](https://np-angler.com/)
 * [Party kara Tsuihou sareta Sono Chiyushi, Jitsu wa Saikyou ni Tsuki](https://sonochiyushi.com/)
+* [Re:Zero kara Hajimeru Isekai Seikatsu 3rd Season](http://re-zero-anime.jp/tv/)
 * [Rekishi ni Nokoru Akujo ni Naru zo](https://rekiaku-anime.com/)
 * [Saikyou no Shienshoku "Wajutsushi" de Aru Ore wa Sekai Saikyou Clan wo Shitagaeru](https://wajutsushi-anime.com/)
 * [Sayounara Ryuusei, Konnichiwa Jinsei](https://dragonlife-anime.com/)

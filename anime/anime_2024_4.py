@@ -608,6 +608,45 @@ class SonoChiyushiDownload(Fall2024AnimeDownload, NewsTemplate2):
         self.download_by_template(folder, templates, 2, 1, max_skip=1)
 
 
+# Re:Zero kara Hajimeru Isekai Seikatsu 3rd Season
+class ReZero3Download(Fall2024AnimeDownload):
+    title = "Re:Zero kara Hajimeru Isekai Seikatsu 3rd Season"
+    keywords = [title, "rezero", "Re:Zero - Starting Life in Another World"]
+    folder_name = 'rezero3'
+    website = 'http://re-zero-anime.jp/tv/'
+    twitter = 'Rezero_official'
+
+    PAGE_PREFIX = website
+    FIRST_EPISODE = 51
+    FINAL_EPISODE = 66
+    IMAGES_PER_EPISODE = 10
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+
+    def download_episode_preview(self):
+        try:
+            template = self.PAGE_PREFIX + 'assets/episode/%s/%s.webp'
+            stop = False
+            for i in range(self.FIRST_EPISODE, self.FINAL_EPISODE + 1, 1):
+                episode = str(i).zfill(2)
+                if self.is_image_exists(episode + '_' + str(self.IMAGES_PER_EPISODE).zfill(2)):
+                    continue
+                for j in range(self.IMAGES_PER_EPISODE):
+                    image_url = template % (episode, str(j + 1))
+                    image_name = episode + '_' + str(j + 1).zfill(2)
+                    if self.download_image(image_url, self.base_folder + '/' + image_name, to_jpg=True) == -1:
+                        stop = True
+                        break
+                if stop:
+                    break
+        except Exception as e:
+            self.print_exception(e)
+
+
 # Rekishi ni Nokoru Akujo ni Naru zo
 class ReikiakuDownload(Fall2024AnimeDownload, NewsTemplate):
     title = 'Rekishi ni Nokoru Akujo ni Naru zo'
