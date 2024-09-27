@@ -1,6 +1,7 @@
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsTemplate4
 from datetime import datetime
 from requests.exceptions import HTTPError
+from scan import AniverseMagazineScanner
 import json
 
 
@@ -477,12 +478,14 @@ class NagekiDownload(Fall2024AnimeDownload, NewsTemplate):
     folder_name = 'nageki'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
 
     def __init__(self):
         super().__init__()
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_external()
         self.download_news()
         self.download_key_visual()
         self.download_character()
@@ -503,6 +506,11 @@ class NagekiDownload(Fall2024AnimeDownload, NewsTemplate):
                 self.download_image_list(self.base_folder)
         except Exception as e:
             self.print_exception(e)
+
+    def download_episode_preview_external(self):
+        keywords = ['嘆きの亡霊は引退したい']
+        AniverseMagazineScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                end_date='20240927', download_id=self.download_id).run()
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.c-hnachi', paging_type=2,
