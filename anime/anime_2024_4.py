@@ -961,6 +961,7 @@ class YariryuDownload(Fall2024AnimeDownload):
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_external()
         self.download_news()
         self.download_key_visual()
         self.download_character()
@@ -983,6 +984,11 @@ class YariryuDownload(Fall2024AnimeDownload):
                     break
         except Exception as e:
             self.print_exception(e)
+
+    def download_episode_preview_external(self):
+        keywords = ['やり直し令嬢は竜帝陛下を攻略中']
+        AniverseMagazineScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                end_date='20240927', download_id=self.download_id).run()
 
     def download_news(self):
         try:
