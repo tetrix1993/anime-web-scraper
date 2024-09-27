@@ -69,6 +69,7 @@ class NigoririDownload(Summer2024AnimeDownload, NewsTemplate):
         self.download_episode_preview_guess()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -181,6 +182,38 @@ class NigoririDownload(Summer2024AnimeDownload, NewsTemplate):
             self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        for page in [0, 1]:
+            try:
+                page_url = self.PAGE_PREFIX + 'package/' if page == 0 else self.PAGE_PREFIX + 'package/store/'
+                soup = self.get_soup(page_url)
+                if page == 0:
+                    images = soup.select('.packages--lineup img[src]')
+                else:
+                    images = soup.select('.packages--store__contents img[src]')
+                self.image_list = []
+                for image in images:
+                    image_url = image['src']
+                    if 'nowprinting' in image_url:
+                        continue
+                    resized_url = self.clear_resize_in_url(image_url)
+                    resized_name = self.extract_image_name_from_url(resized_url)
+                    image_name = self.extract_image_name_from_url(image_url)
+                    if resized_name == image_name:
+                        if self.is_image_exists(image_name, folder):
+                            continue
+                    else:
+                        if self.is_image_exists(resized_name, folder) or self.is_image_exists(image_name, folder):
+                            continue
+                        if self.is_valid_url(resized_url, is_image=True):
+                            image_url = resized_url
+                            image_name = resized_name
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(folder)
+            except Exception as e:
+                self.print_exception(e, 'Blu-ray' + ('' if page == 0 else ' Bonus'))
 
 
 # Atri: My Dear Moments
