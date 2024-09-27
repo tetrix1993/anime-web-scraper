@@ -10,19 +10,18 @@ def run():
         os.makedirs(constants.FOLDER_OUTPUT)
 
     downloads = []
-    skip = [BokutsumaDownload.__name__, MayopanDownload.__name__, VdenDownload.__name__, WistoriaDownload.__name__]
+    for subclass in Fall2024AnimeDownload.__subclasses__():
+        downloads.append(subclass())
+    downloads += [KanteiSkillDownload(), NigoririDownload(), SengokuYouko2Download()]
+    skip = [BokutsumaDownload.__name__, MayopanDownload.__name__, VdenDownload.__name__, WistoriaDownload.__name__,
+            NigoririDownload.__name__, SengokuYouko2Download.__name__, PainokoDownload.__name__]
     for subclass in Summer2024AnimeDownload.__subclasses__():
         if subclass.enabled and subclass.__name__ not in skip:
             downloads.append(subclass())
-    downloads += [OokamitoKoushinryouDownload(), NierAutomataDownload(), Maohgakuin2Download(),
-                  KanteiSkillDownload(), Konosuba3Download(), TenshitsukiDownload(), UnnamedMemoryDownload(),
-                  YorukuraDownload()]
-    subclasses = UnconfirmedDownload.__subclasses__() + Fall2024AnimeDownload.__subclasses__()
+    subclasses = UnconfirmedDownload.__subclasses__()
     for subclass in subclasses:
         if subclass.enabled:
             downloads.append(subclass())
-    downloads += [
-        NozomanuFushiDownload(), Youzitsu3Download(), HyakkanoDownload(), MushokuTensei2Download()]
     process_download(downloads)
 
     #downloads = []
