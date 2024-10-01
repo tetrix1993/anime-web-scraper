@@ -246,7 +246,7 @@ class AtriDownload(Summer2024AnimeDownload, NewsTemplate):
                     episode = str(int(story.text.strip().replace('Log', ''))).zfill(2)
                 except:
                     continue
-                if self.is_image_exists(episode + '_1'):
+                if self.is_image_exists(episode + '_5'):
                     continue
                 if '-active' in story['class']:
                     ep_soup = soup
