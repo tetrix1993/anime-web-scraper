@@ -196,7 +196,9 @@ class BocchiKouryakuDownload(Fall2024AnimeDownload, NewsTemplate):
 
     def download_episode_preview(self):
         try:
-            obj = self.get_json(self.PAGE_PREFIX + '_next/data/BzDL13VvwZSS-I6JX2gPe/story/latest.json')
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/latest')
+            build_id = soup.select('script[src*="/_buildManifest.js"]')[0]['src'].split('/static/')[1].split('/')[0]
+            obj = self.get_json(self.PAGE_PREFIX + f'_next/data/{build_id}/story/latest.json')
             for story in obj['pageProps']['storyList']:
                 story_data = story['data'][0]
                 episode = str(story_data['episode']).zfill(2)
