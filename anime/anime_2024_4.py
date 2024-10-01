@@ -1,8 +1,9 @@
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsTemplate4
-from datetime import datetime
+from datetime import datetime, timedelta
 from requests.exceptions import HTTPError
 from scan import AniverseMagazineScanner
 import json
+import os
 
 
 # Fall 2024 Anime
@@ -257,16 +258,74 @@ class MagilumiereDownload(Fall2024AnimeDownload, NewsTemplate4):
     folder_name = 'magilumiere'
 
     PAGE_PREFIX = website
+    IMAGES_PER_EPISODE = 6
+    FINAL_EPISODE = 12
 
     def __init__(self):
         super().__init__()
 
     def run(self):
-        self.download_episode_preview()
-        self.download_news()
+        json_obj = self.download_episode_preview()
+        self.download_news(json_obj)
+        self.download_episode_preview_guess()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        json_obj = None
+        try:
+            json_obj = self.get_json(self.PAGE_PREFIX + 'api/site-data/init')
+            for story in json_obj['story']:
+                episode = story['episode'].zfill(2)
+                self.image_list = []
+                for i in range(len(story['images'])):
+                    image_name = episode + '_' + str(i + 1)
+                    image_url = story['images'][i]['image_path']
+                    self.add_to_image_list(image_name, image_url, to_jpg=True)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
+        return json_obj
+
+    def download_episode_preview_guess(self, print_invalid=False, download_valid=True):
+        if self.is_image_exists(str(self.FINAL_EPISODE).zfill(2) + '_' + str(self.IMAGES_PER_EPISODE)):
+            return
+
+        folder = self.create_custom_directory('guess')
+        template = self.PAGE_PREFIX + 'wp/wp-content/uploads/%s/%s/%s.jpg'
+        current_date = datetime.now() + timedelta(hours=1)
+        year = current_date.strftime('%Y')
+        month = current_date.strftime('%m')
+        is_successful = False
+        valid_urls = []
+        for j in range(self.IMAGES_PER_EPISODE):
+            k = 0
+            while k < 20:
+                if k == 0:
+                    append = ''
+                else:
+                    append = '-' + str(k)
+                image_folder = folder + '/' + year + '/' + month
+                image_name = str(j + 1).zfill(2) + append
+                if not self.is_image_exists(image_name, image_folder):
+                    image_url = template % (year, month, image_name)
+                    if self.is_valid_url(image_url, is_image=True):
+                        print('VALID - ' + image_url)
+                        is_successful = True
+                        valid_urls.append({'name': image_name, 'url': image_url, 'folder': image_folder})
+                    else:
+                        if print_invalid:
+                            print('INVALID - ' + image_url)
+                        break
+                k += 1
+        if download_valid and len(valid_urls) > 0:
+            for valid_url in valid_urls:
+                image_name = valid_url['name']
+                image_folder = valid_url['folder']
+                if not os.path.exists(image_folder):
+                    os.makedirs(image_folder)
+                self.download_image(valid_url['url'], image_folder + '/' + image_name, to_jpg=True)
+        if is_successful:
+            print(self.__class__.__name__ + ' - Guessed correctly!')
+        return is_successful
 
     def download_news(self, json_obj=None):
         self.download_template_news(json_url=self.PAGE_PREFIX + 'api/site-data/init')
