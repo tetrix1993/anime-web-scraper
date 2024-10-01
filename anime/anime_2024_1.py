@@ -6,7 +6,7 @@ from scan import AniverseMagazineScanner
 from requests.exceptions import HTTPError
 
 # Akuyaku Reijou Level 99 https://akuyakulv99-anime.com/ #akuyakuLV99 @akuyakuLV99
-# Ao no Exorcist: Shimane Illuminati-hen https://ao-ex.com/ #青エク #aoex @aoex_anime
+# Ao no Exorcist: Shimane Illuminati-hen https://ao-ex.com/Illuminati/ #青エク #aoex @aoex_anime
 # Chiyu Mahou no Machigatta Tsukaikata https://chiyumahou-anime.com/ #治癒魔法 @chiyumahou_PR
 # Dosanko Gal wa Namara Menkoi https://dosankogal-pr.com/ #道産子ギャル #どさこい @dosankogal_pr
 # Dungeon Meshi https://delicious-in-dungeon.com/ #ダンジョン飯 #deliciousindungeon @dun_meshi_anime
@@ -211,7 +211,7 @@ class AkuyakuLv99Download(Winter2024AnimeDownload, NewsTemplate2):
 class Aoex3Download(Winter2024AnimeDownload, NewsTemplate):
     title = 'Ao no Exorcist: Shimane Illuminati-hen'
     keywords = [title, 'aoex', 'Blue Exorcist: Shimane Illuminati Saga']
-    website = 'https://ao-ex.com/'
+    website = 'https://ao-ex.com/Illuminati/'
     twitter = 'aoex_anime'
     hashtags = ['青エク', 'aoex']
     folder_name = 'aoex3'

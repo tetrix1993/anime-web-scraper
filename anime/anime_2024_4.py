@@ -175,6 +175,55 @@ class AmagamiDownload(Fall2024AnimeDownload, NewsTemplate):
         self.download_by_template(folder, template, 2, 1)
 
 
+# Ao no Exorcist: Yuki no Hate-hen
+class Aoex4Download(Fall2024AnimeDownload, NewsTemplate):
+    title = 'Ao no Exorcist: Yuki no Hate-hen'
+    keywords = [title, 'aoex', 'Blue Exorcist: Beyond the Snow Saga', '4th Season']
+    website = 'https://ao-ex.com/'
+    twitter = 'aoex_anime'
+    hashtags = ['青エク', 'aoex']
+    folder_name = 'aoex4'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+
+    def download_episode_preview(self):
+        try:
+            story_prefix = self.PAGE_PREFIX + 'snow/story/'
+            soup = self.get_soup(story_prefix)
+            stories = soup.select('.story_navList a[href]')
+            for story in stories:
+                try:
+                    episode = str(int(story.select('.linkbox_txt')[0].text)).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_5'):
+                    continue
+                if '--current' in story['class']:
+                    ep_soup = soup
+                else:
+                    story_url = story['href']
+                    if story_url.startswith('./'):
+                        story_url = story_prefix + story_url[2:]
+                    ep_soup = self.get_soup(story_url)
+                if ep_soup is None:
+                    continue
+                self.image_list = []
+                images = ep_soup.select('.storyImageList img[src]')
+                for i in range(len(images)):
+                    image_name = episode + '_' + str(i + 1)
+                    image_url = story_prefix + images[i]['src']
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
+
+
 # Hitoribocchi no Isekai Kouryaku
 class BocchiKouryakuDownload(Fall2024AnimeDownload, NewsTemplate):
     title = 'Hitoribocchi no Isekai Kouryaku'

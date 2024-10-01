@@ -87,6 +87,7 @@ The premiere date for the anime listed here has not been announced.
 * [Tsuyokute New Saga](https://tsuyosaga-pr.com/)
 
 ### Fall 2024 Anime
+* [Ao no Exorcist: Yuki no Hate-hen](https://www.ao-ex.com/)
 * [Acro Trip](https://acrotrip-anime.com/)
 * [Amagami-san Chi no Enmusubi](https://amagami-anime.com/)
 * [Hitoribocchi no Isekai Kouryaku](https://bocchi-kouryaku.com/)
@@ -167,7 +168,7 @@ The premiere date for the anime listed here has not been announced.
 
 ### Winter 2024 Anime
 * [Akuyaku Reijou Level 99](https://akuyakulv99-anime.com/)
-* [Ao no Exorcist: Shimane Illuminati-hen](https://ao-ex.com/)
+* [Ao no Exorcist: Shimane Illuminati-hen](https://ao-ex.com/Illuminati/)
 * [Boku no Kokoro no Yabai Yatsu Season 2](https://bokuyaba-anime.com/)
 * [Chiyu Mahou no Machigatta Tsukaikata](https://chiyumahou-anime.com/)
 * [Dosanko Gal wa Namara Menkoi](https://dosankogal-pr.com/)
