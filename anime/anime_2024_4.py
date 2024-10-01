@@ -811,7 +811,21 @@ class WajutsushiDownload(Fall2024AnimeDownload, NewsTemplate):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/latest')
+            build_id = soup.select('script[src*="/_buildManifest.js"]')[0]['src'].split('/static/')[1].split('/')[0]
+            obj = self.get_json(self.PAGE_PREFIX + f'_next/data/{build_id}/story/latest.json')
+            for story in obj['pageProps']['storyList']:
+                story_data = story['data'][0]
+                episode = str(story_data['episode']).zfill(2)
+                image_list = story_data['imageList']
+                for i in range(len(image_list)):
+                    image_name = episode + '_' + str(i + 1)
+                    image_url = self.PAGE_PREFIX + image_list[i]['url'][1:]
+                    self.add_to_image_list(image_name, image_url, to_jpg=True)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.c-jhOyWv',
