@@ -195,7 +195,19 @@ class BocchiKouryakuDownload(Fall2024AnimeDownload, NewsTemplate):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            obj = self.get_json(self.PAGE_PREFIX + '_next/data/BzDL13VvwZSS-I6JX2gPe/story/latest.json')
+            for story in obj['pageProps']['storyList']:
+                story_data = story['data'][0]
+                episode = str(story_data['episode']).zfill(2)
+                image_list = story_data['imageList']
+                for i in range(len(image_list)):
+                    image_name = episode + '_' + str(i + 1)
+                    image_url = self.PAGE_PREFIX + image_list[i]['url'][1:]
+                    self.add_to_image_list(image_name, image_url, to_jpg=True)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.c-fGHEql', paging_type=2,
