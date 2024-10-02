@@ -2,6 +2,7 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 from datetime import datetime, timedelta
 from requests.exceptions import HTTPError
 from scan import AniverseMagazineScanner
+from bs4 import BeautifulSoup
 import json
 import os
 
@@ -651,6 +652,7 @@ class NagekiDownload(Fall2024AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -719,6 +721,28 @@ class NagekiDownload(Fall2024AnimeDownload, NewsTemplate):
                 self.download_image_list(folder)
         except Exception as e:
             self.print_exception(e, 'Character')
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'products')
+            content = soup.select('#__NEXT_DATA__')
+            obj = json.loads(content[0].contents[0])
+            for product in obj['props']['pageProps']['productsList']:
+                product_data = product['data']
+                for data in product_data:
+                    content = data['content']
+                    content_soup = BeautifulSoup(content, 'html.parser')
+                    images = content_soup.select('img[src]')
+                    for image in images:
+                        if 'nowprinting' in image['src']:
+                            continue
+                        image_url = self.PAGE_PREFIX + image['src'][1:].split('?')[0]
+                        image_name = self.extract_image_name_from_url(image_url)
+                        self.add_to_image_list(image_name, image_url, to_jpg=True)
+                    self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Blu-ray')
 
 
 # NegiPosi Angler
