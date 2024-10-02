@@ -131,6 +131,7 @@ class AmagamiDownload(Fall2024AnimeDownload, NewsTemplate):
         self.download_news()
         self.download_key_visual()
         self.download_character()
+        self.download_media()
 
     def download_episode_preview(self):
         try:
@@ -173,6 +174,27 @@ class AmagamiDownload(Fall2024AnimeDownload, NewsTemplate):
         folder = self.create_character_directory()
         template = self.PAGE_PREFIX + 'img/character-%s.png'
         self.download_by_template(folder, template, 2, 1)
+
+    def download_media(self):
+        folder = self.create_media_directory()
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'blu-ray/')
+            images = soup.select('.jacket img[src],.image img[src]')
+            self.image_list = []
+            for image in images:
+                if 'nowprinting' in image['src']:
+                    continue
+                if image['src'].startswith('../'):
+                    image_url = self.PAGE_PREFIX + image['src'][3:]
+                elif image['src'].startswith('http'):
+                    image_url = image['src']
+                else:
+                    image_url = self.PAGE_PREFIX + image['src']
+                image_name = self.extract_image_name_from_url(image_url)
+                self.add_to_image_list(image_name, image_url)
+            self.download_image_list(folder)
+        except Exception as e:
+            self.print_exception(e, 'Key Visual')
 
 
 # Ao no Exorcist: Yuki no Hate-hen
