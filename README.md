@@ -104,6 +104,7 @@ The premiere date for the anime listed here has not been announced.
 * [Saikyou no Shienshoku "Wajutsushi" de Aru Ore wa Sekai Saikyou Clan wo Shitagaeru](https://wajutsushi-anime.com/)
 * [Sayounara Ryuusei, Konnichiwa Jinsei](https://dragonlife-anime.com/)
 * [Seirei Gensouki 2](https://seireigensouki.com/)
+* [Sword Art Online Alternative: Gun Gale Online II](https://gungale-online.net/)
 * [Yarinaoshi Reijou wa Ryuutei Heika wo Kouryakuchuu](https://yarinaoshi-reijyou.com/)
 
 ### Summer 2024 Anime
@@ -697,7 +698,7 @@ The premiere date for the anime listed here has not been announced.
 * [Hisone to Maso-tan](http://hisomaso.com/)
 * [Last Period: Owarinaki Rasen no Monogatari](https://www.lastperiod.jp/)
 * [Lostorage Conflated WIXOSS](http://lostorage-wixoss.com/)
-* [Sword Art Online Alternative: Gun Gale Online](https://gungale-online.net/)
+* [Sword Art Online Alternative: Gun Gale Online](https://gungale-online.net/1st/)
 * [Tada-kun wa Koi wo Shinai](http://tadakoi.tv/)
 * [Wotaku ni Koi wa Muzukashii](https://wotakoi-anime.com/)
 

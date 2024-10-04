@@ -1222,6 +1222,57 @@ class SeireiGensouki2Download(Fall2024AnimeDownload, NewsTemplate):
         self.download_by_template(folder, template, 2, 1)
 
 
+# Sword Art Online Alternative: Gun Gale Online II
+class GunGaleOnline2Download(Fall2024AnimeDownload):
+    title = "Sword Art Online Alternative: Gun Gale Online II"
+    keywords = [title, 'ggo', '2nd']
+    website = 'https://gungale-online.net/'
+    twitter = 'ggo_anime'
+    hashtags = ['ggo_anime']
+    folder_name = 'ggo2'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+
+    def download_episode_preview(self):
+        story_url = self.PAGE_PREFIX + 'story/'
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            stories = soup.select('.p-in_story__contents-nav-list-item')
+            for story in stories:
+                try:
+                    a_tag = story.select('a[href]')[0]
+                    episode = ''
+                    for s in a_tag.text:
+                        if s.isnumeric():
+                            episode += s
+                        elif s == ' ' and len(episode) > 0:
+                            break
+                    episode = episode.zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                if 'is-current' in story['class']:
+                    ep_soup = soup
+                else:
+                    ep_soup = self.get_soup(story_url + a_tag['href'].replace('./', ''))
+                images = ep_soup.select('.p-in-list-item img[src]')
+                self.image_list = []
+                for i in range(len(images)):
+                    image_url = story_url + images[i]['src']
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url, to_jpg=True)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
+
+
 # Yarinaoshi Reijou wa Ryuutei Heika wo Kouryakuchuu
 class YariryuDownload(Fall2024AnimeDownload):
     title = 'Yarinaoshi Reijou wa Ryuutei Heika wo Kouryakuchuu'

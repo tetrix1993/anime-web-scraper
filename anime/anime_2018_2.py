@@ -246,10 +246,10 @@ class LostorageConflatedWixossDownload(Spring2018AnimeDownload):
 # Sword Art Online Alternative: Gun Gale Online
 class GunGaleOnlineDownload(Spring2018AnimeDownload):
     title = "Sword Art Online Alternative: Gun Gale Online"
-    keywords = ["Sword Art Online Alternative: Gun Gale Online"]
+    keywords = [title, 'ggo']
     folder_name = 'gungale-online'
 
-    IMAGE_URL = "https://gungale-online.net/assets/images/story/img_ep%s_%s.jpg"
+    IMAGE_URL = "https://gungale-online.net/1st/assets/images/story/img_ep%s_%s.jpg"
     FINAL_EPISODE = 12
     NUM_OF_PICTURES_PER_PAGE = 2
     
