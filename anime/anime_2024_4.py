@@ -1165,22 +1165,43 @@ class SeireiGensouki2Download(Fall2024AnimeDownload, NewsTemplate):
     PAGE_PREFIX = website
 
     def run(self):
-        self.download_episode_preview()
+        soup = self.download_episode_preview()
         self.download_news()
-        self.download_key_visual()
+        self.download_key_visual(soup)
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        soup = None
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            stories = soup.select('.story-box')
+            for story in stories:
+                try:
+                    episode = str(int(story.select('.num')[0].text)).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                images = story.select('.ss-item img[src]')
+                self.image_list = []
+                for i in range(len(images)):
+                    image_url = images[i]['src']
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url, to_jpg=True)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
+        return soup
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-item',
                                     title_select='.title', date_select='.date', id_select='a')
 
-    def download_key_visual(self):
+    def download_key_visual(self, soup=None):
         folder = self.create_key_visual_directory()
         try:
-            soup = self.get_soup(self.PAGE_PREFIX)
+            if soup is None:
+                soup = self.get_soup(self.PAGE_PREFIX)
             images = soup.select('.kv-container img[src]')
             self.image_list = []
             for image in images:
