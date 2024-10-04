@@ -459,6 +459,8 @@ class MeidosamaDownload(Fall2024AnimeDownload, NewsTemplate):
     folder_name = 'meidosama'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 6
 
     def __init__(self):
         super().__init__()
@@ -470,7 +472,45 @@ class MeidosamaDownload(Fall2024AnimeDownload, NewsTemplate):
         self.download_character()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        prefix = self.PAGE_PREFIX + 'story/'
+        try:
+            soup = self.get_soup(prefix)
+            wrap = soup.select('.epNumWrap')
+            episode = ''
+            for s in wrap[0].text:
+                if s.isnumeric():
+                    episode += s
+                elif s == ' ' and len(episode) > 0:
+                    break
+            episode = episode.zfill(2)
+            self.image_list = []
+            images = soup.select('.storyBox_txt img[src]')
+            for i in range(len(images)):
+                image_url = images[i]['src']
+                image_name = episode + '_' + str(i + 1)
+                self.add_to_image_list(image_name, image_url, to_jpg=True)
+            self.download_image_list(self.base_folder)
+            # stories = soup.select('.storyNav a[href]')
+            # for story in stories:
+            #     try:
+            #         episode = str(int(story.text.replace('EP', ''))).zfill(2)
+            #     except:
+            #         continue
+            #     if self.is_image_exists(episode + '_' + str(self.IMAGES_PER_EPISODE)):
+            #         continue
+            #     story_soup = soup
+            #     # story_soup = self.get_soup(prefix + story['href'])
+            #     # if story_soup is None:
+            #     #     continue
+            #     self.image_list = []
+            #     images = story_soup.select('.storyBox_txt img[src]')
+            #     for i in range(len(images)):
+            #         image_url = images[i]['src']
+            #         image_name = episode + '_' + str(i + 1)
+            #         self.add_to_image_list(image_name, image_url, to_jpg=True)
+            #     self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + 'news/'
