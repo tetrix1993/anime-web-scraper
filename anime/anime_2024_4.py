@@ -247,6 +247,50 @@ class Aoex4Download(Fall2024AnimeDownload, NewsTemplate):
             self.print_exception(e)
 
 
+# Arifureta Shokugyou de Sekai Saikyou 3rd Season
+class Arifureta3Download(Fall2024AnimeDownload, NewsTemplate):
+    title = "Arifureta Shokugyou de Sekai Saikyou 3rd Season"
+    keywords = [title, "Arifureta: From Commonplace to World's Strongest 3rd Season"]
+    website = 'https://arifureta.com/'
+    twitter = 'ARIFURETA_info'
+    hashtags = ['ARIFURETA', 'ありふれた']
+    folder_name = 'arifureta3'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_episode_preview_guess()
+
+    def download_episode_preview(self):
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            stories = soup.select('ol.season03 a[href]')
+            for story in stories:
+                try:
+                    text = story.text.replace('第', '').replace('話', '')
+                    episode = str(int(self.convert_kanji_to_number(text))).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                ep_soup = self.get_soup(story['href'])
+                if ep_soup is None:
+                    continue
+                self.image_list = []
+                images = ep_soup.select('#story_cont img[src]')
+                for i in range(len(images)):
+                    image_url = self.clear_resize_in_url(images[i]['src'])
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url, to_jpg=True)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
+
+
 # Hitoribocchi no Isekai Kouryaku
 class BocchiKouryakuDownload(Fall2024AnimeDownload, NewsTemplate):
     title = 'Hitoribocchi no Isekai Kouryaku'

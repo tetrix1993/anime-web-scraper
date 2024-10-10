@@ -90,6 +90,7 @@ The premiere date for the anime listed here has not been announced.
 * [Ao no Exorcist: Yuki no Hate-hen](https://www.ao-ex.com/)
 * [Acro Trip](https://acrotrip-anime.com/)
 * [Amagami-san Chi no Enmusubi](https://amagami-anime.com/)
+* [Arifureta Shokugyou de Sekai Saikyou 3rd Season](https://arifureta.com/)
 * [Hitoribocchi no Isekai Kouryaku](https://bocchi-kouryaku.com/)
 * [Kabushikigaisha Magi-Lumière](https://magilumiere-pr.com/)
 * [Kekkon suru tte, Hontou desu ka](https://365-wedding-anime.com/)
