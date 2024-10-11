@@ -12,7 +12,7 @@ def run():
     downloads = []
     for subclass in Fall2024AnimeDownload.__subclasses__():
         downloads.append(subclass())
-    downloads += [KanteiSkillDownload(), NigoririDownload(), SengokuYouko2Download()]
+    downloads += [KanteiSkillDownload(), NigoririDownload(), SengokuYouko2Download(), ShangriLaFrontierDownload()]
     skip = [BokutsumaDownload.__name__, MayopanDownload.__name__, VdenDownload.__name__, WistoriaDownload.__name__,
             NigoririDownload.__name__, SengokuYouko2Download.__name__, PainokoDownload.__name__]
     for subclass in Summer2024AnimeDownload.__subclasses__():
