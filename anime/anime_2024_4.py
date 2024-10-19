@@ -794,7 +794,7 @@ class NagekiDownload(Fall2024AnimeDownload, NewsTemplate):
     folder_name = 'nageki'
 
     PAGE_PREFIX = website
-    FINAL_EPISODE = 12
+    FINAL_EPISODE = 13
 
     def __init__(self):
         super().__init__()
@@ -1141,7 +1141,7 @@ class ReikiakuDownload(Fall2024AnimeDownload, NewsTemplate):
     folder_name = 'rekiaku'
 
     PAGE_PREFIX = website
-    FINAL_EPISODE = 12
+    FINAL_EPISODE = 13
     IMAGES_PER_EPISODE = 6
 
     def __init__(self):
