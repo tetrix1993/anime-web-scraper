@@ -1041,9 +1041,9 @@ class SonoChiyushiDownload(Fall2024AnimeDownload, NewsTemplate2):
             if self.is_image_exists(episode + '_1'):
                 continue
             is_success = False
-            first = 27 + i
-            second = 76 + 4 * i
-            third = 72 + 6 * i
+            first = 42 + i
+            second = 80 + 4 * i
+            third = 98 + 6 * i
             for j in range(self.IMAGES_PER_EPISODE):
                 image_url = template % (str(first).zfill(8), str(second).zfill(8), str(third + j).zfill(8))
                 if print_url:
