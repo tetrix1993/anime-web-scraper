@@ -13,11 +13,14 @@ def run():
     for subclass in Fall2024AnimeDownload.__subclasses__():
         downloads.append(subclass())
     downloads += [KanteiSkillDownload(), NigoririDownload(), SengokuYouko2Download(), ShangriLaFrontierDownload()]
-    skip = [BokutsumaDownload.__name__, MayopanDownload.__name__, VdenDownload.__name__, WistoriaDownload.__name__,
-            NigoririDownload.__name__, SengokuYouko2Download.__name__, PainokoDownload.__name__]
-    for subclass in Summer2024AnimeDownload.__subclasses__():
-        if subclass.enabled and subclass.__name__ not in skip:
-            downloads.append(subclass())
+    # skip = [BokutsumaDownload.__name__, MayopanDownload.__name__, VdenDownload.__name__, WistoriaDownload.__name__,
+    #         NigoririDownload.__name__, SengokuYouko2Download.__name__, PainokoDownload.__name__]
+    for subclass in [GimaiSeikatsuDownload]:
+        # if subclass.enabled and subclass.__name__ not in skip:
+        if subclass.enabled:
+            new_subclass = subclass()
+            new_subclass.download_media_only = True
+            downloads.append(new_subclass)
     subclasses = UnconfirmedDownload.__subclasses__()
     for subclass in subclasses:
         if subclass.enabled:
@@ -37,11 +40,17 @@ def run_process(download, download_id):
     download.download_id = download_id
     class_name = download.__class__.__name__
     filepath = constants.FOLDER_PROCESS + '/' + class_name
-    print("Running %s" % class_name)
+    message = "Running %s" % class_name
+    if download.download_media_only:
+        message += ' (Media)'
+    print(message)
     if os.path.exists(constants.FOLDER_PROCESS):
         with open(filepath, 'w+') as f:
             f.write(pid)
-    download.run()
+    if download.download_media_only:
+        download.download_media()
+    else:
+        download.run()
     #print("Ending %s" % class_name)
     if os.path.exists(filepath):
         os.remove(filepath)

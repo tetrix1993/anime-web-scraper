@@ -32,6 +32,7 @@ class MainDownload:
     enabled = True
     refresh_meta_tag = False
     download_id = None  # For printing global logs
+    download_media_only = False  # Used in main.py
 
     def __init__(self):
         path = self.get_full_path()
