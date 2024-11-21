@@ -270,6 +270,24 @@ class Arifureta3Download(Fall2024AnimeDownload, NewsTemplate):
     def download_episode_preview(self):
         try:
             soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+
+            # Evaluate current page
+            title = soup.select('h1.title')
+            try:
+                text = title[0].text.split('話')[0].split('第')[1]
+                episode = str(int(self.convert_kanji_to_number(text))).zfill(2)
+                if not self.is_image_exists(episode + '_1'):
+                    self.image_list = []
+                    images = soup.select('#story_cont img[src]')
+                    for i in range(len(images)):
+                        image_url = self.clear_resize_in_url(images[i]['src'])
+                        image_name = episode + '_' + str(i + 1)
+                        self.add_to_image_list(image_name, image_url, to_jpg=True)
+                    self.download_image_list(self.base_folder)
+            except:
+                pass
+
+            # Evaluate other pages
             stories = soup.select('ol.season03 a[href]')
             for story in stories:
                 try:
