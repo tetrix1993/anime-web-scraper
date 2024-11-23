@@ -72,3 +72,30 @@ class MedakawaDownload(Winter2025AnimeDownload, NewsTemplate):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.newsList',
                                     title_select='.newsList__title_txt>span', date_select='.newsList__date',
                                     id_select='a')
+
+
+# NEET Kunoichi to Nazeka Dousei Hajimemashita
+class NeetKunoichiDownload(Winter2025AnimeDownload, NewsTemplate):
+    title = 'NEET Kunoichi to Nazeka Dousei Hajimemashita'
+    keywords = [title, "I'm Living with an Otaku NEET Kunoichi!?"]
+    website = 'https://neet-kunoichi.com/'
+    twitter = 'neet_kunoichi'
+    hashtags = ['ニートくノ一 ']
+    folder_name = 'neetkunoichi'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article', title_select='.title h3',
+                                    date_select='time', id_select=None, id_has_id=True,
+                                    a_tag_prefix=self.PAGE_PREFIX + 'news/#')
