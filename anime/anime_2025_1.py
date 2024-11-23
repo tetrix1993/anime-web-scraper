@@ -129,3 +129,28 @@ class NeetKunoichiDownload(Winter2025AnimeDownload, NewsTemplate):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article', title_select='.title h3',
                                     date_select='time', id_select=None, id_has_id=True,
                                     a_tag_prefix=self.PAGE_PREFIX + 'news/#')
+
+
+# S-Rank Monster no "Behemoth" dakedo, Neko to Machigawarete Elf Musume no Pet toshite Kurashitemasu
+class BehenekoDownload(Winter2025AnimeDownload, NewsTemplate2):
+    title = 'S-Rank Monster no "Behemoth" dakedo, Neko to Machigawarete Elf Musume no Pet toshite Kurashitemasua'
+    keywords = [title, "Beheneko: The Elf-Girl's Cat is Secretly an S-Ranked Monster!"]
+    website = 'https://behemoth-anime.com/'
+    twitter = 'beheneko_anime'
+    hashtags = ['べヒ猫', 'beheneko']
+    folder_name = 'beheneko'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX)
