@@ -21,7 +21,7 @@ def run():
             new_subclass = subclass()
             new_subclass.download_media_only = True
             downloads.append(new_subclass)
-    subclasses = UnconfirmedDownload.__subclasses__()
+    subclasses = Winter2025AnimeDownload.__subclasses__() + UnconfirmedDownload.__subclasses__()
     for subclass in subclasses:
         if subclass.enabled:
             downloads.append(subclass())

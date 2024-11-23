@@ -86,6 +86,9 @@ The premiere date for the anime listed here has not been announced.
 * [Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita 2nd Season](https://slime300-anime.com/)
 * [Tsuyokute New Saga](https://tsuyosaga-pr.com/)
 
+### Winter 2025 Anime
+* [Guild no Uketsukejou desu ga, Zangyou wa Iya nanode Boss wo Solo Toubatsu Shiyou to Omoimasu](https://girumasu.com/)
+
 ### Fall 2024 Anime
 * [Ao no Exorcist: Yuki no Hate-hen](https://www.ao-ex.com/)
 * [Acro Trip](https://acrotrip-anime.com/)
