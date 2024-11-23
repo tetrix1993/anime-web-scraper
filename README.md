@@ -87,6 +87,7 @@ The premiere date for the anime listed here has not been announced.
 * [Tsuyokute New Saga](https://tsuyosaga-pr.com/)
 
 ### Winter 2025 Anime
+* [Class no Daikirai na Joshi to Kekkon suru Koto ni Natta.](https://kura-kon.com/)
 * [Guild no Uketsukejou desu ga, Zangyou wa Iya nanode Boss wo Solo Toubatsu Shiyou to Omoimasu](https://girumasu.com/)
 * [Kuroiwa Medaka ni Watashi no Kawaii ga Tsuujinai](https://monaxmedaka.com/)
 * [NEET Kunoichi to Nazeka Dousei Hajimemashita](https://neet-kunoichi.com/)

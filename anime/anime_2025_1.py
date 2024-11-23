@@ -17,6 +17,36 @@ class Winter2025AnimeDownload(MainDownload):
         super().__init__()
 
 
+# Class no Daikirai na Joshi to Kekkon suru Koto ni Natta.
+class KurakonDownload(Winter2025AnimeDownload, NewsTemplate):
+    title = 'Class no Daikirai na Joshi to Kekkon suru Koto ni Natta.'
+    keywords = [title, "I'm Getting Married to a Girl I Hate in My Class", 'kurakon']
+    website = 'https://kura-kon.com/'
+    twitter = 'kurakon'
+    hashtags = ['クラ婚']
+    folder_name = 'kurakon'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.p-news__list-item',
+                                    title_select='.p-news__list-text', date_select='.p-news__list-date',
+                                    id_select='a', a_tag_start_text_to_remove='./',
+                                    a_tag_prefix=self.PAGE_PREFIX + 'news/', paging_type=1,
+                                    next_page_select='.c-pagination__list-item',
+                                    next_page_eval_index_class='is-current', next_page_eval_index=-1)
+
+
 # Guild no Uketsukejou desu ga, Zangyou wa Iya nanode Boss wo Solo Toubatsu Shiyou to Omoimasu
 class GirumasuDownload(Winter2025AnimeDownload, NewsTemplate):
     title = 'Guild no Uketsukejou desu ga, Zangyou wa Iya nanode Boss wo Solo Toubatsu Shiyou to Omoimasu'
