@@ -88,6 +88,7 @@ The premiere date for the anime listed here has not been announced.
 
 ### Winter 2025 Anime
 * [Guild no Uketsukejou desu ga, Zangyou wa Iya nanode Boss wo Solo Toubatsu Shiyou to Omoimasu](https://girumasu.com/)
+* [Kuroiwa Medaka ni Watashi no Kawaii ga Tsuujinai](https://monaxmedaka.com/)
 
 ### Fall 2024 Anime
 * [Ao no Exorcist: Yuki no Hate-hen](https://www.ao-ex.com/)

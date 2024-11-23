@@ -45,3 +45,30 @@ class GirumasuDownload(Winter2025AnimeDownload, NewsTemplate):
                                     paging_type=1, next_page_select='.p-news-pagination__item',
                                     next_page_eval_index_class='is-current', next_page_eval_index=-1,
                                     date_func=lambda x: x[0:4] + '.' + x[4:])
+
+
+# Kuroiwa Medaka ni Watashi no Kawaii ga Tsuujinai
+class MedakawaDownload(Winter2025AnimeDownload, NewsTemplate):
+    title = 'Kuroiwa Medaka ni Watashi no Kawaii ga Tsuujinai'
+    keywords = [title, "Medaka Kuroiwa Is Impervious to My Charms", 'medakawa']
+    website = 'https://monaxmedaka.com/'
+    twitter = 'monaxmedaka'
+    hashtags = ['メダかわ']
+    folder_name = 'medakawa'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.newsList',
+                                    title_select='.newsList__title_txt>span', date_select='.newsList__date',
+                                    id_select='a')
