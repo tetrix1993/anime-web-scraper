@@ -39,10 +39,10 @@ class GirumasuDownload(Winter2025AnimeDownload, NewsTemplate):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
 
     def download_news(self):
-        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.p-news-list__item',
-                                    title_select='.p-news-list__main', date_select='.p-news-list__date',
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.p-news__list-item',
+                                    title_select='.p-news_article__title', date_select='.p-news_article__date',
                                     id_select='a', a_tag_start_text_to_remove='/', a_tag_prefix=self.PAGE_PREFIX,
-                                    paging_type=1, next_page_select='.p-news-pagination__item',
+                                    paging_type=1, next_page_select='.c-pagination__list-item',
                                     next_page_eval_index_class='is-current', next_page_eval_index=-1,
                                     date_func=lambda x: x[0:4] + '.' + x[4:])
 
