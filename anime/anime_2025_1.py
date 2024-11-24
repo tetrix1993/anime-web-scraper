@@ -229,6 +229,33 @@ class FugukanDownload(Winter2025AnimeDownload, NewsTemplate):
                                     title_select='.news_title', date_select='time', id_select=None)
 
 
+# Grisaia: Phantom Trigger
+class GrisaiaPTDownload(Winter2025AnimeDownload, NewsTemplate):
+    title = 'Grisaia: Phantom Trigger'
+    keywords = [title]
+    website = 'https://grisaia-pt.com/gptanime/'
+    twitter = 'grisaia_fw'
+    hashtags = ['グリザイア', 'グリザイアPT']
+    folder_name = 'grisaiapt'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news_area ul.list>li',
+                                    title_select='.title', date_select='.date', id_select='a', stop_date='2021',
+                                    next_page_select='li.next a')
+
+
 # Guild no Uketsukejou desu ga, Zangyou wa Iya nanode Boss wo Solo Toubatsu Shiyou to Omoimasu
 class GirumasuDownload(Winter2025AnimeDownload, NewsTemplate):
     title = 'Guild no Uketsukejou desu ga, Zangyou wa Iya nanode Boss wo Solo Toubatsu Shiyou to Omoimasu'
