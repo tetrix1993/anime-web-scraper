@@ -286,6 +286,33 @@ class GirumasuDownload(Winter2025AnimeDownload, NewsTemplate):
                                     date_func=lambda x: x[0:4] + '.' + x[4:])
 
 
+# Hana wa Saku, Shura no Gotoku
+class HanashuraDownload(Winter2025AnimeDownload, NewsTemplate):
+    title = 'Hana wa Saku, Shura no Gotoku'
+    keywords = [title, "Flower and Asura", 'hanashura']
+    website = 'https://hanashura-anime.com/'
+    twitter = 'hanashura_PR'
+    hashtags = ['花修羅']
+    folder_name = 'hanashura'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article', title_select='.title h3',
+                                    date_select='time', id_select=None, id_has_id=True,
+                                    a_tag_prefix=self.PAGE_PREFIX + 'news/#')
+
+
 # Hazure Skill "Kinomi Master": Skill no Mi (Tabetara Shinu) wo Mugen ni Taberareru You ni Natta Ken ni Tsuite
 class KinomiMasterDownload(Winter2025AnimeDownload, NewsTemplate4):
     title = 'Hazure Skill "Kinomi Master": Skill no Mi (Tabetara Shinu) wo Mugen ni Taberareru You ni Natta Ken ni Tsuite'
