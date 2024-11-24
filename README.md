@@ -93,6 +93,7 @@ The premiere date for the anime listed here has not been announced.
 * [Kisaki Kyouiku kara Nigetai Watashi](https://kisakikyouiku.com/)
 * [Kuroiwa Medaka ni Watashi no Kawaii ga Tsuujinai](https://monaxmedaka.com/)
 * [NEET Kunoichi to Nazeka Dousei Hajimemashita](https://neet-kunoichi.com/)
+* [Nihon e Youkoso Elf-san.](https://welcome-elfsan.com/)
 * [S-Rank Monster no "Behemoth" dakedo, Neko to Machigawarete Elf Musume no Pet toshite Kurashitemasu](https://behemoth-anime.com/)
 
 ### Fall 2024 Anime

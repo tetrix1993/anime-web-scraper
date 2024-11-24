@@ -183,6 +183,32 @@ class NeetKunoichiDownload(Winter2025AnimeDownload, NewsTemplate):
                                     a_tag_prefix=self.PAGE_PREFIX + 'news/#')
 
 
+# Nihon e Youkoso Elf-san.
+class NihonElfsanDownload(Winter2025AnimeDownload, NewsTemplate):
+    title = 'Nihon e Youkoso Elf-san.'
+    keywords = [title, "Welcome to Japan, Ms. Elf!"]
+    website = 'https://welcome-elfsan.com/'
+    twitter = 'welcome_elfsan'
+    hashtags = ['日本へようこそエルフさん']
+    folder_name = 'nihonelfsan'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-item', title_select='.title',
+                                    date_select='.date', id_select='a')
+
+
 # S-Rank Monster no "Behemoth" dakedo, Neko to Machigawarete Elf Musume no Pet toshite Kurashitemasu
 class BehenekoDownload(Winter2025AnimeDownload, NewsTemplate2):
     title = 'S-Rank Monster no "Behemoth" dakedo, Neko to Machigawarete Elf Musume no Pet toshite Kurashitemasua'
