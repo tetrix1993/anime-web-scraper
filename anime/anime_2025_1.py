@@ -599,6 +599,36 @@ class NihonElfsanDownload(Winter2025AnimeDownload, NewsTemplate):
                                     date_select='.date', id_select='a')
 
 
+# Okinawa de Suki ni Natta Ko ga Hougen Sugite Tsurasugiru
+class OkitsuraDownload(Winter2025AnimeDownload, NewsTemplate):
+    title = 'Okinawa de Suki ni Natta Ko ga Hougen Sugite Tsurasugiru'
+    keywords = [title, "Okitsura"]
+    website = 'https://okitsura.com/'
+    twitter = 'okitsura'
+    hashtags = ['沖ツラ']
+    folder_name = 'okitsura'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.bl_vertPosts_item',
+                                    title_select='.bl_vertPosts_txt', date_select='.bl_vertPosts_date',
+                                    id_select='a', paging_type=3, paging_suffix='?page=%s',
+                                    next_page_select='.page-numbers', next_page_eval_index_class='current',
+                                    next_page_eval_index=-1,
+                                    date_func=lambda x: x[0:4] + '.' + str(self.convert_month_string_to_number(x[4:7])).zfill(2) + '.' + x[8:])
+
+
 # S-Rank Monster no "Behemoth" dakedo, Neko to Machigawarete Elf Musume no Pet toshite Kurashitemasu
 class BehenekoDownload(Winter2025AnimeDownload, NewsTemplate2):
     title = 'S-Rank Monster no "Behemoth" dakedo, Neko to Machigawarete Elf Musume no Pet toshite Kurashitemasua'
