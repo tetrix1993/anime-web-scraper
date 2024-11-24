@@ -89,6 +89,7 @@ The premiere date for the anime listed here has not been announced.
 ### Winter 2025 Anime
 * [A-Rank Party wo Ridatsu shita Ore wa, Moto Oshiego-tachi to Meikyuu Shinbu wo Mezasu.](https://arank-party-ridatsu-official.com/)
 * [Akuyaku Reijou Tensei Ojisan](https://tensei-ojisan.com/)
+* [Ameku Takao no Suiri Karte](https://atdk-a.com/)
 * [Class no Daikirai na Joshi to Kekkon suru Koto ni Natta.](https://kura-kon.com/)
 * [Guild no Uketsukejou desu ga, Zangyou wa Iya nanode Boss wo Solo Toubatsu Shiyou to Omoimasu](https://girumasu.com/)
 * [Hazure Skill "Kinomi Master": Skill no Mi (Tabetara Shinu) wo Mugen ni Taberareru You ni Natta Ken ni Tsuite](https://kinomimaster.com/)

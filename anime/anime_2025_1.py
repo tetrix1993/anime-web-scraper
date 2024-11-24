@@ -69,6 +69,35 @@ class TenseiOjisanDownload(Winter2025AnimeDownload, NewsTemplate4):
         self.download_template_news(json_url=self.PAGE_PREFIX + 'api/site-data/init')
 
 
+# Ameku Takao no Suiri Karte
+class AmekuTakaoDownload(Winter2025AnimeDownload, NewsTemplate):
+    title = 'Ameku Takao no Suiri Karte'
+    keywords = [title, "Ameku M.D.: Doctor Detective"]
+    website = 'https://atdk-a.com/'
+    twitter = 'Ameku_off'
+    hashtags = ['あめく', '天久鷹央の推理カルテ', 'アニメあめく']
+    folder_name = 'amekutakao'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.p-news__list-item',
+                                    title_select='.p-news_data__ttl', date_select='.p-news_data__date',
+                                    id_select='a', a_tag_prefix=self.PAGE_PREFIX + 'news/', paging_type=1,
+                                    next_page_select='.c-pagination__list-item',
+                                    next_page_eval_index_class='is-current', next_page_eval_index=-1)
+
+
 # Class no Daikirai na Joshi to Kekkon suru Koto ni Natta.
 class KurakonDownload(Winter2025AnimeDownload, NewsTemplate):
     title = 'Class no Daikirai na Joshi to Kekkon suru Koto ni Natta.'
