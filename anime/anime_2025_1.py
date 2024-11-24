@@ -77,6 +77,31 @@ class GirumasuDownload(Winter2025AnimeDownload, NewsTemplate):
                                     date_func=lambda x: x[0:4] + '.' + x[4:])
 
 
+# Hazure Skill "Kinomi Master": Skill no Mi (Tabetara Shinu) wo Mugen ni Taberareru You ni Natta Ken ni Tsuite
+class KinomiMasterDownload(Winter2025AnimeDownload, NewsTemplate4):
+    title = 'Hazure Skill "Kinomi Master": Skill no Mi (Tabetara Shinu) wo Mugen ni Taberareru You ni Natta Ken ni Tsuite'
+    keywords = [title, 'kinomimaster']
+    website = 'https://kinomimaster.com/'
+    twitter = 'kinomimaster_PR'
+    hashtags = ['木の実マスター']
+    folder_name = 'kinomimaster'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self, json_obj=None):
+        self.download_template_news(json_url=self.PAGE_PREFIX + 'api/site-data/init')
+
+
 # Kisaki Kyouiku kara Nigetai Watashi
 class KisakiKyouikuDownload(Winter2025AnimeDownload, NewsTemplate):
     title = 'Kisaki Kyouiku kara Nigetai Watashi'

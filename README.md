@@ -89,6 +89,7 @@ The premiere date for the anime listed here has not been announced.
 ### Winter 2025 Anime
 * [Class no Daikirai na Joshi to Kekkon suru Koto ni Natta.](https://kura-kon.com/)
 * [Guild no Uketsukejou desu ga, Zangyou wa Iya nanode Boss wo Solo Toubatsu Shiyou to Omoimasu](https://girumasu.com/)
+* [Hazure Skill "Kinomi Master": Skill no Mi (Tabetara Shinu) wo Mugen ni Taberareru You ni Natta Ken ni Tsuite](https://kinomimaster.com/)
 * [Kisaki Kyouiku kara Nigetai Watashi](https://kisakikyouiku.com/)
 * [Kuroiwa Medaka ni Watashi no Kawaii ga Tsuujinai](https://monaxmedaka.com/)
 * [NEET Kunoichi to Nazeka Dousei Hajimemashita](https://neet-kunoichi.com/)
