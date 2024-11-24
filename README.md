@@ -106,9 +106,10 @@ The premiere date for the anime listed here has not been announced.
 * [Medalist](https://medalist-pr.com/)
 * [Momentary Lily](https://sh-anime.shochiku.co.jp/momentary-lily/)
 * [NEET Kunoichi to Nazeka Dousei Hajimemashita](https://neet-kunoichi.com/)
-* [Okinawa de Suki ni Natta Ko ga Hougen Sugite Tsurasugiru](https://okitsura.com/)
 * [Nihon e Youkoso Elf-san.](https://welcome-elfsan.com/)
+* [Okinawa de Suki ni Natta Ko ga Hougen Sugite Tsurasugiru](https://okitsura.com/)
 * [S-Rank Monster no "Behemoth" dakedo, Neko to Machigawarete Elf Musume no Pet toshite Kurashitemasu](https://behemoth-anime.com/)
+* [Sentai Red Isekai de Boukensha ni Naru](https://isekai-red-anime.com/)
 
 ### Fall 2024 Anime
 * [Ao no Exorcist: Yuki no Hate-hen](https://www.ao-ex.com/)

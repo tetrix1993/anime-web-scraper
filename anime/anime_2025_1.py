@@ -652,3 +652,30 @@ class BehenekoDownload(Winter2025AnimeDownload, NewsTemplate2):
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX)
+
+
+# Sentai Red Isekai de Boukensha ni Naru
+class IsekaiRedDownload(Winter2025AnimeDownload, NewsTemplate):
+    title = 'Sentai Red Isekai de Boukensha ni Naru'
+    keywords = [title, "The Red Ranger Becomes an Adventurer in Another World"]
+    website = 'https://isekai-red-anime.com/'
+    twitter = 'KizunaFive'
+    hashtags = ['異世界レッド', 'isekai_red']
+    folder_name = 'isekaired'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article', title_select='.entry-title',
+                                    date_select='.entry-date', id_select=None, id_has_id=True, news_prefix='news.html',
+                                    a_tag_prefix=self.PAGE_PREFIX + 'news.html#')
