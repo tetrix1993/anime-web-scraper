@@ -338,6 +338,31 @@ class KinomiMasterDownload(Winter2025AnimeDownload, NewsTemplate4):
         self.download_template_news(json_url=self.PAGE_PREFIX + 'api/site-data/init')
 
 
+# Izure Saikyou no Renkinjutsushi?
+class IzureSaikyoDownload(Winter2025AnimeDownload, NewsTemplate4):
+    title = 'Izure Saikyou no Renkinjutsushi?'
+    keywords = [title, "Someday Will I Be the Greatest Alchemist?", 'izuresaikyo']
+    website = 'https://izuresaikyo-pr.com/'
+    twitter = 'izuresaikyo_pr'
+    hashtags = ['いずれ最強の錬金術師']
+    folder_name = 'izuresaikyo'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self, json_obj=None):
+        self.download_template_news(json_url=self.PAGE_PREFIX + 'api/site-data/init')
+
+
 # Kisaki Kyouiku kara Nigetai Watashi
 class KisakiKyouikuDownload(Winter2025AnimeDownload, NewsTemplate):
     title = 'Kisaki Kyouiku kara Nigetai Watashi'

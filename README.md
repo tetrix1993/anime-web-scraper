@@ -98,6 +98,7 @@ The premiere date for the anime listed here has not been announced.
 * [Guild no Uketsukejou desu ga, Zangyou wa Iya nanode Boss wo Solo Toubatsu Shiyou to Omoimasu](https://girumasu.com/)
 * [Hana wa Saku, Shura no Gotoku](https://hanashura-anime.com/)
 * [Hazure Skill "Kinomi Master": Skill no Mi (Tabetara Shinu) wo Mugen ni Taberareru You ni Natta Ken ni Tsuite](https://kinomimaster.com/)
+* [Izure Saikyou no Renkinjutsushi?](https://izuresaikyo-pr.com/)
 * [Kisaki Kyouiku kara Nigetai Watashi](https://kisakikyouiku.com/)
 * [Kuroiwa Medaka ni Watashi no Kawaii ga Tsuujinai](https://monaxmedaka.com/)
 * [NEET Kunoichi to Nazeka Dousei Hajimemashita](https://neet-kunoichi.com/)
