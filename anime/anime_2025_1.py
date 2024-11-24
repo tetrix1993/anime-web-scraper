@@ -98,6 +98,55 @@ class AmekuTakaoDownload(Winter2025AnimeDownload, NewsTemplate):
                                     next_page_eval_index_class='is-current', next_page_eval_index=-1)
 
 
+# Arafoo Otoko no Isekai Tsuuhan
+class ArafoTsuhanDownload(Winter2025AnimeDownload):
+    title = 'Arafoo Otoko no Isekai Tsuuhan'
+    keywords = [title, "The Daily Life of a Middle-Aged Online Shopper in Another World", 'arafotsuhan']
+    website = 'https://arafo-tsuhan.com/'
+    twitter = 'arafotsuhan'
+    hashtags = ['アラフォー通販']
+    folder_name = 'arafotsuhan'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        try:
+            results = []
+            news_obj = self.get_last_news_log_object()
+            json_obj = self.get_json(self.PAGE_PREFIX + 'news.json')
+            for item in json_obj:
+                if 'day' in item and 'url' in item and 'title' in item:
+                    try:
+                        date = item['day']
+                    except:
+                        continue
+                    title = item['title']
+                    url = self.PAGE_PREFIX + item['url']
+                    if news_obj is not None and (news_obj['id'] == url or news_obj['title'] == title
+                                                 or date < news_obj['date']):
+                        break
+                    results.append(self.create_news_log_object(date, title, url))
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log_from_news_log_object(result)
+                if process_result == 0:
+                    success_count += 1
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
+        except Exception as e:
+            self.print_exception(e, 'News')
+
+
 # Class no Daikirai na Joshi to Kekkon suru Koto ni Natta.
 class KurakonDownload(Winter2025AnimeDownload, NewsTemplate):
     title = 'Class no Daikirai na Joshi to Kekkon suru Koto ni Natta.'
