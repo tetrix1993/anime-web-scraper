@@ -44,6 +44,31 @@ class AparidaDownload(Winter2025AnimeDownload, NewsTemplate):
                                     news_prefix='information/')
 
 
+# Akuyaku Reijou Tensei Ojisan
+class TenseiOjisanDownload(Winter2025AnimeDownload, NewsTemplate4):
+    title = 'Akuyaku Reijou Tensei Ojisan'
+    keywords = [title, "From Bureaucrat to Villainess: Dad's Been Reincarnated!", 'tenseiojisan']
+    website = 'https://tensei-ojisan.com/'
+    twitter = 'tensei_ojisan'
+    hashtags = ['転生おじさん']
+    folder_name = 'tenseiojisan'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self, json_obj=None):
+        self.download_template_news(json_url=self.PAGE_PREFIX + 'api/site-data/init')
+
+
 # Class no Daikirai na Joshi to Kekkon suru Koto ni Natta.
 class KurakonDownload(Winter2025AnimeDownload, NewsTemplate):
     title = 'Class no Daikirai na Joshi to Kekkon suru Koto ni Natta.'
