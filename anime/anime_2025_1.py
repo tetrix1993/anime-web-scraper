@@ -390,6 +390,56 @@ class KisakiKyouikuDownload(Winter2025AnimeDownload, NewsTemplate):
                                     a_tag_prefix=self.PAGE_PREFIX + 'news.html#')
 
 
+# Kono Kaisha ni Suki na Hito ga Imasu
+class KonosukiDownload(Winter2025AnimeDownload, NewsTemplate):
+    title = 'Kono Kaisha ni Suki na Hito ga Imasu'
+    keywords = [title, "I Have a Crush at Work", "Can You Keep a Secret?", 'kononsuki']
+    website = 'https://kaishani-sukinahito.com/'
+    twitter = 'kaishani_suki'
+    hashtags = ['この好き']
+    folder_name = 'konosuki'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        news_prefix = self.PAGE_PREFIX + 'news/'
+        try:
+            results = []
+            news_obj = self.get_last_news_log_object()
+            json_obj = self.get_json(news_prefix + 'news.json')
+            for item in json_obj:
+                if 'date' in item and 'url' in item and 'title' in item:
+                    try:
+                        date = item['date']
+                    except:
+                        continue
+                    title = item['title']
+                    url = news_prefix + item['url']
+                    if news_obj is not None and (news_obj['id'] == url or news_obj['title'] == title
+                                                 or date < news_obj['date']):
+                        break
+                    results.append(self.create_news_log_object(date, title, url))
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log_from_news_log_object(result)
+                if process_result == 0:
+                    success_count += 1
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
+        except Exception as e:
+            self.print_exception(e, 'News')
+
+
 # Kuroiwa Medaka ni Watashi no Kawaii ga Tsuujinai
 class MedakawaDownload(Winter2025AnimeDownload, NewsTemplate):
     title = 'Kuroiwa Medaka ni Watashi no Kawaii ga Tsuujinai'
