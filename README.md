@@ -103,6 +103,7 @@ The premiere date for the anime listed here has not been announced.
 * [Kono Kaisha ni Suki na Hito ga Imasu](https://kaishani-sukinahito.com/)
 * [Kuroiwa Medaka ni Watashi no Kawaii ga Tsuujinai](https://monaxmedaka.com/)
 * [Magic Maker: Isekai Mahou no Tsukurikata](https://magicmaker-anime.com/)
+* [Medalist](https://medalist-pr.com/)
 * [NEET Kunoichi to Nazeka Dousei Hajimemashita](https://neet-kunoichi.com/)
 * [Nihon e Youkoso Elf-san.](https://welcome-elfsan.com/)
 * [S-Rank Monster no "Behemoth" dakedo, Neko to Machigawarete Elf Musume no Pet toshite Kurashitemasu](https://behemoth-anime.com/)

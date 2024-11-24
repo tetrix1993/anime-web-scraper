@@ -492,6 +492,34 @@ class MagicMakerDownload(Winter2025AnimeDownload, NewsTemplate2):
         self.download_template_news(page_prefix=self.PAGE_PREFIX)
 
 
+# Medalist
+class MedalistDownload(Winter2025AnimeDownload, NewsTemplate):
+    title = 'Medalist'
+    keywords = [title]
+    website = 'https://medalist-pr.com/'
+    twitter = 'medalist_PR'
+    hashtags = ['メダリスト', 'medalist']
+    folder_name = 'medalist'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article',
+                                    title_select='.entry-title .text span', date_select='.entry-date', id_select=None,
+                                    id_has_id=True, news_prefix='news.html',
+                                    a_tag_prefix=self.PAGE_PREFIX + 'news.html#')
+
+
 # NEET Kunoichi to Nazeka Dousei Hajimemashita
 class NeetKunoichiDownload(Winter2025AnimeDownload, NewsTemplate):
     title = 'NEET Kunoichi to Nazeka Dousei Hajimemashita'
