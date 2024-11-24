@@ -17,6 +17,33 @@ class Winter2025AnimeDownload(MainDownload):
         super().__init__()
 
 
+# A-Rank Party wo Ridatsu shita Ore wa, Moto Oshiego-tachi to Meikyuu Shinbu wo Mezasu.
+class AparidaDownload(Winter2025AnimeDownload, NewsTemplate):
+    title = 'A-Rank Party wo Ridatsu shita Ore wa, Moto Oshiego-tachi to Meikyuu Shinbu wo Mezasu.'
+    keywords = [title, "I Left My A-Rank Party to Help My Former Students Reach the Dungeon Depths!", 'aparida']
+    website = 'https://arank-party-ridatsu-official.com/'
+    twitter = 'Aparidaofficial'
+    hashtags = ['エパリダ']
+    folder_name = 'aparida'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.info__item',
+                                    title_select='.info__title', date_select='.info__date', id_select='a',
+                                    news_prefix='information/')
+
+
 # Class no Daikirai na Joshi to Kekkon suru Koto ni Natta.
 class KurakonDownload(Winter2025AnimeDownload, NewsTemplate):
     title = 'Class no Daikirai na Joshi to Kekkon suru Koto ni Natta.'
