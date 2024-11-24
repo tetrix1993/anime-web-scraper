@@ -203,6 +203,32 @@ class KurakonDownload(Winter2025AnimeDownload, NewsTemplate):
                                     next_page_eval_index_class='is-current', next_page_eval_index=-1)
 
 
+# Fuguushoku "Kanteishi" ga Jitsu wa Saikyou Datta
+class FugukanDownload(Winter2025AnimeDownload, NewsTemplate):
+    title = 'Fuguushoku "Kanteishi" ga Jitsu wa Saikyou Datta'
+    keywords = [title, 'Even Given the Worthless "Appraiser" Class, I\'m Actually the Strongest', 'fugukan']
+    website = 'https://fugukan.com/'
+    twitter = 'fugu_kan'
+    hashtags = ['ふぐ鑑', '不遇職', '鑑定士']
+    folder_name = 'fugukan'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news_list a',
+                                    title_select='.news_title', date_select='time', id_select=None)
+
+
 # Guild no Uketsukejou desu ga, Zangyou wa Iya nanode Boss wo Solo Toubatsu Shiyou to Omoimasu
 class GirumasuDownload(Winter2025AnimeDownload, NewsTemplate):
     title = 'Guild no Uketsukejou desu ga, Zangyou wa Iya nanode Boss wo Solo Toubatsu Shiyou to Omoimasu'
