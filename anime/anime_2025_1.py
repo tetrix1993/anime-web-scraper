@@ -147,6 +147,32 @@ class ArafoTsuhanDownload(Winter2025AnimeDownload):
             self.print_exception(e, 'News')
 
 
+# Botsuraku Yotei no Kizoku dakedo, Hima Datta kara Mahou wo Kiwametemita
+class BotsurakuKizokuDownload(Winter2025AnimeDownload, NewsTemplate):
+    title = 'Botsuraku Yotei no Kizoku dakedo, Hima Datta kara Mahou wo Kiwametemita'
+    keywords = [title, "I'm a Noble on the Brink of Ruin, So I Might as Well Try Mastering Magic"]
+    website = 'https://botsurakukizoku-anime.com/'
+    twitter = 'botsuraku_pr'
+    hashtags = ['没落貴族']
+    folder_name = 'botsurakukizoku'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.bl_posts_item',
+                                    title_select='.bl_posts_txt', date_select='.bl_posts_date', id_select='a')
+
+
 # Class no Daikirai na Joshi to Kekkon suru Koto ni Natta.
 class KurakonDownload(Winter2025AnimeDownload, NewsTemplate):
     title = 'Class no Daikirai na Joshi to Kekkon suru Koto ni Natta.'
