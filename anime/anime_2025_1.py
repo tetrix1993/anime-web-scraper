@@ -77,6 +77,33 @@ class GirumasuDownload(Winter2025AnimeDownload, NewsTemplate):
                                     date_func=lambda x: x[0:4] + '.' + x[4:])
 
 
+# Kisaki Kyouiku kara Nigetai Watashi
+class KisakiKyouikuDownload(Winter2025AnimeDownload, NewsTemplate):
+    title = 'Kisaki Kyouiku kara Nigetai Watashi'
+    keywords = [title, "I Want to Escape from Princess Lessons", 'kisakikyouiku']
+    website = 'https://kisakikyouiku.com/'
+    twitter = 'kisakikyouiku'
+    hashtags = ['妃教育']
+    folder_name = 'kisakikyouiku'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article', title_select='.entry-title',
+                                    date_select='.entry-date', id_select=None, id_has_id=True, news_prefix='news.html',
+                                    a_tag_prefix=self.PAGE_PREFIX + 'news.html#')
+
+
 # Kuroiwa Medaka ni Watashi no Kawaii ga Tsuujinai
 class MedakawaDownload(Winter2025AnimeDownload, NewsTemplate):
     title = 'Kuroiwa Medaka ni Watashi no Kawaii ga Tsuujinai'
