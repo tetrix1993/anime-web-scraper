@@ -654,6 +654,65 @@ class BehenekoDownload(Winter2025AnimeDownload, NewsTemplate2):
         self.download_template_news(page_prefix=self.PAGE_PREFIX)
 
 
+# Salaryman ga Isekai ni Ittara Shitennou ni Natta Hanashi
+class SalarymanShitennouDownload(Winter2025AnimeDownload, NewsTemplate):
+    title = 'Salaryman ga Isekai ni Ittara Shitennou ni Natta Hanashi'
+    keywords = [title, 'Headhunted to Another World: From Salaryman to Big Four!']
+    website = 'https://salaryman-big4.com/'
+    twitter = 'salaryman_big4'
+    hashtags = 'サラリーマン四天王'
+    folder_name = 'salarymanshitennou'
+
+    PAGE_PREFIX = 'https://salaryman-big4.com/'
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            stories = soup.select('.sub-introduction__list.pc a[href]')
+            curr_title = soup.select('.sub-introduction__title')
+            curr_episode = None
+            if len(curr_title) > 0:
+                try:
+                    curr_episode = int(curr_title[0].text.split('話')[0].split('第')[1])
+                except:
+                    pass
+            for story in stories:
+                try:
+                    ep_num = int(story.text)
+                except:
+                    continue
+                episode = str(ep_num).zfill(2)
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                if curr_episode is not None and curr_episode == ep_num:
+                    ep_soup = soup
+                else:
+                    ep_soup = self.get_soup(story['href'])
+                if ep_soup is None:
+                    continue
+                self.image_list = []
+                images = ep_soup.select('.intro__slider img[src]')
+                for i in range(len(images)):
+                    image_url = images[i]['src']
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.js-animation-news',
+                                    title_select='.news__ttl', date_select='.news__date', id_select='a',
+                                    next_page_select='.next.page-numbers')
+
+
 # Sentai Red Isekai de Boukensha ni Naru
 class IsekaiRedDownload(Winter2025AnimeDownload, NewsTemplate):
     title = 'Sentai Red Isekai de Boukensha ni Naru'
