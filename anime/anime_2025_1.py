@@ -545,6 +545,7 @@ class MomelilyDownload(Winter2025AnimeDownload, NewsTemplate):
     folder_name = 'momelily'
 
     PAGE_PREFIX = website
+    enabled = False
 
     def __init__(self):
         super().__init__()
