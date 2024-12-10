@@ -297,7 +297,7 @@ class AniverseMagazineScanner(MainScanner):
     
     # Example prefix: https://aniverse-mag.com/page/2?s=プランダラ
     SEARCH_URL = "https://aniverse-mag.com/page/%s?s=%s"
-    enabled = False
+    enabled = True
     
     def __init__(self, keywords, base_folder, last_episode=None, suffix=None,
                  min_width=None, end_date='00000000', check_resize=False, download_id=None, prefix=None):
