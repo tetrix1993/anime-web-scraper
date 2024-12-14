@@ -419,7 +419,7 @@ class KisakiKyouikuDownload(Winter2025AnimeDownload, NewsTemplate):
                     continue
                 for j in range(self.IMAGES_PER_EPISODE):
                     image_url = template % (str(i + 1), str(j + 1))
-                    image_name = episode + '_' + str(j + 1).zfill(2)
+                    image_name = episode + '_' + str(j + 1)
                     if self.download_image(image_url, self.base_folder + '/' + image_name, to_jpg=True) == -1:
                         stop = True
                         break
