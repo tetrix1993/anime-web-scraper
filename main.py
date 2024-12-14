@@ -15,12 +15,12 @@ def run():
     downloads += [KanteiSkillDownload(), NigoririDownload(), SengokuYouko2Download(), ShangriLaFrontierDownload()]
     # skip = [BokutsumaDownload.__name__, MayopanDownload.__name__, VdenDownload.__name__, WistoriaDownload.__name__,
     #         NigoririDownload.__name__, SengokuYouko2Download.__name__, PainokoDownload.__name__]
-    for subclass in [GimaiSeikatsuDownload]:
-        # if subclass.enabled and subclass.__name__ not in skip:
-        if subclass.enabled:
-            new_subclass = subclass()
-            new_subclass.download_media_only = True
-            downloads.append(new_subclass)
+    # for subclass in [GimaiSeikatsuDownload]:
+    #     # if subclass.enabled and subclass.__name__ not in skip:
+    #     if subclass.enabled:
+    #         new_subclass = subclass()
+    #         new_subclass.download_media_only = True
+    #         downloads.append(new_subclass)
     subclasses = Winter2025AnimeDownload.__subclasses__() + UnconfirmedDownload.__subclasses__()
     for subclass in subclasses:
         if subclass.enabled:
