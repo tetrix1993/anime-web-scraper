@@ -88,7 +88,33 @@ class AmekuTakaoDownload(Winter2025AnimeDownload, NewsTemplate):
         self.download_news()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        prefix = self.PAGE_PREFIX + 'story/'
+        try:
+            soup = self.get_soup(prefix)
+            stories = soup.select('.p-story_tab-item')
+            for story in stories:
+                try:
+                    episode = str(int(story.select('p')[0].text)).zfill(2)
+                except:
+                    continue
+                if 'is-current' in story['class']:
+                    ep_soup = soup
+                else:
+                    a_tag = story.select('a[href]')
+                    if len(a_tag) == 0:
+                        continue
+                    ep_soup = self.get_soup(prefix + a_tag[0]['href'].replace('./', ''))
+                if ep_soup is None:
+                    continue
+                self.image_list = []
+                images = ep_soup.select('.swiper-slide img[src]')
+                for i in range(len(images)):
+                    image_url = prefix + images[i]['src']
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.p-news__list-item',
