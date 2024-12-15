@@ -1895,7 +1895,7 @@ class HyakkanoDownload(Fall2023AnimeDownload, NewsTemplate):
 
     def download_episode_preview(self):
         try:
-            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/season1/')
             stories = soup.select('.story-Wrapper[id]')
             for story in stories:
                 try:

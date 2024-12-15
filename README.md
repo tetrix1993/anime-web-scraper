@@ -99,6 +99,7 @@ The premiere date for the anime listed here has not been announced.
 * [Hana wa Saku, Shura no Gotoku](https://hanashura-anime.com/)
 * [Hazure Skill "Kinomi Master": Skill no Mi (Tabetara Shinu) wo Mugen ni Taberareru You ni Natta Ken ni Tsuite](https://kinomimaster.com/)
 * [Izure Saikyou no Renkinjutsushi?](https://izuresaikyo-pr.com/)
+* [Kimi no Koto ga Daidaidaidaidaisuki na 100-nin no Kanojo 2nd Season](https://hyakkano.com/)
 * [Kisaki Kyouiku kara Nigetai Watashi](https://kisakikyouiku.com/)
 * [Kono Kaisha ni Suki na Hito ga Imasu](https://kaishani-sukinahito.com/)
 * [Kuroiwa Medaka ni Watashi no Kawaii ga Tsuujinai](https://monaxmedaka.com/)

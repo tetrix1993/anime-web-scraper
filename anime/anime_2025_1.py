@@ -389,6 +389,88 @@ class IzureSaikyoDownload(Winter2025AnimeDownload, NewsTemplate4):
         self.download_template_news(json_url=self.PAGE_PREFIX + 'api/site-data/init')
 
 
+# Kimi no Koto ga Daidaidaidaidaisuki na 100-nin no Kanojo 2nd Season
+class Hyakkano2Download(Winter2025AnimeDownload, NewsTemplate):
+    title = 'Kimi no Koto ga Daidaidaidaidaisuki na 100-nin no Kanojo 2nd Season'
+    keywords = [title, 'The 100 Girlfriends Who Really, Really, Really, Really, Really Love You', '2nd']
+    website = 'https://hyakkano.com/'
+    twitter = 'hyakkano_anime'
+    hashtags = '100カノ'
+    folder_name = 'hyakkano2'
+
+    PAGE_PREFIX = website
+    FIRST_EPISODE = 13
+    FINAL_EPISODE = 24
+    IMAGES_PER_EPISODE = 6
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+        self.download_episode_preview_guess(download_valid=True)
+
+    def download_episode_preview(self):
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/season2/')
+            stories = soup.select('.story-Wrapper[id]')
+            for story in stories:
+                try:
+                    episode = str(int(story['id'].replace('ep', '')) + self.FIRST_EPISODE - 1).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                self.image_list = []
+                images = story.select('.swiper-slide img[src]')
+                for i in range(len(images)):
+                    image_url = self.clear_resize_in_url(images[i]['src'])
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url, to_jpg=True)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-List li',
+                                    date_select='.date', title_select='.title', id_select='a',
+                                    next_page_select='.nextpostslink', stop_date='2024.08')
+
+    def download_episode_preview_guess(self, print_invalid=False, download_valid=False):
+        if self.is_image_exists(str(self.FINAL_EPISODE).zfill(2) + '_' + str(self.IMAGES_PER_EPISODE)):
+            return
+
+        folder = self.create_custom_directory('guess')
+        template = self.PAGE_PREFIX + 'xUtUy1FY/wp-content/uploads/%s/%s/img_story%s_%s.jpg'
+        current_date = datetime.now() + timedelta(hours=1)
+        year = current_date.strftime('%Y')
+        month = current_date.strftime('%m')
+        is_successful = False
+        for ep_num in range(self.FIRST_EPISODE, self.FINAL_EPISODE + 1, 1):
+            episode = str(ep_num).zfill(2)
+            if self.is_image_exists(episode + '_1'):
+                continue
+            for j in range(self.IMAGES_PER_EPISODE):
+                image_name = episode + '_' + str(j + 1)
+                if not self.is_image_exists(image_name, folder):
+                    image_url = template % (year, month, episode, str(j + 1).zfill(2))
+                    if self.is_valid_url(image_url, is_image=True):
+                        print('VALID - ' + image_url)
+                        is_successful = True
+                        if download_valid:
+                            self.download_image(image_url, folder + '/' + image_name)
+                    else:
+                        if print_invalid:
+                            print('INVALID - ' + image_url)
+                        break
+            if not is_successful:
+                break
+        if is_successful:
+            print(self.__class__.__name__ + ' - Guessed correctly!')
+        return is_successful
+
+
 # Kisaki Kyouiku kara Nigetai Watashi
 class KisakiKyouikuDownload(Winter2025AnimeDownload, NewsTemplate):
     title = 'Kisaki Kyouiku kara Nigetai Watashi'
