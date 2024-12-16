@@ -576,6 +576,7 @@ class MedakawaDownload(Winter2025AnimeDownload, NewsTemplate):
     folder_name = 'medakawa'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
 
     def __init__(self):
         super().__init__()
@@ -583,14 +584,37 @@ class MedakawaDownload(Winter2025AnimeDownload, NewsTemplate):
     def run(self):
         self.download_episode_preview()
         self.download_news()
+        self.download_episode_preview_external()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            articles = soup.select('.articleContentWrap')
+            for article in articles:
+                try:
+                    episode = str(int(article.select('h3 span')[0].text.replace('#', ''))).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_01'):
+                    continue
+                images = article.select('.story__contentImg-swiper-slide img[src]')
+                for i in range(len(images)):
+                    image_name = episode + '_' + str(i + 1).zfill(2)
+                    image_url = images[i]['src']
+                    self.add_to_image_list(image_name, image_url, to_jpg=True)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.newsList',
                                     title_select='.newsList__title_txt>span', date_select='.newsList__date',
                                     id_select='a')
+
+    def download_episode_preview_external(self):
+        keywords = ['黒岩メダカに私の可愛いが通じない']
+        AniverseMagazineScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                end_date='20241216', download_id=self.download_id).run()
 
 
 # Magic Maker: Isekai Mahou no Tsukurikata
