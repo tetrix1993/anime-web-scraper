@@ -112,6 +112,7 @@ The premiere date for the anime listed here has not been announced.
 * [Salaryman ga Isekai ni Ittara Shitennou ni Natta Hanashi](https://salaryman-big4.com/)
 * [Sentai Red Isekai de Boukensha ni Naru](https://isekai-red-anime.com/)
 * [Ubel Blatt](https://ubel-blatt-anime.com/)
+* [Unnamed Memory Act.2](https://unnamedmemory.com/)
 
 ### Fall 2024 Anime
 * [Ao no Exorcist: Yuki no Hate-hen](https://www.ao-ex.com/)

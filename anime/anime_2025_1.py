@@ -941,3 +941,49 @@ class UbelBlattDownload(Winter2025AnimeDownload, NewsTemplate):
                                     title_select='.news-item__title', date_select='.news-item__date', id_select=None,
                                     a_tag_start_text_to_remove='/', a_tag_prefix=self.PAGE_PREFIX,
                                     date_func=lambda x: x[0:4] + '.' + x[4:6] + '.' + x[6:8])
+
+
+# Unnamed Memory Act.2
+class UnnamedMemory2Download(Winter2025AnimeDownload, NewsTemplate):
+    title = 'Unnamed Memory Act.2'
+    keywords = [title]
+    website = 'https://unnamedmemory.com/'
+    twitter = 'Project_UM'
+    hashtags = ['UnnamedMemory', 'アンメモ']
+    folder_name = 'unnamedmemory2'
+
+    PAGE_PREFIX = website
+    FIRST_EPISODE = 13
+    FINAL_EPISODE = 24
+    IMAGES_PER_EPISODE = 6
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        try:
+            template = self.PAGE_PREFIX + 'assets/story/%s/%s.webp'
+            stop = False
+            for i in range(self.FIRST_EPISODE, self.FINAL_EPISODE + 1, 1):
+                episode = str(i).zfill(2)
+                if self.is_image_exists(episode + '_' + str(self.IMAGES_PER_EPISODE)):
+                    continue
+                for j in range(self.IMAGES_PER_EPISODE):
+                    image_url = template % (str(i), str(j + 1))
+                    image_name = episode + '_' + str(j + 1)
+                    if self.download_image(image_url, self.base_folder + '/' + image_name, to_jpg=True) == -1:
+                        stop = True
+                        break
+                if stop:
+                    break
+        except Exception as e:
+            self.print_exception(e)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.content-entry',
+                                    title_select='.entry-title span', date_select='.entry-date span',
+                                    id_select=None, id_has_id=True, news_prefix='news.html', stop_date='2024.06')
