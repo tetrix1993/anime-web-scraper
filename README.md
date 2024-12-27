@@ -113,6 +113,7 @@ The premiere date for the anime listed here has not been announced.
 * [Sentai Red Isekai de Boukensha ni Naru](https://isekai-red-anime.com/)
 * [Ubel Blatt](https://ubel-blatt-anime.com/)
 * [Unnamed Memory Act.2](https://unnamedmemory.com/)
+* [Watashi no Shiawase na Kekkon 2nd Season](https://watakon-anime.com/)
 
 ### Fall 2024 Anime
 * [Ao no Exorcist: Yuki no Hate-hen](https://www.ao-ex.com/)

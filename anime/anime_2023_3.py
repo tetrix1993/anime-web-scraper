@@ -2776,7 +2776,7 @@ class WatakonDownload(Summer2023AnimeDownload, NewsTemplate):
     folder_name = 'watakon'
 
     PAGE_PREFIX = website
-    FINAL_EPISODE = 12
+    FINAL_EPISODE = 13
     IMAGES_PER_EPISODE = 6
 
     def __init__(self):
@@ -2795,8 +2795,11 @@ class WatakonDownload(Summer2023AnimeDownload, NewsTemplate):
             stories = soup.select('.index-Story_Content')
             for story in stories:
                 try:
-                    episode = str(int(self.convert_kanji_to_number(
-                        story.select('span.num')[0].text.replace('第', '').replace('話', '')))).zfill(2)
+                    ep_num = int(self.convert_kanji_to_number(
+                        story.select('span.num')[0].text.replace('第', '').replace('話', '')))
+                    if ep_num > self.FINAL_EPISODE:
+                        continue
+                    episode = str(ep_num).zfill(2)
                 except:
                     continue
                 self.image_list = []

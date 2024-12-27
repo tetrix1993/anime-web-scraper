@@ -1021,3 +1021,54 @@ class UnnamedMemory2Download(Winter2025AnimeDownload, NewsTemplate):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.content-entry',
                                     title_select='.entry-title span', date_select='.entry-date span',
                                     id_select=None, id_has_id=True, news_prefix='news.html', stop_date='2024.06')
+
+
+# Watashi no Shiawase na Kekkon 2nd Season
+class Watakon2Download(Winter2025AnimeDownload, NewsTemplate):
+    title = 'Watashi no Shiawase na Kekkon 2nd Season'
+    keywords = [title, 'My Happy Marriage', 'watakon']
+    website = 'https://watakon-anime.com/'
+    twitter = 'watashino_info'
+    hashtags = ['watakon', 'わたしの幸せな結婚']
+    folder_name = 'watakon2'
+
+    PAGE_PREFIX = website
+    FIRST_EPISODE = 14
+    FINAL_EPISODE = 26
+    IMAGES_PER_EPISODE = 6
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            stories = soup.select('.index-Story_Content')
+            for story in stories:
+                try:
+                    ep_num = int(self.convert_kanji_to_number(
+                        story.select('span.num')[0].text.replace('第', '').replace('話', '')))
+                    if ep_num < self.FIRST_EPISODE:
+                        continue
+                    episode = str(ep_num).zfill(2)
+                except:
+                    continue
+                self.image_list = []
+                images = story.select('.swiper-slide img[src]')
+                for i in range(len(images)):
+                    image_url = images[i]['src']
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news_List li.item',
+                                    date_select='span.time', title_select='.ttl', id_select='a',
+                                    date_func=lambda x: x[0:4] + '.' + x[4:6] + '.' + x[6:8],
+                                    next_page_select='.nextpostslink', stop_date='2024.09.18')
