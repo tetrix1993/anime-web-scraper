@@ -495,11 +495,26 @@ class IzureSaikyoDownload(Winter2025AnimeDownload, NewsTemplate4):
         super().__init__()
 
     def run(self):
-        self.download_episode_preview()
-        self.download_news()
+        json_obj = self.download_episode_preview()
+        self.download_news(json_obj)
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        json_obj = None
+        try:
+            json_obj = self.get_json(self.PAGE_PREFIX + 'api/site-data/init')
+            if 'stories' not in json_obj:
+                return
+            for story in json_obj['stories']:
+                episode = story['episode'].zfill(2)
+                self.image_list = []
+                for i in range(len(story['images'])):
+                    image_name = episode + '_' + str(i + 1)
+                    image_url = story['images'][i]['image_path']
+                    self.add_to_image_list(image_name, image_url, to_jpg=True)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
+        return json_obj
 
     def download_news(self, json_obj=None):
         self.download_template_news(json_url=self.PAGE_PREFIX + 'api/site-data/init')
