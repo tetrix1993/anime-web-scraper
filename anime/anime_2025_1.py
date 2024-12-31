@@ -935,6 +935,64 @@ class OkitsuraDownload(Winter2025AnimeDownload, NewsTemplate):
                                     date_func=lambda x: x[0:4] + '.' + str(self.convert_month_string_to_number(x[4:7])).zfill(2) + '.' + x[8:])
 
 
+# Ore dake Level Up na Ken Season 2: Arise from the Shadow
+class SoloLeveling2Download(Winter2025AnimeDownload, NewsTemplate):
+    title = 'Ore dake Level Up na Ken Season 2: Arise from the Shadow'
+    keywords = [title, 'Solo Leveling']
+    website = 'https://sololeveling-anime.net/'
+    twitter = 'sololeveling_pr'
+    hashtags = ['俺レベ', 'SoloLeveling']
+    folder_name = 'sololeveling2'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        try:
+            story_prefix = self.PAGE_PREFIX + 'story/'
+            soup = self.get_soup(story_prefix)
+            stories = soup.select('.storyNavList')
+            for story in stories:
+                try:
+                    episode = str(int(story.select('.storyNavList__linktxt')[0].text)).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_5'):
+                    continue
+                if '--is-current' in story['class']:
+                    ep_soup = soup
+                else:
+                    a_tag = story.select('a[href]')
+                    if len(a_tag) == 0:
+                        continue
+                    story_url = story_prefix + a_tag[0]['href']
+                    ep_soup = self.get_soup(story_url)
+                if ep_soup is None:
+                    continue
+                self.image_list = []
+                images = ep_soup.select('.storyImageList img[src]')
+                for i in range(len(images)):
+                    image_name = episode + '_' + str(i + 1)
+                    image_url = story_prefix + images[i]['src']
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news__lists li',
+                                    title_select='p', date_select='time', id_select='a', stop_date='2024.03.24',
+                                    a_tag_prefix=news_url, paging_type=1, next_page_select='.linkBtn._pager',
+                                    next_page_eval_index=-1, next_page_eval_index_class='is-active')
+
+
 # S-Rank Monster no "Behemoth" dakedo, Neko to Machigawarete Elf Musume no Pet toshite Kurashitemasu
 class BehenekoDownload(Winter2025AnimeDownload, NewsTemplate2):
     title = 'S-Rank Monster no "Behemoth" dakedo, Neko to Machigawarete Elf Musume no Pet toshite Kurashitemasua'

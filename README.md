@@ -108,6 +108,7 @@ The premiere date for the anime listed here has not been announced.
 * [NEET Kunoichi to Nazeka Dousei Hajimemashita](https://neet-kunoichi.com/)
 * [Nihon e Youkoso Elf-san.](https://welcome-elfsan.com/)
 * [Okinawa de Suki ni Natta Ko ga Hougen Sugite Tsurasugiru](https://okitsura.com/)
+* [Ore dake Level Up na Ken Season 2: Arise from the Shadow](https://sololeveling-anime.net/)
 * [S-Rank Monster no "Behemoth" dakedo, Neko to Machigawarete Elf Musume no Pet toshite Kurashitemasu](https://behemoth-anime.com/)
 * [Salaryman ga Isekai ni Ittara Shitennou ni Natta Hanashi](https://salaryman-big4.com/)
 * [Sentai Red Isekai de Boukensha ni Naru](https://isekai-red-anime.com/)
