@@ -1064,8 +1064,34 @@ class UbelBlattDownload(Winter2025AnimeDownload, NewsTemplate):
         self.download_episode_preview()
         self.download_news()
 
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+    def download_episode_preview(self, print_http_error=False):
+        try:
+            objs = self.get_json(self.PAGE_PREFIX + 'news/story_data')
+            for obj in objs:
+                if 'acf' in obj:
+                    acf = obj['acf']
+                    if 'number' in acf and 'images' in acf and isinstance(acf['images'], list):
+                        try:
+                            episode = ''
+                            ep_num = acf['number']
+                            for a in ep_num:
+                                if a.isnumeric():
+                                    episode += a
+                            if len(episode) == 0:
+                                continue
+                            episode = str(int(episode)).zfill(2)
+                        except:
+                            continue
+                        for i in range(len(acf['images'])):
+                            image_url = acf['images'][i]
+                            image_name = episode + '_' + str(i + 1)
+                            self.add_to_image_list(image_name, image_url, to_jpg=True)
+                        self.download_image_list(self.base_folder)
+        except HTTPError:
+            if print_http_error:
+                print(self.__class__.__name__ + ' - 403 Error when retrieving story API.')
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-item',
