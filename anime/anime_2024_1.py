@@ -2325,7 +2325,8 @@ class SoloLevelingDownload(Winter2024AnimeDownload, NewsTemplate):
     def download_episode_preview(self):
         try:
             story_prefix = self.PAGE_PREFIX + 'story/'
-            soup = self.get_soup(story_prefix)
+            story_page = story_prefix + '1st.html'
+            soup = self.get_soup(story_page)
             stories = soup.select('.storyNavList')
             for story in stories:
                 try:
@@ -2340,9 +2341,7 @@ class SoloLevelingDownload(Winter2024AnimeDownload, NewsTemplate):
                     a_tag = story.select('a[href]')
                     if len(a_tag) == 0:
                         continue
-                    story_url = a_tag[0]['href']
-                    if story_url.startswith('./'):
-                        story_url = story_prefix + story_url[2:]
+                    story_url = story_page + a_tag[0]['href']
                     ep_soup = self.get_soup(story_url)
                 if ep_soup is None:
                     continue
@@ -2360,7 +2359,8 @@ class SoloLevelingDownload(Winter2024AnimeDownload, NewsTemplate):
         news_url = self.PAGE_PREFIX + 'news/'
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news__lists li',
                                     title_select='p', date_select='time', id_select='a',
-                                    a_tag_prefix=news_url, paging_type=1, next_page_select='.paging__nav--next')
+                                    a_tag_prefix=news_url, paging_type=1, next_page_select='.linkBtn._pager',
+                                    next_page_eval_index=-1, next_page_eval_index_class='is-active')
 
     def download_key_visual(self):
         folder = self.create_key_visual_directory()
