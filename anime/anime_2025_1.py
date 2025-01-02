@@ -342,7 +342,7 @@ class GrisaiaPTDownload(Winter2025AnimeDownload, NewsTemplate):
                     episode = str(int(episode)).zfill(2)
                 except:
                     continue
-                if self.is_image_exists(episode + '_1'):
+                if self.is_image_exists(episode + '_01'):
                     continue
                 if story.has_attr('class') and 'active' in story['class']:
                     ep_soup = soup
@@ -353,7 +353,7 @@ class GrisaiaPTDownload(Winter2025AnimeDownload, NewsTemplate):
                 images = ep_soup.select('.slide img[src]')
                 for i in range(len(images)):
                     image_url = images[i]['src']
-                    image_name = episode + '_' + str(i + 1)
+                    image_name = episode + '_' + str(i + 1).zfill(2)
                     self.add_to_image_list(image_name, image_url)
                 self.download_image_list(self.base_folder)
         except Exception as e:
