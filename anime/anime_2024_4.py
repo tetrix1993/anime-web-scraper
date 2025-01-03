@@ -202,7 +202,7 @@ class AmagamiDownload(Fall2024AnimeDownload, NewsTemplate):
 class Aoex4Download(Fall2024AnimeDownload, NewsTemplate):
     title = 'Ao no Exorcist: Yuki no Hate-hen'
     keywords = [title, 'aoex', 'Blue Exorcist: Beyond the Snow Saga', '4th Season']
-    website = 'https://ao-ex.com/'
+    website = 'https://ao-ex.com/snow/'
     twitter = 'aoex_anime'
     hashtags = ['青エク', 'aoex']
     folder_name = 'aoex4'
@@ -217,7 +217,7 @@ class Aoex4Download(Fall2024AnimeDownload, NewsTemplate):
 
     def download_episode_preview(self):
         try:
-            story_prefix = self.PAGE_PREFIX + 'snow/story/'
+            story_prefix = self.PAGE_PREFIX + 'story/'
             soup = self.get_soup(story_prefix)
             stories = soup.select('.story_navList a[href]')
             for story in stories:

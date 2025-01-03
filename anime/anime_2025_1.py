@@ -124,6 +124,56 @@ class AmekuTakaoDownload(Winter2025AnimeDownload, NewsTemplate):
                                     next_page_eval_index_class='is-current', next_page_eval_index=-1)
 
 
+# Ao no Exorcist: Yosuga-hen
+class Aoex5Download(Winter2025AnimeDownload, NewsTemplate):
+    title = 'Ao no Exorcist: Yosuga-hen'
+    keywords = [title, 'aoex', 'Blue Exorcist: The Blue Night Saga', '5th Season']
+    website = 'https://ao-ex.com/bluenight/'
+    twitter = 'aoex_anime'
+    hashtags = ['青エク', 'aoex']
+    folder_name = 'aoex5'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+
+    def download_episode_preview(self):
+        try:
+            story_prefix = self.PAGE_PREFIX + 'story/'
+            soup = self.get_soup(story_prefix)
+            stories = soup.select('li.storyNavList')
+            for story in stories:
+                try:
+                    episode = str(int(story.select('a[href] span')[0].text)).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_5'):
+                    continue
+                if '--is-current' in story['class']:
+                    ep_soup = soup
+                else:
+                    a_tag = story.select('a[href]')
+                    if len(a_tag) == 0:
+                        continue
+                    story_url = story_prefix + a_tag[0]['href']
+                    ep_soup = self.get_soup(story_url)
+                if ep_soup is None:
+                    continue
+                self.image_list = []
+                images = ep_soup.select('.storyImageList img[src]')
+                for i in range(len(images)):
+                    image_name = episode + '_' + str(i + 1)
+                    image_url = story_prefix + images[i]['src']
+                    self.add_to_image_list(image_name, image_url, to_jpg=True)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
+
+
 # Arafoo Otoko no Isekai Tsuuhan
 class ArafoTsuhanDownload(Winter2025AnimeDownload):
     title = 'Arafoo Otoko no Isekai Tsuuhan'

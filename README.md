@@ -90,6 +90,7 @@ The premiere date for the anime listed here has not been announced.
 * [A-Rank Party wo Ridatsu shita Ore wa, Moto Oshiego-tachi to Meikyuu Shinbu wo Mezasu.](https://arank-party-ridatsu-official.com/)
 * [Akuyaku Reijou Tensei Ojisan](https://tensei-ojisan.com/)
 * [Ameku Takao no Suiri Karte](https://atdk-a.com/)
+* [Ao no Exorcist: Yuki no Hate-hen](https://ao-ex.com/bluenight/)
 * [Arafoo Otoko no Isekai Tsuuhan](https://arafo-tsuhan.com/)
 * [Botsuraku Yotei no Kizoku dakedo, Hima Datta kara Mahou wo Kiwametemita](https://botsurakukizoku-anime.com/)
 * [Class no Daikirai na Joshi to Kekkon suru Koto ni Natta.](https://kura-kon.com/)
@@ -117,7 +118,7 @@ The premiere date for the anime listed here has not been announced.
 * [Watashi no Shiawase na Kekkon 2nd Season](https://watakon-anime.com/)
 
 ### Fall 2024 Anime
-* [Ao no Exorcist: Yuki no Hate-hen](https://www.ao-ex.com/)
+* [Ao no Exorcist: Yuki no Hate-hen](https://www.ao-ex.com/snow/)
 * [Acro Trip](https://acrotrip-anime.com/)
 * [Amagami-san Chi no Enmusubi](https://amagami-anime.com/)
 * [Arifureta Shokugyou de Sekai Saikyou 3rd Season](https://arifureta.com/)
