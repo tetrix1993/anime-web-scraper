@@ -87,6 +87,7 @@ The premiere date for the anime listed here has not been announced.
 
 ### Spring 2025 Anime
 * [Isshun de Chiryou shiteita noni Yakutatazu to Tsuihou sareta Tensai Chiyushi, Yami Healer toshite Tanoshiku Ikiru](https://sh-anime.shochiku.co.jp/yamihealer/)
+* [Katainaka no Ossan, Kensei ni Naru](https://ossan-kensei.com/)
 * [Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita: Sono Ni](https://slime300-anime.com/)
 
 ### Winter 2025 Anime

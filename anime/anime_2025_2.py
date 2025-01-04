@@ -45,6 +45,31 @@ class YamiHealerDownload(Spring2025AnimeDownload, NewsTemplate):
                                     next_page_eval_index_class='is-active')
 
 
+# Katainaka no Ossan, Kensei ni Naru
+class OssanKenseiDownload(Spring2025AnimeDownload, NewsTemplate2):
+    title = 'Katainaka no Ossan, Kensei ni Naru'
+    keywords = [title, 'From Old Country Bumpkin to Master Swordsman']
+    website = 'https://ossan-kensei.com/'
+    twitter = 'ossan_kensei'
+    hashtags = 'おっさん剣聖'
+    folder_name = 'ossankensei'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX)
+
+
 # Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita: Sono Ni
 class Slime3002Download(Spring2025AnimeDownload, NewsTemplate):
     title = "Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita: Sono Ni"
