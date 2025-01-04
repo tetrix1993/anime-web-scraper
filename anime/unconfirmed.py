@@ -5,7 +5,6 @@ import anime.constants as constants
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsTemplate3
 
 # Anohana S2 https://10th.anohana.jp/ #あの花 #anohana @anohana_project
-# Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita 2nd Season https://slime300-anime.com/ #スライム倒して300年 @slime300_PR
 # Tsuyokute New Saga https://tsuyosaga-pr.com/ #つよサガ @tsuyosaga_pr
 # Vlad Love https://www.vladlove.com/index.html #ぶらどらぶ #vladlove @VLADLOVE_ANIME
 
@@ -98,51 +97,6 @@ class Anohana2Download(UnconfirmedDownload):
         self.download_image_list(folder)
 
 
-# Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita 2nd Season
-class Slime3002Download(UnconfirmedDownload, NewsTemplate):
-    title = "Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita 2nd Season"
-    keywords = [title, "I've Been Killing Slimes for 300 Years and Maxed Out My Level", "Slime 300", "slime300", '2nd']
-    website = 'https://slime300-anime.com/'
-    twitter = 'slime300_PR'
-    hashtags = 'スライム倒して300年'
-    folder_name = 'slime300-2'
-
-    PAGE_PREFIX = website
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        self.download_episode_preview()
-        self.download_news()
-        self.download_key_visual()
-
-    def download_episode_preview(self):
-        pass
-
-    def download_news(self):
-        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-list li',
-                                    date_select='.date', title_select='p:nth-child(2)', id_select='a')
-
-    def download_key_visual(self):
-        folder = self.create_key_visual_directory()
-        # self.image_list = []
-        # self.add_to_image_list('announce', self.PAGE_PREFIX + '/static/944a17585cc6d3dccaf125c0201aab71/99383/promo.png')
-        # self.download_image_list(folder)
-
-        try:
-            soup = self.get_soup(self.PAGE_PREFIX)
-            images = soup.select('.slider img[src*="/images/"]')
-            self.image_list = []
-            for image in images:
-                image_url = self.PAGE_PREFIX + image['src'].replace('./', '')
-                image_name = self.generate_image_name_from_url(image_url, 'images')
-                self.add_to_image_list(image_name, image_url)
-            self.download_image_list(folder)
-        except Exception as e:
-            self.print_exception(e, 'Key Visual')
-
-
 # Tsuyokute New Saga
 class TsuyosagaDownload(UnconfirmedDownload, NewsTemplate):
     title = 'Tsuyokute New Saga'
@@ -153,6 +107,7 @@ class TsuyosagaDownload(UnconfirmedDownload, NewsTemplate):
     folder_name = 'tsuyosaga'
 
     PAGE_PREFIX = website
+    enabled = False
 
     def __init__(self):
         super().__init__()
