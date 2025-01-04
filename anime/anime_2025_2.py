@@ -17,6 +17,32 @@ class Spring2025AnimeDownload(MainDownload):
         super().__init__()
 
 
+# Danjo no Yuujou wa Seiritsu suru? (Iya, Shinai!!)
+class DanjoruDownload(Spring2025AnimeDownload, NewsTemplate):
+    title = 'Danjo no Yuujou wa Seiritsu suru? (Iya, Shinai!!)'
+    keywords = [title, 'danjoru']
+    website = 'https://www.danjoru.com/'
+    twitter = 'danjoru_'
+    hashtags = 'だんじょる'
+    folder_name = 'danjoru'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news_item', date_select='.year',
+                                    title_select='.ttl', id_select='a')
+
+
 # Haite Kudasai, Takamine-san
 class TakaminesanDownload(Spring2025AnimeDownload, NewsTemplate2):
     title = 'Haite Kudasai, Takamine-san'

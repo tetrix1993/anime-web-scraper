@@ -86,6 +86,7 @@ The premiere date for the anime listed here has not been announced.
 * [Tsuyokute New Saga](https://tsuyosaga-pr.com/)
 
 ### Spring 2025 Anime
+* [Danjo no Yuujou wa Seiritsu suru? (Iya, Shinai!!)](https://www.danjoru.com/)
 * [Haite Kudasai, Takamine-san](https://takaminesan.com/)
 * [Isshun de Chiryou shiteita noni Yakutatazu to Tsuihou sareta Tensai Chiyushi, Yami Healer toshite Tanoshiku Ikiru](https://sh-anime.shochiku.co.jp/yamihealer/)
 * [Katainaka no Ossan, Kensei ni Naru](https://ossan-kensei.com/)
