@@ -199,3 +199,29 @@ class Slime3002Download(Spring2025AnimeDownload, NewsTemplate):
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-list li',
                                     date_select='.date', title_select='p:nth-child(2)', id_select='a')
+
+
+# Summer Pockets
+class SamapokeDownload(Spring2025AnimeDownload, NewsTemplate):
+    title = 'Summer Pockets'
+    keywords = [title, 'samapoke']
+    website = 'https://summerpockets-anime.jp/'
+    twitter = 'samapoke_anime'
+    hashtags = 'サマポケアニメ'
+    folder_name = 'samapoke'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.News-cont2',
+                                    date_select='.News-cont-date2', title_select='.News-cont-txt2', id_select='a')
