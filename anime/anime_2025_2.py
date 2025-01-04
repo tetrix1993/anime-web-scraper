@@ -17,6 +17,31 @@ class Spring2025AnimeDownload(MainDownload):
         super().__init__()
 
 
+# Haite Kudasai, Takamine-san
+class TakaminesanDownload(Spring2025AnimeDownload, NewsTemplate2):
+    title = 'Haite Kudasai, Takamine-san'
+    keywords = [title, 'Please Put Them On, Takamine-san']
+    website = 'https://takaminesan.com/'
+    twitter = 'takamine_anime'
+    hashtags = '鷹峰さん'
+    folder_name = 'takaminesan'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX)
+
+
 # Isshun de Chiryou shiteita noni Yakutatazu to Tsuihou sareta Tensai Chiyushi, Yami Healer toshite Tanoshiku Ikiru
 class YamiHealerDownload(Spring2025AnimeDownload, NewsTemplate):
     title = 'Isshun de Chiryou shiteita noni Yakutatazu to Tsuihou sareta Tensai Chiyushi, Yami Healer toshite Tanoshiku Ikiru'
