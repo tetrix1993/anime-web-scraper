@@ -17,6 +17,34 @@ class Spring2025AnimeDownload(MainDownload):
         super().__init__()
 
 
+# Isshun de Chiryou shiteita noni Yakutatazu to Tsuihou sareta Tensai Chiyushi, Yami Healer toshite Tanoshiku Ikiru
+class YamiHealerDownload(Spring2025AnimeDownload, NewsTemplate):
+    title = 'Isshun de Chiryou shiteita noni Yakutatazu to Tsuihou sareta Tensai Chiyushi, Yami Healer toshite Tanoshiku Ikiru'
+    keywords = [title, "The Brilliant Healer's New Life in the Shadows", 'yamihealer']
+    website = 'https://sh-anime.shochiku.co.jp/yamihealer/'
+    twitter = 'yamihealer'
+    hashtags = '闇ヒーラー'
+    folder_name = 'yamihealer'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.p-news__item',
+                                    date_select='.p-news__item__date', title_select='.p-news__item__ttl',
+                                    id_select=None, next_page_select='.c-pager__number', next_page_eval_index=-1,
+                                    next_page_eval_index_class='is-active')
+
+
 # Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita: Sono Ni
 class Slime3002Download(Spring2025AnimeDownload, NewsTemplate):
     title = "Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita: Sono Ni"
