@@ -1367,6 +1367,8 @@ class SalarymanShitennouDownload(Winter2025AnimeDownload, NewsTemplate):
     folder_name = 'salarymanshitennou'
 
     PAGE_PREFIX = 'https://salaryman-big4.com/'
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 6
 
     def __init__(self):
         super().__init__()
@@ -1414,6 +1416,38 @@ class SalarymanShitennouDownload(Winter2025AnimeDownload, NewsTemplate):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.js-animation-news',
                                     title_select='.news__ttl', date_select='.news__date', id_select='a',
                                     next_page_select='.next.page-numbers')
+
+    def download_episode_preview_guess(self, print_url=False, print_invalid=False, max_count=100):
+        if self.is_image_exists(str(self.FINAL_EPISODE).zfill(2) + '_1'):
+            return
+        folder = self.create_custom_directory('guess')
+        template = self.PAGE_PREFIX + 'wp/wp-content/uploads/%s/%s/サラリーマン四天王_%s-%s.jpg'
+        current_date = datetime.now() + timedelta(hours=1)
+        year = current_date.strftime('%Y')
+        month = current_date.strftime('%m')
+        is_successful = False
+        for i in range(self.FINAL_EPISODE):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_1'):
+                continue
+            image_count = 0
+            for j in range(max_count + 1):
+                image_url = template % (year, month, str(i + 1), str(j))
+                if print_url:
+                    print(image_url)
+                if self.is_valid_url(image_url, is_image=True):
+                    print('VALID - ' + image_url)
+                    image_count += 1
+                    image_name = episode + '_' + str(image_count)
+                    self.download_image(image_url, folder + '/' + image_name, to_jpg=True)
+                    is_successful = True
+                elif print_invalid:
+                    print('INVALID - ' + image_url)
+            if image_count != self.IMAGES_PER_EPISODE:
+                break
+        if is_successful:
+            print(self.__class__.__name__ + ' - Guessed correctly!')
+        return is_successful
 
 
 # Sentai Red Isekai de Boukensha ni Naru
