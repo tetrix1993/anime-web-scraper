@@ -562,6 +562,8 @@ class KinomiMasterDownload(Winter2025AnimeDownload, NewsTemplate4):
     folder_name = 'kinomimaster'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 6
 
     def __init__(self):
         super().__init__()
@@ -569,6 +571,7 @@ class KinomiMasterDownload(Winter2025AnimeDownload, NewsTemplate4):
     def run(self):
         json_obj = self.download_episode_preview()
         self.download_news(json_obj)
+        self.download_episode_preview_guess()
 
     def download_episode_preview(self):
         json_obj = None
@@ -590,6 +593,40 @@ class KinomiMasterDownload(Winter2025AnimeDownload, NewsTemplate4):
 
     def download_news(self, json_obj=None):
         self.download_template_news(json_url=self.PAGE_PREFIX + 'api/site-data/init')
+
+    def download_episode_preview_guess(self, print_url=False, print_invalid=False):
+        if self.is_image_exists(str(self.FINAL_EPISODE).zfill(2) + '_1'):
+            return
+        folder = self.create_custom_directory('guess')
+        template = self.PAGE_PREFIX + 'wp/wp-content/uploads/%s/%s/kinomimaster_ep%s-%s.jpg'
+        current_date = datetime.now() + timedelta(hours=1)
+        year = current_date.strftime('%Y')
+        month = current_date.strftime('%m')
+        is_successful = False
+        for i in range(self.FINAL_EPISODE):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_1'):
+                continue
+            is_success = False
+            for j in range(self.IMAGES_PER_EPISODE):
+                image_name = episode + '_' + str(j + 1)
+                image_url = template % (year, month, episode, str(j + 1).zfill(2))
+                if print_url:
+                    print(image_url)
+                if self.is_valid_url(image_url, is_image=True):
+                    print('VALID - ' + image_url)
+                    self.download_image(image_url, folder + '/' + image_name, to_jpg=True)
+                    is_successful = True
+                    is_success = True
+                elif print_invalid:
+                    print('INVALID - ' + image_url)
+                if not is_success:
+                    break
+            if not is_success:
+                break
+        if is_successful:
+            print(self.__class__.__name__ + ' - Guessed correctly!')
+        return is_successful
 
 
 # Izure Saikyou no Renkinjutsushi?
@@ -602,6 +639,8 @@ class IzureSaikyoDownload(Winter2025AnimeDownload, NewsTemplate4):
     folder_name = 'izuresaikyo'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 6
 
     def __init__(self):
         super().__init__()
@@ -609,6 +648,7 @@ class IzureSaikyoDownload(Winter2025AnimeDownload, NewsTemplate4):
     def run(self):
         json_obj = self.download_episode_preview()
         self.download_news(json_obj)
+        self.download_episode_preview_guess()
 
     def download_episode_preview(self):
         json_obj = None
@@ -630,6 +670,40 @@ class IzureSaikyoDownload(Winter2025AnimeDownload, NewsTemplate4):
 
     def download_news(self, json_obj=None):
         self.download_template_news(json_url=self.PAGE_PREFIX + 'api/site-data/init')
+
+    def download_episode_preview_guess(self, print_url=False, print_invalid=False):
+        if self.is_image_exists(str(self.FINAL_EPISODE).zfill(2) + '_1'):
+            return
+        folder = self.create_custom_directory('guess')
+        template = self.PAGE_PREFIX + 'wp/wp-content/uploads/%s/%s/izuren_ep%s-%s.jpg'
+        current_date = datetime.now() + timedelta(hours=1)
+        year = current_date.strftime('%Y')
+        month = current_date.strftime('%m')
+        is_successful = False
+        for i in range(self.FINAL_EPISODE):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_1'):
+                continue
+            is_success = False
+            for j in range(self.IMAGES_PER_EPISODE):
+                image_name = episode + '_' + str(j + 1)
+                image_url = template % (year, month, episode, str(j + 1).zfill(2))
+                if print_url:
+                    print(image_url)
+                if self.is_valid_url(image_url, is_image=True):
+                    print('VALID - ' + image_url)
+                    self.download_image(image_url, folder + '/' + image_name, to_jpg=True)
+                    is_successful = True
+                    is_success = True
+                elif print_invalid:
+                    print('INVALID - ' + image_url)
+                if not is_success:
+                    break
+            if not is_success:
+                break
+        if is_successful:
+            print(self.__class__.__name__ + ' - Guessed correctly!')
+        return is_successful
 
 
 # Kimi no Koto ga Daidaidaidaidaisuki na 100-nin no Kanojo 2nd Season
