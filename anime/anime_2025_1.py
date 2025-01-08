@@ -1615,6 +1615,7 @@ class Watakon2Download(Winter2025AnimeDownload, NewsTemplate):
     def run(self):
         self.download_episode_preview()
         self.download_news()
+        self.download_episode_preview_guess()
 
     def download_episode_preview(self):
         try:
@@ -1644,3 +1645,37 @@ class Watakon2Download(Winter2025AnimeDownload, NewsTemplate):
                                     date_select='span.time', title_select='.ttl', id_select='a',
                                     date_func=lambda x: x[0:4] + '.' + x[4:6] + '.' + x[6:8],
                                     next_page_select='.nextpostslink', stop_date='2024.09.18')
+
+    def download_episode_preview_guess(self, print_url=False, print_invalid=False):
+        if self.is_image_exists(str(self.FINAL_EPISODE).zfill(2) + '_1'):
+            return
+        folder = self.create_custom_directory('guess')
+        template = self.PAGE_PREFIX + 'wordpress/wp-content/uploads/%s/%s/img_story-%s_%s.jpg'
+        current_date = datetime.now() + timedelta(hours=1)
+        year = current_date.strftime('%Y')
+        month = current_date.strftime('%m')
+        is_successful = False
+        for i in range(self.FIRST_EPISODE, self.FINAL_EPISODE + 1, 1):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_1'):
+                continue
+            is_success = False
+            for j in range(self.IMAGES_PER_EPISODE):
+                image_name = episode + '_' + str(j + 1)
+                image_url = template % (year, month, episode, str(j + 1).zfill(2))
+                if print_url:
+                    print(image_url)
+                if self.is_valid_url(image_url, is_image=True):
+                    print('VALID - ' + image_url)
+                    self.download_image(image_url, folder + '/' + image_name, to_jpg=True)
+                    is_successful = True
+                    is_success = True
+                elif print_invalid:
+                    print('INVALID - ' + image_url)
+                if not is_success:
+                    break
+            if not is_success:
+                break
+        if is_successful:
+            print(self.__class__.__name__ + ' - Guessed correctly!')
+        return is_successful
