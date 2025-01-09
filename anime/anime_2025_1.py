@@ -1001,6 +1001,46 @@ class MedakawaDownload(Winter2025AnimeDownload, NewsTemplate):
                                 end_date='20241216', download_id=self.download_id).run()
 
 
+# Kusuriya no Hitorigoto 2nd Season
+class Kusuriya2Download(Winter2025AnimeDownload, NewsTemplate):
+    title = 'Kusuriya no Hitorigoto 2nd Season'
+    keywords = [title, 'The Apothecary Diaries']
+    website = 'https://kusuriyanohitorigoto.jp/season2/'
+    twitter = 'kusuriya_PR'
+    hashtags = ['薬屋のひとりごと']
+    folder_name = 'kusuriya2'
+
+    PAGE_PREFIX = website
+    FIRST_EPISODE = 25
+    FINAL_EPISODE = 50
+    IMAGES_PER_EPISODE = 6
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+
+    def download_episode_preview(self):
+        try:
+            template = self.PAGE_PREFIX + 'episodes/img/%s/%s.jpg'
+            stop = False
+            for i in range(self.FIRST_EPISODE, self.FINAL_EPISODE + 1, 1):
+                episode = str(i).zfill(2)
+                if self.is_image_exists(episode + '_' + str(self.IMAGES_PER_EPISODE)):
+                    continue
+                for j in range(self.IMAGES_PER_EPISODE):
+                    image_url = template % (str(i), str(j + 1))
+                    image_name = episode + '_' + str(j + 1)
+                    if self.download_image(image_url, self.base_folder + '/' + image_name) == -1:
+                        stop = True
+                        break
+                if stop:
+                    break
+        except Exception as e:
+            self.print_exception(e)
+
+
 # Magic Maker: Isekai Mahou no Tsukurikata
 class MagicMakerDownload(Winter2025AnimeDownload, NewsTemplate2):
     title = 'Magic Maker: Isekai Mahou no Tsukurikata'

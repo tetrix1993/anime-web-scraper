@@ -112,6 +112,7 @@ The premiere date for the anime listed here has not been announced.
 * [Kisaki Kyouiku kara Nigetai Watashi](https://kisakikyouiku.com/)
 * [Kono Kaisha ni Suki na Hito ga Imasu](https://kaishani-sukinahito.com/)
 * [Kuroiwa Medaka ni Watashi no Kawaii ga Tsuujinai](https://monaxmedaka.com/)
+* [Kusuriya no Hitorigoto 2nd Season](https://kusuriyanohitorigoto.jp/season2/)
 * [Magic Maker: Isekai Mahou no Tsukurikata](https://magicmaker-anime.com/)
 * [Medalist](https://medalist-pr.com/)
 * [NEET Kunoichi to Nazeka Dousei Hajimemashita](https://neet-kunoichi.com/)
