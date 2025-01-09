@@ -636,7 +636,7 @@ class KinomiMasterDownload(Winter2025AnimeDownload, NewsTemplate4):
         is_successful = False
         for i in range(self.FINAL_EPISODE):
             episode = str(i + 1).zfill(2)
-            if self.is_image_exists(episode + '_1'):
+            if self.is_image_exists(episode + '_1') or self.is_image_exists(episode + '_1', folder):
                 continue
             is_success = False
             for j in range(self.IMAGES_PER_EPISODE):
@@ -713,7 +713,7 @@ class IzureSaikyoDownload(Winter2025AnimeDownload, NewsTemplate4):
         is_successful = False
         for i in range(self.FINAL_EPISODE):
             episode = str(i + 1).zfill(2)
-            if self.is_image_exists(episode + '_1'):
+            if self.is_image_exists(episode + '_1') or self.is_image_exists(episode + '_1', folder):
                 continue
             is_success = False
             for j in range(self.IMAGES_PER_EPISODE):
@@ -1400,7 +1400,7 @@ class BehenekoDownload(Winter2025AnimeDownload, NewsTemplate2):
         is_successful = False
         for i in range(self.FINAL_EPISODE):
             episode = str(i + 1).zfill(2)
-            if self.is_image_exists(episode + '_1'):
+            if self.is_image_exists(episode + '_1') or self.is_image_exists(episode + '_1', folder):
                 continue
             is_success = False
             first = 19 + i
@@ -1728,7 +1728,7 @@ class Watakon2Download(Winter2025AnimeDownload, NewsTemplate):
         is_successful = False
         for i in range(self.FIRST_EPISODE, self.FINAL_EPISODE + 1, 1):
             episode = str(i + 1).zfill(2)
-            if self.is_image_exists(episode + '_1'):
+            if self.is_image_exists(episode + '_1') or self.is_image_exists(episode + '_1', folder):
                 continue
             is_success = False
             for j in range(self.IMAGES_PER_EPISODE):
