@@ -380,7 +380,38 @@ class FugukanDownload(Winter2025AnimeDownload, NewsTemplate):
         self.download_news()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            stories = soup.select('#story_link_list li')
+            for story in stories:
+                a_tag = story.select('a')
+                if len(a_tag) == 0 or 'introduction' in a_tag[0]['href']:
+                    continue
+                episode = ''
+                ep_num = a_tag[0].text
+                for a in ep_num:
+                    if a.isnumeric():
+                        episode += a
+                if len(episode) == 0:
+                    continue
+                episode = str(int(episode)).zfill(2)
+                if self.is_image_exists(episode + '_01'):
+                    continue
+                if 'current' in story['class']:
+                    ep_soup = soup
+                else:
+                    ep_soup = self.get_soup(a_tag[0]['href'])
+                if ep_soup is None:
+                    continue
+                self.image_list = []
+                images = ep_soup.select('p.story_thumbs img[src]')
+                for i in range(len(images)):
+                    image_url = self.PAGE_PREFIX + images[i]['src'][1:]
+                    image_name = episode + '_' + str(i + 1).zfill(2)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news_list a',
