@@ -36,7 +36,33 @@ class AparidaDownload(Winter2025AnimeDownload, NewsTemplate):
         self.download_news()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            story_prefix = self.PAGE_PREFIX + 'story/detail/'
+            soup = self.get_soup(story_prefix)
+            stories = soup.select('.story-detail__item')
+            for story in stories:
+                try:
+                    episode = ''
+                    ep_num = story.select('.story-detail__title-num')[0].text
+                    for a in ep_num:
+                        if a.isnumeric():
+                            episode += a
+                    if len(episode) == 0:
+                        continue
+                    episode = str(int(episode)).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                self.image_list = []
+                images = story.select('.story-detail__img-item img[src]')
+                for i in range(len(images)):
+                    image_name = episode + '_' + str(i + 1)
+                    image_url = images[i]['src']
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.info__item',
