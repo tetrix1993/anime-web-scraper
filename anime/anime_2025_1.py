@@ -1838,7 +1838,7 @@ class Watakon2Download(Winter2025AnimeDownload, NewsTemplate):
     def run(self):
         self.download_episode_preview()
         self.download_news()
-        self.download_episode_preview_guess()
+        # self.download_episode_preview_guess()
 
     def download_episode_preview(self):
         try:
@@ -1858,7 +1858,7 @@ class Watakon2Download(Winter2025AnimeDownload, NewsTemplate):
                 for i in range(len(images)):
                     image_url = images[i]['src']
                     image_name = episode + '_' + str(i + 1)
-                    self.add_to_image_list(image_name, image_url)
+                    self.add_to_image_list(image_name, image_url, to_jpg=True)
                 self.download_image_list(self.base_folder)
         except Exception as e:
             self.print_exception(e)
