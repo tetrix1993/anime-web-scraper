@@ -196,7 +196,7 @@ class AmekuTakaoDownload(Winter2025AnimeDownload, NewsTemplate):
                 for i in range(len(images)):
                     image_url = prefix + images[i]['src']
                     image_name = episode + '_' + str(i + 1)
-                    self.add_to_image_list(image_name, image_url)
+                    self.add_to_image_list(image_name, image_url, to_jpg=True)
                 self.download_image_list(self.base_folder)
         except Exception as e:
             self.print_exception(e)
