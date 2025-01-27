@@ -1270,6 +1270,8 @@ class MagicMakerDownload(Winter2025AnimeDownload, NewsTemplate2):
                 image_url = template % (str(first).zfill(8), str(second).zfill(8), str(third + j).zfill(8))
                 if print_url:
                     print(image_url)
+                if not self.is_content_length_in_range(image_url, more_than_amount=2500):
+                    break
                 image_name = episode + '_' + str(j + 1)
                 result = self.download_image(image_url, folder + '/' + image_name)
                 if result == 0:
