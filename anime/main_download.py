@@ -33,6 +33,7 @@ class MainDownload:
     refresh_meta_tag = False
     download_id = None  # For printing global logs
     download_media_only = False  # Used in main.py
+    guess_only = False  # Run download_episode_preview_guess method only
 
     def __init__(self):
         path = self.get_full_path()

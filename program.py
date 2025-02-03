@@ -13,13 +13,16 @@ def run_process(download, download_id):
     if os.path.exists(constants.FOLDER_PROCESS):
         with open(filepath, 'w+') as f:
             f.write(pid)
-    download.run()
+    if download.guess_only:
+        download.download_episode_preview_guess()
+    else:
+        download.run()
     # print("Ending %s" % class_name)
     if os.path.exists(filepath):
         os.remove(filepath)
 
 
-def process_download(downloads):
+def process_download(downloads, guess=False):
     if not os.path.exists(constants.FOLDER_PROCESS):
         os.makedirs(constants.FOLDER_PROCESS)
     if constants.MAX_PROCESSES <= 0 or len(downloads) == 0:
@@ -30,13 +33,17 @@ def process_download(downloads):
             results = []
             download_id = 1
             for download in downloads:
-                result = p.apply_async(run_process, (download(), str(download_id).zfill(5)))
+                dl = download()
+                dl.guess_only = guess
+                result = p.apply_async(run_process, (dl, str(download_id).zfill(5)))
                 results.append(result)
                 download_id += 1
             for result in results:
                 result.wait()
     else:
-        run_process(downloads[0](), '00001')
+        dl = downloads[0]()
+        dl.guess_only = guess
+        run_process(dl, '00001')
     update_global_logs()
     if len(os.listdir(constants.FOLDER_PROCESS)) == 0:
         os.rmdir(constants.FOLDER_PROCESS)
@@ -92,6 +99,8 @@ def run():
             process_query(True, False, True)
         elif choice == 5:
             download_from_news_website()
+        elif choice == 6:
+            process_query(True, False, False, guess=True)
         elif choice == 0:
             break
         else:
@@ -106,6 +115,7 @@ def print_intro_message():
     print("3 - Search anime by keyword and season")
     print("4 - Identify the season the anime belongs to")
     print("5 - Download from news website")
+    print("6 - Search anime and run guess method only")
     print("0 - Exit")
 
 
@@ -139,7 +149,7 @@ def get_numbers_from_expression(expr):
     return results
 
 
-def process_query(has_keyword, has_season, print_season):
+def process_query(has_keyword, has_season, print_season, guess=False):
     keyword = None
     season = None
 
@@ -214,7 +224,7 @@ def process_query(has_keyword, has_season, print_season):
         elif print_season:
             print_season_out(filtered_anime_classes)
         else:
-            process_download(filtered_anime_classes)
+            process_download(filtered_anime_classes, guess)
 
 
 def print_season_out(anime_classes):
