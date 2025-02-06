@@ -43,12 +43,16 @@ def run_process(download, download_id):
     message = "Running %s" % class_name
     if download.download_media_only:
         message += ' (Media)'
+    elif download.guess_only:
+        message += ' (Guess)'
     print(message)
     if os.path.exists(constants.FOLDER_PROCESS):
         with open(filepath, 'w+') as f:
             f.write(pid)
     if download.download_media_only:
         download.download_media()
+    elif download.guess_only:
+        download.download_episode_preview_guess()
     else:
         download.run()
     #print("Ending %s" % class_name)

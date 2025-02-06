@@ -9,7 +9,12 @@ def run_process(download, download_id):
     download.download_id = download_id
     class_name = download.__class__.__name__
     filepath = constants.FOLDER_PROCESS + '/' + class_name
-    print("Running %s" % class_name)
+    message = "Running %s" % class_name
+    if download.download_media_only:
+        message += ' (Media)'
+    elif download.guess_only:
+        message += ' (Guess)'
+    print(message)
     if os.path.exists(constants.FOLDER_PROCESS):
         with open(filepath, 'w+') as f:
             f.write(pid)
@@ -101,6 +106,8 @@ def run():
             download_from_news_website()
         elif choice == 6:
             process_query(True, False, False, guess=True)
+        elif choice == 7:
+            process_query(False, True, False, guess=True)
         elif choice == 0:
             break
         else:
@@ -115,7 +122,8 @@ def print_intro_message():
     print("3 - Search anime by keyword and season")
     print("4 - Identify the season the anime belongs to")
     print("5 - Download from news website")
-    print("6 - Search anime and run guess method only")
+    print("6 - Search anime by keyword and run guess method only")
+    print("7 - Search anime by season and run guess method only")
     print("0 - Exit")
 
 
