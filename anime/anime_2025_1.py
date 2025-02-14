@@ -36,7 +36,8 @@ class AparidaDownload(Winter2025AnimeDownload, NewsTemplate):
     def run(self):
         self.download_episode_preview()
         self.download_news()
-        self.download_episode_preview_guess()
+        self.download_episode_preview_external()
+        # self.download_episode_preview_guess()
 
     def download_episode_preview(self):
         try:
@@ -71,6 +72,11 @@ class AparidaDownload(Winter2025AnimeDownload, NewsTemplate):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.info__item',
                                     title_select='.info__title', date_select='.info__date', id_select='a',
                                     news_prefix='information/')
+
+    def download_episode_preview_external(self):
+        keywords = ['Aランクパーティを離脱した俺は']
+        AniverseMagazineScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                end_date='20250214', download_id=self.download_id).run()
 
     def download_episode_preview_guess(self, print_url=False, print_invalid=False):
         if self.is_image_exists(str(self.FINAL_EPISODE).zfill(2) + '_1'):
