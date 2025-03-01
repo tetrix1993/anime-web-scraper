@@ -90,6 +90,7 @@ The premiere date for the anime listed here has not been announced.
 * [Danjo no Yuujou wa Seiritsu suru? (Iya, Shinai!!)](https://www.danjoru.com/)
 * [Haite Kudasai, Takamine-san](https://takaminesan.com/)
 * [Isshun de Chiryou shiteita noni Yakutatazu to Tsuihou sareta Tensai Chiyushi, Yami Healer toshite Tanoshiku Ikiru](https://sh-anime.shochiku.co.jp/yamihealer/)
+* [Kanchigai no Atelier Meister](https://kanchigai-pr.com/)
 * [Kanpeki Sugite Kawaige ga Nai to Konyaku Haki sareta Seijo wa Ringoku ni Urareru](https://kanpekiseijo-anime.com/)
 * [Katainaka no Ossan, Kensei ni Naru](https://ossan-kensei.com/)
 * [Ore wa Seikan Kokka no Akutoku Ryoushu!](https://seikankokka-anime.com/)

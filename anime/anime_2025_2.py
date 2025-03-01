@@ -121,6 +121,46 @@ class YamiHealerDownload(Spring2025AnimeDownload, NewsTemplate):
                                     next_page_eval_index_class='is-active')
 
 
+# Kanchigai no Atelier Meister
+class KanchigaiAtelierDownload(Spring2025AnimeDownload, NewsTemplate4):
+    title = 'Kanchigai no Atelier Meister'
+    keywords = [title, 'The Unaware Atelier Master']
+    website = 'https://kanchigai-pr.com/'
+    twitter = 'kanchigai_pr'
+    hashtags = '勘違いの工房主'
+    folder_name = 'kanchigaiatelier'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        json_obj = None
+        try:
+            json_obj = self.get_json(self.PAGE_PREFIX + 'api/site-data/init')
+            if 'stories' not in json_obj:
+                return
+            for story in json_obj['stories']:
+                episode = story['episode'].zfill(2)
+                self.image_list = []
+                for i in range(len(story['images'])):
+                    image_name = episode + '_' + str(i + 1)
+                    image_url = story['images'][i]['image_path']
+                    self.add_to_image_list(image_name, image_url, to_jpg=True)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
+        return json_obj
+
+    def download_news(self, json_obj=None):
+        self.download_template_news(json_url=self.PAGE_PREFIX + 'api/site-data/init')
+
+
 # Kanpeki Sugite Kawaige ga Nai to Konyaku Haki sareta Seijo wa Ringoku ni Urareru
 class KanpekiSeijoDownload(Spring2025AnimeDownload, NewsTemplate):
     title = 'Kanpeki Sugite Kawaige ga Nai to Konyaku Haki sareta Seijo wa Ringoku ni Urareru'
