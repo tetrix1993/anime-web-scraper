@@ -94,6 +94,7 @@ The premiere date for the anime listed here has not been announced.
 * [Kanchigai no Atelier Meister](https://kanchigai-pr.com/)
 * [Kanpeki Sugite Kawaige ga Nai to Konyaku Haki sareta Seijo wa Ringoku ni Urareru](https://kanpekiseijo-anime.com/)
 * [Katainaka no Ossan, Kensei ni Naru](https://ossan-kensei.com/)
+* [Ninja to Koroshiya no Futarigurashi](https://ninkoro.jp/)
 * [Ore wa Seikan Kokka no Akutoku Ryoushu!](https://seikankokka-anime.com/)
 * [Shiunji-ke no Kodomotachi](https://shiunjifamily.com/)
 * [Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita: Sono Ni](https://slime300-anime.com/)
