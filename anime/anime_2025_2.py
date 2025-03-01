@@ -121,6 +121,34 @@ class YamiHealerDownload(Spring2025AnimeDownload, NewsTemplate):
                                     next_page_eval_index_class='is-active')
 
 
+# Kanpeki Sugite Kawaige ga Nai to Konyaku Haki sareta Seijo wa Ringoku ni Urareru
+class KanpekiSeijoDownload(Spring2025AnimeDownload, NewsTemplate):
+    title = 'Kanpeki Sugite Kawaige ga Nai to Konyaku Haki sareta Seijo wa Ringoku ni Urareru'
+    keywords = [title, 'The Too-Perfect Saint: Tossed Aside by My Fiancé and Sold to Another Kingdom']
+    website = 'https://kanpekiseijo-anime.com/'
+    twitter = 'kanpekiseijo_pr'
+    hashtags = '完璧聖女'
+    folder_name = 'kanpekiseijo'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news_item',
+                                    date_select='.date_inner', title_select='.ttl', id_select='a',
+                                    next_page_select='.next.page-numbers',
+                                    date_func=lambda x: x[0:4] + '.' + x[4:9])
+
+
 # Katainaka no Ossan, Kensei ni Naru
 class OssanKenseiDownload(Spring2025AnimeDownload, NewsTemplate2):
     title = 'Katainaka no Ossan, Kensei ni Naru'
