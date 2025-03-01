@@ -21,7 +21,9 @@ def run():
     #         new_subclass = subclass()
     #         new_subclass.download_media_only = True
     #         downloads.append(new_subclass)
-    subclasses = Spring2025AnimeDownload.__subclasses__() + UnconfirmedDownload.__subclasses__()
+    subclasses = Spring2025AnimeDownload.__subclasses__()\
+                 + Summer2025AnimeDownload.__subclasses__()\
+                 + UnconfirmedDownload.__subclasses__()
     for subclass in subclasses:
         if subclass.enabled:
             downloads.append(subclass())
