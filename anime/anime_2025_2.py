@@ -121,6 +121,34 @@ class OssanKenseiDownload(Spring2025AnimeDownload, NewsTemplate2):
         self.download_template_news(page_prefix=self.PAGE_PREFIX)
 
 
+# Ore wa Seikan Kokka no Akutoku Ryoushu!
+class SeikanKokkaDownload(Spring2025AnimeDownload, NewsTemplate):
+    title = 'Ore wa Seikan Kokka no Akutoku Ryoushu!'
+    keywords = [title, "I'm the Evil Lord of an Intergalactic Empire!"]
+    website = 'https://seikankokka-anime.com/'
+    twitter = 'akutoku_ryoushu'
+    hashtags = '星間国家'
+    folder_name = 'seikankokka'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.border-newsBorder',
+                                    date_select='a .absolute', title_select='.line-clamp-2',
+                                    id_select='a', a_tag_start_text_to_remove='/', a_tag_prefix=self.PAGE_PREFIX,
+                                    paging_type=2, next_page_select='a[href] .rotate-180')
+
+
 # Shiunji-ke no Kodomotachi
 class ShinunjiDownload(Spring2025AnimeDownload):
     title = 'Shiunji-ke no Kodomotachi'

@@ -90,6 +90,7 @@ The premiere date for the anime listed here has not been announced.
 * [Haite Kudasai, Takamine-san](https://takaminesan.com/)
 * [Isshun de Chiryou shiteita noni Yakutatazu to Tsuihou sareta Tensai Chiyushi, Yami Healer toshite Tanoshiku Ikiru](https://sh-anime.shochiku.co.jp/yamihealer/)
 * [Katainaka no Ossan, Kensei ni Naru](https://ossan-kensei.com/)
+* [Ore wa Seikan Kokka no Akutoku Ryoushu!](https://seikankokka-anime.com/)
 * [Shiunji-ke no Kodomotachi](https://shiunjifamily.com/)
 * [Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita: Sono Ni](https://slime300-anime.com/)
 * [Summer Pockets](https://summerpockets-anime.jp/)
