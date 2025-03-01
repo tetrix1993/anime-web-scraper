@@ -17,6 +17,31 @@ class Spring2025AnimeDownload(MainDownload):
         super().__init__()
 
 
+# Aru Majo ga Shinu Made
+class ArumajoDownload(Spring2025AnimeDownload, NewsTemplate2):
+    title = 'Aru Majo ga Shinu Made'
+    keywords = [title]
+    website = 'https://arumajo-anime.com/'
+    twitter = 'arumajo_anime'
+    hashtags = 'ある魔女が死ぬまで'
+    folder_name = 'arumajo'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX)
+
+
 # Danjo no Yuujou wa Seiritsu suru? (Iya, Shinai!!)
 class DanjoruDownload(Spring2025AnimeDownload, NewsTemplate):
     title = 'Danjo no Yuujou wa Seiritsu suru? (Iya, Shinai!!)'
