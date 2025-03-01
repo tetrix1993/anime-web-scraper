@@ -68,6 +68,31 @@ class DanjoruDownload(Spring2025AnimeDownload, NewsTemplate):
                                     title_select='.ttl', id_select='a')
 
 
+# Gorilla no Kami kara Kago sareta Reijou wa Ouritsu Kishidan de Kawaigarareru
+class GorillaLadyDownload(Spring2025AnimeDownload, NewsTemplate2):
+    title = 'Gorilla no Kami kara Kago sareta Reijou wa Ouritsu Kishidan de Kawaigarareru'
+    keywords = [title]
+    website = 'https://gorillalady-anime.com/'
+    twitter = 'gorilla_bless'
+    hashtags = 'ゴリラの加護令嬢'
+    folder_name = 'gorillalady'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX)
+
+
 # Haite Kudasai, Takamine-san
 class TakaminesanDownload(Spring2025AnimeDownload, NewsTemplate2):
     title = 'Haite Kudasai, Takamine-san'
