@@ -280,6 +280,32 @@ class SamapokeDownload(Spring2025AnimeDownload, NewsTemplate):
                                     date_select='.News-cont-date2', title_select='.News-cont-txt2', id_select='a')
 
 
+# Witch Watch
+class WitchWatchDownload(Spring2025AnimeDownload, NewsTemplate):
+    title = "Witch Watch"
+    keywords = [title]
+    website = 'https://witchwatch-anime.com/'
+    twitter = 'WITCHWATCHanime'
+    hashtags = 'ウィッチウォッチ'
+    folder_name = 'witchwatch'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.md-li__topics', title_select='.ttl',
+                                    date_select='time', id_select='a', news_prefix='topics')
+
+
 # Zatsu Tabi: That's Journey
 class ZatsuTabiDownload(Spring2025AnimeDownload, NewsTemplate):
     title = "Zatsu Tabi: That's Journey"
