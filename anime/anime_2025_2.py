@@ -278,3 +278,31 @@ class SamapokeDownload(Spring2025AnimeDownload, NewsTemplate):
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.News-cont2',
                                     date_select='.News-cont-date2', title_select='.News-cont-txt2', id_select='a')
+
+
+# Zatsu Tabi: That's Journey
+class ZatsuTabiDownload(Spring2025AnimeDownload, NewsTemplate):
+    title = "Zatsu Tabi: That's Journey"
+    keywords = [title]
+    website = 'https://zatsutabi.com/'
+    twitter = 'zatsutabi_anime'
+    hashtags = 'ざつ旅'
+    folder_name = 'zatsutabi'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article', title_select='.entry-title',
+                                    date_select='.entry-date', id_select=None, id_has_id=True, news_prefix='news.html',
+                                    a_tag_prefix=self.PAGE_PREFIX + 'news.html#',
+                                    date_func=lambda x: x.replace('年', '.').replace('月', '.').replace('日', ''))

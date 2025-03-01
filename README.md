@@ -95,6 +95,7 @@ The premiere date for the anime listed here has not been announced.
 * [Shiunji-ke no Kodomotachi](https://shiunjifamily.com/)
 * [Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita: Sono Ni](https://slime300-anime.com/)
 * [Summer Pockets](https://summerpockets-anime.jp/)
+* [Zatsu Tabi: That's Journey](https://zatsutabi.com/)
 
 ### Winter 2025 Anime
 * [A-Rank Party wo Ridatsu shita Ore wa, Moto Oshiego-tachi to Meikyuu Shinbu wo Mezasu.](https://arank-party-ridatsu-official.com/)
