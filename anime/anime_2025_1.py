@@ -1349,14 +1349,14 @@ class NeetKunoichiDownload(Winter2025AnimeDownload, NewsTemplate):
     folder_name = 'neetkunoichi'
 
     PAGE_PREFIX = website
-    FINAL_EPISODE = 12
+    FINAL_EPISODE = 24
     IMAGES_PER_EPISODE = 6
 
     def __init__(self):
         super().__init__()
 
     def run(self):
-        self.download_episode_preview()
+        # self.download_episode_preview()
         self.download_news()
 
     def download_episode_preview(self):
@@ -1643,7 +1643,7 @@ class SalarymanShitennouDownload(Winter2025AnimeDownload, NewsTemplate):
         super().__init__()
 
     def run(self):
-        self.download_episode_preview()
+        # self.download_episode_preview()
         self.download_news()
 
     def download_episode_preview(self):
