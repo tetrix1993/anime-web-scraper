@@ -10,9 +10,12 @@ def run():
         os.makedirs(constants.FOLDER_OUTPUT)
 
     downloads = []
+    skip = [SalarymanShitennouDownload.__name__, NeetKunoichiDownload.__name__,
+            BehenekoDownload.__name__, BotsurakuKizokuDownload.__name__]
     for subclass in Winter2025AnimeDownload.__subclasses__():
-        downloads.append(subclass())
-    downloads += [AmagamiDownload(), Arifureta3Download(), ReZero3Download(), ShangriLaFrontierDownload()]
+        if subclass.__name__ not in skip:
+            downloads.append(subclass())
+    downloads += [AmagamiDownload(), ReZero3Download(), ShangriLaFrontierDownload()]
     # skip = [BokutsumaDownload.__name__, MayopanDownload.__name__, VdenDownload.__name__, WistoriaDownload.__name__,
     #         NigoririDownload.__name__, SengokuYouko2Download.__name__, PainokoDownload.__name__]
     # for subclass in [GimaiSeikatsuDownload]:
