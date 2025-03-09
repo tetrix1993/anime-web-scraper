@@ -45,7 +45,7 @@ class Spring2022AnimeDownload(MainDownload):
 class AharensanDownload(Spring2022AnimeDownload, NewsTemplate):
     title = 'Aharen-san wa Hakarenai'
     keywords = [title]
-    website = 'https://aharen-pr.com/'
+    website = 'https://aharen-pr.com/1st/'
     twitter = 'aharen_pr'
     hashtags = '阿波連さん'
     folder_name = 'aharensan'

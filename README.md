@@ -89,6 +89,7 @@ The premiere date for the anime listed here has not been announced.
 * [Tsuyokute New Saga](https://tsuyosaga-pr.com/)
 
 ### Spring 2025 Anime
+* [Aharen-san wa Hakarenai Season 2](https://aharen-pr.com/)
 * [Aru Majo ga Shinu Made](https://arumajo-anime.com/)
 * [Danjo no Yuujou wa Seiritsu suru? (Iya, Shinai!!)](https://www.danjoru.com/)
 * [Gorilla no Kami kara Kago sareta Reijou wa Ouritsu Kishidan de Kawaigarareru](https://gorillalady-anime.com/)
@@ -433,7 +434,7 @@ The premiere date for the anime listed here has not been announced.
 * [Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e 2nd Season](http://you-zitsu.com/2nd/)
 
 ### Spring 2022 Anime
-* [Aharen-san wa Hakarenai](https://aharen-pr.com/)
+* [Aharen-san wa Hakarenai](https://aharen-pr.com/1st/)
 * [Deaimon](https://deaimon.jp/)
 * [Gaikotsu Kishi-sama, Tadaima Isekai e Odekakechuu](https://skeleton-knight.com/)
 * [Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan wo Erandeiraremasen 3rd Season](http://booklove-anime.jp/)

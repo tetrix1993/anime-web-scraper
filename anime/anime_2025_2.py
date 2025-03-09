@@ -17,6 +17,34 @@ class Spring2025AnimeDownload(MainDownload):
         super().__init__()
 
 
+# Aharen-san wa Hakarenai Season 2
+class Aharensan2Download(Spring2025AnimeDownload, NewsTemplate):
+    title = 'Aharen-san wa Hakarenai Season 2'
+    keywords = [title]
+    website = 'https://aharen-pr.com/'
+    twitter = 'aharen_pr'
+    hashtags = '阿波連さん'
+    folder_name = 'aharensan2'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.md-li__news',
+                                    date_select='time', title_select='.ttl', id_select='a',
+                                    next_page_select='.pagination li', next_page_eval_index_class='is__current',
+                                    next_page_eval_index=-1)
+
+
 # Aru Majo ga Shinu Made
 class ArumajoDownload(Spring2025AnimeDownload, NewsTemplate2):
     title = 'Aru Majo ga Shinu Made'
