@@ -202,6 +202,33 @@ class YamiHealerDownload(Spring2025AnimeDownload, NewsTemplate):
                                     next_page_eval_index_class='is-active')
 
 
+# Kakushite! Makina-san!!
+class MakinasanDownload(Spring2025AnimeDownload, NewsTemplate):
+    title = 'Kakushite! Makina-san!!'
+    keywords = [title]
+    website = 'https://makinasan-anime.com/'
+    twitter = 'makinasan_anime'
+    hashtags = 'マキナさん'
+    folder_name = 'makinasan'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-list__item', title_select='a',
+                                    date_select='.news-list__item-data', id_select='a', news_prefix='news.html',
+                                    a_tag_prefix=self.PAGE_PREFIX, date_separator='/')
+
+
 # Kanchigai no Atelier Meister
 class KanchigaiAtelierDownload(Spring2025AnimeDownload, NewsTemplate4):
     title = 'Kanchigai no Atelier Meister'
