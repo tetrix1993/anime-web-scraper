@@ -70,6 +70,34 @@ class ArumajoDownload(Spring2025AnimeDownload, NewsTemplate2):
         self.download_template_news(page_prefix=self.PAGE_PREFIX)
 
 
+# Chotto dake Ai ga Omoi Dark Elf ga Isekai kara Oikaketekita
+class AiomoDarkElfDownload(Spring2025AnimeDownload, NewsTemplate):
+    title = 'Chotto dake Ai ga Omoi Dark Elf ga Isekai kara Oikaketekita'
+    keywords = [title, 'Yandere Dark Elf: She Chased Me All the Way From Another World!']
+    website = 'https://aiomodarkelf.deregula.com/'
+    twitter = 'aiomodarkelf'
+    hashtags = '愛重ダークエルフ'
+    folder_name = 'aiomodarkelf'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.l_newslist a',
+                                    date_select='.newslist_date', title_select='.newslist_ttl', id_select=None,
+                                    next_page_select='.pagination', next_page_eval_index_compare_page=True,
+                                    next_page_eval_index=-1)
+
+
 # Danjo no Yuujou wa Seiritsu suru? (Iya, Shinai!!)
 class DanjoruDownload(Spring2025AnimeDownload, NewsTemplate):
     title = 'Danjo no Yuujou wa Seiritsu suru? (Iya, Shinai!!)'
