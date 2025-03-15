@@ -70,6 +70,32 @@ class ArumajoDownload(Spring2025AnimeDownload, NewsTemplate2):
         self.download_template_news(page_prefix=self.PAGE_PREFIX)
 
 
+# Ballpark de Tsukamaete!]
+class BallparkDownload(Spring2025AnimeDownload, NewsTemplate):
+    title = 'Ballpark de Tsukamaete!'
+    keywords = [title, 'The Catcher in the Ballpark!']
+    website = 'https://anime-ballpark.com/'
+    twitter = 'ballpark_PR'
+    hashtags = 'アニメボルパ'
+    folder_name = 'ballpark'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.c-Post__listItem',
+                                    date_select='.c-Post__date', title_select='.c-Post__textHover', id_select='a')
+
+
 # Chotto dake Ai ga Omoi Dark Elf ga Isekai kara Oikaketekita
 class AiomoDarkElfDownload(Spring2025AnimeDownload, NewsTemplate):
     title = 'Chotto dake Ai ga Omoi Dark Elf ga Isekai kara Oikaketekita'
@@ -205,7 +231,7 @@ class YamiHealerDownload(Spring2025AnimeDownload, NewsTemplate):
 # Kakushite! Makina-san!!
 class MakinasanDownload(Spring2025AnimeDownload, NewsTemplate):
     title = 'Kakushite! Makina-san!!'
-    keywords = [title]
+    keywords = [title, "Makina-san's a Love Bot?!"]
     website = 'https://makinasan-anime.com/'
     twitter = 'makinasan_anime'
     hashtags = 'マキナさん'

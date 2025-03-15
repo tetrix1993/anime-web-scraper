@@ -91,6 +91,7 @@ The premiere date for the anime listed here has not been announced.
 ### Spring 2025 Anime
 * [Aharen-san wa Hakarenai Season 2](https://aharen-pr.com/)
 * [Aru Majo ga Shinu Made](https://arumajo-anime.com/)
+* [Ballpark de Tsukamaete!](https://anime-ballpark.com/)
 * [Chotto dake Ai ga Omoi Dark Elf ga Isekai kara Oikaketekita](https://aiomodarkelf.deregula.com/)
 * [Danjo no Yuujou wa Seiritsu suru? (Iya, Shinai!!)](https://www.danjoru.com/)
 * [Gorilla no Kami kara Kago sareta Reijou wa Ouritsu Kishidan de Kawaigarareru](https://gorillalady-anime.com/)
