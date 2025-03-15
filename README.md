@@ -96,6 +96,7 @@ The premiere date for the anime listed here has not been announced.
 * [Danjo no Yuujou wa Seiritsu suru? (Iya, Shinai!!)](https://www.danjoru.com/)
 * [Gorilla no Kami kara Kago sareta Reijou wa Ouritsu Kishidan de Kawaigarareru](https://gorillalady-anime.com/)
 * [Haite Kudasai, Takamine-san](https://takaminesan.com/)
+* [Hibi wa Sugiredo Meshi Umashi](https://hibimeshi.com/)
 * [Isshun de Chiryou shiteita noni Yakutatazu to Tsuihou sareta Tensai Chiyushi, Yami Healer toshite Tanoshiku Ikiru](https://sh-anime.shochiku.co.jp/yamihealer/)
 * [Kakushite! Makina-san!!](https://makinasan-anime.com/)
 * [Kanchigai no Atelier Meister](https://kanchigai-pr.com/)
