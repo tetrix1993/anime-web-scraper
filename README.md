@@ -104,6 +104,7 @@ The premiere date for the anime listed here has not been announced.
 * [Katainaka no Ossan, Kensei ni Naru](https://ossan-kensei.com/)
 * [Ninja to Koroshiya no Futarigurashi](https://ninkoro.jp/)
 * [Ore wa Seikan Kokka no Akutoku Ryoushu!](https://seikankokka-anime.com/)
+* [Saikyou no Ousama, Nidome no Jinsei wa Nani wo Suru?](https://saikyo2dome-tbate.com/)
 * [Shiunji-ke no Kodomotachi](https://shiunjifamily.com/)
 * [Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita: Sono Ni](https://slime300-anime.com/)
 * [Summer Pockets](https://summerpockets-anime.jp/)

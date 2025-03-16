@@ -5,6 +5,9 @@ from scan import AniverseMagazineScanner
 from bs4 import BeautifulSoup
 import json
 import os
+import requests
+from anime.constants import HTTP_HEADER_USER_AGENT
+from ast import literal_eval
 
 
 # Spring 2025 Anime
@@ -200,7 +203,7 @@ class TakaminesanDownload(Spring2025AnimeDownload, NewsTemplate2):
         self.download_template_news(page_prefix=self.PAGE_PREFIX)
 
 
-# Hibi wa Sugiredo Meshi Umashi]
+# Hibi wa Sugiredo Meshi Umashi
 class HibimeshiDownload(Spring2025AnimeDownload, NewsTemplate):
     title = 'Hibi wa Sugiredo Meshi Umashi'
     keywords = [title, 'Food for the Soul']
@@ -428,6 +431,90 @@ class SeikanKokkaDownload(Spring2025AnimeDownload, NewsTemplate):
                                     date_select='a .absolute', title_select='.line-clamp-2',
                                     id_select='a', a_tag_start_text_to_remove='/', a_tag_prefix=self.PAGE_PREFIX,
                                     paging_type=2, next_page_select='a[href] .rotate-180')
+
+
+# Saikyou no Ousama, Nidome no Jinsei wa Nani wo Suru?
+class Saikyo2domeDownload(Spring2025AnimeDownload, NewsTemplate):
+    title = 'Saikyou no Ousama, Nidome no Jinsei wa Nani wo Suru?'
+    keywords = [title, "The Beginning After the End"]
+    website = 'https://saikyo2dome-tbate.com/'
+    twitter = 'saikyo2dome'
+    hashtags = ['最強の王様', 'TBATE']
+    folder_name = 'saikyo2dome'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        # self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        prefix = 'https://firestore.googleapis.com/google.firestore.v1.Firestore/Listen/channel?database=projects%2Fsaikyo2dome-prod%2Fdatabases%2F(default)&'
+        post_url = prefix + 'VER=8&RID=9822&CVER=22&X-HTTP-Session-Id=gsessionid&%24httpHeaders=X-Goog-Api-Client%3Agl-js%2F%20fire%2F8.0.0%0D%0AContent-Type%3Atext%2Fplain%0D%0A&zx=4dfvse3tiweq&t=1'
+        payload = {'count': '1', 'ofs': '0',
+                   'req0___data__': '{"database":"projects/saikyo2dome-prod/databases/(default)","addTarget":{"query":{"structuredQuery":{"from":[{"collectionId":"lists"}],"where":{"fieldFilter":{"field":{"fieldPath":"publication_date"},"op":"LESS_THAN_OR_EQUAL","value":{"timestampValue":"2025-03-15T15:31:14.271000000Z"}}},"orderBy":[{"field":{"fieldPath":"publication_date"},"direction":"DESCENDING"},{"field":{"fieldPath":"__name__"},"direction":"DESCENDING"}],"limit":1},"parent":"projects/saikyo2dome-prod/databases/(default)/documents/pages/news"},"targetId":2}}'}
+        try:
+            results = []
+            news_obj = self.get_last_news_log_object()
+            news_prefix = self.PAGE_PREFIX + 'news/'
+
+            # Firebase - first post to get gsessionid and SID
+            r = requests.post(url=post_url, headers=HTTP_HEADER_USER_AGENT, data=payload)
+            ssid = r.headers["X-HTTP-Session-Id"]
+            sid = literal_eval(r.text[r.text.find('\n') + 1:])[0][1][1]
+
+            # Get actual data - takes the longest time here
+            get_url = prefix + f'gsessionid={ssid}&VER=8&RID=rpc&SID={sid}&CI=0&AID=0&TYPE=xmlhttp&zx=903hqape89t1&t=1'
+            r2 = requests.get(get_url)
+
+            # Process data to find the news segment
+            c1 = r2.text[r2.text.find('\n') + 1:]
+            art_idx = c1.find('"articles": {')
+            c2 = c1[art_idx + 13:]
+            val_idx = c2.find('"values": [')
+            c3 = c2[val_idx + 10:]
+
+            # Find index of the last closing "]" for the end of array
+            track = 0
+            last_index = -1
+            for i in range(len(c3)):
+                if c3[i] == '[':
+                    track += 1
+                elif c3[i] == ']':
+                    track -= 1
+                if track == 0:
+                    last_index = i
+                    break
+            if last_index == -1:
+                return
+            content = c3[0:last_index + 1]
+
+            # Finally process news data
+            items = literal_eval(content)
+            for item in items:
+                fields = item['mapValue']['fields']
+                date = fields['publication_date']['timestampValue'][0:10].replace('-', '.')
+                title = fields['title']['stringValue']
+                url = news_prefix + fields['id']['stringValue']
+                if news_obj is not None and (news_obj['id'] == url or news_obj['title'] == title
+                                             or date < news_obj['date']):
+                    break
+                results.append(self.create_news_log_object(date, title, url))
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log_from_news_log_object(result)
+                if process_result == 0:
+                    success_count += 1
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
+        except Exception as e:
+            self.print_exception(e, 'News')
 
 
 # Shiunji-ke no Kodomotachi
