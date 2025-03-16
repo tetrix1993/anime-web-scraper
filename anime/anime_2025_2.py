@@ -380,6 +380,33 @@ class OssanKenseiDownload(Spring2025AnimeDownload, NewsTemplate2):
         self.download_template_news(page_prefix=self.PAGE_PREFIX)
 
 
+# Mono
+class MonoDownload(Spring2025AnimeDownload, NewsTemplate):
+    title = 'Mono'
+    keywords = [title]
+    website = 'https://mono-weekend.photo/'
+    twitter = 'mono_weekend'
+    hashtags = 'mono'
+    folder_name = 'mono'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, paging_type=1, article_select='.newsList',
+                                    date_select='.newsList__date', title_select='.newsList__title', id_select='a',
+                                    a_tag_prefix=self.PAGE_PREFIX + 'news/', next_page_select='.pagination__next')
+
+
 # Ninja to Koroshiya no Futarigurashi
 class NinkoroDownload(Spring2025AnimeDownload, NewsTemplate2):
     title = 'Ninja to Koroshiya no Futarigurashi'

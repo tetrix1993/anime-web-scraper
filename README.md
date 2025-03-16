@@ -102,6 +102,7 @@ The premiere date for the anime listed here has not been announced.
 * [Kanchigai no Atelier Meister](https://kanchigai-pr.com/)
 * [Kanpeki Sugite Kawaige ga Nai to Konyaku Haki sareta Seijo wa Ringoku ni Urareru](https://kanpekiseijo-anime.com/)
 * [Katainaka no Ossan, Kensei ni Naru](https://ossan-kensei.com/)
+* [Mono](https://mono-weekend.photo/)
 * [Ninja to Koroshiya no Futarigurashi](https://ninkoro.jp/)
 * [Ore wa Seikan Kokka no Akutoku Ryoushu!](https://seikankokka-anime.com/)
 * [Saikyou no Ousama, Nidome no Jinsei wa Nani wo Suru?](https://saikyo2dome-tbate.com/)
