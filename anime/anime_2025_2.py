@@ -858,6 +858,57 @@ class WitchWatchDownload(Spring2025AnimeDownload, NewsTemplate):
                                     date_select='time', id_select='a', news_prefix='topics')
 
 
+# Your Forma
+class YourFormaDownload(Spring2025AnimeDownload):
+    title = 'Your Forma'
+    keywords = [title]
+    website = 'https://www.yourforma-anime.com/'
+    twitter = 'yourforma'
+    hashtags = ['ユア・フォルマ', 'your_forma']
+    folder_name = 'yourforma'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self, print_http_error=False):
+        news_url = self.PAGE_PREFIX + 'news/detail.html?id='
+        api_url = 'https://www.news.yourforma-anime.com/wp-json/wp/v2/posts?acf_format=standard&per_page=10&page='
+        try:
+            page = 1
+            page_url = api_url + str(page)
+            json_obj = self.get_json(page_url)
+            news_obj = self.get_last_news_log_object()
+            results = []
+            for item in json_obj:
+                article_id = news_url + str(item['id'])
+                date = item['date'][0:10].replace('-', '.')
+                title = item['title']['rendered']
+                if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
+                    break
+                results.append(self.create_news_log_object(date, title, article_id))
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log_from_news_log_object(result)
+                if process_result == 0:
+                    success_count += 1
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
+        except HTTPError as e:
+            if print_http_error:
+                print(self.__class__.__name__ + ' - 403 Error when retrieving news API.')
+        except Exception as e:
+            self.print_exception(e, 'News')
+
+
 # Zatsu Tabi: That's Journey
 class ZatsuTabiDownload(Spring2025AnimeDownload, NewsTemplate):
     title = "Zatsu Tabi: That's Journey"

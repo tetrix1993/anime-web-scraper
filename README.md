@@ -110,6 +110,7 @@ The premiere date for the anime listed here has not been announced.
 * [Slime Taoshite 300-nen, Shiranai Uchi ni Level Max ni Nattemashita: Sono Ni](https://slime300-anime.com/)
 * [Summer Pockets](https://summerpockets-anime.jp/)
 * [Witch Watch](https://witchwatch-anime.com/)
+* [Your Forma](https://www.yourforma-anime.com/)
 * [Zatsu Tabi: That's Journey](https://zatsutabi.com/)
 
 ### Winter 2025 Anime
