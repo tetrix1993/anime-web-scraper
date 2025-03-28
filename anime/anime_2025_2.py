@@ -58,6 +58,7 @@ class ArumajoDownload(Spring2025AnimeDownload, NewsTemplate2):
     folder_name = 'arumajo'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
 
     def __init__(self):
         super().__init__()
@@ -65,6 +66,7 @@ class ArumajoDownload(Spring2025AnimeDownload, NewsTemplate2):
     def run(self):
         self.download_episode_preview()
         self.download_news()
+        self.download_episode_preview_external()
 
     def download_episode_preview(self):
         try:
@@ -96,6 +98,11 @@ class ArumajoDownload(Spring2025AnimeDownload, NewsTemplate2):
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX)
+
+    def download_episode_preview_external(self):
+        keywords = ['ある魔女が死ぬまで']
+        AniverseMagazineScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                end_date='20250328', download_id=self.download_id).run()
 
 
 # Ballpark de Tsukamaete!]
@@ -251,6 +258,7 @@ class TakaminesanDownload(Spring2025AnimeDownload, NewsTemplate2):
     folder_name = 'takaminesan'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
 
     def __init__(self):
         super().__init__()
@@ -258,6 +266,7 @@ class TakaminesanDownload(Spring2025AnimeDownload, NewsTemplate2):
     def run(self):
         self.download_episode_preview()
         self.download_news()
+        self.download_episode_preview_external()
 
     def download_episode_preview(self):
         try:
@@ -289,6 +298,11 @@ class TakaminesanDownload(Spring2025AnimeDownload, NewsTemplate2):
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX)
+
+    def download_episode_preview_external(self):
+        keywords = ['履いてください、鷹峰さん']
+        AniverseMagazineScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                end_date='20250328', download_id=self.download_id).run()
 
 
 # Hibi wa Sugiredo Meshi Umashi
