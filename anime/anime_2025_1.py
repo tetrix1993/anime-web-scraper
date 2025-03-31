@@ -313,7 +313,7 @@ class ArafoTsuhanDownload(Winter2025AnimeDownload):
     folder_name = 'arafotsuhan'
 
     PAGE_PREFIX = website
-    FINAL_EPISODE = 12
+    FINAL_EPISODE = 13
     IMAGES_PER_EPISODE = 6
 
     def __init__(self):
