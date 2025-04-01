@@ -938,8 +938,37 @@ class YourFormaDownload(Spring2025AnimeDownload):
         self.download_episode_preview()
         self.download_news()
 
-    def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+    def download_episode_preview(self, print_http_error=False):
+        api_url = 'https://www.news.yourforma-anime.com/wp-json/wp/v2/story?acf_format=standard&context=embed'
+        try:
+            objs = self.get_json(api_url)
+            for obj in objs:
+                if 'acf' in obj:
+                    acf = obj['acf']
+                    if 'story_num' in acf and 'story_imgs' in acf and isinstance(acf['story_imgs'], list):
+                        try:
+                            episode = ''
+                            ep_num = acf['story_num']
+                            for a in ep_num:
+                                if a.isnumeric():
+                                    episode += a
+                            if len(episode) == 0:
+                                continue
+                            episode = str(int(episode)).zfill(2)
+                        except:
+                            continue
+                        for i in range(len(acf['story_imgs'])):
+                            image_obj = acf['story_imgs'][i]
+                            if 'story_img' in image_obj and 'url' in image_obj['story_img']:
+                                image_url = image_obj['story_img']['url']
+                                image_name = episode + '_' + str(i + 1)
+                                self.add_to_image_list(image_name, image_url, to_jpg=True)
+                        self.download_image_list(self.base_folder)
+        except HTTPError as e:
+            if print_http_error:
+                print(self.__class__.__name__ + ' - 403 Error when retrieving news API.')
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self, print_http_error=False):
         news_url = self.PAGE_PREFIX + 'news/detail.html?id='
