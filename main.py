@@ -14,8 +14,7 @@ def run():
     #         BehenekoDownload.__name__, BotsurakuKizokuDownload.__name__]
     for subclass in Spring2025AnimeDownload.__subclasses__():
         downloads.append(subclass())
-    downloads += [Kusuriya2Download(), AparidaDownload(), Kimisen2Download(), Watakon2Download(), AmekuTakaoDownload(),
-                  IsekaiRedDownload()]
+    downloads += [Kusuriya2Download(), AparidaDownload(), Kimisen2Download(), ShoshiminDownload(), Watakon2Download()]
     # for subclass in [GimaiSeikatsuDownload]:
     #     # if subclass.enabled and subclass.__name__ not in skip:
     #     if subclass.enabled:
