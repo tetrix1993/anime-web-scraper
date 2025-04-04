@@ -957,7 +957,10 @@ class MainDownload:
             return False
         try:
             existing_length = os.path.getsize(filename_with_extension)
-            content_length = int(requests.head(url).headers['Content-Length'])
+            r = requests.head(url)
+            if 400 <= r.status_code < 600:
+                return True
+            content_length = int(r.headers['Content-Length'])
         except Exception as e:
             print(e)
             return True
