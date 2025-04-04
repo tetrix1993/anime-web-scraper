@@ -1242,6 +1242,46 @@ class MainDownload:
                 break
         return success
 
+    # Template for guessing url that has 'core_sys' in the image URL
+    def download_guess_core_sys(self, prefix, final_episode, images_per_episode, x1, x2, x3, x2m, x3m, print_url=False,
+                                check_content_length=False, less_than_amount=None, more_than_amount=None,
+                                less_than_equal=False, more_than_equal=False, is_or=False):
+        folder = self.create_custom_directory('guess')
+        template = prefix + 'core_sys/images/contents/%s/block/%s/%s.jpg'
+        is_successful = False
+        for i in range(final_episode):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_1') or self.is_image_exists(episode + '_1', folder):
+                continue
+            is_success = False
+            first = x1 + i
+            second = x2 + x2m * i
+            third = x3 + x3m * i
+            for j in range(images_per_episode):
+                image_url = template % (str(first).zfill(8), str(second).zfill(8), str(third + j).zfill(8))
+                if print_url:
+                    print(image_url)
+                if check_content_length and\
+                    not self.is_content_length_in_range(image_url, less_than_amount, more_than_amount,
+                                                        less_than_equal, more_than_equal, is_or):
+                    break
+                image_name = episode + '_' + str(j + 1)
+                result = self.download_image(image_url, folder + '/' + image_name)
+                if result == 0:
+                    is_success = True
+                    is_successful = True
+                elif result == -1:
+                    break
+            if is_success:
+                print(self.__class__.__name__ + ' - Guessed successfully!')
+            else:
+                if len(os.listdir(folder)) == 0:
+                    os.rmdir(folder)
+                return
+        if len(os.listdir(folder)) == 0:
+            os.rmdir(folder)
+        return is_successful
+
     @staticmethod
     def get_processed_items_from_cache_file(cache_filepath):
         processed_items = []
