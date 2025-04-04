@@ -170,7 +170,40 @@ class AiomoDarkElfDownload(Spring2025AnimeDownload, NewsTemplate):
         self.download_news()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            eps = soup.select('.contents_head_story_btn[data-num]')
+            lis = soup.select('#js_story>li')
+            for ep in eps:
+                episode = ''
+                add_enabled = False
+                for i in ep.text:
+                    if i.isnumeric():
+                        episode += i
+                        add_enabled = True
+                    elif add_enabled:
+                        break
+                if len(episode) == 0:
+                    continue
+                episode = episode.zfill(2)
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                try:
+                    data_num = int(ep['data-num'])
+                except:
+                    continue
+                if data_num < 0 or len(lis) > data_num + 1:
+                    continue
+                li = lis[data_num]
+                images = li.select('.story_body_thumb a[data-imgload]')
+                self.image_list = []
+                for i in range(len(images)):
+                    image_url = self.PAGE_PREFIX + images[i]['data-imgload'][1:]
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.l_newslist a',
