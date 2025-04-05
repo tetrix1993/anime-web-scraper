@@ -39,7 +39,37 @@ class Aharensan2Download(Spring2025AnimeDownload, NewsTemplate):
         self.download_news()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            styles = soup.select('style[type="text/css"]')
+            self.image_list = []
+            for style in styles:
+                if '#js-epwrap[data-ep="1"]' not in style.text:
+                    continue
+                s = style.text.split('}')
+                for s2 in s:
+                    if '#js-epwrap[data-ep="' in s2:
+                        s3 = s2.split('#js-epwrap[data-ep="')
+                        for t in s3:
+                            if '#js-ep-thumb' not in t:
+                                continue
+                            try:
+                                episode = str(int(t.split('"')[0])).zfill(2)
+                                img_num = str(int(t.split('#js-ep-thumb')[1].split('{')[0].strip()))
+                                image_name = episode + '_' + img_num
+                            except:
+                                continue
+                            if self.is_image_exists(image_name):
+                                continue
+                            if 'url(' in t and ');' in t:
+                                start_idx = t.find('url(') + 4
+                                end_idx = t.find(');')
+                                if start_idx < end_idx:
+                                    image_url = t[start_idx : end_idx]
+                                    self.add_to_image_list(image_name, image_url)
+            self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.md-li__news',
