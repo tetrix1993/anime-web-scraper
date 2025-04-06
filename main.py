@@ -12,8 +12,10 @@ def run():
     downloads = []
     # skip = [SalarymanShitennouDownload.__name__, NeetKunoichiDownload.__name__,
     #         BehenekoDownload.__name__, BotsurakuKizokuDownload.__name__]
+    skip = [GorillaLadyDownload.__name__]
     for subclass in Spring2025AnimeDownload.__subclasses__():
-        downloads.append(subclass())
+        if subclass.enabled and subclass.__name__ not in skip:
+            downloads.append(subclass())
     downloads += [Kusuriya2Download(), AparidaDownload(), Kimisen2Download(), ShoshiminDownload(), Watakon2Download()]
     # for subclass in [GimaiSeikatsuDownload]:
     #     # if subclass.enabled and subclass.__name__ not in skip:
