@@ -537,7 +537,35 @@ class MakinasanDownload(Spring2025AnimeDownload, NewsTemplate):
         self.download_news()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story.html')
+            eps = soup.select('label.tab_menu[for]')
+            for ep in eps:
+                episode = ''
+                add_enabled = False
+                for i in ep.text:
+                    if i.isnumeric():
+                        episode += i
+                        add_enabled = True
+                    elif add_enabled:
+                        break
+                if len(episode) == 0:
+                    continue
+                episode = episode.zfill(2)
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                lbl_for = ep['for']
+                if len(lbl_for) == 0:
+                    continue
+                images = soup.select('#' + lbl_for + ' .gallery img[src]')
+                self.image_list = []
+                for i in range(len(images)):
+                    image_url = self.PAGE_PREFIX + images[i]['src']
+                    image_name = episode + '_' + str(i + 1).zfill(2)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-list__item', title_select='a',
