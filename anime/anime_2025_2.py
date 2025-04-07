@@ -712,6 +712,7 @@ class OssanKenseiDownload(Spring2025AnimeDownload, NewsTemplate2):
     folder_name = 'ossankensei'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
 
     def __init__(self):
         super().__init__()
@@ -719,6 +720,7 @@ class OssanKenseiDownload(Spring2025AnimeDownload, NewsTemplate2):
     def run(self):
         self.download_episode_preview()
         self.download_news()
+        self.download_episode_preview_external()
 
     def download_episode_preview(self):
         try:
@@ -750,6 +752,11 @@ class OssanKenseiDownload(Spring2025AnimeDownload, NewsTemplate2):
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX)
+
+    def download_episode_preview_external(self):
+        keywords = ['片田舎のおっさん、剣聖になる']
+        AniverseMagazineScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                end_date='20250407', download_id=self.download_id).run()
 
 
 # Mono
