@@ -491,6 +491,7 @@ class YamiHealerDownload(Spring2025AnimeDownload, NewsTemplate):
     def run(self):
         self.download_episode_preview()
         self.download_news()
+        self.download_episode_preview_external()
 
     def download_episode_preview(self):
         try:
@@ -516,6 +517,11 @@ class YamiHealerDownload(Spring2025AnimeDownload, NewsTemplate):
                                     date_select='.p-news__item__date', title_select='.p-news__item__ttl',
                                     id_select=None, next_page_select='.c-pager__number', next_page_eval_index=-1,
                                     next_page_eval_index_class='is-active')
+
+    def download_episode_preview_external(self):
+        keywords = ['一瞬で治療していたのに役立たずと追放された天才治癒師、闇ヒーラーとして楽しく生きる']
+        AniverseMagazineScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                end_date='20250407', download_id=self.download_id).run()
 
 
 # Kakushite! Makina-san!!
