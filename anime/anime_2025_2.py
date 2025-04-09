@@ -896,6 +896,8 @@ class NinkoroDownload(Spring2025AnimeDownload, NewsTemplate2):
     folder_name = 'ninkoro'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 6
 
     def __init__(self):
         super().__init__()
@@ -905,7 +907,34 @@ class NinkoroDownload(Spring2025AnimeDownload, NewsTemplate2):
         self.download_news()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/01.html', decode=True)
+            stories = soup.select('table[summary="List_Type01"] a[href]')
+            for story in stories:
+                story_url = self.PAGE_PREFIX + story['href'].replace('../', '')
+                try:
+                    episode = str(self.convert_kanji_to_number(story.text.replace('第', '').replace('葉', ''))).zfill(2)
+                    if episode is None:
+                        continue
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                if episode == '01':
+                    ep_soup = soup
+                else:
+                    ep_soup = self.get_soup(story_url)
+                if ep_soup is not None:
+                    images = ep_soup.select('.ph img[src]')
+                    self.image_list = []
+                    for i in range(len(images)):
+                        image_url = self.PAGE_PREFIX + images[i]['src'].split('?')[0]
+                        image_url = self.remove_string(image_url, ['../', 'sn_'])
+                        image_name = episode + '_' + str(i + 1)
+                        self.add_to_image_list(image_name, image_url, to_jpg=True)
+                    self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX)
