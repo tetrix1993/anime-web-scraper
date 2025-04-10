@@ -611,6 +611,7 @@ class MakinasanDownload(Spring2025AnimeDownload, NewsTemplate):
     folder_name = 'makinasan'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
 
     def __init__(self):
         super().__init__()
@@ -618,6 +619,7 @@ class MakinasanDownload(Spring2025AnimeDownload, NewsTemplate):
     def run(self):
         self.download_episode_preview()
         self.download_news()
+        self.download_episode_preview_external()
 
     def download_episode_preview(self):
         try:
@@ -654,6 +656,11 @@ class MakinasanDownload(Spring2025AnimeDownload, NewsTemplate):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-list__item', title_select='a',
                                     date_select='.news-list__item-data', id_select='a', news_prefix='news.html',
                                     a_tag_prefix=self.PAGE_PREFIX, date_separator='/')
+
+    def download_episode_preview_external(self):
+        keywords = ['かくして！ マキナさん']
+        AniverseMagazineScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                end_date='20250403', download_id=self.download_id).run()
 
 
 # Kanchigai no Atelier Meister
