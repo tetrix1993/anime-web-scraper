@@ -274,7 +274,7 @@ class AiomoDarkElfDownload(Spring2025AnimeDownload, NewsTemplate):
                     data_num = int(ep['data-num'])
                 except:
                     continue
-                if data_num < 0 or len(lis) > data_num + 1:
+                if data_num < 0 or len(lis) < data_num + 1:
                     continue
                 li = lis[data_num]
                 images = li.select('.story_body_thumb a[data-imgload]')
