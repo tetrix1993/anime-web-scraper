@@ -1267,6 +1267,11 @@ class WitchWatchDownload(Spring2025AnimeDownload, NewsTemplate):
         try:
             soup = self.get_soup(self.PAGE_PREFIX + 'story/')
             eps = soup.select('.story--nav a[href]')
+            current_episode = None
+            try:
+                current_episode = str(int(soup.select('h3.epnum em')[0].text)).zfill(2)
+            except Exception:
+                pass
             for ep in eps:
                 try:
                     episode = str(ep.text).zfill(2)
@@ -1274,7 +1279,10 @@ class WitchWatchDownload(Spring2025AnimeDownload, NewsTemplate):
                     continue
                 if self.is_image_exists(episode + '_1'):
                     continue
-                ep_soup = self.get_soup(ep['href'])
+                if current_episode is not None and current_episode == episode:
+                    ep_soup = soup
+                else:
+                    ep_soup = self.get_soup(ep['href'])
                 if ep_soup is None:
                     continue
                 self.image_list = []
