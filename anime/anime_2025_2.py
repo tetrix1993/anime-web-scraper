@@ -920,9 +920,7 @@ class NinkoroDownload(Spring2025AnimeDownload, NewsTemplate2):
             for story in stories:
                 story_url = self.PAGE_PREFIX + story['href'].replace('../', '')
                 try:
-                    episode = str(self.convert_kanji_to_number(story.text.replace('第', '').replace('葉', ''))).zfill(2)
-                    if episode is None:
-                        continue
+                    episode = str(int(story_url.split('/')[-1].replace('.html', ''))).zfill(2)
                 except:
                     continue
                 if self.is_image_exists(episode + '_1'):
