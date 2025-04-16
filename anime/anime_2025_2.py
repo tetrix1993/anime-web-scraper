@@ -1339,7 +1339,8 @@ class YourFormaDownload(Spring2025AnimeDownload):
                             continue
                         for i in range(len(acf['story_imgs'])):
                             image_obj = acf['story_imgs'][i]
-                            if 'story_img' in image_obj and 'url' in image_obj['story_img']:
+                            if 'story_img' in image_obj and isinstance(image_obj['story_img'], dict)\
+                                    and 'url' in image_obj['story_img']:
                                 image_url = image_obj['story_img']['url']
                                 image_name = episode + '_' + str(i + 1)
                                 self.add_to_image_list(image_name, image_url, to_jpg=True)
