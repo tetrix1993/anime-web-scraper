@@ -596,7 +596,7 @@ class YamiHealerDownload(Spring2025AnimeDownload, NewsTemplate):
                                     next_page_eval_index_class='is-active')
 
     def download_episode_preview_external(self):
-        keywords = ['一瞬で治療していたのに役立たずと追放された天才治癒師、闇ヒーラーとして楽しく生きる']
+        keywords = ['闇ヒーラー']
         AniverseMagazineScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE,
                                 end_date='20250407', download_id=self.download_id).run()
 
