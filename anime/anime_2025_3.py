@@ -44,6 +44,35 @@ class KaoruHanaDownload(Summer2025AnimeDownload, NewsTemplate):
                                     a_tag_start_text_to_remove='./', a_tag_prefix=self.PAGE_PREFIX + 'news/')
 
 
+# Koujo Denka no Kateikyoushi
+class KoujoDenkaDownload(Summer2025AnimeDownload, NewsTemplate):
+    title = 'Koujo Denka no Kateikyoushi'
+    keywords = [title, "Private Tutor to the Duke's Daughter", 'Koujodenka']
+    website = 'https://koujodenka-anime.com/'
+    twitter = 'koujo_anime'
+    hashtags = '公女殿下'
+    folder_name = 'koujodenka'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.bg-newsItem',
+                                    date_select='.text-newsDate', title_select='.text-base.line-clamp-3', id_select='a',
+                                    a_tag_start_text_to_remove='/', a_tag_prefix=self.PAGE_PREFIX, paging_type=2,
+                                    next_page_select='.h-full.shadow-pagerShadow', next_page_eval_index=-1,
+                                    next_page_eval_index_class='pointer-events-none')
+
+
 # Silent Witch: Chinmoku no Majo no Kakushigoto
 class SilentWitchDownload(Summer2025AnimeDownload, NewsTemplate):
     title = 'Silent Witch: Chinmoku no Majo no Kakushigoto'
