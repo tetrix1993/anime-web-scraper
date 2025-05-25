@@ -86,6 +86,7 @@ The premiere date for the anime listed here has not been announced.
 * To be added
 
 ### Summer 2025 Anime
+* [Kaoru Hana wa Rin to Saku](https://kaoruhana-anime.com/)
 * [Tsuyokute New Saga](https://tsuyosaga-pr.com/)
 
 ### Spring 2025 Anime

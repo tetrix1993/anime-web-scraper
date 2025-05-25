@@ -17,6 +17,33 @@ class Summer2025AnimeDownload(MainDownload):
         super().__init__()
 
 
+# Kaoru Hana wa Rin to Saku
+class KaoruHanaDownload(Summer2025AnimeDownload, NewsTemplate):
+    title = 'Kaoru Hana wa Rin to Saku'
+    keywords = [title, 'The Fragrant Flower Blooms with Dignity', 'Kaoruhana']
+    website = 'https://kaoruhana-anime.com/'
+    twitter = 'kaoruhana_anime'
+    hashtags = '薫る花'
+    folder_name = 'kaoruhana'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news_list__item',
+                                    date_select='.-date', title_select='.-title', id_select='a',
+                                    a_tag_start_text_to_remove='./', a_tag_prefix=self.PAGE_PREFIX + 'news/')
+
+
 # Tsuyokute New Saga
 class TsuyosagaDownload(Summer2025AnimeDownload, NewsTemplate4):
     title = 'Tsuyokute New Saga'
