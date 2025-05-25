@@ -87,6 +87,7 @@ The premiere date for the anime listed here has not been announced.
 
 ### Summer 2025 Anime
 * [Kaoru Hana wa Rin to Saku](https://kaoruhana-anime.com/)
+* [Silent Witch: Chinmoku no Majo no Kakushigoto](https://silentwitch.net/)
 * [Tsuyokute New Saga](https://tsuyosaga-pr.com/)
 
 ### Spring 2025 Anime

@@ -44,6 +44,33 @@ class KaoruHanaDownload(Summer2025AnimeDownload, NewsTemplate):
                                     a_tag_start_text_to_remove='./', a_tag_prefix=self.PAGE_PREFIX + 'news/')
 
 
+# Silent Witch: Chinmoku no Majo no Kakushigoto
+class SilentWitchDownload(Summer2025AnimeDownload, NewsTemplate):
+    title = 'Silent Witch: Chinmoku no Majo no Kakushigoto'
+    keywords = [title, 'Secrets of the Silent Witch']
+    website = 'https://silentwitch.net/'
+    twitter = 'SilentWitch_pr'
+    hashtags = 'サイレントウィッチ'
+    folder_name = 'silentwitch'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.l-news__list-item',
+                                    date_select='.l-news__list-item-date', title_select='.l-news__list-item-title',
+                                    id_select='a', a_tag_prefix=self.PAGE_PREFIX + 'news/')
+
+
 # Tsuyokute New Saga
 class TsuyosagaDownload(Summer2025AnimeDownload, NewsTemplate4):
     title = 'Tsuyokute New Saga'
