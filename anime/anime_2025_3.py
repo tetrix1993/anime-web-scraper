@@ -218,7 +218,7 @@ class KaoruHanaDownload(Summer2025AnimeDownload, NewsTemplate):
 class KizetsuYushaDownload(Summer2025AnimeDownload, NewsTemplate):
     title = 'Kizetsu Yuusha to Ansatsu Hime'
     keywords = [title, 'The Stunned Hero and the Assassin Princesses']
-    website = 'https://kizetsuyusha-anime.com//'
+    website = 'https://kizetsuyusha-anime.com/'
     twitter = 'kzt_toto'
     hashtags = '気絶勇者'
     folder_name = 'kizetsuyusha'
