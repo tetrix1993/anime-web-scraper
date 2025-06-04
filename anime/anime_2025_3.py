@@ -242,6 +242,33 @@ class MattanDownload(Summer2025AnimeDownload, NewsTemplate2):
         self.download_template_news(page_prefix=self.PAGE_PREFIX)
 
 
+# Mizu Zokusei no Mahoutsukai
+class MizuZokuseiDownload(Summer2025AnimeDownload, NewsTemplate):
+    title = 'Mizu Zokusei no Mahoutsukai'
+    keywords = [title, 'The Water Magician']
+    website = 'https://mizuzokusei-anime.com/'
+    twitter = 'anime_mizuzoku'
+    hashtags = '水属性'
+    folder_name = 'mizuzokusei'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-list .item',
+                                    date_select='.date', title_select='.text', id_select='a',
+                                    date_func=lambda x: x[0:10])
+
+
 # Silent Witch: Chinmoku no Majo no Kakushigoto
 class SilentWitchDownload(Summer2025AnimeDownload, NewsTemplate):
     title = 'Silent Witch: Chinmoku no Majo no Kakushigoto'
