@@ -82,6 +82,31 @@ class FutariSoloCampDownload(Summer2025AnimeDownload, NewsTemplate2):
         self.download_template_news(page_prefix=self.PAGE_PREFIX)
 
 
+# GaCen Shoujo to Ibunka Kouryuu
+class GaCenShoujoDownload(Summer2025AnimeDownload, NewsTemplate2):
+    title = 'GaCen Shoujo to Ibunka Kouryuu'
+    keywords = [title, 'Cultural Exchange With a Game Centre Girl']
+    website = 'https://gacen-girl-anime.com/'
+    twitter = 'GaCenGirl_Anime'
+    hashtags = 'ゲーセン少女'
+    folder_name = 'gacenshoujo'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX)
+
+
 # Kaoru Hana wa Rin to Saku
 class KaoruHanaDownload(Summer2025AnimeDownload, NewsTemplate):
     title = 'Kaoru Hana wa Rin to Saku'
