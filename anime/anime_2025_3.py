@@ -57,6 +57,31 @@ class BadGirlDownload(Summer2025AnimeDownload, NewsTemplate4):
         self.download_template_news(json_url=self.PAGE_PREFIX + 'api/site-data/init', verify=False)
 
 
+# Futari Solo Camp
+class FutariSoloCampDownload(Summer2025AnimeDownload, NewsTemplate2):
+    title = 'Futari Solo Camp'
+    keywords = [title, 'Solo Camping for Two']
+    website = 'https://2solocamp-anime.com/'
+    twitter = '2solocamp_anime'
+    hashtags = 'ふたりソロキャンプ'
+    folder_name = 'futarisolocamp'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX)
+
+
 # Kaoru Hana wa Rin to Saku
 class KaoruHanaDownload(Summer2025AnimeDownload, NewsTemplate):
     title = 'Kaoru Hana wa Rin to Saku'
