@@ -130,7 +130,7 @@ class MynoghraDownload(Summer2025AnimeDownload, NewsTemplate):
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.bl_news__article_item',
-                                    date_select='time ', title_select='h3', id_select='a', paging_type=3,
+                                    date_select='time', title_select='h3', id_select='a', paging_type=3,
                                     paging_suffix='?page=%s', next_page_select='.next.page-numbers')
 
 
@@ -437,3 +437,30 @@ class WatarikunDownload(Summer2025AnimeDownload, NewsTemplate2):
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX)
+
+
+# Yuusha Party wo Tsuihou sareta Shiromadoushi, S-Rank Boukensha ni Hirowareru
+class TsuihoShiromadoshiDownload(Summer2025AnimeDownload, NewsTemplate):
+    title = 'Yuusha Party wo Tsuihou sareta Shiromadoushi, S-Rank Boukensha ni Hirowareru'
+    keywords = [title, "Scooped Up by an S-Rank Adventurer!"]
+    website = 'https://tsuiho-shiromadoshi.com/'
+    twitter = 'tsuiho_anime'
+    hashtags = '追放白魔導師'
+    folder_name = 'tsuihoshiromadoshi'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.bl_posts_item',
+                                    date_select='.bl_posts_date', title_select='.bl_posts_txt', id_select='a',
+                                    paging_type=3, paging_suffix='?page=%s', next_page_select='.next.page-numbers')
