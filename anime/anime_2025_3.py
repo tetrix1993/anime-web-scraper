@@ -107,6 +107,33 @@ class GaCenShoujoDownload(Summer2025AnimeDownload, NewsTemplate2):
         self.download_template_news(page_prefix=self.PAGE_PREFIX)
 
 
+# Isekai Mokushiroku Mynoghra
+class MynoghraDownload(Summer2025AnimeDownload, NewsTemplate):
+    title = 'Isekai Mokushiroku Mynoghra'
+    keywords = [title, 'Apocalypse Bringer Mynoghra']
+    website = 'https://mynoghra-anime.com/'
+    twitter = 'myap_GCofficial'
+    hashtags = 'マイノグーラ'
+    folder_name = 'mynoghra'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.bl_news__article_item',
+                                    date_select='time ', title_select='h3', id_select='a', paging_type=3,
+                                    paging_suffix='?page=%s', next_page_select='.next.page-numbers')
+
+
 # Kaoru Hana wa Rin to Saku
 class KaoruHanaDownload(Summer2025AnimeDownload, NewsTemplate):
     title = 'Kaoru Hana wa Rin to Saku'
