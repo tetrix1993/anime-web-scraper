@@ -412,3 +412,28 @@ class TsuyosagaDownload(Summer2025AnimeDownload, NewsTemplate4):
             result = self.download_image(image_url, folder + '/' + image_name)
             if result == -1:
                 break
+
+
+# Watari-kun no xx ga Houkai Sunzen
+class WatarikunDownload(Summer2025AnimeDownload, NewsTemplate2):
+    title = 'Watari-kun no xx ga Houkai Sunzen'
+    keywords = [title, "Watari-kun's ****** Is about to Collapse"]
+    website = 'https://watarikunxx-anime.com/'
+    twitter = 'watarikun_anime'
+    hashtags = '渡くん'
+    folder_name = 'watarikun'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX)

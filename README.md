@@ -99,6 +99,7 @@ The premiere date for the anime listed here has not been announced.
 * [Silent Witch: Chinmoku no Majo no Kakushigoto](https://silentwitch.net/)
 * [Tsuihousha Shokudou e Youkoso!](https://tsuihosha-shokudo.com/)
 * [Tsuyokute New Saga](https://tsuyosaga-pr.com/)
+* [Watari-kun no xx ga Houkai Sunzen](https://watarikunxx-anime.com/)
 
 ### Spring 2025 Anime
 * [Aharen-san wa Hakarenai Season 2](https://aharen-pr.com/)
