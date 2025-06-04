@@ -269,6 +269,33 @@ class MizuZokuseiDownload(Summer2025AnimeDownload, NewsTemplate):
                                     date_func=lambda x: x[0:10])
 
 
+# Ruri no Houseki
+class RurinoHousekiDownload(Summer2025AnimeDownload, NewsTemplate):
+    title = 'Ruri no Houseki'
+    keywords = [title, 'Ruri Rocks']
+    website = 'https://rurinohouseki.com/'
+    twitter = 'rurinohouseki'
+    hashtags = '瑠璃の宝石'
+    folder_name = 'rurinohouseki'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        # self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.p-news__list-item',
+                                    date_select='.p-news_article__date', title_select='.p-news_article__title',
+                                    id_select='a', a_tag_prefix=self.PAGE_PREFIX, a_tag_start_text_to_remove='/')
+
+
 # Silent Witch: Chinmoku no Majo no Kakushigoto
 class SilentWitchDownload(Summer2025AnimeDownload, NewsTemplate):
     title = 'Silent Witch: Chinmoku no Majo no Kakushigoto'
