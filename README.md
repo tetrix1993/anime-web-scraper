@@ -93,6 +93,7 @@ The premiere date for the anime listed here has not been announced.
 * [Kaoru Hana wa Rin to Saku](https://kaoruhana-anime.com/)
 * [Kizetsu Yuusha to Ansatsu Hime](https://kizetsuyusha-anime.com/)
 * [Koujo Denka no Kateikyoushi](https://koujodenka-anime.com/)
+* [Mattaku Saikin no Tantei to Kitara](https://mattan-anime.com/)
 * [Silent Witch: Chinmoku no Majo no Kakushigoto](https://silentwitch.net/)
 * [Tsuyokute New Saga](https://tsuyosaga-pr.com/)
 
