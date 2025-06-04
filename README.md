@@ -87,6 +87,7 @@ The premiere date for the anime listed here has not been announced.
 
 ### Summer 2025 Anime
 * [Bad Girl](https://badgirl-anime.com/)
+* [Food Court de, Mata Ashita.](https://www.foodcourtjk-anime.com/)
 * [Futari Solo Camp](https://2solocamp-anime.com/)
 * [GaCen Shoujo to Ibunka Kouryuu](https://gacen-girl-anime.com/)
 * [Isekai Mokushiroku Mynoghra](https://mynoghra-anime.com/onair/)

@@ -57,6 +57,32 @@ class BadGirlDownload(Summer2025AnimeDownload, NewsTemplate4):
         self.download_template_news(json_url=self.PAGE_PREFIX + 'api/site-data/init', verify=False)
 
 
+# Food Court de, Mata Ashita.
+class FoodCourtDownload(Summer2025AnimeDownload, NewsTemplate):
+    title = 'Food Court de, Mata Ashita.'
+    keywords = [title, 'See You Tomorrow at the Food Court']
+    website = 'https://www.foodcourtjk-anime.com/'
+    twitter = 'foodcourt_anime'
+    hashtags = ['フドあす', 'foodcourtjk']
+    folder_name = 'foodcourtjk'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.sw-News_Item', date_select='.date',
+                                    title_select='.ttl', id_select='a', next_page_select='.nextpostslink')
+
+
 # Futari Solo Camp
 class FutariSoloCampDownload(Summer2025AnimeDownload, NewsTemplate2):
     title = 'Futari Solo Camp'
