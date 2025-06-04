@@ -86,6 +86,7 @@ The premiere date for the anime listed here has not been announced.
 * To be added
 
 ### Summer 2025 Anime
+* [9: Ruler's Crown](https://nine-anime.marv.jp/)
 * [Bad Girl](https://badgirl-anime.com/)
 * [Food Court de, Mata Ashita.](https://www.foodcourtjk-anime.com/)
 * [Futari Solo Camp](https://2solocamp-anime.com/)

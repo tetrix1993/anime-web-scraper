@@ -17,6 +17,33 @@ class Summer2025AnimeDownload(MainDownload):
         super().__init__()
 
 
+# 9: Ruler's Crown
+class NineDownload(Summer2025AnimeDownload, NewsTemplate):
+    title = "9: Ruler's Crown"
+    keywords = [title, 'nine']
+    website = 'https://nine-anime.marv.jp/'
+    twitter = 'info_9_nine_'
+    hashtags = ['9ナイン', 'アニメナイン']
+    folder_name = 'nine'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.c-news-list__item',
+                                    date_select='.date', title_select='.title', id_select='a',
+                                    a_tag_prefix=self.PAGE_PREFIX, a_tag_start_text_to_remove='/')
+
+
 # Bad Girl
 class BadGirlDownload(Summer2025AnimeDownload, NewsTemplate4):
     title = 'Bad Girl'
