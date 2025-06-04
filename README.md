@@ -86,6 +86,7 @@ The premiere date for the anime listed here has not been announced.
 * To be added
 
 ### Summer 2025 Anime
+* [Bad Girl](https://badgirl-anime.com/)
 * [Kaoru Hana wa Rin to Saku](https://kaoruhana-anime.com/)
 * [Koujo Denka no Kateikyoushi](https://koujodenka-anime.com/)
 * [Silent Witch: Chinmoku no Majo no Kakushigoto](https://silentwitch.net/)
