@@ -1555,8 +1555,8 @@ class SlowLoopDownload(Winter2022AnimeDownload, NewsTemplate):
 class KisekoiDownload(Winter2022AnimeDownload, NewsTemplate):
     title = 'Sono Bisque Doll wa Koi wo Suru'
     keywords = [title, 'kisekoi', 'My Dress-Up Darling']
-    website = 'https://bisquedoll-anime.com/'
-    twitter = 'kisekoi'
+    website = 'https://bisquedoll-anime.com/1st/'
+    twitter = 'kisekoi_anime'
     hashtags = '着せ恋'
     folder_name = 'kisekoi'
 

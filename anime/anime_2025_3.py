@@ -349,6 +349,35 @@ class RurinoHousekiDownload(Summer2025AnimeDownload, NewsTemplate):
                                     id_select='a', a_tag_prefix=self.PAGE_PREFIX, a_tag_start_text_to_remove='/')
 
 
+# Sono Bisque Doll wa Koi wo Suru S2
+class Kisekoi2Download(Summer2025AnimeDownload, NewsTemplate):
+    title = 'Sono Bisque Doll wa Koi wo Suru Season 2'
+    keywords = [title, 'kisekoi', 'My Dress-Up Darling', '2nd']
+    website = 'https://bisquedoll-anime.com/'
+    twitter = 'kisekoi_anime'
+    hashtags = '着せ恋'
+    folder_name = 'kisekoi2'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.l-news__list-item',
+                                    date_select='.l-news__date', title_select='.l-news__title',
+                                    id_select='a', paging_type=1, a_tag_prefix=self.PAGE_PREFIX + 'news/',
+                                    stop_date='2024.06', next_page_select='.c-nav__item.--next a',
+                                    next_page_eval_index_class='is-disable', next_page_eval_index=-1)
+
+
 # Silent Witch: Chinmoku no Majo no Kakushigoto
 class SilentWitchDownload(Summer2025AnimeDownload, NewsTemplate):
     title = 'Silent Witch: Chinmoku no Majo no Kakushigoto'

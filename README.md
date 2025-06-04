@@ -99,6 +99,7 @@ The premiere date for the anime listed here has not been announced.
 * [Mizu Zokusei no Mahoutsukai](https://mizuzokusei-anime.com/)
 * [Ruri no Houseki](https://rurinohouseki.com/)
 * [Silent Witch: Chinmoku no Majo no Kakushigoto](https://silentwitch.net/)
+* [Sono Bisque Doll wa Koi wo Suru Season 2](https://bisquedoll-anime.com/1st/)
 * [Tsuihousha Shokudou e Youkoso!](https://tsuihosha-shokudo.com/)
 * [Tsuyokute New Saga](https://tsuyosaga-pr.com/)
 * [Watari-kun no xx ga Houkai Sunzen](https://watarikunxx-anime.com/)
@@ -496,7 +497,7 @@ The premiere date for the anime listed here has not been announced.
 * [Shikkakumon no Saikyou Kenja](https://shikkakumon.com/)
 * [Shuumatsu no Harem](https://end-harem-anime.com/)
 * [Slow Loop](https://slowlooptv.com/)
-* [Sono Bisque Doll wa Koi wo Suru](https://bisquedoll-anime.com/)
+* [Sono Bisque Doll wa Koi wo Suru](https://bisquedoll-anime.com/1st/)
 * [Tensai Ouji no Akaji Kokka Saisei Jutsu](https://tensaiouji-anime.com/)
 
 ### Fall 2021 Anime
