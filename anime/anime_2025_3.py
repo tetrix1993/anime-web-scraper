@@ -161,6 +161,33 @@ class KaoruHanaDownload(Summer2025AnimeDownload, NewsTemplate):
                                     a_tag_start_text_to_remove='./', a_tag_prefix=self.PAGE_PREFIX + 'news/')
 
 
+# Kizetsu Yuusha to Ansatsu Hime
+class KizetsuYushaDownload(Summer2025AnimeDownload, NewsTemplate):
+    title = 'Kizetsu Yuusha to Ansatsu Hime'
+    keywords = [title, 'The Stunned Hero and the Assassin Princesses']
+    website = 'https://kizetsuyusha-anime.com//'
+    twitter = 'kzt_toto'
+    hashtags = '気絶勇者'
+    folder_name = 'kizetsuyusha'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.p-news__item',
+                                    date_select='.p-news__date', title_select='.p-news__description', id_select='a',
+                                    date_func=lambda x: x[0:4] + '.' + x[5:7] + '.' + x[7:9])
+
+
 # Koujo Denka no Kateikyoushi
 class KoujoDenkaDownload(Summer2025AnimeDownload, NewsTemplate):
     title = 'Koujo Denka no Kateikyoushi'

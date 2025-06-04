@@ -91,6 +91,7 @@ The premiere date for the anime listed here has not been announced.
 * [GaCen Shoujo to Ibunka Kouryuu](https://gacen-girl-anime.com/)
 * [Isekai Mokushiroku Mynoghra](https://mynoghra-anime.com/onair/)
 * [Kaoru Hana wa Rin to Saku](https://kaoruhana-anime.com/)
+* [Kizetsu Yuusha to Ansatsu Hime](https://kizetsuyusha-anime.com/)
 * [Koujo Denka no Kateikyoushi](https://koujodenka-anime.com/)
 * [Silent Witch: Chinmoku no Majo no Kakushigoto](https://silentwitch.net/)
 * [Tsuyokute New Saga](https://tsuyosaga-pr.com/)
