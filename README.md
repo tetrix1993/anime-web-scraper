@@ -97,6 +97,7 @@ The premiere date for the anime listed here has not been announced.
 * [Mizu Zokusei no Mahoutsukai](https://mizuzokusei-anime.com/)
 * [Ruri no Houseki](https://rurinohouseki.com/)
 * [Silent Witch: Chinmoku no Majo no Kakushigoto](https://silentwitch.net/)
+* [Tsuihousha Shokudou e Youkoso!](https://tsuihosha-shokudo.com/)
 * [Tsuyokute New Saga](https://tsuyosaga-pr.com/)
 
 ### Spring 2025 Anime

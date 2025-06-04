@@ -296,6 +296,36 @@ class RurinoHousekiDownload(Summer2025AnimeDownload, NewsTemplate):
                                     id_select='a', a_tag_prefix=self.PAGE_PREFIX, a_tag_start_text_to_remove='/')
 
 
+# Tsuihousha Shokudou e Youkoso!
+class TsuishokuDownload(Summer2025AnimeDownload, NewsTemplate):
+    title = 'Tsuihousha Shokudou e Youkoso!'
+    keywords = [title, "Welcome to the Outcast's Restaurant!", 'tsuishoku']
+    website = 'https://tsuihosha-shokudo.com/'
+    twitter = 'tsuishoku_PR'
+    hashtags = ['追放者食堂', 'WelcomeToTheOutcastsRestaurant']
+    folder_name = 'tsuishoku'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.p-news__list-item',
+                                    date_select='.p-news_data__date', title_select='.p-news_data__ttl',
+                                    id_select='a', a_tag_prefix=self.PAGE_PREFIX + 'news/',
+                                    a_tag_start_text_to_remove='./', paging_type=3, paging_suffix='?page=%s',
+                                    next_page_select='.c-pagination__list-item', next_page_eval_index=-1,
+                                    next_page_eval_index_class='is-current')
+
+
 # Silent Witch: Chinmoku no Majo no Kakushigoto
 class SilentWitchDownload(Summer2025AnimeDownload, NewsTemplate):
     title = 'Silent Witch: Chinmoku no Majo no Kakushigoto'
