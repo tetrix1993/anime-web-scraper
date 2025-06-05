@@ -118,8 +118,8 @@ class GrandBlueDownload(Summer2018AnimeDownload):
     keywords = ["Grand Blue"]
     folder_name = 'grand-blue'
 
-    PAGE_PREFIX = "https://www.grandblue-anime.com/"
-    STORY_PAGE = "https://www.grandblue-anime.com/story/introduction.html"
+    PAGE_PREFIX = "https://www.grandblue-anime.com/01/"
+    STORY_PAGE = "https://www.grandblue-anime.com/01/story/introduction.html"
     
     def __init__(self):
         super().__init__()

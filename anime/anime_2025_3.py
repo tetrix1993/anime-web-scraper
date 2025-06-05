@@ -160,6 +160,31 @@ class GaCenShoujoDownload(Summer2025AnimeDownload, NewsTemplate2):
         self.download_template_news(page_prefix=self.PAGE_PREFIX)
 
 
+# Grand Blue S2
+class GrandBlue2Download(Summer2025AnimeDownload, NewsTemplate2):
+    title = 'Grand Blue Season 2'
+    keywords = [title, 'Grand Blue Dreaming', '2nd']
+    website = 'https://www.grandblue-anime.com/'
+    twitter = 'gb_anime'
+    hashtags = 'ぐらんぶる'
+    folder_name = 'grandblue2'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX)
+
+
 # Isekai Mokushiroku Mynoghra
 class MynoghraDownload(Summer2025AnimeDownload, NewsTemplate):
     title = 'Isekai Mokushiroku Mynoghra'
@@ -441,7 +466,7 @@ class TateNoYuusha4Download(Summer2025AnimeDownload):
     website = "http://shieldhero-anime.jp/"
     twitter = 'shieldheroanime'
     hashtags = ['shieldhero', '盾の勇者の成り上がり']
-    folder_name = 'tate-no-yuusha4'
+    folder_name = 'tatenoyuusha4'
 
     PAGE_PREFIX = website
     FINAL_EPISODE = 13
