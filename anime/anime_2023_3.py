@@ -861,7 +861,7 @@ class JitsuoresaikyouDownload(Summer2023AnimeDownload, NewsTemplate):
 class Kanokari3Download(Summer2023AnimeDownload, NewsTemplate):
     title = "Kanojo, Okarishimasu 3rd Season"
     keywords = [title, "Kanokari", "Rent-a-Girlfriend"]
-    website = 'https://kanokari-official.com/'
+    website = 'https://kanokari-official.com/3rd/'
     twitter = 'kanokari_anime'
     hashtags = ['彼女お借りします', 'かのかり', 'kanokari']
     folder_name = 'kanokari3'
@@ -903,7 +903,7 @@ class Kanokari3Download(Summer2023AnimeDownload, NewsTemplate):
             self.print_exception(e)
 
     def download_episode_preview_guess(self):
-        template = self.PAGE_PREFIX + '3rd/wp-content/uploads/%s/%s/かのかり3_%s-%s.%s'
+        template = self.PAGE_PREFIX + 'wp-content/uploads/%s/%s/かのかり3_%s-%s.%s'
         current_date = datetime.now() + timedelta(hours=1)
         year = current_date.strftime('%Y')
         month = current_date.strftime('%m')
@@ -930,7 +930,7 @@ class Kanokari3Download(Summer2023AnimeDownload, NewsTemplate):
             return
         # https://kanokari-official.com/3rd/wp-content/uploads/2023/09/かのかり3_33-01.jpg
         folder = self.create_custom_directory('guess')
-        template = self.PAGE_PREFIX + '3rd/wp-content/uploads/%s/%s/かのかり3_%s-%s.jpg'
+        template = self.PAGE_PREFIX + 'wp-content/uploads/%s/%s/かのかり3_%s-%s.jpg'
         current_date = datetime.now() + timedelta(hours=1)
         year = current_date.strftime('%Y')
         month = current_date.strftime('%m')
@@ -991,7 +991,7 @@ class Kanokari3Download(Summer2023AnimeDownload, NewsTemplate):
         except Exception as e:
             self.print_exception(e, 'Key Visual')
 
-        template = self.PAGE_PREFIX + '3rd/wp-content/themes/kanokari_3rd_honban/images/kv-3rd%s.jpg'
+        template = self.PAGE_PREFIX + 'wp-content/themes/kanokari_3rd_honban/images/kv-3rd%s.jpg'
         self.download_by_template(folder, template, 1, 4)
 
     def download_character(self):

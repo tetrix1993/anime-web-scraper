@@ -212,6 +212,49 @@ class MynoghraDownload(Summer2025AnimeDownload, NewsTemplate):
                                     paging_suffix='?page=%s', next_page_select='.next.page-numbers')
 
 
+# Kanojo, Okarishimasu 4th Season
+class Kanokari4Download(Summer2025AnimeDownload, NewsTemplate4):
+    title = "Kanojo, Okarishimasu 4th Season"
+    keywords = [title, "Kanokari", "Rent-a-Girlfriend"]
+    website = 'https://kanokari-official.com/'
+    twitter = 'kanokari_anime'
+    hashtags = ['彼女お借りします', 'かのかり', 'kanokari']
+    folder_name = 'kanokari4'
+
+    PAGE_PREFIX = website
+    FIRST_EPISODE = 37
+    FINAL_EPISODE = 48
+    IMAGES_PER_EPISODE = 6
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        json_obj = None
+        try:
+            json_obj = self.get_json(self.PAGE_PREFIX + 'api/site-data/init')
+            if 'stories' not in json_obj:
+                return
+            for story in json_obj['stories']:
+                episode = story['episode'].zfill(2)
+                self.image_list = []
+                for i in range(len(story['images'])):
+                    image_name = episode + '_' + str(i + 1)
+                    image_url = story['images'][i]['image_path']
+                    self.add_to_image_list(image_name, image_url, to_jpg=True)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
+        return json_obj
+
+    def download_news(self, json_obj=None):
+        self.download_template_news(json_url=self.PAGE_PREFIX + 'api/site-data/init')
+
+
 # Kaoru Hana wa Rin to Saku
 class KaoruHanaDownload(Summer2025AnimeDownload, NewsTemplate):
     title = 'Kaoru Hana wa Rin to Saku'
