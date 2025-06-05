@@ -349,6 +349,33 @@ class RurinoHousekiDownload(Summer2025AnimeDownload, NewsTemplate):
                                     id_select='a', a_tag_prefix=self.PAGE_PREFIX, a_tag_start_text_to_remove='/')
 
 
+# Silent Witch: Chinmoku no Majo no Kakushigoto
+class SilentWitchDownload(Summer2025AnimeDownload, NewsTemplate):
+    title = 'Silent Witch: Chinmoku no Majo no Kakushigoto'
+    keywords = [title, 'Secrets of the Silent Witch']
+    website = 'https://silentwitch.net/'
+    twitter = 'SilentWitch_pr'
+    hashtags = 'サイレントウィッチ'
+    folder_name = 'silentwitch'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.l-news__list-item',
+                                    date_select='.l-news__list-item-date', title_select='.l-news__list-item-title',
+                                    id_select='a', a_tag_prefix=self.PAGE_PREFIX + 'news/')
+
+
 # Sono Bisque Doll wa Koi wo Suru S2
 class Kisekoi2Download(Summer2025AnimeDownload, NewsTemplate):
     title = 'Sono Bisque Doll wa Koi wo Suru Season 2'
@@ -378,16 +405,18 @@ class Kisekoi2Download(Summer2025AnimeDownload, NewsTemplate):
                                     next_page_eval_index_class='is-disable', next_page_eval_index=-1)
 
 
-# Silent Witch: Chinmoku no Majo no Kakushigoto
-class SilentWitchDownload(Summer2025AnimeDownload, NewsTemplate):
-    title = 'Silent Witch: Chinmoku no Majo no Kakushigoto'
-    keywords = [title, 'Secrets of the Silent Witch']
-    website = 'https://silentwitch.net/'
-    twitter = 'SilentWitch_pr'
-    hashtags = 'サイレントウィッチ'
-    folder_name = 'silentwitch'
+# Tate no Yuusha no Nariagari Season 4
+class TateNoYuusha4Download(Summer2025AnimeDownload):
+    title = "Tate no Yuusha no Nariagari Season 4"
+    keywords = [title, "The Rising of the Shield Hero", "4th"]
+    website = "http://shieldhero-anime.jp/"
+    twitter = 'shieldheroanime'
+    hashtags = ['shieldhero', '盾の勇者の成り上がり']
+    folder_name = 'tate-no-yuusha4'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 13
+    IMAGES_PER_EPISODE = 6
 
     def __init__(self):
         super().__init__()
@@ -400,9 +429,33 @@ class SilentWitchDownload(Summer2025AnimeDownload, NewsTemplate):
         self.has_website_updated(self.PAGE_PREFIX, 'index')
 
     def download_news(self):
-        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.l-news__list-item',
-                                    date_select='.l-news__list-item-date', title_select='.l-news__list-item-title',
-                                    id_select='a', a_tag_prefix=self.PAGE_PREFIX + 'news/')
+        news_url = self.website + 'news/'
+        try:
+            soup = self.get_soup(news_url, decode=True)
+            articles = soup.select('article.p-newspage_item')
+            news_obj = self.get_last_news_log_object()
+            results = []
+            for article in articles:
+                tag_date = article.find('span', class_='a')
+                tag_title = article.find('h2', class_='txt')
+                if tag_date and tag_title and tag_title.has_attr('id'):
+                    article_id = tag_title['id'].strip()
+                    date = self.format_news_date(tag_date.text.strip())
+                    if len(date) == 0:
+                        continue
+                    title = tag_title.text.strip()
+                    if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
+                        break
+                    results.append(self.create_news_log_object(date, title, article_id))
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log_from_news_log_object(result)
+                if process_result == 0:
+                    success_count += 1
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
+        except Exception as e:
+            self.print_exception(e, 'News')
 
 
 # Tsuihousha Shokudou e Youkoso!

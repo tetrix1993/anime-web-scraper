@@ -3282,7 +3282,7 @@ class TateNoYuusha3Download(Fall2023AnimeDownload):
     hashtags = ['shieldhero', '盾の勇者の成り上がり']
     folder_name = 'tate-no-yuusha3'
 
-    PAGE_PREFIX = website
+    PAGE_PREFIX = website + '/3rd'
     FINAL_EPISODE = 13
     IMAGES_PER_EPISODE = 6
 
@@ -3298,7 +3298,7 @@ class TateNoYuusha3Download(Fall2023AnimeDownload):
 
     def download_episode_preview(self):
         try:
-            template = self.PAGE_PREFIX + 'assets/img/3rd/story/ss/ep%s/%s.jpg'
+            template = self.website + 'assets/img/3rd/story/ss/ep%s/%s.jpg'
             stop = False
             for i in range(self.FINAL_EPISODE):
                 episode = str(i + 1).zfill(2)
