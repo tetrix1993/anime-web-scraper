@@ -212,6 +212,33 @@ class MynoghraDownload(Summer2025AnimeDownload, NewsTemplate):
                                     paging_suffix='?page=%s', next_page_select='.next.page-numbers')
 
 
+# Jidou Hanbaiki ni Umarekawatta Ore wa Meikyuu wo Samayou S2
+class Jihanki2Download(Summer2025AnimeDownload, NewsTemplate):
+    title = 'Jidou Hanbaiki ni Umarekawatta Ore wa Meikyuu wo Samayou 2nd Season'
+    keywords = [title, "jihanki", 'Reborn as a Vending Machine, I Now Wander the Dungeon']
+    website = 'https://jihanki-anime.com/'
+    twitter = 'jihanki_anime'
+    hashtags = ['jihanki', '俺自販機']
+    folder_name = 'jihanki2'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        news_url = 'https://up-info.news/jihanki-anime/2nd/'
+        self.download_template_news(page_prefix=news_url, article_select='.modListNews li', title_select='h3',
+                                    date_select='time', id_select='a', date_separator='/', news_prefix='')
+
+
 # Kakkou no Iinazuke S2
 class KakkounoIinazuke2Download(Summer2025AnimeDownload, NewsTemplate3):
     title = 'Kakkou no Iinazuke Season 2'

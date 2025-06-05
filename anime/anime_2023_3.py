@@ -651,7 +651,7 @@ class Horimiya2Download(Summer2023AnimeDownload, NewsTemplate):
 class JihankiDownload(Summer2023AnimeDownload, NewsTemplate):
     title = 'Jidou Hanbaiki ni Umarekawatta Ore wa Meikyuu wo Samayou'
     keywords = [title, "jihanki", 'Reborn as a Vending Machine, I Now Wander the Dungeon']
-    website = 'https://jihanki-anime.com/'
+    website = 'https://jihanki-anime.com/1st/'
     twitter = 'jihanki_anime'
     hashtags = ['jihanki', '俺自販機']
     folder_name = 'jihanki'
