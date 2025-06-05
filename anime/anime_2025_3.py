@@ -349,6 +349,35 @@ class RurinoHousekiDownload(Summer2025AnimeDownload, NewsTemplate):
                                     id_select='a', a_tag_prefix=self.PAGE_PREFIX, a_tag_start_text_to_remove='/')
 
 
+# Seishun Buta Yarou wa Santa Claus no Yume wo Minai
+class AobutaSantaDownload(Summer2025AnimeDownload, NewsTemplate):
+    title = 'Seishun Buta Yarou wa Santa Claus no Yume wo Minai'
+    keywords = [title, 'Rascal Does Not Dream of Santa Claus']
+    website = 'https://ao-buta.com/santa/'
+    twitter = 'aobuta_anime'
+    hashtags = '青ブタ'
+    folder_name = 'aobutasanta'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.l-list__item',
+                                    date_select='.l-list__item-date', title_select='.l-list__item-title',
+                                    id_select='a', a_tag_prefix=self.PAGE_PREFIX + 'news/', paging_type=1,
+                                    next_page_select='.c-pagination__list li', next_page_eval_index=-1,
+                                    next_page_eval_index_class='is-current')
+
+
 # Silent Witch: Chinmoku no Majo no Kakushigoto
 class SilentWitchDownload(Summer2025AnimeDownload, NewsTemplate):
     title = 'Silent Witch: Chinmoku no Majo no Kakushigoto'
