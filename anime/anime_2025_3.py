@@ -442,6 +442,34 @@ class MizuZokuseiDownload(Summer2025AnimeDownload, NewsTemplate):
                                     date_func=lambda x: x[0:10])
 
 
+# Nukitashi the Animation
+class NukitashiDownload(Summer2025AnimeDownload, NewsTemplate):
+    title = 'Nukitashi the Animation'
+    keywords = [title]
+    website = 'https://nukiani.com/'
+    twitter = 'nukitashi_anime'
+    hashtags = ['ぬきたし', 'ぬきアニ']
+    folder_name = 'nukitashi'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        # self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.content-entry',
+                                    title_select='.entry-title', date_select='.entry-date', id_select=None,
+                                    id_has_id=True, news_prefix='news.html',
+                                    date_func=lambda x: x[0:4] + '.' + x[4:6] + '.' + x[6:8])
+
+
 # Ruri no Houseki
 class RurinoHousekiDownload(Summer2025AnimeDownload, NewsTemplate):
     title = 'Ruri no Houseki'
