@@ -648,7 +648,7 @@ class Kaguyasama3Download(Spring2022AnimeDownload, NewsTemplate):
 class KakkounoIinazukeDownload(Spring2022AnimeDownload, NewsTemplate3):
     title = 'Kakkou no Iinazuke'
     keywords = [title, 'A Couple of Cuckoos']
-    website = 'https://cuckoos-anime.com/'
+    website = 'https://cuckoos-anime.com/season1/'
     twitter = 'cuckoo_anime'
     hashtags = 'カッコウの許嫁'
     folder_name = 'kakkou-no-iinazuke'

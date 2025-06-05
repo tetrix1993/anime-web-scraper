@@ -1,4 +1,4 @@
-from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsTemplate4
+from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsTemplate3, NewsTemplate4
 from datetime import datetime, timedelta
 from requests.exceptions import HTTPError
 from scan import AniverseMagazineScanner
@@ -210,6 +210,31 @@ class MynoghraDownload(Summer2025AnimeDownload, NewsTemplate):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.bl_news__article_item',
                                     date_select='time', title_select='h3', id_select='a', paging_type=3,
                                     paging_suffix='?page=%s', next_page_select='.next.page-numbers')
+
+
+# Kakkou no Iinazuke S2
+class KakkounoIinazuke2Download(Summer2025AnimeDownload, NewsTemplate3):
+    title = 'Kakkou no Iinazuke Season 2'
+    keywords = [title, 'A Couple of Cuckoos', '2nd']
+    website = 'https://cuckoos-anime.com/'
+    twitter = 'cuckoo_anime'
+    hashtags = 'カッコウの許嫁'
+    folder_name = 'cuckoo2'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(self.PAGE_PREFIX)
 
 
 # Kanojo, Okarishimasu 4th Season
