@@ -84,6 +84,33 @@ class BadGirlDownload(Summer2025AnimeDownload, NewsTemplate4):
         self.download_template_news(json_url=self.PAGE_PREFIX + 'api/site-data/init', verify=False)
 
 
+# City The Animation
+class CityDownload(Summer2025AnimeDownload, NewsTemplate):
+    title = 'City The Animation'
+    keywords = [title]
+    website = 'https://city-the-animation.com/'
+    twitter = 'city_anime_info'
+    hashtags = ['アニメCITY', 'animeCITY']
+    folder_name = 'city'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-item', date_select='.news-date',
+                                    title_select='.news-title', id_select='a', a_tag_start_text_to_remove='/',
+                                    a_tag_prefix=self.PAGE_PREFIX)
+
+
 # Food Court de, Mata Ashita.
 class FoodCourtDownload(Summer2025AnimeDownload, NewsTemplate):
     title = 'Food Court de, Mata Ashita.'
