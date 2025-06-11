@@ -84,6 +84,34 @@ class BadGirlDownload(Summer2025AnimeDownload, NewsTemplate4):
         self.download_template_news(json_url=self.PAGE_PREFIX + 'api/site-data/init', verify=False)
 
 
+# Busamen Gachi Fighter
+class BusagachiDownload(Summer2025AnimeDownload, NewsTemplate):
+    title = 'Busamen Gachi Fighter'
+    keywords = [title, "Uglymug, Epicfighter", "Busagachi"]
+    website = 'https://busamen-gachi-fighter.com/'
+    twitter = 'busamen_gachi_f'
+    hashtags = ['ブサガチ']
+    folder_name = 'busagachi'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.archive__list',
+                                    date_select='.archive__date p', title_select='.archive__text', id_select='a',
+                                    next_page_select='.archive__pagination a', next_page_eval_index=-1,
+                                    next_page_eval_index_class='active')
+
+
 # City The Animation
 class CityDownload(Summer2025AnimeDownload, NewsTemplate):
     title = 'City The Animation'
