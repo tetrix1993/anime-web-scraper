@@ -525,6 +525,33 @@ class NukitashiDownload(Summer2025AnimeDownload, NewsTemplate):
                                     date_func=lambda x: x[0:4] + '.' + x[4:6] + '.' + x[6:8])
 
 
+# Onmyou Kaiten Re:Birth
+class OnmyoKaitenDownload(Summer2025AnimeDownload, NewsTemplate):
+    title = 'Onmyou Kaiten Re:Birth'
+    keywords = [title, 'Onmyo Kaiten Re:Birth Verse']
+    website = 'https://onmyo-kaiten.com/'
+    twitter = 'OnmyoKaiten_PR'
+    hashtags = '陰陽廻天'
+    folder_name = 'onmyokaiten'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        # self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.bl_posts_item', date_select='time',
+                                    title_select='.bl_posts_txt', id_select='a', date_attr='datetime',
+                                    date_separator='-')
+
+
 # Ruri no Houseki
 class RurinoHousekiDownload(Summer2025AnimeDownload, NewsTemplate):
     title = 'Ruri no Houseki'

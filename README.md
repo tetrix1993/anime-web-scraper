@@ -104,6 +104,7 @@ The premiere date for the anime listed here has not been announced.
 * [Mattaku Saikin no Tantei to Kitara](https://mattan-anime.com/)
 * [Mizu Zokusei no Mahoutsukai](https://mizuzokusei-anime.com/)
 * [Nukitashi the Animation](https://nukiani.com/)
+* [Onmyou Kaiten Re:Birth](https://onmyo-kaiten.com/)
 * [Ruri no Houseki](https://rurinohouseki.com/)
 * [Seishun Buta Yarou wa Santa Claus no Yume wo Minai](https://ao-buta.com/santa/)
 * [Silent Witch: Chinmoku no Majo no Kakushigoto](https://silentwitch.net/)
