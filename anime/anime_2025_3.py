@@ -392,7 +392,7 @@ class KaoruHanaDownload(Summer2025AnimeDownload, NewsTemplate):
 # Kizetsu Yuusha to Ansatsu Hime
 class KizetsuYushaDownload(Summer2025AnimeDownload, NewsTemplate):
     title = 'Kizetsu Yuusha to Ansatsu Hime'
-    keywords = [title, 'The Stunned Hero and the Assassin Princesses']
+    keywords = [title, 'The Shy Hero and the Assassin Princesses']
     website = 'https://kizetsuyusha-anime.com/'
     twitter = 'kzt_toto'
     hashtags = '気絶勇者'
@@ -468,6 +468,35 @@ class MattanDownload(Summer2025AnimeDownload, NewsTemplate2):
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX)
+
+
+# Mikadono Sanshimai wa Angai, Choroi.
+class MikadonoDownload(Summer2025AnimeDownload, NewsTemplate):
+    title = 'Mikadono Sanshimai wa Angai, Choroi.'
+    keywords = [title, 'Dealing with Mikadono Sisters Is a Breeze']
+    website = 'https://mikadono.family/'
+    twitter = 'mikadono_anime'
+    hashtags = '帝乃三姉妹'
+    folder_name = 'mikadono'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.p-news__contents-list-item',
+                                    date_select='.p-in-date', title_select='.p-in-title', id_select='a',
+                                    a_tag_prefix=self.PAGE_PREFIX + 'news/', paging_type=1,
+                                    next_page_select='.p-pagination__list li', next_page_eval_index=-1,
+                                    next_page_eval_index_class='is-current')
 
 
 # Mizu Zokusei no Mahoutsukai
@@ -890,7 +919,7 @@ class WatanareDownload(Summer2025AnimeDownload, NewsTemplate):
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-item',
                                     date_select='.c-card-article__date', title_select='.c-card-article__title',
-                                    id_select='.c-card-article', next_page_select='.c-arrow-btn--next')
+                                    id_select='a', next_page_select='.c-arrow-btn--next')
 
 
 # Yuusha Party wo Tsuihou sareta Shiromadoushi, S-Rank Boukensha ni Hirowareru

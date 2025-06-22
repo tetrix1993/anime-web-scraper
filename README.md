@@ -102,6 +102,7 @@ The premiere date for the anime listed here has not been announced.
 * [Kizetsu Yuusha to Ansatsu Hime](https://kizetsuyusha-anime.com/)
 * [Koujo Denka no Kateikyoushi](https://koujodenka-anime.com/)
 * [Mattaku Saikin no Tantei to Kitara](https://mattan-anime.com/)
+* [Mikadono Sanshimai wa Angai, Choroi.](https://mikadono.family/)
 * [Mizu Zokusei no Mahoutsukai](https://mizuzokusei-anime.com/)
 * [Nukitashi the Animation](https://nukiani.com/)
 * [Onmyou Kaiten Re:Birth](https://onmyo-kaiten.com/)
