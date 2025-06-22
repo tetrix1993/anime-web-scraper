@@ -113,6 +113,7 @@ The premiere date for the anime listed here has not been announced.
 * [Tsuihousha Shokudou e Youkoso!](https://tsuihosha-shokudo.com/)
 * [Tsuyokute New Saga](https://tsuyosaga-pr.com/)
 * [Watari-kun no xx ga Houkai Sunzen](https://watarikunxx-anime.com/)
+* [Watashi ga Koibito ni Nareru Wake Nai jan, Muri Muri! (※Muri ja Nakatta!?)](https://www.watanare-anime.com/)
 * [Yuusha Party wo Tsuihou sareta Shiromadoushi, S-Rank Boukensha ni Hirowareru: Kono Shiromadoushi ga Kikakugai Sugiru](https://tsuiho-shiromadoshi.com/)
 
 ### Spring 2025 Anime

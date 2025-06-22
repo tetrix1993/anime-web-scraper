@@ -866,6 +866,33 @@ class WatarikunDownload(Summer2025AnimeDownload, NewsTemplate2):
         self.download_template_news(page_prefix=self.PAGE_PREFIX)
 
 
+# Watashi ga Koibito ni Nareru Wake Nai jan, Muri Muri! (※Muri ja Nakatta!?)
+class WatanareDownload(Summer2025AnimeDownload, NewsTemplate):
+    title = 'Watashi ga Koibito ni Nareru Wake Nai jan, Muri Muri! (※Muri ja Nakatta!?)'
+    keywords = [title, "There's No Freaking Way I'll be Your Lover! Unless...", 'Watanare']
+    website = 'https://www.watanare-anime.com/'
+    twitter = 'watanare_anime'
+    hashtags = 'わたなれ'
+    folder_name = 'watanare'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX, 'index')
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-item',
+                                    date_select='.c-card-article__date', title_select='.c-card-article__title',
+                                    id_select='.c-card-article', next_page_select='.c-arrow-btn--next')
+
+
 # Yuusha Party wo Tsuihou sareta Shiromadoushi, S-Rank Boukensha ni Hirowareru
 class TsuihoShiromadoshiDownload(Summer2025AnimeDownload, NewsTemplate):
     title = 'Yuusha Party wo Tsuihou sareta Shiromadoushi, S-Rank Boukensha ni Hirowareru'
