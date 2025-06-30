@@ -732,7 +732,8 @@ class MizuZokuseiDownload(Summer2025AnimeDownload, NewsTemplate):
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-list .item',
                                     date_select='.date', title_select='.text', id_select='a',
-                                    date_func=lambda x: x[0:10])
+                                    date_func=lambda x: x[0:10], next_page_select='.next.page-numbers',
+                                    paging_type=3, paging_suffix='?page=%s')
 
 
 # Nukitashi the Animation
