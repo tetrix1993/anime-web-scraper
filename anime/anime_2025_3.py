@@ -579,7 +579,33 @@ class KoujoDenkaDownload(Summer2025AnimeDownload, NewsTemplate):
         self.download_news()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/latest/')
+            divs = soup.select('div.max-w-\\[880px\\]')
+            for div in divs:
+                h2 = div.select('h2')
+                if len(h2) == 0:
+                    continue
+                episode = ''
+                add_enabled = False
+                for i in h2[0].text:
+                    if i.isnumeric():
+                        episode += i
+                        add_enabled = True
+                    elif add_enabled:
+                        break
+                if len(episode) == 0:
+                    continue
+                episode = str(episode).zfill(2)
+                images = div.select('img[data-story-image][src]')
+                self.image_list = []
+                for j in range(len(images)):
+                    image_url = self.PAGE_PREFIX + images[j]['src'][1:]
+                    image_name = episode + '_' + str(j + 1)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.bg-newsItem',
