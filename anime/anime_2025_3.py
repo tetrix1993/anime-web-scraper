@@ -79,6 +79,8 @@ class BadGirlDownload(Summer2025AnimeDownload, NewsTemplate4):
     folder_name = 'badgirl'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 8
 
     def __init__(self):
         super().__init__()
@@ -88,22 +90,26 @@ class BadGirlDownload(Summer2025AnimeDownload, NewsTemplate4):
         self.download_news()
 
     def download_episode_preview(self):
-        json_obj = None
         try:
-            json_obj = self.get_json(self.PAGE_PREFIX + 'api/site-data/init', verify=False)
-            if 'stories' not in json_obj:
-                return
-            for story in json_obj['stories']:
-                episode = story['episode'].zfill(2)
-                self.image_list = []
-                for i in range(len(story['images'])):
-                    image_name = episode + '_' + str(i + 1)
-                    image_url = story['images'][i]['image_path']
-                    self.add_to_image_list(image_name, image_url, to_jpg=True)
-                self.download_image_list(self.base_folder)
+            soup = self.get_soup(self.PAGE_PREFIX + 'story')
+            content = soup.select('#__NEXT_DATA__')
+            json_obj = json.loads(content[0].contents[0])
+            template = self.PAGE_PREFIX + json_obj['assetPrefix'][1:] + '/story/%s/%s.webp'
+            stop = False
+            for i in range(self.FINAL_EPISODE):
+                episode = str(i + 1).zfill(2)
+                if self.is_image_exists(episode + '_' + str(self.IMAGES_PER_EPISODE)):
+                    continue
+                for j in range(self.IMAGES_PER_EPISODE):
+                    image_url = template % (episode, str(j + 1).zfill(2))
+                    image_name = episode + '_' + str(j + 1)
+                    if self.download_image(image_url, self.base_folder + '/' + image_name, to_jpg=True) == -1:
+                        stop = True
+                        break
+                if stop:
+                    break
         except Exception as e:
             self.print_exception(e)
-        return json_obj
 
     def download_news(self, json_obj=None):
         self.download_template_news(json_url=self.PAGE_PREFIX + 'api/site-data/init', verify=False)
