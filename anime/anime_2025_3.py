@@ -1021,7 +1021,7 @@ class TateNoYuusha4Download(Summer2025AnimeDownload):
     folder_name = 'tatenoyuusha4'
 
     PAGE_PREFIX = website
-    FINAL_EPISODE = 13
+    FINAL_EPISODE = 12
     IMAGES_PER_EPISODE = 6
 
     def __init__(self):
