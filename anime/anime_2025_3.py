@@ -234,7 +234,31 @@ class FoodCourtDownload(Summer2025AnimeDownload, NewsTemplate):
         self.download_news()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            stories = soup.select('.story-Detail_Item[id]')
+            for story in stories:
+                try:
+                    episode = ''
+                    ep_num = story['id']
+                    for a in ep_num:
+                        if a.isnumeric():
+                            episode += a
+                    if len(episode) == 0:
+                        continue
+                    episode = str(int(episode)).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                images = story.select('.swiper-wrapper img[data-src]')
+                for i in range(len(images)):
+                    image_url = images[i]['data-src']
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url, to_jpg=True)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.sw-News_Item', date_select='.date',
