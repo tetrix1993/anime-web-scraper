@@ -1037,15 +1037,14 @@ class SilentWitchDownload(Summer2025AnimeDownload, NewsTemplate):
         template = self.PAGE_PREFIX + 'special/monica-week/result/img/ep_%s-%s.jpg'
         for i in range(self.FINAL_EPISODE):
             episode = str(i + 1).zfill(2)
-            if self.is_image_exists(episode + '_a1'):
-                continue
-            for j in range(3):
-                image_name = episode + '_a' + str(j + 1)
-                image_url = template % (episode, str(j + 1))
-                try:
-                    self.download_image(image_url, self.base_folder + '/' + image_name, to_jpg=True)
-                except:
-                    continue
+            if self.is_image_exists(episode + '_1') and not self.is_image_exists(episode + '_a1'):
+                for j in range(3):
+                    image_name = episode + '_a' + str(j + 1)
+                    image_url = template % (episode, str(j + 1))
+                    try:
+                        self.download_image(image_url, self.base_folder + '/' + image_name, to_jpg=True)
+                    except:
+                        continue
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.l-news__list-item',
