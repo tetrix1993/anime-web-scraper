@@ -1090,6 +1090,7 @@ class TsuishokuDownload(Summer2025AnimeDownload, NewsTemplate):
     folder_name = 'tsuishoku'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
 
     def __init__(self):
         super().__init__()
@@ -1097,9 +1098,48 @@ class TsuishokuDownload(Summer2025AnimeDownload, NewsTemplate):
     def run(self):
         self.download_episode_preview()
         self.download_news()
+        self.download_episode_preview_external()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX, 'index')
+        prefix = self.PAGE_PREFIX + 'story/'
+        try:
+            soup = self.get_soup(prefix)
+            stories = soup.select('.p-story__contents-list-item a[href]')
+            for story in stories:
+                story_url = prefix + story['href']
+                try:
+                    episode = ''
+                    ep_num = story.select('.p-in-title')[0].text
+                    is_num = False
+                    for a in ep_num:
+                        if a.isnumeric():
+                            episode += a
+                            is_num = True
+                        elif is_num:
+                            break
+                    if len(episode) == 0:
+                        continue
+                    episode = str(int(episode)).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                ep_soup = self.get_soup(story_url)
+                if ep_soup is not None:
+                    images = ep_soup.select('.p-story__contents-detail-text img[src]')
+                    self.image_list = []
+                    for i in range(len(images)):
+                        image_url = images[i]['src'].split('?')[0]
+                        image_name = episode + '_' + str(i + 1)
+                        self.add_to_image_list(image_name, image_url, to_jpg=True)
+                    self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
+
+    def download_episode_preview_external(self):
+        keywords = ['追放者食堂へようこそ']
+        AniverseMagazineScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                end_date='20250702', download_id=self.download_id).run()
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.p-news__list-item',
