@@ -10,32 +10,15 @@ def run():
         os.makedirs(constants.FOLDER_OUTPUT)
 
     downloads = []
-    # skip = [SalarymanShitennouDownload.__name__, NeetKunoichiDownload.__name__,
-    #         BehenekoDownload.__name__, BotsurakuKizokuDownload.__name__]
-    skip = [AiomoDarkElfDownload.__name__, GorillaLadyDownload.__name__, YourFormaDownload.__name__]
-    for subclass in Spring2025AnimeDownload.__subclasses__():
-        if subclass.enabled and subclass.__name__ not in skip:
+    for subclass in Summer2025AnimeDownload.__subclasses__():
+        if subclass.enabled:
             downloads.append(subclass())
-    downloads += [Kusuriya2Download(), AparidaDownload(), Kimisen2Download(), ShoshiminDownload(), Watakon2Download()]
-    # for subclass in [GimaiSeikatsuDownload]:
-    #     # if subclass.enabled and subclass.__name__ not in skip:
-    #     if subclass.enabled:
-    #         new_subclass = subclass()
-    #         new_subclass.download_media_only = True
-    #         downloads.append(new_subclass)
-    subclasses = Summer2025AnimeDownload.__subclasses__()\
-                 + UnconfirmedDownload.__subclasses__()
+    downloads += [DainanaojiDownload(), SamapokeDownload(), WitchWatchDownload()]
+    subclasses = UnconfirmedDownload.__subclasses__()
     for subclass in subclasses:
         if subclass.enabled:
             downloads.append(subclass())
     process_download(downloads)
-
-    #downloads = []
-    #subclasses = Winter2021AnimeDownload.__subclasses__() \
-    #             + UnconfirmedDownload.__subclasses__()
-    #for subclass in subclasses:
-    #    downloads.append(subclass())
-    #process_download(downloads)
 
 
 def run_process(download, download_id):
