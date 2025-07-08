@@ -692,7 +692,9 @@ class KaoruHanaDownload(Summer2025AnimeDownload, NewsTemplate):
                     episode = str(int(episode)).zfill(2)
                 except:
                     continue
-                if 'is-current' in story['class']:
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                if story.has_attr('class') and 'is-current' in story['class']:
                     ep_soup = soup
                 else:
                     try:
@@ -1028,7 +1030,9 @@ class RurinoHousekiDownload(Summer2025AnimeDownload, NewsTemplate):
                     episode = str(int(episode)).zfill(2)
                 except:
                     continue
-                if 'is-current' in story['class']:
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                if story.has_attr('class') and 'is-current' in story['class']:
                     ep_soup = soup
                 else:
                     try:
@@ -1088,7 +1092,9 @@ class AobutaSantaDownload(Summer2025AnimeDownload, NewsTemplate):
                     episode = str(int(episode)).zfill(2)
                 except:
                     continue
-                if 'is-active' in story['class']:
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                if story.has_attr('class') and 'is-active' in story['class']:
                     ep_soup = soup
                 else:
                     try:
@@ -1151,7 +1157,9 @@ class SilentWitchDownload(Summer2025AnimeDownload, NewsTemplate):
                     episode = str(int(episode)).zfill(2)
                 except:
                     continue
-                if 'is-current' in story['class']:
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                if story.has_attr('class') and 'is-current' in story['class']:
                     ep_soup = soup
                 else:
                     try:
@@ -1224,7 +1232,9 @@ class Kisekoi2Download(Summer2025AnimeDownload, NewsTemplate):
                     episode = str(int(episode)).zfill(2)
                 except:
                     continue
-                if 'is-current' in story['class']:
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                if story.has_attr('class') and 'is-current' in story['class']:
                     ep_soup = soup
                 else:
                     try:
