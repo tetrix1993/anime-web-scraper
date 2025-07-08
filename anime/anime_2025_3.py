@@ -1498,6 +1498,7 @@ class WatarikunDownload(Summer2025AnimeDownload, NewsTemplate2):
     folder_name = 'watarikun'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 26
 
     def __init__(self):
         super().__init__()
@@ -1505,6 +1506,7 @@ class WatarikunDownload(Summer2025AnimeDownload, NewsTemplate2):
     def run(self):
         self.download_episode_preview()
         self.download_news()
+        self.download_episode_preview_external()
 
     def download_episode_preview(self):
         try:
@@ -1540,6 +1542,11 @@ class WatarikunDownload(Summer2025AnimeDownload, NewsTemplate2):
                     self.download_image_list(self.base_folder)
         except Exception as e:
             self.print_exception(e)
+
+    def download_episode_preview_external(self):
+        keywords = ['渡くんの××が崩壊寸前']
+        AniverseMagazineScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                end_date='20250708', download_id=self.download_id).run()
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX)
