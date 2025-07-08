@@ -812,6 +812,7 @@ class MattanDownload(Summer2025AnimeDownload, NewsTemplate2):
 
     PAGE_PREFIX = website
     FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 6
 
     def __init__(self):
         super().__init__()
@@ -820,6 +821,7 @@ class MattanDownload(Summer2025AnimeDownload, NewsTemplate2):
         self.download_episode_preview()
         self.download_news()
         self.download_episode_preview_external()
+        self.download_episode_preview_guess()
 
     def download_episode_preview(self):
         try:
@@ -863,6 +865,10 @@ class MattanDownload(Summer2025AnimeDownload, NewsTemplate2):
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX)
+
+    def download_episode_preview_guess(self, print_url=False):
+        self.download_guess_core_sys(self.PAGE_PREFIX, self.FINAL_EPISODE, self.IMAGES_PER_EPISODE, 28, 48, 40, 8, 6,
+                                     print_url)
 
 
 # Mikadono Sanshimai wa Angai, Choroi.
@@ -1544,6 +1550,7 @@ class WatarikunDownload(Summer2025AnimeDownload, NewsTemplate2):
 
     PAGE_PREFIX = website
     FINAL_EPISODE = 26
+    IMAGES_PER_EPISODE = 6
 
     def __init__(self):
         super().__init__()
@@ -1552,6 +1559,7 @@ class WatarikunDownload(Summer2025AnimeDownload, NewsTemplate2):
         self.download_episode_preview()
         self.download_news()
         self.download_episode_preview_external()
+        self.download_episode_preview_guess()
 
     def download_episode_preview(self):
         try:
@@ -1595,6 +1603,10 @@ class WatarikunDownload(Summer2025AnimeDownload, NewsTemplate2):
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX)
+
+    def download_episode_preview_guess(self, print_url=False):
+        self.download_guess_core_sys(self.PAGE_PREFIX, self.FINAL_EPISODE, self.IMAGES_PER_EPISODE, 5, 25, 35, 5, 6,
+                                     print_url)
 
 
 # Watashi ga Koibito ni Nareru Wake Nai jan, Muri Muri! (※Muri ja Nakatta!?)
