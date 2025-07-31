@@ -904,7 +904,7 @@ class MattanDownload(Summer2025AnimeDownload, NewsTemplate2):
 
     def download_episode_preview_guess(self, print_url=False):
         self.download_guess_core_sys(self.PAGE_PREFIX, self.FINAL_EPISODE, self.IMAGES_PER_EPISODE, 28, 48, 40, 8, 6,
-                                     print_url)
+                                     print_url, check_content_length=True, more_than_amount=8400)
 
 
 # Mikadono Sanshimai wa Angai, Choroi.
