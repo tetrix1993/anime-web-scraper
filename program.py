@@ -27,29 +27,35 @@ def run_process(download, download_id):
         os.remove(filepath)
 
 
-def process_download(downloads, guess=False):
+def process_download(downloads, guess=False, repeat=False):
     if not os.path.exists(constants.FOLDER_PROCESS):
         os.makedirs(constants.FOLDER_PROCESS)
     if constants.MAX_PROCESSES <= 0 or len(downloads) == 0:
         return
 
-    if len(downloads) > 1:
-        with Pool(min(constants.MAX_PROCESSES, len(downloads))) as p:
-            results = []
-            download_id = 1
-            for download in downloads:
-                dl = download()
-                dl.guess_only = guess
-                result = p.apply_async(run_process, (dl, str(download_id).zfill(5)))
-                results.append(result)
-                download_id += 1
-            for result in results:
-                result.wait()
-    else:
-        dl = downloads[0]()
-        dl.guess_only = guess
-        run_process(dl, '00001')
-    update_global_logs()
+    while True:
+        if len(downloads) > 1:
+            with Pool(min(constants.MAX_PROCESSES, len(downloads))) as p:
+                results = []
+                download_id = 1
+                for download in downloads:
+                    dl = download()
+                    dl.guess_only = guess
+                    result = p.apply_async(run_process, (dl, str(download_id).zfill(5)))
+                    results.append(result)
+                    download_id += 1
+                for result in results:
+                    result.wait()
+        else:
+            dl = downloads[0]()
+            dl.guess_only = guess
+            run_process(dl, '00001')
+        update_global_logs()
+        if not repeat or os.path.exists('stop.txt'):
+            if repeat:
+                print('File "stop.txt" detected.')
+            break
+        time.sleep(5)
     if len(os.listdir(constants.FOLDER_PROCESS)) == 0:
         os.rmdir(constants.FOLDER_PROCESS)
 
@@ -108,6 +114,8 @@ def run():
             process_query(True, False, False, guess=True)
         elif choice == 7:
             process_query(False, True, False, guess=True)
+        elif choice == 8:
+            process_query(True, False, False, repeat=True)
         elif choice == 0:
             break
         else:
@@ -124,6 +132,7 @@ def print_intro_message():
     print("5 - Download from news website")
     print("6 - Search anime by keyword and run guess method only")
     print("7 - Search anime by season and run guess method only")
+    print("8 - Search anime by keyword and repeatedly run until stop.txt detected")
     print("0 - Exit")
 
 
@@ -157,7 +166,7 @@ def get_numbers_from_expression(expr):
     return results
 
 
-def process_query(has_keyword, has_season, print_season, guess=False):
+def process_query(has_keyword, has_season, print_season, guess=False, repeat=False):
     keyword = None
     season = None
 
@@ -232,7 +241,7 @@ def process_query(has_keyword, has_season, print_season, guess=False):
         elif print_season:
             print_season_out(filtered_anime_classes)
         else:
-            process_download(filtered_anime_classes, guess)
+            process_download(filtered_anime_classes, guess, repeat)
 
 
 def print_season_out(anime_classes):
@@ -323,7 +332,7 @@ def download_from_news_website():
             print("Invalid input. Please enter an integer.")
             continue
 
-        if 0 < choice < 8:
+        if 0 < choice < 9:
             id = input('Enter article ID: ').strip()
             if len(id) == 0:
                 print('Invalid article ID')
