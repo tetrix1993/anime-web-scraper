@@ -97,6 +97,7 @@ The premiere date for the anime listed here has not been announced.
 * [Mushoku no Eiyuu](https://mushoku-eiyu-anime.com/)
 * [Souzai Saishuka no Isekai Ryokouki](https://www.sozaisaishu-pr.com/)
 * [Tomodachi no Imouto ga Ore ni dake Uzai](https://www.imouza-animation.com/)
+* [Towa no Yuugure](https://towanoyuugure.com/)
 * [Yasei no Last Boss ga Arawareta!](https://www.lastboss-anime.com/)
 
 ### Summer 2025 Anime

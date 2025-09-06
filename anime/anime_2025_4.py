@@ -312,6 +312,32 @@ class ImouzaDownload(Fall2025AnimeDownload, NewsTemplate):
                                     next_page_select='.nextpostslink')
 
 
+# Towa no Yuugure
+class TowanoYuugureDownload(Fall2025AnimeDownload, NewsTemplate):
+    title = "Towa no Yuugure"
+    keywords = [title, 'Dusk Beyond the End of the World']
+    website = 'https://towanoyuugure.com/'
+    twitter = 'towanoyuugure'
+    hashtags = '永久のユウグレ'
+    folder_name = 'towanoyuugure'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news a', date_select='time',
+                                    title_select='.ttl', id_select=None)
+
+
 # Yasei no Last Boss ga Arawareta!
 class YaseinoLastBossDownload(Fall2025AnimeDownload, NewsTemplate2):
     title = "Yasei no Last Boss ga Arawareta!"
