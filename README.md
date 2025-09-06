@@ -91,6 +91,7 @@ The premiere date for the anime listed here has not been announced.
 * [Chichi wa Eiyuu, Haha wa Seirei, Musume no Watashi wa Tenseisha.](https://hahanoha-anime.com/)
 * [Chitose-kun wa Ramune Bin no Naka](https://chiramune.com/)
 * [Isekai Munchkin](https://isekai-munchkin.com/)
+* [Kao ni Denai Kashiwada-san to Kao ni Deru Oota-kun](https://kashiwada-ohta.com/)
 * [Mugen Gacha](https://mugengacha.com/)
 * [Mushoku no Eiyuu](https://mushoku-eiyu-anime.com/)
 * [Tomodachi no Imouto ga Ore ni dake Uzai](https://www.imouza-animation.com/)

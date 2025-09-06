@@ -151,6 +151,34 @@ class IsekaiMunchkinDownload(Fall2025AnimeDownload, NewsTemplate):
                                     next_page_select='.pagination .next')
 
 
+# Kao ni Denai Kashiwada-san to Kao ni Deru Oota-kun
+class KashiwadaOhtaDownload(Fall2025AnimeDownload, NewsTemplate):
+    title = "Kao ni Denai Kashiwada-san to Kao ni Deru Oota-kun"
+    keywords = [title, 'kashiwada ohta', 'Inexpressive Kashiwada and Expressive Oota']
+    website = 'https://kashiwada-ohta.com/'
+    twitter = 'kashiwada_ohta'
+    hashtags = '#柏田さんと太田君'
+    folder_name = 'kashiwadaohta'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news__list li',
+                                    date_select='.news__date', title_select='.news__link-title', id_select='a',
+                                    next_page_select='.next.page-numbers',
+                                    date_func=lambda x: x[0:4] + '.' + x[5:7] + '.' + x[7:])
+
+
 # Mugen Gacha
 class MugenGachaDownload(Fall2025AnimeDownload, NewsTemplate):
     title = "Mugen Gacha"
