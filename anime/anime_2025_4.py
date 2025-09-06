@@ -17,6 +17,53 @@ class Fall2025AnimeDownload(MainDownload):
         super().__init__()
 
 
+# Alma-chan wa Kazoku ni Naritai
+class AlmachanDownload(Fall2025AnimeDownload):
+    title = "Alma-chan wa Kazoku ni Naritai"
+    keywords = [title, 'almachan' 'Alma-chan Wants to Have a Family!']
+    website = 'https://alma-chan.com/'
+    twitter = 'alma_chan_pr'
+    hashtags = 'アルマちゃん'
+    folder_name = 'almachan'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self, print_http_error=False):
+        try:
+            json_obj = self.get_json(self.PAGE_PREFIX + 'news.json')
+            news_obj = self.get_last_news_log_object()
+            results = []
+            for item in json_obj:
+                article_id = self.PAGE_PREFIX + item['url']
+                date = item['day']
+                title = item['title']
+                if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
+                    break
+                results.append(self.create_news_log_object(date, title, article_id))
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log_from_news_log_object(result)
+                if process_result == 0:
+                    success_count += 1
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
+        except HTTPError as e:
+            if print_http_error:
+                print(self.__class__.__name__ + ' - 403 Error when retrieving news API.')
+        except Exception as e:
+            self.print_exception(e, 'News')
+
+
 # Ansatsusha de Aru Ore no Status ga Yuusha yori mo Akiraka ni Tsuyoi no da ga
 class SutetsuyoDownload(Fall2025AnimeDownload, NewsTemplate):
     title = "Ansatsusha de Aru Ore no Status ga Yuusha yori mo Akiraka ni Tsuyoi no da ga"
