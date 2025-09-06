@@ -17,6 +17,32 @@ class Fall2025AnimeDownload(MainDownload):
         super().__init__()
 
 
+# Ansatsusha de Aru Ore no Status ga Yuusha yori mo Akiraka ni Tsuyoi no da ga
+class SutetsuyoDownload(Fall2025AnimeDownload, NewsTemplate):
+    title = "Ansatsusha de Aru Ore no Status ga Yuusha yori mo Akiraka ni Tsuyoi no da ga"
+    keywords = [title, 'sutetsuyo', 'My Status as an Assassin Obviously Exceeds the Hero\'s']
+    website = 'https://sutetsuyo-anime.com/'
+    twitter = 'sutetsuyo_an'
+    hashtags = ['ステつよ', 'sutetsuyo']
+    folder_name = 'sutetsuyo'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article', date_select='time',
+                                    title_select='h2', id_select='a', a_tag_prefix=self.PAGE_PREFIX + 'news/')
+
+
 # Tomodachi no Imouto ga Ore ni dake Uzai
 class ImouzaDownload(Fall2025AnimeDownload, NewsTemplate):
     title = "Tomodachi no Imouto ga Ore ni dake Uzai"

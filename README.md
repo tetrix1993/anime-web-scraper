@@ -85,6 +85,10 @@ pip install -r requirements.txt
 The premiere date for the anime listed here has not been announced.
 * To be added
 
+### Fall 2025 Anime
+* [Ansatsusha de Aru Ore no Status ga Yuusha yori mo Akiraka ni Tsuyoi no da ga](https://sutetsuyo-anime.com/)
+* [Tomodachi no Imouto ga Ore ni dake Uzai](https://www.imouza-animation.com/)
+
 ### Summer 2025 Anime
 * [9: Ruler's Crown](https://nine-anime.marv.jp/)
 * [Bad Girl](https://badgirl-anime.com/)
