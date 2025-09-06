@@ -71,6 +71,33 @@ class BukiyouDownload(Fall2025AnimeDownload, NewsTemplate):
                                     next_page_eval_index=-1, date_func=lambda x: x[0:4] + '.' + x[5:])
 
 
+# Chichi wa Eiyuu, Haha wa Seirei, Musume no Watashi wa Tenseisha.
+class HahanohaDownload(Fall2025AnimeDownload, NewsTemplate):
+    title = "Chichi wa Eiyuu, Haha wa Seirei, Musume no Watashi wa Tenseisha."
+    keywords = [title, 'hahanoha', 'Reincarnated as the Daughter of the Legendary Hero and the Queen of Spirits']
+    website = 'https://hahanoha-anime.com/'
+    twitter = 'hahanoha_anime'
+    hashtags = 'ははのは'
+    folder_name = 'hahanoha'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.sec-news__list_item',
+                                    date_select='.sec-news__list_item_date', title_select='.sec-news__list_item_title',
+                                    id_select=None, next_page_select='.pagination .next')
+
+
 # Chitose-kun wa Ramune Bin no Naka
 class ChiramuneDownload(Fall2025AnimeDownload, NewsTemplate2):
     title = "Chitose-kun wa Ramune Bin no Naka"
