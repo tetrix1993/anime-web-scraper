@@ -150,6 +150,33 @@ class ChiramuneDownload(Fall2025AnimeDownload, NewsTemplate2):
         self.download_template_news(page_prefix=self.PAGE_PREFIX)
 
 
+# Egao no Taenai Shokuba desu.
+class EgataeDownload(Fall2025AnimeDownload, NewsTemplate):
+    title = "Egao no Taenai Shokuba desu."
+    keywords = [title, "egatae", "A Mangaka's Weirdly Wonderful Workplace"]
+    website = 'https://www.egatae.com/'
+    twitter = 'egatae'
+    hashtags = 'えがたえ'
+    folder_name = 'egatae'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news_item',
+                                    date_select='.year', title_select='.ttl p', id_select='a',
+                                    next_page_select='.next.page-numbers', paging_type=3, paging_suffix='?page=%s')
+
+
 # Isekai Munchkin
 class IsekaiMunchkinDownload(Fall2025AnimeDownload, NewsTemplate):
     title = "Isekai Munchkin"

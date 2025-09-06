@@ -91,6 +91,7 @@ The premiere date for the anime listed here has not been announced.
 * [Chanto Suenai Kyuuketsuki-chan](https://kyuketsuki-chan.com/)
 * [Chichi wa Eiyuu, Haha wa Seirei, Musume no Watashi wa Tenseisha.](https://hahanoha-anime.com/)
 * [Chitose-kun wa Ramune Bin no Naka](https://chiramune.com/)
+* [Egao no Taenai Shokuba desu.](https://www.egatae.com/)
 * [Isekai Munchkin](https://isekai-munchkin.com/)
 * [Kao ni Denai Kashiwada-san to Kao ni Deru Oota-kun](https://kashiwada-ohta.com/)
 * [Mikata ga Yowasugite Hojo Mahou ni Tesshiteita Kyuutei Mahoushi, Tsuihou sarete Saikyou wo Mezashimasu](https://hojomaho.com/)
