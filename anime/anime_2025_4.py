@@ -258,6 +258,33 @@ class MushokuEiyuDownload(Fall2025AnimeDownload, NewsTemplate):
                                     next_page_select='.pagination .next', date_func=lambda x: x[0:4] + '.' + x[4:])
 
 
+# Souzai Saishuka no Isekai Ryokouki
+class SozaiSaishuDownload(Fall2025AnimeDownload, NewsTemplate):
+    title = "Souzai Saishuka no Isekai Ryokouki (A Gatherer's Adventure in Isekai)"
+    keywords = [title, 'sozaisaishu', 'A Gatherer\'s Adventure in Isekai']
+    website = 'https://www.sozaisaishu-pr.com/'
+    twitter = 'sozaisaishu'
+    hashtags = '素材採取家の異世界旅行記'
+    folder_name = 'sozaisaishu'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-list', id_select='a',
+                                    date_select='.news-list-link__date', title_select='.news-list-link__ttl',
+                                    next_page_select='.next.page-numbers', paging_type=3, paging_suffix='?page=%s')
+
+
 # Tomodachi no Imouto ga Ore ni dake Uzai
 class ImouzaDownload(Fall2025AnimeDownload, NewsTemplate):
     title = "Tomodachi no Imouto ga Ore ni dake Uzai"
