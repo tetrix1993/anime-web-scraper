@@ -285,9 +285,37 @@ class MushokuEiyuDownload(Fall2025AnimeDownload, NewsTemplate):
                                     next_page_select='.pagination .next', date_func=lambda x: x[0:4] + '.' + x[4:])
 
 
+# Sawaranaide Kotesashi-kun
+class KotesashikunDownload(Fall2025AnimeDownload, NewsTemplate):
+    title = "Sawaranaide Kotesashi-kun"
+    keywords = [title, 'sozaisaishu', "Don't Touch Kotesashi"]
+    website = 'https://kotesashikun.deregula.com/'
+    twitter = 'kotesashi_anime'
+    hashtags = 'アニメ小手指くん'
+    folder_name = 'kotesashikun'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-item', id_select='a',
+                                    date_select='.news_inner_date', title_select='.newslist_ttl',
+                                    next_page_select='.pagination', next_page_eval_index=-1,
+                                    next_page_eval_index_compare_page=True)
+
+
 # Souzai Saishuka no Isekai Ryokouki
 class SozaiSaishuDownload(Fall2025AnimeDownload, NewsTemplate):
-    title = "Souzai Saishuka no Isekai Ryokouki (A Gatherer's Adventure in Isekai)"
+    title = "Souzai Saishuka no Isekai Ryokouki"
     keywords = [title, 'sozaisaishu', 'A Gatherer\'s Adventure in Isekai']
     website = 'https://www.sozaisaishu-pr.com/'
     twitter = 'sozaisaishu'

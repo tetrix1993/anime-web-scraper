@@ -96,6 +96,7 @@ The premiere date for the anime listed here has not been announced.
 * [Mikata ga Yowasugite Hojo Mahou ni Tesshiteita Kyuutei Mahoushi, Tsuihou sarete Saikyou wo Mezashimasu](https://hojomaho.com/)
 * [Mugen Gacha](https://mugengacha.com/)
 * [Mushoku no Eiyuu](https://mushoku-eiyu-anime.com/)
+* [Sawaranaide Kotesashi-kun](https://kotesashikun.deregula.com/)
 * [Souzai Saishuka no Isekai Ryokouki](https://www.sozaisaishu-pr.com/)
 * [Tomodachi no Imouto ga Ore ni dake Uzai](https://www.imouza-animation.com/)
 * [Towa no Yuugure](https://towanoyuugure.com/)
