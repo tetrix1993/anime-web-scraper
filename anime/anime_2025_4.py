@@ -151,6 +151,32 @@ class IsekaiMunchkinDownload(Fall2025AnimeDownload, NewsTemplate):
                                     next_page_select='.pagination .next')
 
 
+# Mugen Gacha
+class MugenGachaDownload(Fall2025AnimeDownload, NewsTemplate):
+    title = "Mugen Gacha"
+    keywords = [title, 'My Gift Lvl 9999 Unlimited Gacha']
+    website = 'https://mugengacha.com/'
+    twitter = 'mugengacha9999'
+    hashtags = ['無限ガチャ', 'unlimitedgacha']
+    folder_name = 'mugengacha'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news_item', date_select='time',
+                                    title_select='.news_item_title', id_select='a', next_page_select='.nextpostslink')
+
+
 # Mushoku no Eiyuu
 class MushokuEiyuDownload(Fall2025AnimeDownload, NewsTemplate):
     title = "Mushoku no Eiyuu"
