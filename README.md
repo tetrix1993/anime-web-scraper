@@ -93,6 +93,7 @@ The premiere date for the anime listed here has not been announced.
 * [Isekai Munchkin](https://isekai-munchkin.com/)
 * [Mushoku no Eiyuu](https://mushoku-eiyu-anime.com/)
 * [Tomodachi no Imouto ga Ore ni dake Uzai](https://www.imouza-animation.com/)
+* [Yasei no Last Boss ga Arawareta!](https://www.lastboss-anime.com/)
 
 ### Summer 2025 Anime
 * [9: Ruler's Crown](https://nine-anime.marv.jp/)

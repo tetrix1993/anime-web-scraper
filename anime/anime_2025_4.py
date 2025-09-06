@@ -203,3 +203,28 @@ class ImouzaDownload(Fall2025AnimeDownload, NewsTemplate):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.sw-News_Item',
                                     date_select='.sw-News_Date', title_select='.sw-News_Txt', id_select='a',
                                     next_page_select='.nextpostslink')
+
+
+# Yasei no Last Boss ga Arawareta!
+class YaseinoLastBossDownload(Fall2025AnimeDownload, NewsTemplate2):
+    title = "Yasei no Last Boss ga Arawareta!"
+    keywords = [title, 'A Wild Last Boss Appeared!']
+    website = 'https://www.lastboss-anime.com/'
+    twitter = 'lastboss_anime'
+    hashtags = ['アニメ野生のラスボスが現れた', 'lastbossanime']
+    folder_name = 'lastboss'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX)
