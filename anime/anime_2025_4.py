@@ -71,6 +71,31 @@ class BukiyouDownload(Fall2025AnimeDownload, NewsTemplate):
                                     next_page_eval_index=-1, date_func=lambda x: x[0:4] + '.' + x[5:])
 
 
+# Chitose-kun wa Ramune Bin no Naka
+class ChiramuneDownload(Fall2025AnimeDownload, NewsTemplate2):
+    title = "Chitose-kun wa Ramune Bin no Naka"
+    keywords = [title, 'chiramune', 'Chitose Is in the Ramune Bottle']
+    website = 'https://chiramune.com/'
+    twitter = 'anime_chiramune'
+    hashtags = 'チラムネ'
+    folder_name = 'chiramune'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX)
+
+
 # Tomodachi no Imouto ga Ore ni dake Uzai
 class ImouzaDownload(Fall2025AnimeDownload, NewsTemplate):
     title = "Tomodachi no Imouto ga Ore ni dake Uzai"

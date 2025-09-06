@@ -88,6 +88,7 @@ The premiere date for the anime listed here has not been announced.
 ### Fall 2025 Anime
 * [Ansatsusha de Aru Ore no Status ga Yuusha yori mo Akiraka ni Tsuyoi no da ga](https://sutetsuyo-anime.com/)
 * [Bukiyou na Senpai.](https://bukiyouna-senpai.asmik-ace.co.jp/)
+* [Chitose-kun wa Ramune Bin no Naka](https://chiramune.com/)
 * [Tomodachi no Imouto ga Ore ni dake Uzai](https://www.imouza-animation.com/)
 
 ### Summer 2025 Anime
