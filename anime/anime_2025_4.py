@@ -179,6 +179,32 @@ class KashiwadaOhtaDownload(Fall2025AnimeDownload, NewsTemplate):
                                     date_func=lambda x: x[0:4] + '.' + x[5:7] + '.' + x[7:])
 
 
+# Mikata ga Yowasugite Hojo Mahou ni Tesshiteita Kyuutei Mahoushi, Tsuihou sarete Saikyou wo Mezashimasu
+class HojomahoDownload(Fall2025AnimeDownload, NewsTemplate):
+    title = "Mikata ga Yowasugite Hojo Mahou ni Tesshiteita Kyuutei Mahoushi, Tsuihou sarete Saikyou wo Mezashimasu"
+    keywords = [title, 'hojomaho', 'The Banished Court Magician Aims to Become the Strongest']
+    website = 'https://hojomaho.com/'
+    twitter = 'hojomaho'
+    hashtags = '補助魔法'
+    folder_name = 'hojomaho'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.newsCol',
+                                    date_select='.newsCol__date', title_select='.newsCol__title', id_select=None)
+
+
 # Mugen Gacha
 class MugenGachaDownload(Fall2025AnimeDownload, NewsTemplate):
     title = "Mugen Gacha"
