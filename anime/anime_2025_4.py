@@ -123,6 +123,33 @@ class ChiramuneDownload(Fall2025AnimeDownload, NewsTemplate2):
         self.download_template_news(page_prefix=self.PAGE_PREFIX)
 
 
+# Mushoku no Eiyuu
+class MushokuEiyuDownload(Fall2025AnimeDownload, NewsTemplate):
+    title = "Mushoku no Eiyuu"
+    keywords = [title, 'Hero without a Class']
+    website = 'https://mushoku-eiyu-anime.com/'
+    twitter = 'mushoku_eiyu'
+    hashtags = '無職の英雄'
+    folder_name = 'mushokueiyu'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='#news .items-center',
+                                    date_select='.inline', title_select='p', id_select='a',
+                                    next_page_select='.pagination .next', date_func=lambda x: x[0:4] + '.' + x[4:])
+
+
 # Tomodachi no Imouto ga Ore ni dake Uzai
 class ImouzaDownload(Fall2025AnimeDownload, NewsTemplate):
     title = "Tomodachi no Imouto ga Ore ni dake Uzai"

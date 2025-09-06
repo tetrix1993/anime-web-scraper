@@ -90,6 +90,7 @@ The premiere date for the anime listed here has not been announced.
 * [Bukiyou na Senpai.](https://bukiyouna-senpai.asmik-ace.co.jp/)
 * [Chichi wa Eiyuu, Haha wa Seirei, Musume no Watashi wa Tenseisha.](https://hahanoha-anime.com/)
 * [Chitose-kun wa Ramune Bin no Naka](https://chiramune.com/)
+* [Mushoku no Eiyuu](https://mushoku-eiyu-anime.com/)
 * [Tomodachi no Imouto ga Ore ni dake Uzai](https://www.imouza-animation.com/)
 
 ### Summer 2025 Anime
