@@ -43,6 +43,34 @@ class SutetsuyoDownload(Fall2025AnimeDownload, NewsTemplate):
                                     title_select='h2', id_select='a', a_tag_prefix=self.PAGE_PREFIX + 'news/')
 
 
+# Bukiyou na Senpai.
+class BukiyouDownload(Fall2025AnimeDownload, NewsTemplate):
+    title = "Bukiyou na Senpai."
+    keywords = [title, 'My Awkward Senpai']
+    website = 'https://bukiyouna-senpai.asmik-ace.co.jp/'
+    twitter = 'bukiyou_anime'
+    hashtags = '不器用な先輩'
+    folder_name = 'bukiyou'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.newsList',
+                                    date_select='time', title_select='.newsList__title', id_select='a',
+                                    next_page_select='.wp-pagenavi *', next_page_eval_index_class='current',
+                                    next_page_eval_index=-1, date_func=lambda x: x[0:4] + '.' + x[5:])
+
+
 # Tomodachi no Imouto ga Ore ni dake Uzai
 class ImouzaDownload(Fall2025AnimeDownload, NewsTemplate):
     title = "Tomodachi no Imouto ga Ore ni dake Uzai"
