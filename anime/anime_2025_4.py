@@ -71,6 +71,33 @@ class BukiyouDownload(Fall2025AnimeDownload, NewsTemplate):
                                     next_page_eval_index=-1, date_func=lambda x: x[0:4] + '.' + x[5:])
 
 
+# Chanto Suenai Kyuuketsuki-chan
+class KyuketsukichanDownload(Fall2025AnimeDownload, NewsTemplate):
+    title = "Chanto Suenai Kyuuketsuki-chan"
+    keywords = [title, 'kyuketsukichan', "Li'l Miss Vampire Can't Suck Right"]
+    website = 'https://kyuketsuki-chan.com/'
+    twitter = 'kyuketsukichan_'
+    hashtags = ['アニメ吸血鬼ちゃん', 'ちゃんと吸えない吸血鬼ちゃん']
+    folder_name = 'kyuketsukichan'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.bl_posts_item',
+                                    date_select='.bl_posts_date', title_select='.bl_posts_txt', id_select='a',
+                                    next_page_select='.next.page-numbers', paging_type=3, paging_suffix='?page=%s')
+
+
 # Chichi wa Eiyuu, Haha wa Seirei, Musume no Watashi wa Tenseisha.
 class HahanohaDownload(Fall2025AnimeDownload, NewsTemplate):
     title = "Chichi wa Eiyuu, Haha wa Seirei, Musume no Watashi wa Tenseisha."

@@ -88,6 +88,7 @@ The premiere date for the anime listed here has not been announced.
 ### Fall 2025 Anime
 * [Ansatsusha de Aru Ore no Status ga Yuusha yori mo Akiraka ni Tsuyoi no da ga](https://sutetsuyo-anime.com/)
 * [Bukiyou na Senpai.](https://bukiyouna-senpai.asmik-ace.co.jp/)
+* [Chanto Suenai Kyuuketsuki-chan](https://kyuketsuki-chan.com/)
 * [Chichi wa Eiyuu, Haha wa Seirei, Musume no Watashi wa Tenseisha.](https://hahanoha-anime.com/)
 * [Chitose-kun wa Ramune Bin no Naka](https://chiramune.com/)
 * [Isekai Munchkin](https://isekai-munchkin.com/)
