@@ -340,6 +340,34 @@ class KotesashikunDownload(Fall2025AnimeDownload, NewsTemplate):
                                     next_page_eval_index_compare_page=True)
 
 
+# Shuumatsu Touring
+class ShumatsuTouringDownload(Fall2025AnimeDownload, NewsTemplate):
+    title = "Shuumatsu Touring"
+    keywords = [title, 'Touring After the Apocalypse']
+    website = 'https://shumatsu-touring.jp/'
+    twitter = 'shmts_touring'
+    hashtags = '終末ツーリング'
+    folder_name = 'shumatsutouring'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.p-news__list-item', id_select='a',
+                                    date_select='.p-news_article__date', title_select='.p-news_article__title',
+                                    a_tag_prefix=self.PAGE_PREFIX, a_tag_start_text_to_remove='/',
+                                    next_page_select='.c-pagination__nav.--next', paging_type=1)
+
+
 # Souzai Saishuka no Isekai Ryokouki
 class SozaiSaishuDownload(Fall2025AnimeDownload, NewsTemplate):
     title = "Souzai Saishuka no Isekai Ryokouki"

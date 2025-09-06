@@ -98,6 +98,7 @@ The premiere date for the anime listed here has not been announced.
 * [Mugen Gacha](https://mugengacha.com/)
 * [Mushoku no Eiyuu](https://mushoku-eiyu-anime.com/)
 * [Sawaranaide Kotesashi-kun](https://kotesashikun.deregula.com/)
+* [Shuumatsu Touring](https://shumatsu-touring.jp/)
 * [Souzai Saishuka no Isekai Ryokouki](https://www.sozaisaishu-pr.com/)
 * [Tomodachi no Imouto ga Ore ni dake Uzai](https://www.imouza-animation.com/)
 * [Towa no Yuugure](https://towanoyuugure.com/)
