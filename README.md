@@ -101,6 +101,7 @@ The premiere date for the anime listed here has not been announced.
 * [Mikata ga Yowasugite Hojo Mahou ni Tesshiteita Kyuutei Mahoushi, Tsuihou sarete Saikyou wo Mezashimasu](https://hojomaho.com/)
 * [Mugen Gacha](https://mugengacha.com/)
 * [Mushoku no Eiyuu](https://mushoku-eiyu-anime.com/)
+* [One Punch Man 3](https://onepunchman-anime.net/)
 * [Sawaranaide Kotesashi-kun](https://kotesashikun.deregula.com/)
 * [Shuumatsu Touring](https://shumatsu-touring.jp/)
 * [Souzai Saishuka no Isekai Ryokouki](https://www.sozaisaishu-pr.com/)

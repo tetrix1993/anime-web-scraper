@@ -420,6 +420,34 @@ class MushokuEiyuDownload(Fall2025AnimeDownload, NewsTemplate):
                                     next_page_select='.pagination .next', date_func=lambda x: x[0:4] + '.' + x[4:])
 
 
+# One Punch Man 3
+class OnePunchMan3Download(Fall2025AnimeDownload, NewsTemplate):
+    title = "One Punch Man 3"
+    keywords = [title, '3rd']
+    website = 'https://onepunchman-anime.net/'
+    twitter = 'opm_anime'
+    hashtags = 'onepunchman'
+    folder_name = 'onepunchman3'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.c-entry-list__item', id_select='a',
+                                    date_select='.c-entry__date', title_select='.c-entry-list__title',
+                                    a_tag_prefix=self.PAGE_PREFIX, a_tag_start_text_to_remove='/',
+                                    next_page_select='.next.page-numbers', stop_date='2022.08.10')
+
+
 # Sawaranaide Kotesashi-kun
 class KotesashikunDownload(Fall2025AnimeDownload, NewsTemplate):
     title = "Sawaranaide Kotesashi-kun"
