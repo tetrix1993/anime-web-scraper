@@ -530,6 +530,34 @@ class ImouzaDownload(Fall2025AnimeDownload, NewsTemplate):
                                     next_page_select='.nextpostslink')
 
 
+# Tondemo Skill de Isekai Hourou Meshi 2
+class TondemoSkill2Download(Fall2025AnimeDownload, NewsTemplate):
+    title = 'Tondemo Skill de Isekai Hourou Meshi 2'
+    keywords = [title, 'Campfire Cooking in Another World with My Absurd Skill Season 2', 'Tonsuki', '2nd']
+    website = 'https://tondemoskill-anime.com/'
+    twitter = 'tonsuki_anime'
+    hashtags = ['とんでもスキル', 'tondemo_skill']
+    folder_name = 'tondemoskill2'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news__item',
+                                    date_select='.news__item-time', title_select='.news__item-tit',
+                                    id_select='a', next_page_select='.wp-pagenavi *',
+                                    next_page_eval_index_class='current', next_page_eval_index=-1)
+
+
 # Towa no Yuugure
 class TowanoYuugureDownload(Fall2025AnimeDownload, NewsTemplate):
     title = "Towa no Yuugure"

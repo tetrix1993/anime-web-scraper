@@ -3958,7 +3958,7 @@ class TomochanDownload(Winter2023AnimeDownload, NewsTemplate):
 class TondemoSkillDownload(Winter2023AnimeDownload, NewsTemplate):
     title = 'Tondemo Skill de Isekai Hourou Meshi'
     keywords = [title, 'Campfire Cooking in Another World with My Absurd Skill', 'Tonsuki']
-    website = 'https://tondemoskill-anime.com/'
+    website = 'https://tondemoskill-anime.com/season1/'
     twitter = 'tonsuki_anime'
     hashtags = ['とんでもスキル', 'tondemo_skill']
     folder_name = 'tondemo-skill'

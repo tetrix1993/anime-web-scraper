@@ -94,6 +94,7 @@ The premiere date for the anime listed here has not been announced.
 * [Chichi wa Eiyuu, Haha wa Seirei, Musume no Watashi wa Tenseisha.](https://hahanoha-anime.com/)
 * [Chitose-kun wa Ramune Bin no Naka](https://chiramune.com/)
 * [Egao no Taenai Shokuba desu.](https://www.egatae.com/)
+* [Fumetsu no Anata e Season 3](Fumetsu no Anata e Season 3)
 * [Isekai Munchkin](https://isekai-munchkin.com/)
 * [Kao ni Denai Kashiwada-san to Kao ni Deru Oota-kun](https://kashiwada-ohta.com/)
 * [Mikata ga Yowasugite Hojo Mahou ni Tesshiteita Kyuutei Mahoushi, Tsuihou sarete Saikyou wo Mezashimasu](https://hojomaho.com/)
@@ -103,6 +104,7 @@ The premiere date for the anime listed here has not been announced.
 * [Shuumatsu Touring](https://shumatsu-touring.jp/)
 * [Souzai Saishuka no Isekai Ryokouki](https://www.sozaisaishu-pr.com/)
 * [Tomodachi no Imouto ga Ore ni dake Uzai](https://www.imouza-animation.com/)
+* [Tondemo Skill de Isekai Hourou Meshi 2](https://tondemoskill-anime.com/season1/)
 * [Towa no Yuugure](https://towanoyuugure.com/)
 * [Yasei no Last Boss ga Arawareta!](https://www.lastboss-anime.com/)
 
@@ -442,7 +444,7 @@ The premiere date for the anime listed here has not been announced.
 * [Akuyaku Reijou nanode Last Boss wo Kattemimashita](https://akulas-pr.com/)
 * [Bocchi the Rock!](https://bocchi.rocks/)
 * [Chainsaw Man](https://www.chainsawman.dog/)
-* [Fumetsu no Anata e Season 2](https://www.anime-fumetsunoanatae.com/)
+* [Fumetsu no Anata e Season 2](https://www.anime-fumetsunoanatae.com/2nd/)
 * [Futoku no Guild](https://futoku-no-anime.com/)
 * [Fuufu Ijou, Koibito Miman.](https://fuukoi-anime.com/)
 * [Golden Kamuy 4th Season](https://www.kamuy-anime.com/)
@@ -579,7 +581,7 @@ The premiere date for the anime listed here has not been announced.
 ### Spring 2021 Anime
 * [86](https://anime-86.com/)
 * [Dragon, Ie wo Kau](https://doraie.com/)
-* [Fumetsu no Anata e](https://anime-fumetsunoanatae.com/)
+* [Fumetsu no Anata e](https://anime-fumetsunoanatae.com/1st/)
 * [Hige wo Soru. Soshite Joshikousei wo Hirou.](http://higehiro-anime.com/)
 * [Ijiranaide, Nagatoro-san](https://www.nagatorosan.jp/1st/)
 * [Isekai Maou to Shoukan Shoujo no Dorei Majutsu Ω](https://isekaimaou-anime.com/)
