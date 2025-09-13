@@ -530,6 +530,63 @@ class ImouzaDownload(Fall2025AnimeDownload, NewsTemplate):
                                     next_page_select='.nextpostslink')
 
 
+# Kingdom 6th Season
+class Kingdom5Download(Fall2025AnimeDownload, NewsTemplate):
+    title = "Kingdom 6th Season"
+    keywords = [title]
+    website = 'https://kingdom-anime.com/'
+    twitter = 'kingdom_animePR'
+    hashtags = 'キングダム'
+    folder_name = 'kingdom6'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        try:
+            story_prefix = self.PAGE_PREFIX + 'story/'
+            soup = self.get_soup(story_prefix + '?season=6')
+            ep_list = soup.select('#ep_list li')
+            for ep in ep_list:
+                try:
+                    episode = self.get_episode_number(ep.find('span', class_='hd').text)
+                    if episode is None:
+                        continue
+                    if self.is_file_exists(self.base_folder + "/" + episode + "_0.jpg") or self.is_file_exists(
+                            self.base_folder + "/" + episode + "_0.png"):
+                        continue
+                    a_tag = ep.find('a')
+                    try:
+                        thumb_image_url = a_tag.find('div', class_='ep_thumb')['style'].split('(')[1].split(')')[0]
+                        self.download_image(thumb_image_url, self.base_folder + '/' + episode + '_0')
+                    except:
+                        continue
+                    ep_url = story_prefix + a_tag['href']
+                    ep_soup = self.get_soup(ep_url)
+                    images = ep_soup.find('div', id='episodeCont').find_all('img')
+                    for j in range(len(images)):
+                        image_url = images[j]['src']
+                        file_path_without_extension = self.base_folder + '/' + episode + '_' + str(j + 1)
+                        self.download_image(image_url, file_path_without_extension)
+                except:
+                    continue
+        except Exception as e:
+            self.print_exception(e)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='#news_list li',
+                                    date_select='.newsDate', title_select='.newsTitle', id_select='a',
+                                    a_tag_prefix=self.PAGE_PREFIX + 'news/', next_page_select='.pagingBox *',
+                                    next_page_eval_index=-1, next_page_eval_index_compare_page=True,
+                                    paging_type=3, paging_suffix='?page=%s')
+
+
 # Tondemo Skill de Isekai Hourou Meshi 2
 class TondemoSkill2Download(Fall2025AnimeDownload, NewsTemplate):
     title = 'Tondemo Skill de Isekai Hourou Meshi 2'
