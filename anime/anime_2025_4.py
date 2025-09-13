@@ -255,6 +255,36 @@ class EgataeDownload(Fall2025AnimeDownload, NewsTemplate):
                                     next_page_select='.next.page-numbers', paging_type=3, paging_suffix='?page=%s')
 
 
+# Fumetsu no Anata e Season 3
+class FumetsuNoAnatae3Download(Fall2025AnimeDownload, NewsTemplate):
+    title = 'Fumetsu no Anata e Season 3'
+    keywords = [title, 'To Your Eternity', '3rd']
+    website = 'https://www.nhk-character.com/chara/fumetsu/'
+    twitter = 'nep_fumetsu'
+    hashtags = '不滅のあなたへ'
+    folder_name = 'fumetsunoanatae3'
+
+    PAGE_PREFIX = website
+    FINAL_EPISODE = 22
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.c-post__list-item',
+                                    date_select='.c-post__year', title_select='.c-post__text-hover', id_select='a',
+                                    date_func=lambda x: x.replace('年', '.').replace('月', '.').replace('日', ''),
+                                    news_prefix='topics/', next_page_select='.next.page-numbers', paging_type=3,
+                                    paging_suffix='?page=%s')
+
+
 # Isekai Munchkin
 class IsekaiMunchkinDownload(Fall2025AnimeDownload, NewsTemplate):
     title = "Isekai Munchkin"
