@@ -558,6 +558,34 @@ class ImouzaDownload(Fall2025AnimeDownload, NewsTemplate):
                                     next_page_select='.nextpostslink')
 
 
+# Kekkon Yubiwa Monogatari II
+class KekkonYubiwa2Download(Fall2025AnimeDownload, NewsTemplate):
+    title = 'Kekkon Yubiwa Monogatari II'
+    keywords = [title, 'Tales of Wedding Rings Season 2', '2nd']
+    website = 'https://talesofweddingrings-anime.jp/'
+    twitter = 'weddingringsPR'
+    hashtags = '結婚指輪物語'
+    folder_name = 'kekkonyubiwa2'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='ul.newslistmob li',
+                                    date_select='.newstime', title_select='a', id_select='a', paging_type=3,
+                                    paging_suffix='?pg=%s', next_page_select='.bannewsln img[alt="next"]',
+                                    stop_date='2024')
+
+
 # Kingdom 6th Season
 class Kingdom5Download(Fall2025AnimeDownload, NewsTemplate):
     title = "Kingdom 6th Season"

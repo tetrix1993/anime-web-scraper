@@ -97,6 +97,7 @@ The premiere date for the anime listed here has not been announced.
 * [Fumetsu no Anata e Season 3](Fumetsu no Anata e Season 3)
 * [Isekai Munchkin](https://isekai-munchkin.com/)
 * [Kao ni Denai Kashiwada-san to Kao ni Deru Oota-kun](https://kashiwada-ohta.com/)
+* [Kekkon Yubiwa Monogatari II](https://talesofweddingrings-anime.jp/)
 * [Kingdom 6th Season](https://kingdom-anime.com/)
 * [Mikata ga Yowasugite Hojo Mahou ni Tesshiteita Kyuutei Mahoushi, Tsuihou sarete Saikyou wo Mezashimasu](https://hojomaho.com/)
 * [Mugen Gacha](https://mugengacha.com/)
