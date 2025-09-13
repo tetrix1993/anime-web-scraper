@@ -88,6 +88,7 @@ The premiere date for the anime listed here has not been announced.
 ### Fall 2025 Anime
 * [Alma-chan wa Kazoku ni Naritai](https://alma-chan.com/)
 * [Ansatsusha de Aru Ore no Status ga Yuusha yori mo Akiraka ni Tsuyoi no da ga](https://sutetsuyo-anime.com/)
+* [Ao no Orchestra Season 2](https://aooke-anime.com/)
 * [Bukiyou na Senpai.](https://bukiyouna-senpai.asmik-ace.co.jp/)
 * [Chanto Suenai Kyuuketsuki-chan](https://kyuketsuki-chan.com/)
 * [Chichi wa Eiyuu, Haha wa Seirei, Musume no Watashi wa Tenseisha.](https://hahanoha-anime.com/)

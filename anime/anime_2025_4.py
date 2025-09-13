@@ -90,6 +90,37 @@ class SutetsuyoDownload(Fall2025AnimeDownload, NewsTemplate):
                                     title_select='h2', id_select='a', a_tag_prefix=self.PAGE_PREFIX + 'news/')
 
 
+# Ao no Orchestra Season 2
+class Aooke2Download(Fall2025AnimeDownload, NewsTemplate):
+    title = 'Ao no Orchestra Season 2'
+    keywords = [title, 'Blue Orchestra']
+    website = 'https://aooke-anime.com/'
+    twitter = 'aooke_anime'
+    hashtags = '青のオーケストラ'
+    folder_name = 'aooke2'
+
+    PAGE_PREFIX = website
+    FINAL_EPISODE = 21
+    IMAGES_PER_EPISODE = 4
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news_item',
+                                    date_select='time', title_select='.ttl',
+                                    id_select=None, a_tag_start_text_to_remove='./', a_tag_prefix=news_url,
+                                    stop_date='2023.09')
+
+
 # Bukiyou na Senpai.
 class BukiyouDownload(Fall2025AnimeDownload, NewsTemplate):
     title = "Bukiyou na Senpai."
