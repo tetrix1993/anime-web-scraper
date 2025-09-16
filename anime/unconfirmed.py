@@ -97,6 +97,35 @@ class Anohana2Download(UnconfirmedDownload):
         self.download_image_list(folder)
 
 
+# Isekai Munchkin
+class IsekaiMunchkinDownload(UnconfirmedDownload, NewsTemplate):
+    title = "Isekai Munchkin"
+    keywords = [title, 'Otherworldly Munchkin']
+    website = 'https://isekai-munchkin.com/'
+    twitter = 'isekai_munchkin'
+    hashtags = ['異世界マンチキン', 'munchkin']
+    folder_name = 'munchkin'
+
+    PAGE_PREFIX = website
+    enabled = False
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        self.has_website_updated(self.PAGE_PREFIX)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-item',
+                                    date_select='.news-item__date', title_select='.news-item__title', id_select=None,
+                                    a_tag_prefix=self.PAGE_PREFIX, a_tag_start_text_to_remove='/',
+                                    next_page_select='.pagination .next')
+
+
 # Vlad Love
 class VladLoveDownload(UnconfirmedDownload):
     title = 'Vlad Love'

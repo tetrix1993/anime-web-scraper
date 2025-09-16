@@ -95,7 +95,6 @@ The premiere date for the anime listed here has not been announced.
 * [Chitose-kun wa Ramune Bin no Naka](https://chiramune.com/)
 * [Egao no Taenai Shokuba desu.](https://www.egatae.com/)
 * [Fumetsu no Anata e Season 3](Fumetsu no Anata e Season 3)
-* [Isekai Munchkin](https://isekai-munchkin.com/)
 * [Kao ni Denai Kashiwada-san to Kao ni Deru Oota-kun](https://kashiwada-ohta.com/)
 * [Kekkon Yubiwa Monogatari II](https://talesofweddingrings-anime.jp/)
 * [Kingdom 6th Season](https://kingdom-anime.com/)
