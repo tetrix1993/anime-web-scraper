@@ -1209,7 +1209,7 @@ class SamapokeDownload(Spring2025AnimeDownload, NewsTemplate):
     folder_name = 'samapoke'
 
     PAGE_PREFIX = website
-    FINAL_EPISODE = 24
+    FINAL_EPISODE = 26
     IMAGES_PER_EPISODE = 6
 
     def __init__(self):
