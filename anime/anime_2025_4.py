@@ -577,7 +577,7 @@ class KekkonYubiwa2Download(Fall2025AnimeDownload, NewsTemplate):
 
 
 # Kingdom 6th Season
-class Kingdom5Download(Fall2025AnimeDownload, NewsTemplate):
+class Kingdom6Download(Fall2025AnimeDownload, NewsTemplate):
     title = "Kingdom 6th Season"
     keywords = [title]
     website = 'https://kingdom-anime.com/'
