@@ -140,7 +140,41 @@ class BukiyouDownload(Fall2025AnimeDownload, NewsTemplate):
         self.download_news()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            ep_tags = soup.select('.js-archiveNav li a[href]')
+            for i in range(len(ep_tags)):
+                try:
+                    episode = ''
+                    ep_num = ep_tags[i].select('span')[0].text
+                    is_num = False
+                    for a in ep_num:
+                        if a.isnumeric():
+                            episode += a
+                            is_num = True
+                        elif is_num:
+                            break
+                    if len(episode) == 0:
+                        continue
+                    episode = str(int(episode)).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                if i == len(ep_tags) - 1:  # is-active
+                    ep_soup = soup
+                else:
+                    ep_soup = self.get_soup(ep_tags[i]['href'])
+                if ep_soup is None:
+                    continue
+                images = ep_soup.select('.swiper-slide img[src]')
+                for j in range(len(images)):
+                    image_url = images[j]['src']
+                    image_name = episode + '_' + str(j + 1)
+                    self.add_to_image_list(image_name, image_url, to_jpg=True)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.newsList',
