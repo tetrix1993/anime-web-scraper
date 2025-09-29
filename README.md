@@ -104,7 +104,7 @@ The premiere date for the anime listed here has not been announced.
 * [One Punch Man 3](https://onepunchman-anime.net/)
 * [Sawaranaide Kotesashi-kun](https://kotesashikun.deregula.com/)
 * [Shuumatsu Touring](https://shumatsu-touring.jp/)
-* [Souzai Saishuka no Isekai Ryokouki](https://www.sozaisaishu-pr.com/)
+* [Sozai Saishuka no Isekai Ryokouki](https://www.sozaisaishu-pr.com/)
 * [Tomodachi no Imouto ga Ore ni dake Uzai](https://www.imouza-animation.com/)
 * [Tondemo Skill de Isekai Hourou Meshi 2](https://tondemoskill-anime.com/season1/)
 * [Towa no Yuugure](https://towanoyuugure.com/)
