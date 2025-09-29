@@ -129,7 +129,44 @@ class Aooke2Download(Fall2025AnimeDownload, NewsTemplate):
         self.download_news()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/all.html')
+            stories = soup.select('.st_item')
+            for story in stories:
+                a_tag = story.select('a[href]')
+                if len(a_tag) == 0:
+                    continue
+                try:
+                    episode = ''
+                    ep_num = story.select('.stnum')[0].text
+                    is_num = False
+                    for a in ep_num:
+                        if a.isnumeric():
+                            episode += a
+                            is_num = True
+                        elif is_num:
+                            break
+                    if len(episode) == 0:
+                        continue
+                    episode = str(int(episode)).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                ep_soup = self.get_soup(a_tag[0]['href'])
+                if ep_soup is None:
+                    continue
+                images = ep_soup.select('.bxslider li img[src]')
+                self.image_list = []
+                for i in range(len(images)):
+                    image_url = self.clear_resize_in_url(images[i]['src'])
+                    if 'dummy' in image_url:
+                        continue
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         news_url = self.PAGE_PREFIX + 'news/'
