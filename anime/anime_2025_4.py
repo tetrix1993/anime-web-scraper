@@ -101,7 +101,28 @@ class SutetsuyoDownload(Fall2025AnimeDownload, NewsTemplate):
         self.download_news()
 
     def download_episode_preview(self):
-        self.has_website_updated(self.PAGE_PREFIX)
+        try:
+            story_url = self.PAGE_PREFIX + 'story/'
+            soup = self.get_soup(story_url)
+            a_tags = soup.select('section.list a[href]')
+            for a_tag in a_tags:
+                try:
+                    episode = str(int(a_tag['href'].replace('.php', '')[0])).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_01'):
+                    continue
+                ep_soup = self.get_soup(story_url + a_tag['href'])
+                if ep_soup is None:
+                    continue
+                images = ep_soup.select('.scene li img[src]')
+                for i in range(len(images)):
+                    image_url = self.PAGE_PREFIX + images[i]['src'].replace('../', '')
+                    image_name = episode + '_' + str(i + 1).zfill(2)
+                    self.add_to_image_list(image_name, image_url, to_jpg=True)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article', date_select='time',
