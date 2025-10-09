@@ -991,7 +991,7 @@ class KekkonYubiwa2Download(Fall2025AnimeDownload, NewsTemplate):
                 if episode == '13':
                     ep_soup = soup
                 else:
-                    ep_soup = soup.select(a_tag['href'])
+                    ep_soup = self.get_soup(a_tag['href'])
                 if ep_soup is None:
                     continue
                 images = ep_soup.select('.sto_inimg img[src]')
