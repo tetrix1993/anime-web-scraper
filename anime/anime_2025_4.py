@@ -356,6 +356,8 @@ class ChiramuneDownload(Fall2025AnimeDownload, NewsTemplate2):
     folder_name = 'chiramune'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 24
+    IMAGES_PER_EPISODE = 6
 
     def __init__(self):
         super().__init__()
@@ -363,6 +365,7 @@ class ChiramuneDownload(Fall2025AnimeDownload, NewsTemplate2):
     def run(self):
         self.download_episode_preview()
         self.download_news()
+        self.download_guess_core_sys()
 
     def download_episode_preview(self):
         try:
@@ -401,6 +404,10 @@ class ChiramuneDownload(Fall2025AnimeDownload, NewsTemplate2):
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX)
+
+    def download_episode_preview_guess(self, print_url=False):
+        self.download_guess_core_sys(self.PAGE_PREFIX, self.FINAL_EPISODE, self.IMAGES_PER_EPISODE, 14, 25, 29, 6, 6,
+                                     print_url, check_content_length=True, more_than_amount=13600)
 
 
 # Egao no Taenai Shokuba desu.
