@@ -113,7 +113,8 @@ class AniverseMagazineDownload(ExternalDownload):
     folder_name = None
     PAGE_PREFIX = "https://aniverse-mag.com/archives/"
     
-    def __init__(self, article_id, save_folder, episode, num_of_pictures=0, min_width=None, check_resize=False, download_id=None):
+    def __init__(self, article_id, save_folder, episode, num_of_pictures=0,
+                 min_width=None, check_resize=False, download_id=None, to_jpg=True):
         super().__init__(download_id)
         self.base_folder = self.base_folder + "/" + save_folder
         if not os.path.exists(self.base_folder):
@@ -126,6 +127,7 @@ class AniverseMagazineDownload(ExternalDownload):
         self.num_of_pictures = num_of_pictures
         self.min_width = min_width
         self.check_resize = check_resize
+        self.to_jpg = to_jpg
 
     def process_article(self):
         try:
@@ -165,7 +167,10 @@ class AniverseMagazineDownload(ExternalDownload):
                             image_name = str(i).zfill(2)
                             if self.episode is not None:
                                 image_name = self.episode + '_' + image_name
-                            image_objs.append({'name': image_name, 'url': image_url})
+                            if self.to_jpg:
+                                image_objs.append({'name': image_name, 'url': image_url, 'to_jpg': True})
+                            else:
+                                image_objs.append({'name': image_name, 'url': image_url})
                             i += 1
                 self.download_image_objects(image_objs, self.base_folder, min_width=self.min_width)
 
