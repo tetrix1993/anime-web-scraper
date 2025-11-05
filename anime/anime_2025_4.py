@@ -277,6 +277,7 @@ class KyuketsukichanDownload(Fall2025AnimeDownload, NewsTemplate):
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_external()
         self.download_news()
 
     def download_episode_preview(self):
@@ -297,6 +298,11 @@ class KyuketsukichanDownload(Fall2025AnimeDownload, NewsTemplate):
                     break
         except Exception as e:
             self.print_exception(e)
+
+    def download_episode_preview_external(self):
+        keywords = ['ちゃんと吸えない吸血鬼ちゃん']
+        AniverseMagazineScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                end_date='20251015', download_id=self.download_id).run()
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.bl_posts_item',
@@ -428,6 +434,7 @@ class EgataeDownload(Fall2025AnimeDownload, NewsTemplate):
 
     def run(self):
         self.download_episode_preview()
+        self.download_episode_preview_external()
         self.download_news()
 
     def download_episode_preview(self):
@@ -448,6 +455,11 @@ class EgataeDownload(Fall2025AnimeDownload, NewsTemplate):
                     break
         except Exception as e:
             self.print_exception(e)
+
+    def download_episode_preview_external(self):
+        keywords = ['笑顔のたえない職場です']
+        AniverseMagazineScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                end_date='20251008', download_id=self.download_id).run()
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news_item',
