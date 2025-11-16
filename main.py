@@ -10,10 +10,10 @@ def run():
         os.makedirs(constants.FOLDER_OUTPUT)
 
     downloads = []
-    for subclass in Summer2025AnimeDownload.__subclasses__():
-        if subclass.enabled and subclass.__name__ != FutariSoloCampDownload.__name__:
-            downloads.append(subclass())
-    downloads += [DainanaojiDownload(), SamapokeDownload(), WitchWatchDownload(), NagekiDownload()]
+    # for subclass in Summer2025AnimeDownload.__subclasses__():
+    #     if subclass.enabled and subclass.__name__ != FutariSoloCampDownload.__name__:
+    #         downloads.append(subclass())
+    downloads += [WatarikunDownload(), NagekiDownload()]
     subclasses = Fall2025AnimeDownload.__subclasses__()
     for subclass in subclasses:
         if subclass.enabled:
