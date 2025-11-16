@@ -85,6 +85,9 @@ pip install -r requirements.txt
 The premiere date for the anime listed here has not been announced.
 * To be added
 
+### Winter 2026 Anime
+* [Shibou Yuugi de Meshi wo Kuu.](https://shiboyugi-anime.com/)
+
 ### Fall 2025 Anime
 * [Alma-chan wa Kazoku ni Naritai](https://alma-chan.com/)
 * [Ansatsusha de Aru Ore no Status ga Yuusha yori mo Akiraka ni Tsuyoi no da ga](https://sutetsuyo-anime.com/)

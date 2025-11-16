@@ -1,0 +1,74 @@
+from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsTemplate3, NewsTemplate4
+from datetime import datetime, timedelta
+from requests.exceptions import HTTPError
+from scan import AniverseMagazineScanner
+from bs4 import BeautifulSoup
+import json
+import os
+
+
+# Winter 2026 Anime
+class Winter2026AnimeDownload(MainDownload):
+    season = "2026-1"
+    season_name = "Winter 2026"
+    folder_name = '2026-1'
+
+    def __init__(self):
+        super().__init__()
+
+
+# Shibou Yuugi de Meshi wo Kuu.
+class ShiboyugiDownload(Winter2026AnimeDownload, NewsTemplate2):
+    title = "Shibou Yuugi de Meshi wo Kuu."
+    keywords = [title, 'Playing Death Games to Put Food on the Table']
+    website = 'https://shiboyugi-anime.com/'
+    twitter = 'shibouyugi_'
+    hashtags = ['死亡遊戯']
+    folder_name = 'shiboyugi'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/01.html')
+            stories = soup.select('table[summary="List_Type01"] a[href]')
+            for story in stories:
+                story_url = self.PAGE_PREFIX + story['href'].replace('../', '')
+                try:
+                    episode = ''
+                    ep_num = story.text
+                    for a in ep_num:
+                        if a.isnumeric():
+                            episode += a
+                    if len(episode) == 0:
+                        continue
+                    episode = str(int(episode)).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                if episode == '01':
+                    ep_soup = soup
+                else:
+                    ep_soup = self.get_soup(story_url)
+                if ep_soup is not None:
+                    images = ep_soup.select('.ph img[src]')
+                    self.image_list = []
+                    for i in range(len(images)):
+                        image_url = self.PAGE_PREFIX + images[i]['src'].split('?')[0]
+                        image_url = self.remove_string(image_url, ['../', 'sn_'])
+                        image_name = episode + '_' + str(i + 1)
+                        self.add_to_image_list(image_name, image_url, to_jpg=True)
+                    self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX)
