@@ -357,7 +357,7 @@ class Bokuyaba2Download(Winter2024AnimeDownload, NewsTemplate):
                 if len(title) == 0:
                     continue
                 try:
-                    ep_num = int(re.sub('\D', '', title[0].text.split('】')[0]))
+                    ep_num = int(re.sub('\\D', '', title[0].text.split('】')[0]))
                     episode = str(ep_num).zfill(2)
                 except:
                     continue

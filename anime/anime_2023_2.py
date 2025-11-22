@@ -229,7 +229,7 @@ class BokuyabaDownload(Spring2023AnimeDownload, NewsTemplate):
                 if len(title) == 0:
                     continue
                 try:
-                    ep_num = int(re.sub('\D', '', title[0].text.split('】')[0]))
+                    ep_num = int(re.sub('\\D', '', title[0].text.split('】')[0]))
                     episode = str(ep_num).zfill(2)
                 except:
                     continue
@@ -1128,7 +1128,7 @@ class KawaisugiCrisisDownload(Spring2023AnimeDownload, NewsTemplate):
                 if len(a_tag) == 0:
                     continue
                 try:
-                    episode = str(int(re.sub('\D', '', a_tag[0].text))).zfill(2)
+                    episode = str(int(re.sub('\\D', '', a_tag[0].text))).zfill(2)
                 except:
                     continue
                 if self.is_image_exists(episode + '_1'):
@@ -2716,7 +2716,7 @@ class WatayuriDownload(Spring2023AnimeDownload, NewsTemplate):
             stories = soup.select('.storyDetail')
             for story in stories:
                 try:
-                    episode = str(int(re.sub('\D', '', story['id']))).zfill(2)
+                    episode = str(int(re.sub('\\D', '', story['id']))).zfill(2)
                 except:
                     continue
                 if self.is_image_exists(episode + '_' + str(self.IMAGES_PER_EPISODE)) and episode in yt_episodes:
