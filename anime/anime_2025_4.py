@@ -859,7 +859,7 @@ class ShumatsuTouringDownload(Fall2025AnimeDownload, NewsTemplate):
     def download_episode_preview(self):
         story_url = self.PAGE_PREFIX + 'story/'
         try:
-            soup = self.get_soup(story_url)
+            soup = self.get_soup(story_url, decode=True)
             stories = soup.select('.p-story_in__contents-nav-list-item')
             for story in stories:
                 a_tag = story.select('a[href]')
@@ -885,7 +885,7 @@ class ShumatsuTouringDownload(Fall2025AnimeDownload, NewsTemplate):
                 if 'is-current' in story['class']:
                     ep_soup = soup
                 else:
-                    ep_soup = self.get_soup(story_url + a_tag[0]['src'][2:])
+                    ep_soup = self.get_soup(story_url + a_tag[0]['href'][2:])
                 images = ep_soup.select('.p-in-list img[src]')
                 for i in range(len(images)):
                     image_url = story_url + images[i]['src']
