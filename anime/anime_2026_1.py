@@ -202,6 +202,34 @@ class KinishiteDownload(Winter2026AnimeDownload, NewsTemplate):
                                     paging_type=3, paging_suffix='?page=%s')
 
 
+# Kizoku Tensei: Megumareta Umare kara Saikyou no Chikara wo Eru
+class KizokuTenseiDownload(Winter2026AnimeDownload, NewsTemplate):
+    title = 'Kizoku Tensei: Megumareta Umare kara Saikyou no Chikara wo Eru'
+    keywords = [title, "Noble Reincarnation: Born Blessed, So I'll Obtain Ultimate Power"]
+    website = 'https://kizoku-tensei.com/'
+    twitter = 'kizokutensei_PR'
+    hashtags = ['貴族転生']
+    folder_name = 'kizokutensei'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        pass
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-archive-Item',
+                                    date_select='.date', title_select='.title', id_select='a',
+                                    next_page_select='.wp-pagenavi *', next_page_eval_index_class='current',
+                                    next_page_eval_index=-1)
+
+
 # Shibou Yuugi de Meshi wo Kuu.
 class ShiboyugiDownload(Winter2026AnimeDownload, NewsTemplate2):
     title = "Shibou Yuugi de Meshi wo Kuu."
