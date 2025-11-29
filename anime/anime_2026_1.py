@@ -18,7 +18,7 @@ class Winter2026AnimeDownload(MainDownload):
 
 
 # 29-sai Dokushin Chuuken Boukensha no Nichijou
-class Anime29SaiDownload(Winter2026AnimeDownload, NewsTemplate):
+class Anime29SaiDownload(Winter2026AnimeDownload):
     title = '29-sai Dokushin Chuuken Boukensha no Nichijou'
     keywords = [title, 'The Daily Life of a Single 29-Year-Old Adventurer']
     website = 'https://anime-29sai-dokushin.com/'
@@ -47,7 +47,7 @@ class Anime29SaiDownload(Winter2026AnimeDownload, NewsTemplate):
             for item in json_obj:
                 if 'datetime' in item and 'uniqueId' in item and 'title' in item:
                     try:
-                        date = item['datetime']
+                        date = item['datetime'].replace('-', '.')
                     except:
                         continue
                     title = item['title']
@@ -69,6 +69,32 @@ class Anime29SaiDownload(Winter2026AnimeDownload, NewsTemplate):
                 self.create_news_log_cache(success_count, results[0])
         except Exception as e:
             self.print_exception(e, 'News')
+
+
+# Champignon no Majo
+class ChampignonDownload(Winter2026AnimeDownload, NewsTemplate):
+    title = 'Champignon no Majo'
+    keywords = [title, 'Champignon Witch']
+    website = 'https://champignon-pr.com/'
+    twitter = 'Champignon_PR'
+    hashtags = 'シャンピニオンの魔女'
+    folder_name = 'champignon'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        pass
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-list li',
+                                    date_select='.date', title_select='.title', id_select='a')
 
 
 # Shibou Yuugi de Meshi wo Kuu.
