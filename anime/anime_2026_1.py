@@ -230,6 +230,35 @@ class KizokuTenseiDownload(Winter2026AnimeDownload, NewsTemplate):
                                     next_page_eval_index=-1)
 
 
+# Majutsushi Kunon wa Mieteiru
+class KunonDownload(Winter2026AnimeDownload, NewsTemplate):
+    title = 'Majutsushi Kunon wa Mieteiru'
+    keywords = [title, 'Kunon the Sorcerer Can See']
+    website = 'https://kunonanime.jp/'
+    twitter = 'animekunon'
+    hashtags = ['アニメクノン']
+    folder_name = 'kunon'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        pass
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.c-post__list-item',
+                                    date_select='.c-post__date', title_select='.c-post__title',
+                                    id_select='.c-post__link--sub', a_tag_start_text_to_remove='../',
+                                    a_tag_prefix=self.PAGE_PREFIX, next_page_select='.c-btn-pager__txt-wrap--next',
+                                    paging_type=3, paging_suffix='?page=%s', date_func=lambda x: x[0:4] + '.' + x[5:])
+
+
 # Shibou Yuugi de Meshi wo Kuu.
 class ShiboyugiDownload(Winter2026AnimeDownload, NewsTemplate2):
     title = "Shibou Yuugi de Meshi wo Kuu."
