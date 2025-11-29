@@ -101,6 +101,7 @@ The premiere date for the anime listed here has not been announced.
 * [Shibou Yuugi de Meshi wo Kuu.](https://shiboyugi-anime.com/)
 * [Yuusha Party ni Kawaii Ko ga Ita node, Kokuhaku shitemita.](https://yuukawa-anime.com/)
 * [Yuusha Party wo Oidasareta Kiyoubinbou](https://kiyou-bimbou.com/)
+* [Yuusha-kei ni Shosu: Choubatsu Yuusha 9004-tai Keimu Kiroku](https://yushakei-pj.com/)
 
 ### Fall 2025 Anime
 * [Alma-chan wa Kazoku ni Naritai](https://alma-chan.com/)

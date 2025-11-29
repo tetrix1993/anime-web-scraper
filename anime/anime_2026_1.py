@@ -453,7 +453,7 @@ class YuukawaDownload(Winter2026AnimeDownload, NewsTemplate):
 # Yuusha Party wo Oidasareta Kiyoubinbou
 class KiyouBimbouDownload(Winter2026AnimeDownload, NewsTemplate):
     title = 'Yuusha Party wo Oidasareta Kiyoubinbou'
-    keywords = [title, "Jack-of-All-Trades, Party of None" 'kiyou bimbou']
+    keywords = [title, "Jack-of-All-Trades, Party of None", 'kiyou bimbou']
     website = 'https://kiyou-bimbou.com/'
     twitter = 'kiyou_bimbou'
     hashtags = ['器用貧乏']
@@ -476,3 +476,57 @@ class KiyouBimbouDownload(Winter2026AnimeDownload, NewsTemplate):
                                     date_select='.news-box-date', title_select='.news-txt-box', id_select='a',
                                     next_page_select='ul.page-numbers li *.page-numbers',
                                     next_page_eval_index_class='current', next_page_eval_index=-1)
+
+
+# Yuusha-kei ni Shosu: Choubatsu Yuusha 9004-tai Keimu Kiroku
+class YushakeiDownload(Winter2026AnimeDownload):
+    title = 'Yuusha-kei ni Shosu: Choubatsu Yuusha 9004-tai Keimu Kiroku'
+    keywords = [title, "Sentenced to Be a Hero", 'yushakei']
+    website = 'https://yushakei-pj.com/'
+    twitter = 'yushakei_PJ'
+    hashtags = ['勇者刑に処す', 'yushakei']
+    folder_name = 'yushakei'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        pass
+
+    def download_news(self):
+        try:
+            results = []
+            news_obj = self.get_last_news_log_object()
+            news_prefix = self.PAGE_PREFIX + 'news/'
+            json_obj = self.get_json(news_prefix + 'newslist.json')
+            for item in json_obj:
+                if 'date' in item and 'uniqueId' in item and 'title' in item:
+                    try:
+                        date = item['date']
+                    except:
+                        continue
+                    title = item['title']
+                    unique_id = item['uniqueId']
+                    if len(unique_id) == 0 and 'directLinkUrl' in item and len(item['directLinkUrl']) > 1:
+                        url = self.PAGE_PREFIX + item['directLinkUrl'][1:]
+                    else:
+                        url = news_prefix + '?id=' + item['uniqueId']
+                    if news_obj is not None and (news_obj['id'] == url or news_obj['title'] == title
+                                                 or date < news_obj['date']):
+                        break
+                    results.append(self.create_news_log_object(date, title, url))
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log_from_news_log_object(result)
+                if process_result == 0:
+                    success_count += 1
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
+        except Exception as e:
+            self.print_exception(e, 'News')
