@@ -284,6 +284,33 @@ class MayochuDownload(Winter2026AnimeDownload, NewsTemplate2):
         self.download_template_news(page_prefix=self.PAGE_PREFIX)
 
 
+# Okiraku Ryoushu no Tanoshii Ryouchi Bouei
+class OkirakuRyoushuDownload(Winter2026AnimeDownload, NewsTemplate):
+    title = 'Okiraku Ryoushu no Tanoshii Ryouchi Bouei'
+    keywords = [title, 'Easygoing Territory Defense by the Optimistic Lord']
+    website = 'https://okiraku-ryousyu-anime.jp/'
+    twitter = 'okiraku_anime'
+    hashtags = ['お気楽領主アニメ']
+    folder_name = 'okirakuryoushu'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        pass
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.bl_news__article_item',
+                                    date_select='time', title_select='.bl_news__article_body', id_select='a',
+                                    next_page_select='a.next.page-numbers', paging_type=3, paging_suffix='?page=%s')
+
+
 # Shibou Yuugi de Meshi wo Kuu.
 class ShiboyugiDownload(Winter2026AnimeDownload, NewsTemplate2):
     title = "Shibou Yuugi de Meshi wo Kuu."
