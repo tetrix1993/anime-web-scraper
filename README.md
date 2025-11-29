@@ -96,6 +96,7 @@ The premiere date for the anime listed here has not been announced.
 * [Majutsushi Kunon wa Mieteiru](https://kunonanime.jp/)
 * [Mayonaka Heart Tune](https://mayochu-anime.com/)
 * [Okiraku Ryoushu no Tanoshii Ryouchi Bouei](https://okiraku-ryousyu-anime.jp/)
+* [Omae Gotoki ga Maou ni Kateru to Omouna](https://omagoto.com/)
 * [Shibou Yuugi de Meshi wo Kuu.](https://shiboyugi-anime.com/)
 
 ### Fall 2025 Anime

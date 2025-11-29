@@ -311,6 +311,32 @@ class OkirakuRyoushuDownload(Winter2026AnimeDownload, NewsTemplate):
                                     next_page_select='a.next.page-numbers', paging_type=3, paging_suffix='?page=%s')
 
 
+# Omae Gotoki ga Maou ni Kateru to Omouna
+class OmagotoDownload(Winter2026AnimeDownload, NewsTemplate):
+    title = 'Omae Gotoki ga Maou ni Kateru to Omouna'
+    keywords = [title, 'Roll Over and Die', 'omagoto']
+    website = 'https://omagoto.com/'
+    twitter = 'omagoto_anime'
+    hashtags = ['おまごと']
+    folder_name = 'omagoto'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        pass
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-item', date_select='.date',
+                                    title_select='.title', id_select='a', next_page_select='a.next.page-numbers')
+
+
 # Shibou Yuugi de Meshi wo Kuu.
 class ShiboyugiDownload(Winter2026AnimeDownload, NewsTemplate2):
     title = "Shibou Yuugi de Meshi wo Kuu."
