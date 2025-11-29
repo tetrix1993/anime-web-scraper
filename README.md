@@ -94,6 +94,7 @@ The premiere date for the anime listed here has not been announced.
 * [Kirei ni Shitemoraemasu ka.](https://kinishite.com/)
 * [Kizoku Tensei: Megumareta Umare kara Saikyou no Chikara wo Eru](https://kizoku-tensei.com/)
 * [Majutsushi Kunon wa Mieteiru](https://kunonanime.jp/)
+* [Mayonaka Heart Tune](https://mayochu-anime.com/)
 * [Shibou Yuugi de Meshi wo Kuu.](https://shiboyugi-anime.com/)
 
 ### Fall 2025 Anime

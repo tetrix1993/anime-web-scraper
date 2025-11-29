@@ -259,6 +259,31 @@ class KunonDownload(Winter2026AnimeDownload, NewsTemplate):
                                     paging_type=3, paging_suffix='?page=%s', date_func=lambda x: x[0:4] + '.' + x[5:])
 
 
+# Mayonaka Heart Tune
+class MayochuDownload(Winter2026AnimeDownload, NewsTemplate2):
+    title = 'Mayonaka Heart Tune'
+    keywords = [title, 'Tune in to the Midnight Heart', 'mayochu']
+    website = 'https://mayochu-anime.com/'
+    twitter = 'anime_mayochu'
+    hashtags = ['真夜中ハートチューン']
+    folder_name = 'mayochu'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        pass
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX)
+
+
 # Shibou Yuugi de Meshi wo Kuu.
 class ShiboyugiDownload(Winter2026AnimeDownload, NewsTemplate2):
     title = "Shibou Yuugi de Meshi wo Kuu."
