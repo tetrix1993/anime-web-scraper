@@ -97,6 +97,33 @@ class ChampignonDownload(Winter2026AnimeDownload, NewsTemplate):
                                     date_select='.date', title_select='.title', id_select='a')
 
 
+# Eris no Seihai
+class ErisSeihaiDownload(Winter2026AnimeDownload, NewsTemplate):
+    title = 'Eris no Seihai'
+    keywords = [title, 'The Holy Grail of Eris']
+    website = 'https://eris-seihai.com/'
+    twitter = 'Project_of_Eris'
+    hashtags = 'エリスの聖杯'
+    folder_name = 'erisseihai'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        pass
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news_item',
+                                    date_select='.date', title_select='.desc', id_select=None,
+                                    next_page_select='li.item.next a[href]')
+
+
 # Shibou Yuugi de Meshi wo Kuu.
 class ShiboyugiDownload(Winter2026AnimeDownload, NewsTemplate2):
     title = "Shibou Yuugi de Meshi wo Kuu."
