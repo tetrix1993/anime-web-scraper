@@ -150,6 +150,31 @@ class HellModeDownload(Winter2026AnimeDownload, NewsTemplate):
                                     date_select='.date', title_select='.title', id_select='a')
 
 
+# Jingai Kyoushitsu no Ningengirai Kyoushi
+class JingaiKyoshitsuDownload(Winter2026AnimeDownload, NewsTemplate2):
+    title = 'Jingai Kyoushitsu no Ningengirai Kyoushi'
+    keywords = [title, 'A Misanthrope Teaches a Class for Demi-Humans']
+    website = 'https://jingai-kyoshitsu-anime.com/'
+    twitter = 'jingaikyoshitsu'
+    hashtags = ['人外教室']
+    folder_name = 'jingaikyoshitsu'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        pass
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX)
+
+
 # Shibou Yuugi de Meshi wo Kuu.
 class ShiboyugiDownload(Winter2026AnimeDownload, NewsTemplate2):
     title = "Shibou Yuugi de Meshi wo Kuu."
