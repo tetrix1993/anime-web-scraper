@@ -124,6 +124,32 @@ class ErisSeihaiDownload(Winter2026AnimeDownload, NewsTemplate):
                                     next_page_select='li.item.next a[href]')
 
 
+# Hell Mode
+class HellModeDownload(Winter2026AnimeDownload, NewsTemplate):
+    title = 'Hell Mode'
+    keywords = [title]
+    website = 'https://hellmode-anime.com/'
+    twitter = 'hellmode_anime'
+    hashtags = ['ヘルモード']
+    folder_name = 'hellmode'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        pass
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-list li',
+                                    date_select='.date', title_select='.title', id_select='a')
+
+
 # Shibou Yuugi de Meshi wo Kuu.
 class ShiboyugiDownload(Winter2026AnimeDownload, NewsTemplate2):
     title = "Shibou Yuugi de Meshi wo Kuu."
