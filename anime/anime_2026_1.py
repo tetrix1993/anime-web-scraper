@@ -259,6 +259,34 @@ class KunonDownload(Winter2026AnimeDownload, NewsTemplate):
                                     paging_type=3, paging_suffix='?page=%s', date_func=lambda x: x[0:4] + '.' + x[5:])
 
 
+# Maou no Musume wa Yasashisugiru!!
+class MaomusuDownload(Winter2026AnimeDownload, NewsTemplate):
+    title = 'Maou no Musume wa Yasashisugiru!!'
+    keywords = [title, "The Demon King's Daughter is too Kind!!", 'maomusu']
+    website = 'https://maomusu.com/'
+    twitter = 'maomusu_info'
+    hashtags = ['まおむす']
+    folder_name = 'maomusu'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        pass
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.bl_posts_item',
+                                    date_select='time', title_select='.bl_posts_txt', id_select='a',
+                                    date_separator='/', next_page_select='a.next.page-numbers', paging_type=3,
+                                    paging_suffix='?page=%s')
+
+
 # Mayonaka Heart Tune
 class MayochuDownload(Winter2026AnimeDownload, NewsTemplate2):
     title = 'Mayonaka Heart Tune'

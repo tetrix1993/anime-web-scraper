@@ -94,6 +94,7 @@ The premiere date for the anime listed here has not been announced.
 * [Kirei ni Shitemoraemasu ka.](https://kinishite.com/)
 * [Kizoku Tensei: Megumareta Umare kara Saikyou no Chikara wo Eru](https://kizoku-tensei.com/)
 * [Majutsushi Kunon wa Mieteiru](https://kunonanime.jp/)
+* [Maou no Musume wa Yasashisugiru!!](https://maomusu.com/)
 * [Mayonaka Heart Tune](https://mayochu-anime.com/)
 * [Okiraku Ryoushu no Tanoshii Ryouchi Bouei](https://okiraku-ryousyu-anime.jp/)
 * [Omae Gotoki ga Maou ni Kateru to Omouna](https://omagoto.com/)
