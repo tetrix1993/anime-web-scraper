@@ -419,3 +419,32 @@ class ShiboyugiDownload(Winter2026AnimeDownload, NewsTemplate2):
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX)
+
+
+# Yuusha Party ni Kawaii Ko ga Ita node, Kokuhaku shitemita.
+class YuukawaDownload(Winter2026AnimeDownload, NewsTemplate):
+    title = 'Yuusha Party ni Kawaii Ko ga Ita node, Kokuhaku shitemita.'
+    keywords = [title, "There was a Cute Girl in the Hero's Party, so I Tried Confessing to Her", 'yuukawa']
+    website = 'https://yuukawa-anime.com/'
+    twitter = 'yuukawa_anime'
+    hashtags = ['ゆうかわ']
+    folder_name = 'yuukawa'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        pass
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news__list li',
+                                    date_select='.news__date', title_select='.news__link-title', id_select='a',
+                                    next_page_select='ul.page-numbers li *.page-numbers',
+                                    next_page_eval_index_class='current', next_page_eval_index=-1,
+                                    date_func=lambda x: x[0:4] + '.' + x[5:7] + '.' + x[7:])

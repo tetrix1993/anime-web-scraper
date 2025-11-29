@@ -99,6 +99,7 @@ The premiere date for the anime listed here has not been announced.
 * [Omae Gotoki ga Maou ni Kateru to Omouna](https://omagoto.com/)
 * [Osananajimi to wa Love Comedy ni Naranai](https://anime-osalove.com/)
 * [Shibou Yuugi de Meshi wo Kuu.](https://shiboyugi-anime.com/)
+* [Yuusha Party ni Kawaii Ko ga Ita node, Kokuhaku shitemita.](https://yuukawa-anime.com/)
 
 ### Fall 2025 Anime
 * [Alma-chan wa Kazoku ni Naritai](https://alma-chan.com/)
