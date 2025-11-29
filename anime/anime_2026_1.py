@@ -175,6 +175,33 @@ class JingaiKyoshitsuDownload(Winter2026AnimeDownload, NewsTemplate2):
         self.download_template_news(page_prefix=self.PAGE_PREFIX)
 
 
+# Kirei ni Shitemoraemasu ka.
+class KinishiteDownload(Winter2026AnimeDownload, NewsTemplate):
+    title = 'Kirei ni Shitemoraemasu ka.'
+    keywords = [title, 'Wash It All Away', 'kinishite']
+    website = 'https://kinishite.com/'
+    twitter = 'kinishite_anime'
+    hashtags = ['きにして']
+    folder_name = 'kinishite'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        pass
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.bl_posts_item', date_select='time',
+                                    title_select='.bl_posts_txt', id_select='a', next_page_select='a.next.page-numbers',
+                                    paging_type=3, paging_suffix='?page=%s')
+
+
 # Shibou Yuugi de Meshi wo Kuu.
 class ShiboyugiDownload(Winter2026AnimeDownload, NewsTemplate2):
     title = "Shibou Yuugi de Meshi wo Kuu."

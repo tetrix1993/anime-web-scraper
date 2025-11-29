@@ -91,6 +91,7 @@ The premiere date for the anime listed here has not been announced.
 * [Eris no Seihai](https://eris-seihai.com/)
 * [Hell Mode](https://hellmode-anime.com/)
 * [Jingai Kyoushitsu no Ningengirai Kyoushi](https://jingai-kyoshitsu-anime.com/)
+* [Kirei ni Shitemoraemasu ka.](https://kinishite.com/)
 * [Shibou Yuugi de Meshi wo Kuu.](https://shiboyugi-anime.com/)
 
 ### Fall 2025 Anime
