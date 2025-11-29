@@ -337,6 +337,33 @@ class OmagotoDownload(Winter2026AnimeDownload, NewsTemplate):
                                     title_select='.title', id_select='a', next_page_select='a.next.page-numbers')
 
 
+# Osananajimi to wa Love Comedy ni Naranai
+class OsaloveDownload(Winter2026AnimeDownload, NewsTemplate):
+    title = 'Osananajimi to wa Love Comedy ni Naranai'
+    keywords = [title, "You Can't Be In a Rom-Com with Your Childhood Friends!", 'osalove']
+    website = 'https://anime-osalove.com/'
+    twitter = 'love_Osnnjm_wm'
+    hashtags = ['幼ラブ', '幼ラブアニメ']
+    folder_name = 'osalove'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        pass
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.newsCol',
+                                    date_select='.newsCol__date', title_select='.newsCol__title', id_select=None,
+                                    next_page_select='#load-more')
+
+
 # Shibou Yuugi de Meshi wo Kuu.
 class ShiboyugiDownload(Winter2026AnimeDownload, NewsTemplate2):
     title = "Shibou Yuugi de Meshi wo Kuu."
