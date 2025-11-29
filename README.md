@@ -100,6 +100,7 @@ The premiere date for the anime listed here has not been announced.
 * [Osananajimi to wa Love Comedy ni Naranai](https://anime-osalove.com/)
 * [Shibou Yuugi de Meshi wo Kuu.](https://shiboyugi-anime.com/)
 * [Yuusha Party ni Kawaii Ko ga Ita node, Kokuhaku shitemita.](https://yuukawa-anime.com/)
+* [Yuusha Party wo Oidasareta Kiyoubinbou](https://kiyou-bimbou.com/)
 
 ### Fall 2025 Anime
 * [Alma-chan wa Kazoku ni Naritai](https://alma-chan.com/)
