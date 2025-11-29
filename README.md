@@ -86,6 +86,7 @@ The premiere date for the anime listed here has not been announced.
 * To be added
 
 ### Winter 2026 Anime
+* [29-sai Dokushin Chuuken Boukensha no Nichijou](https://anime-29sai-dokushin.com/)
 * [Shibou Yuugi de Meshi wo Kuu.](https://shiboyugi-anime.com/)
 
 ### Fall 2025 Anime

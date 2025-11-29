@@ -17,6 +17,60 @@ class Winter2026AnimeDownload(MainDownload):
         super().__init__()
 
 
+# 29-sai Dokushin Chuuken Boukensha no Nichijou
+class Anime29SaiDownload(Winter2026AnimeDownload, NewsTemplate):
+    title = '29-sai Dokushin Chuuken Boukensha no Nichijou'
+    keywords = [title, 'The Daily Life of a Single 29-Year-Old Adventurer']
+    website = 'https://anime-29sai-dokushin.com/'
+    twitter = 'anime29sai'
+    hashtags = 'アニメ29歳'
+    folder_name = '29sai'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        pass
+
+    def download_news(self):
+        try:
+            results = []
+            news_obj = self.get_last_news_log_object()
+            news_prefix = self.PAGE_PREFIX + 'news/'
+            json_obj = self.get_json(news_prefix + 'newslist.json')
+            for item in json_obj:
+                if 'datetime' in item and 'uniqueId' in item and 'title' in item:
+                    try:
+                        date = item['datetime']
+                    except:
+                        continue
+                    title = item['title']
+                    unique_id = item['uniqueId']
+                    if len(unique_id) == 0 and 'directLinkUrl' in item and len(item['directLinkUrl']) > 1:
+                        url = self.PAGE_PREFIX + item['directLinkUrl'][1:]
+                    else:
+                        url = news_prefix + '?id=' + item['uniqueId']
+                    if news_obj is not None and (news_obj['id'] == url or news_obj['title'] == title
+                                                 or date < news_obj['date']):
+                        break
+                    results.append(self.create_news_log_object(date, title, url))
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log_from_news_log_object(result)
+                if process_result == 0:
+                    success_count += 1
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
+        except Exception as e:
+            self.print_exception(e, 'News')
+
+
 # Shibou Yuugi de Meshi wo Kuu.
 class ShiboyugiDownload(Winter2026AnimeDownload, NewsTemplate2):
     title = "Shibou Yuugi de Meshi wo Kuu."
