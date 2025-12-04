@@ -107,7 +107,7 @@ class SutetsuyoDownload(Fall2025AnimeDownload, NewsTemplate):
             a_tags = soup.select('section.list a[href]')
             for a_tag in a_tags:
                 try:
-                    episode = str(int(a_tag['href'].replace('.php', '')[0])).zfill(2)
+                    episode = str(int(a_tag['href'].replace('.php', ''))).zfill(2)
                 except:
                     continue
                 if self.is_image_exists(episode + '_01'):
