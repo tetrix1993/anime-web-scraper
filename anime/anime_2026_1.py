@@ -449,6 +449,33 @@ class ShiboyugiDownload(Winter2026AnimeDownload, NewsTemplate2):
         self.download_template_news(page_prefix=self.PAGE_PREFIX)
 
 
+# Yuusha no Kuzu
+class YushanoKuzuDownload(Winter2026AnimeDownload, NewsTemplate):
+    title = 'Yuusha no Kuzu'
+    keywords = [title, 'Scum of the Brave']
+    website = 'https://yushanokuzu.com/'
+    twitter = 'yushanokuzu'
+    hashtags = ['勇者のクズ']
+    folder_name = 'yushanokuzu'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        pass
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.bl_news__article_item',
+                                    date_select='time', title_select='.bl_news__article__ttl', id_select='a',
+                                    next_page_select='a.next.page-numbers', paging_type=3, paging_suffix='?page=%s')
+
+
 # Yuusha Party ni Kawaii Ko ga Ita node, Kokuhaku shitemita.
 class YuukawaDownload(Winter2026AnimeDownload, NewsTemplate):
     title = 'Yuusha Party ni Kawaii Ko ga Ita node, Kokuhaku shitemita.'
