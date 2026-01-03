@@ -693,6 +693,8 @@ class KiyouBimbouDownload(Winter2026AnimeDownload, NewsTemplate):
     folder_name = 'kiyoubimbou'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 7
 
     def __init__(self):
         super().__init__()
@@ -734,6 +736,44 @@ class KiyouBimbouDownload(Winter2026AnimeDownload, NewsTemplate):
                                     date_select='.news-box-date', title_select='.news-txt-box', id_select='a',
                                     next_page_select='ul.page-numbers li *.page-numbers',
                                     next_page_eval_index_class='current', next_page_eval_index=-1)
+
+    def download_episode_preview_guess(self, print_url=False, print_invalid=False):
+        if self.is_image_exists(str(self.FINAL_EPISODE).zfill(2) + '_1'):
+            return
+        folder = self.create_custom_directory('guess')
+        template = self.PAGE_PREFIX + 'aRbOqWxL/wp-content/uploads/%s/%s/batch_kyou_%s_%s.'
+        extensions = ['jpg']
+        current_date = datetime.now() + timedelta(hours=1)
+        year = current_date.strftime('%Y')
+        month = current_date.strftime('%m')
+        is_successful = False
+        for i in range(self.FINAL_EPISODE):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_1') or self.is_image_exists(episode + '_1', folder):
+                continue
+            is_success = False
+            for ext in extensions:
+                for j in range(self.IMAGES_PER_EPISODE):
+                    image_name = episode + '_' + str(j + 1)
+                    image_url = (template % (year, month, episode, 'main' if j == 0 else 'sub' + str(j))) + ext
+                    if print_url:
+                        print(image_url)
+                    if self.is_valid_url(image_url, is_image=True):
+                        print('VALID - ' + image_url)
+                        self.download_image(image_url, folder + '/' + image_name, to_jpg=True)
+                        is_successful = True
+                        is_success = True
+                    elif print_invalid:
+                        print('INVALID - ' + image_url)
+                    # if not is_success:
+                    #     break
+                if is_success:
+                    break
+            if not is_success:
+                break
+        if is_successful:
+            print(self.__class__.__name__ + ' - Guessed correctly!')
+        return is_successful
 
 
 # Yuusha-kei ni Shosu: Choubatsu Yuusha 9004-tai Keimu Kiroku
