@@ -554,6 +554,8 @@ class OmagotoDownload(Winter2026AnimeDownload, NewsTemplate):
     folder_name = 'omagoto'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 6
 
     def __init__(self):
         super().__init__()
@@ -563,11 +565,75 @@ class OmagotoDownload(Winter2026AnimeDownload, NewsTemplate):
         self.download_news()
 
     def download_episode_preview(self):
-        pass
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            stories = soup.select('.story-box')
+            for story in stories:
+                try:
+                    episode = ''
+                    ep_num = story.select('.story-title p.num')[0].text
+                    for a in reversed(ep_num):
+                        if a.isnumeric():
+                            episode = a + episode
+                    if len(episode) == 0:
+                        continue
+                    episode = str(int(episode)).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                images = story.select('.ss-container img[src]')
+                self.image_list = []
+                for i in range(len(images)):
+                    image_url = images[i]['src']
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url, to_jpg=True)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-item', date_select='.date',
                                     title_select='.title', id_select='a', next_page_select='a.next.page-numbers')
+
+    def download_episode_preview_guess(self, print_url=False, print_invalid=False, download_valid=True):
+        if self.is_image_exists(str(self.FINAL_EPISODE).zfill(2) + '_1'):
+            return
+
+        folder = self.create_custom_directory('guess')
+        template = self.PAGE_PREFIX + 'wp/wp-content/uploads/%s/%s/omagoto_ep%s-%s.'
+        extensions = ['jpg']
+        current_date = datetime.now() + timedelta(hours=1)
+        year = current_date.strftime('%Y')
+        month = current_date.strftime('%m')
+        is_successful = False
+        for i in range(self.FINAL_EPISODE):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_1') or self.is_image_exists(episode + '_1', folder):
+                continue
+            is_success = False
+            for ext in extensions:
+                for j in range(self.IMAGES_PER_EPISODE):
+                    image_name = episode + '_' + str(j + 1)
+                    image_url = (template % (year, month, episode, str(j + 1)) + ext)
+                    if print_url:
+                        print(image_url)
+                    if self.is_valid_url(image_url, is_image=True):
+                        print('VALID - ' + image_url)
+                        self.download_image(image_url, folder + '/' + image_name, to_jpg=True)
+                        is_successful = True
+                        is_success = True
+                    elif print_invalid:
+                        print('INVALID - ' + image_url)
+                    # if not is_success:
+                    #     break
+                if is_success:
+                    break
+            if not is_success:
+                break
+        if is_successful:
+            print(self.__class__.__name__ + ' - Guessed correctly!')
+        return is_successful
 
 
 # Osananajimi to wa Love Comedy ni Naranai
