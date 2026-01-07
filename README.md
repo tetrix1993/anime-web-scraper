@@ -99,6 +99,7 @@ The premiere date for the anime listed here has not been announced.
 * [Okiraku Ryoushu no Tanoshii Ryouchi Bouei](https://okiraku-ryousyu-anime.jp/)
 * [Omae Gotoki ga Maou ni Kateru to Omouna](https://omagoto.com/)
 * [Osananajimi to wa Love Comedy ni Naranai](https://anime-osalove.com/)
+* [Oshi no Ko Season 3](https://ichigoproduction.com/Season3/)
 * [Shibou Yuugi de Meshi wo Kuu.](https://shiboyugi-anime.com/)
 * [Yuusha no Kuzu](https://yushanokuzu.com/)
 * [Yuusha Party ni Kawaii Ko ga Ita node, Kokuhaku shitemita.](https://yuukawa-anime.com/)
