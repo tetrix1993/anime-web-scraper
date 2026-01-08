@@ -300,7 +300,8 @@ class AniverseMagazineScanner(MainScanner):
     enabled = True
     
     def __init__(self, keywords, base_folder, last_episode=None, suffix=None,
-                 min_width=None, end_date='00000000', check_resize=False, download_id=None, prefix=None):
+                 min_width=None, end_date='00000000', check_resize=False, download_id=None, prefix=None,
+                 class_name=None):
         super().__init__(download_id)
 
         if isinstance(keywords, str):
@@ -317,6 +318,7 @@ class AniverseMagazineScanner(MainScanner):
         self.end_date = end_date
         self.prefix = prefix
         self.check_resize = check_resize
+        self.class_name = class_name
 
     @staticmethod
     def has_results(text):
@@ -417,6 +419,8 @@ class AniverseMagazineScanner(MainScanner):
             article_id = self.get_article_id(url)
             if len(article_id) == 0:
                 continue
+            if self.class_name is not None:
+                print(self.class_name + ' - Process Aniverse ' + AniverseMagazineDownload.PAGE_PREFIX + article_id)
             AniverseMagazineDownload(article_id, self.base_folder, episode,
                                      min_width=self.min_width, check_resize=self.check_resize,
                                      download_id=self.download_id).run()

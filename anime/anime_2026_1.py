@@ -364,7 +364,7 @@ class KinishiteDownload(Winter2026AnimeDownload, NewsTemplate):
 
     PAGE_PREFIX = website
     FINAL_EPISODE = 12
-    IMAGES_PER_EPISODE = 6
+    IMAGES_PER_EPISODE = 5
 
     def __init__(self):
         super().__init__()
@@ -372,6 +372,7 @@ class KinishiteDownload(Winter2026AnimeDownload, NewsTemplate):
     def run(self):
         self.download_episode_preview()
         self.download_news()
+        self.download_episode_preview_external()
 
     def download_episode_preview(self):
         template = self.PAGE_PREFIX + 'assets/img/story/ep%s/img%s.jpg'
@@ -396,6 +397,12 @@ class KinishiteDownload(Winter2026AnimeDownload, NewsTemplate):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.bl_posts_item', date_select='time',
                                     title_select='.bl_posts_txt', id_select='a', next_page_select='a.next.page-numbers',
                                     paging_type=3, paging_suffix='?page=%s')
+
+    def download_episode_preview_external(self):
+        keywords = ['綺麗にしてもらえますか']
+        AniverseMagazineScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE,
+                                end_date='20251218', download_id=self.download_id,
+                                class_name=KinishiteDownload.__name__).run()
 
 
 # Kizoku Tensei: Megumareta Umare kara Saikyou no Chikara wo Eru
@@ -646,7 +653,8 @@ class MayochuDownload(Winter2026AnimeDownload, NewsTemplate2):
     def download_episode_preview_external(self):
         keywords = ['真夜中ハートチューン']
         AniverseMagazineScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE,
-                                end_date='20251225', download_id=self.download_id).run()
+                                end_date='20251225', download_id=self.download_id,
+                                class_name=MayochuDownload.__name__).run()
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX)
@@ -947,7 +955,8 @@ class Oshinoko3Download(Winter2026AnimeDownload, NewsTemplate2):
     def download_episode_preview_external(self):
         keywords = ['推しの子']
         AniverseMagazineScanner(keywords, self.base_folder, last_episode=self.FINAL_EPISODE,
-                                end_date='20260107', download_id=self.download_id).run()
+                                end_date='20260107', download_id=self.download_id,
+                                class_name=Oshinoko3Download.__name__).run()
 
     def download_news(self):
         self.download_template_news(self.PAGE_PREFIX)
