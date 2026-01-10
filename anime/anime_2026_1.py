@@ -627,6 +627,63 @@ class MaomusuDownload(Winter2026AnimeDownload, NewsTemplate):
                                     paging_suffix='?page=%s')
 
 
+# Mato Seihei no Slave 2
+class MatoSlave2Download(Winter2026AnimeDownload, NewsTemplate):
+    title = 'Mato Seihei no Slave 2'
+    keywords = [title, 'Chained Soldier', 'matoslave', 'mabotai', '2nd']
+    website = 'https://mabotai.jp/'
+    twitter = 'mabotai_kohobu'
+    hashtags = ['魔都精兵のスレイブ', 'まとスレ']
+    folder_name = 'matoslave2'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self, print_http_error=False):
+        try:
+            objs = self.get_json(self.PAGE_PREFIX + 'news/story_data')
+            for obj in objs:
+                if 'acf' in obj:
+                    acf = obj['acf']
+                    if 'number' in acf and 'images' in acf and isinstance(acf['images'], list):
+                        if 'season_id' in acf and acf['season_id'] != 'season2':
+                            continue
+                        try:
+                            episode = ''
+                            ep_num = acf['number']
+                            for a in ep_num:
+                                if a.isnumeric():
+                                    episode += a
+                            if len(episode) == 0:
+                                continue
+                            episode = str(int(episode)).zfill(2)
+                        except:
+                            continue
+                        for i in range(len(acf['images'])):
+                            image_url = acf['images'][i]
+                            image_name = episode + '_' + str(i + 1)
+                            self.add_to_image_list(image_name, image_url)
+                        self.download_image_list(self.base_folder)
+        except HTTPError:
+            if print_http_error:
+                print(self.__class__.__name__ + ' - 403 Error when retrieving story API.')
+        except Exception as e:
+            self.print_exception(e)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-list-item',
+                                    date_select='.news-list-item__date', title_select='.news-list-item__title',
+                                    id_select='a', a_tag_start_text_to_remove='/', a_tag_prefix=self.PAGE_PREFIX,
+                                    date_func=lambda x: x.replace('年', '.').replace('月', '.').replace('日', ''),
+                                    stop_date='2024.03.18')
+
+
 # Mayonaka Heart Tune
 class MayochuDownload(Winter2026AnimeDownload, NewsTemplate2):
     title = 'Mayonaka Heart Tune'

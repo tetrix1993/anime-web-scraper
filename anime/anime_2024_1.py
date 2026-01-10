@@ -1966,6 +1966,8 @@ class MatoSlaveDownload(Winter2024AnimeDownload, NewsTemplate):
                 if 'acf' in obj:
                     acf = obj['acf']
                     if 'number' in acf and 'images' in acf and isinstance(acf['images'], list):
+                        if 'season_id' in acf and acf['season_id'] != 'season1':
+                            continue
                         try:
                             episode = str(int(acf['number'].split('第')[1].split('話')[0])).zfill(2)
                         except:
