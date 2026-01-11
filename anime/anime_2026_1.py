@@ -916,17 +916,11 @@ class OsaloveDownload(Winter2026AnimeDownload, NewsTemplate):
     def download_episode_preview(self):
         try:
             soup = self.get_soup(self.PAGE_PREFIX + 'episode/')
-            stories = soup.select('.newsCategory__anc[href]')
+            stories = soup.select('.newsCol__row a[href]')
             for story in stories:
                 try:
-                    episode = ''
-                    ep_num = story.text
-                    for a in reversed(ep_num):
-                        if a.isnumeric():
-                            episode = a + episode
-                    if len(episode) == 0:
-                        continue
-                    episode = str(int(episode)).zfill(2)
+                    t = story['href'][:-1] if story['href'].endswith('/') else story['href']
+                    episode = str(int(t.split('/')[-1])).zfill(2)
                 except:
                     continue
                 if self.is_image_exists(episode + '_1'):
