@@ -14,6 +14,7 @@ import portalocker
 from PIL import Image
 from io import BytesIO
 from html import unescape
+from curl_cffi import requests as requests2
 
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -210,11 +211,14 @@ class MainDownload:
         return False
 
     @staticmethod
-    def get_soup(url, headers=None, decode=False, verify=True):
+    def get_soup(url, headers=None, decode=False, verify=True, impersonate=False):
         if headers is None:
             headers = constants.HTTP_HEADER_USER_AGENT
         try:
-            result = requests.get(url, headers=headers, verify=verify)
+            if impersonate:
+                result = requests2.get(url, headers=headers, verify=verify, impersonate='chrome')
+            else:
+                result = requests.get(url, headers=headers, verify=verify)
             if decode:
                 return bs(result.content.decode(), 'html.parser')
             else:
@@ -224,20 +228,26 @@ class MainDownload:
         return ""
 
     @staticmethod
-    def get_json(url, headers=None, verify=True):
+    def get_json(url, headers=None, verify=True, impersonate=False):
         if headers is None:
             headers = constants.HTTP_HEADER_USER_AGENT
-        r = requests.get(url, headers=headers, verify=verify)
+        if impersonate:
+            r = requests2.get(url, headers=headers, verify=verify, impersonate='chrome')
+        else:
+            r = requests.get(url, headers=headers, verify=verify)
         r.raise_for_status()
         return r.json()
 
     @staticmethod
-    def post_response(url, headers=None, data=None):
+    def post_response(url, headers=None, data=None, impersonate=False):
         response = ""
         if headers is None:
             headers = constants.HTTP_HEADER_USER_AGENT
         try:
-            result = requests.post(url, headers=headers, data=data)
+            if impersonate:
+                result = requests2.post(url, headers=headers, data=data, impersonate='chrome')
+            else:
+                result = requests.post(url, headers=headers, data=data)
             response = str(result.content.decode())
         except Exception as e:
             print(e)
@@ -1402,7 +1412,8 @@ class NewsTemplate:
                                date_func=None, a_tag_replace_from=None, a_tag_replace_to='',
                                a_tag_start_text_to_remove=None, next_page_select=None, next_page_eval_index_class=None,
                                next_page_eval_index=0, next_page_eval_index_compare_page=False, unescape_title=False,
-                               reverse_article_list=False, date_tag_count=1, verify=True, skip_first_page_num=True):
+                               reverse_article_list=False, date_tag_count=1, verify=True, skip_first_page_num=True,
+                               impersonate=False):
         """
         :param page_prefix: Start of the page URL to evaluate
         :param article_select: Selects article item elements
@@ -1435,6 +1446,7 @@ class NewsTemplate:
         :param date_tag_count: Number of tags in date select to concatenate
         :param verify: Set False to ignore SSLError
         :param skip_first_page_num: If False, include the first page number "1" in the page URL
+        :param impersonate: Impersonate browser fingerprints to bypass Cloudflare protection
         """
 
         if not issubclass(self.__class__, MainDownload):
@@ -1465,9 +1477,10 @@ class NewsTemplate:
                     else:
                         page_url = news_url + 'page/' + str(page)
                 if response_headers:
-                    soup = self.get_soup(page_url, headers=response_headers, decode=decode_response, verify=verify)
+                    soup = self.get_soup(page_url, headers=response_headers, decode=decode_response, verify=verify,
+                                         impersonate=impersonate)
                 else:
-                    soup = self.get_soup(page_url, decode=decode_response, verify=verify)
+                    soup = self.get_soup(page_url, decode=decode_response, verify=verify, impersonate=impersonate)
                 articles = soup.select(article_select)
                 if reverse_article_list:
                     articles = reversed(articles)
@@ -1566,7 +1579,8 @@ class NewsTemplate:
 # News template
 # Where exists div.list_01, date = td.day, title = div.title, nagivation next page = nb_nex
 class NewsTemplate2:
-    def download_template_news(self, page_prefix, first_page_url=None, stop_date=None, date_select=None):
+    def download_template_news(self, page_prefix, first_page_url=None, stop_date=None, date_select=None,
+                               impersonate=False):
         if not issubclass(self.__class__, MainDownload):
             return
 
@@ -1585,7 +1599,7 @@ class NewsTemplate2:
             news_obj = self.get_last_news_log_object()
             page_url = news_url
             for page in range(1, 100, 1):
-                soup = self.get_soup(page_url, decode=True)
+                soup = self.get_soup(page_url, decode=True, impersonate=impersonate)
                 list_div = soup.find('div', id='list_01')
                 if not list_div:
                     continue
@@ -1634,7 +1648,7 @@ class NewsTemplate2:
 
 # News template which contain article.content-entry, div.entry-date, div.entry-title
 class NewsTemplate3:
-    def download_template_news(self, page_prefix, first_page_url=None, stop_date=None):
+    def download_template_news(self, page_prefix, first_page_url=None, stop_date=None, impersonate=False):
         if not issubclass(self.__class__, MainDownload):
             return
 
@@ -1648,7 +1662,7 @@ class NewsTemplate3:
             news_url += 'news.html'
 
         try:
-            soup = self.get_soup(news_url, decode=True)
+            soup = self.get_soup(news_url, decode=True, impersonate=impersonate)
             articles = soup.find_all('article', class_='content-entry')
             news_obj = self.get_last_news_log_object()
             results = []
@@ -1679,14 +1693,16 @@ class NewsTemplate3:
 
 
 class NewsTemplate4:
-    def download_template_news(self, name='', print_http_error=False, json_obj=None, json_url=None, verify=True):
+    def download_template_news(self, name='', print_http_error=False, json_obj=None, json_url=None, verify=True,
+                               impersonate=False):
         news_url = self.PAGE_PREFIX + 'news/'
         try:
             if json_obj is None:
                 if json_url is None:
-                    json_obj = self.get_json(self.PAGE_PREFIX + f'wp-json/{name}/init', verify=verify)
+                    json_obj = self.get_json(self.PAGE_PREFIX + f'wp-json/{name}/init', verify=verify,
+                                             impersonate=impersonate)
                 else:
-                    json_obj = self.get_json(json_url, verify=verify)
+                    json_obj = self.get_json(json_url, verify=verify, impersonate=impersonate)
             news_obj = self.get_last_news_log_object()
             results = []
             for item in json_obj['news']:

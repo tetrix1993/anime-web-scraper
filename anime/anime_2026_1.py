@@ -2,8 +2,6 @@ from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsT
 from datetime import datetime, timedelta
 from requests.exceptions import HTTPError
 from scan import AniverseMagazineScanner
-from bs4 import BeautifulSoup
-import json
 import os
 
 
@@ -1122,7 +1120,7 @@ class Frieren2Download(Winter2026AnimeDownload, NewsTemplate):
 
     def download_episode_preview(self):
         try:
-            soup = self.get_soup(self.PAGE_PREFIX + 'story/2nd/')
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/2nd/', impersonate=True)
             stories = soup.select('.storyLists__item a[href]')
             for story in stories:
                 try:
@@ -1137,7 +1135,7 @@ class Frieren2Download(Winter2026AnimeDownload, NewsTemplate):
                 ep_url = story['href']
                 if ep_url.startswith('/'):
                     ep_url = self.PAGE_PREFIX + ep_url[1:]
-                ep_soup = self.get_soup(ep_url)
+                ep_soup = self.get_soup(ep_url, impersonate=True)
                 if ep_soup is None:
                     continue
                 self.image_list = []
@@ -1154,7 +1152,7 @@ class Frieren2Download(Winter2026AnimeDownload, NewsTemplate):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.newsLists__item',
                                     date_select='.newsLists__time', title_select='.newsLists__title', id_select='a',
                                     a_tag_start_text_to_remove='/', a_tag_prefix=self.PAGE_PREFIX,
-                                    stop_date='2025.03.04')
+                                    stop_date='2025.03.04', impersonate=True)
 
 
 # Yuusha no Kuzu
