@@ -3044,7 +3044,7 @@ class FrierenDownload(Fall2023AnimeDownload, NewsTemplate):
 
     def download_episode_preview(self):
         try:
-            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/1st/')
             stories = soup.select('.storyLists__item a[href]')
             for story in stories:
                 try:

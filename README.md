@@ -102,6 +102,7 @@ The premiere date for the anime listed here has not been announced.
 * [Osananajimi to wa Love Comedy ni Naranai](https://anime-osalove.com/)
 * [Oshi no Ko Season 3](https://ichigoproduction.com/Season3/)
 * [Shibou Yuugi de Meshi wo Kuu.](https://shiboyugi-anime.com/)
+* [Sousou no Frieren 2nd Season](https://frieren-anime.jp/)
 * [Yuusha no Kuzu](https://yushanokuzu.com/)
 * [Yuusha Party ni Kawaii Ko ga Ita node, Kokuhaku shitemita.](https://yuukawa-anime.com/)
 * [Yuusha Party wo Oidasareta Kiyoubinbou](https://kiyou-bimbou.com/)

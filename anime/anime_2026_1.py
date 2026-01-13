@@ -1102,6 +1102,61 @@ class ShiboyugiDownload(Winter2026AnimeDownload, NewsTemplate2):
         self.download_template_news(page_prefix=self.PAGE_PREFIX)
 
 
+# Sousou no Frieren 2nd Season
+class Frieren2Download(Winter2026AnimeDownload, NewsTemplate):
+    title = 'Sousou no Frieren 2nd Season'
+    keywords = [title, "Frieren: Beyond Journey's End"]
+    website = 'https://frieren-anime.jp/'
+    twitter = 'Anime_Frieren'
+    hashtags = ['フリーレン', 'frieren']
+    folder_name = 'frieren2'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/2nd/')
+            stories = soup.select('.storyLists__item a[href]')
+            for story in stories:
+                try:
+                    href = story['href']
+                    if href.endswith('/'):
+                        href = story['href'][:-1]
+                    episode = str(int(href.split('/')[-1].replace('ep', ''))).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_01'):
+                    continue
+                ep_url = story['href']
+                if ep_url.startswith('/'):
+                    ep_url = self.PAGE_PREFIX + ep_url[1:]
+                ep_soup = self.get_soup(ep_url)
+                if ep_soup is None:
+                    continue
+                self.image_list = []
+                images = ep_soup.select('.storyPhotoLists img[src]')
+                for i in range(len(images)):
+                    image_url = self.PAGE_PREFIX + images[i]['src'][1:]
+                    image_name = episode + '_' + str(i + 1).zfill(2)
+                    self.add_to_image_list(image_name, image_url)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='li.newsLists__item',
+                                    date_select='.newsLists__time', title_select='.newsLists__title', id_select='a',
+                                    a_tag_start_text_to_remove='/', a_tag_prefix=self.PAGE_PREFIX,
+                                    stop_date='2025.03.04')
+
+
 # Yuusha no Kuzu
 class YushanoKuzuDownload(Winter2026AnimeDownload, NewsTemplate):
     title = 'Yuusha no Kuzu'
