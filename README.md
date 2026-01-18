@@ -97,6 +97,7 @@ The premiere date for the anime listed here has not been announced.
 * [Maou no Musume wa Yasashisugiru!!](https://maomusu.com/)
 * [Mato Seihei no Slave 2](https://mabotai.jp/)
 * [Mayonaka Heart Tune](https://mayochu-anime.com/)
+* [Medalist 2nd Season](https://medalist-pr.com/)
 * [Okiraku Ryoushu no Tanoshii Ryouchi Bouei](https://okiraku-ryousyu-anime.jp/)
 * [Omae Gotoki ga Maou ni Kateru to Omouna](https://omagoto.com/)
 * [Osananajimi to wa Love Comedy ni Naranai](https://anime-osalove.com/)

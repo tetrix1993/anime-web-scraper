@@ -742,6 +742,50 @@ class MayochuDownload(Winter2026AnimeDownload, NewsTemplate2):
         self.download_template_news(page_prefix=self.PAGE_PREFIX)
 
 
+# Medalist 2nd Season
+class Medalist2Download(Winter2026AnimeDownload, NewsTemplate):
+    title = 'Medalist 2nd Season'
+    keywords = [title]
+    website = 'https://medalist-pr.com/'
+    twitter = 'medalist_PR'
+    hashtags = ['メダリスト', 'medalist']
+    folder_name = 'medalist2'
+
+    PAGE_PREFIX = website
+    FIRST_EPISODE = 14
+    FINAL_EPISODE = 23
+    IMAGES_PER_EPISODE = 6
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        template = self.PAGE_PREFIX + 'assets/story/%s/%s.webp'
+        try:
+            for i in range(self.FIRST_EPISODE, self.FINAL_EPISODE + 1, 1):
+                episode = str(i).zfill(2)
+                if self.is_image_exists(episode + '_' + str(self.IMAGES_PER_EPISODE)):
+                    continue
+                for j in range(self.IMAGES_PER_EPISODE):
+                    image_url = template % (episode, str(j + 1))
+                    image_name = episode + '_' + str(j + 1)
+                    result = self.download_image(image_url, self.base_folder + '/' + image_name, to_jpg=True)
+                    if result == -1:
+                        return
+        except Exception as e:
+            self.print_exception(e)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article',
+                                    title_select='.entry-title .text span', date_select='.entry-date', id_select=None,
+                                    id_has_id=True, news_prefix='news.html',
+                                    a_tag_prefix=self.PAGE_PREFIX + 'news.html#', stop_date='2025.03.28')
+
+
 # Okiraku Ryoushu no Tanoshii Ryouchi Bouei
 class OkirakuRyoushuDownload(Winter2026AnimeDownload, NewsTemplate):
     title = 'Okiraku Ryoushu no Tanoshii Ryouchi Bouei'
