@@ -489,44 +489,39 @@ class KizokuTenseiDownload(Winter2026AnimeDownload, NewsTemplate):
                                     next_page_select='.wp-pagenavi *', next_page_eval_index_class='current',
                                     next_page_eval_index=-1)
 
-    def download_episode_preview_guess(self, print_invalid=False, download_valid=True):
+    def download_episode_preview_guess(self, print_url=False, print_invalid=False, download_valid=True):
         if self.is_image_exists(str(self.FINAL_EPISODE).zfill(2) + '_' + str(self.IMAGES_PER_EPISODE)):
             return
 
         folder = self.create_custom_directory('guess')
-        template = self.PAGE_PREFIX + 'wp/wp-content/uploads/%s/%s/KizokuTensei_%s.jpg'
+        template = self.PAGE_PREFIX + 'wp/wp-content/uploads/%s/%s/KizokuTensei_%s_先行%s.'
         current_date = datetime.now() + timedelta(hours=1)
         year = current_date.strftime('%Y')
         month = current_date.strftime('%m')
+        extensions = ['jpg']
         is_successful = False
-        valid_urls = []
-        for j in range(self.IMAGES_PER_EPISODE):
-            k = 0
-            while k < 20:
-                if k == 0:
-                    append = ''
-                else:
-                    append = '-' + str(k)
-                image_folder = folder + '/' + year + '/' + month
-                image_name = str(j + 1).zfill(2) + append
-                if not self.is_image_exists(image_name, image_folder):
-                    image_url = template % (year, month, image_name)
+        for i in range(self.FINAL_EPISODE):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_1') or self.is_image_exists(episode + '_1', folder):
+                continue
+            is_success = False
+            for ext in extensions:
+                for j in range(self.IMAGES_PER_EPISODE):
+                    image_name = episode + '_' + str(j + 1)
+                    image_url = (template % (year, month, episode, str(j + 1)) + ext)
+                    if print_url:
+                        print(image_url)
                     if self.is_valid_url(image_url, is_image=True):
                         print('VALID - ' + image_url)
+                        self.download_image(image_url, folder + '/' + image_name, to_jpg=True)
                         is_successful = True
-                        valid_urls.append({'name': image_name, 'url': image_url, 'folder': image_folder})
-                    else:
-                        if print_invalid:
-                            print('INVALID - ' + image_url)
-                        break
-                k += 1
-        if download_valid and len(valid_urls) > 0:
-            for valid_url in valid_urls:
-                image_name = valid_url['name']
-                image_folder = valid_url['folder']
-                if not os.path.exists(image_folder):
-                    os.makedirs(image_folder)
-                self.download_image(valid_url['url'], image_folder + '/' + image_name, to_jpg=True)
+                        is_success = True
+                    elif print_invalid:
+                        print('INVALID - ' + image_url)
+                if is_success:
+                    break
+            if not is_success:
+                break
         if is_successful:
             print(self.__class__.__name__ + ' - Guessed correctly!')
         return is_successful
