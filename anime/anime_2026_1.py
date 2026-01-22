@@ -1092,6 +1092,8 @@ class ShiboyugiDownload(Winter2026AnimeDownload, NewsTemplate2):
     folder_name = 'shiboyugi'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 11
+    IMAGES_PER_EPISODE = 6
 
     def __init__(self):
         super().__init__()
@@ -1137,6 +1139,10 @@ class ShiboyugiDownload(Winter2026AnimeDownload, NewsTemplate2):
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX)
+
+    def download_episode_preview_guess(self, print_url=False):
+        self.download_guess_core_sys(self.PAGE_PREFIX, self.FINAL_EPISODE, self.IMAGES_PER_EPISODE, 24, 73, 49, 5, 6,
+                                     print_url, check_content_length=True, more_than_amount=2500)
 
 
 # Sousou no Frieren 2nd Season
