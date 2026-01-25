@@ -1255,12 +1255,12 @@ class MainDownload:
     # Template for guessing url that has 'core_sys' in the image URL
     def download_guess_core_sys(self, prefix, final_episode, images_per_episode, x1, x2, x3, x2m, x3m, print_url=False,
                                 check_content_length=False, less_than_amount=None, more_than_amount=None,
-                                less_than_equal=False, more_than_equal=False, is_or=False):
+                                less_than_equal=False, more_than_equal=False, is_or=False, episode_offset=0):
         folder = self.create_custom_directory('guess')
         template = prefix + 'core_sys/images/contents/%s/block/%s/%s.jpg'
         is_successful = False
         for i in range(final_episode):
-            episode = str(i + 1).zfill(2)
+            episode = str(i + 1 + episode_offset).zfill(2)
             if self.is_image_exists(episode + '_1') or self.is_image_exists(episode + '_1', folder):
                 continue
             is_success = False

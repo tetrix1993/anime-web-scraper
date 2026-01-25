@@ -1040,10 +1040,7 @@ class Oshinoko3Download(Winter2026AnimeDownload, NewsTemplate2):
     def run(self):
         self.download_episode_preview()
         self.download_episode_preview_external()
-        self.download_episode_preview_guess()
         self.download_news()
-        self.download_key_visual()
-        self.download_character()
 
     def download_episode_preview(self):
         try:
@@ -1080,6 +1077,11 @@ class Oshinoko3Download(Winter2026AnimeDownload, NewsTemplate2):
 
     def download_news(self):
         self.download_template_news(self.PAGE_PREFIX)
+
+    def download_episode_preview_guess(self, print_url=False):
+        self.download_guess_core_sys(self.PAGE_PREFIX, self.FINAL_EPISODE - self.FIRST_EPISODE + 1,
+                                     self.IMAGES_PER_EPISODE, 27, 118, 73, 5, 6, print_url, check_content_length=True,
+                                     more_than_amount=8500, episode_offset=self.FIRST_EPISODE - 1)
 
 
 # Shibou Yuugi de Meshi wo Kuu.
