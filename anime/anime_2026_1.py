@@ -715,7 +715,7 @@ class MayochuDownload(Winter2026AnimeDownload, NewsTemplate2):
                     episode = str(int(episode)).zfill(2)
                 except:
                     continue
-                if self.is_image_exists(episode + '_1'):
+                if self.is_image_exists(episode + '_8'):
                     continue
                 if episode == '01':
                     ep_soup = soup
@@ -727,8 +727,9 @@ class MayochuDownload(Winter2026AnimeDownload, NewsTemplate2):
                     for i in range(len(images)):
                         image_url = self.PAGE_PREFIX + images[i]['src'].split('?')[0]
                         image_url = self.remove_string(image_url, ['../', 'sn_'])
-                        image_name = episode + '_' + str(i + 1)
-                        self.add_to_image_list(image_name, image_url, to_jpg=True)
+                        if self.is_content_length_in_range(image_url, more_than_amount=25100):
+                            image_name = episode + '_' + str(i + 1)
+                            self.add_to_image_list(image_name, image_url, to_jpg=True)
                     self.download_image_list(self.base_folder)
         except Exception as e:
             self.print_exception(e)
@@ -744,7 +745,7 @@ class MayochuDownload(Winter2026AnimeDownload, NewsTemplate2):
 
     def download_episode_preview_guess(self, print_url=False):
         self.download_guess_core_sys(self.PAGE_PREFIX, self.FINAL_EPISODE, self.IMAGES_PER_EPISODE, 8, 53, 39, 3,
-                                     self.IMAGES_PER_EPISODE, print_url)
+                                     self.IMAGES_PER_EPISODE, print_url, more_than_amount=25100)
 
 
 # Medalist 2nd Season
