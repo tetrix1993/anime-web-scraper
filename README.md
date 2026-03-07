@@ -85,6 +85,9 @@ pip install -r requirements.txt
 The premiere date for the anime listed here has not been announced.
 * To be added
 
+### Spring 2026 Anime
+* [Aishiteru Game wo Owarasetai](https://www.aishiteru-game.com/)
+
 ### Winter 2026 Anime
 * [29-sai Dokushin Chuuken Boukensha no Nichijou](https://anime-29sai-dokushin.com/)
 * [Champignon no Majo](https://champignon-pr.com/)
