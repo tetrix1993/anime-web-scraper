@@ -95,3 +95,58 @@ class HaibarakunDownload(Spring2026AnimeDownload, NewsTemplate):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.md-li__topics li',
                                     date_select='time', title_select='.info--postttl', id_select='a',
                                     news_prefix='topics/', date_separator='-')
+
+
+# Replica datte, Koi wo Suru.
+class ReplicoDownload(Spring2026AnimeDownload):
+    title = 'Replica datte, Koi wo Suru.'
+    keywords = [title, "Even a Replica Can Fall in Love", 'replico']
+    website = 'https://replico.jp/'
+    twitter = 'REPLICO_dengeki'
+    hashtags = 'レプリコ'
+    folder_name = 'replico'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        pass
+
+    def download_news(self):
+        try:
+            results = []
+            news_obj = self.get_last_news_log_object()
+            news_prefix = self.PAGE_PREFIX + 'news/'
+            json_obj = self.get_json(news_prefix + 'newslist.json')
+            for item in json_obj:
+                if 'datetime' in item and 'uniqueId' in item and 'title' in item:
+                    try:
+                        date = item['datetime'].replace('-', '.')
+                    except:
+                        continue
+                    title = item['title']
+                    unique_id = item['uniqueId']
+                    if len(unique_id) == 0 and 'directLinkUrl' in item and len(item['directLinkUrl']) > 1:
+                        url = self.PAGE_PREFIX + item['directLinkUrl'][1:]
+                    else:
+                        url = news_prefix + '?id=' + item['uniqueId']
+                    if news_obj is not None and (news_obj['id'] == url or news_obj['title'] == title
+                                                 or date < news_obj['date']):
+                        break
+                    results.append(self.create_news_log_object(date, title, url))
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log_from_news_log_object(result)
+                if process_result == 0:
+                    success_count += 1
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
+        except Exception as e:
+            self.print_exception(e, 'News')
+

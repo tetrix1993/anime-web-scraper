@@ -89,6 +89,7 @@ The premiere date for the anime listed here has not been announced.
 * [Aishiteru Game wo Owarasetai](https://www.aishiteru-game.com/)
 * [Class de 2-banme ni Kawaii Onnanoko to Tomodachi ni Natta](https://kuranika.asmik-ace.co.jp/)
 * [Haibara-kun no Tsuyokute Seishun New Game](https://haibarakun-anime.com/)
+* [Replica datte, Koi wo Suru.](https://replico.jp/)
 
 ### Winter 2026 Anime
 * [29-sai Dokushin Chuuken Boukensha no Nichijou](https://anime-29sai-dokushin.com/)
