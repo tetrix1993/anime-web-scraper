@@ -497,7 +497,7 @@ class KizokuTenseiDownload(Winter2026AnimeDownload, NewsTemplate):
         template = self.PAGE_PREFIX + 'wp/wp-content/uploads/%s/%s/KizokuTensei_%s_先行%s.'
         current_date = datetime.now() + timedelta(hours=1)
         year = current_date.strftime('%Y')
-        month = current_date.strftime('%m')
+        month = '01'
         extensions = ['jpg']
         is_successful = False
         for i in range(self.FINAL_EPISODE):
