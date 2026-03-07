@@ -68,3 +68,30 @@ class KuranikaDownload(Spring2026AnimeDownload, NewsTemplate):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.bl_posts_item', date_select='time',
                                     title_select='.bl_posts_txt', id_select='a', next_page_select='a.next.page-numbers',
                                     paging_type=3, paging_suffix='?page=%s', date_separator='/')
+
+
+# Haibara-kun no Tsuyokute Seishun New Game
+class HaibarakunDownload(Spring2026AnimeDownload, NewsTemplate):
+    title = 'Haibara-kun no Tsuyokute Seishun New Game'
+    keywords = [title, "Haibara's Teenage New Game+"]
+    website = 'https://haibarakun-anime.com/'
+    twitter = 'haibara_anime'
+    hashtags = '灰原くんの強くて青春ニューゲーム'
+    folder_name = 'haibarakun'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        pass
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.md-li__topics li',
+                                    date_select='time', title_select='.info--postttl', id_select='a',
+                                    news_prefix='topics/', date_separator='-')
