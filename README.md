@@ -91,6 +91,7 @@ The premiere date for the anime listed here has not been announced.
 * [Haibara-kun no Tsuyokute Seishun New Game](https://haibarakun-anime.com/)
 * [Kuroneko to Majo no Kyoushitsu](https://witch-classroom.com/)
 * [Replica datte, Koi wo Suru.](https://replico.jp/)
+* [Yowayowa Sensei](https://www.yowayowasensei-anime.com/)
 
 ### Winter 2026 Anime
 * [29-sai Dokushin Chuuken Boukensha no Nichijou](https://anime-29sai-dokushin.com/)

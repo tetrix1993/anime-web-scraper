@@ -177,3 +177,30 @@ class ReplicoDownload(Spring2026AnimeDownload):
         except Exception as e:
             self.print_exception(e, 'News')
 
+
+# Yowayowa Sensei
+class YowayowaSenseiDownload(Spring2026AnimeDownload, NewsTemplate):
+    title = 'Yowayowa Sensei'
+    keywords = [title, "Yowayowa Teacher"]
+    website = 'https://www.yowayowasensei-anime.com/'
+    twitter = 'yowayowa_anime'
+    hashtags = ['よわよわ先生']
+    folder_name = 'yowayowasensei'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        pass
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article.content-entry',
+                                    title_select='.entry-title span', date_select='.entry-date span',
+                                    id_select=None, id_has_id=True, news_prefix='news.html',
+                                    a_tag_prefix=self.PAGE_PREFIX + 'news.html#')
