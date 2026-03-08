@@ -152,6 +152,33 @@ class NekomajoDownload(Spring2026AnimeDownload, NewsTemplate):
                                     next_page_select='.pagination .next')
 
 
+# Mata Korosarete Shimatta no desu ne, Tantei-sama
+class MatakoroDownload(Spring2026AnimeDownload, NewsTemplate):
+    title = 'Mata Korosarete Shimatta no desu ne, Tantei-sama'
+    keywords = [title, "Killed Again, Mr. Detective.", 'matakoro']
+    website = 'https://www.tbs.co.jp/anime/matakoro/'
+    twitter = 'matakoro_anime'
+    hashtags = ['またころ']
+    folder_name = 'matakoro'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        pass
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='#news-list>li',
+                                    date_select='dt', title_select='dd', id_select='a',
+                                    a_tag_prefix=self.PAGE_PREFIX + 'news/')
+
+
 # Replica datte, Koi wo Suru.
 class ReplicoDownload(Spring2026AnimeDownload):
     title = 'Replica datte, Koi wo Suru.'
