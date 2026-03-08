@@ -97,6 +97,34 @@ class HaibarakunDownload(Spring2026AnimeDownload, NewsTemplate):
                                     news_prefix='topics/', date_separator='-')
 
 
+# Kanan-sama wa Akumade Choroi
+class KanachoroDownload(Spring2026AnimeDownload, NewsTemplate):
+    title = 'Kanan-sama wa Akumade Choroi'
+    keywords = [title, "Mistress Kanan is Devilishly Easy"]
+    website = 'https://kanachoro-anime.com/'
+    twitter = 'Kanan_Choroi'
+    hashtags = ['カナチョロ', 'kanan_choroi']
+    folder_name = 'kanachoro'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        pass
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article',
+                                    date_select='.news-date', title_select='h3', id_select=None, id_has_id=True,
+                                    a_tag_prefix=self.PAGE_PREFIX + 'news.html#',
+                                    date_func=lambda x: x[0:4] + '.' + x[5:])
+
+
 # Kuroneko to Majo no Kyoushitsu
 class NekomajoDownload(Spring2026AnimeDownload, NewsTemplate):
     title = 'Kuroneko to Majo no Kyoushitsu'
