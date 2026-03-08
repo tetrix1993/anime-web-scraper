@@ -97,6 +97,33 @@ class HaibarakunDownload(Spring2026AnimeDownload, NewsTemplate):
                                     news_prefix='topics/', date_separator='-')
 
 
+# Kuroneko to Majo no Kyoushitsu
+class NekomajoDownload(Spring2026AnimeDownload, NewsTemplate):
+    title = 'Kuroneko to Majo no Kyoushitsu'
+    keywords = [title, "The Classroom of a Black Cat and a Witch"]
+    website = 'https://witch-classroom.com/'
+    twitter = 'witch_classroom'
+    hashtags = ['猫魔女', '黒猫と魔女の教室']
+    folder_name = 'nekomajo'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        pass
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.entry-title',
+                                    date_select='.news__date', title_select='.news__text', id_select='a',
+                                    next_page_select='.pagination .next')
+
+
 # Replica datte, Koi wo Suru.
 class ReplicoDownload(Spring2026AnimeDownload):
     title = 'Replica datte, Koi wo Suru.'
