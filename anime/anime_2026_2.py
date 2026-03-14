@@ -152,6 +152,32 @@ class BaruyomeDownload(Spring2026AnimeDownload):
             self.print_exception(e, 'News')
 
 
+# Ichijouma Mankitsugurashi!
+class IchijyomaDownload(Spring2026AnimeDownload, NewsTemplate):
+    title = 'Ichijouma Mankitsugurashi!'
+    keywords = [title, "Ichijyoma Mankitsu Gurashi!"]
+    website = 'https://ichijyoma-anime.com/'
+    twitter = 'ichijyoma_anime'
+    hashtags = ['まんきつ暮らし']
+    folder_name = 'ichijyoma'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        pass
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-a',
+                                    date_select='.news-div', title_select='.news-div2', id_select=None)
+
+
 # Kanan-sama wa Akumade Choroi
 class KanachoroDownload(Spring2026AnimeDownload, NewsTemplate):
     title = 'Kanan-sama wa Akumade Choroi'

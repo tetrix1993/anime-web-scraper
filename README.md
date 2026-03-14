@@ -90,6 +90,7 @@ The premiere date for the anime listed here has not been announced.
 * [Class de 2-banme ni Kawaii Onnanoko to Tomodachi ni Natta](https://kuranika.asmik-ace.co.jp/)
 * [Haibara-kun no Tsuyokute Seishun New Game](https://haibarakun-anime.com/)
 * [Himekishi wa Barbaroi no Yome](https://himekishi-anime.com/)
+* [Ichijouma Mankitsugurashi!](https://ichijyoma-anime.com/)
 * [Kanan-sama wa Akumade Choroi](https://kanachoro-anime.com/)
 * [Kuroneko to Majo no Kyoushitsu](https://witch-classroom.com/)
 * [Mata Korosarete Shimatta no desu ne, Tantei-sama](https://www.tbs.co.jp/anime/matakoro/)
