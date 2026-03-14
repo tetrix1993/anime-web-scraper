@@ -97,6 +97,61 @@ class HaibarakunDownload(Spring2026AnimeDownload, NewsTemplate):
                                     news_prefix='topics/', date_separator='-')
 
 
+# Himekishi wa Barbaroi no Yome
+class BaruyomeDownload(Spring2026AnimeDownload):
+    title = 'Himekishi wa Barbaroi no Yome'
+    keywords = [title, "The Warrior Princess and the Barbaric King"]
+    website = 'https://himekishi-anime.com/'
+    twitter = 'himekishi_anime'
+    hashtags = ['バルよめ']
+    folder_name = 'baruyome'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        pass
+
+    def download_news(self, print_http_error=False):
+        try:
+            json_obj = self.get_json(self.PAGE_PREFIX + 'news.json')
+            news_obj = self.get_last_news_log_object()
+            results = []
+            for item in json_obj:
+                article_id = self.PAGE_PREFIX + item['url']
+                date = item['day']
+                date_split = date.split('.')
+                if len(date_split) != 3:
+                    continue
+                if len(date_split[1]) == 1:
+                    date_split[1] = '0' + date_split[1]
+                if len(date_split[2]) == 1:
+                    date_split[2] = '0' + date_split[2]
+                date = '.'.join(date_split)
+                title = item['title']
+                if news_obj and (news_obj['id'] == article_id or date < news_obj['date']):
+                    break
+                results.append(self.create_news_log_object(date, title, article_id))
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log_from_news_log_object(result)
+                if process_result == 0:
+                    success_count += 1
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
+        except HTTPError as e:
+            if print_http_error:
+                print(self.__class__.__name__ + ' - 403 Error when retrieving news API.')
+        except Exception as e:
+            self.print_exception(e, 'News')
+
+
 # Kanan-sama wa Akumade Choroi
 class KanachoroDownload(Spring2026AnimeDownload, NewsTemplate):
     title = 'Kanan-sama wa Akumade Choroi'
