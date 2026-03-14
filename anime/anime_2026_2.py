@@ -314,6 +314,34 @@ class MatakoroDownload(Spring2026AnimeDownload, NewsTemplate):
                                     a_tag_prefix=self.PAGE_PREFIX + 'news/')
 
 
+# Otaku ni Yasashii Gal wa Inai!?
+class OtagalDownload(Spring2026AnimeDownload, NewsTemplate):
+    title = 'Otaku ni Yasashii Gal wa Inai!?'
+    keywords = [title, "Gals Can't Be Kind to Otaku!?", 'otagal']
+    website = 'https://otagal.jp/'
+    twitter = 'OtaGal_official'
+    hashtags = ['オタギャル']
+    folder_name = 'otagal'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        pass
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news__list li',
+                                    date_select='.home__news-date span:nth-child(2)', title_select='.home__news-text',
+                                    id_select='a', next_page_select='.wp-pagenavi *',
+                                    next_page_eval_index_class='current', next_page_eval_index=-1)
+
+
 # Replica datte, Koi wo Suru.
 class ReplicoDownload(Spring2026AnimeDownload):
     title = 'Replica datte, Koi wo Suru.'

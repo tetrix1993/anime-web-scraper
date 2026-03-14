@@ -96,6 +96,7 @@ The premiere date for the anime listed here has not been announced.
 * [Kuroneko to Majo no Kyoushitsu](https://witch-classroom.com/)
 * [Maid-san wa Taberu dake](https://meitabe-anime.com/)
 * [Mata Korosarete Shimatta no desu ne, Tantei-sama](https://www.tbs.co.jp/anime/matakoro/)
+* [Otaku ni Yasashii Gal wa Inai!?](https://otagal.jp/)
 * [Replica datte, Koi wo Suru.](https://replico.jp/)
 * [Yowayowa Sensei](https://www.yowayowasensei-anime.com/)
 
