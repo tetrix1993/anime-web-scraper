@@ -94,6 +94,7 @@ The premiere date for the anime listed here has not been announced.
 * [Jishou Akuyaku Reijou na Konyakusha no Kansatsu Kiroku.]()
 * [Kanan-sama wa Akumade Choroi](https://kanachoro-anime.com/)
 * [Kuroneko to Majo no Kyoushitsu](https://witch-classroom.com/)
+* [Liar Game](https://www.liargame-anime.com/)
 * [Maid-san wa Taberu dake](https://meitabe-anime.com/)
 * [Mata Korosarete Shimatta no desu ne, Tantei-sama](https://www.tbs.co.jp/anime/matakoro/)
 * [Otaku ni Yasashii Gal wa Inai!?](https://otagal.jp/)

@@ -260,6 +260,34 @@ class NekomajoDownload(Spring2026AnimeDownload, NewsTemplate):
                                     next_page_select='.pagination .next')
 
 
+# Liar Game
+class LiarGameDownload(Spring2026AnimeDownload, NewsTemplate):
+    title = 'Liar Game'
+    keywords = [title]
+    website = 'https://www.liargame-anime.com/'
+    twitter = 'liargame_anime'
+    hashtags = ['ライアーゲーム', 'LiarGame']
+    folder_name = 'liargame'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        pass
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.archive__item',
+                                    date_select='.archive__item-date', title_select='.archive__item-title',
+                                    id_select='a', next_page_select='.wp-pagenavi *',
+                                    next_page_eval_index_class='current', next_page_eval_index=-1)
+
+
 # Maid-san wa Taberu dake
 class MeitabeDownload(Spring2026AnimeDownload, NewsTemplate):
     title = 'Maid-san wa Taberu dake'
