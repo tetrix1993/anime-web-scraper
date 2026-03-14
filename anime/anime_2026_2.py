@@ -260,6 +260,33 @@ class NekomajoDownload(Spring2026AnimeDownload, NewsTemplate):
                                     next_page_select='.pagination .next')
 
 
+# Maid-san wa Taberu dake
+class MeitabeDownload(Spring2026AnimeDownload, NewsTemplate):
+    title = 'Maid-san wa Taberu dake'
+    keywords = [title, "The Food Diary of Miss Maid"]
+    website = 'https://meitabe-anime.com/'
+    twitter = 'lovetoeat_maid'
+    hashtags = ['メイ食べ']
+    folder_name = 'meitabe'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        pass
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.bl_posts_item',
+                                    date_select='time', title_select='.bl_posts_txt', id_select='a',
+                                    next_page_select='a.next.page-numbers', paging_type=3, paging_suffix='?page=%s')
+
+
 # Mata Korosarete Shimatta no desu ne, Tantei-sama
 class MatakoroDownload(Spring2026AnimeDownload, NewsTemplate):
     title = 'Mata Korosarete Shimatta no desu ne, Tantei-sama'
