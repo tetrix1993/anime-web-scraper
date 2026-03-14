@@ -178,6 +178,33 @@ class IchijyomaDownload(Spring2026AnimeDownload, NewsTemplate):
                                     date_select='.news-div', title_select='.news-div2', id_select=None)
 
 
+# Jishou Akuyaku Reijou na Konyakusha no Kansatsu Kiroku.
+class JishoAkuyakuDownload(Spring2026AnimeDownload, NewsTemplate):
+    title = 'Jishou Akuyaku Reijou na Konyakusha no Kansatsu Kiroku.'
+    keywords = [title, "An Observation Log of My Fiancée Who Calls Herself a Villainess"]
+    website = 'https://jisho-akuyaku-anime.jp/'
+    twitter = 'jisho_akuyakuPR'
+    hashtags = ['自称悪役令嬢']
+    folder_name = 'jishoakuyaku'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        pass
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.bl_news__article_item',
+                                    date_select='time', title_select='.bl_news__article_body', id_select='a',
+                                    next_page_select='a.next.page-numbers', paging_type=3, paging_suffix='?page=%s')
+
+
 # Kanan-sama wa Akumade Choroi
 class KanachoroDownload(Spring2026AnimeDownload, NewsTemplate):
     title = 'Kanan-sama wa Akumade Choroi'
