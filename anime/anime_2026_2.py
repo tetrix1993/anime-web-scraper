@@ -342,6 +342,33 @@ class MatakoroDownload(Spring2026AnimeDownload, NewsTemplate):
                                     a_tag_prefix=self.PAGE_PREFIX + 'news/')
 
 
+# Nigashita Sakana wa Ookikatta ga Tsuriageta Sakana ga Ookisugita Ken
+class NigetsuriDownload(Spring2026AnimeDownload, NewsTemplate):
+    title = 'Nigashita Sakana wa Ookikatta ga Tsuriageta Sakana ga Ookisugita Ken'
+    keywords = [title, "Always a Catch!", 'nigetsuri']
+    website = 'https://nigetsuri-anime.com/'
+    twitter = 'nigetsuri_anime'
+    hashtags = ['逃げ釣り']
+    folder_name = 'nigetsuri'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        pass
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news article',
+                                    date_select='time', title_select='h2', id_select='a',
+                                    a_tag_start_text_to_remove='./', a_tag_prefix=self.PAGE_PREFIX + 'news/')
+
+
 # Otaku ni Yasashii Gal wa Inai!?
 class OtagalDownload(Spring2026AnimeDownload, NewsTemplate):
     title = 'Otaku ni Yasashii Gal wa Inai!?'
