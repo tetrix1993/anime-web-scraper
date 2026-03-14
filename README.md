@@ -99,6 +99,7 @@ The premiere date for the anime listed here has not been announced.
 * [Otaku ni Yasashii Gal wa Inai!?](https://otagal.jp/)
 * [Replica datte, Koi wo Suru.](https://replico.jp/)
 * [Saikyou no Shokugyou wa Yuusha demo Kenja demo Naku Kanteishi (Kari) Rashii desu yo?](https://kanteishikari-anime.com/)
+* [Tongari Boushi no Atelier](https://tongari-anime.com/)
 * [Yowayowa Sensei](https://www.yowayowasensei-anime.com/)
 
 ### Winter 2026 Anime

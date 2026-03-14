@@ -424,6 +424,35 @@ class KanteishiKariDownload(Spring2026AnimeDownload, NewsTemplate):
                                     date_func=lambda x: x[0:4] + '.' + x[4:6] + '.' + x[7:], news_prefix='')
 
 
+# Tongari Boushi no Atelier
+class TongariDownload(Spring2026AnimeDownload, NewsTemplate):
+    title = 'Tongari Boushi no Atelier'
+    keywords = [title, "Witch Hat Atelier"]
+    website = 'https://tongari-anime.com/'
+    twitter = 'tongari_anime'
+    hashtags = ['とんがり帽子のアトリエ', 'WitchHatAtelier']
+    folder_name = 'tongari'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        pass
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.p-news__list-item',
+                                    date_select='.p-news_data__date', title_select='.p-news_data__title',
+                                    id_select='a', a_tag_prefix=self.PAGE_PREFIX, a_tag_start_text_to_remove='/',
+                                    paging_type=1, next_page_select='.c-pagination__list li', next_page_eval_index=-1,
+                                    next_page_eval_index_class='is-current')
+
+
 # Yowayowa Sensei
 class YowayowaSenseiDownload(Spring2026AnimeDownload, NewsTemplate):
     title = 'Yowayowa Sensei'
