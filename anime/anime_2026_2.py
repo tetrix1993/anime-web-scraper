@@ -396,6 +396,34 @@ class ReplicoDownload(Spring2026AnimeDownload):
             self.print_exception(e, 'News')
 
 
+# Saikyou no Shokugyou wa Yuusha demo Kenja demo Naku Kanteishi (Kari) Rashii desu yo?
+class KanteishiKariDownload(Spring2026AnimeDownload, NewsTemplate):
+    title = 'Saikyou no Shokugyou wa Yuusha demo Kenja demo Naku Kanteishi (Kari) Rashii desu yo?'
+    keywords = [title, "The Strongest Job is Apparently Not a Hero or a Sage, but an Appraiser (Provisional)!"]
+    website = 'https://kanteishikari-anime.com/'
+    twitter = 'kanteishi_anime'
+    hashtags = ['アニメ鑑定士仮']
+    folder_name = 'kanteishikari'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        pass
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news_list_item',
+                                    title_select='.news_list_item_title', date_select='.news_list_item_date',
+                                    id_select='a', a_tag_prefix=self.PAGE_PREFIX, a_tag_start_text_to_remove='./',
+                                    date_func=lambda x: x[0:4] + '.' + x[4:6] + '.' + x[7:], news_prefix='')
+
+
 # Yowayowa Sensei
 class YowayowaSenseiDownload(Spring2026AnimeDownload, NewsTemplate):
     title = 'Yowayowa Sensei'
