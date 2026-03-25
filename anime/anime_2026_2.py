@@ -397,7 +397,35 @@ class NigetsuriDownload(Spring2026AnimeDownload, NewsTemplate):
         self.download_news()
 
     def download_episode_preview(self):
-        pass
+        try:
+            story_url = self.PAGE_PREFIX + 'story/'
+            soup = self.get_soup(story_url)
+            stories = soup.select('ol.list a[href]')
+            for story in stories:
+                try:
+                    episode = ''
+                    ep_num = story.select('h2 span')[0].text
+                    for a in reversed(ep_num):
+                        if a.isnumeric():
+                            episode = a + episode
+                    if len(episode) == 0:
+                        continue
+                    episode = str(int(episode)).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                ep_soup = self.get_soup(story_url + story['href'])
+                if ep_soup is None:
+                    continue
+                images = ep_soup.select('.scene li img[src]')
+                for i in range(len(images)):
+                    image_url = self.PAGE_PREFIX + images[i]['src'].replace('../', '')
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url, to_jpg=True)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news article',
