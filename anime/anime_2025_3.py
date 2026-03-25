@@ -498,7 +498,7 @@ class MynoghraDownload(Summer2025AnimeDownload, NewsTemplate):
 class Jihanki2Download(Summer2025AnimeDownload, NewsTemplate):
     title = 'Jidou Hanbaiki ni Umarekawatta Ore wa Meikyuu wo Samayou 2nd Season'
     keywords = [title, "jihanki", 'Reborn as a Vending Machine, I Now Wander the Dungeon']
-    website = 'https://jihanki-anime.com/'
+    website = 'https://jihanki-anime.com/2nd/'
     twitter = 'jihanki_anime'
     hashtags = ['jihanki', '俺自販機']
     folder_name = 'jihanki2'

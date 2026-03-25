@@ -196,6 +196,51 @@ class IchijyomaDownload(Spring2026AnimeDownload, NewsTemplate):
                                     date_select='.news-div', title_select='.news-div2', id_select=None)
 
 
+# Jidou Hanbaiki ni Umarekawatta Ore wa Meikyuu wo Samayou S3
+class Jihanki3Download(Spring2026AnimeDownload, NewsTemplate):
+    title = 'Jidou Hanbaiki ni Umarekawatta Ore wa Meikyuu wo Samayou 3rd Season'
+    keywords = [title, "jihanki", 'Reborn as a Vending Machine, I Now Wander the Dungeon']
+    website = 'https://jihanki-anime.com/'
+    twitter = 'jihanki_anime'
+    hashtags = ['jihanki', '俺自販機']
+    folder_name = 'jihanki3'
+
+    PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 5
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        template = self.PAGE_PREFIX + 'assets/img/story/%s/story_%s_%s.jpg'
+        try:
+            stop = False
+            for i in range(self.FINAL_EPISODE):
+                episode = str(i + 1).zfill(2)
+                if self.is_image_exists(episode + '_' + str(self.IMAGES_PER_EPISODE)):
+                    continue
+                for j in range(self.IMAGES_PER_EPISODE):
+                    image_url = template % (episode, episode, str(j + 1).zfill(2))
+                    image_name = episode + '_' + str(j + 1)
+                    if self.download_image(image_url, self.base_folder + '/' + image_name, to_jpg=True) == -1:
+                        stop = True
+                        break
+                if stop:
+                    break
+        except Exception as e:
+            self.print_exception(e)
+
+    def download_news(self):
+        news_url = 'https://up-info.news/jihanki-anime/3rd/'
+        self.download_template_news(page_prefix=news_url, article_select='.modListNews li', title_select='h3',
+                                    date_select='time', id_select='a', date_separator='/', news_prefix='')
+
+
 # Jishou Akuyaku Reijou na Konyakusha no Kansatsu Kiroku.
 class JishoAkuyakuDownload(Spring2026AnimeDownload, NewsTemplate):
     title = 'Jishou Akuyaku Reijou na Konyakusha no Kansatsu Kiroku.'
