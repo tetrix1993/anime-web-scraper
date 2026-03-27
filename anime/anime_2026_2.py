@@ -170,6 +170,51 @@ class BaruyomeDownload(Spring2026AnimeDownload):
             self.print_exception(e, 'News')
 
 
+# Honzuki no Gekokujou: Ryoushu no Youjo
+class Honzuki4Download(Spring2026AnimeDownload, NewsTemplate):
+    title = "Honzuki no Gekokujou: Ryoushu no Youjo"
+    keywords = [title, "Ascendance of a Bookworm", '4th', 'Season 4']
+    website = 'http://booklove-anime.jp/'
+    twitter = 'anime_booklove'
+    hashtags = '本好きの下剋上'
+    folder_name = 'honzuki4'
+
+    PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        try:
+            stories = self.get_json(self.PAGE_PREFIX + 'data/story.json')
+            for story in stories:
+                try:
+                    episode_int = self.convert_kanji_to_number(story['data']['episode'])
+                    episode = str(episode_int).zfill(2)
+                except Exception:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                if 'content_pic' not in story['data']:
+                    continue
+                images = story['data']['content_pic']
+                self.image_list = []
+                for i in range(len(images)):
+                    if 'pic' not in images[i]:
+                        continue
+                    image_url = self.PAGE_PREFIX + images[i]['pic'][1:]
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url, to_jpg=True)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
+
+
 # Ichijouma Mankitsugurashi!
 class IchijyomaDownload(Spring2026AnimeDownload, NewsTemplate):
     title = 'Ichijouma Mankitsugurashi!'

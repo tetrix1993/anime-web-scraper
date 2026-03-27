@@ -90,6 +90,7 @@ The premiere date for the anime listed here has not been announced.
 * [Class de 2-banme ni Kawaii Onnanoko to Tomodachi ni Natta](https://kuranika.asmik-ace.co.jp/)
 * [Haibara-kun no Tsuyokute Seishun New Game](https://haibarakun-anime.com/)
 * [Himekishi wa Barbaroi no Yome](https://himekishi-anime.com/)
+* [Honzuki no Gekokujou: Ryoushu no Youjo](https://booklove-anime.jp/)
 * [Ichijouma Mankitsugurashi!](https://ichijyoma-anime.com/)
 * [Jidou Hanbaiki ni Umarekawatta Ore wa Meikyuu wo Samayou 3rd Season](https://jihanki-anime.com/)
 * [Jishou Akuyaku Reijou na Konyakusha no Kansatsu Kiroku.](https://jisho-akuyaku-anime.jp/)
