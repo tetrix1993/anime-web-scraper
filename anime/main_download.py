@@ -1127,30 +1127,45 @@ class MainDownload:
     @staticmethod
     def convert_kanji_to_number(text):
         # Only 1 to 99
-        if not isinstance(text, str):
+        if text is None or not isinstance(text, str):
             return None
-        if len(text) == 0 or len(text) > 3:
+        txt = text.strip()
+        if len(txt) == 0 or len(txt) > 3:
             return None
 
-        kanjis = ['十', '一', '二', '三', '四', '五', '六', '七', '八', '九']
-        eval = []
-        for character in text:
+        kanjis = [
+            ['十', '拾', '什'],
+            ['一', '弌', '壱', '壹'],
+            ['二', '弐', '貳', '貮'],
+            ['三', '弎', '参', '參'],
+            ['四', '肆'],
+            ['五', '伍'],
+            ['六', '陸'],
+            ['七', '漆'],
+            ['八', '捌'],
+            ['九', '玖']
+        ]
+        val = []
+        for character in txt:
             for i in range(len(kanjis)):
-                if character == kanjis[i]:
-                    eval.append(i)
+                if character in kanjis[i]:
+                    val.append(i)
+                    break
+        if len(txt) != len(val):
+            return None
 
-        if len(eval) == 1:
-            if eval[0] == 0:
+        if len(val) == 1:
+            if val[0] == 0:
                 return 10
             else:
-                return eval[0]
-        elif len(eval) == 2:
-            if eval[0] == 0 and eval[1] > 0:
-                return 10 + eval[1]
-            if eval[1] == 0 and eval[0] > 1:
-                return eval[0] * 10
-        elif len(eval) == 3 and eval[1] == 0 and eval[0] > 1:
-            return eval[0] * 10 + eval[2]
+                return val[0]
+        elif len(val) == 2:
+            if val[0] == 0 and val[1] > 0:
+                return 10 + val[1]
+            if val[1] == 0 and val[0] > 1:
+                return val[0] * 10
+        elif len(val) == 3 and val[1] == 0 and val[0] > 1:
+            return val[0] * 10 + val[2]
         return None
 
     @staticmethod
