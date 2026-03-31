@@ -285,6 +285,51 @@ class IchijyomaDownload(Spring2026AnimeDownload, NewsTemplate):
                                     date_select='.news-div', title_select='.news-div2', id_select=None)
 
 
+# Isekai Nonbiri Nouka 2
+class NonbiriNouka2Download(Spring2026AnimeDownload, NewsTemplate):
+    title = 'Isekai Nonbiri Nouka 2'
+    keywords = [title, "jihanki", 'Farming Life in Another World Season 2']
+    website = 'https://nonbiri-nouka2.com/'
+    twitter = 'nonbiri_nouka'
+    hashtags = ['のんびり農家']
+    folder_name = 'nonbirinouka2'
+
+    PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 4
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        template = self.PAGE_PREFIX + 'wp/wp-content/themes/nonbiri-nouka2/assets/img/story/episode/ep%s_%s.jpg'
+        try:
+            stop = False
+            for i in range(self.FINAL_EPISODE):
+                episode = str(i + 1).zfill(2)
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                for j in range(self.IMAGES_PER_EPISODE):
+                    image_url = template % (str(i + 1), str(j + 1).zfill(2))
+                    image_name = episode + '_' + str(j + 1)
+                    if self.download_image(image_url, self.base_folder + '/' + image_name, to_jpg=True) == -1:
+                        stop = True
+                        break
+                if stop:
+                    break
+        except Exception as e:
+            self.print_exception(e)
+
+    def download_news(self):
+        news_url = 'https://up-info.news/jihanki-anime/3rd/'
+        self.download_template_news(page_prefix=news_url, article_select='.modListNews li', title_select='h3',
+                                    date_select='time', id_select='a', date_separator='/', news_prefix='')
+
+
 # Jidou Hanbaiki ni Umarekawatta Ore wa Meikyuu wo Samayou S3
 class Jihanki3Download(Spring2026AnimeDownload, NewsTemplate):
     title = 'Jidou Hanbaiki ni Umarekawatta Ore wa Meikyuu wo Samayou 3rd Season'
