@@ -92,6 +92,7 @@ The premiere date for the anime listed here has not been announced.
 * [Himekishi wa Barbaroi no Yome](https://himekishi-anime.com/)
 * [Honzuki no Gekokujou: Ryoushu no Youjo](https://booklove-anime.jp/)
 * [Ichijouma Mankitsugurashi!](https://ichijyoma-anime.com/)
+* [Isekai Nonbiri Nouka 2](https://nonbiri-nouka2.com/)
 * [Jidou Hanbaiki ni Umarekawatta Ore wa Meikyuu wo Samayou 3rd Season](https://jihanki-anime.com/)
 * [Jishou Akuyaku Reijou na Konyakusha no Kansatsu Kiroku.](https://jisho-akuyaku-anime.jp/)
 * [Kanan-sama wa Akumade Choroi](https://kanachoro-anime.com/)
