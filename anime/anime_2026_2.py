@@ -458,6 +458,8 @@ class NekomajoDownload(Spring2026AnimeDownload, NewsTemplate):
     folder_name = 'nekomajo'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 6
 
     def __init__(self):
         super().__init__()
@@ -490,6 +492,46 @@ class NekomajoDownload(Spring2026AnimeDownload, NewsTemplate):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.entry-title',
                                     date_select='.news__date', title_select='.news__text', id_select='a',
                                     next_page_select='.pagination .next')
+
+    def download_episode_preview_guess(self, print_invalid=False, download_valid=True):
+        if self.is_image_exists(str(self.FINAL_EPISODE).zfill(2) + '_' + str(self.IMAGES_PER_EPISODE)):
+            return
+
+        folder = self.create_custom_directory('guess')
+        template = self.PAGE_PREFIX + 'wp-content/uploads/%s/%s/episode%s_%s.webp'
+        current_date = datetime.now() + timedelta(hours=1)
+        year = current_date.strftime('%Y')
+        month = current_date.strftime('%m')
+        is_successful = False
+        valid_urls = []
+        for i in range(self.FINAL_EPISODE):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_1'):
+                continue
+            is_success = False
+            for j in range(self.IMAGES_PER_EPISODE):
+                image_url = template % (year, month, str(i + 1), str(j + 1).zfill(2))
+                image_name = episode + '_' + str(j + 1)
+                if self.is_valid_url(image_url, is_image=True):
+                    print('VALID - ' + image_url)
+                    is_successful = True
+                    is_success = True
+                    valid_urls.append({'name': image_name, 'url': image_url})
+                else:
+                    if print_invalid:
+                        print('INVALID - ' + image_url)
+                    break
+            if not is_success:
+                break
+        if download_valid and len(valid_urls) > 0:
+            for valid_url in valid_urls:
+                image_name = valid_url['name']
+                if not os.path.exists(folder):
+                    os.makedirs(folder)
+                self.download_image(valid_url['url'], folder + '/' + image_name, to_jpg=True)
+        if is_successful:
+            print(self.__class__.__name__ + ' - Guessed correctly!')
+        return is_successful
 
 
 # Liar Game
