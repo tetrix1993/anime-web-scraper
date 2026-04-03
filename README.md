@@ -106,6 +106,7 @@ The premiere date for the anime listed here has not been announced.
 * [Replica datte, Koi wo Suru.](https://replico.jp/)
 * [Saikyou no Shokugyou wa Yuusha demo Kenja demo Naku Kanteishi (Kari) Rashii desu yo?](https://kanteishikari-anime.com/)
 * [Tongari Boushi no Atelier](https://tongari-anime.com/)
+* [Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e 4th Season: 2-nensei-hen 1 Gakki](https://you-zitsu.com/)
 * [Yowayowa Sensei](https://www.yowayowasensei-anime.com/)
 
 ### Winter 2026 Anime

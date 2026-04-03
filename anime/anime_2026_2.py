@@ -883,6 +883,46 @@ class TongariDownload(Spring2026AnimeDownload, NewsTemplate):
                                     next_page_eval_index_class='is-current')
 
 
+# Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e 4th Season: 2-nensei-hen 1 Gakki
+class Youzitsu4Download(Spring2026AnimeDownload, NewsTemplate):
+    title = "Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e 4th Season: 2-nensei-hen 1 Gakki"
+    keywords = ["Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e", "Youzitsu", "Youjitsu",
+                "Classroom of the Elite"]
+    website = 'http://you-zitsu.com/'
+    twitter = 'youkosozitsu'
+    hashtags = ['you_zitsu', 'よう実', 'ClassroomOfTheElite']
+    folder_name = 'youzitsu4'
+
+    PAGE_PREFIX = website
+    FINAL_EPISODE = 16
+    IMAGES_PER_EPISODE = 6
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+
+    def download_episode_preview(self):
+        try:
+            template = self.PAGE_PREFIX + 'assets/story/%s/%s.webp'
+            stop = False
+            for i in range(5, self.FINAL_EPISODE + 1, 1):
+                episode = str(i).zfill(2)
+                if self.is_image_exists(episode + '_' + str(self.IMAGES_PER_EPISODE)):
+                    continue
+                for j in range(self.IMAGES_PER_EPISODE):
+                    image_name = episode + '_' + str(j + 1)
+                    image_url = template % (str(i), str(j + 1))
+                    if self.download_image(image_url, self.base_folder + '/' + image_name, to_jpg=True) == -1:
+                        stop = True
+                        break
+                if stop:
+                    break
+        except Exception as e:
+            self.print_exception(e)
+
+
 # Yowayowa Sensei
 class YowayowaSenseiDownload(Spring2026AnimeDownload, NewsTemplate):
     title = 'Yowayowa Sensei'
