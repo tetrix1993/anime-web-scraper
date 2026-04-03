@@ -873,7 +873,45 @@ class TongariDownload(Spring2026AnimeDownload, NewsTemplate):
         self.download_news()
 
     def download_episode_preview(self):
-        pass
+        story_url = self.PAGE_PREFIX + 'story/'
+        try:
+            soup = self.get_soup(story_url)
+            eps = soup.select('.p-story__list-item')
+            for ep in eps:
+                a_tag = ep.select('a[href]')
+                if len(a_tag) == 0:
+                    continue
+                try:
+                    ep_title = ep.select('.p-story_card__title')[0].text
+                    ep_num = ''
+                    append_num = False
+                    for i in ep_title:
+                        if not append_num and i.isnumeric():
+                            append_num = True
+                            ep_num = ep_num + i
+                        elif append_num:
+                            if i.isnumeric():
+                                ep_num = ep_num + i
+                            else:
+                                break
+                    if len(ep_num) == 0:
+                        continue
+                    episode = str(ep_num).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_01'):
+                    continue
+                ep_soup = self.get_soup(story_url + a_tag[0]['href'])
+                if ep_soup is None:
+                    continue
+                images = ep_soup.select('.p-story_single__text img[src]')
+                for j in range(len(images)):
+                    image_url = images[j]['src']
+                    image_name = episode + '_' + str(j + 1).zfill(2)
+                    self.add_to_image_list(image_name, image_url, to_jpg=True)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.p-news__list-item',
