@@ -96,6 +96,7 @@ The premiere date for the anime listed here has not been announced.
 * [Jidou Hanbaiki ni Umarekawatta Ore wa Meikyuu wo Samayou 3rd Season](https://jihanki-anime.com/)
 * [Jishou Akuyaku Reijou na Konyakusha no Kansatsu Kiroku.](https://jisho-akuyaku-anime.jp/)
 * [Kanan-sama wa Akumade Choroi](https://kanachoro-anime.com/)
+* [Kanojo, Okarishimasu 5th Season](https://kanokari-official.com/)
 * [Kuroneko to Majo no Kyoushitsu](https://witch-classroom.com/)
 * [Liar Game](https://www.liargame-anime.com/)
 * [Maid-san wa Taberu dake](https://meitabe-anime.com/)

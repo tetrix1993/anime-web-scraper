@@ -466,6 +466,84 @@ class KanachoroDownload(Spring2026AnimeDownload, NewsTemplate):
                                     date_func=lambda x: x[0:4] + '.' + x[5:])
 
 
+# Kanojo, Okarishimasu 5th Season
+class Kanokari5Download(Spring2026AnimeDownload, NewsTemplate4):
+    title = "Kanojo, Okarishimasu 5th Season"
+    keywords = [title, "Kanokari", "Rent-a-Girlfriend"]
+    website = 'https://kanokari-official.com/'
+    twitter = 'kanokari_anime'
+    hashtags = ['彼女お借りします', 'かのかり', 'kanokari']
+    folder_name = 'kanokari5'
+
+    PAGE_PREFIX = website
+    FIRST_EPISODE = 49
+    FINAL_EPISODE = 60
+    IMAGES_PER_EPISODE = 6
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_episode_preview_guess()
+
+    def download_episode_preview(self):
+        json_obj = None
+        try:
+            json_obj = self.get_json(self.PAGE_PREFIX + 'api/site-data/init')
+            if 'stories' not in json_obj:
+                return
+            for story in json_obj['stories']:
+                episode = story['episode'].zfill(2)
+                self.image_list = []
+                for i in range(len(story['images'])):
+                    image_name = episode + '_' + str(i + 1)
+                    image_url = story['images'][i]['image_path']
+                    self.add_to_image_list(image_name, image_url, to_jpg=True)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
+        return json_obj
+
+    def download_episode_preview_guess(self, print_url=False, print_invalid=False):
+        if self.is_image_exists(str(self.FINAL_EPISODE).zfill(2) + '_1'):
+            return
+        folder = self.create_custom_directory('guess')
+        template = self.PAGE_PREFIX + '5th/wp-content/uploads/%s/%s/kanokari5_%s-%s.'
+        extensions = ['jpg', 'png']
+        current_date = datetime.now() + timedelta(hours=1)
+        year = current_date.strftime('%Y')
+        month = current_date.strftime('%m')
+        is_successful = False
+        for i in range(self.FIRST_EPISODE, self.FINAL_EPISODE + 1):
+            episode = str(i).zfill(2)
+            if self.is_image_exists(episode + '_1') or self.is_image_exists(episode + '_1', folder):
+                continue
+            is_success = False
+            for ext in extensions:
+                for j in range(self.IMAGES_PER_EPISODE):
+                    image_name = episode + '_' + str(j + 1)
+                    image_url = (template % (year, month, episode, str(j + 1).zfill(2))) + ext
+                    if print_url:
+                        print(image_url)
+                    if self.is_valid_url(image_url, is_image=True):
+                        print('VALID - ' + image_url)
+                        self.download_image(image_url, folder + '/' + image_name, to_jpg=True)
+                        is_successful = True
+                        is_success = True
+                    elif print_invalid:
+                        print('INVALID - ' + image_url)
+                    if not is_success:
+                        break
+                if is_success:
+                    break
+            if not is_success:
+                break
+        if is_successful:
+            print(self.__class__.__name__ + ' - Guessed correctly!')
+        return is_successful
+
+
 # Kuroneko to Majo no Kyoushitsu
 class NekomajoDownload(Spring2026AnimeDownload, NewsTemplate):
     title = 'Kuroneko to Majo no Kyoushitsu'
