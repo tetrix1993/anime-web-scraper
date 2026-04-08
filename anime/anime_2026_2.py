@@ -940,17 +940,19 @@ class Tenshisama2Download(Spring2026AnimeDownload):
     def download_episode_preview(self):
         try:
             soup = self.get_soup(self.PAGE_PREFIX + 'story/', impersonate=True)
-            stories = soup.select('section.episode')
-            for story in stories:
-                if not story.has_attr('id') or not story['id'].startswith('ep') or not story['id'][2:].isnumeric():
+            a_tags = soup.select('a.episode-pager__number[href]')
+            for a_tag in a_tags:
+                try:
+                    episode = str(int(a_tag.text)).zfill(2)
+                except:
                     continue
-                ep_num = int(story['id'][2:])
-                if ep_num < 13:
-                    continue
-                episode = str(ep_num - 12).zfill(2)
+                if 'current' in a_tag['class']:
+                    ep_soup = soup
+                else:
+                    ep_soup = self.get_soup(a_tag['href'])
                 if self.is_image_exists(episode + '_1'):
                     continue
-                images = story.select('picture img[src]')
+                images = ep_soup.select('.episode__slide picture img[src]')
                 for i in range(len(images)):
                     image_url = images[i]['src']
                     image_name = episode + '_' + str(i + 1)
