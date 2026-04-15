@@ -336,8 +336,17 @@ class IchijyomaDownload(Spring2026AnimeDownload, NewsTemplate):
             soup = self.get_soup(self.PAGE_PREFIX + 'story/')
             btns = soup.select('.story-btn[data-story]')
             for btn in btns:
+                episode = ''
                 try:
-                    episode = str(int(btn.text.replace('#', ''))).zfill(2)
+                    ep_num = btn.text.strip()
+                    for a in reversed(ep_num):
+                        if a.isnumeric():
+                            episode = a + episode
+                        elif len(episode) > 0:
+                            break
+                    if len(episode) == 0:
+                        continue
+                    episode = str(int(episode)).zfill(2)
                 except:
                     continue
                 if self.is_image_exists(episode + '_1'):
