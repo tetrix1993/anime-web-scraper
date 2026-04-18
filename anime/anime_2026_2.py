@@ -1171,7 +1171,7 @@ class KanteishiKariDownload(Spring2026AnimeDownload, NewsTemplate):
 
     PAGE_PREFIX = website
     FINAL_EPISODE = 12
-    IMAGES_PER_EPISODE = 9
+    IMAGES_PER_EPISODE = 10
 
     def __init__(self):
         super().__init__()
