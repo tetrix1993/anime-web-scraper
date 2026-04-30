@@ -389,21 +389,31 @@ class NonbiriNouka2Download(Spring2026AnimeDownload, NewsTemplate):
         self.download_news()
 
     def download_episode_preview(self):
-        template = self.PAGE_PREFIX + 'wp/wp-content/themes/nonbiri-nouka2/assets/img/story/episode/ep%s_%s.jpg'
         try:
-            stop = False
-            for i in range(self.FINAL_EPISODE):
-                episode = str(i + 1).zfill(2)
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            eps = soup.select('li.episode-item[id^="ep"]')
+            for ep in eps:
+                episode = ''
+                try:
+                    ep_num = ep['id'].strip()
+                    for a in reversed(ep_num):
+                        if a.isnumeric():
+                            episode = a + episode
+                        elif len(episode) > 0:
+                            break
+                    if len(episode) == 0:
+                        continue
+                    episode = str(int(episode)).zfill(2)
+                except:
+                    continue
                 if self.is_image_exists(episode + '_1'):
                     continue
-                for j in range(self.IMAGES_PER_EPISODE):
-                    image_url = template % (str(i + 1), str(j + 1).zfill(2))
-                    image_name = episode + '_' + str(j + 1)
-                    if self.download_image(image_url, self.base_folder + '/' + image_name, to_jpg=True) == -1:
-                        stop = True
-                        break
-                if stop:
-                    break
+                images = ep.select('.episode-visual img[src]')
+                for i in range(len(images)):
+                    image_url = images[i]['src']
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url, to_jpg=True)
+                self.download_image_list(self.base_folder)
         except Exception as e:
             self.print_exception(e)
 
