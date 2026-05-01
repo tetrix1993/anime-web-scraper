@@ -936,6 +936,8 @@ class OtagalDownload(Spring2026AnimeDownload, NewsTemplate):
     folder_name = 'otagal'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 6
 
     def __init__(self):
         super().__init__()
@@ -974,6 +976,52 @@ class OtagalDownload(Spring2026AnimeDownload, NewsTemplate):
                                     date_select='.home__news-date span:nth-child(2)', title_select='.home__news-text',
                                     id_select='a', next_page_select='.wp-pagenavi *',
                                     next_page_eval_index_class='current', next_page_eval_index=-1)
+    
+    def download_episode_preview_guess(self, print_invalid=False, download_valid=True):
+        if self.is_image_exists(str(self.FINAL_EPISODE).zfill(2) + '_' + str(self.IMAGES_PER_EPISODE)):
+            return
+
+        folder = self.create_custom_directory('guess')
+        template = self.PAGE_PREFIX + 'wp/wp-content/uploads/%s/%s/【宣伝使用】OG__%s_%s.png'
+        current_date = datetime.now() + timedelta(hours=1)
+        year = current_date.strftime('%Y')
+        month = current_date.strftime('%m')
+        is_successful = False
+        valid_urls = []
+        for i in range(self.FINAL_EPISODE):
+            episode = str(i + 1).zfill(2)
+            if self.is_image_exists(episode + '_1'):
+                continue
+            is_success = False
+            j = 0
+            img_num = 0
+            while j < 200 and img_num < self.IMAGES_PER_EPISODE:
+                j += 1
+                image_url = template % (year, month, episode, str(j).zfill(6))
+                if self.is_valid_url(image_url, is_image=True):
+                    print('VALID - ' + image_url)
+                    image_name = episode + '_' + str(img_num + 1)
+                    is_successful = True
+                    is_success = True
+                    img_num += 1
+                    valid_urls.append({'name': image_name, 'url': image_url})
+                else:
+                    if print_invalid:
+                        print('INVALID - ' + image_url)
+                    if j >= 50 and img_num == 0:
+                        break
+            if not is_success:
+                break
+            if download_valid and len(valid_urls) > 0:
+                for valid_url in valid_urls:
+                    image_name = valid_url['name']
+                    if not os.path.exists(folder):
+                        os.makedirs(folder)
+                    self.download_image(valid_url['url'], folder + '/' + image_name, to_jpg=True)
+                valid_urls = []
+        if is_successful:
+            print(self.__class__.__name__ + ' - Guessed correctly!')
+        return is_successful
 
 
 # Otonari no Tenshi-sama ni Itsunomanika Dame Ningen ni Sareteita Ken 2
