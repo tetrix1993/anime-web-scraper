@@ -1117,7 +1117,7 @@ class Tenshisama2Download(Spring2026AnimeDownload):
             return
 
         folder = self.create_custom_directory('guess')
-        template = self.PAGE_PREFIX + 'wordpress/wp-content/uploads/%s/%s/story-episode%s-cut%s.jpg'
+        template = self.PAGE_PREFIX + 'wordpress/wp-content/uploads/%s/%s/story-episode%s-cat%s.jpg'
         current_date = datetime.now() + timedelta(hours=1)
         year = current_date.strftime('%Y')
         month = current_date.strftime('%m')
