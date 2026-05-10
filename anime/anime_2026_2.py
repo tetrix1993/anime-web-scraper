@@ -733,7 +733,7 @@ class NekomajoDownload(Spring2026AnimeDownload, NewsTemplate):
             return
 
         folder = self.create_custom_directory('guess')
-        template = self.PAGE_PREFIX + 'wp-content/uploads/%s/%s/episode%s_%s.webp'
+        template = self.PAGE_PREFIX + 'wp-content/uploads/%s/%s/KMK_EP%s_%s.webp'
         current_date = datetime.now() + timedelta(hours=1)
         year = current_date.strftime('%Y')
         month = current_date.strftime('%m')
@@ -745,7 +745,7 @@ class NekomajoDownload(Spring2026AnimeDownload, NewsTemplate):
                 continue
             is_success = False
             for j in range(self.IMAGES_PER_EPISODE):
-                image_url = template % (year, month, str(i + 1), str(j + 1).zfill(2))
+                image_url = template % (year, month, str(i + 1), str(j + 1).zfill(3))
                 image_name = episode + '_' + str(j + 1)
                 if self.is_valid_url(image_url, is_image=True):
                     print('VALID - ' + image_url)
