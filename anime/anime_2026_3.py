@@ -208,3 +208,29 @@ class SaijonoOsewaDownload(Summer2026AnimeDownload, NewsTemplate):
                                     title_select='.info--txt__ttl', id_select='a', paging_type=0,
                                     next_page_select='.pagination li', next_page_eval_index=-1,
                                     next_page_eval_index_class='is__current')
+
+
+# Saikyou Degarashi Ouji no Anyaku Teii Arasoi
+class DegarashiOujiDownload(Summer2026AnimeDownload, NewsTemplate):
+    title = 'Saikyou Degarashi Ouji no Anyaku Teii Arasoi'
+    keywords = ["The Insipid Prince's Furtive Grab for The Throne"]
+    website = 'https://degarashiouji.com/'
+    twitter = 'sn_degarashi'
+    hashtags = ['出涸らし', '出涸らし皇子']
+    folder_name = 'degarashiouji'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        pass
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-item', date_select='.date',
+                                    title_select='.title', id_select='a')
