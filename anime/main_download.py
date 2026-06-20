@@ -15,6 +15,8 @@ from PIL import Image
 from io import BytesIO
 from html import unescape
 from curl_cffi import requests as requests2
+import base64
+from urllib.parse import quote
 
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -1739,6 +1741,84 @@ class NewsTemplate4:
                 print(self.__class__.__name__ + ' - 403 Error when retrieving news API.')
         except Exception as e:
             self.print_exception(e, 'News')
+
+
+# Using api.cms.studiodesignapp.com
+class NewsTemplate5:
+    def download_template_news(self):
+        try:
+            api_url_prefix = 'https://api.cms.studiodesignapp.com/v2/search?q='
+            uid = ''
+            project_id = ''
+            schema_key = ''
+
+            news_prefix = self.PAGE_PREFIX + 'topics'
+
+            soup = self.get_soup(news_prefix)
+            nuxt_ = json.loads(soup.select('#__NUXT_DATA__')[0].text)
+            root = nuxt_[1]
+            if 'pinia' not in root:
+                return
+            pinia = nuxt_[root['pinia']]
+            if isinstance(pinia, list) and len(pinia) == 2 and pinia[0] == 'Reactive' and isinstance(pinia[1], int):
+                pinia_ = nuxt_[pinia[1]]
+            else:
+                return
+            if 'productStore' not in pinia_:
+                return
+            product_store = nuxt_[pinia_['productStore']]
+            if 'product' not in product_store:
+                return
+            product = nuxt_[product_store['product']]
+            if 'publishedUid' in product:
+                uid = nuxt_[product['publishedUid']]
+            if 'resources' in product:
+                resources = nuxt_[product['resources']]
+                if 'cmsProjectId' in resources:
+                    project_id = nuxt_[resources['cmsProjectId']]
+            if 'pages' in product:
+                pages = nuxt_[product['pages']]
+                for pageidx in pages:
+                    page = nuxt_[pageidx]
+                    if 'cmsRequest' not in page or 'id' not in page:
+                        continue
+                    page_id = nuxt_[page['id']]
+                    if page_id != 'topics/:slug':
+                        continue
+                    cms_request = nuxt_[page['cmsRequest']]
+                    if 'schemaKey' not in cms_request:
+                        continue
+                    schema_key = nuxt_[cms_request['schemaKey']]
+                    break
+
+            query = '{"uid":"' + uid + '","project_id":"' + project_id + '",' +\
+                '"schema_key":"' + schema_key + '","orders":"-publishedAt","offset":0,"limit":14}'
+            api_url = api_url_prefix + quote(base64.b64encode(query.encode('utf-8')).decode("utf-8"))
+
+            results = []
+            news_obj = self.get_last_news_log_object()
+            json_obj = self.get_json(api_url)
+            for item in json_obj:
+                fields = item['document']['fields']
+                date = fields['_meta']['mapValue']['fields']['publishedAt']['timestampValue'][0:10].replace('-', '.')
+                fields2 = fields['default']['mapValue']['fields']
+                title = fields2['title']['stringValue']
+                slug = fields2['slug']['stringValue']
+                url = news_prefix + '/' + slug
+                if news_obj is not None and (news_obj['id'] == url or news_obj['title'] == title
+                                             or date < news_obj['date']):
+                    break
+                results.append(self.create_news_log_object(date, title, url))
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log_from_news_log_object(result)
+                if process_result == 0:
+                    success_count += 1
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
+        except Exception as e:
+            self.print_exception(e, 'News')
+
 
 
 class InvalidImageSizeError(Exception):

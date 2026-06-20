@@ -1,8 +1,4 @@
-from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsTemplate3, NewsTemplate4
-from datetime import datetime, timedelta
-from requests.exceptions import HTTPError
-from scan import AniverseMagazineScanner
-import os
+from anime.main_download import MainDownload, NewsTemplate, NewsTemplate5
 
 
 # Summer 2026 Anime
@@ -58,6 +54,56 @@ class AllWorksMaidDownload(Summer2026AnimeDownload, NewsTemplate):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news__list li',
                                     date_select='.news__year', title_select='.news__link-title',
                                     id_select='a', next_page_select='.next.page-numbers', paging_type=0)
+
+
+# Koko wa Ore ni Makasete Saki ni Ike to Itte kara 10-nen ga Tattara Densetsu ni Natteita.
+class KokooreDownload(Summer2026AnimeDownload, NewsTemplate5):
+    title = 'Koko wa Ore ni Makasete Saki ni Ike to Itte kara 10-nen ga Tattara Densetsu ni Natteita.'
+    keywords = ["kokoore", 'I Became a Legend After My 10 Year-Long Last Stand.']
+    website = 'https://kokoore-anime.com/'
+    twitter = 'kokoore_anime'
+    hashtags = ['ここ俺アニメ']
+    folder_name = 'kokoore'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        pass
+
+    def download_news(self):
+        self.download_template_news()
+
+
+# Lv999 no Murabito
+class Lv999MurabitoDownload(Summer2026AnimeDownload, NewsTemplate5):
+    title = 'Lv999 no Murabito'
+    keywords = ["The Villager of Level 999"]
+    website = 'https://lv999-anime.com/'
+    twitter = 'lv999_anime'
+    hashtags = ['LV999の村人']
+    folder_name = 'lv999'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        pass
+
+    def download_news(self):
+        self.download_template_news()
 
 
 # Ryoumin 0-nin Start no Henkyou Ryoushu-sama
