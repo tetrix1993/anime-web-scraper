@@ -85,6 +85,9 @@ pip install -r requirements.txt
 The premiere date for the anime listed here has not been announced.
 * To be added
 
+### Summer 2026 Anime
+* [Heroine? Seijo? Iie, All Works Maid desu (Hokori)!](https://all-works-maid-anime.com/)
+
 ### Spring 2026 Anime
 * [Aishiteru Game wo Owarasetai](https://www.aishiteru-game.com/)
 * [Class de 2-banme ni Kawaii Onnanoko to Tomodachi ni Natta](https://kuranika.asmik-ace.co.jp/)
