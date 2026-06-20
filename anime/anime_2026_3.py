@@ -234,3 +234,30 @@ class DegarashiOujiDownload(Summer2026AnimeDownload, NewsTemplate):
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-item', date_select='.date',
                                     title_select='.title', id_select='a')
+
+
+# Sekai Saikyou no Kouei
+class RearguardDownload(Summer2026AnimeDownload, NewsTemplate):
+    title = 'Sekai Saikyou no Kouei'
+    keywords = ["The World's Strongest Rearguard"]
+    website = 'https://strongestrearguard-anime.com/'
+    twitter = 'Rearguard_PR'
+    hashtags = ['世界最強の後衛']
+    folder_name = 'rearguard'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        pass
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article', date_select='time',
+                                    title_select='h3', id_select=None, id_has_id=True,
+                                    a_tag_prefix=self.PAGE_PREFIX + 'news/#')
