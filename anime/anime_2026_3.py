@@ -180,3 +180,31 @@ class Ryomin0Download(Summer2026AnimeDownload, NewsTemplate6):
 
     def download_news(self):
         self.download_template_news('detail.html?d=')
+
+
+# Saijo no Osewa
+class SaijonoOsewaDownload(Summer2026AnimeDownload, NewsTemplate):
+    title = 'Saijo no Osewa'
+    keywords = ["Rich Girl Caretaker"]
+    website = 'https://saijonoosewa-anime.com/'
+    twitter = 'saijonoosewa_pr'
+    hashtags = ['才女のお世話']
+    folder_name = 'saijonoosewa'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        pass
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article', date_select='time',
+                                    title_select='.info--txt__ttl', id_select='a', paging_type=0,
+                                    next_page_select='.pagination li', next_page_eval_index=-1,
+                                    next_page_eval_index_class='is__current')
