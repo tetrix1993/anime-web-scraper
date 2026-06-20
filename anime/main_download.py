@@ -26,6 +26,7 @@ class MainDownload:
     title = ""
     keywords = []
     website = ""
+    PAGE_PREFIX = ''
     twitter = []  # Twitter Account Names
     hashtags = []
     season = None
@@ -1466,7 +1467,7 @@ class NewsTemplate:
         :param impersonate: Impersonate browser fingerprints to bypass Cloudflare protection
         """
 
-        if not issubclass(self.__class__, MainDownload):
+        if not isinstance(self, MainDownload):
             return
 
         if page_prefix.endswith('/'):
@@ -1598,7 +1599,7 @@ class NewsTemplate:
 class NewsTemplate2:
     def download_template_news(self, page_prefix, first_page_url=None, stop_date=None, date_select=None,
                                impersonate=False):
-        if not issubclass(self.__class__, MainDownload):
+        if not isinstance(self, MainDownload):
             return
 
         if page_prefix.endswith('/'):
@@ -1666,7 +1667,7 @@ class NewsTemplate2:
 # News template which contain article.content-entry, div.entry-date, div.entry-title
 class NewsTemplate3:
     def download_template_news(self, page_prefix, first_page_url=None, stop_date=None, impersonate=False):
-        if not issubclass(self.__class__, MainDownload):
+        if not isinstance(self, MainDownload):
             return
 
         if page_prefix.endswith('/'):
@@ -1712,6 +1713,9 @@ class NewsTemplate3:
 class NewsTemplate4:
     def download_template_news(self, name='', print_http_error=False, json_obj=None, json_url=None, verify=True,
                                impersonate=False):
+        if not isinstance(self, MainDownload):
+            return
+
         news_url = self.PAGE_PREFIX + 'news/'
         try:
             if json_obj is None:
@@ -1746,6 +1750,9 @@ class NewsTemplate4:
 # Using api.cms.studiodesignapp.com
 class NewsTemplate5:
     def download_template_news(self):
+        if not isinstance(self, MainDownload):
+            return
+
         try:
             api_url_prefix = 'https://api.cms.studiodesignapp.com/v2/search?q='
             uid = ''
@@ -1819,6 +1826,40 @@ class NewsTemplate5:
         except Exception as e:
             self.print_exception(e, 'News')
 
+
+# Using newslist.json
+class NewsTemplate6:
+    def download_template_news(self, page_name_prefix):
+        if not isinstance(self, MainDownload):
+            return
+
+        try:
+            results = []
+            news_obj = self.get_last_news_log_object()
+            news_prefix = self.PAGE_PREFIX + 'news/'
+            json_obj = self.get_json(news_prefix + 'newslist.json')
+            for item in json_obj:
+                if 'date' in item and 'uniqueId' in item and 'title' in item:
+                    date = item['date']
+                    title = item['title']
+                    unique_id = item['uniqueId']
+                    if len(unique_id) == 0 and 'directLinkUrl' in item and len(item['directLinkUrl']) > 1:
+                        url = self.PAGE_PREFIX + item['directLinkUrl'][1:]
+                    else:
+                        url = news_prefix + page_name_prefix + item['uniqueId']
+                    if news_obj is not None and (news_obj['id'] == url or news_obj['title'] == title
+                                                 or date < news_obj['date']):
+                        break
+                    results.append(self.create_news_log_object(date, title, url))
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log_from_news_log_object(result)
+                if process_result == 0:
+                    success_count += 1
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
+        except Exception as e:
+            self.print_exception(e, 'News')
 
 
 class InvalidImageSizeError(Exception):
