@@ -95,6 +95,7 @@ The premiere date for the anime listed here has not been announced.
 * [Saijo no Osewa](https://saijonoosewa-anime.com/)
 * [Saikyou Degarashi Ouji no Anyaku Teii Arasoi](https://degarashiouji.com/)
 * [Sekai Saikyou no Kouei](https://strongestrearguard-anime.com/)
+* [Tenkou-saki no Seiso Karen na Bishoujo ga, Mukashi Danshi to Omotte Issho ni Asonda Osananajimi Datta Ken](https://tenbin-anime.asmik-ace.co.jp/)
 
 ### Spring 2026 Anime
 * [Aishiteru Game wo Owarasetai](https://www.aishiteru-game.com/)

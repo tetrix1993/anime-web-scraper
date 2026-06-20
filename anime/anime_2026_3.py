@@ -261,3 +261,31 @@ class RearguardDownload(Summer2026AnimeDownload, NewsTemplate):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article', date_select='time',
                                     title_select='h3', id_select=None, id_has_id=True,
                                     a_tag_prefix=self.PAGE_PREFIX + 'news/#')
+
+
+# Tenkou-saki no Seiso Karen na Bishoujo ga, Mukashi Danshi to Omotte Issho ni Asonda Osananajimi Datta Ken
+class TenbinDownload(Summer2026AnimeDownload, NewsTemplate):
+    title = 'Tenkou-saki no Seiso Karen na Bishoujo ga, Mukashi Danshi to Omotte Issho ni Asonda Osananajimi Datta Ken'
+    keywords = ["tenbin", 'Oh Boy, Was I Wrong About Her']
+    website = 'https://tenbin-anime.asmik-ace.co.jp/'
+    twitter = 'tenbin_anime'
+    hashtags = ['てんびん']
+    folder_name = 'tenbin'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        pass
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.p-sub-news__main li',
+                                    date_select='.c-post__date', title_select='.c-post__clamp', id_select='a',
+                                    date_func=lambda x: x[0:4] + '.' + x[5:7] + '.' + x[8:10],
+                                    next_page_select='a.next.page-numbers', paging_type=3, paging_suffix='?page=%s')
