@@ -58,3 +58,54 @@ class AllWorksMaidDownload(Summer2026AnimeDownload, NewsTemplate):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news__list li',
                                     date_select='.news__year', title_select='.news__link-title',
                                     id_select='a', next_page_select='.next.page-numbers', paging_type=0)
+
+
+# Ryoumin 0-nin Start no Henkyou Ryoushu-sama
+class Ryomin0Download(Summer2026AnimeDownload):
+    title = 'Ryoumin 0-nin Start no Henkyou Ryoushu-sama'
+    keywords = ["ryomin0", 'The Frontier Lord Begins with Zero Subjects']
+    website = 'https://ryomin0-anime.com/'
+    twitter = 'ryomin0_anime'
+    hashtags = ['ryomin0anime', 'アニメ領民０人']
+    folder_name = 'ryomin0'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        pass
+
+    def download_news(self):
+        try:
+            results = []
+            news_obj = self.get_last_news_log_object()
+            news_prefix = self.PAGE_PREFIX + 'news/'
+            json_obj = self.get_json(news_prefix + 'newslist.json')
+            for item in json_obj:
+                if 'date' in item and 'uniqueId' in item and 'title' in item:
+                    date = item['date']
+                    title = item['title']
+                    unique_id = item['uniqueId']
+                    if len(unique_id) == 0 and 'directLinkUrl' in item and len(item['directLinkUrl']) > 1:
+                        url = self.PAGE_PREFIX + item['directLinkUrl'][1:]
+                    else:
+                        url = news_prefix + 'detail.html?d=' + item['uniqueId']
+                    if news_obj is not None and (news_obj['id'] == url or news_obj['title'] == title
+                                                 or date < news_obj['date']):
+                        break
+                    results.append(self.create_news_log_object(date, title, url))
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log_from_news_log_object(result)
+                if process_result == 0:
+                    success_count += 1
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
+        except Exception as e:
+            self.print_exception(e, 'News')

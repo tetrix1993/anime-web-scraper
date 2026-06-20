@@ -87,6 +87,7 @@ The premiere date for the anime listed here has not been announced.
 
 ### Summer 2026 Anime
 * [Heroine? Seijo? Iie, All Works Maid desu (Hokori)!](https://all-works-maid-anime.com/)
+* [Ryoumin 0-nin Start no Henkyou Ryoushu-sama](https://ryomin0-anime.com/)
 
 ### Spring 2026 Anime
 * [Aishiteru Game wo Owarasetai](https://www.aishiteru-game.com/)
