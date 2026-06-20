@@ -289,3 +289,31 @@ class TenbinDownload(Summer2026AnimeDownload, NewsTemplate):
                                     date_select='.c-post__date', title_select='.c-post__clamp', id_select='a',
                                     date_func=lambda x: x[0:4] + '.' + x[5:7] + '.' + x[8:10],
                                     next_page_select='a.next.page-numbers', paging_type=3, paging_suffix='?page=%s')
+
+
+# Tsuihou sareta Tensei Juukishi wa Game Chishiki de Musou suru
+class JukishiDownload(Summer2026AnimeDownload, NewsTemplate):
+    title = 'Tsuihou sareta Tensei Juukishi wa Game Chishiki de Musou suru'
+    keywords = ["jukishi", 'The Exiled Heavy Knight Knows How to Game the System']
+    website = 'https://sh-anime.shochiku.co.jp/jukishi-anime/'
+    twitter = 'jukishi_anime'
+    hashtags = ['転生重騎士']
+    folder_name = 'jukishi'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        pass
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.p-news__item',
+                                    date_select='.p-news__item__date', title_select='.p-news__item__ttl',
+                                    id_select=None, next_page_select='.c-pager__number', next_page_eval_index=-1,
+                                    next_page_eval_index_class='is-active')
