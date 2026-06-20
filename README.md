@@ -89,6 +89,7 @@ The premiere date for the anime listed here has not been announced.
 * [Heroine? Seijo? Iie, All Works Maid desu (Hokori)!](https://all-works-maid-anime.com/)
 * [Koko wa Ore ni Makasete Saki ni Ike to Itte kara 10-nen ga Tattara Densetsu ni Natteita.](https://kokoore-anime.com/)
 * [Lv999 no Murabito](https://lv999-anime.com/)
+* [Rakudai Kenja no Gakuin Musou](https://rakudai-anime.com/)
 * [Ryoumin 0-nin Start no Henkyou Ryoushu-sama](https://ryomin0-anime.com/)
 
 ### Spring 2026 Anime

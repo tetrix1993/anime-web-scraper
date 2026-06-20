@@ -1,4 +1,4 @@
-from anime.main_download import MainDownload, NewsTemplate, NewsTemplate5
+from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2, NewsTemplate5
 
 
 # Summer 2026 Anime
@@ -104,6 +104,32 @@ class Lv999MurabitoDownload(Summer2026AnimeDownload, NewsTemplate5):
 
     def download_news(self):
         self.download_template_news()
+
+
+# Rakudai Kenja no Gakuin Musou
+class RakudaiKenjaDownload(Summer2026AnimeDownload, NewsTemplate2):
+    title = 'Rakudai Kenja no Gakuin Musou'
+    keywords = ["Nidome no Tensei, S-Rank Cheat Majutsushi Boukenroku",
+                'From Overshadowed to Overpowered: Second Reincarnation of a Talentless Sage']
+    website = 'https://rakudai-anime.com/'
+    twitter = 'rakudai_anime'
+    hashtags = ['落第賢者']
+    folder_name = 'rakudaikenja'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        pass
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX)
 
 
 # Ryoumin 0-nin Start no Henkyou Ryoushu-sama
