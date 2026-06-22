@@ -87,6 +87,7 @@ The premiere date for the anime listed here has not been announced.
 
 ### Summer 2026 Anime
 * [Futsutsuka na Akujo dewa Gozaimasu ga: Suuguu Chouso Torikae Den](https://futsutsuka.net/)
+* [Grand Blue Season 3](https://www.grandblue-anime.com/)
 * [Heroine? Seijo? Iie, All Works Maid desu (Hokori)!](https://all-works-maid-anime.com/)
 * [Koko wa Ore ni Makasete Saki ni Ike to Itte kara 10-nen ga Tattara Densetsu ni Natteita.](https://kokoore-anime.com/)
 * [Lv999 no Murabito](https://lv999-anime.com/)
