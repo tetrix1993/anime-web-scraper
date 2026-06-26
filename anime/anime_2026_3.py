@@ -36,6 +36,50 @@ class FutsutsukaDownload(Summer2026AnimeDownload, NewsTemplate6):
         self.download_template_news('detail.html?d=')
 
 
+# Gaikotsu Kishi-sama, Tadaima Isekai e Odekakechuu II
+class GaikotsuKishi2Download(Summer2026AnimeDownload, NewsTemplate):
+    title = 'Gaikotsu Kishi-sama, Tadaima Isekai e Odekakechuu II'
+    keywords = [title, 'Skeleton Knight in Another World', 'Gaikotsukishi', '2nd']
+    website = 'https://skeleton-knight.com/'
+    twitter = 'gaikotsukishi02'
+    hashtags = '骸骨騎士様'
+    folder_name = 'gaikotsukishi2'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+
+    def download_episode_preview(self):
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story')
+            switch_div = soup.select('div.switch')
+            for s in switch_div:
+                h3_tag = s.select('h3.mds03')
+                if len(h3_tag) == 0 or h3_tag[0].text != 'SEASON02':
+                    continue
+                a_tags = s.select('ol.switch a[href]')
+                for a_tag in reversed(a_tags):
+                    try:
+                        episode = str(int(a_tag.text.strip().replace('第', '').replace('話', ''))).zfill(2)
+                    except:
+                        continue
+                    ep_soup = self.get_soup(a_tag['href'])
+                    if ep_soup is not None:
+                        images = ep_soup.select('#story_cont img[src]')
+                        self.image_list = []
+                        for i in range(len(images)):
+                            image_url = self.clear_resize_in_url(images[i]['src'])
+                            image_name = episode + '_' + str(i + 1)
+                            self.add_to_image_list(image_name, image_url)
+                        self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
+
+
 # Grand Blue S3
 class GrandBlue3Download(Summer2026AnimeDownload, NewsTemplate2):
     title = 'Grand Blue Season 3'
