@@ -1399,6 +1399,49 @@ class MainDownload:
                 yt_image_url = f'https://img.youtube.com/vi/{yt_id}/sddefault.jpg'
                 self.download_image(yt_image_url, f'{yt_folder}/{yt_image_name}')
 
+    def retrieve_nuxt_keys(self, page_url, slug):
+        uid = ''
+        project_id = ''
+        schema_key = ''
+
+        soup = self.get_soup(page_url)
+        nuxt_ = json.loads(soup.select('#__NUXT_DATA__')[0].text)
+        root = nuxt_[1]
+        if 'pinia' not in root:
+            return
+        pinia = nuxt_[root['pinia']]
+        if isinstance(pinia, list) and len(pinia) == 2 and pinia[0] == 'Reactive' and isinstance(pinia[1], int):
+            pinia_ = nuxt_[pinia[1]]
+        else:
+            return
+        if 'productStore' not in pinia_:
+            return
+        product_store = nuxt_[pinia_['productStore']]
+        if 'product' not in product_store:
+            return
+        product = nuxt_[product_store['product']]
+        if 'publishedUid' in product:
+            uid = nuxt_[product['publishedUid']]
+        if 'resources' in product:
+            resources = nuxt_[product['resources']]
+            if 'cmsProjectId' in resources:
+                project_id = nuxt_[resources['cmsProjectId']]
+        if 'pages' in product:
+            pages = nuxt_[product['pages']]
+            for pageidx in pages:
+                page = nuxt_[pageidx]
+                if 'cmsRequest' not in page or 'id' not in page:
+                    continue
+                page_id = nuxt_[page['id']]
+                if page_id != slug:
+                    continue
+                cms_request = nuxt_[page['cmsRequest']]
+                if 'schemaKey' not in cms_request:
+                    continue
+                schema_key = nuxt_[cms_request['schemaKey']]
+                break
+        return uid, project_id, schema_key
+
     # Match filter
     def match(self, s_filter):
         if not isinstance(s_filter, SearchFilter):
@@ -1755,48 +1798,8 @@ class NewsTemplate5:
 
         try:
             api_url_prefix = 'https://api.cms.studiodesignapp.com/v2/search?q='
-            uid = ''
-            project_id = ''
-            schema_key = ''
-
             news_prefix = self.PAGE_PREFIX + 'topics'
-
-            soup = self.get_soup(news_prefix)
-            nuxt_ = json.loads(soup.select('#__NUXT_DATA__')[0].text)
-            root = nuxt_[1]
-            if 'pinia' not in root:
-                return
-            pinia = nuxt_[root['pinia']]
-            if isinstance(pinia, list) and len(pinia) == 2 and pinia[0] == 'Reactive' and isinstance(pinia[1], int):
-                pinia_ = nuxt_[pinia[1]]
-            else:
-                return
-            if 'productStore' not in pinia_:
-                return
-            product_store = nuxt_[pinia_['productStore']]
-            if 'product' not in product_store:
-                return
-            product = nuxt_[product_store['product']]
-            if 'publishedUid' in product:
-                uid = nuxt_[product['publishedUid']]
-            if 'resources' in product:
-                resources = nuxt_[product['resources']]
-                if 'cmsProjectId' in resources:
-                    project_id = nuxt_[resources['cmsProjectId']]
-            if 'pages' in product:
-                pages = nuxt_[product['pages']]
-                for pageidx in pages:
-                    page = nuxt_[pageidx]
-                    if 'cmsRequest' not in page or 'id' not in page:
-                        continue
-                    page_id = nuxt_[page['id']]
-                    if page_id != 'topics/:slug':
-                        continue
-                    cms_request = nuxt_[page['cmsRequest']]
-                    if 'schemaKey' not in cms_request:
-                        continue
-                    schema_key = nuxt_[cms_request['schemaKey']]
-                    break
+            uid, project_id, schema_key = self.retrieve_nuxt_keys(news_prefix, 'topics/:slug')
 
             query = '{"uid":"' + uid + '","project_id":"' + project_id + '",' +\
                 '"schema_key":"' + schema_key + '","orders":"-publishedAt","offset":0,"limit":14}'
