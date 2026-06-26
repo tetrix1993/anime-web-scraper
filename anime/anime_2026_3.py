@@ -255,7 +255,7 @@ class Lv999MurabitoDownload(Summer2026AnimeDownload, NewsTemplate5):
                     if episode is None or img_num is None or len(image_url) == 0:
                         continue
                     image_name = episode + '_' + str(img_num)
-                    self.add_to_image_list(image_name, image_url)
+                    self.add_to_image_list(image_name, image_url, to_jpg=True)
                 except:
                     continue
             self.download_image_list(self.base_folder)
