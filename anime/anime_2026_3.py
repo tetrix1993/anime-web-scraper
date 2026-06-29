@@ -181,6 +181,53 @@ class AllWorksMaidDownload(Summer2026AnimeDownload, NewsTemplate):
                                     id_select='a', next_page_select='.next.page-numbers', paging_type=0)
 
 
+# Katainaka no Ossan, Kensei ni Naru II
+class OssanKensei2Download(Summer2026AnimeDownload, NewsTemplate2):
+    title = 'Katainaka no Ossan, Kensei ni Naru II'
+    keywords = [title, 'From Old Country Bumpkin to Master Swordsman Season 2', '2nd']
+    website = 'https://ossan-kensei.com/'
+    twitter = 'ossan_kensei'
+    hashtags = 'おっさん剣聖'
+    folder_name = 'ossankensei2'
+
+    PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+
+    def download_episode_preview(self):
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/01.html')
+            stories = soup.select('table[summary="List_Type01"] a[href]')
+            for story in stories:
+                story_url = self.PAGE_PREFIX + story['href'].replace('../', '')
+                try:
+                    episode = str(int(story.text.replace('#', ''))).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                if episode == '01':
+                    ep_soup = soup
+                else:
+                    ep_soup = self.get_soup(story_url)
+                if ep_soup is not None:
+                    images = ep_soup.select('.ph img[src]')
+                    self.image_list = []
+                    for i in range(len(images)):
+                        image_url = self.PAGE_PREFIX + images[i]['src'].split('?')[0]
+                        image_url = self.remove_string(image_url, ['../', 'sn_'])
+                        image_name = episode + '_' + str(i + 1)
+                        self.add_to_image_list(image_name, image_url, to_jpg=True)
+                    self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
+
+
 # Koko wa Ore ni Makasete Saki ni Ike to Itte kara 10-nen ga Tattara Densetsu ni Natteita.
 class KokooreDownload(Summer2026AnimeDownload, NewsTemplate5):
     title = 'Koko wa Ore ni Makasete Saki ni Ike to Itte kara 10-nen ga Tattara Densetsu ni Natteita.'
