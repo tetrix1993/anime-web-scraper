@@ -278,7 +278,6 @@ class Honzuki4Download(Spring2026AnimeDownload, NewsTemplate):
     folder_name = 'honzuki4'
 
     PAGE_PREFIX = website
-    FINAL_EPISODE = 12
 
     def __init__(self):
         super().__init__()
@@ -693,7 +692,7 @@ class NekomajoDownload(Spring2026AnimeDownload, NewsTemplate):
     folder_name = 'nekomajo'
 
     PAGE_PREFIX = website
-    FINAL_EPISODE = 12
+    FINAL_EPISODE = 24
     IMAGES_PER_EPISODE = 6
 
     def __init__(self):
