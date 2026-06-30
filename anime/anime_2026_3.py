@@ -247,7 +247,42 @@ class KokooreDownload(Summer2026AnimeDownload, NewsTemplate5):
         self.download_news()
 
     def download_episode_preview(self):
-        pass
+        try:
+            api_url_prefix = 'https://api.cms.studiodesignapp.com/v2/search?q='
+            uid, project_id, schema_key = self.retrieve_nuxt_keys(self.PAGE_PREFIX + 'story', 'story/:slug')
+            query = '{"uid":"' + uid + '","project_id":"' + project_id + '",' + \
+                    '"schema_key":"' + schema_key + '","orders":"-publishedAt","offset":0,"limit":32}'
+            api_url = api_url_prefix + quote(base64.b64encode(query.encode('utf-8')).decode("utf-8"))
+            json_obj = self.get_json(api_url)
+            self.image_list = []
+            for item in json_obj:
+                try:
+                    fields = item['document']['fields']['default']['mapValue']['fields']
+                    image_url = fields['cover']['stringValue']
+                    title = fields['title']['stringValue']
+                    slug = fields['slug']['stringValue']
+                    episode = None
+                    img_num = None
+                    if slug.lower().startswith('ep') and slug[2:].isnumeric():
+                        episode = str(int(slug[2:])).zfill(2)
+                        img_num = 1
+                    if title.lower().startswith('ep') and '-' in title:
+                        split_ = title.split('-')
+                        if len(split_) != 2:
+                            continue
+                        if split_[0][2:].isnumeric():
+                            episode = str(int(split_[0][2:])).zfill(2)
+                        if split_[1].isnumeric():
+                            img_num = int(split_[1])
+                    if episode is None or img_num is None or len(image_url) == 0:
+                        continue
+                    image_name = episode + '_' + str(img_num)
+                    self.add_to_image_list(image_name, image_url, to_jpg=True)
+                except:
+                    continue
+            self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news()
