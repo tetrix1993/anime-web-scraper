@@ -559,7 +559,24 @@ class JukishiDownload(Summer2026AnimeDownload, NewsTemplate):
         self.download_news()
 
     def download_episode_preview(self):
-        pass
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX)
+            stories = soup.select('.story_panel[data-chapter]')
+            for story in stories:
+                try:
+                    episode = str(int(story['data-chapter'])).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                images = story.select('.swiper-slide img[src]')
+                for i in range(len(images)):
+                    image_name = episode + '_' + str(i + 1)
+                    image_url = self.PAGE_PREFIX + images[i]['src']
+                    self.add_to_image_list(image_name, image_url, to_jpg=True)
+            self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.p-news__item',
