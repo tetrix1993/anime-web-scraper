@@ -13,8 +13,8 @@ def run():
     # for subclass in Summer2025AnimeDownload.__subclasses__():
     #     if subclass.enabled and subclass.__name__ != FutariSoloCampDownload.__name__:
     #         downloads.append(subclass())
-    downloads += [YushanoKuzuDownload()]
-    subclasses = Summer2026AnimeDownload.__subclasses__() + Spring2026AnimeDownload.__subclasses__()
+    downloads += [Honzuki4Download(), NekomajoDownload(), LiarGameDownload(), ReZero4Download()]
+    subclasses = Summer2026AnimeDownload.__subclasses__()
     for subclass in subclasses:
         if subclass.enabled:
             downloads.append(subclass())
