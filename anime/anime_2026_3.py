@@ -16,7 +16,7 @@ class Summer2026AnimeDownload(MainDownload):
 # Futsutsuka na Akujo dewa Gozaimasu ga: Suuguu Chouso Torikae Den
 class FutsutsukaDownload(Summer2026AnimeDownload, NewsTemplate6):
     title = 'Futsutsuka na Akujo dewa Gozaimasu ga: Suuguu Chouso Torikae Den'
-    keywords = ['Though I Am an Inept Villainess']
+    keywords = [title, 'Though I Am an Inept Villainess']
     website = 'https://futsutsuka.net/'
     twitter = 'futsutsuka_PR'
     hashtags = ['ふつつかな悪女']
@@ -139,7 +139,7 @@ class GrandBlue3Download(Summer2026AnimeDownload, NewsTemplate2):
 # Heroine? Seijo? Iie, All Works Maid desu (Hokori)!
 class AllWorksMaidDownload(Summer2026AnimeDownload, NewsTemplate):
     title = 'Heroine? Seijo? Iie, All Works Maid desu (Hokori)!'
-    keywords = ["Heroine? Saint? No, I'm an All-Works Maid (And Proud of It)!"]
+    keywords = [title, "Heroine? Saint? No, I'm an All-Works Maid (And Proud of It)!"]
     website = 'https://all-works-maid-anime.com/'
     twitter = 'allworks_maid'
     hashtags = 'オールワークスメイド'
@@ -231,7 +231,7 @@ class OssanKensei2Download(Summer2026AnimeDownload, NewsTemplate2):
 # Koko wa Ore ni Makasete Saki ni Ike to Itte kara 10-nen ga Tattara Densetsu ni Natteita.
 class KokooreDownload(Summer2026AnimeDownload, NewsTemplate5):
     title = 'Koko wa Ore ni Makasete Saki ni Ike to Itte kara 10-nen ga Tattara Densetsu ni Natteita.'
-    keywords = ["kokoore", 'I Became a Legend After My 10 Year-Long Last Stand.']
+    keywords = [title, "kokoore", 'I Became a Legend After My 10 Year-Long Last Stand.']
     website = 'https://kokoore-anime.com/'
     twitter = 'kokoore_anime'
     hashtags = ['ここ俺アニメ']
@@ -291,7 +291,7 @@ class KokooreDownload(Summer2026AnimeDownload, NewsTemplate5):
 # Lv999 no Murabito
 class Lv999MurabitoDownload(Summer2026AnimeDownload, NewsTemplate5):
     title = 'Lv999 no Murabito'
-    keywords = ["The Villager of Level 999"]
+    keywords = [title, "The Villager of Level 999"]
     website = 'https://lv999-anime.com/'
     twitter = 'lv999_anime'
     hashtags = ['LV999の村人']
@@ -351,7 +351,7 @@ class Lv999MurabitoDownload(Summer2026AnimeDownload, NewsTemplate5):
 # Rakudai Kenja no Gakuin Musou
 class RakudaiKenjaDownload(Summer2026AnimeDownload, NewsTemplate2):
     title = 'Rakudai Kenja no Gakuin Musou'
-    keywords = ["Nidome no Tensei, S-Rank Cheat Majutsushi Boukenroku",
+    keywords = [title, "Nidome no Tensei, S-Rank Cheat Majutsushi Boukenroku",
                 'From Overshadowed to Overpowered: Second Reincarnation of a Talentless Sage']
     website = 'https://rakudai-anime.com/'
     twitter = 'rakudai_anime'
@@ -409,7 +409,7 @@ class RakudaiKenjaDownload(Summer2026AnimeDownload, NewsTemplate2):
 # Ryoumin 0-nin Start no Henkyou Ryoushu-sama
 class Ryomin0Download(Summer2026AnimeDownload, NewsTemplate6):
     title = 'Ryoumin 0-nin Start no Henkyou Ryoushu-sama'
-    keywords = ["ryomin0", 'The Frontier Lord Begins with Zero Subjects']
+    keywords = [title, "ryomin0", 'The Frontier Lord Begins with Zero Subjects']
     website = 'https://ryomin0-anime.com/'
     twitter = 'ryomin0_anime'
     hashtags = ['ryomin0anime', 'アニメ領民０人']
@@ -434,7 +434,7 @@ class Ryomin0Download(Summer2026AnimeDownload, NewsTemplate6):
 # Saijo no Osewa
 class SaijonoOsewaDownload(Summer2026AnimeDownload, NewsTemplate):
     title = 'Saijo no Osewa'
-    keywords = ["Rich Girl Caretaker"]
+    keywords = [title, "Rich Girl Caretaker"]
     website = 'https://saijonoosewa-anime.com/'
     twitter = 'saijonoosewa_pr'
     hashtags = ['才女のお世話']
@@ -462,7 +462,7 @@ class SaijonoOsewaDownload(Summer2026AnimeDownload, NewsTemplate):
 # Saikyou Degarashi Ouji no Anyaku Teii Arasoi
 class DegarashiOujiDownload(Summer2026AnimeDownload, NewsTemplate):
     title = 'Saikyou Degarashi Ouji no Anyaku Teii Arasoi'
-    keywords = ["The Insipid Prince's Furtive Grab for The Throne"]
+    keywords = [title, "The Insipid Prince's Furtive Grab for The Throne"]
     website = 'https://degarashiouji.com/'
     twitter = 'sn_degarashi'
     hashtags = ['出涸らし', '出涸らし皇子']
@@ -488,13 +488,15 @@ class DegarashiOujiDownload(Summer2026AnimeDownload, NewsTemplate):
 # Sekai Saikyou no Kouei
 class RearguardDownload(Summer2026AnimeDownload, NewsTemplate):
     title = 'Sekai Saikyou no Kouei'
-    keywords = ["The World's Strongest Rearguard"]
+    keywords = [title, "The World's Strongest Rearguard"]
     website = 'https://strongestrearguard-anime.com/'
     twitter = 'Rearguard_PR'
     hashtags = ['世界最強の後衛']
     folder_name = 'rearguard'
 
     PAGE_PREFIX = website
+    IMAGES_PER_EPISODE = 6
+    FINAL_EPISODE = 12
 
     def __init__(self):
         super().__init__()
@@ -504,7 +506,23 @@ class RearguardDownload(Summer2026AnimeDownload, NewsTemplate):
         self.download_news()
 
     def download_episode_preview(self):
-        pass
+        template = self.PAGE_PREFIX + 'assets/images/story/%s_%s.jpg'
+        try:
+            stop = False
+            for i in range(self.FINAL_EPISODE):
+                episode = str(i + 1).zfill(2)
+                if self.is_image_exists(episode + '_' + str(self.IMAGES_PER_EPISODE)):
+                    continue
+                for j in range(self.IMAGES_PER_EPISODE):
+                    image_url = template % (episode, str(j + 1).zfill(2))
+                    image_name = episode + '_' + str(j + 1)
+                    if self.download_image(image_url, self.base_folder + '/' + image_name, to_jpg=True) == -1:
+                        stop = True
+                        break
+                if stop:
+                    break
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article', date_select='time',
@@ -515,7 +533,7 @@ class RearguardDownload(Summer2026AnimeDownload, NewsTemplate):
 # Tenkou-saki no Seiso Karen na Bishoujo ga, Mukashi Danshi to Omotte Issho ni Asonda Osananajimi Datta Ken
 class TenbinDownload(Summer2026AnimeDownload, NewsTemplate):
     title = 'Tenkou-saki no Seiso Karen na Bishoujo ga, Mukashi Danshi to Omotte Issho ni Asonda Osananajimi Datta Ken'
-    keywords = ["tenbin", 'Oh Boy, Was I Wrong About Her']
+    keywords = [title, "tenbin", 'Oh Boy, Was I Wrong About Her']
     website = 'https://tenbin-anime.asmik-ace.co.jp/'
     twitter = 'tenbin_anime'
     hashtags = ['てんびん']
@@ -543,7 +561,7 @@ class TenbinDownload(Summer2026AnimeDownload, NewsTemplate):
 # Tsuihou sareta Tensei Juukishi wa Game Chishiki de Musou suru
 class JukishiDownload(Summer2026AnimeDownload, NewsTemplate):
     title = 'Tsuihou sareta Tensei Juukishi wa Game Chishiki de Musou suru'
-    keywords = ["jukishi", 'The Exiled Heavy Knight Knows How to Game the System']
+    keywords = [title, "jukishi", 'The Exiled Heavy Knight Knows How to Game the System']
     website = 'https://sh-anime.shochiku.co.jp/jukishi-anime/'
     twitter = 'jukishi_anime'
     hashtags = ['転生重騎士']
