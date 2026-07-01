@@ -440,6 +440,44 @@ class Lv999MurabitoDownload(Summer2026AnimeDownload, NewsTemplate5):
         self.download_template_news()
 
 
+# Mushoku Tensei III: Isekai Ittara Honki Dasu
+class MushokuTensei3Download(Summer2026AnimeDownload, NewsTemplate):
+    title = "Mushoku Tensei: Isekai Ittara Honki Dasu III"
+    keywords = [title, 'Jobless Reincarnation', '3rd']
+    website = 'https://mushokutensei.jp/'
+    twitter = 'mushokutensei_A'
+    hashtags = ['無職転生', 'MushokuTensei']
+    folder_name = 'mushokutensei3'
+
+    PAGE_PREFIX = website
+    FINAL_EPISODE = 24
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+
+    def download_episode_preview(self):
+        try:
+            for i in range(self.FINAL_EPISODE):
+                episode = str(i + 1).zfill(2)
+                if not self.is_image_exists(episode + '_1'):
+                    ep_soup = self.get_soup(self.PAGE_PREFIX + f'story/3-{episode}/', impersonate=True)
+                    if ep_soup is not None:
+                        self.image_list = []
+                        images = ep_soup.select('.storycontents_subimg_img[data-imgload]')
+                        if len(images) == 0:
+                            break
+                        for j in range(len(images)):
+                            image_url = images[j]['data-imgload']
+                            image_name = episode + '_' + str(j + 1)
+                            self.add_to_image_list(image_name, image_url)
+                        self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
+
+
 # Rakudai Kenja no Gakuin Musou
 class RakudaiKenjaDownload(Summer2026AnimeDownload, NewsTemplate2):
     title = 'Rakudai Kenja no Gakuin Musou'

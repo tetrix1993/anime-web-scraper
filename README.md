@@ -94,6 +94,7 @@ The premiere date for the anime listed here has not been announced.
 * [Katainaka no Ossan, Kensei ni Naru II](https://ossan-kensei.com/)
 * [Koko wa Ore ni Makasete Saki ni Ike to Itte kara 10-nen ga Tattara Densetsu ni Natteita.](https://kokoore-anime.com/)
 * [Lv999 no Murabito](https://lv999-anime.com/)
+* [Mushoku Tensei III: Isekai Ittara Honki Dasu](https://mushokutensei.jp)
 * [Rakudai Kenja no Gakuin Musou](https://rakudai-anime.com/)
 * [Ryoumin 0-nin Start no Henkyou Ryoushu-sama](https://ryomin0-anime.com/)
 * [Saijo no Osewa](https://saijonoosewa-anime.com/)
