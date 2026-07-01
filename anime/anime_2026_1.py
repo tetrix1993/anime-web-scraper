@@ -254,7 +254,7 @@ class HellModeDownload(Winter2026AnimeDownload, NewsTemplate):
     def download_episode_preview(self):
         try:
             soup = self.get_soup(self.PAGE_PREFIX)
-            stories = soup.select('.story-box')
+            stories = soup.select('.season-box.first .story-box')
             for story in stories:
                 try:
                     episode = ''
@@ -292,6 +292,8 @@ class HellModeDownload(Winter2026AnimeDownload, NewsTemplate):
         current_date = datetime.now() + timedelta(hours=1)
         year = current_date.strftime('%Y')
         month = current_date.strftime('%m')
+        if int(year) > 2026 or (int(year) == 2026 and int(month) > 3):
+            return
         is_successful = False
         valid_urls = []
         for j in range(self.IMAGES_PER_EPISODE):
