@@ -459,7 +459,6 @@ class Magilumiere2Download(Summer2026AnimeDownload, NewsTemplate4):
     def run(self):
         json_obj = self.download_episode_preview()
         self.download_news(json_obj)
-        self.download_episode_preview_guess()
 
     def download_episode_preview(self):
         json_obj = None
@@ -482,7 +481,7 @@ class Magilumiere2Download(Summer2026AnimeDownload, NewsTemplate4):
             return
 
         folder = self.create_custom_directory('guess')
-        template = self.PAGE_PREFIX + 'wp/wp-content/uploads/%s/%s/%s.jpg'
+        template = self.PAGE_PREFIX + '2nd/wp-content/uploads/%s/%s/%s.png'
         current_date = datetime.now() + timedelta(hours=1)
         year = current_date.strftime('%Y')
         month = current_date.strftime('%m')
@@ -496,7 +495,7 @@ class Magilumiere2Download(Summer2026AnimeDownload, NewsTemplate4):
                 else:
                     append = '-' + str(k)
                 image_folder = folder + '/' + year + '/' + month
-                image_name = str(j + 1).zfill(2) + append
+                image_name = str(j + 1) + append
                 if not self.is_image_exists(image_name, image_folder):
                     image_url = template % (year, month, image_name)
                     if self.is_valid_url(image_url, is_image=True):
@@ -654,6 +653,8 @@ class SaijonoOsewaDownload(Summer2026AnimeDownload, NewsTemplate):
     folder_name = 'saijonoosewa'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 6
 
     def __init__(self):
         super().__init__()
@@ -663,13 +664,83 @@ class SaijonoOsewaDownload(Summer2026AnimeDownload, NewsTemplate):
         self.download_news()
 
     def download_episode_preview(self):
-        pass
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'episodes/')
+            stories = soup.select('.episodes--nav__links a[href]')
+            for story in stories:
+                try:
+                    episode = ''
+                    ep_num = story.text
+                    for a in reversed(ep_num):
+                        if a.isnumeric():
+                            episode = a + episode
+                    if len(episode) == 0:
+                        continue
+                    episode = str(int(episode)).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                ep_soup = self.get_soup(story['href'])
+                if ep_soup is None:
+                    continue
+                images = ep_soup.select('.episodes--contents__carousel img[src]')
+                self.image_list = []
+                for i in range(len(images)):
+                    image_url = images[i]['src']
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url, to_jpg=True)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article', date_select='time',
                                     title_select='.info--txt__ttl', id_select='a', paging_type=0,
                                     next_page_select='.pagination li', next_page_eval_index=-1,
                                     next_page_eval_index_class='is__current')
+
+    def download_episode_preview_guess(self, print_invalid=False, download_valid=True):
+        if self.is_image_exists(str(self.FINAL_EPISODE).zfill(2) + '_' + str(self.IMAGES_PER_EPISODE)):
+            return
+
+        folder = self.create_custom_directory('guess')
+        template = self.PAGE_PREFIX + 'wp/wp-content/uploads/%s/%s/%s.jpg'
+        current_date = datetime.now() + timedelta(hours=1)
+        year = current_date.strftime('%Y')
+        month = current_date.strftime('%m')
+        is_successful = False
+        valid_urls = []
+        for j in range(self.IMAGES_PER_EPISODE):
+            k = 0
+            while k < 20:
+                if k == 0:
+                    append = ''
+                else:
+                    append = '-' + str(k)
+                image_folder = folder + '/' + year + '/' + month
+                image_name = str(j + 1).zfill(2) + append
+                if not self.is_image_exists(image_name, image_folder):
+                    image_url = template % (year, month, image_name)
+                    if self.is_valid_url(image_url, is_image=True):
+                        print('VALID - ' + image_url)
+                        is_successful = True
+                        valid_urls.append({'name': image_name, 'url': image_url, 'folder': image_folder})
+                    else:
+                        if print_invalid:
+                            print('INVALID - ' + image_url)
+                        break
+                k += 1
+        if download_valid and len(valid_urls) > 0:
+            for valid_url in valid_urls:
+                image_name = valid_url['name']
+                image_folder = valid_url['folder']
+                if not os.path.exists(image_folder):
+                    os.makedirs(image_folder)
+                self.download_image(valid_url['url'], image_folder + '/' + image_name, to_jpg=True)
+        if is_successful:
+            print(self.__class__.__name__ + ' - Guessed correctly!')
+        return is_successful
 
 
 # Saikyou Degarashi Ouji no Anyaku Teii Arasoi
