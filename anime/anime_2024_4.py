@@ -425,7 +425,7 @@ class BocchiKouryakuDownload(Fall2024AnimeDownload, NewsTemplate):
 class MagilumiereDownload(Fall2024AnimeDownload, NewsTemplate4):
     title = 'Kabushikigaisha Magi-Lumière'
     keywords = [title, 'Magilumiere Magical Girls Inc.']
-    website = 'https://magilumiere-pr.com/'
+    website = 'https://magilumiere-pr.com/1st/'
     twitter = 'MagilumiereLtd'
     hashtags = 'マジルミエ'
     folder_name = 'magilumiere'
