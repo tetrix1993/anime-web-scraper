@@ -614,6 +614,8 @@ class RakudaiKenjaDownload(Summer2026AnimeDownload, NewsTemplate2):
     folder_name = 'rakudaikenja'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 6
 
     def __init__(self):
         super().__init__()
@@ -659,6 +661,10 @@ class RakudaiKenjaDownload(Summer2026AnimeDownload, NewsTemplate2):
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX)
+
+    def download_episode_preview_guess(self, print_url=False):
+        self.download_guess_core_sys(self.PAGE_PREFIX, self.FINAL_EPISODE, self.IMAGES_PER_EPISODE, 4, 21, 29, 4,
+                                     self.IMAGES_PER_EPISODE, print_url)
 
 
 # Ryoumin 0-nin Start no Henkyou Ryoushu-sama
