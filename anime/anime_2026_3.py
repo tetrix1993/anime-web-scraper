@@ -320,6 +320,49 @@ class OssanKensei2Download(Summer2026AnimeDownload, NewsTemplate2):
             self.print_exception(e)
 
 
+# Kimi no Koto ga Daidaidaidaidaisuki na 100-nin no Kanojo 3rd Season
+class Hyakkano3Download(Summer2026AnimeDownload, NewsTemplate):
+    title = 'Kimi no Koto ga Daidaidaidaidaisuki na 100-nin no Kanojo 3rd Season'
+    keywords = [title, 'The 100 Girlfriends Who Really, Really, Really, Really, Really Love You', '3rd']
+    website = 'https://hyakkano.com/'
+    twitter = 'hyakkano_anime'
+    hashtags = '100カノ'
+    folder_name = 'hyakkano3'
+
+    PAGE_PREFIX = website
+    FIRST_EPISODE = 25
+    FINAL_EPISODE = 36
+    IMAGES_PER_EPISODE = 6
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/season3/')
+            stories = soup.select('.story-Wrapper[id]')
+            for story in stories:
+                try:
+                    episode = str(int(story['id'].replace('ep', '')) + self.FIRST_EPISODE - 1).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                self.image_list = []
+                images = story.select('.swiper-slide img[src]')
+                for i in range(len(images)):
+                    image_url = self.clear_resize_in_url(images[i]['src'])
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url, to_jpg=True)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
+
+
 # Koko wa Ore ni Makasete Saki ni Ike to Itte kara 10-nen ga Tattara Densetsu ni Natteita.
 class KokooreDownload(Summer2026AnimeDownload, NewsTemplate5):
     title = 'Koko wa Ore ni Makasete Saki ni Ike to Itte kara 10-nen ga Tattara Densetsu ni Natteita.'

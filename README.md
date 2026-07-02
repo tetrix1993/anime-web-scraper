@@ -92,6 +92,7 @@ The premiere date for the anime listed here has not been announced.
 * [Hell Mode Season 2](https://hellmode-anime.com/)
 * [Heroine? Seijo? Iie, All Works Maid desu (Hokori)!](https://all-works-maid-anime.com/)
 * [Katainaka no Ossan, Kensei ni Naru II](https://ossan-kensei.com/)
+* [Kimi no Koto ga Daidaidaidaidaisuki na 100-nin no Kanojo 3rd Season](https://hyakkano.com/)
 * [Koko wa Ore ni Makasete Saki ni Ike to Itte kara 10-nen ga Tattara Densetsu ni Natteita.](https://kokoore-anime.com/)
 * [Lv999 no Murabito](https://lv999-anime.com/)
 * [Kabushikigaisha Magi-Lumière 2nd Season](https://magilumiere-pr.com/)
