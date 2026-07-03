@@ -677,6 +677,8 @@ class Ryomin0Download(Summer2026AnimeDownload, NewsTemplate6):
     folder_name = 'ryomin0'
 
     PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 8
 
     def __init__(self):
         super().__init__()
@@ -686,7 +688,23 @@ class Ryomin0Download(Summer2026AnimeDownload, NewsTemplate6):
         self.download_news()
 
     def download_episode_preview(self):
-        pass
+        template = self.PAGE_PREFIX + 'story/img/%s/%s.jpg'
+        try:
+            stop = False
+            for i in range(self.FINAL_EPISODE):
+                episode = str(i + 1).zfill(2)
+                if self.is_image_exists(episode + '_' + str(self.IMAGES_PER_EPISODE)):
+                    continue
+                for j in range(self.IMAGES_PER_EPISODE):
+                    image_url = template % (episode, str(j + 1))
+                    image_name = episode + '_' + str(j + 1)
+                    if self.download_image(image_url, self.base_folder + '/' + image_name, to_jpg=True) == -1:
+                        stop = True
+                        break
+                if stop:
+                    break
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news('detail.html?d=')
