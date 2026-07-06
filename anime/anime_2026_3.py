@@ -603,6 +603,57 @@ class MushokuTensei3Download(Summer2026AnimeDownload, NewsTemplate):
             self.print_exception(e)
 
 
+# Otome Game Sekai wa Mob ni Kibishii Sekai desu 2
+class Mobseka2Download(Summer2026AnimeDownload, NewsTemplate):
+    title = 'Otome Game Sekai wa Mob ni Kibishii Sekai desu 2'
+    keywords = [title, 'Trapped in a Dating Sim: The World of Otome Games is Tough for Mobs', 'Mobseka', 'Mobuseka',
+                '2nd']
+    website = 'https://mobseka.com/'
+    twitter = 'mobseka_anime'
+    hashtags = ['モブせか', 'mobseka', 'mobuseka']
+    folder_name = 'mobseka2'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+
+    def download_episode_preview(self):
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            stories = soup.select('section.story__episode')
+            for story in stories:
+                try:
+                    episode = ''
+                    ep_num = story.select('.story__episode-num')[0].text
+                    for a in ep_num:
+                        if a.isnumeric():
+                            episode += a
+                    if len(episode) == 0:
+                        continue
+                    episode = str(int(episode)).zfill(2)
+                except:
+                    continue
+                self.image_list = []
+                images = story.select('.story__episode-images .story__episode-thumb img[src]')
+                for i in range(len(images)):
+                    image_url = images[i]['src']
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url, to_jpg=True)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-item',
+                                    date_select='.news-item__date', title_select='.news-item__title',
+                                    id_select='a', paging_type=0, next_page_select='.news-pagination__list li',
+                                    next_page_eval_index=-1, next_page_eval_index_class='is-current')
+
+
 # Rakudai Kenja no Gakuin Musou
 class RakudaiKenjaDownload(Summer2026AnimeDownload, NewsTemplate2):
     title = 'Rakudai Kenja no Gakuin Musou'

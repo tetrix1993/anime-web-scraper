@@ -1678,7 +1678,7 @@ class ReimeikiDownload(Spring2022AnimeDownload, NewsTemplate):
 class MobsekaDownload(Spring2022AnimeDownload, NewsTemplate):
     title = 'Otome Game Sekai wa Mob ni Kibishii Sekai desu'
     keywords = [title, 'Trapped in a Dating Sim: The World of Otome Games is Tough for Mobs', 'Mobseka', 'Mobuseka']
-    website = 'https://mobseka.com/'
+    website = 'https://mobseka.com/1st/'
     twitter = 'mobseka_anime'
     hashtags = ['モブせか', 'mobseka', 'mobuseka']
     folder_name = 'mobseka'
