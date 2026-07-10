@@ -1090,3 +1090,43 @@ class JukishiDownload(Summer2026AnimeDownload, NewsTemplate):
                                     date_select='.p-news__item__date', title_select='.p-news__item__ttl',
                                     id_select=None, next_page_select='.c-pager__number', next_page_eval_index=-1,
                                     next_page_eval_index_class='is-active')
+
+
+# Youjo Senki II
+class YoujoSenki2Download(Summer2026AnimeDownload, NewsTemplate6):
+    title = 'Youjo Senki II'
+    keywords = [title, "Saga of Tanya the Evil II"]
+    website = 'https://youjo-senki.jp/'
+    twitter = 'youjosenki'
+    hashtags = ['幼女戦記', 'youjosenki']
+    folder_name = 'youjosenki2'
+
+    PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 6
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        template = self.PAGE_PREFIX + 'assets/story/%s/%s.webp'
+        try:
+            stop = False
+            for i in range(self.FINAL_EPISODE):
+                episode = str(i + 1).zfill(2)
+                if self.is_image_exists(episode + '_' + str(self.IMAGES_PER_EPISODE)):
+                    continue
+                for j in range(self.IMAGES_PER_EPISODE):
+                    image_url = template % (str(i + 1), str(j + 1))
+                    image_name = episode + '_' + str(j + 1)
+                    if self.download_image(image_url, self.base_folder + '/' + image_name, to_jpg=True) == -1:
+                        stop = True
+                        break
+                if stop:
+                    break
+        except Exception as e:
+            self.print_exception(e)
