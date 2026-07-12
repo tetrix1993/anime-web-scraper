@@ -743,17 +743,20 @@ class NekomajoDownload(Spring2026AnimeDownload, NewsTemplate):
             if self.is_image_exists(episode + '_1'):
                 continue
             is_success = False
-            for j in range(self.IMAGES_PER_EPISODE):
+            img_count = 0
+            for j in range(200):
                 image_url = template % (year, month, str(i + 1), str(j + 1).zfill(4))
-                image_name = episode + '_' + str(j + 1)
+                image_name = episode + '_' + str(img_count + 1)
                 if self.is_valid_url(image_url, is_image=True):
                     print('VALID - ' + image_url)
                     is_successful = True
                     is_success = True
                     valid_urls.append({'name': image_name, 'url': image_url})
+                    img_count += 1
                 else:
                     if print_invalid:
                         print('INVALID - ' + image_url)
+                if img_count == self.IMAGES_PER_EPISODE or (img_count == 0 and j == 50):
                     break
             if not is_success:
                 break
