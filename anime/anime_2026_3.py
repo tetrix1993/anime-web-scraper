@@ -156,7 +156,52 @@ class GrandBlue3Download(Summer2026AnimeDownload, NewsTemplate2):
             self.print_exception(e)
 
 
-# Hell Mode
+# Hanaori-san wa Tensei shitemo Kenka ga Shitai
+class HanaorisanDownload(Summer2026AnimeDownload, NewsTemplate):
+    title = 'Hanaori-san wa Tensei shitemo Kenka ga Shitai'
+    keywords = [title, 'Hanaori-san Still Wants to Fight in the Next Life']
+    website = 'https://hanaorisan-anime.com/'
+    twitter = 'hanaori_anime'
+    hashtags = ['アニメ花織さん']
+    folder_name = 'hanaorisan'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/')
+            stories = soup.select('div[data-episode-content]')
+            for story in stories:
+                try:
+                    episode = str(int(story['data-episode-content'])).zfill(2)
+                except:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                images = story.select('.p-page-story__episode-thumbs img[src]')
+                self.image_list = []
+                for i in range(len(images)):
+                    image_url = self.clear_resize_in_url(images[i]['src'])
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url, to_jpg=True)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.c-dl__item', date_select='time',
+                                    title_select='.c-dl__description', id_select='a', date_separator='-',
+                                    next_page_select='.next.page-numbers', paging_type=0)
+
+
+# Hell Mode S2
 class HellMode2Download(Summer2026AnimeDownload, NewsTemplate):
     title = 'Hell Mode Season 2'
     keywords = [title, '2nd']

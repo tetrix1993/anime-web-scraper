@@ -89,6 +89,7 @@ The premiere date for the anime listed here has not been announced.
 * [Futsutsuka na Akujo dewa Gozaimasu ga: Suuguu Chouso Torikae Den](https://futsutsuka.net/)
 * [Gaikotsu Kishi-sama, Tadaima Isekai e Odekakechuu II](https://skeleton-knight.com/)
 * [Grand Blue Season 3](https://www.grandblue-anime.com/)
+* [Hanaori-san wa Tensei shitemo Kenka ga Shitai](https://hanaorisan-anime.com/)
 * [Hell Mode Season 2](https://hellmode-anime.com/)
 * [Heroine? Seijo? Iie, All Works Maid desu (Hokori)!](https://all-works-maid-anime.com/)
 * [Katainaka no Ossan, Kensei ni Naru II](https://ossan-kensei.com/)
