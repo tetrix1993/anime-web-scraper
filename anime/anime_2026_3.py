@@ -601,7 +601,7 @@ class Magilumiere2Download(Summer2026AnimeDownload, NewsTemplate4):
                 else:
                     append = '-' + str(k)
                 image_folder = folder + '/' + year + '/' + month
-                image_name = str(j + 1) + append
+                image_name = str(j + 1).zfill(2) + append
                 if not self.is_image_exists(image_name, image_folder):
                     image_url = template % (year, month, image_name)
                     if self.is_valid_url(image_url, is_image=True):
