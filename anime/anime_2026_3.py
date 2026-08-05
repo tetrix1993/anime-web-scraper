@@ -449,7 +449,7 @@ class Hyakkano3Download(Summer2026AnimeDownload, NewsTemplate):
                 image_name = str(j + 1).zfill(2) + append
                 if not self.is_image_exists(image_name, image_folder):
                     image_url = template % (year, month, image_name)
-                    if self.is_valid_url(image_url, is_image=True):
+                    if self.is_valid_url(image_url, is_image=True, impersonate=True):
                         print('VALID - ' + image_url)
                         is_successful = True
                         valid_urls.append({'name': image_name, 'url': image_url, 'folder': image_folder})
