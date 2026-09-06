@@ -86,6 +86,7 @@ The premiere date for the anime listed here has not been announced.
 * To be added
 
 ### Fall 2026 Anime
+* [Kyouran Reijou Nia Liston](https://kyoranreijo-pr.com/)
 * [Seitokai ni mo Ana wa Aru!](https://nama-anaru.com/)
 
 ### Summer 2026 Anime

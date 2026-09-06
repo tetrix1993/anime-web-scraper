@@ -11,6 +11,33 @@ class Fall2026AnimeDownload(MainDownload):
         super().__init__()
 
 
+# Kyouran Reijou Nia Liston
+class KyoranReijoDownload(Fall2026AnimeDownload, NewsTemplate):
+    title = 'Kyouran Reijou Nia Liston'
+    keywords = [title, 'Nia Liston: The Merciless Maiden', 'kyoranreijo']
+    website = 'https://kyoranreijo-pr.com/'
+    twitter = 'kyoranreijo_pr'
+    hashtags = ['凶乱令嬢']
+    folder_name = 'kyoranreijo'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        pass
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-item', date_select='.date',
+                                    title_select='.title', id_select='a')
+
+
 # Seitokai ni mo Ana wa Aru!
 class NamaAnaruDownload(Fall2026AnimeDownload, NewsTemplate):
     title = 'Seitokai ni mo Ana wa Aru!'
