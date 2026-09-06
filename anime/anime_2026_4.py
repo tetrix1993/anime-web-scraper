@@ -38,6 +38,36 @@ class KyoranReijoDownload(Fall2026AnimeDownload, NewsTemplate):
                                     title_select='.title', id_select='a')
 
 
+# Mezametara Saikyou Soubi to Uchuusenmochi Datta node, Ikkodate Mezashite Youhei toshite Jiyuu ni Ikitai
+class SaikyoSoubiDownload(Fall2026AnimeDownload, NewsTemplate):
+    title = 'Mezametara Saikyou Soubi to Uchuusenmochi Datta node, Ikkodate Mezashite Youhei toshite Jiyuu ni Ikitai'
+    keywords = [title, 'Reborn as a Space Mercenary: I Woke Up Piloting the Strongest Starship!', 'mezameza']
+    website = 'https://saikyosoubi.com/'
+    twitter = 'saikyosoubi'
+    hashtags = ['めざめざ']
+    folder_name = 'saikyosoubi'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        pass
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.l-news__item',
+                                    date_select='.l-news__item-date', title_select='.l-news__item-title',
+                                    id_select='.l-news__item-link', a_tag_prefix=news_url, paging_type=1,
+                                    next_page_select='.c-pagination__item', next_page_eval_index=-1,
+                                    next_page_eval_index_class='is-current')
+
+
 # Seitokai ni mo Ana wa Aru!
 class NamaAnaruDownload(Fall2026AnimeDownload, NewsTemplate):
     title = 'Seitokai ni mo Ana wa Aru!'

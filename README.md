@@ -87,6 +87,7 @@ The premiere date for the anime listed here has not been announced.
 
 ### Fall 2026 Anime
 * [Kyouran Reijou Nia Liston](https://kyoranreijo-pr.com/)
+* [Mezametara Saikyou Soubi to Uchuusenmochi Datta node, Ikkodate Mezashite Youhei toshite Jiyuu ni Ikitai](https://saikyosoubi.com/)
 * [Seitokai ni mo Ana wa Aru!](https://nama-anaru.com/)
 
 ### Summer 2026 Anime
