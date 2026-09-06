@@ -85,6 +85,9 @@ pip install -r requirements.txt
 The premiere date for the anime listed here has not been announced.
 * To be added
 
+### Fall 2026 Anime
+* [Seitokai ni mo Ana wa Aru!](https://nama-anaru.com/)
+
 ### Summer 2026 Anime
 * [Futsutsuka na Akujo dewa Gozaimasu ga: Suuguu Chouso Torikae Den](https://futsutsuka.net/)
 * [Gaikotsu Kishi-sama, Tadaima Isekai e Odekakechuu II](https://skeleton-knight.com/)
