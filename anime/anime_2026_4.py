@@ -1,4 +1,4 @@
-from anime.main_download import MainDownload, NewsTemplate
+from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
 
 
 # Fall 2026 Anime
@@ -95,3 +95,28 @@ class NamaAnaruDownload(Fall2026AnimeDownload, NewsTemplate):
                                     date_select='.p-news__list-date', title_select='.p-news__list-ttl',
                                     id_select='a', a_tag_start_text_to_remove='./', a_tag_prefix=news_url,
                                     next_page_select='.-next', paging_type=1)
+
+
+# Toaru Anbu no Item
+class ToaruItemDownload(Fall2026AnimeDownload, NewsTemplate2):
+    title = 'Toaru Anbu no Item'
+    keywords = [title, 'A Certain Dark Side Item']
+    website = 'https://toaru-project.com/item/'
+    twitter = 'toaru_project'
+    hashtags = ['とある暗部の少女共棲']
+    folder_name = 'toaruitem'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        pass
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX)

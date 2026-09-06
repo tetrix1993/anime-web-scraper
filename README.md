@@ -89,6 +89,7 @@ The premiere date for the anime listed here has not been announced.
 * [Kyouran Reijou Nia Liston](https://kyoranreijo-pr.com/)
 * [Mezametara Saikyou Soubi to Uchuusenmochi Datta node, Ikkodate Mezashite Youhei toshite Jiyuu ni Ikitai](https://saikyosoubi.com/)
 * [Seitokai ni mo Ana wa Aru!](https://nama-anaru.com/)
+* [Toaru Anbu no Item](https://toaru-project.com/item/)
 
 ### Summer 2026 Anime
 * [Futsutsuka na Akujo dewa Gozaimasu ga: Suuguu Chouso Torikae Den](https://futsutsuka.net/)
