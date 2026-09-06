@@ -33,9 +33,37 @@ class KyoranReijoDownload(Fall2026AnimeDownload, NewsTemplate):
         pass
 
     def download_news(self):
-        news_url = self.PAGE_PREFIX + 'news/'
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-item', date_select='.date',
                                     title_select='.title', id_select='a')
+
+
+# Magical Explorer
+class MajiekuDownload(Fall2026AnimeDownload, NewsTemplate):
+    title = 'Magical Explorer'
+    keywords = [title, 'majieku']
+    website = 'https://majieku.com/'
+    twitter = 'Majieku_anime'
+    hashtags = ['マジエク']
+    folder_name = 'majieku'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        pass
+
+    def download_news(self):
+        news_url = self.PAGE_PREFIX + 'news/'
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.newsList',
+                                    date_select='.newsList__date', title_select='.newsList__title', id_select='a',
+                                    date_func=lambda x: x[0:4] + '.' + x[5:], a_tag_prefix=news_url, paging_type=1,
+                                    next_page_select='.-next')
 
 
 # Mezametara Saikyou Soubi to Uchuusenmochi Datta node, Ikkodate Mezashite Youhei toshite Jiyuu ni Ikitai
