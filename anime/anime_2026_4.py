@@ -125,6 +125,53 @@ class NamaAnaruDownload(Fall2026AnimeDownload, NewsTemplate):
                                     next_page_select='.-next', paging_type=1)
 
 
+# Shiotaiou no Satou-san ga Ore ni dake Amai
+class ShioamaDownload(Fall2026AnimeDownload):
+    title = 'Shiotaiou no Satou-san ga Ore ni dake Amai'
+    keywords = [title, 'The Salty Koharu Has a Soft Spot for Me', 'shioama']
+    website = 'https://shioama-anime.com/'
+    twitter = 'shioamaofficial'
+    hashtags = ['しおあま']
+    folder_name = 'shioama'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        pass
+
+    def download_news(self):
+        try:
+            results = []
+            news_obj = self.get_last_news_log_object()
+            json_obj = self.get_json(self.PAGE_PREFIX + 'news.json')
+            for item in json_obj:
+                if 'date' in item and 'id' in item and 'title' in item:
+                    date = item['date'].replace('/', '.')
+                    title = item['title']
+                    id_ = item['id']
+                    url = self.PAGE_PREFIX + 'news.html?id=' + id_
+                    if news_obj is not None and (news_obj['id'] == url or news_obj['title'] == title
+                                                 or date < news_obj['date']):
+                        break
+                    results.append(self.create_news_log_object(date, title, url))
+            success_count = 0
+            for result in reversed(results):
+                process_result = self.create_news_log_from_news_log_object(result)
+                if process_result == 0:
+                    success_count += 1
+            if len(results) > 0:
+                self.create_news_log_cache(success_count, results[0])
+        except Exception as e:
+            self.print_exception(e, 'News')
+
+
 # Toaru Anbu no Item
 class ToaruItemDownload(Fall2026AnimeDownload, NewsTemplate2):
     title = 'Toaru Anbu no Item'
