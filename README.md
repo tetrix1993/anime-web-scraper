@@ -86,6 +86,7 @@ The premiere date for the anime listed here has not been announced.
 * To be added
 
 ### Fall 2026 Anime
+* [Kashita Maryoku wa "Revo Barai" de Kyousei Choushuu](https://revo-anime.com/)
 * [Kyouran Reijou Nia Liston](https://kyoranreijo-pr.com/)
 * [Magical Explorer](https://majieku.com/)
 * [Mezametara Saikyou Soubi to Uchuusenmochi Datta node, Ikkodate Mezashite Youhei toshite Jiyuu ni Ikitai](https://saikyosoubi.com/)

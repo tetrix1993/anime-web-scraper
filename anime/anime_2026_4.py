@@ -11,6 +11,33 @@ class Fall2026AnimeDownload(MainDownload):
         super().__init__()
 
 
+# Kashita Maryoku wa "Revo Barai" de Kyousei Choushuu
+class MaryokuRevoDownload(Fall2026AnimeDownload, NewsTemplate):
+    title = 'Kashita Maryoku wa "Revo Barai" de Kyousei Choushuu'
+    keywords = [title, 'Magic Repo Man']
+    website = 'https://revo-anime.com/'
+    twitter = 'revo_anime'
+    hashtags = ['魔力リボ']
+    folder_name = 'maryokurevo'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        pass
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='a', date_select='.news-date',
+                                    title_select='h2', id_select=None, paging_type=0, next_page_select='.page-numbers',
+                                    next_page_eval_index=-1, next_page_eval_index_class='current')
+
+
 # Kyouran Reijou Nia Liston
 class KyoranReijoDownload(Fall2026AnimeDownload, NewsTemplate):
     title = 'Kyouran Reijou Nia Liston'
@@ -256,7 +283,7 @@ class Tenken2Download(Fall2026AnimeDownload, NewsTemplate):
                 for j in range(self.IMAGES_PER_EPISODE):
                     image_url = template % (str(i + 1), str(j + 1))
                     image_name = episode + '_' + str(j + 1)
-                    result = self.download_image(image_url, self.base_folder + '/' + image_name)
+                    result = self.download_image(image_url, self.base_folder + '/' + image_name, to_jpg=True)
                     if result == -1:
                         stop = True
                         break
