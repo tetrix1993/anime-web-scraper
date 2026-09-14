@@ -91,6 +91,7 @@ The premiere date for the anime listed here has not been announced.
 * [Mezametara Saikyou Soubi to Uchuusenmochi Datta node, Ikkodate Mezashite Youhei toshite Jiyuu ni Ikitai](https://saikyosoubi.com/)
 * [Seitokai ni mo Ana wa Aru!](https://nama-anaru.com/)
 * [Sekai Saikyou no Majo, Hajimemashita](https://sekamajo-anime.com/)
+* [Shinja Zero no Megami-sama to Hajimeru Isekai Kouryaku](https://zero-believers-anime.com/)
 * [Shiotaiou no Satou-san ga Ore ni dake Amai](https://shioama-anime.com/)
 * [Tensei shitara Ken deshita II](https://www.tenken-anime.com/)
 * [Toaru Anbu no Item](https://toaru-project.com/item/)

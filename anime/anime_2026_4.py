@@ -151,6 +151,33 @@ class SekamajoDownload(Fall2026AnimeDownload, NewsTemplate):
                                     date_select='.article__date', title_select='.article__ttl', id_select='a')
 
 
+# Shinja Zero no Megami-sama to Hajimeru Isekai Kouryaku
+class ShinjaZeroDownload(Fall2026AnimeDownload, NewsTemplate):
+    title = 'Shinja Zero no Megami-sama to Hajimeru Isekai Kouryaku'
+    keywords = [title, 'Full Clearing Another World under a Goddess with Zero Believers']
+    website = 'https://zero-believers-anime.com/'
+    twitter = 'zero_believers'
+    hashtags = ['信者ゼロ']
+    folder_name = 'shinjazero'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        pass
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.p-news__item',
+                                    date_select='time', title_select='.c-card-news__title', id_select='a',
+                                    next_page_select='.next.page-numbers', paging_type=3, paging_suffix='?page=%s')
+
+
 # Shiotaiou no Satou-san ga Ore ni dake Amai
 class ShioamaDownload(Fall2026AnimeDownload):
     title = 'Shiotaiou no Satou-san ga Ore ni dake Amai'
