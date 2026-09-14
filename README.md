@@ -93,6 +93,7 @@ The premiere date for the anime listed here has not been announced.
 * [Shiotaiou no Satou-san ga Ore ni dake Amai](https://shioama-anime.com/)
 * [Tensei shitara Ken deshita II](https://www.tenken-anime.com/)
 * [Toaru Anbu no Item](https://toaru-project.com/item/)
+* [Tsuihou sareta Cheat Fuyo Majutsushi wa Kimama na Second Life wo Ouka suru.](https://sh-anime.shochiku.co.jp/chiifuyo-anime/)
 
 ### Summer 2026 Anime
 * [Futsutsuka na Akujo dewa Gozaimasu ga: Suuguu Chouso Torikae Den](https://futsutsuka.net/)

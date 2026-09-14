@@ -175,7 +175,7 @@ class ShioamaDownload(Fall2026AnimeDownload):
 # Tensei shitara Ken deshita II
 class Tenken2Download(Fall2026AnimeDownload, NewsTemplate):
     title = 'Tensei shitara Ken deshita II'
-    keywords = [title, 'Reincarnated as a Sword', 'tenken']
+    keywords = [title, 'Reincarnated as a Sword Season 2', 'tenken', '2nd']
     website = 'https://tenken-anime.com/'
     twitter = 'tenken_official'
     hashtags = ['転生したら剣でした', '転剣']
@@ -243,3 +243,29 @@ class ToaruItemDownload(Fall2026AnimeDownload, NewsTemplate2):
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX)
+
+
+# Tsuihou sareta Cheat Fuyo Majutsushi wa Kimama na Second Life wo Ouka suru.
+class ChiifuyoDownload(Fall2026AnimeDownload, NewsTemplate):
+    title = 'Tsuihou sareta Cheat Fuyo Majutsushi wa Kimama na Second Life wo Ouka suru.'
+    keywords = [title, 'The Laid-Off Cheat-Granting Mage Enjoys a Second Lease on Life', 'chiifuyo']
+    website = 'https://sh-anime.shochiku.co.jp/chiifuyo-anime/'
+    twitter = 'chi_fuyo'
+    hashtags = ['チー付与']
+    folder_name = 'chiifuyo'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        pass
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news_list_item',
+                                    title_select='.title', date_select='.date', id_select='a')
