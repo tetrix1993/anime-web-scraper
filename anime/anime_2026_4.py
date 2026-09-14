@@ -125,6 +125,32 @@ class NamaAnaruDownload(Fall2026AnimeDownload, NewsTemplate):
                                     next_page_select='.-next', paging_type=1)
 
 
+# Sekai Saikyou no Majo, Hajimemashita
+class SekamajoDownload(Fall2026AnimeDownload, NewsTemplate):
+    title = 'Sekai Saikyou no Majo, Hajimemashita'
+    keywords = [title, "The World's Strongest Witch"]
+    website = 'https://sekamajo-anime.com/'
+    twitter = 'sekamajo_anime'
+    hashtags = ['せかまじょ', '世界最強魔女']
+    folder_name = 'sekamajo'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        pass
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.article',
+                                    date_select='.article__date', title_select='.article__ttl', id_select='a')
+
+
 # Shiotaiou no Satou-san ga Ore ni dake Amai
 class ShioamaDownload(Fall2026AnimeDownload):
     title = 'Shiotaiou no Satou-san ga Ore ni dake Amai'
