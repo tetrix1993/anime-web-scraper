@@ -172,6 +172,54 @@ class ShioamaDownload(Fall2026AnimeDownload):
             self.print_exception(e, 'News')
 
 
+# Tensei shitara Ken deshita II
+class Tenken2Download(Fall2026AnimeDownload, NewsTemplate):
+    title = 'Tensei shitara Ken deshita II'
+    keywords = [title, 'Reincarnated as a Sword', 'tenken']
+    website = 'https://tenken-anime.com/'
+    twitter = 'tenken_official'
+    hashtags = ['転生したら剣でした', '転剣']
+    folder_name = 'tenken2'
+
+    PAGE_PREFIX = website
+    FINAL_EPISODE = 12
+    IMAGES_PER_EPISODE = 6
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        template = self.PAGE_PREFIX + 'assets/story/%s/%s.webp'
+        try:
+            stop = False
+            for i in range(self.FINAL_EPISODE):
+                episode = str(i + 1).zfill(2)
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                for j in range(self.IMAGES_PER_EPISODE):
+                    image_url = template % (str(i + 1), str(j + 1))
+                    image_name = episode + '_' + str(j + 1)
+                    result = self.download_image(image_url, self.base_folder + '/' + image_name)
+                    if result == -1:
+                        stop = True
+                        break
+                if stop:
+                    break
+        except Exception as e:
+            self.print_exception(e)
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='article.content-entry',
+                                    title_select='h2.entry-title span', date_select='div.entry-date',
+                                    id_select=None, id_has_id=True, news_prefix='news.html',
+                                    date_func=lambda x: x[0:4] + '.' + x[4:],
+                                    a_tag_prefix=self.PAGE_PREFIX + 'news.html#')
+
+
 # Toaru Anbu no Item
 class ToaruItemDownload(Fall2026AnimeDownload, NewsTemplate2):
     title = 'Toaru Anbu no Item'

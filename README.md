@@ -91,6 +91,7 @@ The premiere date for the anime listed here has not been announced.
 * [Mezametara Saikyou Soubi to Uchuusenmochi Datta node, Ikkodate Mezashite Youhei toshite Jiyuu ni Ikitai](https://saikyosoubi.com/)
 * [Seitokai ni mo Ana wa Aru!](https://nama-anaru.com/)
 * [Shiotaiou no Satou-san ga Ore ni dake Amai](https://shioama-anime.com/)
+* [Tensei shitara Ken deshita II](https://www.tenken-anime.com/)
 * [Toaru Anbu no Item](https://toaru-project.com/item/)
 
 ### Summer 2026 Anime
@@ -543,7 +544,7 @@ The premiere date for the anime listed here has not been announced.
 * [Renai Flops](https://loveflops.com/)
 * [Shinmai Renkinjutsushi no Tenpo Keiei](https://shinmai-renkin.com/)
 * [Shinobi no Ittoki](https://ninja-ittoki.com/)
-* [Tensei shitara Ken Deshita](https://tenken-anime.com/)
+* [Tensei shitara Ken Deshita](https://tenken-anime.com/s1/)
 * [Uchi no Shishou wa Shippo ga Nai](https://shippona-anime.com/)
 * [Urusei Yatsura (2022)](https://uy-allstars.com/)
 * [Yama no Susume: Next Summit](https://yamanosusume-ns.com/)

@@ -2355,7 +2355,7 @@ class ShinobinoIttokiDownload(Fall2022AnimeDownload, NewsTemplate):
 class TenkenDownload(Fall2022AnimeDownload, NewsTemplate):
     title = 'Tensei shitara Ken Deshita'
     keywords = [title, 'Reincarnated as a Sword', 'tenken']
-    website = 'https://tenken-anime.com/'
+    website = 'https://tenken-anime.com/s1/'
     twitter = 'tenken_official'
     hashtags = ['転生したら剣でした', '転剣']
     folder_name = 'tenken'
