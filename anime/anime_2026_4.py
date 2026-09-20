@@ -38,6 +38,46 @@ class MaryokuRevoDownload(Fall2026AnimeDownload, NewsTemplate):
                                     next_page_eval_index=-1, next_page_eval_index_class='current')
 
 
+# Kusuriya no Hitorigoto 3rd Season
+class Kusuriya3Download(Fall2026AnimeDownload, NewsTemplate):
+    title = 'Kusuriya no Hitorigoto 3rd Season'
+    keywords = [title, 'The Apothecary Diaries']
+    website = 'https://kusuriyanohitorigoto.jp/season3/'
+    twitter = 'kusuriya_PR'
+    hashtags = ['薬屋のひとりごと']
+    folder_name = 'kusuriya3'
+
+    PAGE_PREFIX = website
+    FIRST_EPISODE = 49
+    FINAL_EPISODE = 72
+    IMAGES_PER_EPISODE = 6
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+
+    def download_episode_preview(self):
+        try:
+            template = self.PAGE_PREFIX + 'episodes/img/%s/%s.jpg'
+            stop = False
+            for i in range(self.FIRST_EPISODE, self.FINAL_EPISODE + 1, 1):
+                episode = str(i).zfill(2)
+                if self.is_image_exists(episode + '_' + str(self.IMAGES_PER_EPISODE)):
+                    continue
+                for j in range(self.IMAGES_PER_EPISODE):
+                    image_url = template % (str(i), str(j + 1))
+                    image_name = episode + '_' + str(j + 1)
+                    if self.download_image(image_url, self.base_folder + '/' + image_name) == -1:
+                        stop = True
+                        break
+                if stop:
+                    break
+        except Exception as e:
+            self.print_exception(e)
+
+
 # Kyouran Reijou Nia Liston
 class KyoranReijoDownload(Fall2026AnimeDownload, NewsTemplate):
     title = 'Kyouran Reijou Nia Liston'

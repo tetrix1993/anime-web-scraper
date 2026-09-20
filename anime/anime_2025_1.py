@@ -1173,7 +1173,7 @@ class Kusuriya2Download(Winter2025AnimeDownload, NewsTemplate):
 
     PAGE_PREFIX = website
     FIRST_EPISODE = 25
-    FINAL_EPISODE = 50
+    FINAL_EPISODE = 48
     IMAGES_PER_EPISODE = 6
 
     def __init__(self):
