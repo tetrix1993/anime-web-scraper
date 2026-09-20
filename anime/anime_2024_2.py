@@ -1852,9 +1852,9 @@ class KanteiSkillDownload(Spring2024AnimeDownload, NewsTemplate):
     def run(self):
         self.download_episode_preview()
         self.download_news()
-        self.download_key_visual()
-        self.download_character()
-        self.download_media()
+        # self.download_key_visual()
+        # self.download_character()
+        # self.download_media()
 
     def download_episode_preview(self, print_http_error=False):
         try:
