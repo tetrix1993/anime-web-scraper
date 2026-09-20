@@ -94,6 +94,7 @@ The premiere date for the anime listed here has not been announced.
 * [Sekai Saikyou no Majo, Hajimemashita](https://sekamajo-anime.com/)
 * [Shinja Zero no Megami-sama to Hajimeru Isekai Kouryaku](https://zero-believers-anime.com/)
 * [Shiotaiou no Satou-san ga Ore ni dake Amai](https://shioama-anime.com/)
+* [Tantei wa Mou, Shindeiru. Season 2](https://tanmoshi-anime.jp/Season2/)
 * [Tensei shitara Ken deshita II](https://www.tenken-anime.com/)
 * [Toaru Anbu no Item](https://toaru-project.com/item/)
 * [Tsuihou sareta Cheat Fuyo Majutsushi wa Kimama na Second Life wo Ouka suru.](https://sh-anime.shochiku.co.jp/chiifuyo-anime/)
