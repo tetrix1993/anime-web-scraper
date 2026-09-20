@@ -87,6 +87,7 @@ The premiere date for the anime listed here has not been announced.
 
 ### Fall 2026 Anime
 * [Kashita Maryoku wa "Revo Barai" de Kyousei Choushuu](https://revo-anime.com/)
+* [Kikansha no Mahou wa Tokubetsu desu 2nd Season](https://returners-magic.com/)
 * [Kusuriya no Hitorigoto 3rd Season](https://kusuriyanohitorigoto.jp/season3/)
 * [Kyouran Reijou Nia Liston](https://kyoranreijo-pr.com/)
 * [Magical Explorer](https://majieku.com/)
@@ -418,7 +419,7 @@ The premiere date for the anime listed here has not been announced.
 * [Kage no Jitsuryokusha ni Naritakute! 2nd Season](https://shadow-garden.jp/)
 * [Kanojo mo Kanojo Season 2](https://kanokano-anime.com/)
 * [Keikenzumi na Kimi to, Keiken Zero na Ore ga, Otsukiai suru Hanashi.](https://kimizero.com/)
-* [Kikansha no Mahou wa Tokubetsu desu](https://returners-magic.com/)
+* [Kikansha no Mahou wa Tokubetsu desu](https://returners-magic.com/1st/)
 * [Kimi no Koto ga Daidaidaidaidaisuki na 100-nin no Kanojo](https://hyakkano.com/)
 * [Konyaku Haki sareta Reijou wo Hirotta Ore ga, Ikenai koto wo Oshiekomu](https://ikenaikyo.com/)
 * [Kusuriya no Hitorigoto](https://kusuriyanohitorigoto.jp/)

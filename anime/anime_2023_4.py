@@ -1753,7 +1753,7 @@ class KimizeroDownload(Fall2023AnimeDownload, NewsTemplate2):
 class KikanshaDownload(Fall2023AnimeDownload, NewsTemplate):
     title = 'Kikansha no Mahou wa Tokubetsu desu'
     keywords = [title, "A Returner's Magic Should Be Special"]
-    website = 'https://returners-magic.com/'
+    website = 'https://returners-magic.com/1st/'
     twitter = 'returners_magic'
     hashtags = ['帰還者', 'returnersmagic']
     folder_name = 'kikansha'

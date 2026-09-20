@@ -38,6 +38,27 @@ class MaryokuRevoDownload(Fall2026AnimeDownload, NewsTemplate):
                                     next_page_eval_index=-1, next_page_eval_index_class='current')
 
 
+# Kikansha no Mahou wa Tokubetsu desu 2nd Season
+class Kikansha2Download(Fall2026AnimeDownload, NewsTemplate):
+    title = 'Kikansha no Mahou wa Tokubetsu desu 2nd Season'
+    keywords = [title, "A Returner's Magic Should Be Special Season 2", '2nd']
+    website = 'https://returners-magic.com/'
+    twitter = 'returners_magic'
+    hashtags = ['帰還者', 'returnersmagic']
+    folder_name = 'kikansha2'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+
+    def download_episode_preview(self):
+        pass
+
+
 # Kusuriya no Hitorigoto 3rd Season
 class Kusuriya3Download(Fall2026AnimeDownload, NewsTemplate):
     title = 'Kusuriya no Hitorigoto 3rd Season'
