@@ -11,6 +11,32 @@ class Fall2026AnimeDownload(MainDownload):
         super().__init__()
 
 
+# Hyouken no Majutsushi ga Sekai wo Suberu II
+class Hyouken2Download(Fall2026AnimeDownload, NewsTemplate):
+    title = 'Hyouken no Majutsushi ga Sekai wo Suberu II'
+    keywords = [title, 'The Iceblade Sorcerer Shall Rule the World II', 'hyouken']
+    website = 'https://hyouken-anime.com/'
+    twitter = 'hyouken_pr'
+    hashtags = ['冰剣の魔術師', 'hyouken']
+    folder_name = 'hyouken2'
+
+    PAGE_PREFIX = website
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        self.download_episode_preview()
+        self.download_news()
+
+    def download_episode_preview(self):
+        pass
+
+    def download_news(self):
+        self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-item', date_select='.date',
+                                    title_select='.title', id_select='a')
+
+
 # Kashita Maryoku wa "Revo Barai" de Kyousei Choushuu
 class MaryokuRevoDownload(Fall2026AnimeDownload, NewsTemplate):
     title = 'Kashita Maryoku wa "Revo Barai" de Kyousei Choushuu'

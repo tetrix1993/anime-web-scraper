@@ -86,6 +86,7 @@ The premiere date for the anime listed here has not been announced.
 * To be added
 
 ### Fall 2026 Anime
+* [Hyouken no Majutsushi ga Sekai wo Suberu II](https://hyouken-anime.com/)
 * [Kashita Maryoku wa "Revo Barai" de Kyousei Choushuu](https://revo-anime.com/)
 * [Kikansha no Mahou wa Tokubetsu desu 2nd Season](https://returners-magic.com/)
 * [Kusuriya no Hitorigoto 3rd Season](https://kusuriyanohitorigoto.jp/season3/)
