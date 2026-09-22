@@ -691,21 +691,48 @@ class MushokuTensei3Download(Summer2026AnimeDownload, NewsTemplate):
         self.download_episode_preview()
 
     def download_episode_preview(self):
+        def download_image_inner(_self, story_url):
+            _self.image_list = []
+            if not _self.is_image_exists(episode + '_1'):
+                ep_soup = _self.get_soup(story_url, impersonate=True)
+                if ep_soup is not None:
+                    _self.image_list = []
+                    images = ep_soup.select('.storycontents_subimg_img[data-imgload]')
+                    if len(images) == 0:
+                        return -1
+                    for j in range(len(images)):
+                        image_url = images[j]['data-imgload']
+                        image_name = episode + '_' + str(j + 1)
+                        _self.add_to_image_list(image_name, image_url)
+                    _self.download_image_list(_self.base_folder)
+            return 0
+
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story/', impersonate=True)
+            stories = soup.select('#js_3rd a.storyarea[href]')
+            for story in stories:
+                try:
+                    episode = ''
+                    ep_num = story.select('.storyarea_ttl span')[0].text
+                    for a in ep_num:
+                        if a.isnumeric():
+                            episode += a
+                    if len(episode) == 0:
+                        continue
+                    episode = str(int(episode)).zfill(2)
+                except:
+                    continue
+                if download_image_inner(self, story['href']) == -1:
+                    break
+        except Exception as e:
+            self.print_exception(e)
+
         try:
             for i in range(self.FINAL_EPISODE):
                 episode = str(i + 1).zfill(2)
                 if not self.is_image_exists(episode + '_1'):
-                    ep_soup = self.get_soup(self.PAGE_PREFIX + f'story/3-{episode}/', impersonate=True)
-                    if ep_soup is not None:
-                        self.image_list = []
-                        images = ep_soup.select('.storycontents_subimg_img[data-imgload]')
-                        if len(images) == 0:
-                            break
-                        for j in range(len(images)):
-                            image_url = images[j]['data-imgload']
-                            image_name = episode + '_' + str(j + 1)
-                            self.add_to_image_list(image_name, image_url)
-                        self.download_image_list(self.base_folder)
+                    if download_image_inner(self, self.PAGE_PREFIX + f'story/3-{episode}/') == -1:
+                        break
         except Exception as e:
             self.print_exception(e)
 
