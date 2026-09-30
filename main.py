@@ -10,10 +10,6 @@ def run():
         os.makedirs(constants.FOLDER_OUTPUT)
 
     downloads = []
-    downloads += [Honzuki4Download(), NekomajoDownload(), LiarGameDownload(), ReZero4Download()]
-    for subclass in Summer2026AnimeDownload.__subclasses__():
-        if subclass.enabled:
-            downloads.append(subclass())
     for subclass in Fall2026AnimeDownload.__subclasses__():
         if subclass.enabled:
             downloads.append(subclass())
