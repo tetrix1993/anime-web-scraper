@@ -93,6 +93,7 @@ The premiere date for the anime listed here has not been announced.
 * [Kyouran Reijou Nia Liston](https://kyoranreijo-pr.com/)
 * [Magical Explorer](https://majieku.com/)
 * [Mezametara Saikyou Soubi to Uchuusenmochi Datta node, Ikkodate Mezashite Youhei toshite Jiyuu ni Ikitai](https://saikyosoubi.com/)
+* [Sasaki to Pii-chan Season 2](https://sasapi-anime.com/)
 * [Seitokai ni mo Ana wa Aru!](https://nama-anaru.com/)
 * [Sekai Saikyou no Majo, Hajimemashita](https://sekamajo-anime.com/)
 * [Shinja Zero no Megami-sama to Hajimeru Isekai Kouryaku](https://zero-believers-anime.com/)
