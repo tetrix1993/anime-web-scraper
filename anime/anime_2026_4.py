@@ -1,4 +1,6 @@
 from anime.main_download import MainDownload, NewsTemplate, NewsTemplate2
+from datetime import datetime, timedelta
+import os
 
 
 # Fall 2026 Anime
@@ -161,6 +163,8 @@ class KyoranReijoDownload(Fall2026AnimeDownload, NewsTemplate):
     folder_name = 'kyoranreijo'
 
     PAGE_PREFIX = website
+    IMAGES_PER_EPISODE = 6
+    FINAL_EPISODE = 25
 
     def __init__(self):
         super().__init__()
@@ -170,11 +174,89 @@ class KyoranReijoDownload(Fall2026AnimeDownload, NewsTemplate):
         self.download_news()
 
     def download_episode_preview(self):
-        pass
+        try:
+            soup = self.get_soup(self.PAGE_PREFIX + 'story')
+            stories = soup.select('.story-select-container .story-select')
+            current_ep = 1
+            try:
+                current_ep = int(soup.select('.story-title .small')[0].text)
+            except:
+                pass
+            for story in stories:
+                a_tag = story.select('a')
+                if len(a_tag) == 0:
+                    continue
+                try:
+                    ep_num = int(a_tag[0].text)
+                except:
+                    continue
+                episode = str(ep_num).zfill(2)
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                if current_ep == ep_num:
+                    ep_soup = soup
+                else:
+                    if not 'href' in a_tag[0]:
+                        continue
+                    else:
+                        ep_soup = self.get_soup(a_tag[0]['href'])
+                if ep_soup is None:
+                    continue
+                self.image_list = []
+                images = ep_soup.select('.ss-container img[src]')
+                for i in range(len(images)):
+                    image_name = episode + '_' + str(i + 1)
+                    image_url = images[i]['src']
+                    self.add_to_image_list(image_name, image_url, to_jpg=True)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         self.download_template_news(page_prefix=self.PAGE_PREFIX, article_select='.news-item', date_select='.date',
                                     title_select='.title', id_select='a')
+
+    def download_episode_preview_guess(self, print_invalid=False, download_valid=True):
+        if self.is_image_exists(str(self.FINAL_EPISODE).zfill(2) + '_' + str(self.IMAGES_PER_EPISODE)):
+            return
+
+        folder = self.create_custom_directory('guess')
+        template = self.PAGE_PREFIX + 'wp/wp-content/uploads/%s/%s/%s.jpg'
+        current_date = datetime.now() + timedelta(hours=1)
+        year = current_date.strftime('%Y')
+        month = current_date.strftime('%m')
+        is_successful = False
+        valid_urls = []
+        for j in range(self.IMAGES_PER_EPISODE):
+            k = 0
+            while k < 20:
+                if k == 0:
+                    append = ''
+                else:
+                    append = '-' + str(k)
+                image_folder = folder + '/' + year + '/' + month
+                image_name = str(j + 1).zfill(2) + append
+                if not self.is_image_exists(image_name, image_folder):
+                    image_url = template % (year, month, image_name)
+                    if self.is_valid_url(image_url, is_image=True):
+                        print('VALID - ' + image_url)
+                        is_successful = True
+                        valid_urls.append({'name': image_name, 'url': image_url, 'folder': image_folder})
+                    else:
+                        if print_invalid:
+                            print('INVALID - ' + image_url)
+                        break
+                k += 1
+        if download_valid and len(valid_urls) > 0:
+            for valid_url in valid_urls:
+                image_name = valid_url['name']
+                image_folder = valid_url['folder']
+                if not os.path.exists(image_folder):
+                    os.makedirs(image_folder)
+                self.download_image(valid_url['url'], image_folder + '/' + image_name, to_jpg=True)
+        if is_successful:
+            print(self.__class__.__name__ + ' - Guessed correctly!')
+        return is_successful
 
 
 # Magical Explorer
