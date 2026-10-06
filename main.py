@@ -13,7 +13,7 @@ def run():
     for subclass in Fall2026AnimeDownload.__subclasses__():
         if subclass.enabled:
             downloads.append(subclass())
-    downloads += [KanteiSkillDownload(), ChiramuneDownload(), YaseinoLastBossDownload()]
+    downloads += [JukishiDownload(), KanteiSkillDownload(), ChiramuneDownload(), YaseinoLastBossDownload()]
     process_download(downloads)
 
 
