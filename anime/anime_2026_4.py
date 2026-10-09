@@ -232,34 +232,17 @@ class KyoranReijoDownload(Fall2026AnimeDownload, NewsTemplate):
     def download_episode_preview(self):
         try:
             soup = self.get_soup(self.PAGE_PREFIX + 'story')
-            stories = soup.select('.story-select-container .story-select')
-            current_ep = 1
-            try:
-                current_ep = int(soup.select('.story-title .small')[0].text)
-            except:
-                pass
+            stories = soup.select('.story-box')
             for story in stories:
-                a_tag = story.select('a')
-                if len(a_tag) == 0:
-                    continue
                 try:
-                    ep_num = int(a_tag[0].text)
+                    ep_num = int(story.select('.story-title .small')[0].text)
                 except:
                     continue
                 episode = str(ep_num).zfill(2)
                 if self.is_image_exists(episode + '_1'):
                     continue
-                if current_ep == ep_num:
-                    ep_soup = soup
-                else:
-                    if not 'href' in a_tag[0]:
-                        continue
-                    else:
-                        ep_soup = self.get_soup(a_tag[0]['href'])
-                if ep_soup is None:
-                    continue
                 self.image_list = []
-                images = ep_soup.select('.ss-container img[src]')
+                images = story.select('.ss-container img[src]')
                 for i in range(len(images)):
                     image_name = episode + '_' + str(i + 1)
                     image_url = images[i]['src']
