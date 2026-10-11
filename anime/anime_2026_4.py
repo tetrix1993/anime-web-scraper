@@ -649,7 +649,27 @@ class ShioamaDownload(Fall2026AnimeDownload):
         self.download_news()
 
     def download_episode_preview(self):
-        pass
+        try:
+            stories = self.get_json(self.PAGE_PREFIX + 'story.json')
+            prefix = self.PAGE_PREFIX + 'story/'
+            for story in stories:
+                try:
+                    episode = str(int(story['no'].replace('#', ''))).zfill(2)
+                except Exception:
+                    continue
+                if self.is_image_exists(episode + '_1'):
+                    continue
+                if 'images' not in story:
+                    continue
+                images = story['images']
+                self.image_list = []
+                for i in range(len(images)):
+                    image_url = prefix + images[i]
+                    image_name = episode + '_' + str(i + 1)
+                    self.add_to_image_list(image_name, image_url, to_jpg=True)
+                self.download_image_list(self.base_folder)
+        except Exception as e:
+            self.print_exception(e)
 
     def download_news(self):
         try:
